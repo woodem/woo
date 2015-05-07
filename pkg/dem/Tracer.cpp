@@ -145,7 +145,9 @@ Vector2r Tracer::rRange;
 int Tracer::num;
 int Tracer::scalar;
 int Tracer::vecAxis;
-int Tracer::lastScalar;
+int Tracer::matStateIx;
+Real Tracer::matStateSmooth;
+bool Tracer::nextReset;
 int Tracer::compress;
 int Tracer::compSkip;
 bool Tracer::glSmooth;
@@ -206,12 +208,24 @@ void Tracer::showHideRange(bool show){
 }
 #endif
 
+void Tracer::postLoadStatic(void* attr){
+	if(attr==&scalar || attr==&matStateIx || attr==NULL) nextReset=true;
+}
+
+
 void Tracer::run(){
-	if(scalar!=lastScalar){
+	if(nextReset){
 		resetNodesRep(/*setup empty*/true,/*includeDead*/false);
-		lastScalar=scalar;
 		lineColor->reset();
+		nextReset=false;
 	}
+	#if 0
+		if(scalar!=lastScalar){
+			resetNodesRep(/*setup empty*/true,/*includeDead*/false);
+			lastScalar=scalar;
+			lineColor->reset();
+		}
+	#endif
 	#ifdef WOO_OPENGL
 		showHideRange(/*show*/true);
 	#endif
@@ -225,6 +239,7 @@ void Tracer::run(){
 		case SCALAR_SHAPE_COLOR: lineColor->label="Shape.color"; break;
 		case SCALAR_ORDINAL: lineColor->label="ordinal"+(ordinalMod>1?string(" % "+to_string(ordinalMod)):string());
 		case SCALAR_KINETIC: lineColor->label="kinetic energy"; break;
+		case SCALAR_MATSTATE: /*handled below*/; break;
 		break;
 	}
 	// add component to the label
@@ -238,6 +253,7 @@ void Tracer::run(){
 	}
 	auto& dem=field->cast<DemField>();
 	size_t i=0;
+	bool matStateNameSet=false; // for SCALAR_MATSTATE, set at every step from the first matState available
 	for(auto& n: dem.nodes){
 		const auto& dyn(n->getData<DemData>());
 		if(dyn.isTracerSkip()) continue;
@@ -265,7 +281,7 @@ void Tracer::run(){
 			if(rRange.maxCoeff()>0) hidden=(isnan(radius) || (rRange[0]>0 && radius<rRange[0]) || (rRange[1]>0 && radius>rRange[1]));
 		}
 		if(tr.isHidden()!=hidden) tr.setHidden(hidden);
-		Real sc;
+		Real sc; // scalar by which the trace will be colored
 		auto vecNormXyz=[&](const Vector3r& v)->Real{ if(vecAxis<0||vecAxis>2) return v.norm(); return v[vecAxis]; };
 		switch(scalar){
 			case SCALAR_VEL: sc=vecNormXyz(n->getData<DemData>().vel); break;
@@ -281,9 +297,21 @@ void Tracer::run(){
 			case SCALAR_TIME: sc=scene->time; break;
 			case SCALAR_ORDINAL: sc=(i%ordinalMod); break;
 			case SCALAR_KINETIC: sc=dyn.getEk_any(n,/*trans*/true,/*rot*/true,scene); break;
+			case SCALAR_MATSTATE:{
+				if(hasP && dyn.parRef.front()->matState){
+					const auto& mState=dyn.parRef.front()->matState;
+					sc=mState->getScalar(matStateIx,scene->step,matStateSmooth);
+					if(!matStateNameSet){
+						matStateNameSet=true;
+						lineColor->label=mState->getScalarName(matStateIx);
+					}
+				} else sc=NaN;
+				break;
+			}
 			default: sc=NaN;
 		}
 		tr.addPoint(n->pos,sc);
 		i++;
 	}
+
 }

@@ -47,18 +47,22 @@ struct Tracer: public PeriodicEngine{
 		void showHideRange(bool show);
 	#endif
 
+	static void postLoadStatic(void* attr);
+
 	virtual void run() WOO_CXX11_OVERRIDE;
-	enum{SCALAR_NONE=0,SCALAR_TIME,SCALAR_VEL,SCALAR_ANGVEL,SCALAR_SIGNED_ACCEL,SCALAR_RADIUS,SCALAR_SHAPE_COLOR,SCALAR_KINETIC,SCALAR_ORDINAL};
+	enum{SCALAR_NONE=0,SCALAR_TIME,SCALAR_VEL,SCALAR_ANGVEL,SCALAR_SIGNED_ACCEL,SCALAR_RADIUS,SCALAR_SHAPE_COLOR,SCALAR_KINETIC,SCALAR_ORDINAL,SCALAR_MATSTATE};
 	WOO_CLASS_BASE_DOC_STATICATTRS_PY(Tracer,PeriodicEngine,"Save trace of node's movement",
 		((int,num,50,,"Number of positions to save (when creating new glyph)"))
 		((int,compress,2,,"Ratio by which history is compress when all data slots are filled; if 0, cycle and don't compress."))
 		((int,compSkip,2,,"Number of leading points to skip during compression; if negative, the value of *compress* is used."))
 		((Real,minDist,0,,"Only add new point when last point is at least minDist away, or no point exists at all."))
 		//((bool,reset,false,,"Reset traces at the next step"))
-		((int,scalar,SCALAR_NONE,AttrTrait<Attr::namedEnum>().namedEnum({{SCALAR_NONE,{"none","-",""}},{SCALAR_TIME,{"time","t"}},{SCALAR_VEL,{"velocity","vel","v"}},{SCALAR_ANGVEL,{"angular velocity","angVel","angvel"}},{SCALAR_SIGNED_ACCEL,{"signed |accel|"}},{SCALAR_RADIUS,{"radius","rad","r"}},{SCALAR_SHAPE_COLOR,{"Shape.color","color"}},{SCALAR_ORDINAL,{"ordinal (+ordinalMod)","ordinal","ord"}},{SCALAR_KINETIC,{"kinetic energy","Ek"}}}),"Scalars associated with history points (determine line color)"))
+		((int,scalar,SCALAR_NONE,AttrTrait<Attr::namedEnum|Attr::triggerPostLoad>().namedEnum({{SCALAR_NONE,{"none","-",""}},{SCALAR_TIME,{"time","t"}},{SCALAR_VEL,{"velocity","vel","v"}},{SCALAR_ANGVEL,{"angular velocity","angVel","angvel"}},{SCALAR_SIGNED_ACCEL,{"signed |accel|"}},{SCALAR_RADIUS,{"radius","rad","r"}},{SCALAR_SHAPE_COLOR,{"Shape.color","color"}},{SCALAR_ORDINAL,{"ordinal (+ordinalMod)","ordinal","ord"}},{SCALAR_KINETIC,{"kinetic energy","Ek"}},{SCALAR_MATSTATE,{"matState.getScalar","mat","material state"}}}),"Scalars associated with history points (determine line color)"))
 		((int,vecAxis,-1,AttrTrait<Attr::namedEnum>().namedEnum({{-1,{"norm"}},{0,{"x"}},{1,{"y"}},{2,{"z"}}}).hideIf("self.scalar not in ('velocity','angular velocity')"),"Scalar to use for vector values."))
 		((int,ordinalMod,5,AttrTrait<>().hideIf("self.scalar!='ordinal (+ordinalMod)'"),"Modulo value when :obj:`scalar` is :obj:`scalarOrdinal`."))
-		((int,lastScalar,SCALAR_NONE,AttrTrait<Attr::hidden>(),"Keep track of last scalar value"))
+		((int,matStateIx,0,AttrTrait<Attr::triggerPostLoad>().hideIf("self.scalar!='matState.getScalar'"),"Index for getting :obj:`MatState` scalars."))
+		((Real,matStateSmooth,1e-3,AttrTrait<>().hideIf("self.scalar!='matState.getScalar'"),"Smoothing coefficient for :obj:`MatState` scalars."))
+		((bool,nextReset,true,AttrTrait<Attr::hidden>(),"Reset all traces at the next step (scalar changed)"))
 		((shared_ptr<ScalarRange>,lineColor,make_shared<ScalarRange>(),AttrTrait<>().readonly(),"Color range for coloring the trace line"))
 		((Vector2i,modulo,Vector2i(0,0),,"Only add trace to nodes with ordinal number such that ``(i+modulo[1])%modulo[0]==0``."))
 		((Vector2r,rRange,Vector2r(0,0),,"If non-zero, only show traces of spheres of which radius falls into this range. (not applicable to clumps); traces of non-spheres are not shown in this case."))
