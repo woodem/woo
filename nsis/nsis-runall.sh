@@ -27,7 +27,8 @@ while getopts ":lweu" opt; do
 done
 
 
-REVNO=`bzr revno ..`
+REVNO=`git rev-list HEAD --count 2>/dev/null`-git-`git log -1 --format='%h' | head -n1`
+echo $REVNO
 DESTDIR=$BINDIR/..
 
 cp *.nsh $BINDIR/
@@ -54,7 +55,7 @@ if [ -d /boot ]; then
 	# linux
 	pushd $BINDIR
 		if $DO_LIBS; then makensis -DVERSION=1.0e nsis-wwoo-libs.nsh; fi
-		if $DO_WOO; then makensis -DVERSION=0.99-r$REVNO nsis-wwoo-main.nsh; fi
+		if $DO_WOO; then makensis -DVERSION=1.0-r$REVNO nsis-wwoo-main.nsh; fi
 		# make installers for extra modules
 		if $DO_EXTRA; then
 			for EGG in wooExtra.*.egg; do

@@ -54,7 +54,7 @@ if not version:
 	revno='na'
 	if os.path.exists('.git'):
 		try:
-			r0=os.popen("git rev-list HEAD --count 2>/dev/null").readlines()[0][:-1]
+			r0=os.popen("git rev-list HEAD --count 2>"+("NUL" if WIN else "/dev/null")).readlines()[0][:-1]
 			r1=os.popen("git log -1 --format='%h'").readlines()[0][:-1]
 			revno=r0+'+git.'+r1
 		except: pass
@@ -336,7 +336,7 @@ if 'vtk' in features:
 	elif len(vtks)>1: raise ValueError("Multiple header directories for VTK detected: "%','.join(vtks))
 	cppDirs+=[vtks[0]]
 	# find VTK version from include directory ending in -x.y
-	m=re.match(r'.*-(\d)\.(\d)$',vtks[0])
+	m=re.match(r'.*-(\d)\.(\d+)$',vtks[0])
 	if not m: raise ValueError("VTK include directory %s not matching numbers ...-x.y, unable to guess VTK version."%vtks[0])
 	vtkMajor,vtkMinor=int(m.group(1)),int(m.group(2))
 	if vtkMajor==5:
