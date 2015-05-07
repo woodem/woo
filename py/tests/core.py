@@ -324,6 +324,24 @@ class TestLoop(unittest.TestCase):
 		'Loop: None engine raises exception.'
 		S=woo.master.scene
 		self.assertRaises(RuntimeError,lambda: setattr(S,'engines',[ContactLoop(),None,ContactLoop()]))
+	def testStopAtStep(self):
+		'Loop: S.stopAtStep and S.run(steps=...)'
+		S=woo.core.Scene(dt=1.)
+		S.stopAtStep=100 # absolute value
+		S.run(wait=True)
+		self.assert_(S.step==100)
+		S.run(steps=100,wait=True) # relative value
+		self.assert_(S.step==200)
+	def testStopAtTime(self):
+		'Loop: S.stopAtTime and S.run(time=...)'
+		S=woo.core.Scene(dt=1e-3)
+		S.stopAtTime=1.0001 # absolute value
+		S.run(wait=True)
+		print 'TIME',S.time
+		self.assertAlmostEqual(S.time,1.001,delta=1e-3)
+		S.run(time=.5,wait=True) # relative value
+		self.assertAlmostEqual(S.time,1.501,delta=1e-3)
+
 
 		
 class TestIO(unittest.TestCase):

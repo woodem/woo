@@ -9,7 +9,7 @@ Meshes
 STL import
 ===========
 
-`STL (STereoLitography) file format <http://en.wikipedia.org/wiki/STL_%28file_format%29>`__ is an interchange format for triangulated surfaces in 3d. It is used as a possible export format in many CAD systems. There is a single function for their import, :obj:`woo.utils.importSTL <_utils2.importSTL>` which return list of facet particles, which can be added to the simulation instantly::
+`STL (STereoLitography) file format <http://en.wikipedia.org/wiki/STL_%28file_format%29>`__ is an interchange format for triangulated surfaces in 3d. It is used as a possible export format in many CAD systems. There is a single function for their import, :obj:`woo.utils.importSTL <woo._utils2.importSTL>` which return list of facet particles, which can be added to the simulation instantly::
 
    S.dem.par.add(woo.utils.importSTL('your-model.stl'),mat=woo.utils.defaultMaterial())
 
@@ -18,7 +18,7 @@ STL import
 
    Mesh imported from the STL file.
 
-The :obj:`woo.utils.importSTL <_utils2.importSTL>` function has options for scaling, shifting, rotating and assigning colors -- check its documentation for details.
+The :obj:`woo.utils.importSTL <woo._utils2.importSTL>` function has options for scaling, shifting, rotating and assigning colors -- check its documentation for details.
 
 
 Parametric surfaces
@@ -120,7 +120,7 @@ There are two basic rules:
 
 2. If a common bit is contained in :obj:`DemField.loneMask <woo.dem.DemField.loneMask>`, the particles will not collide. This rule is to avoid collisions of particles where it is meaningless, such as facets in a mesh between themselves. With meshes, the number of spurious "contacts" can be **very high** (thousands) slowing down the simulation unnecessarily.
 
-Mask bits can be further used for marking particles (e.g. with :obj:`~woo.dem.BoxOutlet`, when :obj:`~woo.dem.BoxOutlet.markMask` is set) in arbitrary ways.
+Mask bits can be further used for marking particles (e.g. with :obj:`~woo.dem.BoxOutlet`, when :obj:`~woo.dem.Outlet.markMask` is set) in arbitrary ways.
 
 **Default values** of mask are different for different particles:
 

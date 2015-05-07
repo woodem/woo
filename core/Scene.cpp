@@ -32,12 +32,13 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY(woo_core_Scene__CLASS_BASE_DOC_A
 // should be elsewhere, probably
 bool TimingInfo::enabled=false;
 
-void Scene::pyRun(long steps, bool wait){
+void Scene::pyRun(long steps, bool wait, Real time_){
 	except.reset();
 	if(running()) throw std::runtime_error("Scene.run: already running");
 	{
 		boost::mutex::scoped_lock l(runMutex);
 		if(steps>0) stopAtStep=step+steps;
+		if(time_>0) stopAtTime=time+time_;
 		/* run really */
 		runningFlag=true;
 		stopFlag=false;
@@ -83,7 +84,7 @@ void Scene::backgroundLoop(){
 			boost::this_thread::interruption_point();
 			if(subStepping){ LOG_INFO("Scene.run: sub-stepping disabled."); subStepping=false; }
 			doOneStep();
-			if(stopAtStep>0 && stopAtStep==step){ boost::mutex::scoped_lock l(runMutex); stopFlag=true; }
+			if((stopAtStep>0 && step==stopAtStep) || (stopAtTime>0 && time>=stopAtTime && time<stopAtTime+dt)){ boost::mutex::scoped_lock l(runMutex); stopFlag=true; }
 			if(stopFlagSet()){ boost::mutex::scoped_lock l(runMutex); runningFlag=false; return; }
 			if(throttle>0){ boost::this_thread::sleep(boost::posix_time::milliseconds(int(1000*throttle))); }
 		}

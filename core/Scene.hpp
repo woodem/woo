@@ -36,7 +36,7 @@ struct Scene: public Object{
 		shared_ptr<std::exception> except;
 	public:
 		// interface for python,
-		void pyRun(long steps=-1, bool wait=false);
+		void pyRun(long steps=-1, bool wait=false, Real time_=NaN);
 		void pyStop();         
 		void pyOne();         
 		void pyWait();         
@@ -155,6 +155,7 @@ struct Scene: public Object{
 		((int,subStep,-1,AttrTrait<Attr::readonly>(),"Number of sub-step; not to be changed directly. -1 means to run loop prologue (cell integration), 0…n-1 runs respective engines (n is number of engines), n runs epilogue (increment step number and time.")) \
 		((Real,time,0,AttrTrait<Attr::readonly>().timeUnit(),"Simulation time (virtual time) [s]")) \
 		((long,stopAtStep,0,,"Iteration after which to stop the simulation.")) \
+		((Real,stopAtTime,NaN,,":obj:`time` around which to stop the simulation.\n\n..note:: This value is not exact, has the granularity of :math:`\\Dt`: simulation will stopped at the moment when :obj:`stopAtTime` ≤ :obj:`time` < :obj:`dt`+:obj:`stopAtTime`. This condition may have some corner cases due to floating-point comparisons involved.")) \
 		\
 		((bool,isPeriodic,false,/*exposed as "periodic" in python */AttrTrait<Attr::hidden>(),"Whether periodic boundary conditions are active.")) \
 		((bool,trackEnergy,false,,"Whether energies are being tracked.")) \
@@ -207,7 +208,7 @@ struct Scene: public Object{
 		/* WOO_OPENCL */ .def("ensureCl",&Scene::ensureCl,"[for debugging] Initialize the OpenCL subsystem (this is done by engines using OpenCL, but trying to do so in advance might catch errors earlier)") \
 		.def("saveTmp",&Scene::saveTmp,(py::arg("slot")="",py::arg("quiet")=false),"Save into a temporary slot inside Master (loadable with O.loadTmp)") \
 		\
-		.def("run",&Scene::pyRun,(py::args("steps")=-1,py::args("wait")=false)) \
+		.def("run",&Scene::pyRun,(py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN)) \
 		.def("stop",&Scene::pyStop) \
 		.def("one",&Scene::pyOne) \
 		.def("wait",&Scene::pyWait) \
