@@ -40,7 +40,7 @@ def wait():
 def inBatch():
 	'Tell whether we are running inside the batch or separately.'
 	import os
-	return bool(wooOptions.batchTable)
+	return bool(wooOptions.batchTable) or wooOptions.batchLine>=0
 
 def mayHaveStaleLock(db):
 	import os.path
@@ -598,7 +598,7 @@ def runPreprocessor(pre,preFile=None):
 	import woo,math,numpy
 	tableFileLine=wooOptions.batchTable,wooOptions.batchLine
 	evalParams=[]
-	if wooOptions.batchTable:
+	if wooOptions.batchTable and wooOptions.batchLine>=0:
 		allTab=TableParamReader(wooOptions.batchTable).paramDict()
 		if not wooOptions.batchLine in allTab: raise RuntimeError("Table %s doesn't contain valid line number %d"%(wooOptions.batchTable,wooOptions.batchLine))
 		vv=allTab[wooOptions.batchLine]

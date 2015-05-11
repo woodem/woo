@@ -17,7 +17,7 @@ class WooOptions(object):
 		self.clDev=None
 		self.fakeDisplay=False
 		self.batchTable=''
-		self.batchLine=-1
+		self.batchLine=-1     # if >=0, in a batch without batchTable
 		self.batchResults=''
 		self.quirks=3 ### was 3, but Intel seems to work now OK
 		self.quirkIntel=1
@@ -235,6 +235,7 @@ def main(sysArgv=None):
 		import woo.tests
 		woo.tests.testAll(sysExit=True)
 
+	options.batchLine=opts.batchLine # copy this one in all cases
 	if opts.batchTable:
 		if opts.batchLine<0: raise RuntimeError('--batch-table given without --batch--line.')
 		options.batchTable=opts.batchTable
@@ -917,7 +918,7 @@ finished: %s
 		useLines=[]
 		params={}
 		for i,s in enumerate(scripts):
-			fakeLineNo=-i-1
+			fakeLineNo=i
 			useLines.append(fakeLineNo)
 			params[fakeLineNo]={'title':'default','!SCRIPT':s}
 			# fix script and set threads if script.py/num

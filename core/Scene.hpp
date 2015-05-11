@@ -155,7 +155,7 @@ struct Scene: public Object{
 		((int,subStep,-1,AttrTrait<Attr::readonly>(),"Number of sub-step; not to be changed directly. -1 means to run loop prologue (cell integration), 0…n-1 runs respective engines (n is number of engines), n runs epilogue (increment step number and time.")) \
 		((Real,time,0,AttrTrait<Attr::readonly>().timeUnit(),"Simulation time (virtual time) [s]")) \
 		((long,stopAtStep,0,,"Iteration after which to stop the simulation.")) \
-		((Real,stopAtTime,NaN,,":obj:`time` around which to stop the simulation.\n\n..note:: This value is not exact, has the granularity of :math:`\\Dt`: simulation will stopped at the moment when :obj:`stopAtTime` ≤ :obj:`time` < :obj:`dt`+:obj:`stopAtTime`. This condition may have some corner cases due to floating-point comparisons involved.")) \
+		((Real,stopAtTime,NaN,,":obj:`time` around which to stop the simulation.\n\n.. note:: This value is not exact, has the granularity of :math:`\\Dt`: simulation will stopped at the moment when :obj:`stopAtTime` ≤ :obj:`time` < :obj:`dt` + :obj:`stopAtTime`. This condition may have some corner cases due to floating-point comparisons involved.")) \
 		\
 		((bool,isPeriodic,false,/*exposed as "periodic" in python */AttrTrait<Attr::hidden>(),"Whether periodic boundary conditions are active.")) \
 		((bool,trackEnergy,false,,"Whether energies are being tracked.")) \
