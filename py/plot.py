@@ -98,8 +98,9 @@ lineKw=dict(linewidth=1.5,alpha=.8)
 "Parameters for the normal line plot"
 
 componentSeparator='_'
-componentSuffixes={Vector2:{0:'x',1:'y'},Vector3:{0:'x',1:'y',2:'z'},Vector2i:{0:'x',1:'y'},Vector3i:{0:'x',1:'y',2:'z'},Vector6:{0:'xx',1:'yy',2:'zz',3:'yz',4:'zx',5:'xy'},Matrix3:{(0,0):'xx',(1,1):'yy',(2,2):'zz',(0,1):'xy',(1,0):'yx',(0,2):'xz',(2,0):'zx',(1,2):'yz',(2,1):'zy'}}
-# if a type with entry in componentSuffixes is given in addData, columns for individual components are synthesized using indices and suffixes given for each type, e.g. foo=Vector3r(1,2,3) will result in columns foox=1,fooy=2,fooz=3
+componentSuffixes={Vector2:{-1:'norm',0:'x',1:'y'},Vector3:{-1:'norm',0:'x',1:'y',2:'z'},Vector2i:{0:'x',1:'y'},Vector3i:{0:'x',1:'y',2:'z'},Vector6:{-1:'norm',0:'xx',1:'yy',2:'zz',3:'yz',4:'zx',5:'xy'},Matrix3:{(0,0):'xx',(1,1):'yy',(2,2):'zz',(0,1):'xy',(1,0):'yx',(0,2):'xz',(2,0):'zx',(1,2):'yz',(2,1):'zy'}}
+# if a type with entry in componentSuffixes is given in addData, columns for individual components are synthesized using indices and suffixes given for each type; negative index means the norm, which is computed using the 'norm()' method (must be defined by the type)
+#    e.g. foo=Vector3r(1,2,3) will result in columns foo_x=1,foo_y=2,foo_z=3,foo_norm=3.741657...
 
 def Scene_plot_reset(P):
 	"Reset all plot-related variables (data, plots, labels)"
@@ -246,8 +247,9 @@ def Scene_plot_addData(P,*d_in,**kw):
 
 	>>> S.plot.resetData()
 	>>> S.plot.addData(c=Vector3(5,6,7),d=Matrix3(8,9,10, 11,12,13, 14,15,16))
-	>>> pprint(S.plot.data)
- 	{'c_x': [5.0],
+	>>> pprint(S.plot.data)    #doctest: +ELLIPSIS
+ 	{'c_norm': [10.488...],
+	 'c_x': [5.0],
 	 'c_y': [6.0],
 	 'c_z': [7.0],
 	 'd_xx': [8.0],
@@ -275,7 +277,8 @@ def Scene_plot_addData(P,*d_in,**kw):
 		if type(d[name]) in componentSuffixes:
 			val=d[name]
 			suffixes=componentSuffixes[type(d[name])]
-			for ix in suffixes: d[name+componentSeparator+suffixes[ix]]=d[name][ix]
+			for ix in suffixes:
+				d[name+componentSeparator+suffixes[ix]]=(d[name][ix] if ix>=0 else d[name].norm())
 			del d[name]
 		elif hasattr(d[name],'__len__'):
 			raise ValueError('plot.addData given unhandled sequence type (is a '+type(d[name]).__name__+', must be number or '+'/'.join([k.__name__ for k in componentSuffixes])+')')
