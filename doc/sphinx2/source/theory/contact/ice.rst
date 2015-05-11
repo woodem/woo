@@ -60,6 +60,8 @@ Breakage
    * force/torque in any sense exceeds limit value (see below);
    * the bond is breakable (fragile) in that sense, as indicated by flag for given sense (stored again in :obj:`~woo.dem.IcePhys.bonds`).
 
+   E.g. for the normal sense, those conditions would be :math:`F_{n}>F_{nb}` (see below) for the first point, and having both ``bondN`` and ``brkN`` bits of :obj:`~woo.dem.IcePhys.bonds` set (rather than zero).
+
 #. When breakage in any sense occurs, the bond is broken in all senses at once and becomes fully unboded.
 
 #. The transition from unbonded to bonded state never occurs naturally (though it can be forced by hand).
@@ -84,6 +86,33 @@ Cohesion values are only useful for senses which are both bonded and breakable, 
    \end{align*}
 
 Note that there is no absolute value in the first equation, as there is no breakage in compression (:math:`F_n<0`).
+
+Bond setup
+"""""""""""
+
+Simulations often need to create different bonding for contacts existing in the starti configuration (at the very beginning of the simulation) and different bonding for particles which only meet later, as an effect of their movement during the simulation.
+
+This scenario is supported out-of-box. Starting configuration's :obj:`IcePhys.bonds <woo.dem.IcePhys.bonds>` are specified by :obj:`Cp2_IceMat_IcePhys.bonds0 <woo.dem.Cp2_IceMat_IcePhys.bonds0>`, and this value is assigned only during the first few steps of the simulation -- precisely until :obj:`S.step <woo.core.Scene.step>` reaches :obj:`~woo.dem.Cp2_IceMat_IcePhys.step01`.
+
+After that, all new contacts are assigned :obj:`Cp2_IceMat_IcePhys.bonds1 <woo.dem.Cp2_IceMat_IcePhys.bonds1>` instead; contacts created before retain their old (:obj:`~woo.dem.Cp2_IceMat_IcePhys.bonds0`) value, it is only updated when the contact is encountered for the very first time.
+
+Bond syntax
+""""""""""""
+
+:obj:`~woo.dem.IcePhys.bonds` are represented by bits of an integeral number. Each bit represents whether the contact is bonded or breakable in one sense. The order is as follows:
+
+#. First 4 bits (counting from the least significant ones, i.e. from the right) represent *bonds* in the 1. normal (``bondN``), 2. tangential (``bondT``), 3. twisting (``bondW``), 4. rolling (``bondR``) senses.
+
+#. Second 4 bits represent *breakability* in those senses again, i.e. ``brkN``, ``brkT``, ``brkW``, ``brkR``. It is understood that breakability bits are only useful in the sense where there is a bond.
+
+Numbers can be written as binary literal in Python; thus, for instance, if the starting configuration were to bond in all senses, and break in the twisting sense *only*, one would set::
+
+   # the bits are (read from the left here):
+   #     brkR=0,  brkW=0,  brkT=1,  brkN=0
+   #    bondR=1, bondW=1, bondT=1, bondN=1
+   bonds0=0b00101111
+
+
 
 Plasticity
 -----------
