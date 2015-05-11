@@ -31,12 +31,6 @@ void Cp2_ConcreteMat_ConcretePhys::go(const shared_ptr<Material>& m1, const shar
 		assert(!isnan(mat2.relDuctility));
 	}
 
-	static bool _w=false;
-	if(!_w && (mat1.ktDivKn!=0 || mat2.ktDivKn!=0)){
-		_w=true;
-		LOG_ERROR("The concrete model has bugs in shear stress computation (investigation ongoing) and is unstable. Set ktDivKn=0. to disable this warning and have at least a limited version of the model for now.");
-	}
-
 	// particles sharing the same material; no averages necessary
 	if (m1.get()==m2.get()) {
 		p->E=mat1.young;
@@ -218,6 +212,9 @@ void ConcretePhys::setRelResidualStrength(Real r) {
 #define NNAN(a) _WOO_VERIFY(!isnan(a));
 #define NNANV(v) _WOO_VERIFY(!isnan(v.maxCoeff()));
 
+WOO_IMPL_LOGGER(Law2_L6Geom_ConcretePhys);
+
+
 bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_ptr<CPhys>& _phys, const shared_ptr<Contact>& C){
 	L6Geom& geom=_geom->cast<L6Geom>();
 	ConcretePhys& phys=_phys->cast<ConcretePhys>();
@@ -256,6 +253,14 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 			phys->epsFracture = phys->epsCrackOnset*phys->relDuctility;
 		}
 	#endif
+
+	static bool _w=false;
+	if(!_w && yieldSurfType!=YIELD_MOHRCOULOMB && phys.G!=0){
+		_w=true;
+		LOG_ERROR("The concrete model has bugs in yield surface equations (except for the linear (=Mohr-Coulomb) yieldSurfType). This is your case now, expect bogus results. The investigation of this is ongoing.");
+	}
+
+
 	
 	if(C->isFresh(scene)) phys.uN0=geom.uN;
 
@@ -305,7 +310,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 
 	/* strain return: Coulomb friction */
 	sigmaT=G*epsT; // trial stress
-	Real rT=yieldSigmaTMagnitude(sigmaN,omega,coh0,tanPhi);  // radius of plastic zone in tangent direction
+	Real rT=yieldSigmaTNorm(sigmaN,omega,coh0,tanPhi);  // radius of plastic zone in tangent direction
 	if(sigmaT.squaredNorm()>rT*rT){
 		Real sigmaTNorm=sigmaT.norm();
 		Real scale=plTau>0 ? phys.computeViscoplScalingFactor(sigmaTNorm,rT,dt) : rT/sigmaTNorm;

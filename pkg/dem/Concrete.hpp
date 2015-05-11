@@ -60,7 +60,6 @@ struct ConcretePhys: public FrictPhys {
 		ConcretePhys,FrictPhys,"Representation of a single interaction of the Concrete type: storage for relevant parameters.", \
 		((Real,E,NaN,,"normal modulus (stiffness / crossSection) [Pa]")) \
 		((Real,G,NaN,,"shear modulus [Pa]")) \
-		/*((Real,tanPhi,NaN,,"tangens of internal friction angle [-]"))*/ \
 		((Real,coh0,NaN,,"virgin material cohesion [Pa]")) \
 		((Real,epsCrackOnset,NaN,,"strain at which the material starts to behave non-linearly")) \
 		/*((Real,relDuctility,NaN,,"Relative ductility of bonds in normal direction"))*/ \
@@ -117,34 +116,40 @@ WOO_REGISTER_OBJECT(Cp2_ConcreteMat_ConcretePhys);
 
 struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 	// Real elasticEnergy();
-	Real yieldSigmaTMagnitude(Real sigmaN, Real omega, Real coh0, Real tanPhi) {
+	enum{YIELD_MOHRCOULOMB=0,YIELD_PARABOLIC,YIELD_LOG,YIELD_LOG_LIN,YIELD_ELLIPTIC,YIELD_ELLIPTIC_LOG};
+	Real yieldSigmaTNorm(Real sigmaN, Real omega, Real coh0, Real tanPhi) {
+		Real ret=NaN;
 		switch(yieldSurfType){
-			case 0: return coh0*(1-omega)*-sigmaN*tanPhi;
-			case 1: return sqrt(pow(coh0,2)-2*coh0*tanPhi*sigmaN)-coh0*omega;
-			case 2: return ( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1)));
-			case 3:
-				if(sigmaN>0) return coh0*(1-omega)*-sigmaN*tanPhi;
-				return ((sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1)));
-			case 4:
-			case 5:
-				if(yieldSurfType==4 && sigmaN>0) return coh0*(1-omega)*-sigmaN*tanPhi;
-				return (pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2)))>=1 ? 0 : sqrt((-coh0*((1-omega)*tanPhi)*yieldEllipseShift+pow(coh0,2))*(1-pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2))))-omega*coh0;
-			default: throw std::logic_error("Law2_L6Geom_ConcretePhys::yieldSigmaTMagnitude: invalid value of yieldSurfType="+to_string(yieldSurfType));
+			case YIELD_MOHRCOULOMB: ret=coh0*(1-omega)-sigmaN*tanPhi; break;
+			case YIELD_PARABOLIC: ret=sqrt(pow(coh0,2)-2*coh0*tanPhi*sigmaN)-coh0*omega; break;
+			case YIELD_LOG: ret=( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1))); break;
+			case YIELD_LOG_LIN:
+				if(sigmaN>0) ret=coh0*(1-omega)-sigmaN*tanPhi; break;
+				ret=((sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1))); break;
+			case YIELD_ELLIPTIC:
+			case YIELD_ELLIPTIC_LOG:
+				if(yieldSurfType==YIELD_ELLIPTIC && sigmaN>0) ret=coh0*(1-omega)-sigmaN*tanPhi; break;
+				ret=(pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2)))>=1 ? 0 : sqrt((-coh0*((1-omega)*tanPhi)*yieldEllipseShift+pow(coh0,2))*(1-pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2))))-omega*coh0; break;
+			default: throw std::logic_error("Law2_L6Geom_ConcretePhys::yieldSigmaTNorm: invalid value of yieldSurfType="+to_string(yieldSurfType));
 		}
+		assert(!isnan(ret));
+		return max(0.,ret);
 	}
 
 	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
 	FUNCTOR2D(L6Geom,ConcretePhys);
+	WOO_DECL_LOGGER;
 	#define woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY \
 		Law2_L6Geom_ConcretePhys,LawFunctor,"Constitutive law for concrete.", \
-		((int,yieldSurfType,2,,"yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log")) \
+		((int,yieldSurfType,YIELD_LOG_LIN,AttrTrait<Attr::namedEnum>().namedEnum({{YIELD_MOHRCOULOMB,{"linear","lin","MC","mc","Mohr-Coulomb"}},{YIELD_PARABOLIC,{"para","parabolic"}},{YIELD_LOG,{"log","logarithmic"}},{YIELD_LOG_LIN,{"logarithmic, linear tension","loglin","log+lin"}},{YIELD_ELLIPTIC,{"elliptic","ell"}},{YIELD_ELLIPTIC_LOG,{"elliptic+logarithmic","ell+log"}}}),"yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log")) \
 		((Real,yieldLogSpeed,.1,,"scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)")) \
 		((Real,yieldEllipseShift,NaN,,"horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)")) \
 		((Real,omegaThreshold,((void)">=1. to deactivate, i.e. never delete any contacts",1.),,"damage after which the contact disappears (<1), since omega reaches 1 only for strain →+∞")) \
 		((Real,epsSoft,((void)"approximates confinement -20MPa precisely, -100MPa a little over, -200 and -400 are OK (secant)",-3e-3),,"Strain at which softening in compression starts (non-negative to deactivate)")) \
 		((Real,relKnSoft,.3,,"Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)")) \
-		, /*py*/.def("yieldSigmaTMagnitude",&Law2_L6Geom_ConcretePhys::yieldSigmaTMagnitude,(py::arg("sigmaN"),py::arg("omega"),py::arg("coh0"),py::arg("tanPhi")),"Return radius of yield surface for given material and state parameters; uses attributes of the current instance (*yieldSurfType* etc), change them before calling if you need that.") \
-		// .def("elasticEnergy",&Law2_L6Geom_ConcretePhys::elasticEnergy,"Compute and return the total elastic energy in all :obj:`ConcretePhys` contacts")
+		, /*py*/.def("yieldSigmaTNorm",&Law2_L6Geom_ConcretePhys::yieldSigmaTNorm,(py::arg("sigmaN"),py::arg("omega"),py::arg("coh0"),py::arg("tanPhi")),"Return radius of yield surface for given material and state parameters; uses attributes of the current instance (:obj:`yieldSurfType` etc), change them before calling if you need that.") \
+		/* .def("elasticEnergy",&Law2_L6Geom_ConcretePhys::elasticEnergy,"Compute and return the total elastic energy in all :obj:`ConcretePhys` contacts") */
+			
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Law2_L6Geom_ConcretePhys);

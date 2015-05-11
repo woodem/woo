@@ -9,12 +9,12 @@ S=woo.master.scene=Scene(fields=[DemField()],dtSafety=.9)
 
 woo.batch.readParamsFromTable(S,noTableOk=True,
 	young=24e9,
-	ktDivKn=0.,
+	ktDivKn=.2,
 
 	sigmaT=3.5e6,
 	tanPhi=0.8,
 	epsCrackOnset=1e-4,
-	relDuctility=30,
+	relDuctility=100,
 
 	distFactor=1.5,
 	# dtSafety=.8,
@@ -26,7 +26,7 @@ woo.batch.readParamsFromTable(S,noTableOk=True,
 	#doModes=3,
 
 	specimenLength=.15,
-	sphereRadius=2e-3,
+	sphereRadius=3e-3,
 
 	# isotropic confinement (should be negative)
 	isoPrestress=0,
@@ -46,7 +46,7 @@ sp.cellSize=(0,0,0) # make aperiodic
 
 sp.toSimulation(S,mat=mat)
 S.dem.collectNodes()
-S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping))+[PyRunner(100,'addPlotData(S)')]
+S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping),lawKw=dict(yieldSurfType='lin'))+[PyRunner(10,'addPlotData(S)')]
 
 # take boundary nodes an prescribe velocity to those
 lc=.5*S.lab.table.specimenLength-3*S.lab.table.sphereRadius
@@ -57,12 +57,16 @@ for n in S.dem.nodes:
 		n.dem.impose=(S.lab.topImpose if n.pos[2]>0 else S.lab.botImpose)
 
 def addPlotData(S):
+	stage=(0 if S.lab.topImpose.vel>0 else 1)
 	u=S.lab.topImpose.dist+S.lab.botImpose.dist
 	eps=u/S.lab.table.specimenLength
-	sig=-.5*(S.lab.topImpose.sumF+S.lab.botImpose.sumF)/(math.pi*S.lab.minRad**2)
-	S.plot.addData(eps=eps,sig=sig,u=u,Ftop=-S.lab.topImpose.sumF,Fbot=-S.lab.botImpose.sumF)
-	stage=(0 if S.lab.topImpose.vel>0 else 1)
-	if S.step>1000 and abs(-S.lab.topImpose.sumF)<.5*abs(max(S.plot.data['Ftop']) if stage==0 else min(S.plot.data['Ftop'])):
+	Ftop,Fbot=-S.lab.topImpose.sumF,-S.lab.botImpose.sumF
+	sig=.5*(Ftop+Fbot)/(math.pi*S.lab.minRad**2)
+	# in this case, we went to tension actually (dynamic), just don't record that as we then fail to detect pak in 
+	if stage==0 and Ftop<0: pass
+	else: S.plot.addData(eps=eps,sig=sig,u=u,Ftop=Ftop,Fbot=Fbot)
+	halved=(Ftop<.5*(max(S.plot.data['Ftop'])) if stage==0 else Ftop>.5*min(S.plot.data['Ftop']))
+	if S.step>1000 and halved:
 		if stage==0:
 			S.stop()
 			p=woo.master.scene.plot
@@ -79,7 +83,7 @@ S.one()
 for f in S.lab.collider.boundDispatcher.functors+S.lab.contactLoop.geoDisp.functors:
 	if hasattr(f,'distFactor'): f.distFactor=1.
 # this is the initial state
-woo.gl.Renderer(dispScale=(10000,10000,10000))
+woo.gl.Renderer(dispScale=(1000,1000,1000))
 woo.gl.Gl1_DemField.colorBy='ref. displacement'
 woo.gl.Gl1_DemField.vecAxis='xy'
 S.plot.plots={'eps':('sig',),'u':('Ftop','Fbot')}
@@ -89,7 +93,7 @@ S.saveTmp('init')
 def start(S,sign=+1):
 	# impose velocity on bottom/top particles
 	v=S.lab.table.strainRateCompression*S.lab.table.specimenLength
-	print sign*v
+	# print sign*v
 	S.lab.topImpose.vel=S.lab.botImpose.vel=sign*v
 start(S,+1)
 S.run()
