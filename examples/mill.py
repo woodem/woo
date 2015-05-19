@@ -55,6 +55,7 @@ for w in millPar[-2:]: w.shape.visible=False
 centralNode=woo.core.Node(pos=(0,0,0))
 S.dem.par.addClumped(millPar,centralNode=centralNode)
 centralNode.dem.angVel=(-5,0,0)
+centralNode.dem.blocked='xyzXYZ' # addClumped does not block automatically anymore, do it by hand
 
 # define domains for initial cloud of red and blue spheres
 packHt=.8*millRad # size of the area
