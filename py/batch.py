@@ -650,11 +650,11 @@ A special value ``=`` can be used instead of parameter value; value from the pre
 This class is used by :obj:`woo.utils.readParamsFromTable`.
 
 >>> tryData=[
-...   ['head1','important2!','head3','...','...','!OMP_NUM_THREADS!','abcd'],
-...   [1,1.1, '1.','1','5', 1.2,1.3,],
-...   ['a','b','HE','AD','_3','c','d','###','comment'],
+...   ['head1','important2!','head3','...','...','...','!OMP_NUM_THREADS!','abcd'],
+...   [1,1.1, '1','.','1','5', 1.2,1.3,],
+...   ['a','b','HE','AD','_','3','c','d','###','comment'],
 ...   ['# empty line'],
-...   [1,'=','=','=','=','=','g']
+...   [1,'=','=','=','=','=','=','g']
 ... ]
 >>> import woo
 >>> tryFile=woo.master.tmpFilename()
@@ -696,7 +696,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
 >>> pprint(TableParamReader(f2).paramDict())
 {2: {u'!OMP_NUM_THREADS': '1.2',
      u'abcd': '1.3',
-     u'head1': '1.0',
+     u'head1': '1',
      u'head3': u'1.15',
      u'important2': '1.1',
      'title': u'important2=1.1,OMP_NUM_THREADS=1.2'},
@@ -708,7 +708,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
      'title': u'important2=b,OMP_NUM_THREADS=c'},
  5: {u'!OMP_NUM_THREADS': u'c',
      u'abcd': u'g',
-     u'head1': '1.0',
+     u'head1': '1',
      u'head3': u'HEAD_3',
      u'important2': u'b',
      'title': u'important2=b,OMP_NUM_THREADS=c__line=5__'}}
@@ -751,6 +751,13 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
 					for c in cols:
 						v=sheet.cell(r,c).value
 						if type(v)!=unicode: v=str(v)
+						# represent numbers with zero fractional part as ints, without trailing ".0" or such
+						# XLS does not know ints
+						# http://stackoverflow.com/questions/8825681/integers-from-excel-files-become-floats
+						try:
+							f=float(v)
+							if f==int(f): v=str(int(f))
+						except ValueError: pass
 						vv[c]=v
 					values[r+firstLine]=[vv[c] for c in cols]
 			else:

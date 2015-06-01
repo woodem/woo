@@ -26,7 +26,7 @@ woo.batch.readParamsFromTable(S,noTableOk=True,
 	#doModes=3,
 
 	specimenLength=.15,
-	sphereRadius=3e-3,
+	sphereRadius=1e-3,
 
 	# isotropic confinement (should be negative)
 	isoPrestress=0,

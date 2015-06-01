@@ -114,9 +114,8 @@ void Renderer::init(){
 		glutInitDone=true;
 	}
 	// this is not initialized properly for some reason?!
-	//showTime=TIME_STEP|TIME_VIRT;
-	//cerr<<"dispScale="<<dispScale.transpose()<<endl;
-	//if(dispScale==Vector3r::Ones()) dispScale=Vector3r(10,10,10);
+	showTime=TIME_STEP|TIME_VIRT;
+	dispScale=Vector3r(10,10,10);
 
 	initDone=true;
 }

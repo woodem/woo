@@ -1,3 +1,5 @@
+.. _theory-geom-ellipsoid:
+
 Ellipsoid
 -----------
 

@@ -18,6 +18,7 @@
    theory/index.rst
    cases/index.rst
    prog/index.rst
+   gallery/index.rst
    wooMods.rst
    references.rst
    todos.rst

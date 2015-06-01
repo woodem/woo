@@ -27,7 +27,7 @@ Results database
 
 Finished jobs may write some resulting data to results database in the lightweight `SQLite <http://www.sqlite.org>`_ format. Saved data include batch information, when was the simulation running, plot information, preprocessor parameters and plot data series.
 
-When running in batch, the database is usually named as the parameter table, only with the :file:`results` suffix -- in the `batch example <batch_example>`_, it is :file:`dt.results`. Standalone simulations use preprocessor-defined name, :obj:`FallingHorse <woo.pre.horse.FallingHorse>` uses ``horse.results``.
+When running in batch, the database is usually named as the parameter table, only with the :file:`results` suffix -- in the :ref:`batch example <batch_example>`_, it is :file:`dt.results`. Standalone simulations use preprocessor-defined name, :obj:`FallingHorse <woo.pre.horse.FallingHorse>` uses ``horse.results``.
 
 .. note:: The database file is never deleted, only appended to. Running the same batch several times will therefore leave results of old batches intact.
 

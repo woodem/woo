@@ -10,7 +10,7 @@ from math import pi
 from minieigen import *
 
 woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False)
-woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis=-1,colorBy2=woo.gl.Gl1_DemField.colorVel)
+woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel)
 woo.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))],dtSafety=.8)
@@ -25,7 +25,7 @@ S.dem.par.add(ff)
 
 # a few spheres falling onto the mesh
 sp=woo.pack.SpherePack()
-sp.makeCloud((.3,.3,.1),(.7,.7,.6),rMean=.5*xmax/xdiv,rRelFuzz=.5)
+sp.makeCloud((.3,.3,.1),(.7,.7,.6),rMean=.3*xmax/xdiv,rRelFuzz=.5)
 sp.toSimulation(S,mat=mat)
 
 S.dem.collectNodes()
@@ -34,9 +34,6 @@ S.dem.collectNodes()
 for n in S.dem.nodes:
 	n.dem.blocked=''
 	if n.pos[0]==0 or (n.pos[1]==0): n.dem.blocked='xyz'
-	r=.3*xmax*1./xdiv; V=(4/3.)*pi*r**3
-	n.dem.inertia=mat.density*(2/5.)*V*r**2*Vector3(1,1,1)
-	n.dem.mass=V*mat.density
 
 
 
@@ -49,6 +46,8 @@ for n in [n for n in S.dem.nodes if n.pos[0]==n.pos[1]]:
 
 S.engines=DemField.minimalEngines(damping=.4,verletDist=-0.01)+[IntraForce([In2_Membrane_ElastMat(thickness=.01,bending=True,bendThickness=.01)]),BoxOutlet(box=((-.1,-.1,-1),(1.1,1.1,1)),glColor=float('nan'))]
 
+
+for n in S.dem.nodes: DemData.setOriMassInertia(n)
 
 S.saveTmp()
 

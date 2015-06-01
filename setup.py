@@ -371,7 +371,7 @@ setup(name='woo',
 	version=version,
 	author='Václav Šmilauer',
 	author_email='eu@doxos.eu',
-	url='http://www.woodem.eu',
+	url='http://www.woodem.org',
 	description='Discrete dynamic compuations, especially granular mechanics.',
 	long_description='''Extesible and portable framework primarily for mechanics
 granular materials. Computation parts are written in c++ parallelized using

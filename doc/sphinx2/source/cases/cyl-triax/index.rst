@@ -1,3 +1,5 @@
+.. _case-cyl-triax:
+
 ================================================
 Cylindrical triaxial test with flexible membrane
 ================================================

@@ -3,6 +3,7 @@ import woo.document
 # import all modules here
 from woo import utils,log,timing,pack,document,manpage,plot,post2d,runtime,WeightedAverage2d
 import minieigen,re,sys,sphinx,os,os.path
+import __builtin__
 ##
 ## generated parts of the docs here
 ##
@@ -28,6 +29,7 @@ if not '--only-extras' in sys.argv:
 		for fmt in 'latex','html':
 			args=['','-T','-b',fmt,'-j','6','-d','../build/doctrees','../source','../build/%s'%fmt]
 			print 'Calling sphinx.build_main with: '+' '.join(args)
+			__builtin__.woo_sphinx_fmt=fmt # this is used in conf.py
 			sphinx.build_main(args)
 
 #
@@ -42,7 +44,7 @@ for mName in [m for m in sys.modules if m.startswith('wooExtra.') and len(m.spli
 	outName=srcDir+'/index.rst'
 	print 'WRITING OUTPUT FOR %s TO %s'%(mName,outName)
 	with open(outName,'w') as f:
-		f.write('.. note:: This page is not `documentation of Woo itself <http://www.woodem.eu/doc>`_, only of an extra module.\n\n')
+		f.write('.. note:: This page is not `documentation of Woo itself <http://www.woodem.org>`_, only of an extra module.\n\n')
 		f.write('%s module\n################################\n\n'%mName)
 		woo.document.oneModuleWithSubmodules(mod,f)
 	# copy config over
@@ -68,7 +70,7 @@ copyright = u'{copyright} (distributor)'
 master_doc = u'index'
 templates_path=['../../source/_templates'] 
 html_static_path=['../../source/_static']
-intersphinx_mapping={{'woo':('http://www.woodem.eu/doc',None)}}
+intersphinx_mapping={{'woo':('http://www.woodem.org',None)}}
 extensions=[e for e in extensions if e!='sphinx.ext.viewcode'] # don't show code in extras, stragely wooExtra.* is included, not just the one particular extra module
 html_additional_pages = {{ }} # double here because of .format(...)
 modindex_common_prefix = [ '{mName}' ]

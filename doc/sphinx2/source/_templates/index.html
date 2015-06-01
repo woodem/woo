@@ -1,20 +1,26 @@
 {% extends "layout.html" %}
-{% set title = 'Overview' %}
+{% set title = 'Woo home' %}
 {% block body %}
   <h1>Welcome to Woo − extensible DEM simulations</h1>
   <p>
+  	This is the main documentation of Woo (also available as a <a href="https://woodem.eu/doc/Woo.pdf">huge PDF hardcopy</a>); were you looking for something else?
+	<ul>
+		<li><a href="https://github.com/eudoxos/woodem">github repository</a> for your own development,</li>
+		<li><a href="http://ask.woodem.org">Ask WooDEM forum</a> for questions &amp; answers,</li>
+		<li><a href="https://launchpad.net/woo/+download">Windows binaries downloads</a>,</li>
+		<li><a href="http://woodem.eu">woodem.eu</a> for commercial support.</li>
+	</ul>
+  </p>
+  <h2>About Woo</h2>
+  <p>
  	Woo is extesible and portable framework primarily for mechanics granular materials. Computation parts are written in c++ parallelized using OpenMP, fully accessible and modifiable from python (ipython console or scripts). Arbitrarily complex scene can be scripted. Qt-based user interface is provided, featuring flexible OpenGL display, inspection of all objects and runtime modification. Parametric preprocessors can be written in pure python, and batch system can be used to drive parametric studies. New material models and particle shapes can be added (in c++) without modifying existing classes.
 
-   Woo is a commercially-backed and geared towards customisations for non-trivial, challenging scenarios — sieving, segregation, conveyors, membranes and similar.
+   Woo is GPL2-licensed, geared towards customisations for non-trivial, challenging scenarios — sieving, segregation, conveyors, membranes and similar. See <a href="http://woodem.eu/examples">examples</a> of what it does.
   </p>
-  <p>
-  	This is user-level documentation of Woo; general information is available from the <a href="http://woodem.eu">main page</a>, development is hosted at <a href="http://www.github.com/eudoxos/woodem">github</a>, including bug tracking and downloads.  <a href="https://woodem.eu/doc/Woo.pdf">PDF hardcopy</a> of the entire documentation is available.
-  </p>
+ <h2>Documentation</h2>
   <p>
    This documentation decribes Woo version {{ release }} / {{ version }}.
   </p>
-  
- <h2>Documentation</h2>
   <table class="contentstable" align="center" style="margin-left: 30px">
     <tr>
       <td width="50%">

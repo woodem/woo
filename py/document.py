@@ -8,7 +8,7 @@ from minieigen import *
 import logging
 
 
-sphinxOnlineDocPath='http://www.woodem.eu/doc/'
+sphinxOnlineDocPath='http://www.woodem.org/'
 "Base URL for the documentation. Packaged versions should change to the local installation directory."
 
 import os.path
@@ -492,7 +492,7 @@ def makeSphinxHtml(k):
 	return 'woo.'+mod
 
 def makeClassAttrDocUrl(klass,attr=None):
-	'''Return URL to documentation of Woo class or its attribute in http://woodem.eu/doc.
+	'''Return URL to documentation of Woo class or its attribute in http://woodem.org.
 	:param klass: class object
 	:param attr:  attribute to link to. If given, must exist directly in given *klass* (not its parent); if not given or empty, link to the class itself is created and *attr* is ignored.
 	:return: URL as text

@@ -1,4 +1,6 @@
 
+.. _cases-x-aniso:
+
 .. sectionauthor:: Václav Šmilauer <eu@doxos.eu>
 
 ==============================================
