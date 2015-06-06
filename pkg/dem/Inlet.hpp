@@ -26,12 +26,12 @@ struct Inlet: public PeriodicEngine{
 	#define woo_dem_Inlet__CLASS_BASE_DOC_ATTRS \
 		Inlet,PeriodicEngine,ClassTrait().doc("Inlet generating new particles. This is an abstract base class which in itself does not generate anything, but provides some unified interface to derived classes.").section("Inlets & Outlets","TODO",{"ParticleGenerator","SpatialBias","ParticleShooter","Outlet"}), \
 		((int,mask,((void)":obj:`DemField.defaultInletMask`",DemField::defaultInletMask),,":obj:`~woo.dem.Particle.mask` for new particles.")) \
-		((Real,maxMass,-1,,"Mass at which the engine will not produce any particles (inactive if not positive)")) \
+		((Real,maxMass,-1,AttrTrait<>().massUnit(),"Mass at which the engine will not produce any particles (inactive if not positive)")) \
 		((long,maxNum,-1,,"Number of generated particles after which no more will be produced (inactive if not positive)")) \
 		((string,doneHook,"",,"Python string to be evaluated when :obj:`maxMass` or :obj:`maxNum` have been reached. The engine is made dead automatically even if doneHook is not specified.")) \
-		((Real,mass,0,,"Generated mass total")) \
+		((Real,mass,0,AttrTrait<>().massUnit(),"Generated mass total")) \
 		((long,num,0,,"Number of generated particles")) \
-		((Real,currRate,NaN,AttrTrait<>().readonly(),"Current value of mass flow rate")) \
+		((Real,currRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Current value of mass flow rate")) \
 		((bool,zeroRateAtStop,true,,"When the generator stops (mass/number of particles reached, ...), set :obj:`currRate` to zero immediately")) \
 		((Real,currRateSmooth,1,AttrTrait<>().range(Vector2r(0,1)),"Smoothing factor for currRate ∈〈0,1〉")) \
 		((Real,glColor,0,AttrTrait<>().noGui(),"Color for rendering (nan disables rendering)"))
