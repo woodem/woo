@@ -3,6 +3,7 @@ Convenience module for setting up visualization pipelines for Paraview through p
 '''
 import woo
 import woo.dem
+import logging
 
 
 def findPV():
@@ -115,7 +116,7 @@ def kwFromFlowAnalysis(flowAnalysis,outPrefix=None,fractions=[],fracA=[],fracB=[
 		else:
 			logging.info('Guessing values for fracA and fracB as they were not given')
 			fracA=range(0,fa.nFractions/2); fracB=range(fa.nFractions/2,fa.nFractions)
-		expSplit=fa.vtkExportVectorOps(outPrefix+'.split',frac=fracA,fracB=fracB)
+		expSplit=fa.vtkExportVectorOps(outPrefix+'.split',fracA=fracA,fracB=fracB)
 		ret['splitFile']=expSplit
 	return ret
 
@@ -176,7 +177,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],flowFile='',sp
 	f.close()
 	
 
-_paraviewScriptTemplate=r'''
+_paraviewScriptTemplate=r'''#!/usr/bin/env python
 import sys, os.path
 
 # input parameters
@@ -289,8 +290,11 @@ if splitFile:
 	for arr,name,rgb in [('cross','Segregation',(0,0,1)),('diffA','Small fraction',(0,1,0)),('diffB','Big fraction',(1,0,0))]:
 		SetActiveSource(_last)
 		arrData=split.GetPointDataInformation().GetArray(arr)
-		scale=_avgcell/max([max([abs(r) for r in arrData.GetRange(i)]) for i in (0,1,2)])
-		scale*=10*splitStride # biggest vector spans about 20 cells (including stride)
+		denom=max([max([abs(r) for r in arrData.GetRange(i)]) for i in (0,1,2)])
+		if denom==0: denom=1e-6
+		scale=_avgcell/denom
+		scale*=2*splitStride # biggest vector spans about 2 cells (including stride)
+		if name=='Segregation': scale*=4
 		gl=Glyph(GlyphType="Arrow",GlyphTransform="Transform2",Vectors=['POINTS',arr])
 		if hasattr(gl,'MaskPoints'): # PV 4.0
 			gl.MaskPoints=0 
@@ -298,7 +302,8 @@ if splitFile:
 			gl.RandomMode=0
 		elif hasattr(gl,'GlyphMode'): # PV>=4.3
 			gl.GlyphMode='All Points'
-			gl.ScaleFactor=1.0
+			gl.ScaleMode='vector'
+			gl.ScaleFactor=scale
 		RenameSource(name,gl)
 		rep=Show()
 		rep.ColorArrayName=('POINT_DATA','') # solid color
