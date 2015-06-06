@@ -75,6 +75,7 @@ struct VtkExport: public PeriodicEngine{
 		((map_string_vector_string,outFiles,,AttrTrait<>().noGui().readonly(),"Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.")) \
 		((vector<Real>,outTimes,,AttrTrait<>().noGui().readonly(),"Times at which files were written.")) \
 		((vector<int>,outSteps,,AttrTrait<>().noGui().readonly(),"Steps at which files were written.")) \
+		((bool,mkDir,false,,"Attempt to create directory for output files, if not present.")) \
 		,/*ctor*/ initRun=false; /* do not run at the very first step */ \
 		,/*py*/ \
 			/* this overrides the c++ map above which won't convert to python automatically */ \

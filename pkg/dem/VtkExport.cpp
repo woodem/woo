@@ -10,6 +10,8 @@
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/pkg/dem/Funcs.hpp>
 
+#include<boost/filesystem.hpp>
+
 WOO_PLUGIN(dem,(VtkExport));
 WOO_IMPL_LOGGER(VtkExport);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
@@ -491,6 +493,16 @@ void VtkExport::run(){
 
 	vtkSmartPointer<vtkDataCompressor> compressor;
 	if(compress) compressor=vtkSmartPointer<vtkZLibDataCompressor>::New();
+
+	if(mkDir){
+		// try to create directory for output files, if not there already
+		boost::filesystem::path p(out+"foo");
+		auto dir=p.parent_path();
+		if(!boost::filesystem::exists(dir)){
+			LOG_INFO("Creating directory for output files as requested: "<<dir.string());
+			boost::filesystem::create_directories(dir);
+		}
+	}
 
 	if(!multiblock){
 		if(what&WHAT_CON){
