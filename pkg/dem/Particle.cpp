@@ -437,9 +437,19 @@ void DemField::pyNodesAppend(const shared_ptr<Node>& n){
 	if(!n) throw std::runtime_error("DemField.nodesAppend: Node to be added may not be None.");
 	if(!n->hasData<DemData>()) throw std::runtime_error("DemField.nodesAppend: Node must define Node.dem (DemData)");
 	auto& dyn=n->getData<DemData>();
-	if(dyn.linIx>=0 && dyn.linIx<(int)nodes.size() && (n.get()==nodes[dyn.linIx].get())) throw std::runtime_error("Node already in DemField.nodes["+to_string(dyn.linIx)+"], refusing to add it again.");
+	if(dyn.linIx>=0 && dyn.linIx<(int)nodes.size() && (n.get()==nodes[dyn.linIx].get())) throw std::runtime_error("Node "+n->pyStr()+" already in DemField.nodes["+to_string(dyn.linIx)+"], refusing to add it again.");
 	n->getData<DemData>().linIx=nodes.size();
 	nodes.push_back(n);
+}
+
+void DemField::pyNodesAppendFromParticles(const vector<shared_ptr<Particle>>& pp){
+	std::set<Node*> nn;
+	for(const auto& p: pp){
+		if(!p->shape) continue;
+		for(const auto& n: p->shape->nodes){
+			if(nn.count(n.get())==0){ pyNodesAppend(n); nn.insert(n.get()); }
+		}
+	}
 }
 
 void DemField::removeParticle(Particle::id_t id){
