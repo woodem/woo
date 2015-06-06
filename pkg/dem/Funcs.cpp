@@ -511,6 +511,11 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 				isNew[v]=true;
 			}
 		}
+		// degenerate facet (due to tolerance), don't add
+		if(vIx[0]==vIx[1] || vIx[1]==vIx[2] || vIx[2]==vIx[0]){
+			LOG_TRACE("STL: Face#"<<v0/3<<" is degenerate (vertex indices "<<vIx[0]<<","<<vIx[1]<<","<<vIx[2]<<"), skipping.");
+			continue;
+		}
 		LOG_TRACE("STL: Face #"<<v0/3<<", node indices "<<vIx[0]<<(isNew[0]?"*":"")<<", "<<vIx[1]<<(isNew[1]?"*":"")<<", "<<vIx[2]<<(isNew[2]?"*":"")<<" ("<<nodes.size()<<" nodes)");
 		// create facet
 		shared_ptr<Facet> facet;
