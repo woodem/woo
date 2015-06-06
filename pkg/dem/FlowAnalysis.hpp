@@ -36,6 +36,7 @@ struct FlowAnalysis: public PeriodicEngine{
 	template<class vtkArrayType=vtkDoubleArray>
 	vtkSmartPointer<vtkArrayType> vtkMakeArray(const vtkSmartPointer<vtkUniformGrid>& grid, const string& name, size_t numComponents, bool fillZero=true);
 
+	// when fracA and/or fracB are not given, half/half is taken -- for convenience
 	string vtkExportVectorOps(const string& out, const vector<size_t>& fracA, const vector<size_t>& fracB);
 
 

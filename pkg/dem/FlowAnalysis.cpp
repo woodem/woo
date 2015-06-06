@@ -56,7 +56,7 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const s
 	size_t fraction=0; // default is the only fraction, which is always present
 	// by diameter
 	if(!dLim.empty()){
-		std::lower_bound(dLim.begin(),dLim.end(),diameter)-dLim.begin();
+		fraction=std::lower_bound(dLim.begin(),dLim.end(),diameter)-dLim.begin();
 	}
 	// by particle mask
 	if(!masks.empty()){
@@ -274,6 +274,15 @@ Real FlowAnalysis::avgFlowNorm(const vector<size_t> &fractions){
 
 string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>& fracA, const vector<size_t>& fracB){
 	if(timeSpan==0.) throw std::runtime_error("FlowAnalysis.timeSpan==0, no data was ever collected.");
+#if 0
+	if(fracA.empty()!=fracB.empty()) throw std::runtime_error("Either both fracA and fracB must be given, or both must be empty (and will be filled automatically).");
+	if(fracA.empty() && fracB.empty()){
+		fracA.resize(nFractions/2);
+		fracB.resize(nFractions-fracA.size());
+		std::iota(fracA.begin(),fracA.end(),0);
+		std::iota(fracB.begin(),fracB.end(),fracA.size());
+	}
+#endif
 	auto grid=vtkMakeGrid();
 	auto cross=vtkMakeArray(grid,"cross",3,/*fillZero*/false);
 	auto crossNorm=vtkMakeArray(grid,"|cross|",1,/*fillZero*/false);
