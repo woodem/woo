@@ -79,7 +79,11 @@ def fromEngines(S,out=None,launch=False,noDataOk=False):
 		if isinstance(e,woo.dem.VtkExport) and e.nDone>0: kw.update(kwFromVtkExport(e))
 		elif isinstance(e,woo.dem.FlowAnalysis) and e.nDone>0: kw.update(kwFromFlowAnalysis(e,outPrefix=outPrefix)) # without the .py
 		elif isinstance(e,woo.dem.Tracer): kw.update(kwFromVtkExportTraces(S,e.field,outPrefix=outPrefix))
-	if 'meshFiles' in kw: kw['flowMeshFile']=kw['meshFiles'][-1]
+ 	# use static mesh as boundary, if present, otherwise use last mesh file
+	if 'static' in kw or 'meshFiles' in kw:
+		kw['flowMeshFiles']=[]
+		if 'static' in kw: kw['flowMeshFiles'].append(kw['static'][0])
+		if 'meshFiles' in kw: kw['flowMeshFiles'].append(kw['meshFiles'][-1])
 	# no data found from engines
 	if not kw:
 		if noDataOk: return None
@@ -92,7 +96,7 @@ def kwFromVtkExport(vtkExport,out=None,launch=False):
 	'Extract keywords suitable for :obj:`write` from a given :obj:`~woo.dem.VtkExport` instance.'
 	assert isinstance(vtkExport,woo.dem.VtkExport)
 	ff=vtkExport.outFiles
-	return dict(sphereFiles=ff['spheres'] if 'spheres' in ff else [],meshFiles=ff['mesh'] if 'mesh' in ff else [],conFiles=ff['con'] if 'con' in ff else [],triFiles=ff['tri'] if 'tri' in ff else [])
+	return dict(sphereFiles=ff['spheres'] if 'spheres' in ff else [],meshFiles=ff['mesh'] if 'mesh' in ff else [],conFiles=ff['con'] if 'con' in ff else [],triFiles=ff['tri'] if 'tri' in ff else [],staticFile=ff['static'][0] if 'static' in ff else [])
 
 def kwFromVtkExportTraces(S,dem,outPrefix=None):
 	if not outPrefix: outPrefix=woo.master.tmpFilename()
@@ -130,24 +134,26 @@ def fromVtkExport(vtkExport,out=None,launch=False):
 def fromFlowAnalysis(flowAnalysis,out=None,findMesh=True,launch=False):
 	'Have *flowAnalysis* (:obj:`~woo.dem.FlowAnalysis`) export flow and split data, write Paraview script for it and optionally launch Paraview. With *findMesh*, try to find a :obj:`~woo.dem.VtkExport` and use its last exported mesh file as mesh to show with flow data as well.'
 	if not out: out=woo.master.tmpFilename()+'.py'
-	flowMeshFile=''
+	flowMeshFiles=[]
 	for e in flowAnalysis.scene.engines:
-		if isinstance(e,woo.dem.VtkExport) and 'mesh' in e.outFiles:
-			flowMeshFile=e.outFiles['mesh'][-1]
-	write(out,flowMeshFile=flowMeshFile,**kwFromFlowAnalysis(flowAnalysis))
+		if isinstance(e,woo.dem.VtkExport):
+			if 'static' in e.outFiles: flowMeshFiles.append(e.outFiles['static'][0])
+			if 'mesh' in e.outFiles: flowMeshFiles.append(e.outFiles['mesh'][-1])
+	write(out,flowMeshFiles=flowMeshFiles,**kwFromFlowAnalysis(flowAnalysis))
 	if launch: launchPV(out)
 
 
-def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],flowFile='',splitFile='',flowMeshFile='',tracesFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
+def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',flowFile='',splitFile='',flowMeshFiles=[],tracesFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
 	'''Write out script suitable for running with Paraview (with the ``--script`` option). The options to this function are:
 
 	:param sphereFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``spheres``);
 	:param meshFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``mesh``);
 	:param conFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``con``);
 	:param triFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``tri``);
+	:param staticFile: file from :obj:`woo.dem.VtkExport.outFiles` (``static``);
 	:param flowFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportFractions` (usually all fractions together);
 	:param splitFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportVectorOps`;
-	:param flowMeshFile: mesh file to be used for showing boundaries for split analysis;
+	:param flowMeshFiles: mesh files to be used for showing boundaries for split analysis;
 	:param tracesFile: file written by :obj:`woo.utils.vtkExportTraces`, for per-particle traces;
 	:param flowMeshOpacity: opacity of the mesh for flow analysis;
 	:param splitStride: spatial stride for segregation analysis; use 2 and more for very dense data meshes which are difficult to see through;
@@ -163,9 +169,10 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],flowFile='',sp
 		meshFiles=[fixPath(f) for f in meshFiles],
 		conFiles=[fixPath(f) for f in conFiles],
 		triFiles=[fixPath(f) for f in triFiles],
+		staticFile=fixPath(staticFile),
 		flowFile=fixPath(flowFile),
 		splitFile=fixPath(splitFile),
-		flowMeshFile=fixPath(flowMeshFile),
+		flowMeshFiles=[fixPath(f) for f in flowMeshFiles],
 		tracesFile=fixPath(tracesFile),
 		flowMeshOpacity=flowMeshOpacity,
 		splitStride=splitStride,
@@ -185,7 +192,7 @@ import sys, os.path
 # fraction flow analysis
 splitFile='{splitFile}'
 splitStride={splitStride} # with dense meshes, subsample to use only each nth point
-flowMeshFile='{flowMeshFile}'
+flowMeshFiles={flowMeshFiles}
 flowMeshOpacity={flowMeshOpacity}
 
 # global flow analysis
@@ -199,6 +206,7 @@ tracesFile='{tracesFile}'
 # particles
 sphereFiles={sphereFiles}
 meshFiles={meshFiles}
+staticFile='{staticFile}'
 conFiles={conFiles}
 triFiles={triFiles}
 
@@ -227,7 +235,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
 		import zipfile
 		with zipfile.ZipFile(zipName,'w',allowZip64=True) as ar:
 			zippedFiles=set()
-			for fff in ('sphereFiles','meshFiles','conFiles','triFiles'):
+			for fff in ('sphereFiles','meshFiles','conFiles','triFiles','flowMeshFiles'):
 				ff=eval(fff) # get the sequence
 				ff2=[]
 				for f in ff[vtkSlice]:
@@ -237,7 +245,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
 					ar.write(f,out0+'/'+fn)
 					ff2.append(fn)
 				newFiles[fff]=ff2
-			for ff in ('splitFile','flowMeshFile','flowFile','tracesFile'):
+			for ff in ('staticFile','splitFile','flowFile','tracesFile'):
 				f=eval(ff)
 				fn=os.path.basename(f)
 				newFiles[ff]=fn
@@ -250,7 +258,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
 			ll=[]
 			for l in open(sys.argv[0]):
 				var=l.split('=',1)[0]
-				if var in ('sphereFiles','meshFiles','conFiles','triFiles','splitFile','flowMeshFile','flowFile','tracesFile'):
+				if var in ('sphereFiles','meshFiles','conFiles','triFiles','staticFile','splitFile','flowMeshFiles','flowFile','tracesFile'):
 					if type(newFiles[var])==list: ll.append(var+'='+str(newFiles[var])+'\n')
 					else: ll.append(var+"='"+newFiles[var]+"'\n")
 				else: ll.append(l)
@@ -271,7 +279,7 @@ if splitFile:
 	RenameSource(splitFile,split)
 	readPointCellData(split)
 	_bounds=split.GetDataInformation().GetBounds()
-	flowBounds=_bounds ## to be used later with in flowMeshFIle
+	flowBounds=_bounds ## to be used later with in flowMeshFiles
 	_ext=split.GetDataInformation().GetExtent()
 	_avgcell=(1/3.)*sum([(_bounds[2*i+1]-_bounds[2*i])/(_ext[2*i+1]-_ext[2*1]) for i in (0,1,2)])
 	rep=Show()
@@ -339,19 +347,20 @@ if flowFile:
 	rep.LookupTable=GetLookupTableForArray('flow (momentum density)',3,VectorMode='Magnitude',EnableOpacityMapping=1)
 	rep.ColorArrayName=('POINT_DATA','flow (momentum density)')
 
-if flowMeshFile:
-	mesh=XMLUnstructuredGridReader(FileName=[flowMeshFile])
-	RenameSource(flowMeshFile,mesh)
-	mesh.CellArrayStatus=mesh.GetCellDataInformation().keys()
-	try:
-		_cl=Clip(ClipType='Box')
-		_cl.ClipType.Bounds=flowBounds
-		_cl.InsideOut=1
-		_cl.Scalars = ['CELLS', 'color']
-	except NameError: pass # flowBounds not defined, as flow/split were not exported
-	rep=Show()
-	rep.Representation='Surface'
-	rep.Opacity=flowMeshOpacity
+if flowMeshFiles:
+	for fmf in flowMeshFiles:
+		mesh=XMLUnstructuredGridReader(FileName=[fmf])
+		RenameSource(fmf,mesh)
+		mesh.CellArrayStatus=mesh.GetCellDataInformation().keys()
+		try:
+			_cl=Clip(ClipType='Box')
+			_cl.ClipType.Bounds=flowBounds
+			_cl.InsideOut=1
+			_cl.Scalars = ['CELLS', 'color']
+		except NameError: pass # flowBounds not defined, as flow/split were not exported
+		rep=Show()
+		rep.Representation='Surface'
+		rep.Opacity=flowMeshOpacity
 
 if tracesFile:
 	traces=XMLPolyDataReader(FileName=[tracesFile])
@@ -390,6 +399,14 @@ if meshFiles:
 	mesh=XMLUnstructuredGridReader(FileName=meshFiles)
 	readPointCellData(mesh)
 	RenameSource(meshFiles[0],mesh)
+	rep=Show()
+	rep.Opacity=0.2
+
+
+if staticFile:
+	mesh=XMLUnstructuredGridReader(FileName=[staticFile])
+	readPointCellData(mesh)
+	RenameSource(staticFile,mesh)
 	rep=Show()
 	rep.Opacity=0.2
 

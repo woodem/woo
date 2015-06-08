@@ -242,6 +242,13 @@ void VtkExport::run(){
 	_VTK_CELL_ARR(mGrid,mVel,"vel",3);
 	_VTK_CELL_ARR(mGrid,mAngVel,"angVel",3);
 	_VTK_CELL_ARR(mGrid,mSigNorm,"|sigma|",1);
+	// static meshes (exported only once)
+	auto smGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
+	auto smPos=vtkSmartPointer<vtkPoints>::New();
+	auto smCells=vtkSmartPointer<vtkCellArray>::New();
+	smGrid->SetPoints(smPos);
+	_VTK_CELL_ARR(smGrid,smColor,"color",1);
+	_VTK_CELL_INT_ARR(smGrid,smMatId,"matId",1);
 	// triangulated particles
 	auto tGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto tPos=vtkSmartPointer<vtkPoints>::New();
@@ -258,6 +265,7 @@ void VtkExport::run(){
 		if(!p->shape) continue; // this should not happen really
 		if(mask && !(mask&p->mask)) continue;
 		if(!p->shape->getVisible() && skipInvisible) continue;
+		if(!clip.isEmpty() && !clip.contains(p->shape->nodes[0]->pos)) continue;
 		const auto sphere=dynamic_cast<Sphere*>(p->shape.get());
 		const auto wall=dynamic_cast<Wall*>(p->shape.get());
 		const auto facet=dynamic_cast<Facet*>(p->shape.get());
@@ -291,16 +299,26 @@ void VtkExport::run(){
 		}
 		// no more spheres, just meshes now
 		int mCellNum=0;
+		int smCellNum=0;
 		int tCellNum=0;
+		// static mesh particle?
+		bool isStatic=((staticMeshBit!=0) && (p->mask&staticMeshBit) && (facet||wall||infCyl));
+		if(isStatic && staticMeshDone) continue; // nothing to do
+		
+		// this unifies code for static/nonstatic meshes
+		auto& _mCellNum=(isStatic?smCellNum:mCellNum);
+		auto& _mPos=(isStatic?smPos:mPos);
+		auto& _mCells=(isStatic?smCells:mCells);
+
 		if(tetra){
 			const Vector3r &A(tetra->nodes[0]->pos), &B(tetra->nodes[1]->pos), &C(tetra->nodes[2]->pos), &D(tetra->nodes[3]->pos);
-			mCellNum=addTriangulatedObject({A,B,C,D},{Vector3i(0,2,1),Vector3i(0,1,3),Vector3i(0,3,2),Vector3i(1,2,3)},mPos,mCells);
+			_mCellNum=addTriangulatedObject({A,B,C,D},{Vector3i(0,2,1),Vector3i(0,1,3),Vector3i(0,3,2),Vector3i(1,2,3)},_mPos,_mCells);
 			if(tet4) sigNorm=tet4->getStressTensor().norm();
 		}
 		else if(facet){
 			const Vector3r &A(facet->nodes[0]->pos), &B(facet->nodes[1]->pos), &C(facet->nodes[2]->pos);
 			if(facet->halfThick==0.){
-				mCellNum=addTriangulatedObject({A,B,C},{Vector3i(0,1,2)},mPos,mCells);
+				_mCellNum=addTriangulatedObject({A,B,C},{Vector3i(0,1,2)},_mPos,_mCells);
 			} else {
 				int fDiv=max(0,thickFacetDiv>=0?thickFacetDiv:subdiv);
 				const Vector3r dz=facet->getNormal()*facet->halfThick;
@@ -312,7 +330,7 @@ void VtkExport::run(){
 						Vector3i(1,2,4),Vector3i(4,2,5),
 						Vector3i(2,0,5),Vector3i(5,0,3),
 					}));
-					mCellNum=addTriangulatedObject({A+dz,B+dz,C+dz,A-dz,B-dz,C-dz},pts,mPos,mCells);
+					_mCellNum=addTriangulatedObject({A+dz,B+dz,C+dz,A-dz,B-dz,C-dz},pts,_mPos,_mCells);
 				} else {
 					// with rounded edges
 					vector<Vector3r> vertices={A+dz,B+dz,C+dz,A-dz,B-dz,C-dz};
@@ -366,7 +384,7 @@ void VtkExport::run(){
 							}
 						}
 					}
-					mCellNum=addTriangulatedObject(vertices,pts,mPos,mCells);
+					_mCellNum=addTriangulatedObject(vertices,pts,_mPos,_mCells);
 				}
 			}
 		}
@@ -394,7 +412,7 @@ void VtkExport::run(){
 			A[ax0]=B[ax0]=C[ax0]=D[ax0]=0;
 			A[ax1]=B[ax1]=lo[0]; C[ax1]=D[ax1]=hi[0];
 			A[ax2]=C[ax2]=lo[1]; B[ax2]=D[ax2]=hi[1];
-			mCellNum=addTriangulatedObject({node->loc2glob(A),node->loc2glob(B),node->loc2glob(C),node->loc2glob(D)},{Vector3i(0,1,3),Vector3i(0,3,2)},mPos,mCells);
+			_mCellNum=addTriangulatedObject({node->loc2glob(A),node->loc2glob(B),node->loc2glob(C),node->loc2glob(D)},{Vector3i(0,1,3),Vector3i(0,3,2)},_mPos,_mCells);
 		}
 		else if(infCyl){
 			if(isnan(infCyl->glAB.squaredNorm())){
@@ -440,7 +458,7 @@ void VtkExport::run(){
 				cA[ax2]=cB[ax2]=c2[1];
 				pts.push_back(cA); pts.push_back(cB);
 			}
-			mCellNum=addTriangulatedObject(pts,tri,mPos,mCells);
+			_mCellNum=addTriangulatedObject(pts,tri,_mPos,_mCells);
 		}
 		else if(ellipsoid){
 			const Vector3r& semiAxes(ellipsoid->semiAxes);
@@ -453,7 +471,7 @@ void VtkExport::run(){
 		}
 		else continue; // skip unhandled shape
 		const auto& dyn=p->shape->nodes[0]->getData<DemData>();
-		assert(mCellNum>0 || tCellNum>0);
+		assert(mCellNum>0 || smCellNum>0 || tCellNum>0);
 
 		// mesh and mesh-like particles (facets, walls, infCylinders)
 		for(int i=0;i<mCellNum;i++){
@@ -469,6 +487,12 @@ void VtkExport::run(){
 			}
 			mMatState->InsertNextValue(isnan(scalar)?nanValue:scalar);
 			mSigNorm->InsertNextValue(sigNorm);
+		}
+		// static mesh particles (only exported once per simulation)
+		for(int i=0;i<smCellNum;i++){
+			smColor->InsertNextValue(p->shape->color);
+			smMatId->InsertNextValue(p->material->id);
+			// don't export state, vel, angVel, sigNorm: meaningless for static meshes
 		}
 		// triangulated particles (ellipsoids, capsules)
 		for(int i=0;i<tCellNum;i++){
@@ -488,8 +512,8 @@ void VtkExport::run(){
 	// set cells (must be called onces cells are complete)
 	sGrid->SetCells(VTK_VERTEX,sCells);
 	mGrid->SetCells(VTK_TRIANGLE,mCells);
+	smGrid->SetCells(VTK_TRIANGLE,smCells);
 	tGrid->SetCells(VTK_TRIANGLE,tCells);
-
 
 	vtkSmartPointer<vtkDataCompressor> compressor;
 	if(compress) compressor=vtkSmartPointer<vtkZLibDataCompressor>::New();
@@ -547,6 +571,21 @@ void VtkExport::run(){
 			writer->Write();
 			outFiles["mesh"].push_back(fn);
 		}
+		if(!staticMeshDone && (what&WHAT_STATIC)){
+			staticMeshDone=true;
+			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
+			if(compress) writer->SetCompressor(compressor);
+			if(ascii) writer->SetDataModeToAscii();
+			string fn=out+"static."+to_string(scene->step)+".vtu";
+			writer->SetFileName(fn.c_str());
+			#if VTK_MAJOR_VERSION==5
+				writer->SetInput(smGrid);
+			#else
+				writer->SetInputData(smGrid);
+			#endif
+			writer->Write();
+			outFiles["static"].push_back(fn);
+		}
 		if(what&WHAT_TRI){
 			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
 			if(compress) writer->SetCompressor(compressor);
@@ -567,6 +606,7 @@ void VtkExport::run(){
 		int i=0;
 		if(what&WHAT_SPHERES) multi->SetBlock(i++,sGrid);
 		if(what&WHAT_MESH) multi->SetBlock(i++,mGrid);
+		if(!staticMeshDone && (what&WHAT_STATIC)) multi->SetBlock(i++,smGrid);
 		if(what&WHAT_CON) multi->SetBlock(i++,cPoly);
 		if(what&WHAT_TRI) multi->SetBlock(i++,tGrid);
 		auto writer=vtkSmartPointer<vtkXMLMultiBlockDataWriter>::New();

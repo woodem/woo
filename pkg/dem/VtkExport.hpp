@@ -35,8 +35,11 @@ struct VtkExport: public PeriodicEngine{
 	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
 	void run() WOO_CXX11_OVERRIDE;
 
-	enum{WHAT_SPHERES=1,WHAT_MESH=2,WHAT_CON=4,WHAT_TRI=8 /*,WHAT_PELLET=8*/ };
-	enum{WHAT_ALL=WHAT_SPHERES|WHAT_MESH|WHAT_CON|WHAT_TRI};
+	enum{WHAT_SPHERES=1,WHAT_MESH=2,WHAT_STATIC=4,WHAT_TRI=8,WHAT_CON=16 /*,WHAT_PELLET=8*/ };
+	enum{
+		WHAT_ALL=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_CON|WHAT_TRI,
+		WHAT_ALL_EXCEPT_CON=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_TRI,
+	};
 
 	static int addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells);
 
@@ -63,10 +66,13 @@ struct VtkExport: public PeriodicEngine{
 		((bool,ascii,false,,"Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``")) \
 		((bool,multiblock,false,,"Write to multi-block VTK files, rather than separate files; currently borken, do not use.")) \
 		((int,mask,0,,"If non-zero, only particles matching the mask will be exported.")) \
-		((int,what,WHAT_ALL,AttrTrait<Attr::triggerPostLoad>(),"Select data to be saved (e.g. VtkExport.spheres|VtkExport.mesh, or use VtkExport.all for everything)")) \
+		((int,what,WHAT_ALL_EXCEPT_CON,AttrTrait<Attr::triggerPostLoad>(),"Select data to be saved (e.g. VtkExport.spheres|VtkExport.mesh, or use VtkExport.all for everything)")) \
 		((bool,sphereSphereOnly,false,,"Only export contacts between two spheres (not sphere+facet and such)")) \
 		((bool,infError,true,,"Raise exception for infinite objects which don't have the glAB attribute set properly.")) \
 		((bool,skipInvisible,true,,"Skip invisible particles")) \
+		((AlignedBox3r,clip,AlignedBox3r(),,"Only export particles of which first node is in the clip box (if given).")) \
+		((int,staticMeshBit,DemField::defaultStaticBit,,"Bit for identifying static mesh particles (:obj:`Facet`, :obj:`Wall`, :obj:`InfCylinder` only) which will be exported only once.")) \
+		((bool,staticMeshDone,false,,"Whether static mesh was already exported")) \
 		((int,subdiv,16,AttrTrait<>(),"Subdivision fineness for circular objects (such as cylinders).\n\n.. note:: :obj:`Facets <woo.dem.Facet>` are rendered without rounded edges (they are closed flat).\n\n.. note:: :obj:`Ellipsoids <woo.dem.Ellipsoid>` triangulation is controlled via the :obj:`ellLev` parameter.")) \
 		((int,ellLev,0,AttrTrait<>().range(Vector2i(0,3)),"Tesselation level for exporting ellipsoids (0 = icosahedron, each level subdivides one triangle into three.")) \
 		((int,thickFacetDiv,1,AttrTrait<>(),"Subdivision for :obj:`woo.dem.Facet` objects with non-zero :obj:`woo.dem.Facet.halfThick`; the value of -1 will use :obj:`subdiv`; 0 will render only faces, without edges; 1 will close the edge flat; higher values mean the number of subdivisions.")) \
@@ -84,9 +90,11 @@ struct VtkExport: public PeriodicEngine{
 			/* casting to (int) necessary, since otherwise it is a special enum type which is not registered in python and we get error: "TypeError: No to_python (by-value) converter found for C++ type: VtkExport::$_2" at boot. */ \
 			_classObj.attr("spheres")=(int)VtkExport::WHAT_SPHERES; \
 			_classObj.attr("mesh")=(int)VtkExport::WHAT_MESH; \
+			_classObj.attr("static")=(int)VtkExport::WHAT_STATIC; \
 			_classObj.attr("tri")=(int)VtkExport::WHAT_TRI; \
 			_classObj.attr("con")=(int)VtkExport::WHAT_CON; \
 			_classObj.attr("all")=(int)VtkExport::WHAT_ALL; \
+			_classObj.attr("allExceptCon")=(int)VtkExport::WHAT_ALL_EXCEPT_CON; \
 			/* _classObj.attr("pellet")=(int)VtkExport::WHAT_PELLET; */
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
