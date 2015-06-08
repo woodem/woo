@@ -294,8 +294,8 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
 		if self.name not in d: raise ValueError('Unknown model: '+self.name)
 		return d[self.name]
 	def getNonviscDamping(self):
-		'''Return the value for :obj:`woo.dem.Leapfrog.damping`; returns zero for models with internal damping, and :obj:`damping` for the "linear" model.'''
-		if self.name=='linear': return self.damping
+		'''Return the value for :obj:`woo.dem.Leapfrog.damping`; returns zero for models with internal damping, and :obj:`damping` for the ``linear`` (:ref:`linear_contact_model`) and ``ice`` (:ref:`ice-contact-model`) models.'''
+		if self.name in ('linear','ice'): return self.damping
 		else: return 0.
 
 
