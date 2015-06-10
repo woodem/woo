@@ -227,7 +227,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
 		_PAT(float,'restitution',1.,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Restitution coefficient for models with viscosity (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.en`).'),
 		_PAT(float,'alpha',.5,hideIf='self.name not in ("Schwarz",)',doc='Parameter interpolating between DMT and JKR extremes in the Schwarz model. :math:`alpha` was introduced in :cite:`Carpick1999`.'),
 		# linear model
-		_PAT(float,'damping',.2,hideIf='self.name not in ("linear",)',doc='Numerical (non-viscous) damping (:obj:`woo.dem.Leapfrog.damping`)'),
+		_PAT(float,'damping',.2,hideIf='self.name not in ("linear","ice")',doc='Numerical (non-viscous) damping (:obj:`woo.dem.Leapfrog.damping`).\n\n.. note:: This damping  value is **only** used for ``linear`` and ``ice`` :obj:`mocel`, otherwise the model has its own damping and this value will be ignored (:obj:`woo.dem.Leapfrog.damping` will be zero).'),
 		_PAT(bool,'linRoll',False,hideIf='self.name!="linear"',doc='*Linear model*: enable rolling, with parameters set in :obj:`linRollParams`.'),
 		_PAT(Vector3,'linRollParams',Vector3(1.,1.,1.),hideIf='self.name!="linear" or not self.linRoll',doc='Rolling parameters for the linear model, in the order of :obj:`relRollStiff <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relRollStiff>`, :obj:`relTwistStiff <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relTwistStiff>`, :obj:`rollTanPhi <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.rollTanPhi>`.'),
 		# pellet model
