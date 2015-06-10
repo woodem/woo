@@ -247,3 +247,33 @@ Timestep
 ---------
 
 .. todo:: Write on :math:`\Dt`, how :obj:`Scene <woo.core.Scene>` queries :obj:`fields <woo.core.Field.critDt>` and :obj:`engines <woo.core.Engine.critDt>` on their timestep, about :obj:`woo.core.Scene.dtSafety`, about :obj:`woo.dem.DynDt`.
+
+
+Numerical damping
+-----------------
+
+.. warning:: This damping scheme is only suitable for quasi-static simulation where the dynamics is only auxiliary and not important as such. Using this damping scheme in dynamic simulations will lead to gross errors, such as free fall not happening correctly.
+
+In simulations of quasi-static phenomena, it it desirable to dissipate kinetic energy of particles. Since some contact laws (such as :ref:`linear_contact_model`) do not include velocity-based damping (such as one in [Addetta2001]_), it is possible to use artificial numerical damping. The formulation is described in the manual of the PFC3D code, but the version used here is slightly adapted.
+
+The basic idea is to decrease forces which increase the particle velocities and increase forces which decrease particle velocities by :math:`(\Delta F)_d`, comparing the current acceleration sense and particle velocity sense. This is done component-by-component, which makes the damping scheme clearly non-physical, as it is not invariant with respect to coordinate system rotation; on the other hand, it is very easy to compute. Cundall proposed the form (we omit particle indices $i$ since it applies to all of them separately):
+
+.. math:: \frac{(\Delta \vec{F})_{dw}}{\vec{F}_w}=-\lambda_d\operatorname{sgn}(\vec{F}_w\pprev{\dot{\vec{u}}}_{w}),\quad w\in\{x,y,z\}
+
+where :math:`\lambda_d` is the damping coefficient. This formulation has several advantages [Hentz2003]_:
+
+* it acts on forces (accelerations), not constraining uniform motion;
+* it is independent of eigenfrequencies of particles, they will be all damped equally;
+* it needs only the dimensionless parameter :math:`\lambda_d` which does not have to be scaled.
+
+Woo uses the adapted form
+
+.. math::
+	:label: eq-damping-woo
+
+	\frac{(\Delta\vec{F})_{dw}}{\vec{F}_w}=-\lambda_d\operatorname{sgn}\vec{F}_w\underbrace{\left(\pprev{\dot{u}}_w+\frac{\curr{\ddot{\vec{u}}}_w\Dt}{2}\right)}_{\simeq\curr{\dot{u}}_w},
+
+where we replaced the previous mid-step velocity :math:`\pprev{\dot{u}}` by its on-step estimate in parentheses. This is to avoid locked-in forces that appear if the velocity changes its sign due to force application at each step, i.e. when the particle in question oscillates around the position of equilibrium with :math:`2\Dt` period.
+
+Equation :eq:`eq-damping-woo` is implemented in :obj:`~woo.dem.Leapfrog`; the damping coefficient :math:`\lambda_d` is :obj:`Leapfrog.damping <woo.dem.Leapfrog.damping>`.
+

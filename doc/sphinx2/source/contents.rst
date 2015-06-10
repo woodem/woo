@@ -13,7 +13,7 @@
 .. toctree::
    :maxdepth: 2
 
-   user/user.rst
+   user/index.rst
    tutorial/index.rst
    theory/index.rst
    cases/index.rst

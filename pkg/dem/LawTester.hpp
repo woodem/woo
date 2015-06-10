@@ -7,7 +7,7 @@
 
 struct LawTesterStage: public Object{
 	WOO_DECL_LOGGER;
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw);
+	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
 	bool pyBroken() const { return hadC && !hasC; }
 	bool pyRebound() const { return bounces>=2 || pyBroken(); }
 	Real pyCTime() const { return time-timeC0; }
@@ -39,8 +39,8 @@ WOO_REGISTER_OBJECT(LawTesterStage);
 
 struct LawTester: public Engine{
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f){ return dynamic_cast<DemField*>(f); }
-	virtual void run();
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
+	virtual void run() override;
 	void restart();
 	py::dict pyFuv() const {
 		py::dict ret;
