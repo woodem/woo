@@ -541,7 +541,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
 		if not noTableOk: raise EnvironmentError("Batch options not defined (and required; pass noTableOk=True if they are not)")
 		S.tags['line']='l!'
 	else:
-		tableFile,tableLine=wooOptions.batchFile,wooOptions.batchLine
+		tableFile,tableLine=wooOptions.batchTable,wooOptions.batchLine
 		if tableFile=='':
 			if not noTableOk: raise RuntimeError("No table specified in batch options, but noTableOk was not given.")
 			else: return
