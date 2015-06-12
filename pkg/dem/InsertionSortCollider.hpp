@@ -139,7 +139,7 @@ struct InsertionSortCollider: public Collider {
 	};
 	#ifdef PISC_DEBUG
 		int watch1, watch2;
-		bool watchIds(Particle::id_t id1,Particle::id_t id2) const { return (watch1<0 &&(watch2==id1||watch2==id2))||(watch2<0 && (watch1==id1||watch1==id2))||(watch1==id1 && watch2==id2)||(watch1==id2 && watch2==id1); }
+		bool watchIds(Particle::id_t id1,Particle::id_t id2) const { return (watch1<0 &&(watch2==id1||watch2==id2))||(watch2<0 && (watch1==id1||watch1==id2))||(watch1==id1 && watch2==id2)||(watch1==id2 && watch2==id1);  }
 	#endif
 			// if False, no type of striding is used
 			// if True, then either verletDist XOR nBins is set
@@ -199,9 +199,13 @@ struct InsertionSortCollider: public Collider {
 	void insertionSortPeri_orig(VecBounds& v,bool doCollide=true, int ax=0);
 	void handleBoundInversionPeri(Particle::id_t,Particle::id_t, bool separating);
 	bool spatialOverlapPeri(Particle::id_t,Particle::id_t,Scene*,Vector3i&) const;
+	bool spatialOverlapPeri_axis(const int& axis, const Particle::id_t& id1, const Particle::id_t& id2, const Real& min1, const Real& max1, const Real& min2, const Real& max2, const Real& dim, int& period) const;
+
 	py::object pySpatialOverlap(const shared_ptr<Scene>&, Particle::id_t id1, Particle::id_t id2);
 	static Real cellWrap(const Real, const Real, const Real, int&);
 	static Real cellWrapRel(const Real, const Real, const Real);
+	static Real cellWrapRel(const Real x, const Real x0, const Real x1, int&);
+
 
 
 	public:
@@ -263,6 +267,7 @@ struct InsertionSortCollider: public Collider {
 		((Vector3i,ompTuneSort,Vector3i(1,1000,0),,"Fine-tuning for the OpenMP-parallellized partial insertion sort. The first number is the number of chunks per CPU (2 means each core will process 2 chunks sequentially, on average). The second number (if positive) is the lower bound on number of particles per chunk; the third number (if positive) is the limit of bounds per one chunk (15000 means that if there are e.g. 300k particles, bounds will be processed in 20 chunks, even if the number of chunks from the first number is smaller)."))
 		((int,sortChunks,-1,AttrTrait<Attr::readonly>(),"Number of threads that were actually used during the last parallelized insertion sort."))
 		((bool,paraPeri,false,,"Enable parallelized periodic sort; this algorithm produces sometimes very incorrect results, use this only for development."))
+		((bool,periDbgNew,false,,"Compute periodic overlaps and periods twice (with the original and the new algorithm) compare the results and report discrepancies."))
 		,
 		/* ctor */
 			#ifdef ISC_TIMING

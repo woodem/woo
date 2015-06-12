@@ -176,7 +176,7 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 		while(j>=iBegin && v[j]>viInit){ // first check whether j is valid, not the other way around
 			v[j+1]=v[j];
 			#ifdef PISC_DEBUG
-				if(watchIds(v[j].id,viInit.id)) cerr<<"Swapping #"<<v[j].id<<"  with #"<<viInit.id<<" ("<<setprecision(80)<<v[j].coord<<">"<<setprecision(80)<<viInit.coord<<" along axis "<<v.axis<<")"<<endl;
+				if(watchIds(v[j].id,viInit.id)) cerr<<"Swapping #"<<v[j].id<<"  with #"<<viInit.id<<" ("<<std::setprecision(80)<<v[j].coord<<">"<<std::setprecision(80)<<viInit.coord<<" along axis "<<v.axis<<")"<<endl;
 				if(v[j].id==viInit.id){ cerr<<"Inversion of #"<<v[j].id<<" with itself, "<<v[j].flags.isMin<<" & "<<viInit.flags.isMin<<", isGreater "<<(v[j]>viInit)<<", "<<(v[j].coord>viInit.coord)<<endl; j--; continue; }
 			#endif
 			#ifdef WOO_DEBUG
@@ -242,32 +242,32 @@ vector<Particle::id_t> InsertionSortCollider::probeAabb(const Vector3r& mn, cons
 	} else {
 		// for the periodic case, go through all particles
 		// algorithmically wasteful :|
-	// copied from handleBoundInversionPeri, with adjustments
-	for(long i=0; i<v.size; i++){
-		// safely skip deleted particles to avoid spurious overlaps
-		const Bounds& b(v.vec[i]);
-		if(!b.flags.isMin || !b.flags.hasBB) continue;
-		long id1=b.id;
-		for(int axis=0; axis<3; axis++){
-			Real dim=scene->cell->getSize()[axis];
-			// find particle of which minimum when taken as period start will make the gap smaller
-			Real m1=minima[3*id1+axis],m2=mn[axis];
-			Real wMn=(cellWrapRel(m1,m2,m2+dim)<cellWrapRel(m2,m1,m1+dim)) ? m2 : m1;
-			int pmn1,pmx1,pmn2,pmx2;
-			Real mn1=cellWrap(minima[3*id1+axis],wMn,wMn+dim,pmn1), mx1=cellWrap(maxima[3*id1+axis],wMn,wMn+dim,pmx1);
-			Real mn2=cellWrap(mn[axis],wMn,wMn+dim,pmn2), mx2=cellWrap(mx[axis],wMn,wMn+dim,pmx2);
-			if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
-				Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
-				LOG_FATAL("Particle #"<<(pmn1!=pmx1?id1:-1)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
-				throw runtime_error(__FILE__ ": Particle larger than half of the cell size encountered.");
+		// copied from handleBoundInversionPeri, with adjustments
+		for(long i=0; i<v.size; i++){
+			// safely skip deleted particles to avoid spurious overlaps
+			const Bounds& b(v.vec[i]);
+			if(!b.flags.isMin || !b.flags.hasBB) continue;
+			long id1=b.id;
+			for(int axis=0; axis<3; axis++){
+				Real dim=scene->cell->getSize()[axis];
+				// find particle of which minimum when taken as period start will make the gap smaller
+				Real m1=minima[3*id1+axis],m2=mn[axis];
+				Real wMn=(cellWrapRel(m1,m2,m2+dim)<cellWrapRel(m2,m1,m1+dim)) ? m2 : m1;
+				int pmn1,pmx1,pmn2,pmx2;
+				Real mn1=cellWrap(minima[3*id1+axis],wMn,wMn+dim,pmn1), mx1=cellWrap(maxima[3*id1+axis],wMn,wMn+dim,pmx1);
+				Real mn2=cellWrap(mn[axis],wMn,wMn+dim,pmn2), mx2=cellWrap(mx[axis],wMn,wMn+dim,pmx2);
+				if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
+					Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
+					LOG_FATAL("Particle #"<<(pmn1!=pmx1?id1:-1)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
+					throw runtime_error(__FILE__ ": Particle larger than half of the cell size encountered.");
+				}
+				if(!(mn1<=mx2 && mx1 >= mn2)) goto noOverlap;
 			}
-			if(!(mn1<=mx2 && mx1 >= mn2)) goto noOverlap;
+			ret.push_back(id1);
+			noOverlap: ;
 		}
-		ret.push_back(id1);
-		noOverlap: ;
+		return ret;
 	}
-	return ret;
-}
 };
 
 // STRIDE
@@ -653,11 +653,19 @@ Real InsertionSortCollider::cellWrap(const Real x, const Real x0, const Real x1,
 	return x0+(xNorm-period)*(x1-x0);
 }
 
+// return coordinate wrapped to 0…(x1-x0), relative to x0, and save period
+Real InsertionSortCollider::cellWrapRel(const Real x, const Real x0, const Real x1, int& period){
+	Real xNorm=(x-x0)/(x1-x0);
+	period=(int)floor(xNorm);
+	return (xNorm-floor(xNorm))*(x1-x0);
+}
+
 // return coordinate wrapped to 0…(x1-x0), relative to x0; don't care about period
 Real InsertionSortCollider::cellWrapRel(const Real x, const Real x0, const Real x1){
 	Real xNorm=(x-x0)/(x1-x0);
 	return (xNorm-floor(xNorm))*(x1-x0);
 }
+
 
 void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
@@ -886,6 +894,122 @@ py::object InsertionSortCollider::pySpatialOverlap(const shared_ptr<Scene>& S, P
 }
 
 
+bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Particle::id_t& id1, const Particle::id_t& id2, const Real& min1, const Real& max1, const Real& min2, const Real& max2, const Real& dim, int& period) const {
+	//__attribute__((unused)) const Real &mn1(minima[3*id1+axis]), &mx1(maxima[3*id1+axis]), &mn2(minima[3*id2+axis]), &mx2(maxima[3*id2+axis]);
+	assert(!isnan(min1)); assert(!isnan(max1));
+	assert(!isnan(min2)); assert(!isnan(max2));
+	assert(isinf(max1) || (max1-min1<dim)); assert(isinf(max2) || (max2-min2<dim));
+	// infinite particles always overlap, cut it short
+	if(isinf(min1) || isinf(min2)){
+		assert(!isinf(min1) || min1<0); // check that minimum is minus infinity
+		assert(!isinf(min2) || min2<0); // check that minimum is minus infinity
+		period=0; // does not matter where the contact happens really
+		#ifdef PISC_DEBUG
+			if(watchIds(id1,id2)){ LOG_DEBUG("    Some particle infinite along the "<<axis<<" axis."); }
+		#endif
+		return true; // do other axes
+	}
+	// compare old and new algorithms
+	int origPeriod; bool origResult; bool origFailed=false;
+	int newPeriod; bool newResult;
+
+	// original algorithm
+	if(periDbgNew){
+		// find particle of which minimum when taken as period start will make the gap smaller
+		/*
+	
+			<.........................> dim
+	      <----------->               cellWrapRel(min2,min1,min1+dim)
+	      <--------------------->     cellWrapRel(max2,min1,min1+dim)
+		   |------------------|        min1..max1
+		 	             |--------|     min2..max2
+	
+	
+			<.........................> dim
+	      <------------->             cellWrapRel(min2,min2,min2+dim)
+	      <---->                      cellWrapRel(max1,min2,min2+dim)
+		   ------|        |----------- min1..max1
+		 	|--------|                  min2..max2
+		   
+		*/
+		const Real& wMn=(cellWrapRel(min1,min2,min2+dim)<cellWrapRel(min2,min1,min1+dim)) ? min2 : min1;
+		#ifdef PISC_DEBUG
+			if(watchIds(id1,id2)){
+				TRVAR4(id1,id2,axis,dim);
+				TRVAR4(min1,max1,min2,max2);
+				TRVAR2(cellWrapRel(min1,min2,min2+dim),cellWrapRel(min2,min1,min1+dim));
+				TRVAR3(min1,min2,wMn);
+			}
+		#endif
+		int pmn1,pmx1,pmn2,pmx2;
+		Real mn1=cellWrap(min1,wMn,wMn+dim,pmn1), mx1=cellWrap(max1,wMn,wMn+dim,pmx1);
+		Real mn2=cellWrap(min2,wMn,wMn+dim,pmn2), mx2=cellWrap(max2,wMn,wMn+dim,pmx2);
+		if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
+			Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
+			LOG_INFO("Particle #"<<(pmn1!=pmx1?id1:id2)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
+			LOG_INFO("Does not matter, try with the new algo now :)");
+			origFailed=true;
+			// throw runtime_error("InsertionSortCollider: (old algo limitation) Particle larger than half of the cell size encountered.");
+		}
+		origPeriod=(int)(pmn1-pmn2);
+		origResult=(mn1<=mx2 && mx1>=mn2); //) origResult=false;
+		// else origResult=true;
+		#ifdef PISC_DEBUG
+			if(watchIds(id1,id2)){
+				TRVAR4(mn1,mx1,mn2,mx2);
+				TRVAR4(pmn1,pmx1,pmn2,pmx2);
+				TRVAR2(origPeriod,origResult);
+			}
+		#endif
+	}
+
+	// new algorithm
+	{
+		int pmn1_2,pmx1_2,pmn2_1,pmx2_1;
+		// minimum and maximum relative to the other particle's minimum
+		Real mn1_2=cellWrapRel(min1,min2,min2+dim,pmn1_2); (void)cellWrapRel(max1,min2,min2+dim,pmx1_2);
+		Real mn2_1=cellWrapRel(min2,min1,min1+dim,pmn2_1); (void)cellWrapRel(max2,min1,min1+dim,pmx2_1);
+		// overlap on both sides (either way does not fit in the cell size)
+		if(pmn1_2!=pmx1_2 && pmn2_1!=pmx2_1){
+			throw std::runtime_error("InsertionSortCollider: ambiguous periodic contact ##"+to_string(id1)+"+"+to_string(id2)+" (axis="+to_string(axis)+", #"+to_string(id1)+" "+to_string(min1)+".."+to_string(max1)+", #"+to_string(id2)+" "+to_string(min2)+".."+to_string(max2)+", cell size "+to_string(dim)+".");
+		}
+		// this handles *also* the special case when minima are positioned exactly equally in the cell
+		// since we allow both pmn1_2==pmx1_2 and pmn1_2!=pmx1_2
+		else if(pmn2_1==pmx2_1){
+			// original algo (wMn=min1): pmn1=0, pmx1=0, pmn2=pmn2_1, pmx2=pmx2_1
+			newPeriod=-pmn2_1;
+			newResult=(mn2_1<(max1-min1));
+		} else {
+			assert(pmn2_1!=pmx2_1); assert(pmn1_2==pmx1_2);
+			// original algo (wMn=min2): pmn1=pmn1_2, pmx1=pmx1_2, pmn2=0, pmx2=0
+			newPeriod=pmn1_2;
+			newResult=(mn1_2<(max2-min2));
+		}
+		#ifdef PISC_DEBUG
+			if(watchIds(id1,id2)){
+				TRVAR2(mn1_2,max1-min1);
+				TRVAR2(mn2_1,max2-min2);
+				TRVAR4(pmn1_2,pmx1_2,pmn2_1,pmx2_1);
+				TRVAR2(newPeriod,newResult);
+			}
+		#endif
+	}
+	// Real mn2=cellWrap(min2,wMn,wMn+dim,pmn2), mx2=cellWrap(max2,wMn,wMn+dim,pmx2);
+	//period=(int)(pmn1-pmn2);
+	//if(!(mn1<=mx2 && mx1 >= mn2)) return false;
+	//return true;
+
+	// compare old and new algos; period difference is only significant if there was overlap found
+	if(periDbgNew && !origFailed && ((origResult && origPeriod!=newPeriod) || origResult!=newResult)){
+		if(origPeriod!=newPeriod) LOG_FATAL("Period mismatch in ##"<<id1<<"+"<<id2<<": old="<<origPeriod<<", new="<<newPeriod);
+		if(origResult!=newResult) LOG_FATAL("Overlap mispatch in ##"<<id1<<"+"<<id2<<": old="<<origResult<<", new="<<newResult);
+		LOG_FATAL("#"<<id1<<": axis "<<axis<<", span "<<min1<<".."<<max1);
+		LOG_FATAL("#"<<id2<<": axis "<<axis<<", span "<<min2<<".."<<max2);
+	}
+	period=newPeriod;
+	return newResult;
+}
+
 /* Performance hint
 	================
 
@@ -904,51 +1028,7 @@ bool InsertionSortCollider::spatialOverlapPeri(Particle::id_t id1, Particle::id_
 	assert(periodic);
 	assert(id1!=id2); // programming error, or weird bodies (too large?)
 	for(int axis=0; axis<3; axis++){
-		Real dim=scene->cell->getSize()[axis];
-		{
-			// assertions; guard in block to avoid name clash with vars below
-			__attribute__((unused)) const Real &mn1(minima[3*id1+axis]), &mx1(maxima[3*id1+axis]), &mn2(minima[3*id2+axis]), &mx2(maxima[3*id2+axis]);
-			assert(!isnan(mn1)); assert(!isnan(mx1));
-			assert(!isnan(mn2)); assert(!isnan(mx2));
-			assert(isinf(mx1) || (mx1-mn1<.99*dim)); assert(isinf(mx2) || (mx2-mn2<.99*dim));
-		}
-		// find particle of which minimum when taken as period start will make the gap smaller
-		Real m1=minima[3*id1+axis],m2=minima[3*id2+axis];
-		// infinite particles always overlap, cut it short
-		if(isinf(m1) || isinf(m2)){
-			assert(!isinf(m1) || m1<0); // check that minimum is minus infinity
-			assert(!isinf(m2) || m2<0); // check that minimum is minus infinity
-			periods[axis]=0; // does not matter where the contact happens really
-			#ifdef PISC_DEBUG
-				if(watchIds(id1,id2)){ LOG_DEBUG("    Some particle infinite along the "<<axis<<" axis."); }
-			#endif
-			continue; // do other axes
-		}
-		Real wMn=(cellWrapRel(m1,m2,m2+dim)<cellWrapRel(m2,m1,m1+dim)) ? m2 : m1;
-		#ifdef PISC_DEBUG
-		if(watchIds(id1,id2)){
-			TRVAR4(id1,id2,axis,dim);
-			TRVAR4(minima[3*id1+axis],maxima[3*id1+axis],minima[3*id2+axis],maxima[3*id2+axis]);
-			TRVAR2(cellWrapRel(m1,m2,m2+dim),cellWrapRel(m2,m1,m1+dim));
-			TRVAR3(m1,m2,wMn);
-		}
-		#endif
-		int pmn1,pmx1,pmn2,pmx2;
-		Real mn1=cellWrap(minima[3*id1+axis],wMn,wMn+dim,pmn1), mx1=cellWrap(maxima[3*id1+axis],wMn,wMn+dim,pmx1);
-		Real mn2=cellWrap(minima[3*id2+axis],wMn,wMn+dim,pmn2), mx2=cellWrap(maxima[3*id2+axis],wMn,wMn+dim,pmx2);
-		#ifdef PISC_DEBUG
-			if(watchIds(id1,id2)){
-				TRVAR4(mn1,mx1,mn2,mx2);
-				TRVAR4(pmn1,pmx1,pmn2,pmx2);
-			}
-		#endif
-		if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
-			Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
-			LOG_FATAL("Particle #"<<(pmn1!=pmx1?id1:id2)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
-			throw runtime_error(__FILE__ ": Particle larger than half of the cell size encountered.");
-		}
-		periods[axis]=(int)(pmn1-pmn2);
-		if(!(mn1<=mx2 && mx1 >= mn2)) return false;
+		if(!spatialOverlapPeri_axis(axis,id1,id2,minima[3*id1+axis],maxima[3*id1+axis],minima[3*id2+axis],maxima[3*id2+axis],scene->cell->getSize()[axis],periods[axis])) return false;
 	}
 	#ifdef PISC_DEBUG
 		if(watchIds(id1,id2)) LOG_DEBUG("Overlap #"<<id1<<"+#"<<id2<<", periods "<<periods);

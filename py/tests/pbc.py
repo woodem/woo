@@ -119,4 +119,56 @@ class TestPBC(unittest.TestCase):
 		S.cell.homoDeform=Cell.HomoPos; S.one()
 		self.assertAlmostEqual(.5*S.dem.par[1].mass*self.initVel.squaredNorm(),S.dem.par[1].Ekt)
 
+class TestPBCCollisions(unittest.TestCase):
+	def setUp(self):
+		woo.master.scene=S=Scene(fields=[DemField()])
+		S.periodic=True
+		S.cell.setBox(1.,1.,1.)
+		S.engines=[InsertionSortCollider([Bo1_Sphere_Aabb()])]
+		#self.cellDist=Vector3i(0,0,10) # how many cells away we go
+		#self.relDist=Vector3(0,.999999999999999999,0) # rel position of the 2nd ball within the cell
+		#self.initVel=Vector3(0,0,5)
+		#S.dem.par.add(utils.sphere((1,1,1),.5))
+	def testOverHalfContact(self):
+		'PBC: InsertionSortCollider handles particle spanning more than half cell-size'
+		S=woo.master.scene
+		S.dem.par.add(Sphere.make((.3,.5,.5),radius=.4))
+		S.dem.par.add(Sphere.make((.7,.9,.5),radius=.1))
+		S.dem.collectNodes()
+		S.saveTmp()
+		S.one()
+		self.assert_(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
+		# move the first sphere elsewhere
+		S=S.loadTmp()
+		S.dem.nodes[0].pos+=(13,14,15)
+		S.one()
+		self.assert_(S.dem.con[0,1].cellDist==Vector3i(13,14,15))
+	def testDoubleContact(self):
+		'PBC: InsertionSortCollider raises on double-contact of large particles accross the cell'
+		S=woo.master.scene
+		# 2*.4+2*.2=1.2, with contact on both sides
+		S.dem.par.add(Sphere.make((.3,.5,.5),radius=.4))
+		S.dem.par.add(Sphere.make((.8,.9,.5),radius=.2))
+		S.dem.collectNodes()
+		S.saveTmp()
+		self.assertRaises(RuntimeError,S.one)
+		#S.one()
+		#self.assert_(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
+	def testNormalContact(self):
+		'PBC: InsertionSortCollider computes collisions and cellDist correctly'
+		S=woo.master.scene
+		S.dem.par.add(Sphere.make((.5,.5,.5),radius=.2))
+		S.dem.par.add(Sphere.make((.8,.6,.5),radius=.2))
+		S.dem.collectNodes()
+		S.saveTmp()
+		# move the second sphere elsewhere
+		for shift2 in [(0,0,0),(1,2,3),(6,8,-4)]:
+			S=S.loadTmp()
+			S.dem.nodes[1].pos+=shift2
+			S.one()
+			C=S.dem.con[0,1]
+			self.assert_(C.cellDist==-Vector3i(shift2))
+
+
+
 
