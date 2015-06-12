@@ -1,3 +1,4 @@
+.. _gallery-interface:
 
 Interface
 =========

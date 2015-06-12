@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% set title = 'Woo home' %}
 {% block body %}
-  <h1>Welcome to Woo − extensible DEM simulations</h1>
+  <h1>Woo − extensible DEM simulations</h1>
   <p>
   	This is the main documentation of Woo (also available as a <a href="https://woodem.eu/doc/Woo.pdf">huge PDF hardcopy</a>); were you looking for something else?
 	<ul>
@@ -11,15 +11,14 @@
 		<li><a href="http://woodem.eu">woodem.eu</a> for commercial support.</li>
 	</ul>
   </p>
-  <h2>About Woo</h2>
+  <h2>About</h2>
   <p>
- 	Woo is extesible and portable framework primarily for mechanics granular materials. Computation parts are written in c++ parallelized using OpenMP, fully accessible and modifiable from python (ipython console or scripts). Arbitrarily complex scene can be scripted. Qt-based user interface is provided, featuring flexible OpenGL display, inspection of all objects and runtime modification. Parametric preprocessors can be written in pure python, and batch system can be used to drive parametric studies. New material models and particle shapes can be added (in c++) without modifying existing classes.
-
-   Woo is GPL2-licensed, geared towards customisations for non-trivial, challenging scenarios — sieving, segregation, conveyors, membranes and similar. See <a href="http://woodem.eu/examples">examples</a> of what it does.
-  </p>
+ 	Woo is extesible and portable framework primarily for mechanics granular materials. Computation parts are written in c++ parallelized using OpenMP, fully accessible and modifiable from python (ipython console or scripts). Arbitrarily complex scene can be scripted. Qt-based user interface is provided, featuring flexible OpenGL display, inspection of all objects and runtime modification. Parametric preprocessors can be written in pure python, and batch system can be used to drive parametric studies. New material models and particle shapes can be added (in c++) without modifying existing classes.</p>
+   <p>Woo is GPL2-licensed, geared towards customisations for non-trivial, challenging scenarios — sieving, segregation, conveyors, membranes and similar, and is a good fit for both academic and industrial use.</p>
+	<p>Some visual examples are linked <a href="#gallery">here below</a> (or in the <a href="{{ pathto("gallery/index") }}">gallery index</a>).</p>
  <h2>Documentation</h2>
   <p>
-   This documentation decribes Woo version {{ release }} / {{ version }}.
+   This documentation decribes Woo version {{ release }} / {{ version }} and was generated {{last_updated}}.
   </p>
   <table class="contentstable" align="center" style="margin-left: 30px">
     <tr>
@@ -54,6 +53,33 @@
            <span class="linkdescr">with all the details</span></p>
       </td>
     </tr>
+  </table>
+  <h2 name="gallery"><a href="{{ pathto("gallery") }}">Gallery</a></h2>
+  <table class="contentstable" align="center" style="margin-left:30px; vertical-align: middle;">
+  	<tr>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/granular") }}"><img src="{{ pathto("_images/abrasion-smaller.png",1) }}" width="50%" alt="granular" style="vertical-align:middle">Granular</a>
+		</td>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/fem") }}"><img src="{{ pathto("_images/tube-with-spheres.png",1) }}" width="50%" alt="fem" style="vertical-align:middle">Finite elements</a>
+		</td>
+	</tr>
+	<tr>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/models") }}"><img src="{{ pathto("_images/adhesive.png",1) }}" width="50%" alt="models" style="vertical-align:middle">Models</a>
+		</td>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/shapes") }}"><img src="{{ pathto("_images/bottle.png",1) }}" width="50%" alt="shapes" style="vertical-align:middle">Shapes</a>
+		</td>
+	</tr>
+	<tr>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/vis") }}"><img src="{{ pathto("_images/triax-force-chains-scaled1.png",1) }}" width="50%" alt="visualization" style="vertical-align:middle">Visualization</a>
+		</td>
+		<td width="50%">
+			<a class="biglink" href="{{ pathto("gallery/interface") }}"><img src="{{ pathto("_images/object-editor-tooltip.png",1) }}" width="50%" alt="interface" style="vertical-align:middle">Interface</a>
+		</td>
+	</tr>
   </table>
 
 {% endblock %}

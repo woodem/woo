@@ -1,3 +1,5 @@
+.. _gallery-models:
+
 Models
 ======
  	
@@ -9,7 +11,7 @@ Woo features a complete decoupling of geometry computation and contact model, th
 Adhesive models
 ---------------
 
-Large family of models based on :ref:`Hertz theory <hertzian-contact-models>` (for non-adhesive contact) :ref:`adding adhesion <adhesive-contact-models>` in different ways. Adhesion is implemented as described by DMT (Derjaugin-Müller-Torporov), JKR (Johnson-Kenall-Roberts) and Schwarz (which interpolates between DMT and JKR using a parameter). These models are primarily useful for micro-particle (dust) simulations.
+Large family of models based on :ref:`Hertz theory <hertzian_contact_models>` (for non-adhesive contact) :ref:`adding adhesion <adhesive_contact_models>` in different ways. Adhesion is implemented as described by DMT (Derjaugin-Müller-Torporov), JKR (Johnson-Kenall-Roberts) and Schwarz (which interpolates between DMT and JKR using a parameter). These models are primarily useful for micro-particle (dust) simulations.
 
 .. image:: fig/adhesive.png
    :width: 100%

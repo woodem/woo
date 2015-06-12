@@ -1,3 +1,5 @@
+.. _gallery-granular:
+
 Granular
 =========
 
@@ -25,8 +27,8 @@ Abrasion
 
 This simulation was analyzing abrasion of the plate when directing the flow from the conveyor. Changing the shape of the plate (by running batch of parametric simulations) helped reducing abrasion effects:
 
-.. image:: fig/abrasion.png
-   :width: 100%
+.. image:: fig/abrasion-smaller.png
+   :width: 60%
 
 
 Segregation

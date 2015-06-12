@@ -154,7 +154,7 @@ Lumped mass and inertia
 
 Triangle mass and inertia are computed supposing the entire :obj:`thickness <woo.dem.Facet.halfThick>` in the triangle plane. The "sleeve" rounding the edges is ignored for the purposes of computing mass and inertia.
 
-Inertia computation is described at `Wikipedia <http://en.wikipedia.org/wiki/Inertia_tensor_of_triangle>`__ and summarized here. For triangle with vertices :math:`\vec{a}`, :math:`\vec{b}`, :math:`\vec{c}`, its area is computed as 
+Inertia computation is described at `Wikipedia <http://en.wikipedia.org/wiki/Inertia_tensor_of_triangle>`__ and summarized here. For triangle with vertices :math:`\vec{a}`, :math:`\vec{b}`, :math:`\vec{c}`, its double-area is computed as 
 
 .. math:: A=\left|(\vec{b}-\vec{a})\times(\vec{c}-\vec{a})\right|.
 
@@ -174,4 +174,9 @@ Inertia tensor (with respect to global origin and axes) is then evaluated as usu
 
 .. math:: \mat{J}=\operatorname{tr}(\mat{C})\mat{I}_3-\mat{C}.
 
-When lumping mass and inertia, only the part adjacent to each node is considered; triangle is partitioned into 3 triangles. With midpoints :math:`\vec{m}_{ab}=\frac{\vec{a}+\vec{b}}{2}` etc., the part adjacent to :math:`\vec{a}` is the triange :math:`\{\vec{a},\vec{m}_{ab},\vec{m}_{ac}\}`.
+When lumping mass and inertia, only the part adjacent to each node is considered according to Voronoi tesselation; triangle is partitioned into 6 sub-triangles. With midpoints :math:`\vec{m}_{ab}=\frac{\vec{a}+\vec{b}}{2}` etc., the part adjacent to :math:`\vec{a}` are triangles :math:`\{\vec{a},\vec{m}_{ab},\vec{m}_{ac}\}` and :math:`\{\vec{m}_{ab},\vec{C},\vec{m}_{ac}\}`, as shown on the image:
+
+.. figure:: fig/triangle-partition.*
+   :align: center
+   
+   Partitioning triangle where 2 sub-triangles belong to each node for the purposes of lumping mass and inertia (greenish, reddish and yellowish colors to :math:`\vec{a}`, :math:`\vec{b}`, :math:`\vec{c}` respectively)

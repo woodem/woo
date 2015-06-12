@@ -34,13 +34,13 @@ The simulation runs in coordinate system where :math:`z` is the axial direction,
 
 The simulation runs in three distinct stages:
 
-1. Compaction
+1. **Compaction.**
    Non-overlapping spherical particles are generated in cylinder-shaped volume, of which radii satisfy the PSD (particle size distribution) function. Cylindrical volume, with rigid boundaries, is compressed to reach isotropic stress value :math:`\sigma_{\rm iso}`; friction parameters are set to zero to ensure high compacity of the resulting packing, as rearrangements are not constrained by tangential forces. Stresses are evaluated from global stress tensor :math:`\sigma` computed from contact forces. The controlling logic is independent for each axis and uses damped feedback loop :cite:`Modenese2013` to reach desired stress state :math:`\sigma_{rr}=\sigma_{zz}=\sigma_{\rm iso}`.
 
-2. Membrane stabilization
+2. **Membrane stabilization.**
    Rigid cylindrical boundary is made compliant (it is transformed into membrane), and each membrane element is loaded with surface load equal to :math:`\sigma_{\rm iso}`. Membrane surface load is adjusted so that :math:`\sigma_{rr}` reaches :math:`\sigma_{\rm iso}`, and :math:`\eps_{zz}` deformation is allowed to maintain :math:`\sigma_{zz}=\sigma_{\rm iso}`. Friction angle of particles/membrane/supports is incremented during this phase linearly to reach real levels used in the triaxial phase.
 
-3. Triaxial phase
+3. **Triaxial phase.**
    The initial triaxial configuration is used as reference configuration with zero strain tensor. The value of :math:`\dot\eps_{zz}` is increased linearly to reach prescribed value, and axial compression continues until prescribed axial strain :math:`\eps_{zz}^{\rm max}` is attained. During this phase, volume enclosed by the membrane+supports triangulation is monitored. Besides axial strain :math:`\eps_{zz}=\log\frac{l_z}{l_{z0}}`, volumetric strain :math:`\eps_v=\log\frac{V}{V_0}` and stress tensor :math:`\sigma_{ii}`, we can compute mean and deviatoric stresses
 
    .. math::
