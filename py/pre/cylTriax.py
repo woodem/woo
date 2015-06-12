@@ -25,7 +25,7 @@ class CylTriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
 	Supports are from the same material as *particles*, but they may have their friction reduced (when :obj:`suppTanPhi` is given). 
 
-	.. warning:: There are (unfortunately) quite a few tunables which must be tinkered with to get the desired result (those are in the *Tunables* section: :obj:`dtSafety`, :obj:`massFactor`, :obj:`model.damping`, :obj:`maxUnbalanced`). Several factors are also hard-set in the code, hoping that they will work in different scenarios than those which were tested.
+	.. warning:: There are (unfortunately) quite a few tunables which must be tinkered with to get the desired result (those are in the *Tunables* section: :obj:`dtSafety`, :obj:`massFactor`, :obj:`model.damping <woo.models.ContactModelSelector.damping>`, :obj:`maxUnbalanced`). Several factors are also hard-set in the code, hoping that they will work in different scenarios than those which were tested.
 
 	.. youtube:: Li13NrIyMYU
 
