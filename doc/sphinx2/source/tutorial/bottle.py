@@ -11,7 +11,7 @@ S.dem.par.add(Wall.make(0,axis=2,sense=1,mat=wallMat,color=0,glAB=((-.2,-.2),(.2
 # create bottle mesh from the STL
 bottle=woo.utils.importSTL('pill-bottle.coarse2.stl',mat=wallMat,scale=0.001,shift=(.056,.027,-0.01),ori=Quaternion((1,0,0),math.pi/2.),color=-.25)
 # create node which will serve as "handle" to move the bottle
-S.lab.botNode=Node(pos=(0,0,.04)) 
+S.lab.botNode=Node(pos=(0,0,.04),dem=ClumpData(blocked='xyzXYZ'))
 # add bottle as clump;
 # center is the centroid normally, but the mesh has no mass, thus reference point must be given
 S.dem.par.addClumped(bottle,centralNode=S.lab.botNode)
