@@ -95,6 +95,7 @@ void Gl1_DemField::initAllRanges(){
 			case COLOR_VEL:          r->label="vel"; break;
 			case COLOR_ANGVEL:       r->label="angVel"; break;
 			case COLOR_MASS:         r->label="mass"; break;
+			case COLOR_POS:          r->label="pos"; break;
 			case COLOR_DISPLACEMENT: r->label="displacement"; break;
 			case COLOR_ROTATION:     r->label="rotation"; break;
 			case COLOR_REFPOS:       r->label="ref. pos"; break;
@@ -266,6 +267,7 @@ void Gl1_DemField::doShape(){
 			case COLOR_VEL: parColor=CR->color(vecNormXyz(getParticleVel(p))); break;
 			case COLOR_ANGVEL: parColor=CR->color(vecNormXyz(getNodeAngVel(n0))); break;
 			case COLOR_MASS: parColor=CR->color(dyn0.mass); break;
+			case COLOR_POS: parColor=CR->color(vecNormXyz(n0->pos)); break;
 			case COLOR_DISPLACEMENT: parColor=CR->color(vecNormXyz(n0->pos-n0->getData<GlData>().refPos)); break;
 			case COLOR_ROTATION: {
 				AngleAxisr aa(n0->ori.conjugate()*n0->getData<GlData>().refOri);
