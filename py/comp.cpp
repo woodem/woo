@@ -2,6 +2,7 @@
 #include<woo/lib/base/CompUtils.hpp>
 #include<woo/lib/base/Volumetric.hpp>
 #include<woo/core/Master.hpp> // for WOO_PYTHON_MODULE
+#include<woo/lib/smoothing/LinearInterpolate.hpp>
 
 
 py::tuple computePrincipalAxes(const Real& V, const Vector3r& Sg, const Matrix3r& Ig){
@@ -22,6 +23,16 @@ Matrix3r tetraInertia_grid(const Vector3r& A, const Vector3r& B, const Vector3r&
 	return woo::Volumetric::tetraInertia_grid(v,div);
 }
 
+vector<Real> uniformResamplePiecewiseLinear(const vector<Real>& xx, const vector<Real>& yy, const Vector2r& xRange, int div){
+	vector<Real> ret; ret.resize(div);
+	size_t pos=0;
+	Real step=(xRange[1]-xRange[0])/(div-1.);
+	for(int i=0; i<div; i++){
+		ret[i]=linearInterpolate(xRange[0]+i*step,xx,yy,pos);
+	}
+	return ret;
+}
+
 WOO_PYTHON_MODULE(comp);
 BOOST_PYTHON_MODULE(comp){
 	WOO_SET_DOCSTRING_OPTS;
@@ -37,4 +48,5 @@ BOOST_PYTHON_MODULE(comp){
 	py::def("computePrincipalAxes",computePrincipalAxes,(py::arg("V"),py::arg("Sg"),py::arg("Ig")),"Return (*pos*, *ori*, *inertia*) of new coordinate system (relative to the current one), whose axes are principal, i.e. second-order momentum is diagonal (the diagonal is returned in *inertia*, which is sorted to be non-decreasing). The arguments are volume (mass) *V*, first-order momentum *Sg* and second-order momentum *Ig*. If *Sg* is ``(0,0,0)``, the reference point will not change, only rotation will occur.");
 	py::def("cart2cyl",&CompUtils::cart2cyl,(py::arg("xyz")),"Convert cartesian coordinates to cylindrical; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
 	py::def("cyl2cart",&CompUtils::cyl2cart,(py::arg("rThetaZ")),"Convert cylindrical coordinates to cartesian; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
+	py::def("uniformResamplePiecewiseLinear",uniformResamplePiecewiseLinear,(py::arg("xx"),py::arg("yy"),py::arg("xRange"),py::arg("div")),"Resample piecewise-linear function (given by points *xx* and *yy*, where *xx* is non-decreasing) using a uniform grid with endpoints *xRange* and *div* points (*div*-1 pieces), returning linearly interpolated value of *yy* in *div*+1 points.");
 };
