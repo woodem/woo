@@ -66,6 +66,7 @@ bool Law2_L6Geom_IcePhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys
 	Tw+=dt*ph.kWR[0]*angVelW;
 	Tr+=dt*ph.kWR[1]*angVelR;
 
+	
 	// breakage conditions: if any breakable bond breaks, all other bonds break, too
 	if((ph.isBrkBondX(0) && Fn>ph.brkNT[0]) ||
 		(ph.isBrkBondX(1) && Ft.squaredNorm()>pow(ph.brkNT[1],2)) ||

@@ -22,7 +22,7 @@ struct IcePhys: public FrictPhys{
 	void setBondX(short x, bool b){ if(!b) bonds&=~(1<<x); else bonds|=(1<<x); }
 	bool isBrkX(short x) const { return bonds & (1<<(4+x)); }
 	void setBrkX(short x, bool b){ if(!b) bonds&=~(1<<(4+x)); else bonds|=(1<<(4+x)); }
-	bool isBrkBondX(short x) const { return bonds & (1<<x) & (1<<(4+x)); }
+	bool isBrkBondX(short x) const { return (bonds&(1<<x)) && (bonds&(1<<(4+x))); }
 	void setAllBroken() { bonds&=~( 1<<0 | 1<<1 | 1<<2 | 1<<3 ); }
 
 	#define woo_dem_IcePhys__CLASS_BASE_DOC_ATTRS_CTOR_PY \
