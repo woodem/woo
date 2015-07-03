@@ -92,7 +92,7 @@ void ConveyorInlet::postLoad(ConveyorInlet&,void* attr){
 	Real vol=packVol();
 	if(shapePack){
 		vol=shapePack->solidVolume();
-		cellLen=shapePack->cellSize[0];
+		if(shapePack->cellSize[0]>0) cellLen=shapePack->cellSize[0];
 	}
 	Real maxRate;
 	Real rho=(material?material->density:NaN);
@@ -324,8 +324,11 @@ void ConveyorInlet::run(){
 		for(const auto& n: nn){
 			auto& dyn=n->getData<DemData>();
 			if(realSphereX<barrierLayer){
-				setAttachedParticlesColor(n,isnan(barrierColor)?Mathr::UnitRandom():barrierColor);
-				barrier.push_back(n);
+				Real z=node->glob2loc(n->pos)[2];
+				bool isBed=(!isnan(movingBedZ) && z<movingBedZ);
+				const auto& color=(isBed?movingBedColor:barrierColor);
+				setAttachedParticlesColor(n,isnan(color)?Mathr::UnitRandom():color);
+				if(!isBed) barrier.push_back(n);
 				dyn.setBlockedAll();
 			} else {
 				setAttachedParticlesColor(n,isnan(color)?Mathr::UnitRandom():color);

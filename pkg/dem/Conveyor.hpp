@@ -51,6 +51,8 @@ struct ConveyorInlet: public Inlet{
 		((Real,barrierColor,.2,,"Color for barrier particles (NaN for random)")) \
 		((Real,color,NaN,,"Color for non-barrier particles (NaN for random)")) \
 		((Real,barrierLayer,-3.,,"Some length of the last part of new particles has all DoFs blocked, so that when new particles are created, there are no sudden contacts in the band; in the next step, DoFs in this layer are unblocked. If *barrierLayer* is negative, it is relative to the maximum radius in the given packing, and is automatically set to the correct value at the first run")) \
+		((Real,movingBedZ,NaN,,"If given, particles with z coordinate lower than this value will move indefinitely with the conveyor (contact velocity, blocked DOFs), technically not added to the barrier at all.")) \
+		((Real,movingBedColor,.5,,"Color for particles selected with :obj:`movingBedZ` (NaN for random).")) \
 		((bool,save,true,,"Save generated particles so that PSD can be generated afterwards")) \
 		\
 		((int,nextIx,-1,AttrTrait<>().readonly().startGroup("Bookkeeping"),"Index of last-generated particles in the packing")) \
