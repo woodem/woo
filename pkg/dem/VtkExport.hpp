@@ -70,6 +70,7 @@ struct VtkExport: public PeriodicEngine{
 		((bool,sphereSphereOnly,false,,"Only export contacts between two spheres (not sphere+facet and such)")) \
 		((bool,infError,true,,"Raise exception for infinite objects which don't have the glAB attribute set properly.")) \
 		((bool,skipInvisible,true,,"Skip invisible particles")) \
+		((bool,savePos,false,,"Save positions of spheres (redundant information, but useful for coloring by position in Paraview.")) \
 		((AlignedBox3r,clip,AlignedBox3r(),,"Only export particles of which first node is in the clip box (if given).")) \
 		((int,staticMeshBit,DemField::defaultStaticBit,,"Bit for identifying static mesh particles (:obj:`Facet`, :obj:`Wall`, :obj:`InfCylinder` only) which will be exported only once.")) \
 		((bool,staticMeshDone,false,,"Whether static mesh was already exported")) \

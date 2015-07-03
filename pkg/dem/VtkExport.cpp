@@ -231,6 +231,9 @@ void VtkExport::run(){
 	_VTK_CELL_ARR(sGrid,sSigT,"sigT",3);
 	_VTK_CELL_ARR(sGrid,sSigN,"sigN",3);
 	_VTK_POINT_INT_ARR(sGrid,sMatId,"matId",1)
+	// separate declaration and optional insertion
+	_VTK_ARR_HELPER(savedPos,"pos",3,vtkDoubleArray);
+	if(savePos) sGrid->GetPointData()->AddArray(savedPos);
 	// meshes
 	auto mGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto mPos=vtkSmartPointer<vtkPoints>::New();
@@ -287,6 +290,7 @@ void VtkExport::run(){
 			sMask->InsertNextValue(p->mask);
 			// sClumpId->InsertNextValue(dyn.isClumped()?sphere->nodes[0]->getData<DemData>().cast<ClumpData>().clumpLinIx:-1);
 			sColor->InsertNextValue(sphere->color);
+			if(savePos) savedPos->InsertNextTupleValue(pos.data());
 			sVel->InsertNextTupleValue(dyn.vel.data());
 			sAngVel->InsertNextTupleValue(dyn.angVel.data());
 			sMatId->InsertNextValue(p->material->id);
