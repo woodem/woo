@@ -43,6 +43,9 @@
 
 
 
+// increc magic from https://wiki.python.org/moin/boost.python/HowTo#Method_2
+template<typename EigenMatrix>
+struct custom_OpenMPAccumulator_to_EigenMatrix{ static PyObject* convert(const OpenMPAccumulator<EigenMatrix>& acc){ return py::incref(py::object(acc.get()).ptr()); } };
 
 struct custom_OpenMPAccumulator_to_float{ static PyObject* convert(const OpenMPAccumulator<Real>& acc){ return py::incref(PyFloat_FromDouble(acc.get())); } };
 struct custom_OpenMPAccumulator_from_float{
@@ -50,6 +53,7 @@ struct custom_OpenMPAccumulator_from_float{
 	static void* convertible(PyObject* obj_ptr){ return PyFloat_Check(obj_ptr) ? obj_ptr : 0; }
 	static void construct(PyObject* obj_ptr, py::converter::rvalue_from_python_stage1_data* data){ void* storage=((py::converter::rvalue_from_python_storage<OpenMPAccumulator<Real> >*)(data))->storage.bytes; new (storage) OpenMPAccumulator<Real>; ((OpenMPAccumulator<Real>*)storage)->set(py::extract<Real>(obj_ptr)); data->convertible=storage; }
 };
+
 struct custom_OpenMPAccumulator_to_int  { static PyObject* convert(const OpenMPAccumulator<int>& acc){ return py::incref(PyLong_FromLong((long)acc.get())); } };
 struct custom_OpenMPAccumulator_from_int{
 	custom_OpenMPAccumulator_from_int(){  py::converter::registry::push_back(&convertible,&construct,py::type_id<OpenMPAccumulator<int> >()); }
@@ -129,6 +133,8 @@ BOOST_PYTHON_MODULE(_customConverters){
 
 	custom_OpenMPAccumulator_from_float(); py::to_python_converter<OpenMPAccumulator<Real>, custom_OpenMPAccumulator_to_float>(); 
 	custom_OpenMPAccumulator_from_int(); py::to_python_converter<OpenMPAccumulator<int>, custom_OpenMPAccumulator_to_int>(); 
+	// to-python only
+	py::to_python_converter<OpenMPAccumulator<Vector3r>,custom_OpenMPAccumulator_to_EigenMatrix<Vector3r>>();
 
 	py::to_python_converter<OpenMPArrayAccumulator<int>, custom_OpenMPArrayAccumulator_to_list<int>>(); 
 	py::to_python_converter<OpenMPArrayAccumulator<Real>, custom_OpenMPArrayAccumulator_to_list<Real>>(); 
