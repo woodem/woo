@@ -1,7 +1,7 @@
 #include<woo/pkg/dem/Impose.hpp>
 #include<woo/lib/smoothing/LinearInterpolate.hpp>
 
-WOO_PLUGIN(dem,(HarmonicOscillation)(AlignedHarmonicOscillations)(CircularOrbit)(StableCircularOrbit)(RadialForce)(Local6Dofs)(VariableAlignedRotation)(InterpolatedMotion)(VelocityAndReadForce));
+WOO_PLUGIN(dem,(HarmonicOscillation)(AlignedHarmonicOscillations)(CircularOrbit)(StableCircularOrbit)(RadialForce)(Local6Dofs)(VariableAlignedRotation)(InterpolatedMotion)(VelocityAndReadForce)(ReadForce));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HarmonicOscillation__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_CircularOrbit__CLASS_BASE_DOC_ATTRS_CTOR);
@@ -11,6 +11,8 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableAlignedRotation__CLASS_BASE_
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_InterpolatedMotion__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_StableCircularOrbit__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VelocityAndReadForce__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_ReadForce__CLASS_BASE_DOC_ATTRS_CTOR);
+
 
 void CircularOrbit::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	if(!node) throw std::runtime_error("CircularOrbit: node must not be None.");
@@ -99,6 +101,25 @@ void InterpolatedMotion::velocity(const Scene* scene, const shared_ptr<Node>& n)
 	AngleAxisr rot(n->ori.conjugate()*nextOri);
 	dyn.angVel=rot.axis()*rot.angle()/scene->dt;
 };
+
+void ReadForce::readForce(const Scene* scene, const shared_ptr<Node>& n){
+	{
+		boost::mutex::scoped_lock l(lock);
+		// first comes, first resets for this step
+		if(stepLast!=scene->step){ stepLast=scene->step; F.reset(); T.reset(); }
+	}
+	const auto& nf=n->getData<DemData>().force;
+	const auto& nt=n->getData<DemData>().torque;
+	if(!node){
+		F+=nf;
+		T+=nt;
+	} else {
+		F+=node->ori.conjugate()*nf; // only rotate
+		T+=node->ori.conjugate()*(nt+(n->pos-node->pos).cross(nf));
+	}
+}
+
+
 
 void VelocityAndReadForce::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	auto& dyn=n->getData<DemData>();

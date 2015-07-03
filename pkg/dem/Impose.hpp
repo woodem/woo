@@ -120,6 +120,18 @@ struct InterpolatedMotion: public Impose{
 };
 WOO_REGISTER_OBJECT(InterpolatedMotion);
 
+struct ReadForce: public Impose {
+	void readForce(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	#define woo_dem_ReadForce__CLASS_BASE_DOC_ATTRS_CTOR \
+		ReadForce,Impose,"Sum forces and torques acting on all nodes with this imposition; this imposition does not change the behavior of particles in any way.", \
+		((shared_ptr<Node>,node,,,"Reference CS for forces and torque (they are recomputed as if acting on this point); if not given, everything is summed in global CS.")) \
+		((OpenMPAccumulator<Vector3r>,F,,AttrTrait<Attr::noSave>().readonly(),"Summary force")) \
+		((OpenMPAccumulator<Vector3r>,T,,AttrTrait<Attr::noSave>().readonly(),"Summary torque")) \
+		,/*ctor*/ what=Impose::READ_FORCE
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_ReadForce__CLASS_BASE_DOC_ATTRS_CTOR);
+};
+WOO_REGISTER_OBJECT(ReadForce);
+
 struct VelocityAndReadForce: public Impose{
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
 	void readForce(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
@@ -137,3 +149,4 @@ struct VelocityAndReadForce: public Impose{
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VelocityAndReadForce__CLASS_BASE_DOC_ATTRS_CTOR);
 };
 WOO_REGISTER_OBJECT(VelocityAndReadForce);
+
