@@ -154,7 +154,8 @@ void Leapfrog::run(){
 		if(dyn.isClumped()) continue; // those particles are integrated via the clump's master node
 		bool isClump=dyn.isClump();
 		bool damp=(damping!=0. && !dyn.isDampingSkip());
-		if(isClump){
+		// useless to compute node force if the value will not be used at all
+		if(isClump && (!dyn.isBlockedAll() || (dyn.impose && (dyn.impose->what & Impose::READ_FORCE)))){
 			// accumulates to existing values of dyn.force, dy.torque (normally zero)
 			ClumpData::forceTorqueFromMembers(node,dyn.force,dyn.torque);
 		}
