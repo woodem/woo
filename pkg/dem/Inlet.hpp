@@ -161,6 +161,20 @@ struct LayeredAxialBias: public AxialBias {
 };
 WOO_REGISTER_OBJECT(LayeredAxialBias);
 
+struct NonuniformAxisPlacementBias: public SpatialBias{
+	void postLoad(NonuniformAxisPlacementBias&,void*);
+	Vector3r unitPos(const Real& diam) WOO_CXX11_OVERRIDE;
+	#define woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS \
+		NonuniformAxisPlacementBias,SpatialBias,"Distribute particle placement probability non-uniformly along given :opbj:`axis`, following a piecewise-linear probability density function. ", \
+		((int,axis,0,AttrTrait<Attr::triggerPostLoad>(),"Biased axis.")) \
+		((vector<Real>,pdf,,AttrTrait<Attr::triggerPostLoad>(),"Probability density function values, on uniform grid spanning the axis unit range. If given, integrated numerically (trapezoid integration) to obtain :obj:`cdf` (which is normalized).")) \
+		((vector<Real>,cdf,,AttrTrait<Attr::triggerPostLoad>(),"Cumulative distribution function, either given directly, or computed from :obj:`pdf`, on uniform grid on unit range. Automatically normalized so that it ends at unity.")) \
+		((Real,dx,NaN,AttrTrait<Attr::readonly>().noGui().noDump(),"Precomputed value of step size."))
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(NonuniformAxisPlacementBias);
+
 
 struct Collider;
 

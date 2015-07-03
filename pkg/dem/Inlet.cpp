@@ -15,7 +15,7 @@
 
 #include<boost/tuple/tuple_comparison.hpp>
 
-WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)/*(ArcShooter)*/(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias));
+WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)/*(ArcShooter)*/(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias)(NonuniformAxisPlacementBias));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ParticleGenerator__CLASS_BASE_DOC_ATTRS_PY);
@@ -31,6 +31,8 @@ WOO_IMPL__CLASS_BASE_DOC_PY(woo_dem_SpatialBias__CLASS_BASE_DOC_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdAxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_LayeredAxialBias__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS);
+
 
 WOO_IMPL_LOGGER(RandomInlet);
 WOO_IMPL_LOGGER(PsdAxialBias);
@@ -47,7 +49,7 @@ void AxialBias::postLoad(AxialBias&,void*){
 
 Vector3r AxialBias::unitPos(const Real& d){
 	Vector3r p3=Mathr::UnitRandom3();
-	if(axis<0 || axis>2) throw std::runtime_error("AxialBias.axis: must be in 0..2 (not "+to_string(axis));
+	if(axis<0 || axis>2) throw std::runtime_error("AxialBias.axis: must be in 0..2 (not "+to_string(axis)+")");
 	Real& p(p3[axis]);
 	p=CompUtils::clamped((d-d01[0])/(d01[1]-d01[0])+(p-.5)*fuzz,0,1);
 	return p3;
@@ -554,4 +556,36 @@ bool ArcInlet::validateBox(const AlignedBox3r& b) {
 		Inlet::renderMassAndRate(node->loc2glob(CompUtils::cyl2cart(cylBox.center())));
 	}
 #endif
+
+
+void NonuniformAxisPlacementBias::postLoad(NonuniformAxisPlacementBias&,void* attr){
+	if(!pdf.empty()){
+		for(const Real& v: pdf){if(!(v>=0) || isinf(v)) throw std::runtime_error("NonuniformAxisPlacementBias.pdf: contains negative or denormalized numbers."); }
+		cdf.resize(pdf.size());
+		Real _dx=1./pdf.size();
+		cdf[0]=0.;
+		for(size_t i=1; i<pdf.size(); i++) cdf[i]=cdf[i-1]+_dx*.5*(pdf[i]+pdf[i-1]);
+	}
+	if(!cdf.empty()){
+		// cerr<<"CDF"<<endl; for(const auto& c: cdf) cerr<<c<<endl;
+		if((!(cdf.back()>0)) || isinf(cdf.back())) throw std::runtime_error("NonuniformAxisPlacementBias.cdf: last cumulated value is not positive (or is infinite), unable to normalize.");
+		for(auto& c: cdf) c/=cdf.back(); // normalize cdf
+		// cerr<<"CDF normalized"<<endl; for(const auto& c: cdf) cerr<<c<<endl;
+		dx=1./cdf.size();
+	}
+	if(axis<0 || axis>2) throw std::runtime_error("NonuniformAxisPlacementBias.axis: must be in 0..2 (not "+to_string(axis)+")");
+}
+
+Vector3r NonuniformAxisPlacementBias::unitPos(const Real& diam){
+	if(cdf.empty()) throw std::runtime_error("NonuniformAxisPlacementBias.cdf is empty.");
+	Vector3r p3=Mathr::UnitRandom3();
+	Real& p(p3[axis]);
+	// lower_bound computes lowest i such that cdf[i]>=p
+	size_t i=std::lower_bound(cdf.begin(),cdf.end(),p)-cdf.begin();
+	if(i==0) return p3; // p is also zero
+	Real mezzo=(p-cdf[i-1])/(cdf[i]-cdf[i-1]); // where are we in-between points on unit scale
+	if(cdf[i]==cdf[i-1]) mezzo=0; // just in case
+	p=((i-1)+mezzo)*dx;
+	return p3;
+};
 
