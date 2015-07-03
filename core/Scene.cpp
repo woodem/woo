@@ -245,8 +245,9 @@ shared_ptr<ScalarRange> Scene::getRange(const std::string& l) const{
 }
 
 void Scene::boostSave(const string& out){
-	lastSave=out;
-	Object::boostSave(out);
+	string out2=expandTags(out);
+	lastSave=out2;
+	Object::boostSave(out2);
 }
 
 void Scene::saveTmp(const string& slot, bool quiet){
