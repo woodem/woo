@@ -21,7 +21,7 @@ class HertzPhys: public FrictPhys{
 WOO_REGISTER_OBJECT(HertzPhys);
 
 struct Cp2_FrictMat_HertzPhys: public Cp2_FrictMat_FrictPhys{
-	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&);
+	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(FrictMat,FrictMat);
 	WOO_DECL_LOGGER;
 	WOO_CLASS_BASE_DOC_ATTRS(Cp2_FrictMat_HertzPhys,Cp2_FrictMat_FrictPhys,"Compute :obj:`HertzPhys` given two instances of :ref`FrictMat`.",

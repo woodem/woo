@@ -155,15 +155,16 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 
 	// shear sense; zero shear stiffness in tension (XXX: should be different with adhesion)
 	ph.kt=ph.kt0*sqrt(g.uN<0?-g.uN:0);
-	Ft=dt*ph.kt*velT;
+	Ft+=dt*ph.kt*velT;
 	// sliding: take adhesion in account
-	Real maxFt=max(0.,Fn)*ph.tanPhi;
+	Real maxFt=std::abs(min(0.,Fn)*ph.tanPhi);
 	if(Ft.squaredNorm()>pow(maxFt,2)){
 		// sliding
 		Real FtNorm=Ft.norm();
 		Real ratio=maxFt/FtNorm;
 		// sliding dissipation
 		if(unlikely(scene->trackEnergy)) scene->energy->add((.5*(FtNorm-maxFt)+maxFt)*(FtNorm-maxFt)/ph.kt,"plast",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
+		// cerr<<"uN="<<g.uN<<",Fn="<<Fn<<",|Ft|="<<Ft.norm()<<",maxFt="<<maxFt<<",ratio="<<ratio<<",Ft2="<<(Ft*ratio).transpose()<<endl;
 		Ft*=ratio;
 	} else {
 		// viscous tangent force (only applied in the absence of sliding)
