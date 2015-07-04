@@ -201,6 +201,7 @@ def Scene_plot_autoData(P,**kw):
 	S=P.scene
 	# data,imgData,plots=P.data,P.imgData,P.plots
 	kw.update(S=S)
+	kw.update(woo=woo)
 	for p in P.plots:
 		pp=P.plots[p]
 		colDictUpdate(p.strip(),cols,kw)
@@ -799,6 +800,7 @@ def Scene_plot_saveDataTxt(P,fileName,vars=None):
 	data=P.data
 	if not vars:
 		vars=data.keys(); vars.sort()
+	fileName=P.scene.expandTags(fileName)
 	if fileName.endswith('.bz2'): f=bz2.BZ2File(fileName,'wb')
 	elif fileName.endswith('.gz'): f=gzip.GzipFile(fileName,'wb')
 	else: f=open(fileName,'wb')
