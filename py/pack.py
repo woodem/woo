@@ -457,10 +457,7 @@ def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fill
 
 def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,spheresInCell=0,memoizeDb=None,useOBB=True,memoDbg=False,color=None):
 	"""Generator of random dense packing with given geometry properties, using TriaxialTest (aperiodic)
-	or PeriIsoCompressor (periodic). The periodicity depens on whether	the spheresInCell parameter is given.
-
-	*O.scene* is temporarily reassigned to have clean simulation for TriaxialTest without deleting the original simulation.
-	This function therefore should never run in parallel with some code accessing your simulation.
+	or PeriIsoCompressor (periodic). The periodicity depens on whether the spheresInCell parameter is given.
 
 	:param predicate: solid-defining predicate for which we generate packing
 	:param spheresInCell: if given, the packing will be periodic, with given number of spheres in the periodic cell.
@@ -535,7 +532,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
 		#print 'Resulting cellSize',sp.cellSize,'proportions',sp.cellSize[1]/sp.cellSize[0],sp.cellSize[2]/sp.cellSize[0]
 		# repetition to the required cell size will be done below, after memoizing the result
 	else:
-		raise RuntimError("Aperiodic compression not implemented.")
+		raise RuntimeError("Aperiodic compression not implemented.")
 		assumedFinalDensity=0.6
 		V=(4/3)*pi*radius**3; N=assumedFinalDensity*fullDim[0]*fullDim[1]*fullDim[2]/V;
 		TriaxialTest(
@@ -552,7 +549,11 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
 	if orientation:
 		sp.cellSize=(0,0,0); # reset periodicity to avoid warning when rotating periodic packing
 		sp.rotate(*orientation.toAxisAngle())
-	return filterSpherePack(predicate,sp,mat=mat,color=color)
+	ret=filterSpherePack(predicate,sp,mat=mat,color=color)
+	# reset periodicity
+	# thanks to https://ask.woodem.org/index.php/283/problem-with-inalignedbox-and-randomdensepack
+	ret.cellSize=(0,0,0)
+	return ret
 
 def randomPeriPack(radius,initSize,rRelFuzz=0.0,memoizeDb=None):
 	"""Generate periodic dense packing.
