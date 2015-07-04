@@ -42,6 +42,10 @@ def inBatch():
 	import os
 	return bool(wooOptions.batchTable) or wooOptions.batchLine>=0
 
+def hasBatchTable():
+	'Tell whether an external batch table is given or not (scripts may be run in script also without batch tables)'
+	return wooOptions.batchTable!=None and len(wooOptions.batchTable)>0
+
 def mayHaveStaleLock(db):
 	import os.path
 	if not os.path.splitext(db)[-1] in ('.h5','.hdf5','.he5','.hdf'): return
@@ -66,7 +70,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
 	import json
 	import logging
 	S=scene
-	if inBatch(): table,line,db=wooOptions.batchTable,wooOptions.batchLine,wooOptions.batchResults
+	if inBatch() and hasBatchTable(): table,line,db=wooOptions.batchTable,wooOptions.batchLine,wooOptions.batchResults
 	else: table,line,db='',-1,defaultDb
 	newDb=not os.path.exists(db)
 	if not quiet: print 'Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing')
@@ -537,7 +541,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
 	S=scene
 	S.lab._newModule(under)
 	pseudoMod=getattr(S.lab,under)
-	if not inBatch():
+	if not inBatch() or not hasBatchTable():
 		if not noTableOk: raise EnvironmentError("Batch options not defined (and required; pass noTableOk=True if they are not)")
 		S.tags['line']='l!'
 	else:
