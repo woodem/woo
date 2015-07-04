@@ -138,7 +138,7 @@ def quadrilateral(A,B,C,D,size=0,div=Vector2i(0,0),**kw):
 	else:
 		l1,l2=min((A-C).norm(),(D-B).norm()),min((A-B).norm(),(C-D).norm())
 		if size!=0: div=Vector2i(int(max(2,math.ceil(l1/size))),int(max(2,math.ceil(l2/size))))
-		else: div=Vector2i(2,2)
+		else: div=Vector2i(1,1)
 	AB,AC,CD,BD=B-A,C-A,D-C,D-B
 	aabb,aacc=numpy.linspace(0,1,div[0]+1),numpy.linspace(0,1,div[1]+1)
 	pts=[[A+ac*AC+ab*(B+ac*BD-(A+ac*AC)) for ac in aacc] for ab in aabb]
