@@ -65,7 +65,7 @@ class CylTriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
 		## tunables
 		_PAT(float,'dtSafety',.9,startGroup='Tunables',doc='Safety factor, stored in :obj:`woo.core.Scene.dtSafety` and used for computing the initial timestep as well as by :obj:`woo.dem.DynDt` later during the simulation.'),
-		_PAT(float,'massFactor',.5,'Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter'),
+		_PAT(float,'massFactor',10.,'Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter'),
 		_PAT(float,'maxUnbalanced',.05,'Maximum unbalanced force at the end of compaction'),
 	]
 	def __init__(self,**kw):
@@ -134,7 +134,7 @@ def mkFacetCyl(aabb,cylDiv,suppMat,sideMat,suppMask,sideMask,suppBlock,sideBlock
 
 def prepareCylTriax(pre):
 	import woo
-	margin=.6
+	margin=1.5
 	rad,ht=.5*pre.htDiam[1],pre.htDiam[0]
 	bot,top=margin*ht,(1+margin)*ht
 	xymin=Vector2(margin*rad,margin*rad)
@@ -398,7 +398,7 @@ def membraneStabilized(S):
 	S.lab.triax.stressMask=0b0000 # all strain-controlled
 	S.lab.triax.maxStrainRate=(0,0,.001*S.pre.maxRates[1])
 	S.lab.triax.maxUnbalanced=10 # don't care, just compress until done
-	S.lab.leapfrog.damping=S.pre.damping
+	S.lab.leapfrog.damping=S.pre.model.damping
 	S.lab.triax.doneHook='import woo.pre.cylTriax; woo.pre.cylTriax.triaxDone(S)'
 
 	# this is the real ref config now
