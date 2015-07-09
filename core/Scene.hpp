@@ -138,7 +138,7 @@ struct Scene: public Object{
 		string expandTags(const string& s) const;
 
 		#ifdef WOO_OPENGL
-			#define woo_core_Scene__DisplayParameters__OPENGL /*WOO_OPENGL*/ ((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<Attr::hidden>().noGui(),"'hash maps' of display parameters (since woo::serialization had no support for maps, emulate it via vector of strings in format key=value)"))
+			#define woo_core_Scene__DisplayParameters__OPENGL /*WOO_OPENGL*/ ((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states."))
 		#else
 			#define woo_core_Scene__DisplayParameters__OPENGL
 		#endif

@@ -21,11 +21,13 @@ class DisplayParameters: public Object{
 		bool getValue(string displayType, std::string& value);
 		//! Set value of given display type; if such display type exists, it is overwritten, otherwise a new one is created.
 		void setValue(string displayType, std::string value);
-	#define woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS \
-		DisplayParameters,Object,"Store display parameters, not useful for user.", \
-		((vector<string>,values,,AttrTrait<Attr::hidden>(),"")) \
-		((vector<string>,displayTypes,,AttrTrait<Attr::hidden>(),"")) 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS);
+	#define woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS_PY \
+		DisplayParameters,Object,"Store display parameters.", \
+		((vector<string>,values,,AttrTrait<Attr::readonly>(),"")) \
+		((vector<string>,displayTypes,,AttrTrait<Attr::readonly>(),"")) \
+		,/*py*/;	woo::converters_cxxVector_pyList_2way<shared_ptr<DisplayParameters>>();
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(DisplayParameters);
 

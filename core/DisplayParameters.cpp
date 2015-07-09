@@ -4,7 +4,7 @@
 #include<woo/core/Master.hpp>
 
 WOO_PLUGIN(gl,(DisplayParameters));
-WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS_PY);
 
 bool DisplayParameters::getValue(std::string displayType, std::string& value){
 	assert(values.size()==displayTypes.size());
