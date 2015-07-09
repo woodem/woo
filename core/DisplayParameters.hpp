@@ -2,6 +2,7 @@
 #ifdef WOO_OPENGL
 
 #include<woo/lib/object/Object.hpp>
+#include<woo/lib/pyutil/converters.hpp>
 #include<string>
 #include<vector>
  
