@@ -55,7 +55,7 @@ WOO_REGISTER_OBJECT(IceCData);
 
 
 struct Cp2_IceMat_IcePhys: public Cp2_FrictMat_FrictPhys{
-	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&);
+	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
 	FUNCTOR2D(IceMat,IceMat);
 	#define woo_dem_Cp2_IceMat_IcePhys__CLASS_BASE_DOC_ATTRS \
 		Cp2_IceMat_IcePhys,Cp2_FrictMat_FrictPhys,"Compute :obj:`IcePhys` given two instances of :ref`IceMat`.", \
