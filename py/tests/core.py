@@ -447,7 +447,6 @@ class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
 		PAT(str,'sChoice','aa',choice=['aa','bb','cc'],doc='String choice attribute')
 	]
 	def postLoad(self,I):
-		# print '_TestPyClass.postLoad(%s)'%I
 		if I==None:
 			self.postLoadCounter+=1
 		elif I==id(self.aF_trigger):
@@ -457,13 +456,28 @@ class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
 		else: raise RuntimeError(self.__class__.__name__+'.postLoad called with unknown attribute id %s'%I)
 	def __init__(self,**kw):
 		woo.core.Object.__init__(self)
-		self.wooPyInit(self.__class__,woo.core.Object,**kw)
+		self.wooPyInit(_TestPyClass,woo.core.Object,**kw)
+
+class _TestPyClass2(_TestPyClass):
+	'Python class deriving from python base class (which in turn derives from c++).'
+	_PAT=woo.pyderived.PyAttrTrait
+	def postLoad(self,I):
+		if I==id(self.f2) or I==None: self.f2counter+=1
+		else: super(_TestPyClass2,self).postLoad(I)
+	_attrTraits=[
+		_PAT(int,'f2',0,triggerPostLoad=True,doc='Float attr in derived class'),
+		_PAT(int,'f2counter',0,doc='Count how many times was f2 manipulated (to test triggerPostLoad in class with python parent)'),
+	]
+	def __init__(self,**kw):
+		_TestPyClass.__init__(self)
+		self.wooPyInit(_TestPyClass2,_TestPyClass,**kw)
 
 
 class TestPyDerived(unittest.TestCase):
 	import woo.pyderived, woo.core
 	def setUp(self):
 		self.t=_TestPyClass()
+		self.t2=_TestPyClass2()
 	def testTrigger(self):
 		'PyDerived: postLoad triggers'
 		# print 'postLoadCounter after ctor:',self.t.postLoadCounter
@@ -535,3 +549,37 @@ class TestPyDerived(unittest.TestCase):
 		self.assertRaises(ValueError, lambda: _TestPyClass(sChoice='abc'))
 		try: _TestPyClass(sChoice='bb')
 		except: self.fail("Valid choice value not accepted in ctor")
+	def testBoostSaveError(self):
+		'PyDerived: refuses to save via Object::save (data loss; dump must be used instead)'
+		self.assertRaises(IOError,lambda: self.t.save('whatever'))
+		self.assertRaises(IOError,lambda: self.t2.save('whatever'))
+	def testBoostDumpError(self):
+		'PyDerived: refuses to dump with boost::serialization format (data loss)'
+		self.assertRaises(IOError,lambda: self.t.dump('whatever.xml'))
+		self.assertRaises(IOError,lambda: self.t2.dump('whatever.xml'))
+
+	def testPickle2(self):
+		'PyDerived: deepcopy (python parent)'
+		self.t2.f2=3
+		self.t2.aF=0
+		tt=self.t2.deepcopy()
+		self.assert_(tt.aF==0)
+		self.assert_(tt.f2==3)
+	def testIniUser(self):
+		'PyDerived: user initialization (python parent)'
+		t2=_TestPyClass2(aF=0,f2=3)
+		self.assert_(t2.aF==0)
+		self.assert_(t2.f2==3)
+	def testTrigger(self):
+		'PyDerived: postLoad trigger (python parent)'
+		c1=self.t2.postLoadCounter
+		c2=self.t2.f2counter
+		self.t2.f2=4.
+		self.t2.aF_trigger=5.
+		self.assert_(self.t2.f2counter>c2)
+		self.assert_(self.t2.postLoadCounter>c1)
+
+
+		
+	
+

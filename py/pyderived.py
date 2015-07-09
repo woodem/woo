@@ -257,7 +257,7 @@ class PyWooObject:
 			]
 			def __init__(self,**kw):
 				woo.core.Object.__init__(self)
-				self.wooPyInit(self.__class__,woo.core.Object,**kw)		
+				self.wooPyInit(SomeClass,woo.core.Object,**kw)   # do NOT use self.__class__ instead of SomeClass, that would break classes deriving from SomeClass
 
 	This new class automatically obtains several features:
 
@@ -304,17 +304,43 @@ class PyWooObject:
 		instance.aF_trigger=3 # calls instance.postLoad(id(instance.aF_trigger))
 	
 	  .. note:: Pay attention to not call `postLoad` in infinite regression. 
+
+	Python classes may be further derived from in python, along those lines::
+
+		class SomeChild(SomeClass): # python base class only
+			_PAT=woo.pyderived.PyAttrTrait
+			_attrTraits=[
+				_PAT(float,'extraAttr',1.,triggerPostLoad=True,doc='Attributes as usual; postLoad is supported.'),
+			]
+			def postLoad(self,I):
+				if I==id(self.extraAttr): pass
+				# don't forget to eventually call parent's class postLoad, if you define postLoad in the derived class
+				# otherwise the triggers from the parents class would not work
+				else: super(SomeChild,self).postLoad(I)
+			def __init__(self,**kw):
+				SomeClass.__init__(self) # default-construct the parent
+				self.wooPyInit(SomeChild,SomeClass,**kw) # this class, parent class, keywords
 	
+	Derived classes should suppor pickling, GUI, documentation, type-checking, postLoad just like python class deriving from c++ directly. The internal machinery is checked by :obj:`woo.tests.core.TestPyDerived`.
+
 	'''
 	def wooPyInit(self,derivedClass,cxxBaseClass,**kw):
 		'''Inject methods into derivedClass, so that it behaves like woo.core.Object,
 		for the purposes of the GUI and expression dumps'''
 		cxxBaseClass.__init__(self) # repeat, just to make sure
+		# this class does not derive from c++ directly, call the helper that one for it as well (recurses)
+		if hasattr(cxxBaseClass,'wooPyInit'):
+			# print 'Calling python base class wooPyInit'
+			self.wooPyInit(cxxBaseClass,cxxBaseClass.__base__)
 		self.cxxBaseClass=cxxBaseClass
 		self.derivedClass=derivedClass
-		self._instanceTraits={}
-		self._attrValues={}
-		self._attrTraitsDict=dict([(trait.name,trait) for trait in derivedClass._attrTraits])
+		# print derivedClass.__name__,'wooPyInit'
+		# initialize these conditionally; when the base class is in python, it has already set those
+		if not hasattr(self,'_instanceTraits'): self._instanceTraits={}
+		if not hasattr(self,'_attrValues'): self._attrValues={}
+		if not hasattr(self,'_attrTraitsDict'): self._attrTraitsDict={}
+		self._attrTraitsDict.update(dict([(trait.name,trait) for trait in derivedClass._attrTraits]))
+
 		for trait in derivedClass._attrTraits:
 			# basic getter/setter
 			getter=(lambda self,trait=trait: self._attrValues[trait.name])
@@ -331,7 +357,7 @@ class PyWooObject:
 				setter(self,val)
 			setattr(derivedClass,trait.name,property(getter,validatingSetter,None,trait.doc))
 			self._attrValues[trait.name]=trait.ini
-		#print derivedClass,self._attrValues
+		# print derivedClass.__name__,self._attrValues
 		if kw:
 			for k in kw:
 				if not hasattr(self,k): raise AttributeError('No such attribute: %s'%k)
@@ -361,11 +387,15 @@ class PyWooObject:
 			is called from python, this function gets precende over the c++ one.'''
 			import pickle
 			return pickle.loads(pickle.dumps(self))
+		def save_error(self,out):
+			raise IOError('%s.save not allowed for Python classes, use %s.dump instead (only attributes of the closest c++ base class would be saved with save with boost::serialization, losing all python-only data).'%(derivedClass.__name__,derivedClass.__name__,))
 		derivedClass.__getstate__=__getstate__
 		derivedClass.__setstate__=__setstate__
 		derivedClass.deepcopy=deepcopy
+		derivedClass.save=save_error
 		if hasattr(derivedClass,'postLoad'):
-			self.postLoad(None)
+			# print derivedClass.__name__,': will call postLoad at construction time; attrValues are',str(self._attrValues)
+			derivedClass.postLoad(self,None)
 		
 
 

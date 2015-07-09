@@ -93,7 +93,7 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
 	# this will go away later
 	if format=='boost::serialization':
 		if format in ('boost::serialization',) and not isinstance(obj,woo.core.Object): raise IOError("Only instances of woo.core.Object can be saved via boost::serialization")
-		if not hasFilename: raise NotImplementedError('Only serialization to files is supported with boost::serialization.')
+		if not hasFilename: raise NotImplementedError('Only serialization to files (not to strings) is supported with boost::serialization.')
 		if obj.deepcopy.__module__!='woo._monkey.io': raise IOError("boost::serialization formats can only reliably save pure-c++ objects. Given object %s.%s seems to be derived from python. Save using some dump formats."%(obj.__class__.__module__,obj.__class__.__name__))
 		obj.save(str(out)) # must convert unicode to str here, so that it can be converted to std::string
 	elif format=='pickle':
