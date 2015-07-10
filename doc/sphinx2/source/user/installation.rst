@@ -130,3 +130,27 @@ Binaries can be downloaded from `Launchpad download page <https://launchpad.net/
 The installer installs the code system-wide, supports unattended installation via the `/S` switch, and the uninstaller should remove all files. Uninstaller for ``Woo-libs`` must be run after all other components have been uninstalled. Installation directory of Woo is added to the ``PATH`` environment variable, so the command ``wwoo`` is understood wherever you are in the filesystem.
 
 An icon is added to the start menu under ``Woo/woo``.
+
+
+Uninstallation
+==============
+
+To uninstall the current installation of Woo from your machine (which is useful e.g. when switching from packaged version to locally compiled one `or vice versa <https://ask.woodem.org/index.php/294/would-completely-uninstall-version-that-built-from-source>`__), the following steps will clean installed files depending on the method you used to install Woo.
+
+Compilation from source
+    If you used the default ``PREFIX`` value for ``scons``, run the following command::
+
+       rm -rf /usr/local/bin/woo* /usr/local/lib/python2.7/dist-packages/woo* 
+    
+    This will delete executables (``woo`` and ``woo-batch``) and modules. Be careful and check first there are not other ``woo*`` files installed in that location (unlikely, but possible).
+
+Virtual Environment
+    If you created the environment for Woo, you can simply delete all of it. Otherwise, follow the steps for source-compiled uninstallation, altering paths accordingly.
+
+Debian/Ubuntu packages
+    Uninstall the package the standard way, from package manager or by saying::
+
+       sudo apt-get remove python-woo    # or python3-woo, depending on what you installed
+
+Windows
+    Uninstallation is done via standard :menuselection:`Control Panel --> Add/Remove Software`, removing both Woo and Woo-libs.
