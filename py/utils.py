@@ -551,7 +551,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
 			#inputs=sum([['-i',f] for f in frameSpecAvconv],[])
 			# inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
 			inputs=['-i',symPattern]
-			cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+			cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
 		print 'Pass %d:'%passNo,' '.join(cmd)
 		ret=subprocess.call(cmd)
 		if ret!=0: raise RuntimeError("Error running %s."%encExec)
