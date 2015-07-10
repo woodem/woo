@@ -100,6 +100,7 @@ struct VariableAlignedRotation: public Impose{
 		VariableAlignedRotation,Impose,"Impose piecewise-linear angular velocity along :obj:`axis`, based on the :obj:`timeAngVel`.", \
 		((int,axis,0,,"Rotation axis.")) \
 		((vector<Vector2r>,timeAngVel,,,"Angular velocity values in time. Time values must be increasing.")) \
+		((bool,wrap,false,,"Wrap time around the last time value (float modulo), if greater.")) \
 		, /*ctor*/ what=Impose::VELOCITY; _interpPos=0; 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableAlignedRotation__CLASS_BASE_DOC_ATTRS_CTOR);
 };

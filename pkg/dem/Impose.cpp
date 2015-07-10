@@ -82,7 +82,9 @@ void VariableAlignedRotation::postLoad(VariableAlignedRotation&,void*){
 
 void VariableAlignedRotation::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	auto& dyn=n->getData<DemData>();
-	dyn.angVel[axis]=linearInterpolate(scene->time,timeAngVel,_interpPos);
+	Real t=scene->time;
+	if(wrap && t>timeAngVel.back().x()) t=std::fmod(t,timeAngVel.back().x());
+	dyn.angVel[axis]=linearInterpolate(t,timeAngVel,_interpPos);
 }
 
 void InterpolatedMotion::postLoad(InterpolatedMotion&,void* attr){
