@@ -14,8 +14,8 @@ extras:
 upload:
 	rsync -r sphinx2/build/html/ woodem:woo-doc/
 	rsync -r sphinx2/build/latex/Woo.pdf woodem:woo-doc/Woo.pdf
-	for ex in sphinx2/build-extra/*; do rsync -r $$ex/html woodem:woo-private/`basename $$ex`/doc/; done
+	for ex in sphinx2/build-extra/*; do rsync -r $$ex/html/ woodem:woo-private/`basename $$ex`/doc/; done
 uploadpng:
 	rsync -r sphinx2/build/html/ woodem:woo-doc-png/
-	for ex in sphinx2/build-extra/*; do rsync -r $$ex/html woodem:woo-private/`basename $$ex`/doc-png/; done
+	for ex in sphinx2/build-extra/*; do rsync -r $$ex/html/ woodem:woo-private/`basename $$ex`/doc-png/; done
 default: gen upload
