@@ -11,5 +11,6 @@ for a in np.linspace(0,1,255):
 	c[i]-=(1-m)*pm
 	if a>0.: sys.stdout.write(',')
 	sys.stdout.write('%g,%g,%g'%(c[0],c[1],c[2]))
+	#print i,c[0],c[1],c[2]
 sys.stdout.write('}}\n') # add comma if there are other colormaps
 
