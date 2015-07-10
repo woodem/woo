@@ -85,6 +85,7 @@ latex_logo='../../source/woo-logo.pdf'
 		for fmt in 'html','latex':
 			args=['','-T','-b',fmt,'-j','6','-d','../build-doctrees',srcDir,outDir+'/'+fmt]
 			print 'Calling sphinx.build_main with: '+' '.join(args)
+			__builtin__.woo_sphinx_fmt=fmt # this is used in conf.py
 			sphinx.build_main(args)
 
 		
