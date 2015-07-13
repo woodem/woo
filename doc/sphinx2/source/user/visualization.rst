@@ -110,6 +110,28 @@ Movies
 
 Movie can be made from snapshots of the 3d view taken by :obj:`woo.qt.SnapshotEngine`. This engine is usually activated from the control panel in :menuselection:`Video --> Take snapshots`; snapshots are taken using the usual periodicity parameters; video from those snapshots is created when clicking the :menuselection:`Make video` button.
 
+Clipping
+---------
+
+Clipping (by a clipping plane) is useful for showing what happens in an interior of a volume, or removing particles which are obstructing the view; this simulation was about leveling heap of particles by screed wall
+
+.. image:: fig/3d-leveling-topview.png
+
+and this image insightfully shows velocity profile in the middle of the heap:
+
+.. image:: fig/3d-leveling-slice-velocity.png
+
+Clipping is set interactively by pressing :kbd:`F1`, :kbd:`F2` or :kbd:`F3` (for manipulating respectively clipping plane number 1, 2 or 3); the clipping plane manipulation is exited by pressing :kbd:`Esc`. The plane is shown as grid. The following keyboard shortcuts are used to manipulate clipping planes:
+
+* :kbd:`Space` activates or deactive current clipping plane (deactivated plane will have no effect);
+* dragging the mouse rotates the plane around its center, left-draggign moves the wall center;
+* mouse wheel moves the plane along its normal;
+* :kbd:`x`, :kbd:`y`, :kbd:`z` aligns the normal with the respective axis;
+* :kbd:`r` reverts the normal of the current plane;
+* :kbd:`1`, :kbd:`2`, :kbd:`3` copies orientation from clip plane no. 1, 2 or 3 respectively (this is useful for making 2 planes parallel whcn showing a slice)
+* :kbd:`Alt-1`, :kbd:`Alt-2`, :kbd:`Alt-3` adds clip plane of that number to the "bound group", which retains its relative positions and rotation if one of the planes is rotated.
+
+Note that particles are always fully clipped, halves of particles will not be shown.
 
 
 .. _vis-paraview:
