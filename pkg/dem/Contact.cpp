@@ -38,6 +38,19 @@ Particle::id_t Contact::pyId1() const { return pA.expired()?-1:leakPA()->id; }
 Particle::id_t Contact::pyId2() const { return pB.expired()?-1:leakPB()->id; }
 Vector2i Contact::pyIds() const { Vector2i ids(pyId1(),pyId2()); return Vector2i(ids.minCoeff(),ids.maxCoeff()); }
 
+int Contact::pyForceSign(const shared_ptr<Particle>& p) const{
+	const Particle* a(leakPA()); const Particle* b(leakPB());
+	if(p.get()!=a && p.get()!=b) throw std::runtime_error("Contact.forceSign: particle "+p->pyStr()+" does not participate in "+this->pyStr()+".");
+	return p.get()==a?1:-1;
+}
+
+int Contact::pyForceSignId(const Particle::id_t& id) const {
+	auto idA=pyId1(), idB=pyId2();
+	if(id!=idA && id!=idB) throw std::runtime_error("Contact.forceSign: particle #"+to_string(id)+" does not participate in "+this->pyStr()+".");
+	return id==idA?1:-1;
+}
+
+
 Vector3r Contact::dPos(const Scene* scene) const{
 	leakPA()->checkNodes(/*dyn*/false,/*checkUninodal*/true); leakPB()->checkNodes(false,true);
 	Vector3r rawDx=leakPB()->shape->nodes[0]->pos-leakPA()->shape->nodes[0]->pos;

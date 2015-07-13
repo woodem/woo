@@ -362,6 +362,25 @@ class TestIO(unittest.TestCase):
 		self.assert_(len(failed)==0,'Failed classes were: '+' '.join(failed))
 
 
+class TestContact(unittest.TestCase):
+	def setUp(self):
+		self.S=S=woo.core.Scene(fields=[DemField()],engines=DemField.minimalEngines())
+		for i in range(0,10):
+			S.dem.par.add(woo.dem.Sphere.make((0,0,i),1.1))
+		S.one()
+	def testForceSign(self):
+		'Contact: forceSign'
+		S=self.S
+		c45=S.dem.con[4,5]
+		inc=(c45.id1==4)
+		self.assert_(c45.forceSign(4)==(1 if inc else -1))
+		self.assert_(c45.forceSign(5)==(-1 if inc else 1))
+		self.assertRaises(RuntimeError,lambda: c45.forceSign(6))
+		self.assert_(c45.forceSign(S.dem.par[4])==(1 if inc else -1))
+		self.assert_(c45.forceSign(S.dem.par[5])==(-1 if inc else 1))
+		self.assertRaises(RuntimeError,lambda: c45.forceSign(S.dem.par[6]))
+
+
 class TestParticles(unittest.TestCase):
 	def setUp(self):
 		woo.master.reset()

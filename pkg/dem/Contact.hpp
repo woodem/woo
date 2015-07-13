@@ -54,6 +54,9 @@ struct Contact: public Object{
 	void reset();
 	// return -1 or +1 depending on whether the particle passed to us is pA or pB
 	int forceSign(const shared_ptr<Particle>& p) const { return p.get()==leakPA()?1:-1; }
+	// python version with parameter correctness checks
+	int pyForceSign(const shared_ptr<Particle>& p) const;
+	int pyForceSignId(const Particle::id_t& p) const;
 	// return 0 or 1 depending on whether the particle passed is pA or pB
 	short pIndex(const shared_ptr<Particle>& p) const { return pIndex(p.get()); }
 	short pIndex(const Particle* p) const { return p==leakPA()?0:1; }
@@ -108,6 +111,8 @@ struct Contact: public Object{
 		.add_property("pB",&Contact::pyPB,"Second particle of the contact") \
 		.def("resetPhys",&Contact::pyResetPhys,"Set :obj:`phys` to *None* (to force its re-evaluation)") \
 		.def("isFresh",&Contact::pyIsFresh,(py::arg("scene")),"Say whether this contact has just been created. Equivalent to ``C.stepCreated==scene.step``.") \
+		.def("forceSign",&Contact::pyForceSign,(py::arg("p")),"Return sign of :obj:`CPhys.force` as it appies on the particle passed, i.e. +1 if ``p==C.pA`` and -1 if ``p==C.pB``. Raise an exception if ``p`` is neither ``pA`` or ``pB``.") \
+		.def("forceSign",&Contact::pyForceSignId,(py::arg("id")),"Return sign of :obj:`CPhys.force` as it appies on the particle with id ``id``, i.e. ``id==C.id1`` and -1 if ``id==id2``. Raise an exception if ``id`` is neither ``id1`` or ``id2``.") \
 		; \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<Contact>>();
 
