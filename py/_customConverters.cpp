@@ -37,6 +37,7 @@
 #include<woo/lib/pyutil/converters.hpp>
 #include<woo/core/Scene.hpp>
 #include<woo/core/MatchMaker.hpp>
+#include<woo/pkg/dem/Particle.hpp> // for exposing ParticleList
 
 
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
@@ -194,6 +195,7 @@ BOOST_PYTHON_MODULE(_customConverters){
 		woo::converters_cxxVector_pyList_2way<std::vector<std::pair<string,Real>>>();
 
 		VECTOR_INDEXING_SUITE_EXPOSE(Node);
+		VECTOR_INDEXING_SUITE_EXPOSE(Particle);
 		VECTOR_INDEXING_SUITE_EXPOSE(Object);
 
 	#undef VECTOR_INDEXING_SUITE_EXPOSE
