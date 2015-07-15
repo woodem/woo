@@ -52,7 +52,9 @@ void PeriIsoCompressor::run(){
 	Vector3r cellSize=scene->cell->getSize(); //unused: Real cellVolume=cellSize[0]*cellSize[1]*cellSize[2];
 	Vector3r cellArea=Vector3r(cellSize[1]*cellSize[2],cellSize[0]*cellSize[2],cellSize[0]*cellSize[1]);
 	Real minSize=min(cellSize[0],min(cellSize[1],cellSize[2])), maxSize=max(cellSize[0],max(cellSize[1],cellSize[2]));
-	if(minSize<2.1*maxSpan){ throw runtime_error("Minimum cell size is smaller than 2.1*span_of_the_biggest_body! (periodic collider requirement)"); }
+	#if 0
+		if(minSize<2.1*maxSpan){ throw runtime_error("Minimum cell size is smaller than 2.1*span_of_the_biggest_body! (periodic collider requirement)"); }
+	#endif
 	if(((step%globalUpdateInt)==0) || isnan(avgStiffness) || isnan(sigma[0]) || isnan(sigma[1])|| isnan(sigma[2])){
 		avgStressIsoStiffness(cellArea,sigma,avgStiffness);
 		LOG_TRACE("Updated sigma="<<sigma<<", avgStiffness="<<avgStiffness);
@@ -67,8 +69,10 @@ void PeriIsoCompressor::run(){
 		Real avgGrow=1e-4*(sigmaGoal-sigAvg)*avgArea/(avgStiffness>0?avgStiffness:1);
 		Real maxToAvg=maxSize/avgSize;
 		if(abs(maxToAvg*avgGrow)>maxDisplPerStep) avgGrow=Mathr::Sign(avgGrow)*maxDisplPerStep/maxToAvg;
-		Real okGrow=-(minSize-2.1*maxSpan)/maxToAvg;
-		if(avgGrow<okGrow) throw runtime_error("Unable to shrink cell due to maximum body size (although required by stress condition). Increase particle rigidity, increase total sample dimensions, or decrease goal stress.");
+		#if 0
+			Real okGrow=-(minSize-2.1*maxSpan)/maxToAvg;
+			if(avgGrow<okGrow) throw runtime_error("Unable to shrink cell due to maximum body size (although required by stress condition). Increase particle rigidity, increase total sample dimensions, or decrease goal stress.");
+		#endif
 		// avgGrow=max(avgGrow,-(minSize-2.1*maxSpan)/maxToAvg);
 		if(avgStiffness>0) { sigma+=(avgGrow*avgStiffness)*Vector3r::Ones(); sigAvg+=avgGrow*avgStiffness; }
 		if(abs((sigAvg-sigmaGoal)/sigmaGoal)>5e-3) allStressesOK=false;

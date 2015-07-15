@@ -101,7 +101,7 @@ def SpherePack_fromDem(self,scene,dem): return SpherePack_fromSimulation(self,sc
 SpherePack.fromDem=SpherePack_fromDem
 SpherePack.fromSimulation=SpherePack_fromSimulation
 
-def SpherePack_toSimulation(self,scene,rot=Matrix3.Identity,**kw):
+def SpherePack_toDem(self,scene,dem=None,rot=Matrix3.Identity,**kw):
 	ur"""Append spheres directly to the simulation. In addition calling :obj:`woo.dem.ParticleContainer.add`,
 this method also appropriately sets periodic cell information of the simulation.
 
@@ -121,7 +121,7 @@ Virgin simulation is aperiodic:
 
 Add generated packing to the simulation, rotated by 45° along +z
 
-	>>> sp.toSimulation(scene,rot=Quaternion((0,0,1),pi/4),color=0)
+	>>> sp.toDem(scene,scene.dem,rot=Quaternion((0,0,1),pi/4),color=0)
 	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
 Periodic properties are transferred to the simulation correctly, including rotation:
@@ -142,6 +142,7 @@ The current state (even if rotated) is taken as mechanically undeformed, i.e. wi
 :param kw: passed to :obj:`woo.utils.sphere`
 :return: list of body ids added (like :obj:`woo.dem.ParticleContainer.add`)
 """
+	if not dem: dem=scene.dem
 	if isinstance(rot,Quaternion): rot=rot.toRotationMatrix()
 	assert(isinstance(rot,Matrix3))
 	if self.cellSize!=Vector3.Zero:
@@ -152,15 +153,15 @@ The current state (even if rotated) is taken as mechanically undeformed, i.e. wi
 	from woo.dem import DemField
 	if not self.hasClumps():
 		if 'mat' not in kw.keys(): kw['mat']=utils.defaultMaterial()
-		return scene.dem.par.add([woo.dem.Sphere.make(rot*c,r,**kw) for c,r in self])
+		return dem.par.add([woo.dem.Sphere.make(rot*c,r,**kw) for c,r in self])
 	else:
 		standalone,clumps=self.getClumps()
 		# add standalone
-		ids=scene.dem.par.add([woo.dem.Sphere.make(rot*self[i][0],self[i][1],**kw) for i in standalone])
+		ids=dem.par.add([woo.dem.Sphere.make(rot*self[i][0],self[i][1],**kw) for i in standalone])
 		# add clumps
 		clumpIds=[]
 		for clump in clumps:
-			clumpNode=scene.dem.par.addClumped([utils.sphere(rot*(self[i][0]),self[i][1],**kw) for i in clump])
+			clumpNode=dem.par.addClumped([utils.sphere(rot*(self[i][0]),self[i][1],**kw) for i in clump])
 			# make all particles within one clump same color (as the first particle),
 			# unless color was already user-specified
 			clumpIds=[n.dem.parRef[0].id for n in clumpNode.dem.nodes] 
@@ -168,8 +169,13 @@ The current state (even if rotated) is taken as mechanically undeformed, i.e. wi
 				c0=clumpNode.dem.nodes[0].dem.parRef[0].shape.color
 				for n in clumpNode.dem.nodes[1:]: n.dem.parRef[0].shape.color=c0
 		return ids+clumpIds
+SpherePack.toDem=SpherePack_toDem
 
+def SpherePack_toSimulation(self,scene,rot=Matrix3.Identity,**kw):
+	'Proxy for old arguments, which merely calls :obj:`SpherePack.toDem`.'
+	return SpherePack_toDem(self,scene,scene.dem,rot,**kw)
 SpherePack.toSimulation=SpherePack_toSimulation
+
 
 # in c++
 SpherePack.filtered=SpherePack_filtered
@@ -507,9 +513,8 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
 		N100*=vol1/vol0 # volume might have been increased, increase number of spheres to keep porosity the same
 		sp=_getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fillPeriodic=True,spheresInCell=spheresInCell,memoDbg=False)
 		if sp:
-			if orientation:
-				sp.cellSize=(0,0,0) # resetting cellSize avoids warning when rotating
-				sp.rotate(*orientation.toAxisAngle())
+			sp.cellSize=(0,0,0) # resetting cellSize avoids warning when rotating, plus we don't want periodic packing anyway
+			if orientation: sp.rotate(*orientation.toAxisAngle())
 			return filterSpherePack(predicate,sp,mat=mat)
 		else: print "No suitable packing in database found, running",'PERIODIC compression' if wantPeri else 'triaxial'
 		sys.stdout.flush()
@@ -931,43 +936,53 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 ## an attempt at a better randomDensePack
 ## currently ShapePack does not support moving, or the interface is not clear, so it just waits here
 
-#	def randomDensePack2(predicate,generator,memoizeDir=None,debug=False):
-#		box=predicate.aabb()
-#		if memoizeDir:
-#			import hashlib
-#			hash=hashlib.sha1('1'+str(box)+generator.dumps(format='expr')).hexdigest()
-#			memo=memoizeDir+'/'+hash+'.randomdense'
-#			print 'Memoize file is',memo
-#			if os.path.exists(memo):
-#				print 'Returning memoized result'
-#				import woo.pack
-#				return woo.pack.ShapePack(loadFrom=memo).filtered(predicate)
-#		S=woo.core.Scene(fields=[woo.dem.DemField()])
-#		S.dtSafety=.9
-#		S.periodic=True
-#		S.cell.setBox(box.sizes())
-#		S.engines=[	
-#			woo.dem.InsertionSortCollider(list(woo.system.childClasses(woo.dem.BoundFunctor))),
-#			woo.dem.BoxInlet(box=((0,0,0),box.sizes()),maxMass=-1,maxNum=-1,generator=generator,massRate=0,maxAttempts=5000,materials=[woo.dem.FrictMat(density=1e3,young=1e7,ktDivKn=0,tanPhi=0)],shooter=None,mask=1)
-#		]
-#		S.one()
-#		print 'Created %d particles, compacting...'%len(S.dem.par)
-#		minRad=float('inf')
-#		for p in S.dem.par:
-#			r=p.shape.equivRadius()
-#			if not isnan(r): minRad=min(minRad,r)
-#		S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print "done"; S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print S>lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced')]+utils.defaultEngines(damping=.3)
-#		# S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
-#		if debug: return S
-#		S.run(); S.wait()
-#		sp=woo.pack.ShapePack()
-#		sp.fromDem(S,S.dem)
-#		print 'Compacted packing size is',sp.cellSize
-#		sp.canonicalize()
-#		if memoizeDir:
-#			print 'saving to',memo
-#			sp.save(memo)
-#		return sp
+def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False):
+	import woo, math, woo.core, woo.dem
+	box=predicate.aabb()
+	if memoizeDir:
+		import hashlib
+		hash=hashlib.sha1('1'+str(box)+str(porosity)+generator.dumps(format='expr')).hexdigest()
+		memo=memoizeDir+'/'+hash+'.randomdense'
+		print 'Memoize file is',memo
+		if os.path.exists(memo):
+			print 'Returning memoized result'
+			return woo.dem.ShapePack(loadFrom=memo).filtered(predicate)
+	boxSize=box.sizes()
+	iniBoxSize=boxSize*(1/(porosity**(1/3.)))
+	S=woo.core.Scene(fields=[woo.dem.DemField()])
+	S.dtSafety=.9
+	S.periodic=True
+	S.cell.setBox(iniBoxSize)
+	S.engines=[	
+		woo.dem.InsertionSortCollider([c() for c in woo.system.childClasses(woo.dem.BoundFunctor)]),
+		woo.dem.BoxInlet(box=((0,0,0),iniBoxSize),maxMass=-1,maxNum=-1,generator=generator,massRate=0,maxAttempts=5000,materials=[woo.dem.FrictMat(density=1e3,young=1e7,ktDivKn=.5,tanPhi=.1)],shooter=None,mask=1)
+	]
+	S.one()
+	print 'Created %d particles, compacting...'%len(S.dem.par)
+	minRad=float('inf')
+	for p in S.dem.par:
+		r=p.shape.equivRadius
+		if not math.isnan(r): minRad=min(minRad,r)
+	goal=.15
+	S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print "done"; S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced')]+woo.dem.DemField.minimalEngines(damping=.7)
+	S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
+	S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
+	if debug: return S
+	S.run(); S.wait()
+	sp=woo.dem.ShapePack()
+	sp.fromDem(S,S.dem)
+	print 'Compacted packing size is',sp.cellSize
+	sp.canonicalize()
+	spCenter=.5*sp.cellSize
+	sp.cellSize=(0,0,0) # make aperiodic
+	# translate current center to predicate center
+	sp.translate(predicate.center()-spCenter)
+	#sp.translate(box.min()) #.5*(boxSize-iniBoxSize)) # translate middle to the predicate's middle
+	if memoizeDir:
+		print 'saving to',memo
+		sp.save(memo)
+	return sp.filtered(predicate)
+	# return sp
 
 
 

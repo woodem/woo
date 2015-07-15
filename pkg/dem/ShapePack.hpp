@@ -109,6 +109,7 @@ struct ShapePack: public Object{
 	// total volume of all particles
 	Real solidVolume(); 
 	void translate(const Vector3r& offset);
+	// void rotate(const Quaternionr& rot);
 	void canonicalize();
 	void cellRepeat(const Vector3i& count);
 
