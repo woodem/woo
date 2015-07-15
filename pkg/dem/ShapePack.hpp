@@ -32,7 +32,7 @@ struct ShapeClump: public Object{
 	// may fail when called from postLoad, but not from ensureOk()
 	virtual void recompute(int div, bool failOk=false, bool fastOnly=false){ throw std::runtime_error("ShapeClump.recompute: this class is not to be used directly, derived classes should override recompute."); }
 	void makeInvalid(){ volume=equivRad=NaN; inertia=Vector3r(NaN,NaN,NaN); pos=Vector3r::Zero(); ori=Quaternionr::Identity(); }
-	bool isOk() const { return !isnan(volume); }
+	bool isOk() const { return !isnan(volume) && !isnan(equivRad) && !isnan(inertia.maxCoeff()); }
 	void ensureOk() { if(!isOk()) recompute(div,/*failOk*/false); }
 	// fill *pos* as average bounding sphere position, without calling compute
 	// virtual void ensureApproxPos(){ throw std::runtime_error("ShapeClump.ensureApproxPos: this class is not to be used directly, derived classes should override ensureApproxPos."); }

@@ -80,6 +80,7 @@ shared_ptr<Shape> RawShape::toShape(Real density, Real scale) const {
 }
 
 void RawShapeClump::translate(const Vector3r& offset){
+	pos+=offset; // move centroid position
 	for(const auto& r: rawShapes) r->translate(offset);
 }
 
@@ -467,7 +468,7 @@ void ShapePack::filter(const shared_ptr<Predicate>& predicate, int recenter){
 	if(movable) throw std::runtime_error("ShapePack.filter: not implemented for movable ShapePack's yet (missing bbox computation).");
 	recomputeAll();
 	// FIXME: warnings with predicates being larger and such à la SpherePack
-	vector<shared_ptr<ShapeClump>> raws2;
+	vector<shared_ptr<ShapeClump>> raws2; raws2.reserve(raws.size());
 	for(const auto& r: raws){
 		// FIXME: this will work exactly for spheres, but not so for clumps and others where equivRad is not at all the bounding radius; this will need some infrastructure changes to work properly
 		if((*predicate)(r->pos,r->equivRad)) raws2.push_back(r);
@@ -481,6 +482,7 @@ shared_ptr<ShapePack> ShapePack::filtered(const shared_ptr<Predicate>& predicate
 		if((!!recenter && !movable) || (!recenter && movable)) throw std::runtime_error("ShapePack.filtered: recenter argument is ignored, but does not match ShapePack.movable.");
 	}
 	auto ret=make_shared<ShapePack>();
+	ret->raws.reserve(raws.size());
 	if(movable) throw std::runtime_error("ShapePack.filter: not implemented for movable ShapePack's yet (missing bbox computation).");
 	// copy everything needed
 	ret->div=div;

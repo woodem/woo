@@ -967,6 +967,7 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
 	S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print "done"; S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced')]+woo.dem.DemField.minimalEngines(damping=.7)
 	S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
 	S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
+	S.lab.collider.paraPeri=True
 	if debug: return S
 	S.run(); S.wait()
 	sp=woo.dem.ShapePack()
