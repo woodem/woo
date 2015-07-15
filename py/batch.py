@@ -615,7 +615,7 @@ def runPreprocessor(pre,preFile=None):
 			# postpone evaluation of parameters starting with = so that they can use other params
 			if type(val) in (str,unicode) and val.startswith('='): evalParams.append((name,val[1:]))
 			elif type(val) in (str,unicode) and val.startswith("'="): evalParams.append((name,val[2:]))
-			else: nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math))) # woo.unit
+			else: nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
 	# postponed evaluation of computable params
 	for name,val in evalParams:
 		nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy,self=pre)))

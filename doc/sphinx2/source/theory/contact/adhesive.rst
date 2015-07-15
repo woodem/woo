@@ -38,7 +38,7 @@ The DMT model superposes adhesion outside of the area of contact as predicted by
 
 which acts against (negative sign) the elastic repulsion of particles :ref:`(eq) <eq_hertz_elastic>`; the total normal force then reads :math:`P_n=P_{ne}+P_{nv}+P_{na}`. Contact radius :math:`a` can be expressed from :ref:`(eq) <eq_contact_radius_general>` by replacing :math:`P_{ne}` with total normal force :math:`P_n`.
 
-.. todo:: Mention JKR model, then MD as the one which accounts for the transition between both, and finally COS as a good approximation of MD.
+.. todo:: For completeness mention JKR model; mention Maugis model as the one which accounts for the transition between both, COS introducing the :math:`\alpha` parameter, Schwarz (below) giving analytical solution.
 
 Schwarz model
 --------------

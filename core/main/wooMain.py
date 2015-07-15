@@ -90,7 +90,7 @@ def main(sysArgv=None):
 
 	# handle command-line options first
 	import argparse
-	par=argparse.ArgumentParser(prog=os.path.basename(sys.argv[0]),description="Woo: open-source platform for dynamic compuations, http://woodem.org, http://woodem.eu.")
+	par=argparse.ArgumentParser(prog=os.path.basename(sys.argv[0]),description="Woo: open-source platform for dynamic computations, http://woodem.org, http://woodem.eu.")
 	par.add_argument('--version',action='store_true',)
 	#
 	# those MUST be stored in *options*
