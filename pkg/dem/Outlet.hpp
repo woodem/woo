@@ -16,7 +16,7 @@ struct Outlet: public PeriodicEngine{
 	py::object pyDiamMass(bool zipped=false) const;
 	py::object pyDiamMassTime(bool zipped=false) const;
 	Real pyMassOfDiam(Real min, Real max) const ;
-	void pyClear(){ diamMassTime.clear(); rDivR0.clear(); mass=0.; num=0; }
+	void pyClear(){ diamMassTime.clear(); rDivR0.clear(); par.clear(); mass=0.; num=0; }
 	#ifdef WOO_OPENGL
 		void renderMassAndRate(const Vector3r& pos);
 	#endif
@@ -25,12 +25,13 @@ struct Outlet: public PeriodicEngine{
 		((uint,markMask,0,,"When non-zero, switch to marking mode -- particles of which :obj:`Particle.mask` does not comtain :obj:`markMask` (i.e. ``(mask&markMask)!=markMask``) have :obj:`markMask` bit-added to :obj:`Particle.mask` (this can happen only once for each particle); particles are not deleted, but their diameter/mass added to :obj:`diamMassTime` if :obj:`save` is True.")) \
 		((uint,mask,((void)":obj:`DemField.defaultOutletMask`",DemField::defaultOutletMask),,"If non-zero, only particles matching the mask will be candidates for removal")) \
 		((bool,inside,false,,"Delete particles which fall inside the volume rather than outside")) \
-		((bool,save,false,,"Save particles which are deleted in the *diamMass* list")) \
+		((bool,save,false,,"Save particle data which are deleted in the :obj:`diamMassTime` list")) \
 		((bool,recoverRadius,false,,"Recover radius of Spheres by computing it back from particle's mass and its material density (used when radius is changed due to radius thinning (in Law2_L6Geom_PelletPhys_Pellet.thinningFactor). When radius is recovered, the :math:`r/r_0` ratio is added to :obj:`rDivR0` for further processing.")) \
 		((vector<Real>,rDivR0,,AttrTrait<>().noGui().readonly(),"List of the :math:`r/r_0` ratio of deleted particles, when :obj:`recoverRadius` is true.")) \
 		((vector<Vector3r>,diamMassTime,,AttrTrait<>().noGui().readonly(),"Radii and masses of deleted particles; not accessible from python (shadowed by the :obj:`diamMassTime` method).")) \
-		((vector<Real>,timeOut,,AttrTrait<>().noGui().readonly(),"Time when particles were deleted.")) \
 		((int,num,0,AttrTrait<Attr::readonly>(),"Number of deleted particles")) \
+		((bool,savePar,false,,"Save particles as objects in :obj:`par`")) \
+		((vector<shared_ptr<Particle>>,par,,AttrTrait<>().noGui().readonly(),"Deleted :obj:`particles <Particle>` (only saved with :obj:`savePar`.")) \
 		((Real,mass,0.,AttrTrait<Attr::readonly>(),"Total mass of deleted particles")) \
 		((Real,glColor,0,AttrTrait<>(),"Color for rendering (NaN disables rendering)")) \
 		((bool,glHideZero,false,,"Show numbers (mass and rate) even if they are zero.")) \

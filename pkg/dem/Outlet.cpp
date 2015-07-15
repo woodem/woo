@@ -71,12 +71,14 @@ void Outlet::run(){
 			if(recoverRadius){
 				r=cbrt(3*m/(4*M_PI*p->material->density));
 				rDivR0.push_back(s.radius/r);
+				s.radius=r; // assign to the original value, so that savePar saves with the original diameter
 			}
 			if(save) diamMassTime.push_back(Vector3r(2*r,m,scene->time));
 		} else{
 			// all other cases
 			if(save) diamMassTime.push_back(Vector3r(2*p->shape->equivRadius(),m,scene->time));
 		}
+		if(savePar) par.push_back(p);
 		LOG_TRACE("DemField.par["<<id<<"] will be "<<(deleting?"deleted.":"marked."));
 		if(deleting) dem->removeParticle(id);
 		else p->mask|=markMask;

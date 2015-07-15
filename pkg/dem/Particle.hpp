@@ -114,8 +114,8 @@ struct Particle: public Object{
 		.def("getEk",&Particle::getEk_any,(py::arg("trans")=true,py::arg("rot")=true,py::arg("scene")=shared_ptr<Scene>()),"Compute kinetic energy (translational and/or rotational); when *scene* is given, only fluctuation linear/angular velocity will be considered if periodic boundary conditions are active.") \
 		.def("make",&Particle::make,(py::arg("shape"),py::arg("mat"),py::arg("fixed")=false),"Return Particle instance created from given shape and material; nodes with DemData are automatically added to the shape, mass and inertia is recomuted.").staticmethod("make") \
 		; \
-		woo::converters_cxxVector_pyList_2way<shared_ptr<Particle>>();
-
+		/* vector<Particle> is now exposed in py/_customConverters as ParticleList to avoid copying */ \
+		/* woo::converters_cxxVector_pyList_2way<shared_ptr<Particle>>();*/
 
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Particle__CLASS_BASE_DOC_ATTRS_PY);
