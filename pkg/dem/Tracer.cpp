@@ -11,7 +11,31 @@
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/pkg/dem/Gl1_DemField.hpp> // for setOurSceneRanges
 
-WOO_PLUGIN(dem,(Tracer)(TraceVisRep));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_TraceVisRep__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxTraceTimeSetter__CLASS_BASE_DOC_ATTRS);
+
+WOO_PLUGIN(dem,(Tracer)(TraceVisRep)(BoxTraceTimeSetter));
+
+void BoxTraceTimeSetter::run(){
+	for(const auto& n: field->nodes){
+		if(!n->rep || !n->rep->isA<TraceVisRep>()) continue;
+		if(!box.contains(node?node->glob2loc(n->pos):n->pos)) continue;
+		n->rep->cast<TraceVisRep>().t0=scene->time;
+	}
+}
+
+void BoxTraceTimeSetter::render(const GLViewInfo&){
+	if(isnan(glColor)) return;
+	if(!node) GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
+	else {
+		glPushMatrix();
+			GLUtils::setLocalCoords(node->pos,node->ori);
+			GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
+		glPopMatrix();
+	}
+}
+
+
 
 WOO_IMPL_LOGGER(TraceVisRep);
 
@@ -40,24 +64,43 @@ void TraceVisRep::addPoint(const Vector3r& p, const Real& scalar){
 }
 
 vector<Vector3r> TraceVisRep::pyPts_get() const{
-	size_t i=0; vector<Vector3r> ret;
+	size_t i=0; vector<Vector3r> ret; ret.reserve(countPointData());
 	Vector3r pt; Real scalar;
 	while(getPointData(i++,pt,scalar)) ret.push_back(pt);
 	return ret;
 }
 
 vector<Real> TraceVisRep::pyScalars_get() const{
-	size_t i=0; vector<Real> ret;
+	size_t i=0; vector<Real> ret; ret.reserve(countPointData());
 	Vector3r pt; Real scalar;
 	while(getPointData(i++,pt,scalar)) ret.push_back(scalar);
 	return ret;
 }
 
-size_t TraceVisRep::countPointData() const {
+int TraceVisRep::pyIndexConvert(int i, const string& name) const {
+	int cnt=(int)countPointData();
+	if(i>=cnt || i<-cnt) woo::IndexError("TraceVisRep."+name+"("+to_string(i)+"): index out of range "+to_string(-cnt)+".."+to_string(cnt-1)+".");
+	if(i>=0) return i;
+	return cnt+i; // i<0
+}
+
+Real TraceVisRep::pyScalar_get(int i) const {
 	Vector3r pt; Real scalar;
-	size_t ret=0;
-	while(getPointData(ret++,pt,scalar));
-	return ret;
+	bool ok=getPointData(pyIndexConvert(i,"scalar"),pt,scalar);
+	if(!ok) throw std::logic_error("TraceVisRep::pyScalar_get: getPointData error for i="+to_string(i)+"?");
+	return scalar;
+}
+
+Vector3r TraceVisRep::pyPt_get(int i) const {
+	Vector3r pt; Real scalar;
+	bool ok=getPointData(pyIndexConvert(i,"point"),pt,scalar);
+	if(!ok) throw std::logic_error("TraceVisRep::pyPt_get: getPointData error for i="+to_string(i)+"?");
+	return pt;
+}
+
+size_t TraceVisRep::countPointData() const {
+	if(flags&FLAG_COMPRESS) return writeIx-1;
+	return pts.size();
 }
 
 bool TraceVisRep::getPointData(size_t i, Vector3r& pt, Real& scalar) const {
@@ -186,6 +229,7 @@ void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 				auto& tr=n->rep->cast<TraceVisRep>();
 				tr.resize(num);
 				tr.flags=(compress>0?TraceVisRep::FLAG_COMPRESS:0) | (minDist>0?TraceVisRep::FLAG_MINDIST:0);
+				tr.t0=scene->time;
 			} else {
 				n->rep.reset();
 			}
@@ -231,6 +275,7 @@ void Tracer::run(){
 	#endif
 	switch(scalar){
 		case SCALAR_NONE: lineColor->label="[index]"; break;
+		case SCALAR_TRACETIME: lineColor->label="trace time"; break;
 		case SCALAR_TIME: lineColor->label="time"; break;
 		case SCALAR_VEL: lineColor->label="vel"; break;
 		case SCALAR_ANGVEL: lineColor->label="angVel"; break;
@@ -264,6 +309,7 @@ void Tracer::run(){
 			auto& tr=n->rep->cast<TraceVisRep>();
 			tr.resize(num);
 			tr.flags=(compress>0?TraceVisRep::FLAG_COMPRESS:0) | (minDist>0?TraceVisRep::FLAG_MINDIST:0);
+			tr.t0=scene->time;
 		}
 		auto& tr=n->rep->cast<TraceVisRep>();
 		bool hasP=!dyn.parRef.empty();
@@ -276,7 +322,7 @@ void Tracer::run(){
 		// get redius only when actually needed
 		if(!hidden && (scalar==SCALAR_RADIUS || rRange.maxCoeff()>0)){
 			const auto& pI(dyn.parRef.begin());
-			if(hasP && dynamic_pointer_cast<Sphere>((*pI)->shape)) radius=(*pI)->shape->cast<Sphere>().radius;
+			if(hasP) radius=(*pI)->shape->equivRadius();
 			else if(dyn.isClump()) radius=dyn.cast<ClumpData>().equivRad;
 			if(rRange.maxCoeff()>0) hidden=(isnan(radius) || (rRange[0]>0 && radius<rRange[0]) || (rRange[1]>0 && radius>rRange[1]));
 		}
@@ -294,6 +340,7 @@ void Tracer::run(){
 			}
 			case SCALAR_RADIUS: sc=radius; break;
 			case SCALAR_SHAPE_COLOR: sc=(hasP?(*dyn.parRef.begin())->shape->color:NaN); break;
+			case SCALAR_TRACETIME: sc=scene->time-tr.t0; break; 
 			case SCALAR_TIME: sc=scene->time; break;
 			case SCALAR_ORDINAL: sc=(i%ordinalMod); break;
 			case SCALAR_KINETIC: sc=dyn.getEk_any(n,/*trans*/true,/*rot*/true,scene); break;
