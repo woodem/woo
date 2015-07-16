@@ -1,2 +1,0 @@
-#!/bin/sh
-convert -define pdf:use-cropbox=true -density 150x150 $1 ${1%.pdf}.png
