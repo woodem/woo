@@ -51,8 +51,9 @@ void PeriIsoCompressor::run(){
 	const long& step=scene->step;
 	Vector3r cellSize=scene->cell->getSize(); //unused: Real cellVolume=cellSize[0]*cellSize[1]*cellSize[2];
 	Vector3r cellArea=Vector3r(cellSize[1]*cellSize[2],cellSize[0]*cellSize[2],cellSize[0]*cellSize[1]);
-	Real minSize=min(cellSize[0],min(cellSize[1],cellSize[2])), maxSize=max(cellSize[0],max(cellSize[1],cellSize[2]));
+	const Real& maxSize=cellSize.maxCoeff();
 	#if 0
+		Real minSize=cellSize.minCoeff();
 		if(minSize<2.1*maxSpan){ throw runtime_error("Minimum cell size is smaller than 2.1*span_of_the_biggest_body! (periodic collider requirement)"); }
 	#endif
 	if(((step%globalUpdateInt)==0) || isnan(avgStiffness) || isnan(sigma[0]) || isnan(sigma[1])|| isnan(sigma[2])){
