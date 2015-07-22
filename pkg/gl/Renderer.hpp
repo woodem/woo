@@ -95,7 +95,6 @@ struct Renderer: public Object{
 		static void setLightUnhighlighted();
 
 		static void init();
-		static void initgl();
 		static void render(const shared_ptr<Scene>& scene, bool withNames, bool fastDraw);
 
 		static void setNodeGlData(const shared_ptr<Node>& n, bool updateRefPos=false);
@@ -112,6 +111,12 @@ struct Renderer: public Object{
 	enum{TIME_ALL=TIME_VIRT|TIME_REAL|TIME_STEP};
 	enum{FAST_ALWAYS=0,FAST_UNFOCUSED,FAST_NEVER};
 
+	static void postLoadStatic(void* attr){
+		if(attr==&dispScale && dispScale!=Vector3r::Ones()) scaleOn=true;
+		if(attr==&rotScale && rotScale!=1.) scaleOn=true;
+	}
+
+
 	WOO_CLASS_BASE_DOC_STATICATTRS_PY(Renderer,Object,"Class responsible for rendering scene on OpenGL devices.",
 		((bool,engines,true,AttrTrait<>().startGroup("General"),"Call engine's rendering functions (if defined)"))
 		((bool,ranges,true,,"Show color scales for :obj:`Scene.ranges`"))
@@ -123,9 +128,9 @@ struct Renderer: public Object{
 		((string,snapFmt,"/tmp/{id}.{#}.png",AttrTrait<>().filename(),"Format for saving snapshots; `{tag}` sequences are expanded with Scene.tags; a special `{#}` tag is expanded with snapshot number (so that older ones are not overwritten), starting from 0 and zero-padded to 4 decimal palces. File format is auto-detected from extension. Supported formats are .png, .jpg, .pdf, .svg, xfig, ps, eps."))
 		((int,fast,true,AttrTrait<Attr::namedEnum>().namedEnum({{FAST_ALWAYS,{"always"}},{FAST_UNFOCUSED,{"unfocused"}},{FAST_NEVER,{"never"}}}),"When to use fast rendering; unfocused means when manipulating camera or the 3d windows is not focused, and framerate drops below *maxFps*."))
 
-		((bool,scaleOn,false,AttrTrait<>().startGroup("Scaling").buttons({"Reference now","woo.gl.Gl1_DemField.updateRefPos=True","use current positions and orientations as reference for scaling displacement/rotation."},/*showBefore*/false),"Whether *dispScale* has any effect or not."))
-		((Vector3r,dispScale,Vector3r(10,10,10),,"Artificially enlarge (scale) dispalcements from bodies' :obj:`reference positions <GlData.refPos>` by this relative amount, so that they become better visible (independently in 3 dimensions). Disbled if (1,1,1), and also if *scaleOn* is false."))
-		((Real,rotScale,((void)"disable scaling",1.),,"Artificially enlarge (scale) rotations of bodies relative to their :ref:`reference orientation <GlData.refOri>`, so the they are better visible. No effect if 1, and also if *scaleOn* is false."))
+		((bool,scaleOn,false,AttrTrait<>().startGroup("Scaling").buttons({"Reference now","woo.gl.Gl1_DemField.updateRefPos=True","use current positions and orientations as reference for scaling displacement/rotation."},/*showBefore*/false),"Whether :obj:`dispScale` and :obj:`rotScale` have any effect or not."))
+		((Vector3r,dispScale,Vector3r(10,10,10),AttrTrait<Attr::triggerPostLoad>(),"Artificially enlarge (scale) displacements from nodes' :obj:`reference positions <GlData.refPos>` by this relative amount, so that they become better visible (independently in 3 dimensions); not enabled unless :obj:`scaleOn` is ``True``. When set to something else than ``(1,1,1)``, :obj:`scaleOn` is set to ``True`` automatically."))
+		((Real,rotScale,((void)"disable scaling",1.),AttrTrait<Attr::triggerPostLoad>(),"Artificially enlarge (scale) rotations of bodies relative to their :ref:`reference orientation <GlData.refOri>`, so the they are better visible; no effect if 1.0 and unless :obj:`scaleOn` is set. If set to anything else than 1.0, :obj:`scaleOn` is set automatically."))
 		((Real,zClipCoeff,4.,AttrTrait<>().range(Vector2r(sqrt(3.),10)),"Z-clipping coefficient, relative to scene radius (see http://www.libqglviewer.com/refManual/classqglviewer_1_1Camera.html#acd07c1b9464b935ad21bb38b7c27afca for details)"))
 
 

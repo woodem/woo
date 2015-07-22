@@ -281,6 +281,7 @@ void Tracer::run(){
 		case SCALAR_ANGVEL: lineColor->label="angVel"; break;
 		case SCALAR_SIGNED_ACCEL: lineColor->label="signed |accel|"; break;
 		case SCALAR_RADIUS: lineColor->label="radius"; break;
+		case SCALAR_NUMCON: lineColor->label="num. contacts"; break;
 		case SCALAR_SHAPE_COLOR: lineColor->label="Shape.color"; break;
 		case SCALAR_ORDINAL: lineColor->label="ordinal"+(ordinalMod>1?string(" % "+to_string(ordinalMod)):string());
 		case SCALAR_KINETIC: lineColor->label="kinetic energy"; break;
@@ -339,6 +340,7 @@ void Tracer::run(){
 				break;
 			}
 			case SCALAR_RADIUS: sc=radius; break;
+			case SCALAR_NUMCON: sc=(hasP?(*dyn.parRef.begin())->countRealContacts():NaN); break;
 			case SCALAR_SHAPE_COLOR: sc=(hasP?(*dyn.parRef.begin())->shape->color:NaN); break;
 			case SCALAR_TRACETIME: sc=scene->time-tr.t0; break; 
 			case SCALAR_TIME: sc=scene->time; break;
