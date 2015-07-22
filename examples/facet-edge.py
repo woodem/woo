@@ -1,6 +1,8 @@
 import woo, woo.dem, woo.core, woo.triangulated
 from minieigen import *
 
+# video of this simulation at https://youtu.be/PkU4PLrCgF0
+
 S=woo.master.scene=woo.core.Scene(
 	fields=[woo.dem.DemField(gravity=(5,0,-10))], # gravity sideways
 	# add significant damping to avoid oscillations

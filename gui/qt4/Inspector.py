@@ -91,7 +91,7 @@ class BodyInspector(QWidget):
 		self.bodyLinkCallback,self.intrLinkCallback=bodyLinkCallback,intrLinkCallback
 		self.bodyIdBox=QSpinBox(self)
 		self.bodyIdBox.setMinimum(0)
-		self.bodyIdBox.setMaximum(100000000)
+		self.bodyIdBox.setMaximum(1000000000)
 		self.bodyIdBox.setValue(self.parId)
 		self.intrWithCombo=QComboBox(self);
 		self.gotoBodyButton=QPushButton(u'→ #',self)
@@ -239,6 +239,8 @@ class InteractionInspector(QWidget):
 		self.bodyLinkCallback=bodyLinkCallback
 		self.ids=ids
 		self.intrLinIxBox=QSpinBox(self)
+		self.intrLinIxBox.setMinimum(0)
+		self.intrLinIxBox.setMaximum(1000000000)
 		self.gotoId1Button=QPushButton(u'#…',self)
 		self.gotoId2Button=QPushButton(u'#…',self)
 		self.gotoId1Button.clicked.connect(self.gotoId1Slot)
