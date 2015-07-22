@@ -92,6 +92,7 @@ void Gl1_DemField::initAllRanges(){
 		switch(i){
 			case COLOR_SHAPE:	 		 r->label="Shape.color"; break;
 			case COLOR_RADIUS:       r->label="radius"; break;
+			case COLOR_DIAM_MM:      r->label="diameter (mm)"; break;
 			case COLOR_VEL:          r->label="vel"; break;
 			case COLOR_ANGVEL:       r->label="angVel"; break;
 			case COLOR_MASS:         r->label="mass"; break;
@@ -237,6 +238,7 @@ void Gl1_DemField::doShape(){
 		// additional conditions under which colorBy2 is used
 		if(false
 			|| (colorBy==COLOR_RADIUS && isnan(radius))
+			|| (colorBy==COLOR_DIAM_MM && isnan(radius))
 			|| (colorBy==COLOR_MATSTATE && !p->matState)
 			/* || (!isSpheroid && (colorBy==COLOR_SIG_N || colorBy==COLOR_SIG_T)) */
 		) useColor2=true;
@@ -264,6 +266,7 @@ void Gl1_DemField::doShape(){
 		int cBy=(!useColor2?colorBy:colorBy2);
 		switch(cBy){
 			case COLOR_RADIUS: parColor=(!isnan(radius)?CR->color(radius):(solidColor)); break;
+			case COLOR_DIAM_MM: parColor=(!isnan(radius)?CR->color(2000*radius):(solidColor)); break;
 			case COLOR_VEL: parColor=CR->color(vecNormXyz(getParticleVel(p))); break;
 			case COLOR_ANGVEL: parColor=CR->color(vecNormXyz(getNodeAngVel(n0))); break;
 			case COLOR_MASS: parColor=CR->color(dyn0.mass); break;

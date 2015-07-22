@@ -291,7 +291,7 @@ class AttrEditor_FloatRange(AttrEditor,QFrame):
 		#pass # this is OK
 
 class AttrEditor_Choice(AttrEditor,QFrame):
-	def __init__(self,parent,getter,setter):
+	def __init__(self,parent,getter,setter,isColormap):
 		AttrEditor.__init__(self,getter,setter)
 		QFrame.__init__(self,parent)
 		curr,choices=getter()
@@ -306,8 +306,9 @@ class AttrEditor_Choice(AttrEditor,QFrame):
 		for c in choices:
 			self.combo.addItem(str(c if self.justValues else c[1])) 
 		### hack for COLORMAPS!!, only based on length of the choice list
-		nCmaps=len(woo.master.cmaps)
-		if len(choices) in (nCmaps,nCmaps+1): # +1 for [default] (-1)
+		if isColormap:
+			nCmaps=len(woo.master.cmaps)
+			assert len(choices) in (nCmaps,nCmaps+1), "Number of colormap choices not equal to the number of known colormaps?" # +1 for default
 			if len(choices)==nCmaps+1:
 				for i in range(len(choices)): self.combo.setItemIcon(i,getColormapIcons()[(i-1) if i>0 else woo.master.cmap[0]])
 			else:
@@ -956,7 +957,7 @@ class ObjectEditor(QFrame):
 		# choice for sequences has the special meaning of descriptions of individual items; handled in SeqEditor, not here
 		if isinstance(entry.T,(list,tuple)) and len(entry.T)==1: return None
 		choice=entry.trait.choice
-		return AttrEditor_Choice(self,lambda: (getattr(entry.obj,entry.name),choice),lambda x: setattr(entry.obj,entry.name,x))
+		return AttrEditor_Choice(self,lambda: (getattr(entry.obj,entry.name),choice),lambda x: setattr(entry.obj,entry.name,x),isColormap=entry.trait.colormap)
 	def handleBits(self,getter,setter,entry):
 		bits=entry.trait.bits
 		return AttrEditor_Bits(self,lambda: (getattr(entry.obj,entry.name),bits),lambda x: setattr(entry.obj,entry.name,x))

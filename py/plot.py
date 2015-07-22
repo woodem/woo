@@ -154,8 +154,6 @@ def Scene_plot_autoData(P,**kw):
 	>>> # we create a simple simulation with one ball falling down
 	>>> S.dem.par.add(Sphere.make((0,0,0),1,mat=utils.defaultMaterial()))
 	0
-	>>> S.dem.collectNodes() 
-	1
 	>>> S.engines=[Leapfrog(damping=.4,reset=True),
 	...    # get data required by plots at every step
 	...    PyRunner(1,'S.plot.autoData()')

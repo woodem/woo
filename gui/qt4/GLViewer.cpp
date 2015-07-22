@@ -717,9 +717,10 @@ void GLViewer::postDraw(){
 	qglviewer::Vec c=QGLViewer::camera()->sceneCenter();
 	Renderer::viewInfo.sceneCenter=Vector3r(c[0],c[1],c[2]);
 
-	Real dispDiameter=min(wholeDiameter,max((Real)displayedSceneRadius()*2,wholeDiameter/1e3)); // limit to avoid drawing 1e5 lines with big zoom level
+	Real dispDiameter=min(wholeDiameter,max((Real)displayedSceneRadius()*2,wholeDiameter/1e2)); // limit to avoid drawing 1e5 lines with big zoom level
 	//qglviewer::Vec center=QGLViewer::camera()->sceneCenter();
 	Real gridStep=pow(10,(floor(log10(dispDiameter)-.7)));
+	if(camera()->type()==qglviewer::Camera::PERSPECTIVE) gridStep=max(gridStep,pow(10,floor(log10(wholeDiameter/10))));
 	Real scaleStep=pow(10,(floor(log10(displayedSceneRadius()*2)-.7))); // unconstrained
 	int nSegments=((int)(wholeDiameter/gridStep))+1;
 	Real realSize=nSegments*gridStep;

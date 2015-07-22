@@ -55,6 +55,7 @@ namespace woo{
 			((int,bits,0,AttrTrait<>().bits({"bit0","bit1","bit2","bit3","bit4"}),"Test writable bits of writable flags var.")) \
 			((int,bitsRw,0,AttrTrait<Attr::readonly>().bits({"bit0rw","bit1rw","bit2rw","bit3rw","bit4rw"},/*rw*/true),"Test writable bits of read-only flags var.")) \
 			((int,bitsRo,3,AttrTrait<Attr::readonly>().bits({"bit0ro","bit1ro","bit2ro","bit3ro","bit4ro"}),"Test read-only bits of read-only flags var.")) \
+			((string,strVar,"",,"Test string type var.")) \
 			,/*ctor*/ \
 			,/*py*/ \
 				.add_property("aaccuRaw",&WooTestClass::aaccuGetRaw,&WooTestClass::aaccuSetRaw,"Access OpenMPArrayAccumulator data directly. Writing resizes and sets the 0th thread value, resetting all other ones.") \

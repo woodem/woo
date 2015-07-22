@@ -2,22 +2,24 @@
 #include<woo/pkg/dem/Sphere.hpp>
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/pkg/dem/Funcs.hpp>
-WOO_PLUGIN(dem,(Outlet)(BoxOutlet)(ArcOutlet));
+WOO_PLUGIN(dem,(Outlet)(BoxOutlet)(StackedBoxOutlet)(ArcOutlet));
 WOO_IMPL_LOGGER(Outlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Outlet__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxOutlet__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcOutlet__CLASS_BASE_DOC_ATTRS);
 
 
 void Outlet::run(){
 	DemField* dem=static_cast<DemField*>(field.get());
 	Real stepMass=0.;
-	std::set<Particle::id_t> delParIds;
+	std::set<std::tuple<Particle::id_t,int>> delParIdLoc;
 	std::set<Particle::id_t> delClumpIxs;
 	bool deleting=(markMask==0);
 	for(size_t i=0; i<dem->nodes.size(); i++){
 		const auto& n=dem->nodes[i];
-		if(inside!=isInside(n->pos)) continue; // node inside, do nothing
+		int loc=-1, loc2=-1; // loc2 is for other nodes and ignored
+		if(inside!=isInside(n->pos,loc)) continue; // node inside, do nothing
 		if(!n->hasData<DemData>()) continue;
 		const auto& dyn=n->getData<DemData>();
 		// check all particles attached to this node
@@ -31,18 +33,18 @@ void Outlet::run(){
 			bool otherOk=true;
 			for(const auto& nn: p->shape->nodes){
 				// useless to check n again
-				if(nn.get()!=n.get() && !(inside!=isInside(nn->pos))){ otherOk=false; break; }
+				if(nn.get()!=n.get() && !(inside!=isInside(nn->pos,loc2))){ otherOk=false; break; }
 			}
 			if(!otherOk) continue;
 			LOG_TRACE("DemField.par["<<i<<"] marked for deletion.");
-			delParIds.insert(p->id);
+			delParIdLoc.insert(std::make_tuple(p->id,loc));
 		}
 		// if this is a clump, check positions of all attached nodes, and masks of their particles
 		if(dyn.isClump()){
 			assert(dynamic_pointer_cast<ClumpData>(n->getDataPtr<DemData>()));
 			const auto& cd=n->getDataPtr<DemData>()->cast<ClumpData>();
 			for(const auto& nn: cd.nodes){
-				if(inside!=isInside(nn->pos)) goto otherNotOk;
+				if(inside!=isInside(nn->pos,loc2)) goto otherNotOk;
 				for(const Particle* p: nn->getData<DemData>().parRef){
 					assert(p);
 					if(mask && !(mask & p->mask)) goto otherNotOk;
@@ -57,7 +59,8 @@ void Outlet::run(){
 			otherNotOk: ;
 		}
 	}
-	for(const auto& id: delParIds){
+	for(const auto& idLoc: delParIdLoc){
+		const auto& id(std::get<0>(idLoc)); const auto& loc(std::get<1>(idLoc));
 		const shared_ptr<Particle>& p((*dem->particles)[id]);
 		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(p->shape->nodes[0],true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
 		const Real& m=p->shape->nodes[0]->getData<DemData>().mass;
@@ -78,6 +81,7 @@ void Outlet::run(){
 			// all other cases
 			if(save) diamMassTime.push_back(Vector3r(2*p->shape->equivRadius(),m,scene->time));
 		}
+		locs.push_back(loc);
 		if(savePar) par.push_back(p);
 		LOG_TRACE("DemField.par["<<id<<"] will be "<<(deleting?"deleted.":"marked."));
 		if(deleting) dem->removeParticle(id);
@@ -160,14 +164,55 @@ void BoxOutlet::render(const GLViewInfo&){
 	}
 	Outlet::renderMassAndRate(center);
 }
+
+void StackedBoxOutlet::render(const GLViewInfo& gli){
+	if(isnan(glColor)) return;
+	Vector3r color=.5*CompUtils::mapColor(glColor); // darker for subdivision
+	if(!isnan(color[0])){
+		if(node){ glPushMatrix(); GLUtils::setLocalCoords(node->pos,node->ori); }
+		glColor3v(color);
+		short ax1((axis+1)%3),ax2((axis+2)%3);
+		for(size_t d=0; d<divs.size(); d++){
+			glBegin(GL_LINE_LOOP);
+				Vector3r v;
+				v[axis]=divs[d];
+				for(size_t i=0; i<4; i++){
+					v[ax1]=(i<2?box.min()[ax1]:box.max()[ax1]);
+					v[ax2]=(i%2?box.min()[ax1]:box.max()[ax2]);
+					glVertex3v(v);
+				}
+			glEnd();
+		}
+		if(node){ glPopMatrix(); }
+	}
+	BoxOutlet::render(gli); // render the rest
+}
 #endif
+
+void StackedBoxOutlet::postLoad(StackedBoxOutlet&, void* attr){
+	if(!divs.empty()){
+		for(size_t i=0; i<divs.size(); i++){
+			if(isnan(divs[i]) || isinf(divs[i])) throw std::runtime_error("StackedBoxOutlet.divs: NaN and Inf not allowed (divs["+to_string(i)+"]="+to_string(divs[i])+").");
+			if(i>0 && !(divs[i-1]<divs[i])) throw std::runtime_error("StackedBoxOutlet.divs: must be increasing (divs["+to_string(i-1)+"]="+to_string(divs[i-1])+", divs["+to_string(i)+"]="+to_string(divs[i])+").");
+		}
+	}
+}
+
+bool StackedBoxOutlet::isInside(const Vector3r& p, int& loc){
+	Vector3r pp(node?node->glob2loc(p):p);
+	if(!box.contains(pp)) return false;
+	// find which stack in the box
+	loc=std::upper_bound(divs.begin(),divs.end(),pp[axis])-divs.begin();
+	return true;
+}
+
 
 void ArcOutlet::postLoad(ArcOutlet&, void* attr){
 	if(!cylBox.isEmpty() && (cylBox.min()[0]<0 || cylBox.max()[0]<0)) throw std::runtime_error("ArcOutlet.cylBox: radius bounds (x-component) must be non-negative (not "+to_string(cylBox.min()[0])+".."+to_string(cylBox.max()[0])+").");
 	if(!node){ node=make_shared<Node>(); throw std::runtime_error("ArcOutlet.node: must not be None (dummy node created)."); }
 };
 
-bool ArcOutlet::isInside(const Vector3r& p){ return CompUtils::cylCoordBox_contains_cartesian(cylBox,node->glob2loc(p)); }
+bool ArcOutlet::isInside(const Vector3r& p, int& loc){ return CompUtils::cylCoordBox_contains_cartesian(cylBox,node->glob2loc(p)); }
 #ifdef WOO_OPENGL
 	void ArcOutlet::render(const GLViewInfo&){
 		if(isnan(glColor)) return;

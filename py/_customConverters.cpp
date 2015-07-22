@@ -83,6 +83,23 @@ struct custom_ptrMatchMaker_from_float{
 	}
 };
 
+#if PY_MAJOR_VERSION < 3
+struct custom_stdstring_from_unicode{
+	custom_stdstring_from_unicode(){ py::converter::registry::push_back(&convertible,&construct,py::type_id<std::string>()); }
+	static void* convertible(PyObject* obj_ptr){ if(PyUnicode_Check(obj_ptr)) return obj_ptr; return 0; }
+	static void construct(PyObject* obj_ptr, py::converter::rvalue_from_python_stage1_data* data){
+		PyObject* utf8=PyUnicode_AsUTF8String(obj_ptr); // encode into python string
+		if(utf8==0) py::throw_error_already_set();
+		char* str=PyString_AsString(utf8); // get NTBS from py::object
+		void* storage=((py::converter::rvalue_from_python_storage<string>*)(data))->storage.bytes;
+		new (storage) string(str); // allocate the std::string at given address
+		py::decref(utf8); // buffer copy has been made on the previous line, decref to delete str
+		data->convertible=storage;
+	}
+};
+#endif
+
+
 
 // inspired by
 // https://www.maillist.unibas.ch/pipermail/openstructure-commits/Week-of-Mon-20100607/001773.html
@@ -131,6 +148,10 @@ struct VectorPickle: py::pickle_suite{
 WOO_PYTHON_MODULE(_customConverters);
 BOOST_PYTHON_MODULE(_customConverters){
 	py::scope().attr("__name__")="woo._customConverters";
+
+	#if PY_MAJOR_VERSION < 3
+		custom_stdstring_from_unicode();
+	#endif
 
 	custom_OpenMPAccumulator_from_float(); py::to_python_converter<OpenMPAccumulator<Real>, custom_OpenMPAccumulator_to_float>(); 
 	custom_OpenMPAccumulator_from_int(); py::to_python_converter<OpenMPAccumulator<int>, custom_OpenMPAccumulator_to_int>(); 

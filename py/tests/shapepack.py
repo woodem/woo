@@ -37,6 +37,7 @@ class TestShapePack(unittest.TestCase):
 		mat=woo.utils.defaultMaterial()
 		sp.toDem(S,S.dem,mat=mat)
 		self.assert_(len(S.dem.nodes)==2)
+		print S.dem.par[0].pos
 		self.assert_(S.dem.par[0].pos==(1,1,1))
 		self.assert_(S.dem.par[1].shape.radius==.2)
 		self.assert_(not S.dem.par[0].shape.nodes[0].dem.clumped)
@@ -53,7 +54,7 @@ class TestShapePack(unittest.TestCase):
 		])
 		# add a capsule
 		c=woo.utils.capsule(center=(5,5,5),shaft=.3,radius=.3)
-		S.dem.par.add(c)
+		S.dem.par.add(c,nodes=False)
 		S.dem.nodesAppend(c.shape.nodes[0])
 		# from DEM
 		sp=ShapePack()

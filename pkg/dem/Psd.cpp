@@ -11,9 +11,7 @@
 
 WOO_PLUGIN(dem,(PsdSphereGenerator));
 WOO_IMPL_LOGGER(PsdSphereGenerator);
-#ifndef WOO_NOCAPSULE
-	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PharmaCapsuleGenerator__CLASS_BASE_DOC_ATTRS);
-#endif
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PharmaCapsuleGenerator__CLASS_BASE_DOC_ATTRS);
 
 
 void PsdSphereGenerator::sanitizePsd(vector<Vector2r>& psdPts, const string& src) {
@@ -299,8 +297,6 @@ PsdClumpGenerator::operator()(const shared_ptr<Material>&mat,const Real& time){
 }
 
 
-#ifndef WOO_NOCAPSULE
-
 /**********************************************
               PsdCapsuleGenerator
 **********************************************/
@@ -392,8 +388,6 @@ PsdCapsuleGenerator::operator()(const shared_ptr<Material>&mat, const Real& time
 
 	return std::make_tuple(2*rEq,vector<ParticleAndBox>({{par,capsule->alignedBox()}}));
 };
-
-#endif /* WOO_NOCAPSULE */
 
 
 /**********************************************

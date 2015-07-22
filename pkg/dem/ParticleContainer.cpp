@@ -173,14 +173,32 @@ py::list ParticleContainer::pyFreeIds(){
 	return ret;
 }
 
-Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p){
+Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, bool nodes){
 	if(p->id>=0) IndexError("Particle already has id "+lexical_cast<string>(p->id)+" set; appending such particle (for the second time) is not allowed.");
+	if(nodes){
+		if(!p->shape) woo::ValueError("Particle.shape is None; unable to add nodes.");
+		for(const auto& n: p->shape->nodes){
+			auto& dyn=n->getData<DemData>();
+			// already has an index
+			if(dyn.linIx>=0){
+				// node already in DemField.nodes, don't add for the second time
+				if(dyn.linIx<(int)dem->nodes.size() && dem->nodes[dyn.linIx].get()==n.get()) continue;
+				// node not in DemField.nodes, or says it is somewhere else than it is
+				if(dyn.linIx<(int)dem->nodes.size()) std::runtime_error(n->pyStr()+": Node.dem.linIx="+to_string(dyn.linIx)+", but DemField.nodes["+to_string(dyn.linIx)+"]"+(dem->nodes[dyn.linIx]?"="+dem->nodes[dyn.linIx]->pyStr():"is empty (programming error!?)")+".");
+				std::runtime_error(n->pyStr()+": Node.dem.linIx="+to_string(dyn.linIx)+", which is out of range for DemField.nodes (size "+to_string(dem->nodes.size())+").");
+			} else {
+				// add node
+				dyn.linIx=dem->nodes.size();
+				dem->nodes.push_back(n);
+			}
+		}
+	}
 	return insert(p);
 }
 
-py::list ParticleContainer::pyAppendList(vector<shared_ptr<Particle>> pp){
+py::list ParticleContainer::pyAppendList(vector<shared_ptr<Particle>> pp, bool nodes){
 	py::list ret;
-	for(shared_ptr<Particle>& p: pp){ret.append(pyAppend(p));}
+	for(shared_ptr<Particle>& p: pp){ret.append(pyAppend(p,nodes));}
 	return ret;
 }
 
@@ -188,7 +206,7 @@ shared_ptr<Node> ParticleContainer::pyAppendClumped(const vector<shared_ptr<Part
 	std::set<void*> seen;
 	vector<shared_ptr<Node>> nodes; nodes.reserve(pp.size());
 	for(const auto& p:pp){
-		pyAppend(p);
+		pyAppend(p,/*nodes*/false); // do not add nodes for clumps, only the clump node (below) gets added
 		for(const auto& n: p->shape->nodes){
 			if(seen.count((void*)n.get())!=0) continue;
 			seen.insert((void*)n.get());

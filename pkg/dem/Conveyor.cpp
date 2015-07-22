@@ -295,11 +295,11 @@ void ConveyorInlet::run(){
 		if(shapePack){
 			const auto& r=shapePack->raws[nextIx];
 			vector<shared_ptr<Particle>> pp;
-			// use conveyor's identity which is added to the particle's orientation
+			// use conveyor's identity orientation which is added to the particle's orientation
 			std::tie(nn,pp)=r->makeParticles(material,/*pos*/newPos,/*ori*/node->ori,/*mask*/mask,/*scale*/1.);
 			for(auto& p: pp){
 				dem->particles->insert(p);
-				LOG_TRACE("[shapePack] new particle #"<<p->id<<", "<<p->shape->pyStr());
+				LOG_TRACE("[shapePack] new particle #"<<p->id<<" at "<<newPos<<"("<<p->shape->nodes[0]->pos<<"): "<<p->shape->pyStr());
 			}
 		} else {
 			if(!hasClumps()){

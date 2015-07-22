@@ -10,13 +10,13 @@
 struct Outlet: public PeriodicEngine{
 	WOO_DECL_LOGGER;
 	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
-	virtual bool isInside(const Vector3r& p) { throw std::runtime_error(pyStr()+" did not override Outlet::isInside."); }
+	virtual bool isInside(const Vector3r& p, int& loc) { throw std::runtime_error(pyStr()+" did not override Outlet::isInside."); }
 	void run() WOO_CXX11_OVERRIDE;
 	py::object pyPsd(bool mass, bool cumulative, bool normalize, int num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk);
 	py::object pyDiamMass(bool zipped=false) const;
 	py::object pyDiamMassTime(bool zipped=false) const;
 	Real pyMassOfDiam(Real min, Real max) const ;
-	void pyClear(){ diamMassTime.clear(); rDivR0.clear(); par.clear(); mass=0.; num=0; }
+	void pyClear(){ diamMassTime.clear(); rDivR0.clear(); locs.clear(); par.clear(); mass=0.; num=0; }
 	#ifdef WOO_OPENGL
 		void renderMassAndRate(const Vector3r& pos);
 	#endif
@@ -29,6 +29,7 @@ struct Outlet: public PeriodicEngine{
 		((bool,recoverRadius,false,,"Recover radius of Spheres by computing it back from particle's mass and its material density (used when radius is changed due to radius thinning (in Law2_L6Geom_PelletPhys_Pellet.thinningFactor). When radius is recovered, the :math:`r/r_0` ratio is added to :obj:`rDivR0` for further processing.")) \
 		((vector<Real>,rDivR0,,AttrTrait<>().noGui().readonly(),"List of the :math:`r/r_0` ratio of deleted particles, when :obj:`recoverRadius` is true.")) \
 		((vector<Vector3r>,diamMassTime,,AttrTrait<>().noGui().readonly(),"Radii and masses of deleted particles; not accessible from python (shadowed by the :obj:`diamMassTime` method).")) \
+		((vector<int>,locs,,AttrTrait<>().noGui().readonly(),"Integer location specified for particles; -1 by default, derived classes can use this for any purposes (usually more precise location within the outlet volume).")) \
 		((int,num,0,AttrTrait<Attr::readonly>(),"Number of deleted particles")) \
 		((bool,savePar,false,,"Save particles as objects in :obj:`par`")) \
 		((vector<shared_ptr<Particle>>,par,,AttrTrait<>().noGui().readonly(),"Deleted :obj:`particles <Particle>` (only saved with :obj:`savePar`.")) \
@@ -54,7 +55,7 @@ struct BoxOutlet: public Outlet{
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
 	#endif
-	bool isInside(const Vector3r& p) WOO_CXX11_OVERRIDE { return box.contains(node?node->glob2loc(p):p); }
+	bool isInside(const Vector3r& p, int& loc) WOO_CXX11_OVERRIDE { return box.contains(node?node->glob2loc(p):p); }
 	#define woo_dem_BoxOutlet__CLASS_BASE_DOC_ATTRS \
 		BoxOutlet,Outlet,"Outlet with box geometry", \
 		((AlignedBox3r,box,AlignedBox3r(),,"Box volume specification (lower and upper corners). If :obj:`node` is specified, the box is in local coordinates; otherwise, global coorinates are used.")) \
@@ -63,8 +64,22 @@ struct BoxOutlet: public Outlet{
 };
 WOO_REGISTER_OBJECT(BoxOutlet);
 
+struct StackedBoxOutlet: public BoxOutlet{
+	#ifdef WOO_OPENGL
+		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	#endif
+	void postLoad(StackedBoxOutlet&, void* attr);
+	bool isInside(const Vector3r& p, int& loc) WOO_CXX11_OVERRIDE;
+	#define woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS \
+		StackedBoxOutlet,BoxOutlet,"Box outlet with subdivision along one axis, so that more precise location can be obtained; this is functionally equivalent to multiple adjacent :obj:`BoxOutlet's <BoxOutlet>`, but faster since it is a single engine.", \
+		((vector<Real>,divs,,,"Coordinates of division between boxes in the stack; must be an increasing sequence.")) \
+		((short,axis,0,,"Axis along which the :obj:`box` is subdivided."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(StackedBoxOutlet);
+
 struct ArcOutlet: public Outlet{
-	bool isInside(const Vector3r& p) WOO_CXX11_OVERRIDE;
+	bool isInside(const Vector3r& p, int& loc) WOO_CXX11_OVERRIDE;
 	void postLoad(ArcOutlet&, void* attr);
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;

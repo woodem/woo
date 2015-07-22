@@ -1,8 +1,6 @@
 // © 2014 Václav Šmilauer <eu@doxos.eu>
 #pragma once
 
-#ifndef WOO_NOCAPSULE
-
 #include<woo/pkg/dem/Particle.hpp>
 #include<woo/pkg/dem/L6Geom.hpp>
 #include<woo/pkg/dem/Sphere.hpp>
@@ -107,5 +105,3 @@ struct Gl1_Capsule: public Gl1_Sphere{
 WOO_REGISTER_OBJECT(Gl1_Capsule);
 #endif
 
-
-#endif /* WOO_NOCAPSULE */

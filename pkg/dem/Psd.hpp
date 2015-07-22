@@ -53,7 +53,6 @@ struct PsdClumpGenerator: public PsdSphereGenerator {
 };
 WOO_REGISTER_OBJECT(PsdClumpGenerator);
 
-#ifndef WOO_NOCAPSULE
 struct PsdCapsuleGenerator: public PsdSphereGenerator {
 	WOO_DECL_LOGGER;
 	std::tuple<Real,vector<ParticleAndBox>> operator()(const shared_ptr<Material>&m, const Real& time) WOO_CXX11_OVERRIDE;
@@ -80,8 +79,6 @@ struct PharmaCapsuleGenerator: public ParticleGenerator{
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_PharmaCapsuleGenerator__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(PharmaCapsuleGenerator);
-
-#endif
 
 struct PsdEllipsoidGenerator: public PsdSphereGenerator {
 	WOO_DECL_LOGGER;

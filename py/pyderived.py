@@ -109,6 +109,7 @@ class PyAttrTrait(object):
 			triggerPostLoad=False,
 			guiReadonly=False,
 			noGuiResize=False,
+			colormap=False,
 		):
 		# validity checks
 		if range:
@@ -152,6 +153,7 @@ class PyAttrTrait(object):
 		self.dirname=dirname
 		self.triggerPostLoad=triggerPostLoad
 		self.noGuiResize=noGuiResize
+		self.colormap=colormap
 		self.readonly=guiReadonly # this has different meaning in c++ and python, so call it differently
 		# those are unsupported in python
 		self.noSave=self.hidden=self.pyByRef=self.static=self.activeLabel=self.namedEnum=False

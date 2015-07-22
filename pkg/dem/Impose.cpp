@@ -1,11 +1,13 @@
 #include<woo/pkg/dem/Impose.hpp>
 #include<woo/lib/smoothing/LinearInterpolate.hpp>
 
-WOO_PLUGIN(dem,(HarmonicOscillation)(AlignedHarmonicOscillations)(CircularOrbit)(StableCircularOrbit)(RadialForce)(Local6Dofs)(VariableAlignedRotation)(InterpolatedMotion)(VelocityAndReadForce)(ReadForce));
+WOO_PLUGIN(dem,(HarmonicOscillation)(AlignedHarmonicOscillations)(CircularOrbit)(StableCircularOrbit)(ConstantForce)(RadialForce)(Local6Dofs)(VariableAlignedRotation)(InterpolatedMotion)(VelocityAndReadForce)(ReadForce));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HarmonicOscillation__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_CircularOrbit__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_AlignedHarmonicOscillations__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_ConstantForce__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_RadialForce__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Local6Dofs__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableAlignedRotation__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_InterpolatedMotion__CLASS_BASE_DOC_ATTRS_CTOR);
@@ -37,6 +39,10 @@ void StableCircularOrbit::velocity(const Scene* scene, const shared_ptr<Node>& n
 	Vector3r pos1(node->loc2glob(CompUtils::cyl2cart(rtz1))); // target pos in global cart
 	n->getData<DemData>().vel=(pos1-pos0)/scene->dt;
 	if(isFirstStepRun(scene)) angle+=omega*scene->dt;
+}
+
+void ConstantForce::force(const Scene* scene, const shared_ptr<Node>& n){
+	n->getData<DemData>().force+=F;
 }
 
 void RadialForce::force(const Scene* scene, const shared_ptr<Node>& n){

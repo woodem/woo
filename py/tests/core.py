@@ -176,6 +176,11 @@ class TestObjectInstantiation(unittest.TestCase):
 		ts.trigger=-1
 		self.assert_(ts.numTriggered==2)
 
+	def testUnicodeStrConverter(self):
+		'Core: std::string attributes can be assigned unicode string'
+		t=woo.core.WooTestClass(strVar=u'abc')
+		t.strVar=u'abc'
+		self.assert_(t.strVar=='abc')
 	def testNamedEnum(self):
 		'Core: Attr::namedEnum'
 		t=woo.core.WooTestClass()
@@ -183,6 +188,9 @@ class TestObjectInstantiation(unittest.TestCase):
 		self.assertRaises(ValueError,lambda: setattr(t,'namedEnum',-2))
 		self.assertRaises(TypeError,lambda: setattr(t,'namedEnum',[]))
 		t.namedEnum='zero'
+		self.assert_(t.namedEnum=='zero')
+		# try with unicode string
+		t.namedEnum=u'zero'
 		self.assert_(t.namedEnum=='zero')
 		t.namedEnum='nothing'
 		self.assert_(t.namedEnum=='zero')

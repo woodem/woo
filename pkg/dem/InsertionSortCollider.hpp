@@ -266,7 +266,7 @@ struct InsertionSortCollider: public Collider {
 		((shared_ptr<BoundDispatcher>,boundDispatcher,make_shared<BoundDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary."))
 		((Vector3i,ompTuneSort,Vector3i(1,1000,0),,"Fine-tuning for the OpenMP-parallellized partial insertion sort. The first number is the number of chunks per CPU (2 means each core will process 2 chunks sequentially, on average). The second number (if positive) is the lower bound on number of particles per chunk; the third number (if positive) is the limit of bounds per one chunk (15000 means that if there are e.g. 300k particles, bounds will be processed in 20 chunks, even if the number of chunks from the first number is smaller)."))
 		((int,sortChunks,-1,AttrTrait<Attr::readonly>(),"Number of threads that were actually used during the last parallelized insertion sort."))
-		((bool,paraPeri,false,,"Enable parallelized periodic sort; this algorithm produces sometimes very incorrect results, use this only for development."))
+		((bool,paraPeri,true,,"(debugging only): enable(default)/disable parallel sort with periodic boundaries."))
 		((bool,periDbgNew,false,,"Compute periodic overlaps and periods twice (with the original and the new algorithm) compare the results and report discrepancies."))
 		,
 		/* ctor */

@@ -794,7 +794,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 :param mat: material for particles
 :param gravity: gravity acceleration (as Vector3)
 '''
-	print 'woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),repr(gen))
+	print 'woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),gen.dumps(format='expr',width=-1,noMagic=True))
 	dim=list(dim) # make modifiable in case of excess width
 
 
@@ -904,7 +904,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 	]
 	# S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
 	S.dtSafety=.9
-	print 'Factory box is',S.lab.factory.box
+	print 'Inlet box is',S.lab.factory.box
 	S.dem.collectNodes()
 	if dontBlock: return S
 	else: S.run()

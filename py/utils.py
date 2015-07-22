@@ -70,14 +70,14 @@ def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCo
 	cp2[0].updateAttrs(cpKw)
 	law[0].updateAttrs(lawKw)
 
-	if not grid: collider=InsertionSortCollider([Bo1_Sphere_Aabb(distFactor=distFactor),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb()]+([] if 'nocapsule' in woo.config.features else [Bo1_Capsule_Aabb()]),label='collider',verletDist=verletDist)
+	if not grid: collider=InsertionSortCollider([Bo1_Sphere_Aabb(distFactor=distFactor),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb(),Bo1_Capsule_Aabb()],label='collider',verletDist=verletDist)
 	else: collider=GridCollider([Grid1_Sphere(),Grid1_Facet(),Grid1_Wall(),Grid1_InfCylinder()],label='collider',verletDist=verletDist)
 
 	return [
 		Leapfrog(damping=damping,reset=True,kinSplit=kinSplit,dontCollect=dontCollect,label='leapfrog'),
 		collider,
 		ContactLoop(
-			[Cg2_Sphere_Sphere_L6Geom(distFactor=distFactor),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom(),Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Sphere_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Wall_Facet_L6Geom(),Cg2_Rod_Sphere_L6Geom()]+([] if 'nocapsule' in woo.config.features else [Cg2_Wall_Capsule_L6Geom(),Cg2_Capsule_Capsule_L6Geom(),Cg2_InfCylinder_Capsule_L6Geom(),Cg2_Facet_Capsule_L6Geom(),Cg2_Sphere_Capsule_L6Geom(),Cg2_Facet_Facet_L6Geom(),Cg2_Facet_InfCylinder_L6Geom()]),
+			[Cg2_Sphere_Sphere_L6Geom(distFactor=distFactor),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom(),Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Sphere_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Wall_Facet_L6Geom(),Cg2_Rod_Sphere_L6Geom(),Cg2_Wall_Capsule_L6Geom(),Cg2_Capsule_Capsule_L6Geom(),Cg2_InfCylinder_Capsule_L6Geom(),Cg2_Facet_Capsule_L6Geom(),Cg2_Sphere_Capsule_L6Geom(),Cg2_Facet_Facet_L6Geom(),Cg2_Facet_InfCylinder_L6Geom()],
 			cp2,law,applyForces=True,label='contactLoop'
 		),
 	]+([woo.dem.DynDt(stepPeriod=dynDtPeriod,label='dynDt')] if dynDtPeriod>0 else [])
@@ -199,7 +199,7 @@ def wall(position,axis,sense=0,glAB=None,fixed=True,mass=0,color=None,mat=defaul
 	return p
 
 def wallBox(box,which=(1,1,1,1,1,1),**kw):
-	'''Return box delimited by walls, created by :obj:`woo.dem.Wall.make`, which receives most arguments. *which* determines which walls are created, in the order -x, +x, -y, +y, -z, +z.'''
+	'''Return box delimited by walls, created by :obj:`woo.dem.Wall.make`, which receives most arguments. *which* determines which walls are created, in the order -x, -y, -z, +x, +y, +z.'''
 	ret=[]
 	if len(which)!=6: raise ValueError("Wall.makeBox: which must be a sequence of boolean-convertible.")
 	for sense,ix,coord in [(1,0,box.min),(-1,1,box.max)]:

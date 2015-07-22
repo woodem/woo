@@ -55,9 +55,7 @@ shared_ptr<Shape> RawShape::toShape(Real density, Real scale) const {
 	shared_ptr<Shape> ret;
 	if(className=="Sphere") ret=make_shared<Sphere>();
 	else if(className=="Ellipsoid") ret=make_shared<Ellipsoid>();
-	#ifndef WOO_NOCAPSULE
-		else if(className=="Capsule") ret=make_shared<Capsule>();
-	#endif
+	else if(className=="Capsule") ret=make_shared<Capsule>();
 	else throw std::invalid_argument("RawShape.toShape: className '"+className+"' is not supported.");
 	if(scale<=0) throw std::invalid_argument("RawShape.toShape: scale must be a positive number.");
 	vector<shared_ptr<Node>> nodes; // initially empty
@@ -293,11 +291,7 @@ Real ShapePack::solidVolume(){
 }
 
 bool ShapePack::shapeSupported(const shared_ptr<Shape>& sh) const {
-	return sh->isA<Sphere>() || sh->isA<Ellipsoid>()
-	#ifndef WOO_NOCAPSULE
-		|| sh->isA<Capsule>()
-	#endif
-	;
+	return sh->isA<Sphere>() || sh->isA<Ellipsoid>() || sh->isA<Capsule>();
 }
 
 void ShapePack::fromDem(const shared_ptr<Scene>& scene, const shared_ptr<DemField>& dem, int mask, bool skipUnsupported){
@@ -349,7 +343,8 @@ void ShapePack::toDem(const shared_ptr<Scene>& scene, const shared_ptr<DemField>
 		std::tie(nodes,pp)=rr->makeParticles(/*mat*/mat,/*clumpPos: force natural position*/Vector3r(NaN,NaN,NaN),/*ori: ignored*/Quaternionr::Identity(),/*mask*/mask,/*scale*/1.);
 		for(const auto& p: pp){
 			p->shape->color=_color;
-			dem->particles->pyAppend(p);
+			// do not add particle's nodes here: if clumped, *nodes* has the clump node which needs to be added
+			dem->particles->pyAppend(p,/*nodes*/false);
 		}
 		for(const auto& n: nodes){
 			dem->pyNodesAppend(n);

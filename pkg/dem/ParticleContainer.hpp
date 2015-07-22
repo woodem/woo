@@ -150,9 +150,9 @@ struct ParticleContainer: public Object{
 			shared_ptr<Particle> next();
 		};
 		py::list pyFreeIds();
-		id_t pyAppend(shared_ptr<Particle>);
+		id_t pyAppend(shared_ptr<Particle>, bool nodes);
 		shared_ptr<Node> pyAppendClumped(const vector<shared_ptr<Particle>>&, const shared_ptr<Node>& node=shared_ptr<Node>());
-		py::list pyAppendList(vector<shared_ptr<Particle>>);
+		py::list pyAppendList(vector<shared_ptr<Particle>>, bool nodes);
 		bool pyRemove(id_t id);
 		py::list pyRemoveList(vector<id_t> ids);
 		shared_ptr<Particle> pyGetItem(id_t id);
@@ -184,9 +184,9 @@ struct ParticleContainer: public Object{
 			((ContainerT/* = std::vector<shared_ptr<Particle> > */,parts,,AttrTrait<Attr::hidden>(),"Actual particle storage")) \
 			((list<id_t>,freeIds,,AttrTrait<Attr::hidden>(),"Free particle id's")) \
 			,/*py*/ \
-			.def("add",&ParticleContainer::pyAppend) /* wrapper checks if the id is not already assigned */ \
-			.def("add",&ParticleContainer::pyAppendList) \
-			.def("addClumped",&ParticleContainer::pyAppendClumped,(py::arg("par"),py::arg("centralNode")=shared_ptr<Node>()),"Add particles as rigid aggregate. Add resulting clump node (which is *not* a particle) to Scene.dem.nodes, subject to integration. *centralNode* must be provided if particles have zero mass (in that case, clump position cannot be computed), all DOFs will be blocked automatically in that case; centralNode.dem will be set with a new instance of :obj:`ClumpData` and the old value, if any, discarded. Clump node is added automatically to :obj:`DemField.nodes`.") \
+			.def("add",&ParticleContainer::pyAppend,(py::arg("par"),py::arg("nodes")=true),"Add single particle, by default also adding its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`.") /* wrapper checks if the id is not already assigned */ \
+			.def("add",&ParticleContainer::pyAppendList,(py::args("pars"),py::arg("nodes")=true),"Add list of particles, by default also adding its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`.") \
+			.def("addClumped",&ParticleContainer::pyAppendClumped,(py::arg("par"),py::arg("centralNode")=shared_ptr<Node>()),"Add particles as rigid aggregate. Add resulting clump node (which is *not* a particle) to Scene.dem.nodes, subject to integration. *centralNode* must be provided if particles have zero mass (in that case, clump position cannot be computed), all DOFs will be blocked automatically in that case; centralNode.dem will be set with a new instance of :obj:`ClumpData` and the old value, if any, discarded. Clump node is added automatically to :obj:`DemField.nodes <woo.core.Field.nodes>`.") \
 			.def("remove",&ParticleContainer::pyRemove)  \
 			.def("remove",&ParticleContainer::pyRemoveList)  \
 			.def("exists",&ParticleContainer::exists) \

@@ -7,7 +7,7 @@
 
 // attribute flags
 namespace woo{
-	#define ATTR_FLAGS_VALUES noSave=(1<<0), readonly=(1<<1), triggerPostLoad=(1<<2), hidden=(1<<3), noGuiResize=(1<<4), noGui=(1<<5), pyByRef=(1<<6), static_=(1<<7), multiUnit=(1<<8), noDump=(1<<9), activeLabel=(1<<10), rgbColor=(1<<11), filename=(1<<12), existingFilename=(1<<13), dirname=(1<<14), namedEnum=(1<<15)
+	#define ATTR_FLAGS_VALUES noSave=(1<<0), readonly=(1<<1), triggerPostLoad=(1<<2), hidden=(1<<3), noGuiResize=(1<<4), noGui=(1<<5), pyByRef=(1<<6), static_=(1<<7), multiUnit=(1<<8), noDump=(1<<9), activeLabel=(1<<10), rgbColor=(1<<11), filename=(1<<12), existingFilename=(1<<13), dirname=(1<<14), namedEnum=(1<<15), colormap=(1<<16)
 	// this will disappear later
 	namespace Attr { enum flags { ATTR_FLAGS_VALUES }; }
 	// prohibit copies, only references should be passed around
@@ -57,6 +57,7 @@ namespace woo{
 			ATTR_FLAG_DO(existingFilename,isExistingFilename)
 			ATTR_FLAG_DO(dirname,isDirname)
 			ATTR_FLAG_DO(namedEnum,isNamedEnum)
+			ATTR_FLAG_DO(colormap,isColormap)
 		#undef ATTR_FLAG_DO
 		py::object pyGetIni()const{ return _ini(); }
 		py::object pyGetRange()const{ return _range(); }
@@ -104,19 +105,21 @@ namespace woo{
 					woo::ValueError(oss.str());
 				} else return i();
 			}
+			// this also extracts utf-8 encoded unicode objects, due to custom conerter in the global registry :)
 			py::extract<string> s(o);
 			if(s.check()){
-				auto I=_enumName2Num.find(s());
+				string su(s());
+				auto I=_enumName2Num.find(su);
 				if(I==_enumName2Num.end()){
 					std::ostringstream oss;
-					oss<<"'"<<s()<<"' invalid for "<<_className<<"."<<_name<<". Valid values are: ";
+					oss<<"'"<<su<<"' invalid for "<<_className<<"."<<_name<<". Valid values are: ";
 					namedEnum_validValues(oss);
 					oss<<".";
 					woo::ValueError(oss.str());
 				}
 				return I->second;
 			}
-			woo::TypeError("Named enumeration "+_className+"."+_name+" can only be assigned string or int.");
+			woo::TypeError("Named enumeration "+_className+"."+_name+" can only be assigned string or int (not .");
 			// make compiler happy
 			throw std::logic_error("Unreachable code in AttrTrait::namedEnum_name2num."); 
 		}
@@ -144,6 +147,7 @@ namespace woo{
 				.add_property("existingFilename",&AttrTraitBase::isExistingFilename)
 				.add_property("dirname",&AttrTraitBase::isDirname)
 				.add_property("namedEnum",&AttrTraitBase::isNamedEnum)
+				.add_property("colormap",&AttrTraitBase::isColormap)
 				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,(py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")=""),"Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
 				.def_readonly("_flags",&AttrTraitBase::_flags)
 				// non-flag attributes
@@ -196,6 +200,7 @@ namespace woo{
 			ATTR_FLAG_DO(filename,isFilename)
 			ATTR_FLAG_DO(existingFilename,isExistingFilename)
 			ATTR_FLAG_DO(dirname,isDirname)
+			ATTR_FLAG_DO(colormap,isColormap) // requires namedEnum (error at runtime if not)
 		#undef ATTR_FLAG_DO
 
 		AttrTrait& name(const string& s){ _name=s; return *this; }
@@ -254,7 +259,7 @@ namespace woo{
 		AttrTrait& bits(const vector<string>& t, bool rw=false){ _bits=t; _bitsRw=rw; return *this; }
 
 		AttrTrait& namedEnum(const map<int,vector<string>>& _n){
-			if(!(compileFlags&(int)Flags::namedEnum)) woo::TypeError("Error in declaration of "+_name+": AttrTrait<Attr::namedEnum|...>().namedEnum(...) template argument must be used with namedEnum(...).");
+			static_assert(compileFlags&(int)Flags::namedEnum,"Attr::namedEnum flag must be used as template parameter with .namedEnum(): AttrTrait<Attr::namedEnum|...>().namedEnum(...).");
 			_enumNum2Names=_n;
 			vector<string> ch;
 			for(const auto& iss: _enumNum2Names){
@@ -264,6 +269,12 @@ namespace woo{
 			}
 			choice(ch);
 			return *this;
+		}
+		// pre-filled choice with colormap
+		AttrTrait& colormapChoice(bool includeDefault=true){
+			static_assert(compileFlags&(int)Flags::namedEnum,"Attr::namedEnum flag must be used as template parameter with .colormapChoice(): AttrTrait<Attr::namedEnum|...>().colormapChoice(...).");
+			colormap(true); // set the bit, so that python can put sampler next to the name in the UI
+			map<int,vector<string>> pairs; if(includeDefault) pairs.insert({-1,{"default",""}}); for(size_t i=0; i<CompUtils::colormaps.size(); i++) pairs.insert({i,{CompUtils::colormaps[i].name}}); return namedEnum(pairs);
 		}
 
 		AttrTrait& buttons(const vector<string>& b, bool showBefore=true){ _buttons=std::function<py::object()>([=]()->py::object{ return py::make_tuple(py::object(b),showBefore);}); return *this; }
@@ -291,7 +302,6 @@ namespace woo{
 		AttrTrait& fractionUnit(){ unit("-"); altUnits({{"%",1e2},{"‰",1e3},{"ppm",1e6}}); return *this; }
 		AttrTrait& surfEnergyUnit(){ unit("J/m²"); return *this; }
 
-		AttrTrait& colormapChoice(){ vector<pair<int,string>> pairs({{-1,"[default] (-1)"}}); for(size_t i=0; i<CompUtils::colormaps.size(); i++) pairs.push_back({i,CompUtils::colormaps[i].name+" ("+to_string(i)+")"}); return choice(pairs); }
 	};
 	#undef ATTR_FLAGS_VALUES
 

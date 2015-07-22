@@ -64,14 +64,26 @@ struct AlignedHarmonicOscillations: public Impose{
 };
 WOO_REGISTER_OBJECT(AlignedHarmonicOscillations);
 
+
+struct ConstantForce: public Impose{
+	void force(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	#define woo_dem_ConstantForce__CLASS_BASE_DOC_ATTRS_CTOR \
+		ConstantForce,Impose,"Impose constant force, which is added to other acting forces.", \
+		((Vector3r,F,Vector3r::Zero(),,"Applied force (in global coordinates)")) \
+		,/*ctor*/ what=Impose::FORCE; 
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_ConstantForce__CLASS_BASE_DOC_ATTRS_CTOR);
+};
+WOO_REGISTER_OBJECT(ConstantForce);
+
 struct RadialForce: public Impose{
 	void force(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR(RadialForce,Impose,"Impose constant force towards an axis in 3d.",
-		((shared_ptr<Node>,nodeA,,,"First node defining the axis"))
-		((shared_ptr<Node>,nodeB,,,"Second node defining the axis"))
-		((Real,F,0,,"Magnitude of the force applied. Positive value means away from the axis given by *nodeA* and *nodeB*."))
-		,/*ctor*/ what=Impose::FORCE;
-	);
+	#define woo_dem_RadialForce__CLASS_BASE_DOC_ATTRS_CTOR \
+		RadialForce,Impose,"Impose constant force towards an axis in 3d.", \
+		((shared_ptr<Node>,nodeA,,,"First node defining the axis")) \
+		((shared_ptr<Node>,nodeB,,,"Second node defining the axis")) \
+		((Real,F,0,,"Magnitude of the force applied. Positive value means away from the axis given by *nodeA* and *nodeB*.")) \
+		,/*ctor*/ what=Impose::FORCE; 
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_RadialForce__CLASS_BASE_DOC_ATTRS_CTOR);
 };
 WOO_REGISTER_OBJECT(RadialForce);
 

@@ -232,7 +232,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
 		_PAT(Vector3,'linRollParams',Vector3(1.,1.,1.),hideIf='self.name!="linear" or not self.linRoll',doc='Rolling parameters for the linear model, in the order of :obj:`relRollStiff <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relRollStiff>`, :obj:`relTwistStiff <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relTwistStiff>`, :obj:`rollTanPhi <woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.rollTanPhi>`.'),
 		# pellet model
 		_PAT(bool,'plastSplit',False,hideIf='self.name not in ("pellet",)',doc='Split plastic dissipation into the normal and tangent component (obj:`woo.dem.Law2_L6Geom_PelletPhys_Pellet.plastSplit`).'),
-		_PAT(Vector3,'pelletThin',(0,0,0),hideIf='self.name!="pellet"',doc='*Pellet model:* parameters for plastic thinning (decreasing pellet radius during normal plastic loading); their order is :obj:`thinRate <woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRate>`, :obj:`thinRelRMin <woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRelRMin>`, :obj:`thinExp <woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinExp>`. Set the first value to zero to deactivate.'),
+		_PAT(Vector6,'pelletThin',(0,0,0,0,0,0),hideIf='self.name!="pellet"',doc='*Pellet model:* parameters for plastic thinning (decreasing pellet radius during normal plastic loading); their order is :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRate`, :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRelRMin`, :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinExp`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRefRad`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinMinExp`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRateExp`.'),
 		_PAT(Vector3,'pelletConf',(0,0,0),hideIf='self.name!="pellet"',doc='*Pellet model:* parameters for history-independent adhesion ("confinement"); the values are :obj:`confSigma <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confSigma>`, :obj:`confRefRad <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confRefRad>` and :obj:`confExp <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confExp>`.'),
 	]
 	def __init__(self,**kw):
@@ -271,7 +271,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
 			if self.linRoll: law.relRollStiff,law.relTwistStiff,law.rollTanPhi=self.linRollParams 
 			return [woo.dem.Cp2_FrictMat_FrictPhys()],[law]
 		elif self.name=='pellet':
-			law=woo.dem.Law2_L6Geom_PelletPhys_Pellet(plastSplit=self.plastSplit,confSigma=self.pelletConf[0],confRefRad=self.pelletConf[1],confExp=self.pelletConf[2],thinRate=self.pelletThin[0],thinRelRMin=self.pelletThin[1],thinExp=self.pelletThin[2])
+			law=woo.dem.Law2_L6Geom_PelletPhys_Pellet(plastSplit=self.plastSplit,confSigma=self.pelletConf[0],confExp=self.pelletConf[2],thinRate=self.pelletThin[0],confRefRad=self.pelletConf[1],thinRelRMin=self.pelletThin[1],thinExp=self.pelletThin[2],thinRefRad=self.pelletThin[3],thinMinExp=self.pelletThin[4],thinRateExp=self.pelletThin[5])
 			return [woo.dem.Cp2_PelletMat_PelletPhys()],[law]
 		elif self.name=='Hertz':
 			return [woo.dem.Cp2_FrictMat_HertzPhys(poisson=self.poisson,alpha=0.,gamma=0.,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]

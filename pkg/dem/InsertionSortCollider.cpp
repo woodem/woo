@@ -527,8 +527,8 @@ void InsertionSortCollider::run(){
 					if(periodic && isinf(BBj[i].coord)){
 						// check that min and max are both infinite or none of them
 						assert(!bv || ((isinf(bv->min[j]) && isinf(bv->max[j])) || (!isinf(bv->min[j]) && !isinf(bv->max[j]))));
-						// infinite particles span between cell boundaries, the lower bound having period 0, the upper one 1 (this should not change)
-						BBj[i].period=(BBj[i].coord<0?0:1); BBj[i].coord=0.; /* wasInf=true; */
+						// infinite particles span between cell boundaries (both have coordinate 0), the lower bound having period 0, the upper one 1 (does not change during simulation at all)
+						BBj[i].period=(BBj[i].flags.isMin?0:1); BBj[i].coord=0.; /* wasInf=true; */
 						BBj[i].flags.isInf=true; // keep track of infinite coord here, so that we know there is no separation possible later
 					}
 				} else { // vanished particle
