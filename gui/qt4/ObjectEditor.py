@@ -379,16 +379,29 @@ class AttrEditor_RgbColor(AttrEditor,QFrame):
 		self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
 		self.butt=QPushButton()
 		self.butt.clicked.connect(self.dialogShow)
+		self.checkBox=QCheckBox('',self)
+		self.checkBox.setStyleSheet('padding: 0px;')
+		self.checkBox.toggled.connect(self.toggled)
+		self.grid.addWidget(self.checkBox,0,0)
+		self.grid.addWidget(self.butt,0,1)
 		self.rgbWidgets=[]
-		self.grid.addWidget(self.butt,0,0)
+		self.prevR=0
 		self.dialog=None
 		for i in (0,1,2):
 			w=QLineEdit('')
-			self.grid.addWidget(w,0,i+1)
+			self.grid.addWidget(w,0,i+2)
 			w.textEdited.connect(self.isHot)
 			w.selectionChanged.connect(self.isHot)
 			w.editingFinished.connect(self.update)
 			self.rgbWidgets.append(w)
+	def toggled(self,enabled):
+		rgb=self.getter()
+		if enabled:
+			for i in 0,1,2:
+				if math.isnan(rgb[i]): rgb[i]=self.prevR
+		else:
+			rgb[0]=float('nan')
+		for w in self.rgbWidgets+[self.butt]: w.setEnabled(enabled)
 	def to256c(self,f):
 		return min(255,max(0,int(f*256))) if not math.isnan(f) else 0
 	def to256(self,v): return (self.to256c(v[0]),self.to256c(v[1]),self.to256c(v[2]))
@@ -408,7 +421,12 @@ class AttrEditor_RgbColor(AttrEditor,QFrame):
 		rgb=self.getter()
 		for i in (0,1,2):
 			self.rgbWidgets[i].setTextStable(str(rgb[i]))
+		if not math.isnan(rgb[0]): self.prevR=rgb[0]
 		self.butt.setStyleSheet('QPushButton { background-color: rgb(%s) }'%(self.to256str(rgb)))
+		if sum([math.isnan(rgb[i]) for i in 0,1,2]):
+			if self.checkBox.isChecked(): self.checkBox.setChecked(False)
+		else:
+			if not self.checkBox.isChecked(): self.checkBox.setChecked(True)
 	def update(self):
 		try:
 			rgb=Vector3([float(self.rgbWidgets[i].text()) for i in (0,1,2)])

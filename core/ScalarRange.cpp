@@ -38,13 +38,17 @@ void ScalarRange::adjust(const Real& v){
 }
 
 
-Real ScalarRange::norm(Real v){
+Real ScalarRange::norm(Real v, bool clamp){
 	if(isAutoAdjust()) adjust(v);
 	if(!isLog()){
-		return CompUtils::clamped((v-mnmx[0])/(mnmx[1]-mnmx[0]),0,1);
+		Real n=(v-mnmx[0])/(mnmx[1]-mnmx[0]);
+		return clamp?CompUtils::clamped(n,0,1):n;
 	} else {
-		if(v<=mnmx[0]) return 0;
-		return CompUtils::clamped((log(v)-logMnmx[0])/(logMnmx[1]-logMnmx[0]),0,1);
+		// out of range handling to avoid expensive log(..)
+		if(v<=mnmx[0] && !clamp) return 0;
+		if(v>=mnmx[1] && !clamp) return 1;
+		Real n=(log(v)-logMnmx[0])/(logMnmx[1]-logMnmx[0]);
+		return clamp?CompUtils::clamped(n,0,1):n;
 	}	
 };
 
@@ -54,7 +58,9 @@ Real ScalarRange::normInv(Real norm){
 }
 
 Vector3r ScalarRange::color(Real v){
-	return CompUtils::mapColor(norm(v),cmap,isReversed());
+	Real n=norm(v,/*clamp*/!isClip());
+	if(isClip() &&	(n<0 || n>1)) return Vector3r(NaN,NaN,NaN);
+	return CompUtils::mapColor(n,cmap,isReversed());
 }
 
 
