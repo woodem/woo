@@ -85,7 +85,7 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
 		elif sum([out.endswith(ext) for ext in ('.pickle','pickle.gz','pickle.bz2')]): format='pickle'
 		elif sum([out.endswith(ext) for ext in ('.json','json.gz','json.bz2')]): format='json'
 		elif sum([out.endswith(ext) for ext in ('.xml','.xml.gz','.xml.bz2','.bin','.gz','.bz2')]): format='boost::serialization'
-		elif fallbackFormat!=None: format=fallbackFormat
+		elif fallbackFormat is not None: format=fallbackFormat
 		else: IOError("Output format not deduced for filename '%s' (and fallbackFormat not specified)"%out)
 	if format not in ('auto','html','json','expr','pickle','boost::serialization'): raise IOError("Unsupported dump format %s"%format)
 	#if not hasFilename and not hasattr(out,'write'): raise IOError('*out* must be filename or file-like object')
@@ -96,10 +96,12 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
 		if not hasFilename: raise NotImplementedError('Only serialization to files (not to strings) is supported with boost::serialization.')
 		if obj.deepcopy.__module__!='woo._monkey.io': raise IOError("boost::serialization formats can only reliably save pure-c++ objects. Given object %s.%s seems to be derived from python. Save using some dump formats."%(obj.__class__.__module__,obj.__class__.__name__))
 		obj.save(str(out)) # must convert unicode to str here, so that it can be converted to std::string
+	elif format=='auto':
+		raise IOError("format='auto' could not guess format from extension (and fallback not given) -- say format='...' or pass an extension which is understood.")
 	elif format=='pickle':
 		if hasFilename: pickle.dump(obj,open(out,'wb'))
 		else: out.write(pickle.dumps(obj))
-	elif format in ('expr','html','json'): 
+	elif format in ('expr','html','json'):
 		if hasFilename:
 			out=codecs.open(out,'wb','utf-8')
 		if format=='expr':
@@ -110,6 +112,7 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
 			if not fragment: out.write(htmlHead)
 			out.write(str(SerializerToHtmlTable(showDoc=showDoc)(obj)))
 			if not fragment: out.write('</body>')
+	else: assert False,'Unreachable.'
 		
 
 
