@@ -160,6 +160,64 @@ def box(dim,center,**kw):
 	return ff
 
 
+def sweep2d(pts,zz,node=None,halfThick=0.,shift=True,shorten=False,**kw):
+	'''
+	Build surface by perpendicularly sweeping list of 2d points along the 3rd axis (in global/local coordinates).
+
+	:param pts: list of :obj:`minieigen:Vector2` containing :math:`xy` coordinates of points in local axes. If any point contains ``nan`` or is ``None``, it is used as splitter.
+	:param zz: tuple or :obj:`minieigen:Vector2` containing ``(z0,z1)`` coordinates for all points.
+	:param node: optional instance of :obj:`woo.core.Node` defining local coordinate system; if not given, global coordinates are used.
+	:param halfThick: if given and *halfThick* is ``True``, shift points so that *pts* give points of the outer surface (and nodes are shifted inwards); in this case, the ordering of pts is important.
+	:param shift: activate point shifting, in conjunction with *halfThick*;
+	:param shorten: move endpoints away from the endpoint (along the segment) by *halfThick*;
+	'''
+	# tell whether pp[i] is an invalid point (beginning, ending, nan, None)
+	def invalid(pp,i): return i<0 or i>=len(pp) or pp[i] is None or math.isnan(pp[i].maxAbsCoeff())
+	def angleBetween(a,b):
+		# http://stackoverflow.com/a/2663678/761090
+		a1,a2=math.atan2(a[1],a[0]),math.atan2(b[1],b[0])
+		if a2>a1+math.pi: a2-=2*math.pi
+		elif a2<a1-math.pi: a2-=2*math.pi
+		return a2-a1
+
+	if shift and halfThick!=0:
+		pts2=[]
+		def perp(v): return Vector2(-v[1],v[0]).normalized()
+		for i in range(0,len(pts)):
+			if invalid(pts,i):
+				pts2.append(Vector2(float('nan'),float('nan')))
+				continue
+			# find average perpendicular vector at that point
+			begPt,endPt=invalid(pts,i-1),invalid(pts,i+1)
+			if begPt and endPt: raise ValueError("Point at %d is not connected to any other."%i)
+			if begPt: pts2.append(pts[i]-perp(pts[i+1]-pts[i])*halfThick+((pts[i+1]-pts[i]).normalized()*halfThick if shorten else Vector2(0,0)))
+			elif endPt: pts2.append(pts[i]-perp(pts[i]-pts[i-1])*halfThick+((pts[i-1]-pts[i]).normalized()*halfThick if shorten else Vector2(0,0)))
+			else:
+				e1,e2=(pts[i-1]-pts[i]).normalized(),(pts[i+1]-pts[i]).normalized()
+				a=angleBetween(e1,e2)
+				if abs(a%math.pi)<1e-6: d=Vector2(0,0) # straight segment, move perpendicularly
+				# FIXME: angle 170 must move by almost halfThick, so we should add halfThick*(1+1/math.sin(a/2.))??
+				else: d=(halfThick/math.sin(a/2.))*(e1+e2).normalized()
+				pts2.append(pts[i]+d)
+	else: pts2=pts
+	nn=[]
+	ff=[]
+	if len(zz)!=2: raise ValueError('len(zz) must be 2 (not %d)'%len(zz))
+	cs=(node if node else woo.core.Node(pos=(0,0,0),ori=Quaternion.Identity))
+	for i in range(0,len(pts2)):
+		if invalid(pts2,i): continue
+		# print pts[i-1],pts[i],pts[i+1],invalid(pts,i)
+		begPt,endPt=invalid(pts2,i-1),invalid(pts2,i+1)
+		nn+=[woo.core.Node(pos=cs.loc2glob((pts2[i][0],pts2[i][1],z)),dem=woo.dem.DemData(blocked='xyzXYZ')) for z in zz]
+		# beginning point does nothing else, all other add the last segment
+		if not begPt:
+			assert len(nn)>=4 # there must be at least 4 points already
+			ff+=[
+				woo.dem.Facet.make((nn[-4],nn[-2],nn[-1]),halfThick=halfThick,**kw),
+				woo.dem.Facet.make((nn[-4],nn[-1],nn[-3]),halfThick=halfThick,**kw)
+			]
+	return ff
+
 
 
 import woo.pyderived
