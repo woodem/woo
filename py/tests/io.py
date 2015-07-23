@@ -78,6 +78,9 @@ class TestFormatsAndDetection(unittest.TestCase):
 	def testInvalidFormat(self):
 		'IO: invalid formats rejected'
 		self.assertRaises(IOError,lambda: woo.master.scene.dem.par[0].dumps(format='bogus'))
+	def testInvalidExtension(self):
+		"IO: unrecognized extension rejected with format='auto'"
+		self.assertRaises(IOError,lambda: woo.master.scene.dem.par[0].dump('/tmp/foo.barbaz',format='auto'))
 	def testTmpStore(self):
 		'IO: temporary store (loadTmp, saveTmp)'
 		S=woo.master.scene
