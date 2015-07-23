@@ -167,7 +167,7 @@ void BoxOutlet::render(const GLViewInfo&){
 
 void StackedBoxOutlet::render(const GLViewInfo& gli){
 	if(isnan(glColor)) return;
-	Vector3r color=.5*CompUtils::mapColor(glColor); // darker for subdivision
+	Vector3r color=.7*CompUtils::mapColor(glColor); // darker for subdivision
 	if(!isnan(color[0])){
 		if(node){ glPushMatrix(); GLUtils::setLocalCoords(node->pos,node->ori); }
 		glColor3v(color);
@@ -177,8 +177,8 @@ void StackedBoxOutlet::render(const GLViewInfo& gli){
 				Vector3r v;
 				v[axis]=divs[d];
 				for(size_t i=0; i<4; i++){
-					v[ax1]=(i<2?box.min()[ax1]:box.max()[ax1]);
-					v[ax2]=(i%2?box.min()[ax1]:box.max()[ax2]);
+					v[ax1]=(i/2?box.min()[ax1]:box.max()[ax1]);
+					v[ax2]=((!(i%2)!=!(i/2))?box.min()[ax2]:box.max()[ax2]); // XOR http://stackoverflow.com/a/1596970/761090
 					glVertex3v(v);
 				}
 			glEnd();
