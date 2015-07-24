@@ -18,6 +18,7 @@ void GLUtils::Grid(const Vector3r& pos, const Vector3r& unitX, const Vector3r& u
 }
 
 void GLUtils::Parallelepiped(const Vector3r& a, const Vector3r& b, const Vector3r& c){
+	if(isnan(c.maxCoeff())) return;
    glBegin(GL_LINE_STRIP);
 	 	glVertex3v(b); glVertex3v(Vector3r(Vector3r::Zero())); glVertex3v(a); glVertex3v(Vector3r(a+b)); glVertex3v(Vector3r(a+b+c)); glVertex3v(Vector3r(b+c)); glVertex3v(b); glVertex3v(Vector3r(a+b));
 	glEnd();
@@ -33,8 +34,9 @@ void GLUtils::Parallelepiped(const Vector3r& a, const Vector3r& b, const Vector3
 }
 
 void GLUtils::AlignedBox(const AlignedBox3r& box, const Vector3r& color){
+	if(isnan(color.maxCoeff())) return;
 	glPushMatrix();
-		if(!isnan(color[0])) glColor3v(color);
+		if(color.minCoeff()>=0) glColor3v(color);
 		glTranslatev(box.center().eval());
 		glScalev(Vector3r(box.max()-box.min()));
 		glDisable(GL_LINE_SMOOTH);
@@ -44,6 +46,7 @@ void GLUtils::AlignedBox(const AlignedBox3r& box, const Vector3r& color){
 }
 
 void GLUtils::AlignedBoxWithTicks(const AlignedBox3r& box, const Vector3r& stepLen, const Vector3r& tickLen, const Vector3r& color){
+	if(isnan(color.maxCoeff())) return;
 	AlignedBox(box,color);
 	glColor3v(color);
 	glBegin(GL_LINES);
@@ -71,6 +74,7 @@ void GLUtils::AlignedBoxWithTicks(const AlignedBox3r& box, const Vector3r& stepL
 
 
 void GLUtils::RevolvedRectangle(const AlignedBox3r& box, const Vector3r& color, int div){
+	if(isnan(color.maxCoeff())) return;
 	Real p0(box.min()[1]); Real p1(box.max()[1]);
 	const Real& r0(box.min()[0]); const Real& r1(box.max()[0]);
 	const Real& z0(box.min()[2]); const Real& z1(box.max()[2]);
@@ -104,6 +108,7 @@ void GLUtils::RevolvedRectangle(const AlignedBox3r& box, const Vector3r& color, 
 
 
 void GLUtils::Cylinder(const Vector3r& a, const Vector3r& b, Real rad1, const Vector3r& color, bool wire, bool caps, Real rad2 /* if negative, use rad1 */,int slices, int stacks){
+	if(isnan(color.maxCoeff())) return;
 	if(rad2<0) rad2=rad1;
 	static GLUquadric* gluQuadric;
 	static GLUquadric* gluDiskQuadric;
@@ -115,7 +120,7 @@ void GLUtils::Cylinder(const Vector3r& a, const Vector3r& b, Real rad1, const Ve
 		Quaternionr q(Quaternionr().setFromTwoVectors(Vector3r(0,0,1),(b-a)/dist /* normalized */));
 		// using Transform with OpenGL: http://eigen.tuxfamily.org/dox/TutorialGeometry.html
 		glMultMatrixd(Eigen::Affine3d(q).data());
-		if(!isnan(color[0]))	glColor3v(color);
+		if(color.minCoeff()>=0)	glColor3v(color);
 		gluQuadricDrawStyle(gluQuadric,wire?GLU_LINE:GLU_FILL);
 		if(stacks<0) stacks=max(1,(int)(dist/(rad1*(-stacks/10.))+.5));
 		gluCylinder(gluQuadric,rad1,rad2,dist,slices,stacks);
@@ -175,6 +180,7 @@ void GLUtils::QGLViewer::drawArrow(const Vector3r& from, const Vector3r& to, flo
 }
 
 void GLUtils::GLDrawText(const std::string& txt, const Vector3r& pos, const Vector3r& color, bool center, void* font, const Vector3r& bgColor, bool shiftIfNeg){
+	if(isnan(color.maxCoeff())) return;
 	font=font?font:GLUT_BITMAP_8_BY_13;
 	Vector2i xyOff=center?Vector2i(-glutBitmapLength(font,(unsigned char*)txt.c_str())/2,glutBitmapHeight(font)/2):Vector2i::Zero();
 	glPushMatrix();

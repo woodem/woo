@@ -127,6 +127,7 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 	glLineWidth(Tracer::glWidth);
 	const bool periodic=glInfo->scene->isPeriodic;
 	Vector3i prevPeriod=Vector3i::Zero(); // silence gcc warning maybe-uninitialized
+	int nSeg=0; // number of connected vertices (used when trace is interruped by NaN)
 	glBegin(GL_LINE_STRIP);
 		for(size_t i=0; i<pts.size(); i++){
 			size_t ix;
@@ -140,13 +141,19 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 				ix=(writeIx+i)%pts.size();
 			}
 			if(!isnan(pts[ix][0])){
+				Vector3r color;
 				if(isnan(scalars[ix])){
 					// if there is no scalar and no scalar should be saved, color by history position
-					if(Tracer::scalar==Tracer::SCALAR_NONE) glColor3v(Tracer::lineColor->color((flags&FLAG_COMPRESS ? i*1./writeIx : i*1./pts.size())));
+					if(Tracer::scalar==Tracer::SCALAR_NONE) color=Tracer::lineColor->color((flags&FLAG_COMPRESS ? i*1./writeIx : i*1./pts.size()));
 					// if other scalars are saved, use noneColor to not destroy Tracer::lineColor range by auto-adjusting to bogus
-					else glColor3v(Tracer::noneColor);
+					else color=Tracer::noneColor;
 				}
-				else glColor3v(Tracer::lineColor->color(scalars[ix]));
+				else color=Tracer::lineColor->color(scalars[ix]);
+				if(isnan(color.maxCoeff())){
+					if(nSeg>0){ glEnd(); glBegin(GL_LINE_STRIP); nSeg=0; } // break line, if there was something already
+					continue; // point skipped completely
+				}
+				glColor3v(color);
 				Vector3r pt(pts[ix]);
 				if(periodic){
 					// canonicalize the point, store the period
@@ -154,8 +161,8 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 					pt=glInfo->scene->cell->canonicalizePt(pt,currPeriod);
 					// if the period changes between these two points, split the line (and don't render the segment in-between for simplicity)
 					if(i>0 && currPeriod!=prevPeriod){
-						glEnd();
-						glBegin(GL_LINE_STRIP);
+						if(nSeg>0){ glEnd(); glBegin(GL_LINE_STRIP); nSeg=0; } // only if there was sth already
+						// point not skipped, only line interruped, so keep going
 					}
 					prevPeriod=currPeriod;
 				}
@@ -167,6 +174,7 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 					// x+(s-1)*(x-x0)
 					else glVertex3v((pt+((Renderer::dispScale-Vector3r::Ones()).array()*(pt-gl.refPos).array()).matrix()).eval());
 				}
+				nSeg++;
 			}
 		}
 	glEnd();

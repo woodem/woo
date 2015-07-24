@@ -16,6 +16,10 @@ struct GLUtils{
 		static void drawArrow(float length=1.0f, float radius=-1.0f, int nbSubdivisions=12, bool doubled=false);
 		static void drawArrow(const Vector3r& from, const Vector3r& to, float radius=-1.0f, int nbSubdivisions=12, bool doubled=false);
 	};
+	/**
+	all methods taking color argument as RGB return immediately when any component is NaN
+
+	**/
 	// render wire of parallelepiped with sides given by vectors a,b,c; zero corner is at origin
 	static void Parallelepiped(const Vector3r& a, const Vector3r& b, const Vector3r& c);
 	static void AlignedBox(const AlignedBox3r& box, const Vector3r& color=Vector3r(1,1,1));
@@ -34,17 +38,20 @@ struct GLUtils{
 		glEnable(GL_LIGHTING); glColor3v(color); QGLViewer::drawArrow(from,to,/*radius*/-1,/*nbSubdivisions*/12,/*doubled*/doubled);	
 	}
 	static void GLDrawLine(const Vector3r& from, const Vector3r& to, const Vector3r& color=Vector3r(1,1,1), int width=-1){
+		if(isnan(color.maxCoeff())) return;
 		glEnable(GL_LIGHTING); glColor3v(color);
 		if(width>0) glLineWidth(width);
 		glBegin(GL_LINES); glVertex3v(from); glVertex3v(to); glEnd();
 	}
 
 	static void GLDrawNum(const Real& n, const Vector3r& pos, const Vector3r& color=Vector3r(1,1,1), unsigned precision=3){
+		if(isnan(color.maxCoeff())) return;
 		std::ostringstream oss; oss.precision(precision); oss<< /* "w="<< */ n;
 		GLUtils::GLDrawText(oss.str(),pos,color);
 	}
 
 	static void GLDrawInt(long i, const Vector3r& pos, const Vector3r& color=Vector3r(1,1,1)){
+		if(isnan(color.maxCoeff())) return;
 		GLUtils::GLDrawText(boost::lexical_cast<std::string>(i),pos,color);
 	}
 

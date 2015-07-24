@@ -168,7 +168,7 @@ void BoxOutlet::render(const GLViewInfo&){
 void StackedBoxOutlet::render(const GLViewInfo& gli){
 	if(isnan(glColor)) return;
 	Vector3r color=.7*CompUtils::mapColor(glColor); // darker for subdivision
-	if(!isnan(color[0])){
+	if(!isnan(color.maxCoeff())){
 		if(node){ glPushMatrix(); GLUtils::setLocalCoords(node->pos,node->ori); }
 		glColor3v(color);
 		short ax1((axis+1)%3),ax2((axis+2)%3);

@@ -301,6 +301,9 @@ void Gl1_DemField::doShape(){
 			case COLOR_INVISIBLE: continue; // don't show this particle at all
 			default: parColor=Vector3r(NaN,NaN,NaN);
 		}
+
+		// particle not rendered
+		if(isnan(parColor.maxCoeff())) continue;
 		
 		// fast-track for spheres (don't call the functor, avoid glPushMatrix())
 		if(Renderer::fastDraw && p->shape->isA<Sphere>()){
@@ -314,7 +317,6 @@ void Gl1_DemField::doShape(){
 				Renderer::shapeDispatcher(p->shape,/*shift*/Vector3r::Zero(),wire||sh->getWire(),*viewInfo);
 			glPopMatrix();
 		}
-
 
 		if(name.highlighted){
 			const Vector3r& pos=sh->nodes[0]->pos;
@@ -436,7 +438,8 @@ void Gl1_DemField::doContactNodes(){
 					x[2]+=scene->cell->intrShiftPos(-cellDist+C->cellDist);
 				}
 				Vector3r color=CompUtils::mapColor(C->color);
-				if(dynamic_pointer_cast<Sphere>(pA->shape)) GLUtils::GLDrawLine(x[0],x[1],color);
+				if(isnan(color.maxCoeff())) continue;
+				if(pA->shape->isA<Sphere>()) GLUtils::GLDrawLine(x[0],x[1],color);
 				GLUtils::GLDrawLine(x[0],x[2],color);
 			}
 			if(cNode & CNODE_NODE) Renderer::renderRawNode(node);
@@ -446,10 +449,10 @@ void Gl1_DemField::doContactNodes(){
 			assert(pA->shape->nodes.size()>0); assert(pB->shape->nodes.size()>0);
 			Vector3r A;
 			Vector3r B=pB->shape->avgNodePos();
-			if(dynamic_pointer_cast<Sphere>(pA->shape)) A=pA->shape->nodes[0]->pos;
-			else if(dynamic_pointer_cast<Wall>(pA->shape)){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<Wall>().axis; A[(ax+1)%3]=B[(ax+1)%3]; A[(ax+2)%3]=B[(ax+2)%3]; }
-			else if(dynamic_pointer_cast<InfCylinder>(pA->shape)){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<InfCylinder>().axis; A[ax]=B[ax]; }
-			else if(dynamic_pointer_cast<Facet>(pA->shape)){ A=pA->shape->cast<Facet>().getNearestPt(B); }
+			if(pA->shape->isA<Sphere>()) A=pA->shape->nodes[0]->pos;
+			else if(pA->shape->isA<Wall>()){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<Wall>().axis; A[(ax+1)%3]=B[(ax+1)%3]; A[(ax+2)%3]=B[(ax+2)%3]; }
+			else if(pA->shape->isA<InfCylinder>()){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<InfCylinder>().axis; A[ax]=B[ax]; }
+			else if(pA->shape->isA<Facet>()){ A=pA->shape->cast<Facet>().getNearestPt(B); }
 			else A=pA->shape->avgNodePos();
 			if(scene->isPeriodic){ B+=scene->cell->intrShiftPos(C->cellDist); }
 			GLUtils::GLDrawLine(A,B,.5*CompUtils::mapColor(C->color));

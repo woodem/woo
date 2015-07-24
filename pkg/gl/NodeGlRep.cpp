@@ -29,6 +29,7 @@ void LabelGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInfo
 
 void ScalarGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInfo){
 	Vector3r color=(range?range->color(val):CompUtils::scalarOnColorScale(val,0,1));
+	if(isnan(color.maxCoeff())) return;
 	Vector3r pos=node->pos+(node->hasData<GlData>()?node->getData<GlData>().dGlPos:Vector3r::Zero());
 	switch(how){
 		case 0: {
@@ -56,6 +57,7 @@ void ScalarGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInf
 void VectorGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInfo){
 	Real valNorm=val.norm();
 	Vector3r color=(range?range->color(valNorm):CompUtils::scalarOnColorScale(valNorm,0,1));
+	if(isnan(color.maxCoeff())) return;
 	Real mxNorm=(range?range->mnmx[1]:1);
 	Real len=relSz*viewInfo->sceneRadius;
 	if(!isnan(scaleExp)) len*=pow(min(1.,valNorm/mxNorm),scaleExp);
@@ -94,6 +96,7 @@ void ActReactGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewI
 }
 
 void ActReactGlRep::renderDoubleArrow(const Vector3r& pos, const Vector3r& arr, bool posStart, const Vector3r& offset, const Vector3r& color){
+	if(isnan(color.maxCoeff())) return;
 	if(posStart){ GLUtils::GLDrawArrow(pos+offset,pos+offset+arr,color); GLUtils::GLDrawArrow(pos-offset,pos-offset-arr,color); }
 	else        { GLUtils::GLDrawArrow(pos+offset-arr,pos+offset,color); GLUtils::GLDrawArrow(pos-offset+arr,pos-offset,color); }
 }
@@ -133,6 +136,7 @@ void TensorGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInf
 
 	for(int i:{0,1,2}){
 		Vector3r color=(range?range->color(eigVal[i]):CompUtils::scalarOnColorScale(eigVal[i],-1,1));
+		if(isnan(color.maxCoeff())) continue;
 		Real mxNorm=(range?range->maxAbs(eigVal[i]):1);
 		Real len=relSz*viewInfo->sceneRadius;
 		len*=isnan(scaleExp)?abs(eigVal[i]/mxNorm):pow(abs(eigVal[i])/mxNorm,scaleExp);
@@ -175,6 +179,7 @@ void CylGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInfo){
 	Real radius=viewInfo->sceneRadius*relSz*(isnan(rad)?1:(rangeRad?rangeRad->norm(rad):1));
 	Real ccol=isnan(col)?0:col;
 	Vector3r color=(rangeCol?rangeCol->color(ccol):CompUtils::scalarOnColorScale(ccol,0,1));
+	if(isnan(color.maxCoeff())) return;
 	Vector3r A=(node->pos+node->ori.conjugate()*Vector3r(xx[0],0,0)), B=(node->pos+node->ori.conjugate()*Vector3r(xx[1],0,0));
 	// cerr<<"A="<<A.transpose()<<", B="<<B.transpose()<<", r="<<radius<<endl;
 	GLUtils::Cylinder(A,B,radius,color,/*wire*/false,/*caps*/false,/*rad2*/-1,/*slices*/10,2);

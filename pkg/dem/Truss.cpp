@@ -182,7 +182,7 @@ void Gl1_Rod::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wir
 		shifts[0]+t.nodes[0]->pos+(t.nodes[0]->hasData<GlData>()?t.nodes[0]->getData<GlData>().dGlPos:Vector3r::Zero()),
 		shifts[1]+t.nodes[1]->pos+(t.nodes[1]->hasData<GlData>()?t.nodes[1]->getData<GlData>().dGlPos:Vector3r::Zero())
 	};
-	GLUtils::Cylinder(glVertices[0],glVertices[1],t.radius,/*color*/Vector3r(NaN,NaN,NaN),t.getWire()||wire2,/*caps*/false,t.radius,slices,stacks);
+	GLUtils::Cylinder(glVertices[0],glVertices[1],t.radius,/*color: keep current*/Vector3r(-1,-1,-1),t.getWire()||wire2,/*caps*/false,t.radius,slices,stacks);
 	for(int end=0; end<2; end++){
 		glPushMatrix();
 			glTranslatev(glVertices[end]);

@@ -110,7 +110,7 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 			return;
 		}
 		glDisable(GL_LINE_SMOOTH);
-		GLUtils::Cylinder(A,B,cyl.radius,/*keep current color*/Vector3r(NaN,NaN,NaN),/*wire*/wire||wire2,/*caps*/false,/*rad2*/-1,slices);
+		GLUtils::Cylinder(A,B,cyl.radius,/*keep current color*/Vector3r(-1,-1,-1),/*wire*/wire||wire2,/*caps*/false,/*rad2*/-1,slices);
 		if(spokes){
 			int ax1((ax+1)%3),ax2((ax+2)%3);
 			for(Real axCoord:{A[ax],B[ax]}){

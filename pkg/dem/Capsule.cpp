@@ -440,7 +440,7 @@ void Gl1_Capsule::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool
 	if (wire || wire2 ){
 		glLineWidth(1.);
 		if(!smooth) glDisable(GL_LINE_SMOOTH);
-		GLUtils::Cylinder(Vector3r(0,0,-shaft/2.),Vector3r(0,0,shaft/2.),r,/*color: keep current*/Vector3r(NaN,NaN,NaN),/*wire*/true,/*caps*/false,r,quality*glutSlices,/*stacks*/cylStacks);
+		GLUtils::Cylinder(Vector3r(0,0,-shaft/2.),Vector3r(0,0,shaft/2.),r,/*color: keep current*/Vector3r(-1,-1,-1),/*wire*/true,/*caps*/false,r,quality*glutSlices,/*stacks*/cylStacks);
 		glEnable(GL_CLIP_PLANE0);
 		glTranslatef(0,0,-shaft/2.); glClipPlane(GL_CLIP_PLANE0,clipPlaneA); glutWireSphere(r,quality*glutSlices,quality*glutStacks);
 		glTranslatef(0,0,shaft);     glClipPlane(GL_CLIP_PLANE0,clipPlaneB); glutWireSphere(r,quality*glutSlices,quality*glutStacks);
@@ -450,7 +450,7 @@ void Gl1_Capsule::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool
 	else {
 		glEnable(GL_LIGHTING);
 		glShadeModel(GL_SMOOTH);
-		GLUtils::Cylinder(Vector3r(0,0,-shaft/2.),Vector3r(0,0,shaft/2.),r,/*color: keep current*/Vector3r(NaN,NaN,NaN),/*wire*/false,/*caps*/false,r,quality*glutSlices,/*stacks*/cylStacks);
+		GLUtils::Cylinder(Vector3r(0,0,-shaft/2.),Vector3r(0,0,shaft/2.),r,/*color: keep current*/Vector3r(-1,-1,-1),/*wire*/false,/*caps*/false,r,quality*glutSlices,/*stacks*/cylStacks);
 		glEnable(GL_CLIP_PLANE0);
 		glTranslatef(0,0,-shaft/2.); glClipPlane(GL_CLIP_PLANE0,clipPlaneA); glutSolidSphere(r,quality*glutSlices,quality*glutStacks);
 		glTranslatef(0,0,shaft);     glClipPlane(GL_CLIP_PLANE0,clipPlaneB); glutSolidSphere(r,quality*glutSlices,quality*glutStacks);

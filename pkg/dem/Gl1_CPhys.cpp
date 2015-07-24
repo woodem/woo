@@ -28,6 +28,7 @@ void Gl1_CPhys::go(const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C, co
 	Real r=relMaxRad*viewInfo.sceneRadius*min(1.,(abs(fn)/(max(abs(range->mnmx[0]),abs(range->mnmx[1])))));
 	if(r<viewInfo.sceneRadius*1e-4 || isnan(r)) return;
 	Vector3r color=shearColor?shearRange->color(Vector2r(cp->force[1],cp->force[2]).norm()):range->color(fn);
+	if(isnan(color.maxCoeff())) return;
 	const Particle *pA=C->leakPA(), *pB=C->leakPB();
 	// get both particle's space positions, but B moved so that it is relative to A as the contact is
 	Vector3r A=(pA->shape->isA<Sphere>()?pA->shape->nodes[0]->pos:C->geom->node->pos);
