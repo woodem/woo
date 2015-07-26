@@ -71,7 +71,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
 	import logging
 	S=scene
 	if inBatch() and hasBatchTable(): table,line,db=wooOptions.batchTable,wooOptions.batchLine,wooOptions.batchResults
-	else: table,line,db='',-1,defaultDb
+	else: table,line,db='',-1,(defaultDb if not wooOptions.batchResults else wooOptions.batchResults)
 	newDb=not os.path.exists(db)
 	if not quiet: print 'Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing')
 	if dbFmt==None:
