@@ -240,6 +240,8 @@ def main(sysArgv=None):
 		if opts.batchLine<0: raise RuntimeError('--batch-table given without --batch--line.')
 		options.batchTable=opts.batchTable
 		options.batchLine=opts.batchLine
+	# this can be given even without batch line & table
+	if opts.batchResults:
 		options.batchResults=opts.batchResults
 		if 'WOO_BATCH' in os.environ: raise RuntimeError('WOO_BATCH env var exists, but --batch-table was also specified (WOO_BATCH is deprecated, it can still be used for backwards-compatibility, but not mixed with --batch-table).')
 
