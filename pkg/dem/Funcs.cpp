@@ -265,8 +265,8 @@ vector<Vector2r> DemFuncs::boxPsd(const Scene* scene, const DemField* dem, const
 		/*cumulative*/true,/*normalize*/true,
 		num,
 		rRange,
-		/*diameter getter*/[](const shared_ptr<Particle>&p) ->Real { return 2.*p->shape->cast<Sphere>().radius; },
-		/*weight getter*/[&](const shared_ptr<Particle>&p) -> Real{ return mass?p->shape->nodes[0]->getData<DemData>().mass:1.; }
+		/*diameter getter*/[](const shared_ptr<Particle>&p, const size_t& i) ->Real { return 2.*p->shape->cast<Sphere>().radius; },
+		/*weight getter*/[&](const shared_ptr<Particle>&p, const size_t& i) -> Real{ return mass?p->shape->nodes[0]->getData<DemData>().mass:1.; }
 	);
 }
 

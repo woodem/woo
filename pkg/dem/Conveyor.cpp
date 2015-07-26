@@ -388,8 +388,8 @@ py::object ConveyorInlet::pyPsd(bool mass, bool cumulative, bool normalize, cons
 	if(!save) throw std::runtime_error("ConveyorInlet.save must be True for calling ConveyorInlet.psd()");
 	auto tOk=[&tRange](const Real& t){ return isnan(tRange.minCoeff()) || (tRange[0]<=t && t<tRange[1]); };
 	vector<Vector2r> psd=DemFuncs::psd(genDiamMassTime,/*cumulative*/cumulative,/*normalize*/normalize,num,dRange,
-		/*radius getter*/[&tOk](const Vector3r& dmt) ->Real { return tOk(dmt[2])?dmt[0]:NaN; },
-		/*weight getter*/[&](const Vector3r& dmt) -> Real{ return mass?dmt[1]:1.; }
+		/*radius getter*/[&tOk](const Vector3r& dmt, const size_t& i) ->Real { return tOk(dmt[2])?dmt[0]:NaN; },
+		/*weight getter*/[&](const Vector3r& dmt, const size_t& i) -> Real{ return mass?dmt[1]:1.; }
 	);
 	return DemFuncs::seqVectorToPy(psd,[](const Vector2r& i)->Vector2r{ return i; },/*zip*/false);
 }

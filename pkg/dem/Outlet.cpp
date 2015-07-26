@@ -125,12 +125,18 @@ Real Outlet::pyMassOfDiam(Real min, Real max) const {
 	return ret;
 }
 
-py::object Outlet::pyPsd(bool _mass, bool cumulative, bool normalize, int _num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk){
+py::object Outlet::pyPsd(bool _mass, bool cumulative, bool normalize, int _num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk, const py::list& locs__){
+	py::extract<vector<int>> ll(locs__);
+	if(!ll.check()) throw std::runtime_error("Outlet.psd: locs must be a list of ints.");
+	vector<int> locs_vec=ll();
+	std::set<int> locs_set;
+	for(auto& i: locs_vec) locs_set.insert(i);
 	if(!save) throw std::runtime_error("Outlet.psd(): Outlet.save must be True.");
 	auto tOk=[&tRange](const Real& t){ return isnan(tRange.minCoeff()) || (tRange[0]<=t && t<tRange[1]); };
+	auto lOk=[&locs_set,this](const size_t& i){ return locs_set.empty() || (i<locs.size() && locs_set.count(locs[i])>0); };
 	vector<Vector2r> psd=DemFuncs::psd(diamMassTime,cumulative,normalize,_num,dRange,
-		/*diameter getter*/[&tOk](const Vector3r& dmt)->Real{ return tOk(dmt[2])?dmt[0]:NaN; },
-		/*weight getter*/[&_mass](const Vector3r& dmt)->Real{ return _mass?dmt[1]:1.; },
+		/*diameter getter*/[&tOk,&lOk](const Vector3r& dmt, const size_t& i)->Real{ return (tOk(dmt[2]) && lOk(i))?dmt[0]:NaN; },
+		/*weight getter*/[&_mass](const Vector3r& dmt, const size_t& i)->Real{ return _mass?dmt[1]:1.; },
 		/*emptyOk*/ emptyOk
 	);
 	return DemFuncs::seqVectorToPy(psd,[](const Vector2r& i)->Vector2r{ return i; },/*zip*/zip);

@@ -157,8 +157,8 @@ py::object ParticleGenerator::pyPsd(bool mass, bool cumulative, bool normalize, 
 	if(!save) throw std::runtime_error("ParticleGenerator.save must be True for calling ParticleGenerator.psd()");
 	auto tOk=[&tRange](const Real& t){ return isnan(tRange.minCoeff()) || (tRange[0]<=t && t<tRange[1]); };
 	vector<Vector2r> psd=DemFuncs::psd(genDiamMassTime,/*cumulative*/cumulative,/*normalize*/normalize,num,dRange,
-		/*diameter getter*/[&tOk](const Vector3r& dmt) ->Real { return tOk(dmt[2])?dmt[0]:NaN; },
-		/*weight getter*/[&](const Vector3r& dmt) -> Real{ return mass?dmt[1]:1.; }
+		/*diameter getter*/[&tOk](const Vector3r& dmt, const size_t& i) ->Real { return tOk(dmt[2])?dmt[0]:NaN; },
+		/*weight getter*/[&](const Vector3r& dmt, const size_t& i) -> Real{ return mass?dmt[1]:1.; }
 	);// 
 	return DemFuncs::seqVectorToPy(psd,[](const Vector2r& i)->Vector2r{ return i; },/*zip*/false);
 }

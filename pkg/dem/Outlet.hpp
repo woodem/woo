@@ -12,7 +12,7 @@ struct Outlet: public PeriodicEngine{
 	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
 	virtual bool isInside(const Vector3r& p, int& loc) { throw std::runtime_error(pyStr()+" did not override Outlet::isInside."); }
 	void run() WOO_CXX11_OVERRIDE;
-	py::object pyPsd(bool mass, bool cumulative, bool normalize, int num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk);
+	py::object pyPsd(bool mass, bool cumulative, bool normalize, int num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk, const py::list& locs__);
 	py::object pyDiamMass(bool zipped=false) const;
 	py::object pyDiamMassTime(bool zipped=false) const;
 	Real pyMassOfDiam(Real min, Real max) const ;
@@ -40,7 +40,7 @@ struct Outlet: public PeriodicEngine{
 		((Real,currRateSmooth,1,AttrTrait<>().range(Vector2r(0,1)),"Smoothing factor for currRate ∈〈0,1〉")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
 		,/*py*/ \
-		.def("psd",&Outlet::pyPsd,(py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=true,py::arg("num")=80,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("zip")=false,py::arg("emptyOk")=false),"Return particle size distribution of deleted particles (only useful with *save*), spaced between *dRange* (a 2-tuple of minimum and maximum radius); )") \
+		.def("psd",&Outlet::pyPsd,(py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=true,py::arg("num")=80,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("zip")=false,py::arg("emptyOk")=false,py::arg("locs")=py::list()),"Return particle size distribution of deleted particles (only useful with *save*), spaced between *dRange* (a 2-tuple of minimum and maximum radius); )") \
 		.def("clear",&Outlet::pyClear,"Clear information about saved particles (particle list, if saved, mass and number, rDivR0)") \
 		.def("diamMass",&Outlet::pyDiamMass,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
 		.def("diamMassTime",&Outlet::pyDiamMassTime,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass, time); without *zipped*, return tuple of 3 arrays: diameters, masses, times.") \

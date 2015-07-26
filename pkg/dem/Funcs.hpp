@@ -63,11 +63,12 @@ struct DemFuncs{
 	){
 		/* determine dRange if not given */
 		if(isnan(dRange[0]) || isnan(dRange[1]) || dRange[0]<0 || dRange[1]<=0 || dRange[0]>=dRange[1]){
-			dRange=Vector2r(Inf,-Inf);
+			dRange=Vector2r(Inf,-Inf); size_t n=0;
 			for(const auto& p: particleRange){
-				Real d=diameterGetter(p);
+				Real d=diameterGetter(p,n);
 				if(d<dRange[0]) dRange[0]=d;
 				if(d>dRange[1]) dRange[1]=d;
+				n+=1;
 			}
 			if(isinf(dRange[0])){
 				if(!emptyOk) throw std::runtime_error("DemFuncs::psd: no spherical particles?");
@@ -76,10 +77,11 @@ struct DemFuncs{
 		}
 		/* put particles in bins */
 		vector<Vector2r> ret(num,Vector2r::Zero());
-		Real weight=0;
+		Real weight=0; size_t n=0;
 		for(const auto& p: particleRange){
-			Real d=diameterGetter(p);
-			Real w=weightGetter(p);
+			Real d=diameterGetter(p,n);
+			Real w=weightGetter(p,n);
+			n+=1;
 			// NaN diameter or weight, or zero weight make the particle effectively disappear
 			if(isnan(d) || isnan(w) || w==0.) continue;
 			// particles beyong upper bound are discarded, though their weight is taken in account

@@ -15,8 +15,8 @@ Real pWaveDt(shared_ptr<Scene> _scene=shared_ptr<Scene>(), bool noClumps=false){
 
 py::tuple psd(vector<Vector2r> ddmm, bool mass, bool cumulative, bool normalize, Vector2r dRange, int num) {
 	vector<Vector2r> psd=DemFuncs::psd(ddmm,/*cumulative*/cumulative,/*normalize*/normalize,num,dRange,
-		/*radius getter*/[](const Vector2r& diamMass) ->Real { return diamMass[0]; },
-		/*weight getter*/[&](const Vector2r& diamMass) -> Real{ return mass?diamMass[1]:1.; }
+		/*radius getter*/[](const Vector2r& diamMass, const size_t& i) ->Real { return diamMass[0]; },
+		/*weight getter*/[&](const Vector2r& diamMass, const size_t& i) -> Real{ return mass?diamMass[1]:1.; }
 	);
 	py::list diameters,percentage;
 	for(const auto& dp: psd){ diameters.append(dp[0]); percentage.append(dp[1]); }
