@@ -170,6 +170,8 @@ cxxInternalFile=_cxxInternal.__file__
 from . import core
 master=core.Master.instance
 
+from . import apiversion
+
 
 #
 # create compiled python modules
@@ -327,6 +329,7 @@ from . import _units
 unit=_units.unit # allow woo.unit['mm']
 # hint fo pyinstaller to freeze this module
 from . import pyderived
+from . import apiversion
 
 # recursive import of everything under wooExtra
 try:
