@@ -195,6 +195,10 @@ public:
 	// called from DemField.selfTest for every node in DemField
 	virtual void selfTest(const shared_ptr<Node>& n, const string& prefix) const;
 
+	// tell whether the node is by default motion-integrated
+	// used from S.dem.par.add with nodes=-1, when deciding whether to add the node to S.dem.nodes
+	bool guessMoving() const;
+
 	bool isBlockedNone() const { return (flags&DOF_ALL)==DOF_NONE; }
 	void setBlockedNone() { flags&=~DOF_ALL; }
 	bool isBlockedAll()  const { return (flags&DOF_ALL)==DOF_ALL; }
@@ -271,6 +275,7 @@ public:
 		.add_property("parRef",&DemData::pyParRef_get).def("addParRef",&DemData::addParRef) \
 		.add_property("isAspherical",&DemData::isAspherical,"Return ``True`` when inertia components are not equal.") \
 		.def("setOriMassInertia",&DemData::setOriMassInertia,"Lump mass and inertia from all attached particles and attempt to rotate the node so that its axes are principal axes of inertia, if allowed by particles shape (without chaning the geometry).").staticmethod("setOriMassInertia") \
+		.def("guessMoving",&DemData::guessMoving,"Tell whether the node is likely to be moving or not. Returns true if any of the following is true:\n\n * nonzero :obj:`mass` **and** not all DoFs are :obj:`blocked <flags>` (this will be false for nodes with mass, but which are completely blocked),\n* nonzero :obj:`velocity <vel>`,\n* nonzero :obj:`angular velocity <angVel>`,\n* anything is :obj:`imposed <impose>`.\n\nThis function is used as heuristics by :obj:`S.dem.par.add <woo.dem.ParticleContainer.add>` when called with ``nodes=-1`` (default), to decide whether the particle's nodes should be added to S.dem.nodes.") \
 		.def("_getDataOnNode",&Node::pyGetData<DemData>).staticmethod("_getDataOnNode").def("_setDataOnNode",&Node::pySetData<DemData>).staticmethod("_setDataOnNode")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_DemData__CLASS_BASE_DOC_ATTRS_PY);

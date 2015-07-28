@@ -173,13 +173,14 @@ py::list ParticleContainer::pyFreeIds(){
 	return ret;
 }
 
-Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, bool nodes){
+Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, int nodes){
 	if(p->id>=0) IndexError("Particle already has id "+lexical_cast<string>(p->id)+" set; appending such particle (for the second time) is not allowed.");
-	if(nodes){
+	if(nodes!=-1 && nodes!=0 && nodes!=1) ValueError("nodes must be ∈ {-1,0,1} (not "+to_string(nodes)+").");
+	if(nodes!=0){
 		if(!p->shape) woo::ValueError("Particle.shape is None; unable to add nodes.");
 		for(const auto& n: p->shape->nodes){
 			auto& dyn=n->getData<DemData>();
-			// already has an index
+			// already has an index, check everything is OK
 			if(dyn.linIx>=0){
 				// node already in DemField.nodes, don't add for the second time
 				if(dyn.linIx<(int)dem->nodes.size() && dem->nodes[dyn.linIx].get()==n.get()) continue;
@@ -187,16 +188,18 @@ Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, bool nodes){
 				if(dyn.linIx<(int)dem->nodes.size()) std::runtime_error(n->pyStr()+": Node.dem.linIx="+to_string(dyn.linIx)+", but DemField.nodes["+to_string(dyn.linIx)+"]"+(dem->nodes[dyn.linIx]?"="+dem->nodes[dyn.linIx]->pyStr():"is empty (programming error!?)")+".");
 				std::runtime_error(n->pyStr()+": Node.dem.linIx="+to_string(dyn.linIx)+", which is out of range for DemField.nodes (size "+to_string(dem->nodes.size())+").");
 			} else {
-				// add node
-				dyn.linIx=dem->nodes.size();
-				dem->nodes.push_back(n);
+				// maybe add node
+				if(nodes==1 || (nodes==-1 && dyn.guessMoving())){
+					dyn.linIx=dem->nodes.size();
+					dem->nodes.push_back(n);
+				}
 			}
 		}
 	}
 	return insert(p);
 }
 
-py::list ParticleContainer::pyAppendList(vector<shared_ptr<Particle>> pp, bool nodes){
+py::list ParticleContainer::pyAppendList(vector<shared_ptr<Particle>> pp, int nodes){
 	py::list ret;
 	for(shared_ptr<Particle>& p: pp){ret.append(pyAppend(p,nodes));}
 	return ret;

@@ -340,7 +340,7 @@ void DemField::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
 	if(d.has_key("par")){
 		py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
 		if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");
-		for(const auto& p: ex()) particles->pyAppend(p,/*nodes*/true);
+		for(const auto& p: ex()) particles->pyAppend(p,/*nodes: maybe*/-1);
 		py::api::delitem(d,"par");
 		// this->collectNodes(); // useless, we added nodes above already
 	}
@@ -410,6 +410,7 @@ vector<shared_ptr<Node>> DemField::splitNode(const shared_ptr<Node>& node, const
 
 
 int DemField::collectNodes(){
+	Master::instance().checkApi(/*minApi*/10101,"S.dem.collectNodes() is largely obsoleted by calling S.dem.par.add(...,nodes=True|False).",/*pyWarn*/true);
 	std::set<void*> seen;
 	// ack nodes which are already there
 	for(const auto& n: nodes) seen.insert((void*)n.get());
@@ -555,6 +556,10 @@ void DemField::selfTest(){
 			// clumps
 			if(dyn.isClumped() && !dyn.master.lock()) throw std::logic_error("DemField.par["+to_string(p->id)+"].shape.nodes["+to_string(j)+"].dem.master=None, but the node claims to be clumped.");
 			if(!dyn.isClumped() && dyn.master.lock()) throw std::logic_error("DemField.par["+to_string(p->id)+"].shape.nodes["+to_string(j)+"].dem.clumped=False, but the node defines a master node (at this point, there is no other valid use of the master node except as clump; this may change in the future).");
+			// check that nodes which have velocity or imposition are also inside DemField.nodes
+			if(dyn.linIx<0 && (dyn.vel!=Vector3r::Zero() || dyn.angVel!=Vector3r::Zero() || dyn.impose)){
+				throw std::runtime_error("DemField.par["+to_string(p->id)+"].shape.nodes["+to_string(j)+"]: velocity, angular velocity or imposition is set, but has no effect as the node is not in DemField.nodes.");
+			}
 		}
 	}
 	// check that DemField.nodes properly keep their indices
@@ -600,4 +605,8 @@ void DemData::selfTest(const shared_ptr<Node>& n, const string& prefix) const {
 	for(int ax:{0,1,2}){
 		if(!isBlockedAxisDOF(ax,/*rot*/true) && !isClumped() && !(inertia[ax]>0)) throw std::runtime_error(prefix+".inertia["+to_string(ax)+"]="+to_string(inertia[ax])+" is non-positive, but the corresponding rotational DoF is not blocked (and the node is not clumped).");
 	}
+}
+
+bool DemData::guessMoving() const {
+	return (mass!=0. && !isBlockedAll()) || vel!=Vector3r::Zero() || angVel!=Vector3r::Zero() || impose;
 }
