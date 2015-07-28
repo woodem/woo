@@ -23,7 +23,7 @@ void NodeData::setDataOnNode(Node&){ throw std::runtime_error(pyStr()+" does not
 
 string Node::pyStr() const {
 	std::ostringstream o;
-	o<<"<"+getClassName()<<" @ "<<this<<", at ("<<pos.transpose()<<")>";
+	o<<"<"+getClassName()<<" @ "<<this<<", at ("<<pos[0]<<","<<pos[1]<<","<<pos[2]<<")>";
 	return o.str();
 }
 
