@@ -262,7 +262,7 @@ def main(sysArgv=None):
 	import woo
 	# other parts we will need soon
 	import woo.config
-	sys.stderr.write(green('Welcome to Woo '+woo.config.prettyVersion()+'%s%s'%(' (debug build)' if woo.config.debug else '',(', flavor '+woo.config.flavor if woo.config.flavor else '')))+'\n')
+	sys.stderr.write(green('Welcome to Woo '+woo.config.prettyVersion()+'%s%s'%(' (debug build)' if woo.config.debug else '',(', flavor '+woo.config.flavor if woo.config.flavor else '')))+', API %d\n'%woo.master.api)
 	import woo.log
 	import woo.system
 	import woo.runtime

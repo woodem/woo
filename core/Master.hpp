@@ -67,6 +67,14 @@ class Master: public Singleton<Master>{
 	
 	shared_ptr<Scene> scene;
 
+	// api version
+	int api; // 0 by default, set from config.cxx
+	int api_get() const; void api_set(int);
+	int usesApi; // 0 by default, set by the user
+	int usesApi_get() const; void usesApi_set(py::object o); 
+
+	void checkApi(int minApi, const string& msg, bool pyWarn) const;
+
 	boost::posix_time::ptime startupLocalTime;
 
 	map<string,string> memSavedSimulations;

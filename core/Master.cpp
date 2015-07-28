@@ -100,6 +100,9 @@ Master::Master(){
 	// create the initial master scene
 	scene=make_shared<Scene>();
 	scene->postLoad(*scene,NULL); // this would not get called otherwise, causing troubles
+
+	api=0; // set from config.cxx to the real value
+	usesApi=0; // 0 means not set
 }
 
 
@@ -124,6 +127,11 @@ void Master::pyRegisterClass(){
 		#endif
 		.def_readonly("confDir",&Master::confDir,"Directory for storing various local configuration files (automatically set at startup)")
 		.add_property("scene",&Master::pyGetScene,&Master::pySetScene)
+
+		.add_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programmin interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
+		.add_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")
+		.def("checkApi",&Master::checkApi,(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn) if :obj:`~woo.core.Master.usesApi` is not set.")
+
 		.def("reset",&Master::pyReset,"Set empty main scene")
 
 		.add_property("cmaps",&Master::pyLsCmap,"List available colormaps (by name)")
@@ -451,3 +459,35 @@ void Master::numThreads_set(int i){
 		else LOG_WARN("woo.core.Master: compiled without OpenMP support, setting numThreads has no effect.");
 	#endif
 }
+
+void Master::api_set(int a){
+	if(a==api) return; // no change
+	if(api>0) woo::ValueError("woo.master.api was already set to "+to_string(api)+", refusing to set it again to "+to_string(a)+".");
+	api=a;
+}
+int Master::api_get() const { return api; }
+
+void Master::usesApi_set(py::object o){
+	py::extract<int> ia(o);
+	py::extract<Vector3i> va(o);
+	if(ia.check()){ usesApi=ia(); return;} 
+	if(va.check()){ Vector3i a=va(); usesApi=a[0]*10000+a[1]*100+a[2]; }
+	woo::ValueError("API must be given either as integer or Vector3i (or anything convertible), e.g. 10151 or (1,1,51).");
+}
+
+int Master::usesApi_get() const { return usesApi; }
+
+
+void Master::checkApi(int minApi, const string& msg, bool pyWarn) const{
+	if(usesApi==0){
+		const char* m="Script did not set woo.master.usesApi, all functions with changed APIs will pessimistically warn about possible functionality changes. See https://woodem.org/api.html for details.";
+		if(pyWarn){ PyErr_WarnEx(PyExc_FutureWarning,m,/*stacklevel*/1); }
+		else{ LOG_WARN(m); }
+	}
+	if(usesApi<minApi){
+		string m("Possible API incompatibility: "+msg+" (woo.master.api="+to_string(api)+" > woo.master.usesApi="+to_string(usesApi)+"; this call requires at least minApi="+to_string(minApi)+"). See https://woodem.org/api.html#api-"+to_string(minApi)+" for details.");
+		if(pyWarn){ PyErr_WarnEx(PyExc_DeprecationWarning,m.c_str(),/*stacklevel*/1); }
+		else{ LOG_WARN(m); }
+	}
+}
+
