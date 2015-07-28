@@ -18,7 +18,6 @@ class TestHertz(unittest.TestCase):
 			woo.utils.sphere((0,0,0),.05,fixed=False,wire=True,mat=m),
 			woo.utils.sphere((0,.10001,0),.05,fixed=False,wire=True,mat=m)
 		])
-		S.dem.collectNodes()
 		# dtSafety=0.4 work with 1% relative tolerance,
 		# dtSafety=0.8 makes collision time not fit within 1%.
 		S.dtSafety=0.4

@@ -204,11 +204,8 @@ def prepareCylTriax(pre):
 		sideThick=pre.memThick,
 	)
 	S.lab.cylNodes=nodes
-	S.dem.par.add(particles)
+	S.dem.par.add(particles,nodes=True) # add all nodes (may be the same automatic?)
 
-	##
-	# collect nodes from both facets and spheres
-	S.dem.collectNodes() 
 
 	#S.dt=pre.pWaveSafety*woo.utils.pWaveDt(S,noClumps=True)
 	S.dtSafety=pre.dtSafety

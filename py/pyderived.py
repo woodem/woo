@@ -430,14 +430,11 @@ if __name__=='wooMain':
 		def __call__(self):
 			import woo.core, woo.dem, woo.utils
 			S=woo.core.Scene(fields=[woo.dem.DemField()])
-			S.dem.par.append([
-				woo.utils.wall(0,axis=2,sense=1),
-				woo.utils.sphere((0,0,1),radius=.2)
-			])
+			S.dem.par.add(Wall.make(0,axis=2,sense=1),nodes=False)
+			S.dem.par.add(Sphere.make((0,0,1),radius=.2),nodes=True)
 			S.dem.gravity=(0,0,-10)
 			S.dt=1e-4*woo.utils.pWaveDt(S)
-			S.engines=woo.utils.defaultEngines(damping=.01)
-			S.dem.collectNodes()
+			S.engines=woo.dem.DemField.minimalEngines(damping=.01)
 			return S
 
 	import woo.pre

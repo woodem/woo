@@ -23,14 +23,13 @@ class TestPBC(unittest.TestCase):
 		self.cellDist=Vector3i(0,0,10) # how many cells away we go
 		self.relDist=Vector3(0,.999999999999999999,0) # rel position of the 2nd ball within the cell
 		self.initVel=Vector3(0,0,5)
-		S.dem.par.add(utils.sphere((1,1,1),.5))
+		S.dem.par.add(Sphere.make((1,1,1),.5))
 		self.initPos=Vector3([S.dem.par[0].pos[i]+self.relDist[i]+self.cellDist[i]*S.cell.hSize0.col(i).norm() for i in (0,1,2)])
 		S.dem.par.add(utils.sphere(self.initPos,.5))
 		S.dem.par[1].vel=self.initVel
 		S.engines=[Leapfrog(reset=True)]
 		S.cell.nextGradV=Matrix3(0,0,0, 0,0,0, 0,0,-1)
 		S.cell.homoDeform=Cell.HomoVel2
-		S.dem.collectNodes() # avoid msg from Leapfrog
 		S.dt=0 # do not change positions with dt=0 in NewtonIntegrator, but still update velocities from velGrad
 	def testVelGrad(self):
 		'PBC: velGrad changes hSize but not hSize0, accumulates in trsf (homoDeform=Cell.HomoVel2)'
@@ -132,9 +131,10 @@ class TestPBCCollisions(unittest.TestCase):
 	def testOverHalfContact(self):
 		'PBC: InsertionSortCollider handles particle spanning more than half cell-size'
 		S=woo.master.scene
-		S.dem.par.add(Sphere.make((.3,.5,.5),radius=.4))
-		S.dem.par.add(Sphere.make((.7,.9,.5),radius=.1))
-		S.dem.collectNodes()
+		S.dem.par.add([
+			Sphere.make((.3,.5,.5),radius=.4),
+			Sphere.make((.7,.9,.5),radius=.1),
+		])
 		S.saveTmp()
 		S.one()
 		self.assert_(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
@@ -147,9 +147,10 @@ class TestPBCCollisions(unittest.TestCase):
 		'PBC: InsertionSortCollider raises on double-contact of large particles accross the cell'
 		S=woo.master.scene
 		# 2*.4+2*.2=1.2, with contact on both sides
-		S.dem.par.add(Sphere.make((.3,.5,.5),radius=.4))
-		S.dem.par.add(Sphere.make((.8,.9,.5),radius=.2))
-		S.dem.collectNodes()
+		S.dem.par.add([
+			Sphere.make((.3,.5,.5),radius=.4),
+			Sphere.make((.8,.9,.5),radius=.2)
+		])
 		S.saveTmp()
 		self.assertRaises(RuntimeError,S.one)
 		#S.one()
@@ -157,9 +158,10 @@ class TestPBCCollisions(unittest.TestCase):
 	def testNormalContact(self):
 		'PBC: InsertionSortCollider computes collisions and cellDist correctly'
 		S=woo.master.scene
-		S.dem.par.add(Sphere.make((.5,.5,.5),radius=.2))
-		S.dem.par.add(Sphere.make((.8,.6,.5),radius=.2))
-		S.dem.collectNodes()
+		S.dem.par.add([
+			Sphere.make((.5,.5,.5),radius=.2),
+			Sphere.make((.8,.6,.5),radius=.2)
+		])
 		S.saveTmp()
 		# move the second sphere elsewhere
 		for shift2 in [(0,0,0),(1,2,3),(6,8,-4)]:

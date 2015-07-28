@@ -33,11 +33,11 @@ class TestEllipsoid(unittest.TestCase):
 			gOri=Quaternion((.1,1,.3),math.pi/3.) # some rather random orientation
 			gOri.normalize() # important; axis is normalized automatically in minieigen newly, but not yet always
 			S.dem.par.add([
-				woo.utils.ellipsoid((0,0,0),semiAxes=scale*Vector3(.1,.2,.1),ori=gOri,mat=self.mat,fixed=True),
-				woo.utils.ellipsoid(gOri*(scale*Vector3(.3,0,0)),semiAxes=scale*Vector3(.2,.1,.1),ori=gOri,mat=self.mat,fixed=True)
-			])
-			S.dem.collectNodes()
+				woo.dem.Ellipsoid.make((0,0,0),semiAxes=scale*Vector3(.1,.2,.1),ori=gOri,mat=self.mat,fixed=True),
+				woo.dem.Ellipsoid.make(gOri*(scale*Vector3(.3,0,0)),semiAxes=scale*Vector3(.2,.1,.1),ori=gOri,mat=self.mat,fixed=True)
+			],nodes=True) # velocity is assigned to the second ellipsoid below, nodes=True needed
 			e0,e1=S.dem.par[0],S.dem.par[1]
+			d0,d1=e0.shape.nodes[0].dem,e1.shape.nodes[0].dem
 			e1.vel=gOri*Vector3(-.1,0,0)
 			S.dt=.1
 			if 0: # debugging stuff

@@ -310,16 +310,19 @@ def gtsSurfaceBestFitOBB(surf):
 	pts=[Vector3(v.x,v.y,v.z) for v in surf.vertices()]
 	return cloudBestFitOBB(tuple(pts))
 
-def revolutionSurfaceMeridians(sects,angles,origin=Vector3().Zero,orientation=Quaternion().Identity):
+def revolutionSurfaceMeridians(sects,angles,node=woo.core.Node(),origin=None,orientation=None):
 	"""Revolution surface given sequences of 2d points and sequence of corresponding angles,
 	returning sequences of 3d points representing meridian sections of the revolution surface.
 	The 2d sections are turned around z-axis, but they can be transformed
 	using the origin and orientation arguments to give arbitrary orientation."""
-	import math
-	def toGlobal(x,y,z):
-		return tuple(origin+orientation*(Vector3(x,y,z)))
-	print sects
-	return [[toGlobal(p[0]*math.cos(angle),p[0]*math.sin(angle),p[1]) for p in sects] for angle in angles]
+	import math, warnings
+	if node is None: node=woo.core.Node()
+	if origin is not None or orientation is not None:
+		warnings.warn(DeprecationWarning,'origin and orientation are deprecated, pass Node object with appropriately set Node.pos and Node.ori. Update your code, backwards-compat will be removed at some point.')
+		if origin is not None: node.pos=origin
+		if orientation is not None: node.ori=orientation
+	if not len(sects)==len(angles): raise ValueError("sects and angles must have the same length (%d!=%d)"%(len(sects),len(angles)))
+	return [[node.loc2glob(Vector3(p[0]*math.cos(angles[i]),p[0]*math.sin(angles[i]),p[1])) for p in sects[i]] for i in range(len(sects))]
 
 ########
 ## packing generators
@@ -529,8 +532,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
 		S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print "DONE"; S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
 		num=sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,spheresInCell,True)
 		mat=dem.FrictMat(young=30e9,tanPhi=.5,density=1e3,ktDivKn=.2)
-		for s in sp: S.dem.par.add(utils.sphere(s[0],s[1],mat=mat))
-		S.dem.collectNodes()
+		for s in sp: S.dem.par.add(woo.dem.Sphere.make(s[0],s[1],mat=mat))
 		S.dt=.5*utils.pWaveDt(S)
 		S.run(); S.wait()
 		sp=SpherePack(); sp.fromDem(S,S.dem)
@@ -859,7 +861,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 	S.cell.setBox(cellSize)
 	# add limiting surface
 	p=sweptPolylines2gtsSurface([utils.tesselatePolyline([Vector3(x,yz[0],yz[1]) for yz in boundary2d],maxDist=min(cellSize[0]/4.,cellSize[1]/4.,cellSize[2]/4.)) for x in numpy.linspace(0,cellSize[0],num=4)])
-	S.dem.par.add(gtsSurface2Facets(p,mask=0b011))
+	S.dem.par.add(gtsSurface2Facets(p,mask=0b011),nodes=False) # nodes not needed
 	S.dem.loneMask=0b010
 
 
@@ -905,7 +907,6 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 	# S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
 	S.dtSafety=.9
 	print 'Inlet box is',S.lab.factory.box
-	S.dem.collectNodes()
 	if dontBlock: return S
 	else: S.run()
 	S.wait()

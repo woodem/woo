@@ -70,19 +70,18 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 			else: p=woo.utils.sphere(center=pos,radius=rad,mat=ellMat)
 			p.vel=rndOri2d()*Vector3(pre.vMax*random.random(),0,0)
 			S.energy['kin0']-=p.Ek
-			S.dem.par.add(p)
 			p.blocked='zXY'
-		S.dem.collectNodes()
+			S.dem.par.add(p)
 		#for coord,axis,sense in [(0,0,+1),(pre.boxSize[0],0,-1),(0,1,+1),(pre.boxSize[1],1,-1)]:
 		#	S.dem.par.add(woo.utils.wall(coord,axis=axis,sense=sense,mat=wallMat,visible=False))
 		S.dem.par.add([
-			woo.utils.wall(0,axis=0,mat=wallMat,visible=True),
-			woo.utils.wall(0,axis=1,mat=wallMat,visible=True)
+			woo.dem.Wall.make(0,axis=0,mat=wallMat,visible=True),
+			woo.dem.Wall.make(0,axis=1,mat=wallMat,visible=True)
 		])
 		S.periodic=True
 		S.cell.setBox((pre.boxSize[0],pre.boxSize[1],2*ZZ))
 
-		S.engines=woo.utils.defaultEngines(model=pre.model,dynDtPeriod=10)+[
+		S.engines=woo.dem.DemField.minimalEngines(model=pre.model,dynDtPeriod=10)+[
 			# trace particles and color by z-angVel
 			woo.dem.Tracer(num=100,compress=4,compSkip=1,glSmooth=True,glWidth=2,scalar=woo.dem.Tracer.scalarAngVel,vecAxis=2,stepPeriod=40,minDist=pre.rRange[0]),
 			woo.core.PyRunner(100,'S.plot.addData(i=S.step,t=S.time,total=S.energy.total(),relErr=(S.energy.relErr() if S.step>100 else 0),**S.energy)'),
