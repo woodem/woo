@@ -2,6 +2,7 @@ from woo.dem import *
 from woo.fem import *
 from woo.core import *
 import woo.utils
+woo.master.usesApi=10101
 mat=woo.utils.defaultMaterial()
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-10))])
@@ -20,10 +21,9 @@ for n in nn[0:3]: n.dem.blocked='xyzXYZ'
 
 S.dem.par.add([t,t2])
 for p in S.dem.par: p.shape.setRefConf()
-S.dem.collectNodes()
 #S.dt=1e-6
 S.engines=DemField.minimalEngines(damping=.4)+[IntraForce([In2_Tet4_ElastMat()])]
-	#PyRunner(1,'for p in S.dem.par: p.shape.update()')]
+#PyRunner(1,'for p in S.dem.par: p.shape.update()')]
 S.lab.collider.dead=True
 
 S.saveTmp()

@@ -1,11 +1,11 @@
 import gts
 import woo.pack,woo.dem,woo.log,woo.core
 from minieigen import *
+woo.master.usesApi=10101
 S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField()])
 surf=gts.sphere(4)
 surf.translate(1.2,1.2,1.2)
 S.dem.par.add(woo.pack.gtsSurface2Facets(surf))
-S.dem.collectNodes()
 S.periodic=True
 S.cell.setBox(2.4,2.4,2.4)
 S.cell.nextGradV=Matrix3(0.,.1,.1, -.1,0,.1, .1,-.1,-.01)

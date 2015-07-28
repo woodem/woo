@@ -1,5 +1,6 @@
 from woo.core import *
 from woo.dem import *
+from woo.fem import *
 import woo
 import woo.gl
 import math
@@ -40,15 +41,12 @@ S=woo.master.scene=Scene(fields=[DemField()])
 S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat()))
 for n in nn: n.dem.addParRef(S.dem.par[-1])
 
-ff=S.dem.par[0].shape
-ff.setRefConf() #update()
-for n in nn: S.dem.nodesAppend(n)
-S.engines=[Leapfrog(reset=True),PyRunner(1,'S.dem.par[0].shape.update()')]
+# ff=S.dem.par[0].shape
+# f.setRefConf() #update()
+S.engines=[Leapfrog(reset=True),PyRunner(1,'S.dem.par[0].shape.update(S.dt)')]
 S.dt=1e-5
 S.saveTmp()
 
 import woo.qt
 woo.qt.Controller()
 woo.qt.View()
-nc=ff.node
-n0=ff.nodes[0]

@@ -8,6 +8,7 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
+woo.master.usesApi=10101
 
 woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False)
 woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel)
@@ -28,14 +29,10 @@ sp=woo.pack.SpherePack()
 sp.makeCloud((.3,.3,.1),(.7,.7,.6),rMean=.3*xmax/xdiv,rRelFuzz=.5)
 sp.toSimulation(S,mat=mat)
 
-S.dem.collectNodes()
-
 # set boundary conditions and set some fake masses and inertia of mesh nodes
 for n in S.dem.nodes:
 	n.dem.blocked=''
 	if n.pos[0]==0 or (n.pos[1]==0): n.dem.blocked='xyz'
-
-
 
 # split the plate along the most part of the diagonal
 for n in [n for n in S.dem.nodes if n.pos[0]==n.pos[1]]:

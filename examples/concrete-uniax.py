@@ -3,6 +3,7 @@ from woo.dem import *
 from woo.core import *
 from woo.gl import *
 from minieigen import *
+woo.master.usesApi=10101
 
 
 S=woo.master.scene=Scene(fields=[DemField()],dtSafety=.9)
@@ -45,7 +46,6 @@ sp=woo.pack.randomDensePack(
 sp.cellSize=(0,0,0) # make aperiodic
 
 sp.toSimulation(S,mat=mat)
-S.dem.collectNodes()
 S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping),lawKw=dict(yieldSurfType='lin'))+[PyRunner(10,'addPlotData(S)')]
 
 # take boundary nodes an prescribe velocity to those

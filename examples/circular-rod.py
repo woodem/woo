@@ -4,6 +4,7 @@ from math import *
 import numpy
 from minieigen import *
 import woo.core, woo.dem, woo.utils
+woo.master.usesApi=10101
 
 # minimal setup
 S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))])
@@ -19,14 +20,12 @@ for origin,radius in [((0,0,1),1),((0,.1,1),.95),((0,-.1,1),.95)]:
 		# node position; convert from cylindrical to local cartesian, then to global cartesian
 		node=woo.core.Node(pos=loc.loc2glob(woo.comp.cyl2cart((radius,th,0))))
 		# when past the first node, connect to the previous node with a rod
-		if i>0: S.dem.par.add(woo.dem.Rod.make(vertices=[prevNode,node],radius=.02,mat=mat,wire=False,fixed=True))
+		# don't add nodes, they won't move
+		if i>0: S.dem.par.add(woo.dem.Rod.make(vertices=[prevNode,node],radius=.02,mat=mat,wire=False,fixed=True),nodes=False)
 		prevNode=node
 
 # a sphere which will fall down
 S.dem.par.add(woo.dem.Sphere.make((.7,0,1),.1,mat=mat))
-# integrate motion of just this node, the other ones are static and don't move at all
-# otherwise use S.dem.collectNodes() to add nodes from all particles
-S.dem.nodesAppend(S.dem.par[-1].shape.nodes[0])
 
 # run slower than full-speed
 S.throttle=5e-3

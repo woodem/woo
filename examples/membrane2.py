@@ -9,7 +9,7 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-
+woo.master.usesApi=10101
 import woo.log
 #woo.log.setLevel('In2_Membrane_ElastMat',woo.log.TRACE)
 #woo.log.setLevel('DynDt',woo.log.DEBUG)
@@ -44,11 +44,11 @@ if 1:
 		woo.gl.Gl1_Membrane.relPhi=0.
 		woo.gl.Gl1_DemField.shape=woo.gl.Gl1_DemField.shapeNonSpheres
 		woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorDisplacement
-		woo.gl.Gl1_DemField.vecAxis=-1
+		woo.gl.Gl1_DemField.vecAxis='norm'
 		woo.gl.Gl1_DemField.colorBy2=woo.gl.Gl1_DemField.colorVel
 		woo.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
 	else:
-		woo.gl.Renderer.dispScale=(1000,1000,10000)
+		woo.gl.Renderer.dispScale=(10,10,100)
 		woo.gl.Renderer.scaleOn=True
 		woo.gl.Gl1_DemField.nodes=True
 		woo.gl.Gl1_DemField.glyphRelSz=.3
@@ -61,7 +61,6 @@ if 1:
 			woo.log.setLevel('Membrane',woo.log.TRACE)
 		else: f=woo.utils.facet([(.2,.1,0),(0,.2,0),(0,0,0)],flex=True) 
 		S.dem.par.add(f)
-	S.dem.collectNodes()
 	for n in S.dem.nodes:
 		n.dem.blocked=''
 		if n.pos[0]==0 or (n.pos[1]==0 and scenario=='youtube'): n.dem.blocked='xyzXYZ'
@@ -84,8 +83,6 @@ if 1:
 		sp=woo.pack.SpherePack()
 		sp.makeCloud((.3,.3,.1),(.7,.7,.3),rMean=.3*xmax/xdiv,rRelFuzz=.3,periodic=False)
 		sp.toSimulation(S,mat=FrictMat(young=1e6,density=3000))
-		for s in S.dem.par:
-			if type(s.shape)==Sphere: S.dem.nodesAppend(s.shape.nodes[0])
 	
 	# split the plate along the diagonal
 	for n in [n for n in S.dem.nodes if n.pos[0]==n.pos[1]]:

@@ -26,9 +26,11 @@ S=woo.master.scene=Scene(
 	]
 )
 
-import woo.qt
-woo.qt.View()
+try:
+	import woo.qt
+	woo.qt.View()
+	S.run()
+except ImportError: pass
 
-S.run()
 
 

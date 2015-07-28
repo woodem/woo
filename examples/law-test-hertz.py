@@ -5,16 +5,16 @@ from woo.dem import *
 from woo import plot
 from woo import *
 import woo.log
+woo.master.usesApi=10101
 woo.log.setLevel('LawTester',woo.log.INFO)
 woo.log.setLevel('Law2_L6Geom_PelletPhys_Pellet',woo.log.TRACE)
 m=FrictMat(density=1e3,young=1e7,ktDivKn=.2,tanPhi=.5)
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,0))])
 S.dtSafety=0.01
 S.dem.par.add([
-	utils.sphere((0,0,0),.05,fixed=False,wire=True,mat=m),
-	utils.sphere((0,.10001,0),.05,fixed=False,wire=True,mat=m)
+	Sphere.make((0,0,0),.05,fixed=False,wire=True,mat=m),
+	Sphere.make((0,.10001,0),.05,fixed=False,wire=True,mat=m)
 ])
-S.dem.collectNodes()
 # S.engines=utils.defaultEngines(damping=.0,cp2=Cp2_FrictMat_FrictPhys(),law=Law2_L6Geom_FrictPhys_IdealElPl())+[
 S.engines=utils.defaultEngines(damping=.0,cp2=Cp2_FrictMat_HertzPhys(gamma=10,en=1.,alpha=.6,label='cp2'),law=Law2_L6Geom_HertzPhys_DMT(),dynDtPeriod=10)+[
 	LawTester(ids=(0,1),abWeight=.5,smooth=1e-4,stages=[

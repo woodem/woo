@@ -3,6 +3,7 @@ from woo.dem import *
 from woo import timing
 import woo, woo.utils
 import sys
+woo.master.usesApi=10101
 S=woo.master.scene
 S.fields=[DemField(gravity=(5,0,-10))]
 S.lab.spheMask=0b001
@@ -22,7 +23,6 @@ gridCollider=GridCollider(domain=((-1,-1,-1),(2,3,3)),minCellSize=cell,boundDisp
 sortCollider=InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Wall_Aabb()],verletDist=verlet)
 
 
-
 S.engines=[
 	Leapfrog(damping=0.3,reset=True),
 	(sortCollider if 'sort' in sys.argv else gridCollider),
@@ -38,7 +38,7 @@ S.engines=[
 
 if 0:
 	for c,r in [((0,0,.4),.2),((1,1,1),.3),((1.3,2,2),.5),((.5,.5,.5),rr)]:
-		S.dem.par.add(woo.utils.sphere(c,r,mask=S.lab.spheMask))
+		S.dem.par.add(Sphere.make(c,r,mask=S.lab.spheMask))
 	S.lab.collider.renderCells=True
 else:
 	import woo.pack
@@ -48,10 +48,10 @@ else:
 	print 'Generated cloud with %d spheres'%(len(sp))
 	sp.toSimulation_fast(S,mat=mat,mask=S.lab.spheMask)
 	print 'Spheres added to Scene'
-S.dem.par.add(woo.utils.wall(0,axis=2,sense=1,mat=mat,mask=S.lab.wallMask))
-S.dem.par.add(woo.utils.wall(1.9,axis=0,sense=-1,mat=mat,mask=S.lab.wallMask))
-S.dem.collectNodes()
-S.dt=.5*woo.utils.pWaveDt()
+S.dem.par.add([
+	Wall.make(0,axis=2,sense=1,mat=mat,mask=S.lab.wallMask),
+	Wall.make(1.9,axis=0,sense=-1,mat=mat,mask=S.lab.wallMask)
+],nodes=False)
 
 S.saveTmp()
 #S.run(3001,wait=True)

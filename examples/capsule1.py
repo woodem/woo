@@ -1,6 +1,7 @@
 import woo.core, woo.dem, woo.utils, woo.gl
 from math import *
 from minieigen import *
+woo.master.usesApi=10101
 S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))])
 m=woo.dem.FrictMat(density=5000,young=5e6,ktDivKn=.5)
 S.dem.par.add([
@@ -11,7 +12,6 @@ S.dem.par.add([
 	woo.utils.infCylinder((.33,.33,0),radius=.3,axis=0,mat=m),
 ])
 S.dem.par[-1].angVel=(1,0,0)
-S.dem.collectNodes()
 S.engines=woo.utils.defaultEngines(damping=.4)
 S.dtSafety=.1
 #S.run(192,True);

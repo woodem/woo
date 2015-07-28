@@ -28,7 +28,6 @@ S.dem.par.add([
 	woo.utils.infCylinder((.33,.33,0),radius=.3,axis=1),
 ])
 S.dem.par[-1].angVel=(0,.5,0)
-S.dem.collectNodes()
 S.dtSafety=.2
 S.engines=woo.utils.defaultEngines(damping=.4,dynDtPeriod=10)+[BoxInlet(box=((-1,-1,1+i*2),(1,1,3+i*2)),stepPeriod=100,maxMass=3e3,maxNum=-1,massRate=0,maxAttempts=100,attemptPar=50,atMaxAttempts=BoxInlet.maxAttWarn,generator=generators[i],materials=[mat]) for i in range(len(generators))]
 

@@ -11,7 +11,7 @@ S.dem.par.add([
 	# woo.utils.facet([(.3,0,.2),(.4,.2,0),(.4,-.2,0)])
 	# woo.utils.facet([(.3,0,.2),(.4,-.2,0),(.4,.2,0)])
 	Capsule.make((.3,.3,.3),radius=.2,shaft=.2,ori=Quaternion((0,1,0),pi/4),fixed=True)
-])
+],nodes=True)
 S.dem.par[-1].angVel=(0,.4,0)
 S.periodic=True
 S.cell.setBox(2,2,2)
@@ -19,7 +19,6 @@ S.cell.setBox(2,2,2)
 #S.cell.trsf=Matrix3(1,0,-.5,.5,1,0,0,0,1)
 S.cell.nextGradV=(0,0,.2,0,0,0,0,0,0)
 S.dtSafety=100.
-S.dem.collectNodes()
 S.engines=[Leapfrog(reset=True),InsertionSortCollider([Bo1_Ellipsoid_Aabb(),Bo1_Capsule_Aabb(),Bo1_Wall_Aabb(),Bo1_Facet_Aabb()],verletDist=.0),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Facet_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl()])]
 # if 'vtk' in woo.config.features: S.engines=S.engines+[VtkExport(out='/tmp/ell0',ascii=True,compress=False,stepPeriod=1000)]
 

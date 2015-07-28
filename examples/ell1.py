@@ -5,6 +5,7 @@ from minieigen import *
 from math import *
 import numpy
 from random import random
+woo.master.usesApi=10101
 S=woo.master.scene=woo.core.Scene(fields=[DemField(gravity=(0,0,-10))])
 S.dem.loneMask=0b0010
 baseMask=0b0011
@@ -23,8 +24,7 @@ for c,r in cloud:
 	S.dem.par.add(
 		woo.utils.ellipsoid(center=c,semiAxes=semiAxes,ori=ori,angVel=angVel,fixed=False,mask=fallMask)
 	)
-S.dem.par.add(woo.utils.wall(-.2,axis=2,sense=1))
-S.dem.collectNodes()
+S.dem.par.add(woo.utils.wall(-.2,axis=2,sense=1),nodes=False)
 S.dtSafety=.8
 S.engines=[Leapfrog(reset=True,damping=.4),InsertionSortCollider([Bo1_Ellipsoid_Aabb(),Bo1_Wall_Aabb()]),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl()]),DynDt(stepPeriod=1000)]
 S.saveTmp()

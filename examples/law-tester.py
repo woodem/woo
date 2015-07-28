@@ -4,14 +4,14 @@ from woo.dem import *
 from woo import plot
 from woo import *
 import woo.log
+woo.master.usesApi=10101
 woo.log.setLevel('LawTester',woo.log.INFO)
 m=utils.defaultMaterial()
 S=woo.master.scene=Scene(fields=[DemField()])
 S.dem.par.add([
-	utils.sphere((0,0,0),.5,fixed=False,wire=True,mat=m),
-	utils.sphere((0,1.01,0),.5,fixed=False,wire=True,mat=m)
+	Sphere.make((0,0,0),.5,fixed=False,wire=True,mat=m),
+	Sphere.make((0,1.01,0),.5,fixed=False,wire=True,mat=m)
 ])
-S.dem.collectNodes()
 S.engines=utils.defaultEngines(damping=.01)+[
 	LawTester(ids=(0,1),abWeight=.3,smooth=1e-4,stages=[
 			LawTesterStage(values=(-1,0,0,0,0,0),whats='v.....',until='bool(C)',done='print "Stage finished, at step",stage.step,", contact is",C'),

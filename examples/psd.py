@@ -17,9 +17,9 @@ pylab.legend(loc='best')
 
 genNum=PsdSphereGenerator(psdPts=[(.3,0),(.3,.2),(.4,.9),(.5,1.)],mass=False)
 for i in range(0,10000): genNum(m)
-pylab.figure(max(pylab.get_fignums())+1); \
-pylab.plot(*genNum.inputPsd(),label= 'in'); \              # plot count-based PSD
-pylab.plot(*genNum.psd(),label='out'); \                   # mass=True is the default
-pylab.plot(*genNum.psd(mass=False),label='out (count)'); \ # mass=False, count-based
-pylab.legend(loc='best');
+pylab.figure(max(pylab.get_fignums())+1)
+pylab.plot(*genNum.inputPsd(),label= 'in')              # plot count-based PSD
+pylab.plot(*genNum.psd(),label='out')                   # mass=True is the default
+pylab.plot(*genNum.psd(mass=False),label='out (count)')  # mass=False, count-based
+pylab.legend(loc='best')
 pylab.show()

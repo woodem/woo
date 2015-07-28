@@ -6,6 +6,8 @@ from woo.fem import *
 import woo, woo.triangulated
 from math import pi
 from minieigen import *
+woo.master.usesApi=10101
+
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-10),loneMask=0)],dtSafety=0.9)
 S.engines=DemField.minimalEngines(damping=.5)+[IntraForce([In2_Tet4_ElastMat(),In2_Facet(),In2_Membrane_FrictMat(bending=True)])]
 
@@ -28,7 +30,6 @@ for p in pp:
 
 S.lab.collider.noBoundOk=True
 
-S.dem.collectNodes()
 for n in S.dem.nodes: DemData.setOriMassInertia(n)
 
 
@@ -44,6 +45,5 @@ def addSpheres(S):
 	sp=woo.pack.SpherePack()
 	sp.makeCloud((3.5,-1,2.5),(6,1,3.5),rMean=.15,rRelFuzz=.5)
 	sp.toSimulation(S,mat=m0,mask=mask)
-	S.dem.collectNodes()
 
 S.saveTmp()

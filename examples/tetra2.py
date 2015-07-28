@@ -25,11 +25,11 @@ else:
 	nn=[Node(pos=p,dem=DemData(blocked='XYZ')) for p in mesh[0]]
 	t4=[Tet4.make((nn[t[0]],nn[t[1]],nn[t[2]],nn[t[3]]),mat=mat,wire=True,fixed=None,mask=maskTet) for t in mesh[1]]
 	f3=[Facet.make((nn[t[0]],nn[t[1]],nn[t[2]]),mat=mat,wire=True,halfThick=halfThick,fixed=None,mask=maskTri) for t in mesh[2]]
-	S.dem.par.add(t4)
+	S.dem.par.add(t4,nodes=True)
 	## surface facets, for contacts
-	S.dem.par.add(f3)
+	S.dem.par.add(f3,nodes=True)
 	for f in f3: f.shape.visible=False
-	S.dem.nodesAppend(nn)
+	# S.dem.nodesAppend(nn)
 	# lumped mass
 	#for n in nn:
 	#	n.dem.mass=sum([p.material.density*.25*p.shape.getVolume() for p in n.dem.parRef if isinstance(p.shape,Tet4)])

@@ -6,6 +6,7 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
+woo.master.usesApi=10101
 woo.gl.Gl1_DemField.nodes=True
 woo.gl.Gl1_Node.wd=4
 woo.gl.Gl1_Node.len=.05
@@ -33,7 +34,6 @@ if 0:
 	for n in nn: n.dem.addParRef(S.dem.par[-1])
 	ff=S.dem.par[0].shape
 	ff.setRefConf() #update()
-	for n in nn: S.dem.nodesAppend(n)
 	S.engines=[Leapfrog(reset=True),IntraForce([In2_Membrane_ElastMat(thickness=.01,bending=False)])]
 	S.dt=1e-5
 	S.saveTmp()
@@ -44,14 +44,13 @@ else:
 	woo.gl.Gl1_DemField.nodes=False
 	woo.gl.Gl1_Membrane.uScale=0.
 	woo.gl.Gl1_Membrane.relPhi=0.
-	woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorVel
 	S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))])
+	woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorVel
 	import woo.pack, woo.utils, numpy
 	xmax,ymax=1,1
 	xdiv,ydiv=20,20
 	ff=woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface([[(x,y,0) for x in numpy.linspace(0,xmax,num=xdiv)] for y in numpy.linspace(0,ymax,num=ydiv)]),flex=True)
 	S.dem.par.add(ff)
-	S.dem.collectNodes()
 	for n in S.dem.nodes:
 		n.dem.inertia=(1.,1.,1.)
 		n.dem.blocked=''
@@ -72,8 +71,6 @@ else:
 		sp=woo.pack.SpherePack()
 		sp.makeCloud((.3,.3,.1),(.7,.7,.3),rMean=.3*xmax/xdiv,rRelFuzz=.3,periodic=False)
 		sp.toSimulation(S,mat=FrictMat(young=1e6,density=3000))
-		for s in S.dem.par:
-			if type(s.shape)==Sphere: S.dem.nodesAppend(s.shape.nodes[0])
 
 	S.dt=min(1e-4,.7*woo.utils.pWaveDt(S))
 
