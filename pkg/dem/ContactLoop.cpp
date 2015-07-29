@@ -175,7 +175,7 @@ void ContactLoop::run(){
 
 		// CPhys
 		if(!C->phys) C->stepCreated=scene->step;
-		if(!C->phys || updatePhys) phyDisp->operator()(pA->material,pB->material,C);
+		if(!C->phys || updatePhys>UPDATE_PHYS_NEVER) phyDisp->operator()(pA->material,pB->material,C);
 		if(!C->phys) throw std::runtime_error("ContactLoop: ##"+to_string(pA->id)+"+"+to_string(pB->id)+": con Contact.phys created from materials "+pA->material->getClassName()+" and "+pB->material->getClassName()+" (a CPhysFunctor must be available for every contacting material combination).");
 
 		CONTACTLOOP_CHECKPOINT("phys");
@@ -255,6 +255,8 @@ void ContactLoop::run(){
 			applyForceUninodal(C,C->leakPB());
 		}
 	}
+	// reset updatePhys if it was to be used only once
+	if(updatePhys==UPDATE_PHYS_ONCE) updatePhys=UPDATE_PHYS_NEVER;
 	CONTACTLOOP_CHECKPOINT("epilogue");
 }
 

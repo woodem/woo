@@ -105,6 +105,8 @@ class ContactLoop: public Engine {
 		#define woo_dem_ContactLoop__CTOR_removeAfterLoopRefs
 	#endif
 
+	enum { UPDATE_PHYS_NEVER=0, UPDATE_PHYS_ALWAYS=1, UPDATE_PHYS_ONCE=2 };
+
 	#define woo_dem_ContactLoop__CLASS_BASE_DOC_ATTRS_CTOR \
 		ContactLoop,Engine,"Loop over all contacts, possible in a parallel manner.\n\n.. admonition:: Special constructor\n\n\tConstructs from 3 lists of :obj:`Cg2 <CGeomFunctor>`, :obj:`Cp2 <IPhysFunctor>`, :obj:`Law <LawFunctor>` functors respectively; they will be passed to interal dispatchers.", \
 			((shared_ptr<CGeomDispatcher>,geoDisp,make_shared<CGeomDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`CGeomDispatcher` object that is used for dispatch.")) \
@@ -113,7 +115,7 @@ class ContactLoop: public Engine {
 			((bool,alreadyWarnedNoCollider,false,AttrTrait<>().noGui(),"Keep track of whether the user was already warned about missing collider.")) \
 			((bool,evalStress,false,,"Evaluate stress tensor, in periodic simluations; if energy tracking is enabled, increments *gradV* energy.")) \
 			((bool,applyForces,true,,"Apply forces directly; this avoids IntraForce engine, but will silently skip multinodal particles.")) \
-			((bool,updatePhys,false,,"Call :obj:`CPhysFunctor` even for contacts which already have :obj:`Contact.phys` (to reflect changes in particle's material, for example)")) \
+			((int,updatePhys,UPDATE_PHYS_NEVER,AttrTrait<Attr::namedEnum>().namedEnum({{UPDATE_PHYS_NEVER,{"never"}},{UPDATE_PHYS_ALWAYS,{"always"}},{UPDATE_PHYS_ONCE,{"once"}}}),"Call :obj:`CPhysFunctor` even for contacts which already have :obj:`Contact.phys` (to reflect changes in particle's material, for example). 'once' will update only once and then set this back to 'never'.")) \
 			/*((bool,alreadyWarnedForceNotApplied,false,AttrTrait<>().noGui(),"We already warned if forces are not applied here and no IntraForce engine exists in O.scene.engines")) */ \
 			((bool,dist00,true,,"Whether to apply the Contact.minDist00Sq optimization (for mesuring the speedup only)")) \
 			((Matrix3r,stress,Matrix3r::Zero(),AttrTrait<Attr::readonly>(),"Stress value, used to compute *gradV*  energy if *trackWork* is True.")) \
