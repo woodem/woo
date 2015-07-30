@@ -22,8 +22,6 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Any_Any_L6Geom__Base__CLASS_BASE_DOC_
 #endif
 
 
-// QQQ: ALL occurences of .row(..) were replaced by .col(...) !!!
-
 void L6Geom::setInitialLocalCoords(const Vector3r& locX){
 	// initial local y-axis orientation, in the xz or xy plane, depending on which component is larger to avoid singularities
 	Vector3r locY=locX.cross(abs(locX[1])<abs(locX[2])?Vector3r::UnitY():Vector3r::UnitZ()); locY-=locX*locY.dot(locX); locY.normalize();

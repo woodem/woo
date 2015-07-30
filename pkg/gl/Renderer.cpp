@@ -342,12 +342,7 @@ void Renderer::renderRawNode(shared_ptr<Node> node){
 	if(likely(!Renderer::fastDraw)){
 		Quaternionr ori=(node->hasData<GlData>()?node->getData<GlData>().dGlOri:Quaternionr::Identity())*node->ori;
 		glPushMatrix();
-			GLUtils::setLocalCoords(x,ori); // QQQ
-			#if 0
-				glTranslatev(x);
-				AngleAxisr aa(ori.conjugate());
-				glRotatef(aa.angle()*(180/M_PI),aa.axis()[0],aa.axis()[1],aa.axis()[2]);
-			#endif
+			GLUtils::setLocalCoords(x,ori);
 			nodeDispatcher(node,viewInfo);
 		glPopMatrix();
 	} else {

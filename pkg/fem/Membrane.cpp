@@ -37,7 +37,7 @@ void Membrane::setRefConf(){
 			break;
 		case INI_CS_NODE0_AT_X:{
 			Matrix3r T;
-			T.col(0)=(nodes[0]->pos-node->pos).normalized(); // QQQ: row->col
+			T.col(0)=(nodes[0]->pos-node->pos).normalized();
 			T.col(2)=this->getNormal();
 			T.col(1)=T.col(2).cross(T.col(0));
 			assert(T.col(0).dot(T.col(2))<1e-12);
@@ -47,7 +47,6 @@ void Membrane::setRefConf(){
 	};
 	// reference nodal positions
 	for(int i:{0,1,2}){
-		// Vector3r nl=node->ori.conjugate()*(nodes[i]->pos-node->pos); // QQQ
 		Vector3r nl=node->glob2loc(nodes[i]->pos);
 		assert(nl[2]<1e-6*(max(abs(nl[0]),abs(nl[1])))); // z-coord should be zero
 		refPos.segment<2>(2*i)=nl.head<2>();
@@ -56,7 +55,6 @@ void Membrane::setRefConf(){
 	refRot.resize(3);
 	for(int i:{0,1,2}){
 		// facet node orientation minus vertex node orientation, in local frame (read backwards)
-		/// QQQ: refRot[i]=node->ori*nodes[i]->ori.conjugate();
 		refRot[i]=nodes[i]->ori.conjugate()*node->ori;
 		//LOG_WARN("refRot["<<i<<"]="<<AngleAxisr(refRot[i]).angle()<<"/"<<AngleAxisr(refRot[i]).axis().transpose());
 	};
