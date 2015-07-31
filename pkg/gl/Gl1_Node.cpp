@@ -15,7 +15,7 @@ Vector2r Gl1_Node::len_range;
 void Gl1_Node::go(const shared_ptr<Node>& node, const GLViewInfo& viewInfo){
 	if(wd<=0) return;
 	glLineWidth(wd);
-	Renderer::glScopedName name(node);
+	Renderer::glScopedName name(viewInfo,node);
 
 	if(len<=0 || Renderer::fastDraw){
 		glPointSize(wd);

@@ -1,3 +1,5 @@
+// disabled, not really functional
+#if 0
 #pragma once
 #ifdef WOO_VTK
 
@@ -72,3 +74,4 @@ WOO_REGISTER_OBJECT(VtkFlowExport);
 
 
 #endif /* WOO_VTK */
+#endif /* 0 */

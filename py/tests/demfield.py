@@ -37,7 +37,6 @@ class TestContactLoop(unittest.TestCase):
 			S.one()
 			kn1=c.phys.kn
 			# those two updated
-			print 100*'#',up,kn0,kn1,E1/E0
 			if up in ('always','once'): self.assertAlmostEqual(kn0*(E1/E0),kn1)
 			else: self.assertAlmostEqual(kn0,c.phys.kn)
 			# change material back

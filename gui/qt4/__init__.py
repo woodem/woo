@@ -479,7 +479,7 @@ class ControllerClass(QWidget,Ui_Controller):
 	def tracerGetEngine(self,S):
 		'Find tracer engine, return it, or return None; raise exception with multiple tracers'
 		tt=[e for e in S.engines if isinstance(e,woo.dem.Tracer)]
-		if len(tt)>1: raise RuntimeError('Multiple tracer engines in scene?')
+		if len(tt)>1: raise RuntimeError('Multiple Tracer engines in scene?')
 		if len(tt)==1: return tt[0]
 		return None
 	def traceCheckboxToggled(self,isOn):
@@ -502,7 +502,7 @@ class ControllerClass(QWidget,Ui_Controller):
 				tracer.label='tracer_' # hijack existing engine and re-label it
 				S.engines=S.engines # force re-creation of labels
 			tracer.dead=False
-			S.ranges=S.ranges+[woo.dem.Tracer.lineColor]
+			S.ranges=S.ranges+[tracer.lineColor]
 			self.tracerArea.setWidget(ObjectEditor(tracer,parent=self.tracerArea,showType=True))
 			self.resetTraceButton.setEnabled(True)
 			woo.gl.Gl1_DemField.glyph=woo.gl.Gl1_DemField.glyphKeep
@@ -515,7 +515,7 @@ class ControllerClass(QWidget,Ui_Controller):
 				tracer.resetNodesRep(setupEmpty=False)
 				#del woo._tracer
 			#S.engines=[e for e in S.engines if type(e)!=woo.dem.Tracer]
-			S.ranges=[r for r in S.ranges if r!=woo.dem.Tracer.lineColor]
+			S.ranges=[r for r in S.ranges if r!=tracer.lineColor]
 			self.tracerArea.setWidget(QFrame())
 			self.resetTraceButton.setEnabled(False)
 			self.tracerActive=False

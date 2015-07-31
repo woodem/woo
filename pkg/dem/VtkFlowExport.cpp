@@ -1,3 +1,4 @@
+#if 0
 #ifdef WOO_VTK
 #include<woo/pkg/dem/VtkFlowExport.hpp>
 #include<woo/pkg/dem/Tracer.hpp>
@@ -237,3 +238,4 @@ void VtkFlowExport::run(){
 }
 
 #endif /* WOO_VTK */
+#endif /* 0 */

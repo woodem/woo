@@ -558,9 +558,9 @@ void GLViewer::centerMedianQuartile(){
 	Scene* scene=Master::instance().getScene().get();
 	if(scene->isPeriodic){ centerPeriodic(); return; }
 	std::vector<Real> coords[3];
-	FOREACH(const shared_ptr<Field>& f, scene->fields){
+	for(const shared_ptr<Field>& f: scene->fields){
 		for(int i=0; i<3; i++) coords[i].reserve(coords[i].size()+f->nodes.size());
-		FOREACH(const shared_ptr<Node>& b, f->nodes){
+		for(const shared_ptr<Node>& b: f->nodes){
 			for(int i=0; i<3; i++) coords[i].push_back(b->pos[i]);
 		}
 	}
@@ -611,51 +611,65 @@ void GLViewer::centerScene(){
 
 void GLViewer::draw(bool withNames, bool fast)
 {
+	const shared_ptr<Scene>& scene=Master::instance().getScene();
+	if(!scene) return; // nothing to do, really
+	/* scene and renderer setup */
 
-	qglviewer::Vec vd=camera()->viewDirection(); Renderer::viewDirection=Vector3r(vd[0],vd[1],vd[2]);
-	if(Master::instance().getScene()){
-		// int selection = selectedName();
-		#if 0
-			if(selection!=-1 && (*(Master::instance().getScene()->bodies)).exists(selection) && isMoving){
-				static int last(-1);
-				if(last == selection) // delay by one redraw, so the body will not jump into 0,0,0 coords
-				{
-					Quaternionr& q = (*(Master::instance().getScene()->bodies))[selection]->state->ori;
-					Vector3r&    v = (*(Master::instance().getScene()->bodies))[selection]->state->pos;
-					float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);v[0]=v0;v[1]=v1;v[2]=v2;
-					double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);	q.x()=q0;q.y()=q1;q.z()=q2;q.w()=q3;
-				}
-				(*(Master::instance().getScene()->bodies))[selection]->userForcedDisplacementRedrawHook();	
-				last=selection;
-			}
-		#endif
-		if(manipulatedClipPlane>=0){
-			assert(manipulatedClipPlane<Renderer::numClipPlanes);
-			float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
-			double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);
-			Vector3r newPos(v0,v1,v2); Quaternionr newOri(q0,q1,q2,q3);
-			const Vector3r& oldPos(Renderer::clipPlanePos[manipulatedClipPlane]);
-			const Quaternionr& oldOri(Renderer::clipPlaneOri[manipulatedClipPlane]);
-			FOREACH(int planeId, boundClipPlanes){
-				if(planeId>=Renderer::numClipPlanes || !Renderer::clipPlaneActive[planeId] || planeId==manipulatedClipPlane) continue;
-				Vector3r& boundPos(Renderer::clipPlanePos[planeId]); Quaternionr& boundOri(Renderer::clipPlaneOri[planeId]);
-				Quaternionr relOrient=oldOri.conjugate()*boundOri; relOrient.normalize();
-				Vector3r relPos=oldOri.conjugate()*(boundPos-oldPos);
-				boundPos=newPos+newOri*relPos;
-				boundOri=newOri*relOrient;
-				boundOri.normalize();
-			}
-			Renderer::clipPlanePos[manipulatedClipPlane]=newPos;
-			Renderer::clipPlaneOri[manipulatedClipPlane]=newOri;
-		}
-		const shared_ptr<Scene>& scene=Master::instance().getScene();
-		camera()->setZClippingCoefficient(Renderer::zClipCoeff);
+	// TODO: copy renderer from GlSetup, this is used only while it has all attributes static anyway
+	if(!scene->renderer) scene->renderer=make_shared<Renderer>();
+	const shared_ptr<Renderer>& renderer(scene->renderer);
+	// FIXME: reload detection will not work now anymore, we'd have to get the old renderer instance somehow...
+	#if 0
 		if(Renderer::scene.get()!=scene.get()){
 			// if the same scene was reloaded, do not change the view
 			if(!(Renderer::scene && scene && !scene->lastSave.empty() && Renderer::scene->lastSave==scene->lastSave)) setInitialView();
 		}
-		Renderer::render(scene,withNames,fast);
+	#endif
+
+
+	qglviewer::Vec vd=camera()->viewDirection(); renderer->viewDirection=Vector3r(vd[0],vd[1],vd[2]);
+
+	// int selection = selectedName();
+	#if 0
+		if(selection!=-1 && (*(Master::instance().getScene()->bodies)).exists(selection) && isMoving){
+			static int last(-1);
+			if(last == selection) // delay by one redraw, so the body will not jump into 0,0,0 coords
+			{
+				Quaternionr& q = (*(Master::instance().getScene()->bodies))[selection]->state->ori;
+				Vector3r&    v = (*(Master::instance().getScene()->bodies))[selection]->state->pos;
+				float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);v[0]=v0;v[1]=v1;v[2]=v2;
+				double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);	q.x()=q0;q.y()=q1;q.z()=q2;q.w()=q3;
+			}
+			(*(Master::instance().getScene()->bodies))[selection]->userForcedDisplacementRedrawHook();	
+			last=selection;
+		}
+	#endif
+	if(manipulatedClipPlane>=0){
+		assert(manipulatedClipPlane<renderer->numClipPlanes);
+		float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
+		double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);
+		Vector3r newPos(v0,v1,v2); Quaternionr newOri(q0,q1,q2,q3);
+		const Vector3r& oldPos(renderer->clipPlanePos[manipulatedClipPlane]);
+		const Quaternionr& oldOri(renderer->clipPlaneOri[manipulatedClipPlane]);
+		for(int planeId: boundClipPlanes){
+			if(planeId>=renderer->numClipPlanes || !renderer->clipPlaneActive[planeId] || planeId==manipulatedClipPlane) continue;
+			Vector3r& boundPos(renderer->clipPlanePos[planeId]); Quaternionr& boundOri(renderer->clipPlaneOri[planeId]);
+			Quaternionr relOrient=oldOri.conjugate()*boundOri; relOrient.normalize();
+			Vector3r relPos=oldOri.conjugate()*(boundPos-oldPos);
+			boundPos=newPos+newOri*relPos;
+			boundOri=newOri*relOrient;
+			boundOri.normalize();
+		}
+		renderer->clipPlanePos[manipulatedClipPlane]=newPos;
+		renderer->clipPlaneOri[manipulatedClipPlane]=newOri;
 	}
+
+	camera()->setZClippingCoefficient(renderer->zClipCoeff);
+
+	// do the actual rendering
+	renderer->render(scene,withNames,fast);
+
+
 	framesDone++;
 }
 
@@ -822,8 +836,8 @@ void GLViewer::postDraw(){
 		if(Renderer::showTime & Renderer::TIME_VIRT){
 			glColor3v(Renderer::virtColor);
 			std::ostringstream oss;
-			const Real& t=Master::instance().getScene()->time;
-			const Real& dt=Master::instance().getScene()->dt;
+			const Real& t=scene->time;
+			const Real& dt=scene->dt;
 			unsigned min=((unsigned)t/60),sec=(((unsigned)t)%60),msec=((unsigned)(1e3*t))%1000,usec=((unsigned long)(1e6*t))%1000,nsec=((unsigned long)(1e9*t))%1000;
 			if(t>0){
 				if(min>0) oss<<_W2<<min<<":";

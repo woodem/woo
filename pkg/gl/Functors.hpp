@@ -20,7 +20,7 @@ struct GLViewInfo{
 	Vector3r sceneCenter;
 	Real sceneRadius;
 	Scene* scene;
-	//Renderer* renderer;
+	Renderer* renderer;
 };
 
 

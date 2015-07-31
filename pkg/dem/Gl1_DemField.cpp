@@ -209,7 +209,7 @@ void Gl1_DemField::doShape(){
 		// last optional arg can be used to provide additional highlight conditions (unused for now)
 		const shared_ptr<Node>& _n0=p->shape->nodes[0];
 		const shared_ptr<Node>& n0=(_n0->getData<DemData>().isClumped()?_n0->getData<DemData>().master.lock():_n0);
-		Renderer::glScopedName name(p,n0,/*highLev=*/(p->shape->getHighlighted()?0:-1));
+		Renderer::glScopedName name(*viewInfo,p,n0,/*highLev=*/(p->shape->getHighlighted()?0:-1));
 		const auto& dyn0=n0->getData<DemData>();
 		// bool highlight=(p->id==selId || (p->clumpId>=0 && p->clumpId==selId) || p->shape->highlight);
 
@@ -405,7 +405,7 @@ void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
 
 		if(!nodes && !n->rep) continue;
 
-		Renderer::glScopedName name(n);
+		Renderer::glScopedName name(*viewInfo,n);
 		if(nodes){ Renderer::renderRawNode(n); }
 		if(n->rep){ n->rep->render(n,viewInfo); }
 	}
@@ -425,7 +425,7 @@ void Gl1_DemField::doContactNodes(){
 			if(!geom) continue;
 			shared_ptr<Node> node=geom->node;
 			Renderer::setNodeGlData(node,updateRefPos);
-			Renderer::glScopedName name(C,node);
+			Renderer::glScopedName name(*viewInfo,C,node);
 			if((cNode & CNODE_GLREP) && node->rep){ node->rep->render(node,viewInfo); }
 			if(cNode & CNODE_LINE){
 				assert(pA->shape && pB->shape);
@@ -478,7 +478,7 @@ void Gl1_DemField::doCPhys(){
 		//assert(C->leakPA()->shape && C->leakPB()->shape);
 		//assert(C->leakPA()->shape->nodes.size()>0); assert(C->leakPB()->shape->nodes.size()>0);
 		if(!geom || !phys) continue;
-		Renderer::glScopedName name(C,geom->node);
+		Renderer::glScopedName name(*viewInfo,C,geom->node);
 		Renderer::cPhysDispatcher(phys,C,*viewInfo);
 	}
 }

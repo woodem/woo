@@ -292,6 +292,7 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 	}
 	// smuggle scene and ourselves into GLViewInfo for use with GlRep and field functors
 	viewInfo.scene=scene.get();
+	viewInfo.renderer=this;
 
 	setClippingPlanes();
 	setLighting();
@@ -305,8 +306,8 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 
 	if(engines){
 		for(const auto& e: scene->engines){
-			if(!e || e->dead) continue; // should not happen, but...
-			glScopedName name(e,shared_ptr<Node>());
+			if(!e || e->dead) continue; // !e should not happen, but make sure
+			glScopedName name(viewInfo,e,shared_ptr<Node>());
 			e->render(viewInfo);
 		}
 	}

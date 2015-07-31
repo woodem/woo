@@ -15,6 +15,7 @@
 
 #ifdef WOO_OPENGL
 	#include<woo/core/DisplayParameters.hpp>
+	struct Renderer;
 #endif
 
 #ifndef HOST_NAME_MAX
@@ -59,6 +60,10 @@ struct Scene: public Object{
 			shared_ptr<cl::Device> device;
 			shared_ptr<cl::Context> context;
 			shared_ptr<cl::CommandQueue> queue;
+		#endif
+
+		#ifdef WOO_OPENGL
+			shared_ptr<Renderer> renderer;
 		#endif
 
 		// keep track of created labels; delete those which are no longer active and so on

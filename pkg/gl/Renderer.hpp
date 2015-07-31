@@ -76,16 +76,17 @@ struct Renderer: public Object{
 		// passing >=0 to highLev causes the object the to be highlighted, regardless of whether it is selected or not
 		struct glScopedName{
 			bool highlighted;
-			glScopedName(const shared_ptr<Object>& s, const shared_ptr<Node>& n, int highLev=-1): highlighted(false){ init(s,n, highLev); }
-			glScopedName(const shared_ptr<Node>& n, int highLev=-1): highlighted(false){ init(n,n, highLev); }
-			void init(const shared_ptr<Object>& s, const shared_ptr<Node>& n, int highLev){
-				if(!Renderer::withNames){
-					if(highLev>=0 || s.get()==Renderer::selObj.get()){ Renderer::setLightHighlighted(highLev); highlighted=true; }
+			glScopedName(const GLViewInfo& viewInfo, const shared_ptr<Object>& s, const shared_ptr<Node>& n, int highLev=-1): highlighted(false){ init(viewInfo,s,n, highLev); }
+			glScopedName(const GLViewInfo& viewInfo, const shared_ptr<Node>& n, int highLev=-1): highlighted(false){ init(viewInfo, n,n, highLev); }
+			void init(const GLViewInfo& viewInfo, const shared_ptr<Object>& s, const shared_ptr<Node>& n, int highLev){
+				const auto& renderer=viewInfo.renderer;
+				if(!renderer->withNames){
+					if(highLev>=0 || s.get()==renderer->selObj.get()){ Renderer::setLightHighlighted(highLev); highlighted=true; }
 					else { Renderer::setLightUnhighlighted(); highlighted=false; }
 				} else {
-					Renderer::glNamedObjects.push_back(s);
-					Renderer::glNamedNodes.push_back(n);
-					::glPushName(Renderer::glNamedObjects.size()-1);
+					renderer->glNamedObjects.push_back(s);
+					renderer->glNamedNodes.push_back(n);
+					::glPushName(renderer->glNamedObjects.size()-1);
 				}
 			};
 			~glScopedName(){ glPopName(); }
@@ -95,7 +96,7 @@ struct Renderer: public Object{
 		static void setLightUnhighlighted();
 
 		static void init();
-		static void render(const shared_ptr<Scene>& scene, bool withNames, bool fastDraw);
+		void render(const shared_ptr<Scene>& scene, bool withNames, bool fastDraw);
 
 		static void setNodeGlData(const shared_ptr<Node>& n, bool updateRefPos=false);
 

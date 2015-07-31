@@ -13,6 +13,8 @@
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_TraceVisRep__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxTraceTimeSetter__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Tracer__CLASS_BASE_DOC_ATTRS_PY);
+
 
 WOO_PLUGIN(dem,(Tracer)(TraceVisRep)(BoxTraceTimeSetter));
 
@@ -40,8 +42,9 @@ void BoxTraceTimeSetter::render(const GLViewInfo&){
 WOO_IMPL_LOGGER(TraceVisRep);
 
 void TraceVisRep::compress(int ratio){
+	assert(tracer);
 	int i;
-	int skip=(Tracer::compSkip<0?ratio:Tracer::compSkip);
+	int skip=(tracer->compSkip<0?ratio:tracer->compSkip);
 	for(i=0; ratio*i+skip<(int)pts.size(); i++){
 		pts[i]=pts[ratio*i+skip];
 		scalars[i]=scalars[ratio*i+skip];
@@ -49,14 +52,15 @@ void TraceVisRep::compress(int ratio){
 	writeIx=i;
 }
 void TraceVisRep::addPoint(const Vector3r& p, const Real& scalar){
+	assert(tracer);
 	if(flags&FLAG_MINDIST){
 		size_t lastIx=(writeIx>0?writeIx-1:pts.size());
-		if((p-pts[lastIx]).norm()<Tracer::minDist) return;
+		if((p-pts[lastIx]).norm()<tracer->minDist) return;
 	}
 	pts[writeIx]=p;
 	scalars[writeIx]=scalar;
 	if(flags&FLAG_COMPRESS){
-		if(writeIx>=pts.size()-1) compress(Tracer::compress);
+		if(writeIx>=pts.size()-1) compress(tracer->compress);
 		else writeIx+=1;
 	} else {
 		writeIx=(writeIx+1)%pts.size();
@@ -119,12 +123,12 @@ bool TraceVisRep::getPointData(size_t i, Vector3r& pt, Real& scalar) const {
 
 #ifdef WOO_OPENGL
 void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
-	if(isHidden()) return;
-	if(!Tracer::glSmooth) glDisable(GL_LINE_SMOOTH);
+	if(isHidden() || !tracer) return;
+	if(!tracer->glSmooth) glDisable(GL_LINE_SMOOTH);
 	else glEnable(GL_LINE_SMOOTH);
 	glDisable(GL_LIGHTING);
 	bool scale=(Renderer::dispScale!=Vector3r::Ones() && Renderer::scaleOn && n->hasData<GlData>());
-	glLineWidth(Tracer::glWidth);
+	glLineWidth(tracer->glWidth);
 	const bool periodic=glInfo->scene->isPeriodic;
 	Vector3i prevPeriod=Vector3i::Zero(); // silence gcc warning maybe-uninitialized
 	int nSeg=0; // number of connected vertices (used when trace is interruped by NaN)
@@ -144,11 +148,11 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 				Vector3r color;
 				if(isnan(scalars[ix])){
 					// if there is no scalar and no scalar should be saved, color by history position
-					if(Tracer::scalar==Tracer::SCALAR_NONE) color=Tracer::lineColor->color((flags&FLAG_COMPRESS ? i*1./writeIx : i*1./pts.size()));
-					// if other scalars are saved, use noneColor to not destroy Tracer::lineColor range by auto-adjusting to bogus
-					else color=Tracer::noneColor;
+					if(tracer->scalar==Tracer::SCALAR_NONE) color=tracer->lineColor->color((flags&FLAG_COMPRESS ? i*1./writeIx : i*1./pts.size()));
+					// if other scalars are saved, use noneColor to not destroy tracer->lineColor range by auto-adjusting to bogus
+					else color=tracer->noneColor;
 				}
-				else color=Tracer::lineColor->color(scalars[ix]);
+				else color=tracer->lineColor->color(scalars[ix]);
 				if(isnan(color.maxCoeff())){
 					if(nSeg>0){ glEnd(); glBegin(GL_LINE_STRIP); nSeg=0; } // break line, if there was something already
 					continue; // point skipped completely
@@ -189,24 +193,6 @@ void TraceVisRep::resize(size_t size){
 void TraceVisRep::consolidate(){
 	LOG_WARN("This function is deprecated and no-op. TraceVisRep.pts is always returned in the proper order, as a copy of the internal circular buffer.");
 }
-
-Vector2i Tracer::modulo;
-int Tracer::ordinalMod;
-Vector2r Tracer::rRange;
-int Tracer::num;
-int Tracer::scalar;
-int Tracer::vecAxis;
-int Tracer::matStateIx;
-Real Tracer::matStateSmooth;
-bool Tracer::nextReset;
-int Tracer::compress;
-int Tracer::compSkip;
-bool Tracer::glSmooth;
-bool Tracer::clumps;
-int Tracer::glWidth;
-Vector3r Tracer::noneColor;
-Real Tracer::minDist;
-shared_ptr<ScalarRange> Tracer::lineColor;
 
 void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 	auto& dem=field->cast<DemField>();
@@ -260,7 +246,7 @@ void Tracer::showHideRange(bool show){
 }
 #endif
 
-void Tracer::postLoadStatic(void* attr){
+void Tracer::postLoad(Tracer&, void* attr){
 	if(attr==&scalar || attr==&matStateIx || attr==NULL) nextReset=true;
 }
 
@@ -271,13 +257,6 @@ void Tracer::run(){
 		lineColor->reset();
 		nextReset=false;
 	}
-	#if 0
-		if(scalar!=lastScalar){
-			resetNodesRep(/*setup empty*/true,/*includeDead*/false);
-			lastScalar=scalar;
-			lineColor->reset();
-		}
-	#endif
 	#ifdef WOO_OPENGL
 		showHideRange(/*show*/true);
 	#endif
@@ -321,6 +300,8 @@ void Tracer::run(){
 			tr.t0=scene->time;
 		}
 		auto& tr=n->rep->cast<TraceVisRep>();
+		// update tracer pointer, if it is not us
+		if(tr.tracer.get()!=this) tr.tracer=static_pointer_cast<Tracer>(shared_from_this());
 		bool hasP=!dyn.parRef.empty();
 		bool hidden=false;
 		Real radius=NaN;
