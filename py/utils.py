@@ -104,7 +104,7 @@ def _mkDemNode(**kw):
 	if hasGL: return Node(dem=DemData(),gl=woo.gl.GlData(),**kw)
 	else: return Node(dem=DemData(),**kw)
 
-def sphere(center,radius,mat=defaultMaterial,fixed=False,wire=False,color=None,highlight=False,mask=DemField.defaultMovableMask):
+def sphere(center,radius,mat=defaultMaterial,fixed=False,wire=False,color=None,highlight=False,mask=DemField.defaultMovableMask,vel=None):
 	"""Create sphere with given parameters; mass and inertia computed automatically.
 
 	:param Vector3 center: center
@@ -147,6 +147,7 @@ def sphere(center,radius,mat=defaultMaterial,fixed=False,wire=False,color=None,h
 	b.shape=Sphere(radius=radius,color=color if color else random.random())
 	b.shape.wire=wire
 	_commonBodySetup(b,([center] if isinstance(center,Node) else [_mkDemNode(pos=center),]),mat=mat,fixed=fixed)
+	if vel: b.vel=vel
 	b.aspherical=False
 	b.mask=mask
 	return b

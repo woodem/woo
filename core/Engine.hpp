@@ -21,6 +21,7 @@
 
 struct Scene;
 struct Field;
+struct ScalarRange;
 
 namespace py=boost::python;
 
@@ -70,6 +71,9 @@ class Engine: public Object {
 			if(o->label.empty()) return;
 			labelMapper->__setitem__woo(o->label,o);
 		}
+		// for getting scalar ranges which will be put to Scene::autoRanges
+		// most engines don't need a range for rendering and don't need to override this
+		virtual void getRanges(vector<shared_ptr<ScalarRange>>& sr) const {};
 	private:
 		// py access funcs	
 		TimingInfo::delta timingInfo_nsec_get(){return timingInfo.nsec;};

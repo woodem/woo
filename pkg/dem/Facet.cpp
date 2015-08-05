@@ -21,6 +21,7 @@ WOO_IMPL_LOGGER(Facet);
 
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_Facet));
+	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Facet__CLASS_BASE_DOC_ATTRS);
 #endif
 
 void Facet::selfTest(const shared_ptr<Particle>& p){
@@ -529,13 +530,6 @@ void halfCylinder(const Vector3r& A, const Vector3r& B, Real radius, const Vecto
 	if(wire) glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
-bool Gl1_Facet::wire;
-int Gl1_Facet::slices;
-int Gl1_Facet::wd;
-Real Gl1_Facet::fastDrawLim;
-#if 0
-Vector2r Gl1_Facet::fuzz;
-#endif
 
 void Gl1_Facet::drawEdges(const Facet& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire){
 	if(slices>=4){
@@ -572,7 +566,7 @@ void Gl1_Facet::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 	Facet& f=sh->cast<Facet>();
 
 	// don't draw very small facets when doing fastDraw
-	if(Renderer::fastDraw && f.getPerimeterSq()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
+	if(viewInfo.renderer->fastDraw && f.getPerimeterSq()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
 	Vector3r shifts[3]={shift,shift,shift};
 	if(scene->isPeriodic && f.nodes[0]->hasData<GlData>() && f.nodes[1]->hasData<GlData>() && f.nodes[2]->hasData<GlData>()){
 		GlData* g[3]={&(f.nodes[0]->getData<GlData>()),&(f.nodes[1]->getData<GlData>()),&(f.nodes[2]->getData<GlData>())};
@@ -584,7 +578,7 @@ void Gl1_Facet::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 		}
 	}
 
-	if(wire || wire2 || Renderer::fastDraw){
+	if(wire || wire2 || viewInfo.renderer->fastDraw){
 		glDisable(GL_LINE_SMOOTH);
 		#if 0
 			Vector3r shift2(shift);
@@ -593,7 +587,7 @@ void Gl1_Facet::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 				shift2+=normal*abs((f.nodes[0]->pos-f.nodes[1]->pos).maxCoeff())*(fuzz[0]/fuzz[1])*(((ptrdiff_t)(&f))%((int)fuzz[1]));
 			}
 		#endif
-		if(f.halfThick==0 || slices<0 || Renderer::fastDraw){
+		if(f.halfThick==0 || slices<0 || viewInfo.renderer->fastDraw){
 			glLineWidth(wd);
 			glBegin(GL_LINE_LOOP);
 				for(int i:{0,1,2}) glVertex3v((f.getGlVertex(i)+shifts[i]).eval());

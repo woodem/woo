@@ -3,6 +3,7 @@ from woo.dem import *
 from woo.gl import *
 from minieigen import *
 from math import *
+woo.master.usesApi=10102
 S=woo.master.scene=woo.core.Scene(fields=[DemField(gravity=(0,0,0))])
 S.dem.par.add([
 	woo.utils.ellipsoid(center=(0,0,0),ori=Quaternion.Identity,semiAxes=(.1,.2,.3),fixed=True),
@@ -23,7 +24,7 @@ S.engines=[Leapfrog(reset=True),InsertionSortCollider([Bo1_Ellipsoid_Aabb(),Bo1_
 # if 'vtk' in woo.config.features: S.engines=S.engines+[VtkExport(out='/tmp/ell0',ascii=True,compress=False,stepPeriod=1000)]
 
 
-S.any=[Gl1_Ellipsoid(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode,bound=True),Renderer(iniViewDir=(0,1,0))]
+S.gl=GlSetup(Gl1_Ellipsoid(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode,bound=True),Renderer(iniViewDir=(0,1,0)))
 S.saveTmp()
 
 S.run(60,True)

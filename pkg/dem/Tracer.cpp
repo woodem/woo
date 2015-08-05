@@ -127,7 +127,7 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 	if(!tracer->glSmooth) glDisable(GL_LINE_SMOOTH);
 	else glEnable(GL_LINE_SMOOTH);
 	glDisable(GL_LIGHTING);
-	bool scale=(Renderer::dispScale!=Vector3r::Ones() && Renderer::scaleOn && n->hasData<GlData>());
+	bool scale=(glInfo->renderer->dispScale!=Vector3r::Ones() && glInfo->renderer->scaleOn && n->hasData<GlData>());
 	glLineWidth(tracer->glWidth);
 	const bool periodic=glInfo->scene->isPeriodic;
 	Vector3i prevPeriod=Vector3i::Zero(); // silence gcc warning maybe-uninitialized
@@ -176,7 +176,7 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 					// don't scale if refpos is invalid
 					if(isnan(gl.refPos.maxCoeff())) glVertex3v(pt); 
 					// x+(s-1)*(x-x0)
-					else glVertex3v((pt+((Renderer::dispScale-Vector3r::Ones()).array()*(pt-gl.refPos).array()).matrix()).eval());
+					else glVertex3v((pt+((glInfo->renderer->dispScale-Vector3r::Ones()).array()*(pt-gl.refPos).array()).matrix()).eval());
 				}
 				nSeg++;
 			}
@@ -237,15 +237,6 @@ void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 	}
 }
 
-#ifdef WOO_OPENGL
-void Tracer::showHideRange(bool show){
-	// show lineColor
-	if(show) Gl1_DemField::setOurSceneRanges(scene,{lineColor},{lineColor});
-	// hide lineColor
-	else Gl1_DemField::setOurSceneRanges(scene,{lineColor},{});
-}
-#endif
-
 void Tracer::postLoad(Tracer&, void* attr){
 	if(attr==&scalar || attr==&matStateIx || attr==NULL) nextReset=true;
 }
@@ -257,9 +248,6 @@ void Tracer::run(){
 		lineColor->reset();
 		nextReset=false;
 	}
-	#ifdef WOO_OPENGL
-		showHideRange(/*show*/true);
-	#endif
 	switch(scalar){
 		case SCALAR_NONE: lineColor->label="[index]"; break;
 		case SCALAR_TRACETIME: lineColor->label="trace time"; break;

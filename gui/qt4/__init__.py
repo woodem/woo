@@ -180,7 +180,7 @@ class ControllerClass(QWidget,Ui_Controller):
 		self.setupUi(self)
 		self.generator=None # updated automatically
 		if OpenGL:
-			self.renderer=Renderer() # only hold one instance, managed by OpenGLManager
+			# self.renderer=Renderer() # only hold one instance, managed by OpenGLManager
 			self.addRenderers()
 
 		# if config file exists already, load the config from that file instead
@@ -266,26 +266,23 @@ class ControllerClass(QWidget,Ui_Controller):
 		self.generatorComboSlot(0)
 	def addRenderers(self):
 		from woo import gl
-		self.displayCombo.addItem('Renderer'); afterSep=1
-		# put GlFieldFunctor at the beginning artificially
-		for bc in ['GlFieldFunctor']+[t for t in dir(gl) if t.endswith('Functor') and t!='GlFieldFunctor']:
-			if afterSep>0: self.displayCombo.insertSeparator(10000); afterSep=0
-			for c in woo.system.childClasses(bc) | set([bc]):
-				try:
-					inst=eval('gl.'+c+'()');
-					if len(set(inst.dict().keys())-set(['label']))>0:
-						self.displayCombo.addItem(c); afterSep+=1
-				except (NameError,AttributeError): pass # functo which is not defined
+		S=woo.master.scene
+		rr=S.renderer # this will create S.gl if not there yet
+		for i,f in enumerate(S.gl.objs):
+			if f is None: self.displayCombo.insertSeparator(1000)
+			else:
+				if len(set(f.dict().keys())-set(['label']))>0: self.displayCombo.addItem(S.gl.objNames[i])
+
 		self.displayCombo.insertSeparator(10000)
 		self.displayCombo.addItem('UI Preferences')
 	def displayComboSlot(self,dispStr):
 		from woo import gl
-		if dispStr=='Renderer':
-			ser,path=self.renderer,'woo.gl.Renderer'
-		elif dispStr=='UI Preferences':
+		dispStr=str(dispStr) # cast from QString if still used (??)
+		if dispStr=='UI Preferences':
 			ser,path=uiPrefs,'woo.qt.uiPrefs'
 		else:
-			ser,path=eval('woo.gl.'+str(dispStr)+'()'),'woo.gl.'+dispStr
+			S=woo.master.scene
+			ser,path=getattr(S.gl,dispStr),'S.gl.'+dispStr
 		se=ObjectEditor(ser,parent=self.displayArea,ignoredAttrs=set(['label']),showType=True,path=path)
 		self.displayArea.setWidget(se)
 	def fillAboutData(self):	
@@ -665,6 +662,10 @@ class ControllerClass(QWidget,Ui_Controller):
 				import __main__
 				glob=globals(); glob.update(__main__.__dict__)
 				exec S.uiBuild in glob, {'S':S,'area':self.customArea}
+		## renderer change
+		if self.lastScene!=S or self.lastScene.renderer!=S.renderer:
+			self.displayComboSlot(self.displayCombo.currentText())
+			
 
 		
 def Generator():

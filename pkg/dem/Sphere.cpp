@@ -142,20 +142,14 @@ void In2_Sphere_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Mater
 
 #ifdef WOO_OPENGL
 WOO_PLUGIN(gl,(Gl1_Sphere));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Sphere__CLASS_BASE_DOC_ATTRS);
+
 
 #include<woo/lib/opengl/OpenGLWrapper.hpp>
 #include<woo/lib/opengl/GLUtils.hpp>
 #include<woo/pkg/gl/Renderer.hpp>
 #include<woo/lib/base/CompUtils.hpp>
 
-bool Gl1_Sphere::wire;
-bool Gl1_Sphere::smooth;
-Real Gl1_Sphere::scale;
-//bool Gl1_Sphere::stripes;
-//bool  Gl1_Sphere::localSpecView;
-int  Gl1_Sphere::glutSlices;
-int  Gl1_Sphere::glutStacks;
-Real  Gl1_Sphere::quality;
 vector<Vector3r> Gl1_Sphere::vertices, Gl1_Sphere::faces;
 int Gl1_Sphere::glStripedSphereList=-1;
 int Gl1_Sphere::glGlutSphereList=-1;
@@ -178,7 +172,7 @@ void Gl1_Sphere::renderScaledSphere(const shared_ptr<Shape>& shape, const Vector
 
 	Real r=radius*scale;
 	//glColor3v(CompUtils::mapColor(shape->getBaseColor()));
-	bool doPoints=(Renderer::fastDraw || quality<0 || (int)(quality*glutSlices)<2 || (int)(quality*glutStacks)<2);
+	bool doPoints=(glInfo.renderer->fastDraw || quality<0 || (int)(quality*glutSlices)<2 || (int)(quality*glutStacks)<2);
 	if(doPoints){
 		if(smooth) glEnable(GL_POINT_SMOOTH);
 		else glDisable(GL_POINT_SMOOTH);

@@ -319,13 +319,18 @@ class AttrEditor_Choice(AttrEditor,QFrame):
 		self.combo.activated.connect(self.update)
 	def refresh(self):
 		curr,choices=self.getter()
-		if curr not in self.admitValues:
-			raise ValueError("Choice attribute value "+str(curr)+" is not within admitted values "+str(self.admitValues))
-		#	self.combo.setEnabled(False)
+		# print curr,choices
+		#if self.justValues:
 		#else:
-		#	if not self.combo.enabled(): self.combo.setEnabled(True)
-		if self.admitValues[self.combo.currentIndex()]!=curr: # update the combo
-			self.combo.setCurrentIndex(self.admitValues.index(curr))
+		if type(curr)==int:
+			if curr<0 or curr>len(self.admitValues): raise ValueError("Current value out of range?")
+			if curr!=self.combo.currentIndex(): self.combo.setCurrentIndex(curr)
+		else:
+			if curr not in self.admitValues:
+				raise ValueError("Choice attribute value "+str(curr)+" is not within admitted values "+str(self.admitValues))
+			if self.admitValues[self.combo.currentIndex()]!=curr: # update the combo
+				self.combo.setCurrentIndex(self.admitValues.index(curr))
+
 	def update(self):
 		choice=self.choices[self.combo.currentIndex()]
 		val=choice if self.justValues else choice[0]

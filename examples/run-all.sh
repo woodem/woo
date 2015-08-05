@@ -7,3 +7,5 @@ for script in *.py; do
 	woo -x $script >> $LOG 2>&1;
 	echo 'Exit status' $? >> $LOG
 done
+
+woo -x -c'import woo.utils; woo.utils.runAllPreprocessors()' >> $LOG

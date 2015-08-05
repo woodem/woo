@@ -6,6 +6,7 @@
 WOO_PLUGIN(dem,(Wall)(Bo1_Wall_Aabb)(In2_Wall_ElastMat)(Cg2_Wall_Sphere_L6Geom)(Cg2_Wall_Facet_L6Geom));
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_Wall))
+	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Wall__CLASS_BASE_DOC_ATTRS);
 #endif
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Wall__CLASS_BASE_DOC_ATTRS_CTOR);
@@ -143,7 +144,6 @@ bool Cg2_Wall_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<Sh
 	#include<woo/lib/opengl/GLUtils.hpp>
 	WOO_IMPL_LOGGER(Gl1_Wall);
 
-	int  Gl1_Wall::div=20;
 	void Gl1_Wall::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){
 		const Wall& wall=shape->cast<Wall>();
 		int ax0=wall.axis,ax1=(wall.axis+1)%3,ax2=(wall.axis+2)%3;

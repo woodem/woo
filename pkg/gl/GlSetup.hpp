@@ -1,6 +1,7 @@
-#ifdef WOO_OPENGL
+#pragma once
 
-#include<woo/core/Scene.hpp>
+#ifdef WOO_OPENGL
+#include<woo/lib/object/Object.hpp>
 #include<woo/lib/pyutil/except.hpp>
 #include<boost/algorithm/string/predicate.hpp>
 #include<typeindex>
@@ -35,29 +36,42 @@ TODO:
 
 */
 
+struct Renderer;
+
 struct GlSetup: public Object{
 	static string accessorName(const string& s);
 	void checkIndex(int i) const;
 	static vector<shared_ptr<Object>> makeObjs(); 
+	// with constructed in c++, call this afterwars
+	void init(){ objs=makeObjs(); }
+	shared_ptr<Renderer> getRenderer() const;
+
 
 	static vector<std::type_index> objTypeIndices;
 	static vector<string> objTypeNames;
 	static vector<string> objAccessorNames;
+	py::list getObjNames() const;
 	
 	void postLoad(GlSetup&,void*);
 	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) WOO_CXX11_OVERRIDE;
+	// proxy for raw_function, extracts instance from args[0]
+	// return value and kw only to satisfy interface
+	// http://stackoverflow.com/questions/27488096/boost-python-raw-function-method
+	static py::object pyCallStatic(py::tuple args, py::dict kw);
+	void pyCall(const py::tuple& args);
 
 	WOO_DECL_LOGGER;
 
 	#define woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY \
 		GlSetup,Object,"Proxy object for accessing all GL-related settings uniformly from the scene.", \
 		((vector<shared_ptr<Object>>,objs,makeObjs(),AttrTrait<Attr::readonly>().noGui(),"List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.")) \
-		,/*py*/ ; \
-			auto oo=makeObjs(); assert(objTypeindices.empty()); \
+		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui(),"Set after modifying functors, so that they can be regenerated.")) \
+		,/*py*/ .add_property("objNames",&GlSetup::getObjNames).def("__call__",py::raw_function(&GlSetup::pyCallStatic,/*the instance*/1),"Replace all current functors by those passed as arguments."); \
+			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
 			for(size_t i=0; i<oo.size(); i++){ \
 				const auto& o=oo[i]; const auto oPtr=o.get(); \
 				string accessor=accessorName(o?o->getClassName():""); \
-				objTypeIndices.push_back(o?std::type_index(typeid(oPtr)):std::type_index(typeid(void))); \
+				objTypeIndices.push_back(o?std::type_index(typeid(*oPtr)):std::type_index(typeid(void))); \
 				objTypeNames.push_back(o?o->getClassName():"None"); \
 				objAccessorNames.push_back(accessor); \
 				/*separator*/if(!o) continue; \

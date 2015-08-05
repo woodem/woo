@@ -5,6 +5,9 @@ from minieigen import *
 from math import *
 import numpy
 from random import random
+
+woo.master.usesApi=10102
+
 S=woo.master.scene=woo.core.Scene(fields=[DemField(gravity=(0,0,-10))])
 
 mat=FrictMat(young=1e6,density=3200)
@@ -31,14 +34,6 @@ S.dem.par[-1].angVel=(0,.5,0)
 S.dtSafety=.2
 S.engines=woo.utils.defaultEngines(damping=.4,dynDtPeriod=10)+[BoxInlet(box=((-1,-1,1+i*2),(1,1,3+i*2)),stepPeriod=100,maxMass=3e3,maxNum=-1,massRate=0,maxAttempts=100,attemptPar=50,atMaxAttempts=BoxInlet.maxAttWarn,generator=generators[i],materials=[mat]) for i in range(len(generators))]
 
-# S.any=[Gl1_Ellipsoid(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode),Renderer(iniViewDir=(0,1,0))]
 # S.throttle=.03
 S.saveTmp()
-Gl1_DemField.colorBy=Gl1_DemField.colorRadius
-Gl1_Sphere.quality=3
-Renderer.engines=False
-Renderer.iniViewDir=Vector3(-0.38001633552330316,-0.5541855363199173,-0.7405848878212721)
-Renderer.iniUp=Vector3(-0.4745913986125537,-0.582504699162141,0.6598873235765362)
-# Renderer.allowFast=False
-# woo.master.timingEnabled=True
-# Gl1_DemField(nodes=False,bound=False,cNode=0)
+S.gl=GlSetup(Gl1_DemField(colorBy='radius'),Gl1_Sphere(quality=3),Renderer(engines=False,iniViewDir=Vector3(-0.38,-0.554,-0.74),iniUp=Vector3(-0.4746,-0.582,0.66)))

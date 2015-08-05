@@ -18,71 +18,26 @@
 	#define PROCESS_GUI_EVENTS_SOMETIMES
 #endif
 
-WOO_PLUGIN(gl,(Gl1_DemField));
+WOO_PLUGIN(gl,
+	(Gl1_DemField)
+	(GlShapeFunctor)(GlShapeDispatcher)
+	(GlBoundFunctor)(GlBoundDispatcher)
+	(GlCPhysFunctor)(GlCPhysDispatcher)
+	//(GlCGeomFunctor)(GlCGeomDispatcher)
+);
+
 WOO_IMPL_LOGGER(Gl1_DemField);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_PY);
 
-bool Gl1_DemField::doPostLoad;
-unsigned int Gl1_DemField::mask;
-bool Gl1_DemField::wire;
-bool Gl1_DemField::bound;
-int Gl1_DemField::shape;
-bool Gl1_DemField::shape2;
-Vector2i Gl1_DemField::modulo;
-bool Gl1_DemField::nodes;
-bool Gl1_DemField::deadNodes;
-bool Gl1_DemField::fluct;
-bool Gl1_DemField::periodic;
-//bool Gl1_DemField::trace;
-//bool Gl1_DemField::_hadTrace;
-int Gl1_DemField::cNode;
-bool Gl1_DemField::cPhys;
-int Gl1_DemField::colorBy;
-int Gl1_DemField::matStateIx;
-Real Gl1_DemField::matStateSmooth;
-int Gl1_DemField::colorBy2;
-Vector3r Gl1_DemField::solidColor;
-shared_ptr<ScalarRange> Gl1_DemField::colorRange;
-shared_ptr<ScalarRange> Gl1_DemField::colorRange2;
-vector<shared_ptr<ScalarRange>> Gl1_DemField::colorRanges;
-int Gl1_DemField::glyph;
-int Gl1_DemField::vecAxis;
-Real Gl1_DemField::glyphRelSz;
-shared_ptr<ScalarRange> Gl1_DemField::glyphRange;
-vector<shared_ptr<ScalarRange>> Gl1_DemField::glyphRanges;
-bool Gl1_DemField::updateRefPos;
-int Gl1_DemField::guiEvery;
 
-/*
-Remove all ScalarRanges in *ours*, which are not in *used*, from the Scene.
-Add all from *used* to the Scene.
-*/
-void Gl1_DemField::setOurSceneRanges(Scene* scene, const vector<shared_ptr<ScalarRange>>& ours, const list<shared_ptr<ScalarRange>>& used){
-	list<size_t> removeIx;
-	// get indices of ranges that should be removed
-	for(size_t i=0; i<scene->ranges.size(); i++){
-		if(
-			// range is in *ours*
-			std::find_if(ours.begin(),ours.end(),[&](const shared_ptr<ScalarRange>& r){return r.get()==scene->ranges[i].get(); })!=ours.end()
-			// but not in *used*
-			&& std::find_if(used.begin(),used.end(),[&](const shared_ptr<ScalarRange>& r){ return r.get()==scene->ranges[i].get();})==used.end()
-		){
-			//cerr<<"Will remove range "<<i<<"/"<<scene->ranges.size()<<" @ "<<scene->ranges[i].get()<<endl;
-			//cerr<<"   Is at index "<<std::find_if(ours.begin(),ours.end(),[&](const shared_ptr<ScalarRange>& r){return r.get()==scene->ranges[i].get(); })-ours.begin()<<endl;
-			removeIx.push_back(i);
-		}
-	}
-	// remove ranges to be removed; iterate backwards, from higher indices
-	for(int i=removeIx.size()-1; i>=0; i--){
-		//cerr<<"Remove range "<<i<<"/"<<scene->ranges.size()<<endl;
-		scene->ranges.erase(scene->ranges.begin()+i);
-	}
-	// get ranges to be added to the scene, and add them in-place
-	for(const auto& r: used){
-		// range not in scene, add it
-		if(std::find_if(scene->ranges.begin(),scene->ranges.end(),[&](const shared_ptr<ScalarRange>& s){ return s.get()==r.get(); })==scene->ranges.end()){
-			if(r) scene->ranges.push_back(r);
-		}
-	}
+void Gl1_DemField::setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr){
+	LOG_DEBUG("setting functors and ranges:");
+	shapeDispatcher->setFunctors_getRanges(ff,rr);
+	boundDispatcher->setFunctors_getRanges(ff,rr);
+	cPhysDispatcher->setFunctors_getRanges(ff,rr);
+	if(colorRanges.empty()) initAllRanges();
+	for(const auto& r: colorRanges) if(r) rr.push_back(r);
+	for(const auto& r: glyphRanges) if(r) rr.push_back(r);
 }
 
 void Gl1_DemField::initAllRanges(){
@@ -109,6 +64,7 @@ void Gl1_DemField::initAllRanges(){
 			case COLOR_MASK:    		 r->label="mask"; break;
 		};
 	}
+	colorRanges[COLOR_SHAPE]->setHidden(true); // don't show by default
 	colorRange=colorRanges[colorBy];
 	colorRange2=colorRanges[colorBy2];
 
@@ -129,32 +85,28 @@ void Gl1_DemField::initAllRanges(){
 	glyphRange=glyphRanges[glyph];
 }
 
-void Gl1_DemField::postLoad2(){
-	colorRange=colorRanges[colorBy];
-	colorRange2=colorRanges[colorBy2];
-	glyphRange=glyphRanges[glyph];
-	//bool noColor=;
-	//bool noColor2=(!shape2 || colorBy2==COLOR_SHAPE || colorBy2==COLOR_SOLID || colorBy2==COLOR_INVISIBLE);
-	list<shared_ptr<ScalarRange>> usedColorRanges;
-	if(shape!=SHAPE_NONE && colorBy!=COLOR_SHAPE && colorBy!=COLOR_SOLID && colorBy!=COLOR_INVISIBLE) usedColorRanges.push_back(colorRange);
-	if(shape2 && colorBy2!=COLOR_SHAPE && colorBy2!=COLOR_SOLID && colorBy2!=COLOR_INVISIBLE) usedColorRanges.push_back(colorRange2);
+void Gl1_DemField::postLoad(Gl1_DemField&, void* attr){
+	if(colorRanges.empty()) initAllRanges();
+	if(attr==&matStateIx) colorRanges[COLOR_MATSTATE]->reset();
 	// set to empty value so that it gets filled later
 	if(colorBy==COLOR_MATSTATE) colorRange->label="";
 	if(colorBy2==COLOR_MATSTATE) colorRange2->label="";
 
-	setOurSceneRanges(scene,colorRanges,usedColorRanges);
-	if(glyph!=GLYPH_NONE) setOurSceneRanges(scene,glyphRanges,{glyphRange});
-	else setOurSceneRanges(scene,glyphRanges,{});
+	colorRange=colorRanges[colorBy];
+	colorRange2=colorRanges[colorBy2];
+	glyphRange=glyphRanges[glyph];
 }
 
 void Gl1_DemField::doBound(){
-	Renderer::boundDispatcher.scene=scene; Renderer::boundDispatcher.updateScenePtr();
+	boundDispatcher->scene=scene; boundDispatcher->updateScenePtr();
 	boost::mutex::scoped_lock lock(dem->particles->manipMutex);
-	FOREACH(const shared_ptr<Particle>& b, *dem->particles){
+	for(const shared_ptr<Particle>& b: *dem->particles){
 		// PROCESS_GUI_EVENTS_SOMETIMES; // rendering bounds is usually fast
 		if(!b->shape || !b->shape->bound) continue;
 		if(mask!=0 && !(b->mask&mask)) continue;
-		glPushMatrix(); Renderer::boundDispatcher(b->shape->bound); glPopMatrix();
+		glPushMatrix();
+			(*boundDispatcher)(b->shape->bound);
+		glPopMatrix();
 	}
 }
 
@@ -189,7 +141,8 @@ Vector3r Gl1_DemField::getNodeAngVel(const shared_ptr<Node>& n) const{
 // http://glprogramming.com/red/chapter13.html
 
 void Gl1_DemField::doShape(){
-	Renderer::shapeDispatcher.scene=scene; Renderer::shapeDispatcher.updateScenePtr();
+	const auto& renderer=viewInfo->renderer;
+	shapeDispatcher->scene=scene; shapeDispatcher->updateScenePtr();
 	boost::mutex::scoped_lock lock(dem->particles->manipMutex);
 
 	// experimental
@@ -198,7 +151,7 @@ void Gl1_DemField::doShape(){
 	// instead of const shared_ptr&, get proper shared_ptr;
 	// Less efficient in terms of performance, since memory has to be written (not measured, though),
 	// but it is still better than crashes if the body gets deleted meanwile.
-	FOREACH(shared_ptr<Particle> p, *dem->particles){
+	for(shared_ptr<Particle> p: *dem->particles){
 		PROCESS_GUI_EVENTS_SOMETIMES;
 
 		if(!p->shape || p->shape->nodes.empty()) continue;
@@ -216,7 +169,7 @@ void Gl1_DemField::doShape(){
 		// if any of the particle's nodes is clipped, don't display it at all
 		bool clipped=false;
 		for(const shared_ptr<Node>& n: p->shape->nodes){
-			Renderer::setNodeGlData(n,updateRefPos);
+			renderer->setNodeGlData(n);
 			if(n->getData<GlData>().isClipped()) clipped=true;
 		}
 
@@ -306,7 +259,7 @@ void Gl1_DemField::doShape(){
 		if(isnan(parColor.maxCoeff())) continue;
 		
 		// fast-track for spheres (don't call the functor, avoid glPushMatrix())
-		if(Renderer::fastDraw && p->shape->isA<Sphere>()){
+		if(renderer->fastDraw && p->shape->isA<Sphere>()){
 			glColor3v(parColor);
 			glBegin(GL_POINTS);
 				glVertex3v((n0->pos+n0->getData<GlData>().dGlPos).eval());
@@ -314,7 +267,7 @@ void Gl1_DemField::doShape(){
 		} else {
 			glPushMatrix();
 				glColor3v(parColor);
-				Renderer::shapeDispatcher(p->shape,/*shift*/Vector3r::Zero(),wire||sh->getWire(),*viewInfo);
+				(*shapeDispatcher)(p->shape,/*shift*/Vector3r::Zero(),wire||sh->getWire(),*viewInfo);
 			glPopMatrix();
 		}
 
@@ -324,14 +277,14 @@ void Gl1_DemField::doShape(){
 			else {
 				// move the label towards the camera by the bounding box so that it is not hidden inside the body
 				const Vector3r& mn=sh->bound->min; const Vector3r& mx=sh->bound->max;
-				Vector3r ext(Renderer::viewDirection[0]>0?pos[0]-mn[0]:pos[0]-mx[0],Renderer::viewDirection[1]>0?pos[1]-mn[1]:pos[1]-mx[1],Renderer::viewDirection[2]>0?pos[2]-mn[2]:pos[2]-mx[2]); // signed extents towards the camera
-				Vector3r dr=-1.01*(Renderer::viewDirection.dot(ext)*Renderer::viewDirection);
+				Vector3r ext(renderer->viewDirection[0]>0?pos[0]-mn[0]:pos[0]-mx[0],renderer->viewDirection[1]>0?pos[1]-mn[1]:pos[1]-mx[1],renderer->viewDirection[2]>0?pos[2]-mn[2]:pos[2]-mx[2]); // signed extents towards the camera
+				Vector3r dr=-1.01*(renderer->viewDirection.dot(ext)*renderer->viewDirection);
 				GLUtils::GLDrawInt(p->id,pos+dr,Vector3r::Ones());
 			}
 		}
 		// if the body goes over the cell margin, draw it in positions where the bbox overlaps with the cell in wire
 		// precondition: pos is inside the cell.
-		if(sh->bound && scene->isPeriodic && Renderer::ghosts){
+		if(sh->bound && scene->isPeriodic && renderer->ghosts){
 			const Vector3r& cellSize(scene->cell->getSize());
 			//Vector3r pos=scene->cell->unshearPt(.5*(sh->bound->min+sh->bound->max)); // middle of bbox, remove the shear component
 			Vector3r pos=.5*(sh->bound->min+sh->bound->max); // middle of bbox, in sheared coords already
@@ -359,7 +312,7 @@ void Gl1_DemField::doShape(){
 					Vector3r pt=scene->cell->shearPt(pos2);
 					// if(pointClipped(pt)) continue;
 					glPushMatrix();
-						Renderer::shapeDispatcher(p->shape,/*shift*/pt-pos,/*wire*/true,*viewInfo);
+						(*shapeDispatcher)(p->shape,/*shift*/pt-pos,/*wire*/true,*viewInfo);
 					glPopMatrix();
 				}
 			}
@@ -372,11 +325,11 @@ void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
 	// not sure if this is right...?
 	glDisable(GL_LIGHTING);
 
-	Renderer::nodeDispatcher.scene=scene; Renderer::nodeDispatcher.updateScenePtr();
+	viewInfo->renderer->nodeDispatcher.scene=scene; viewInfo->renderer->nodeDispatcher.updateScenePtr();
 	for(shared_ptr<Node> n: nodeContainer){
 		PROCESS_GUI_EVENTS_SOMETIMES;
 
-		Renderer::setNodeGlData(n,updateRefPos);
+		viewInfo->renderer->setNodeGlData(n);
 		if(n->getData<GlData>().isClipped()) continue;
 		const DemData& dyn=n->getData<DemData>();
 
@@ -406,7 +359,7 @@ void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
 		if(!nodes && !n->rep) continue;
 
 		Renderer::glScopedName name(*viewInfo,n);
-		if(nodes){ Renderer::renderRawNode(n); }
+		if(nodes){ viewInfo->renderer->renderRawNode(n); }
 		if(n->rep){ n->rep->render(n,viewInfo); }
 	}
 }
@@ -414,7 +367,7 @@ void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
 
 void Gl1_DemField::doContactNodes(){
 	// if(cNode==CNODE_NONE) return;
-	Renderer::nodeDispatcher.scene=scene; Renderer::nodeDispatcher.updateScenePtr();
+	viewInfo->renderer->nodeDispatcher.scene=scene; viewInfo->renderer->nodeDispatcher.updateScenePtr();
 	boost::mutex::scoped_lock lock(dem->contacts->manipMutex);
 	for(size_t i=0; i<dem->contacts->size(); i++){
 		PROCESS_GUI_EVENTS_SOMETIMES;
@@ -424,7 +377,7 @@ void Gl1_DemField::doContactNodes(){
 			shared_ptr<CGeom> geom=C->geom;
 			if(!geom) continue;
 			shared_ptr<Node> node=geom->node;
-			Renderer::setNodeGlData(node,updateRefPos);
+			viewInfo->renderer->setNodeGlData(node);
 			Renderer::glScopedName name(*viewInfo,C,node);
 			if((cNode & CNODE_GLREP) && node->rep){ node->rep->render(node,viewInfo); }
 			if(cNode & CNODE_LINE){
@@ -442,7 +395,7 @@ void Gl1_DemField::doContactNodes(){
 				if(pA->shape->isA<Sphere>()) GLUtils::GLDrawLine(x[0],x[1],color);
 				GLUtils::GLDrawLine(x[0],x[2],color);
 			}
-			if(cNode & CNODE_NODE) Renderer::renderRawNode(node);
+			if(cNode & CNODE_NODE) viewInfo->renderer->renderRawNode(node);
 		} else {
 			if(!(cNode & CNODE_POTLINE)) continue;
 			assert(pA->shape && pB->shape);
@@ -463,7 +416,7 @@ void Gl1_DemField::doContactNodes(){
 
 void Gl1_DemField::doCPhys(){
 	glEnable(GL_LIGHTING);
-	Renderer::cPhysDispatcher.scene=scene; Renderer::cPhysDispatcher.updateScenePtr();
+	cPhysDispatcher->scene=scene; cPhysDispatcher->updateScenePtr();
 	boost::mutex::scoped_lock lock(dem->contacts->manipMutex);
 	FOREACH(const shared_ptr<Contact>& C, *dem->contacts){
 		PROCESS_GUI_EVENTS_SOMETIMES;
@@ -479,7 +432,7 @@ void Gl1_DemField::doCPhys(){
 		//assert(C->leakPA()->shape->nodes.size()>0); assert(C->leakPB()->shape->nodes.size()>0);
 		if(!geom || !phys) continue;
 		Renderer::glScopedName name(*viewInfo,C,geom->node);
-		Renderer::cPhysDispatcher(phys,C,*viewInfo);
+		(*cPhysDispatcher)(phys,C,*viewInfo);
 	}
 }
 
@@ -490,22 +443,22 @@ void Gl1_DemField::doCPhys(){
 void Gl1_DemField::go(const shared_ptr<Field>& demField, GLViewInfo* _viewInfo){
 	dem=static_pointer_cast<DemField>(demField);
 	viewInfo=_viewInfo;
+	if(colorRanges.empty()) initAllRanges();
 
-	if(doPostLoad || _lastScene!=scene) postLoad2();
-	doPostLoad=false; _lastScene=scene;
+	//if(doPostLoad || _lastScene!=scene) postLoad2();
+	//doPostLoad=false; _lastScene=scene;
 	periodic=scene->isPeriodic;
-	if(updateRefPos && periodic) scene->cell->refHSize=scene->cell->hSize;
+	if(viewInfo->renderer->setRefNow && periodic) scene->cell->refHSize=scene->cell->hSize;
 
 	if(shape!=SHAPE_NONE || shape2) doShape();
 
-	if(!Renderer::fastDraw){
+	if(!viewInfo->renderer->fastDraw){
 		if(bound) doBound();
 		doNodes(dem->nodes);
 		if(deadNodes && !dem->deadNodes.empty()) doNodes(dem->deadNodes);
 		if(cNode!=CNODE_NONE) doContactNodes();
 		if(cPhys) doCPhys();
 	}
-	updateRefPos=false;
 };
 
 #endif

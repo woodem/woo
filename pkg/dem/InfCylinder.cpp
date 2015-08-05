@@ -7,8 +7,10 @@
 WOO_PLUGIN(dem,(InfCylinder)(Bo1_InfCylinder_Aabb)(Cg2_InfCylinder_Sphere_L6Geom));
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_InfCylinder))
+	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_InfCylinder__CLASS_BASE_DOC_ATTRS);
 #endif
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_InfCylinder__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_InfCylinder__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_InfCylinder_Sphere_L6Geom__CLASS_BASE_DOC);
 
 void InfCylinder::lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk){
@@ -72,12 +74,6 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 	#include<woo/lib/base/CompUtils.hpp>
 	#include<woo/lib/opengl/GLUtils.hpp>
 
-
-	bool Gl1_InfCylinder::wire;
-	bool Gl1_InfCylinder::spokes;
-	int  Gl1_InfCylinder::slices;
-	int  Gl1_InfCylinder::stacks;
-
 	void Gl1_InfCylinder::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){
 		const InfCylinder& cyl=shape->cast<InfCylinder>();
 		const int& ax(cyl.axis);
@@ -103,7 +99,7 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 			B[ax]=cyl.nodes[0]->pos[ax]+cyl.glAB[1];
 		}
 		// fast drawing
-		if(Renderer::fastDraw){
+		if(viewInfo.renderer->fastDraw){
 			glBegin(GL_LINES);
 			glVertex3v(A); glVertex3v(B);
 			glEnd();

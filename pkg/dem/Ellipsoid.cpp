@@ -6,6 +6,8 @@
 
 WOO_PLUGIN(dem,(Ellipsoid)(Bo1_Ellipsoid_Aabb)(Cg2_Wall_Ellipsoid_L6Geom)(Cg2_Facet_Ellipsoid_L6Geom)(Cg2_Ellipsoid_Ellipsoid_L6Geom)(Cg2_Sphere_Ellipsoid_L6Geom));
 
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Ellipsoid__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Ellipsoid_Aabb__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Ellipsoid_Ellipsoid_L6Geom__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Ellipsoid_L6Geom__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Sphere_Ellipsoid_L6Geom__CLASS_BASE_DOC);
@@ -13,6 +15,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Ellipsoid_L6Geom__CLASS_BASE_DOC);
 
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_Ellipsoid));
+	WOO_IMPL__CLASS_BASE_DOC(woo_dem_Gl1_Ellipsoid__CLASS_BASE_DOC_ATTRS);
 #endif
 
 void woo::Ellipsoid::selfTest(const shared_ptr<Particle>& p){

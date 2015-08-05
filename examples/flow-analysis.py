@@ -4,6 +4,7 @@ from woo.core import *
 import woo, woo.triangulated
 m=FrictMat(young=10e6)
 domain=AlignedBox3((-.4,-.1,-.5),(.4,.4,.3))
+woo.master.usesApi=10102
 S=woo.master.scene=Scene(
 	fields=[DemField(gravity=(0,0,-9.81),par=woo.triangulated.quadrilateral(Vector3(-.4,-.1,0),Vector3(-.4,.4,0),Vector3(.3,0,-.5),Vector3(.3,.3,-.2),div=(5,5),mat=m,wire=False))],
 	engines=DemField.minimalEngines(dynDtPeriod=100)+[

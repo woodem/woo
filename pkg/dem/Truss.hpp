@@ -50,13 +50,14 @@ WOO_REGISTER_OBJECT(Cg2_Rod_Sphere_L6Geom);
 struct Gl1_Rod: public GlShapeFunctor{
 	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
 	FUNCTOR1D(Rod);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Rod,GlShapeFunctor,"Render truss particles",
-		((int,slices,12,,"Number of slices, controls quality"))
-		((int,stacks,6,,"Number of stacks, controls quality"))
-		((bool,wire,false,,"Render all shapes with wireframe only"))
-		((bool,colorStress,true,,"Set color based on axial stress rather than :obj:`woo.dem.Shape.color`"))
+	#define woo_dem_Gl1_Rod__CLASS_BASE_DOC_ATTRS \
+		Gl1_Rod,GlShapeFunctor,"Render truss particles", \
+		((int,slices,12,,"Number of slices, controls quality")) \
+		((int,stacks,6,,"Number of stacks, controls quality")) \
+		((bool,wire,false,,"Render all shapes with wireframe only")) \
+		((bool,colorStress,true,,"Set color based on axial stress rather than :obj:`woo.dem.Shape.color`")) \
 		((Vector2r,stressRange,Vector2r(-1,1),,"Stress range, to set color appropriately"))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Rod__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Gl1_Rod);
 #endif

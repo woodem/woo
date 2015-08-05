@@ -105,9 +105,7 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 	
 		try:
 			import woo.gl
-			S.any=[
-				woo.gl.Renderer(iniUp=(0,1,0),iniViewDir=(0,0,-1),grid=4)
-			]
+			S.gl.renderer(iniUp=(0,1,0),iniViewDir=(0,0,-1),grid=4)
 		except ImportError: pass
 
 		return S

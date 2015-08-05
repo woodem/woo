@@ -1,5 +1,6 @@
 import woo, woo.dem, woo.core, woo.triangulated
 from minieigen import *
+woo.master.usesApi=10102
 
 # video of this simulation at https://youtu.be/PkU4PLrCgF0
 
@@ -19,7 +20,6 @@ S.saveTmp()
 
 try:
 	import woo.gl, woo.qt
-	woo.gl.Renderer(dispScale=(1,1,1000),scaleOn=True,iniViewDir=(0,1,0)) # scale vertical displacement 
-	woo.gl.Gl1_DemField.glyph='force'
+	S.gl=woo.gl.GlSetup(woo.gl.Renderer(dispScale=(1,1,1000),scaleOn=True,iniViewDir=(0,1,0)),woo.gl.Gl1_DemField(glyph='force')) # scale vertical displacement
 	woo.qt.View()
 except ImportError: pass

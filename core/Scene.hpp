@@ -16,6 +16,8 @@
 #ifdef WOO_OPENGL
 	#include<woo/core/DisplayParameters.hpp>
 	struct Renderer;
+	// TODO: move GlSetup to core so that we keep modules neatly separated
+	#include<woo/pkg/gl/GlSetup.hpp>
 #endif
 
 #ifndef HOST_NAME_MAX
@@ -63,7 +65,15 @@ struct Scene: public Object{
 		#endif
 
 		#ifdef WOO_OPENGL
-			shared_ptr<Renderer> renderer;
+			//shared_ptr<Renderer> renderer;
+			// implementation is in pkg/gl/Renderer(!!!)
+			void ensureGl();
+			shared_ptr<Renderer> ensureAndGetRenderer();
+			shared_ptr<Object> pyEnsureAndGetRenderer(); // return cast to Object, since .def needs full type
+			shared_ptr<GlSetup> pyGetGl(void);
+			void pySetGl(const shared_ptr<GlSetup>&);
+		#else
+			shared_ptr<Object> ensureAndGetRenderer() { return shared_ptr<Object>(); }
 		#endif
 
 		// keep track of created labels; delete those which are no longer active and so on
@@ -143,9 +153,14 @@ struct Scene: public Object{
 		string expandTags(const string& s) const;
 
 		#ifdef WOO_OPENGL
-			#define woo_core_Scene__DisplayParameters__OPENGL /*WOO_OPENGL*/ ((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states."))
+			#define woo_core_Scene__ATTRS__OPENGL \
+				((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states.")) \
+				((shared_ptr<GlSetup>,gl,/* no default since the type is incomplete here ... really?! */,AttrTrait<Attr::hidden>(),"Settings related to rendering; default instance is created on-the-fly when requested from Python.")) \
+				((bool,glDirty,true,AttrTrait<Attr::readonly>(),"Flag to re-initalize functors and colorscales before rendering."))
+			#define woo_core_Scene__PY__OPENGL .add_property("renderer",&Scene::pyEnsureAndGetRenderer) /* for retrieving from Python */ .add_property("gl",&Scene::pyGetGl,&Scene::pySetGl)
 		#else
-			#define woo_core_Scene__DisplayParameters__OPENGL
+			#define woo_core_Scene__ATTRS__OPENGL
+			#define woo_core_Scene__PY__OPENGL
 		#endif
 
 	#define woo_core_Scene__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY \
@@ -186,8 +201,9 @@ struct Scene: public Object{
 		((shared_ptr<Cell>,cell,make_shared<Cell>(),AttrTrait<Attr::hidden>(),"Information on periodicity; only should be used if Scene::isPeriodic.")) \
 		((std::string,lastSave,,AttrTrait<Attr::readonly>(),"Name under which the simulation was saved for the last time; used for reloading the simulation. Updated automatically, don't change.")) \
 		((long,preSaveDuration,,AttrTrait<Attr::readonly>().noGui(),"Wall clock duration this Scene was alive before being saved last time; this count is incremented every time the scene is saved. When Scene is loaded, it is used to construct clock0 as current_local_time - lastSecDuration.")) \
-		woo_core_Scene__DisplayParameters__OPENGL \
-		((vector<shared_ptr<ScalarRange>>,ranges,,,"Scalar ranges to be rendered on the display as colormaps")) \
+		woo_core_Scene__ATTRS__OPENGL \
+		((vector<shared_ptr<ScalarRange>>,ranges,,,"User-defined :obj:`~woo.core.ScalarRange` objects, to be rendered as colormaps.")) \
+		((vector<shared_ptr<ScalarRange>>,autoRanges,,AttrTrait<Attr::readonly>(),":obj:`~woo.core.ScalarRange` colormaps automatically obtained from renderes and engines; displayed only when actually used.")) \
 		((vector<shared_ptr<Object>>,any,,,"Storage for arbitrary Objects; meant for storing and loading static objects like Gl1_* functors to restore their parameters when scene is loaded.")) \
 		((py::object,pre,,AttrTrait<>().noGui(),"Preprocessor used for generating this simulation; to be only used in user scripts to query preprocessing parameters, not in c++ code.")) \
 		\
@@ -202,6 +218,7 @@ struct Scene: public Object{
 			clock0adjusted=false; \
 		, /* dtor */ pyStop();  \
 		, /* py */ \
+		woo_core_Scene__PY__OPENGL \
 		.add_property("tags",&Scene::pyGetTags,"Arbitrary key=value associations (tags like mp3 tags: author, date, version, description etc.") \
 		.add_property("duration",&Scene::pyGetDuration,"Number of (wall clock) seconds this instance is alive (including time before being loaded from file") \
 		.add_property("cell",&Scene::pyGetCell,"Periodic space configuration (is None for aperiodic scene); set :obj:`periodic` to enable/disable periodicity") \

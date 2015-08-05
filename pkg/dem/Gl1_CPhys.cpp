@@ -7,15 +7,7 @@
 #include<woo/pkg/dem/Sphere.hpp>
 
 WOO_PLUGIN(gl,(Gl1_CPhys));
-
-GLUquadric* Gl1_CPhys::gluQuadric=NULL;
-shared_ptr<ScalarRange> Gl1_CPhys::range;
-shared_ptr<ScalarRange> Gl1_CPhys::shearRange;
-bool Gl1_CPhys::shearColor;
-int Gl1_CPhys::signFilter;
-int Gl1_CPhys::slices;
-Vector2i Gl1_CPhys::slices_range;
-Real Gl1_CPhys::relMaxRad;
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_CPhys__CLASS_BASE_DOC_ATTRS);
 
 void Gl1_CPhys::go(const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C, const GLViewInfo& viewInfo){
 	if(!range) return;

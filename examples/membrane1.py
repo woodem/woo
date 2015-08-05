@@ -6,13 +6,15 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.master.usesApi=10101
-woo.gl.Gl1_DemField.nodes=True
-woo.gl.Gl1_Node.wd=4
-woo.gl.Gl1_Node.len=.05
-woo.gl.Gl1_Membrane.node=False
-woo.gl.Gl1_Membrane.phiScale=0.
-woo.gl.Gl1_DemField.glyph=woo.gl.Gl1_DemField.glyphForce
+woo.master.usesApi=10102
+
+S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,0))])
+S.gl.demField.nodes=True
+S.gl.node.wd=4
+S.gl.membrane.node=False
+S.gl.node.len=.05
+S.gl.membrane.phiScale=0.
+S.gl.demField.glyph=woo.gl.Gl1_DemField.glyphForce
 
 import woo.dem
 # print sorted(woo.dem.__dict__.keys())
@@ -28,7 +30,6 @@ if 0:
 	nn[2].dem.vel=(0,0,0)
 	nn[2].dem.blocked=''
 
-	S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,0))])
 	S.dem.gravity=(0,0,-10)
 	S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat(young=1e6)))
 	for n in nn: n.dem.addParRef(S.dem.par[-1])
@@ -41,11 +42,11 @@ if 0:
 	# print S.dem.par[0].shape.KK
 else:
 	# see http://www.youtube.com/watch?v=jimWu0_8oLc
-	woo.gl.Gl1_DemField.nodes=False
-	woo.gl.Gl1_Membrane.uScale=0.
-	woo.gl.Gl1_Membrane.relPhi=0.
-	S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))])
-	woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorVel
+	S.gl.demField.nodes=False
+	S.gl.membrane.uScale=0.
+	S.gl.membrane.relPhi=0.
+	S.dem.gravity=(0,0,-30)
+	S.gl.demField.colorBy='vel'
 	import woo.pack, woo.utils, numpy
 	xmax,ymax=1,1
 	xdiv,ydiv=20,20

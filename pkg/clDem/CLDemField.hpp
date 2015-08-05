@@ -91,7 +91,7 @@ struct Gl1_CLDemField: public GlFieldFunctor{
 	void renderPar();
 	void renderCon();
 	void renderPot();
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_CLDemField,GlFieldFunctor,"Render clDemField.",
+	WOO_CLASS_BASE_DOC_ATTRS(Gl1_CLDemField,GlFieldFunctor,"Render clDemField.",
 		((bool,parWire,false,,"Whether particles are rendered with wirte only"))
 		((Real,quality,.2,,"Adjust number of slices/stacks for spheres &c"))
 		((Vector2r,quality_range,Vector2r(0,1),AttrTrait<>().noGui(),"Range for quality"))

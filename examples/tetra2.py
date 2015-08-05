@@ -55,8 +55,9 @@ S.lab.collider.noBoundOk=True
 
 S.saveTmp()
 
-Gl1_DemField(nodes=False,glyph=Gl1_DemField.glyphForce)
-woo.gl.Gl1_Facet.slices=-1
+S.gl.demField.nodes=False
+S.gl.demField.glyph='force'
+S.gl.facet.slices=-1
 # import woo.log
 #
 # woo.log.setLevel('DynDt',woo.log.TRACE)

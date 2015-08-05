@@ -28,6 +28,5 @@ S.dem.par.add(woo.utils.wall(-.2,axis=2,sense=1),nodes=False)
 S.dtSafety=.8
 S.engines=[Leapfrog(reset=True,damping=.4),InsertionSortCollider([Bo1_Ellipsoid_Aabb(),Bo1_Wall_Aabb()]),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl()]),DynDt(stepPeriod=1000)]
 S.saveTmp()
-# S.any=[Gl1_Ellipsoid(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode),Renderer(iniViewDir=(0,1,0))]
-Gl1_Ellipsoid(quality=3)
+S.gl.ellipsoid.quality=3
 

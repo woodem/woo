@@ -1,7 +1,7 @@
 import woo.core, woo.dem, woo.utils, woo.gl
 from math import *
 from minieigen import *
-woo.master.usesApi=10101
+woo.master.usesApi=10102
 S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))])
 m=woo.dem.FrictMat(density=5000,young=5e6,ktDivKn=.5)
 S.dem.par.add([
@@ -19,5 +19,5 @@ S.throttle=5e-3
 S.saveTmp()
 
 from woo.gl import *
-Gl1_Capsule(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode),Renderer(iniViewDir=(0,1,0))
+S.gl=GlSetup(Gl1_Capsule(wire=True),Gl1_DemField(cPhys=True,cNode=Gl1_DemField.cNodeNode),Renderer(iniViewDir=(0,1,0)))
 

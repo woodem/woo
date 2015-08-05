@@ -390,21 +390,8 @@ void In2_Membrane_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Mat
 #include<woo/lib/opengl/GLUtils.hpp>
 
 WOO_PLUGIN(gl,(Gl1_Membrane));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS);
 
-
-bool Gl1_Membrane::node;
-bool Gl1_Membrane::refConf;
-Vector3r Gl1_Membrane::refColor;
-int Gl1_Membrane::refWd;
-Real Gl1_Membrane::uScale;
-int Gl1_Membrane::uWd;
-bool Gl1_Membrane::uSplit;
-Real Gl1_Membrane::relPhi;
-int Gl1_Membrane::phiWd;
-bool Gl1_Membrane::phiSplit;
-bool Gl1_Membrane::arrows;
-shared_ptr<ScalarRange> Gl1_Membrane::uRange;
-shared_ptr<ScalarRange> Gl1_Membrane::phiRange;
 
 void Gl1_Membrane::drawLocalDisplacement(const Vector2r& nodePt, const Vector2r& xy, const shared_ptr<ScalarRange>& range, bool split, char arrow, int lineWd, const Real z){
 	Vector3r nodePt3(nodePt[0],nodePt[1],0);
@@ -438,12 +425,12 @@ void Gl1_Membrane::drawLocalDisplacement(const Vector2r& nodePt, const Vector2r&
 
 void Gl1_Membrane::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){
 	Gl1_Facet::go(sh,shift,/*don't force wire rendering*/ wire2,viewInfo);
-	if(Renderer::fastDraw) return;
+	if(viewInfo.renderer->fastDraw) return;
 	Membrane& ff=sh->cast<Membrane>();
 	if(!ff.hasRefConf()) return;
 	if(node){
-		Renderer::setNodeGlData(ff.node,false/*set refPos only for the first time*/);
-		Renderer::renderRawNode(ff.node);
+		viewInfo.renderer->setNodeGlData(ff.node);
+		viewInfo.renderer->renderRawNode(ff.node);
 		if(ff.node->rep) ff.node->rep->render(ff.node,&viewInfo);
 		#ifdef MEMBRANE_DEBUG_ROT
 			// show what Membrane thinks the orientation of nodes is - render those midway
@@ -452,7 +439,7 @@ void Gl1_Membrane::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool w
 					shared_ptr<Node> n=make_shared<Node>();
 					n->pos=ff.node->pos+.5*(ff.nodes[i]->pos-ff.node->pos);
 					n->ori=(ff.currRot[i]*ff.node->ori.conjugate()).conjugate();
-					Renderer::renderRawNode(n);
+					viewInfo.renderer->renderRawNode(n);
 				}
 			}
 		#endif
@@ -460,7 +447,7 @@ void Gl1_Membrane::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool w
 
 	// draw everything in in local coords now
 	glPushMatrix();
-		if(!Renderer::scaleOn){
+		if(!viewInfo.renderer->scaleOn){
 			// without displacement scaling, local orientation is easy
 			GLUtils::setLocalCoords(ff.node->pos,ff.node->ori);
 		} else {

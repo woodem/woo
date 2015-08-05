@@ -20,6 +20,8 @@ WOO_IMPL__CLASS_BASE_DOC(woo_fem_Bo1_Tetra_Aabb__CLASS_BASE_DOC);
 
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_Tetra)(Gl1_Tet4));
+	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Tetra__CLASS_BASE_DOC_ATTRS);
+	WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Tet4__CLASS_BASE_DOC_ATTRS);
 #endif
 
 WOO_IMPL_LOGGER(Tetra);
@@ -289,14 +291,10 @@ Vector3r Tetra::getGlCentroid() const{
 }
 
 
-bool Gl1_Tetra::wire;
-int Gl1_Tetra::wd;
-Real Gl1_Tetra::fastDrawLim;
-
 void Gl1_Tetra::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){   
 	Tetra& t=sh->cast<Tetra>();
 
-	if(Renderer::fastDraw && (t.getCentroid()-sh->nodes[0]->pos).squaredNorm()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
+	if(viewInfo.renderer->fastDraw && (t.getCentroid()-sh->nodes[0]->pos).squaredNorm()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
 	Vector3r shifts[4]={shift,shift,shift,shift};
 	if(scene->isPeriodic){
 		assert(t.nodes[0]->hasData<GlData>() && t.nodes[1]->hasData<GlData>() && t.nodes[2]->hasData<GlData>() && t.nodes[3]->hasData<GlData>());
@@ -309,7 +307,7 @@ void Gl1_Tetra::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 		}
 	}
 
-	if(wire || wire2 || Renderer::fastDraw){
+	if(wire || wire2 || viewInfo.renderer->fastDraw){
 		glDisable(GL_LINE_SMOOTH);
 		glLineWidth(wd);
 		glBegin(GL_LINE_LOOP);
@@ -330,22 +328,14 @@ void Gl1_Tetra::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 	}
 }
 
-
-bool Gl1_Tet4::node;
-bool Gl1_Tet4::rep;
-bool Gl1_Tet4::refConf;
-Vector3r Gl1_Tet4::refColor;
-int Gl1_Tet4::refWd;
-int Gl1_Tet4::uWd;
-
 void Gl1_Tet4::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){
 	Gl1_Tetra::go(sh,shift,wire2,viewInfo);
-	if(Renderer::fastDraw) return;
+	if(viewInfo.renderer->fastDraw) return;
 	Tet4& t=sh->cast<Tet4>();
 	if(!t.node) return;
 	if(node || rep){
-		Renderer::setNodeGlData(t.node);
-		if(node) Renderer::renderRawNode(t.node);
+		viewInfo.renderer->setNodeGlData(t.node);
+		if(node) viewInfo.renderer->renderRawNode(t.node);
 		if(rep && t.node->rep) t.node->rep->render(t.node,&viewInfo);
 	}
 

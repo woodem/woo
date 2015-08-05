@@ -22,8 +22,8 @@ struct ScalarRange: public Object{
 	Real normInv(Real norm);
 	Real norm(Real v, bool clamp=true);
 	void adjust(const Real& v);
+	enum{RANGE_LOG=1,RANGE_REVERSED=2,RANGE_SYMMETRIC=4,RANGE_AUTO_ADJUST=8,RANGE_HIDDEN=16,RANGE_CLIP=32,RANGE_USED=64};
 	// called only when mnmx is manipulated
-	enum{RANGE_LOG=1,RANGE_REVERSED=2,RANGE_SYMMETRIC=4,RANGE_AUTO_ADJUST=8,RANGE_HIDDEN=16,RANGE_CLIP=32};
 	void postLoad(const ScalarRange&,void*);
 
 	bool isAutoAdjust() const { return flags&RANGE_AUTO_ADJUST; }
@@ -38,13 +38,16 @@ struct ScalarRange: public Object{
 	void setLog(bool l) { if(!l) flags&=~RANGE_LOG; else flags|=RANGE_LOG; }
 	bool isClip() const { return flags&RANGE_CLIP; }
 	void setClip(bool p) { if(!p) flags&=~RANGE_CLIP; else flags|=RANGE_CLIP; }
+	bool isUsed() const { return flags&RANGE_USED; }
+	void setUsed(bool u) { if(!u) flags&=~RANGE_USED; else flags|=RANGE_USED; }
+	void markUsed(){ if(!isUsed()) setUsed(true); }
 	void cacheLogs(); 
 
 	#define woo_core_ScalarRange__CLASS_BASE_DOC_ATTRS_PY \
 		ScalarRange,Object,"Store and share range of scalar values", \
 		((Vector2r,mnmx,Vector2r(std::numeric_limits<Real>::infinity(),-std::numeric_limits<Real>::infinity()),AttrTrait<Attr::triggerPostLoad>().buttons({"Reset","self.reset()","Re-initialize range"}),"Packed minimum and maximum values; adjusting from python sets :obj:`autoAdjust` to false automatically.")) \
 		((Vector2r,logMnmx,,AttrTrait<Attr::noSave|Attr::hidden>(),"Logs of mnmx values, to avoid computing logarithms all the time; computed via cacheLogs.")) \
-		((int,flags,(RANGE_AUTO_ADJUST),AttrTrait<>().bits({"log","reversed","symmetric","autoAdjust","hidden","clip"}),"Flags for this range.")) \
+		((int,flags,(RANGE_AUTO_ADJUST),AttrTrait<>().bits({"log","reversed","symmetric","autoAdjust","hidden","clip","used"}),"Flags for this range.")) \
 		((Vector2i,dispPos,Vector2i(-1000,-1000),AttrTrait<>().noGui(),"Where is this range displayed on the OpenGL canvas; initially out of range, will be reset automatically.")) \
 		((Real,length,200,AttrTrait<>().noGui(),"Length on the display; if negative, it is fractional relative to view width/height")) \
 		((bool,landscape,false,AttrTrait<>().noGui(),"Make the range display with landscape orientation")) \

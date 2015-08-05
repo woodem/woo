@@ -25,7 +25,8 @@ class Dispatcher: public Engine{
 	virtual int getDimension() { throw; };
 	virtual string getBaseClassType(unsigned int ) { throw; };
 	//
-	WOO_CLASS_BASE_DOC(Dispatcher,Engine,ClassTrait().doc("Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself.").section("","",{"Functor"}));
+	#define woo_core_Dispatcher__CLASS_BASE_DOC Dispatcher,Engine,ClassTrait().doc("Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself.").section("","",{"Functor"})
+	WOO_DECL__CLASS_BASE_DOC(woo_core_Dispatcher__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Dispatcher);
 

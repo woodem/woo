@@ -340,9 +340,17 @@ void DemField::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
 	if(d.has_key("par")){
 		py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
 		if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");
-		for(const auto& p: ex()) particles->pyAppend(p,/*nodes: maybe*/-1);
+		int parNodes=-1; // default, decide by particle properties
+		if(d.has_key("parNodes")){
+			py::extract<int> en(d["parNodes"]);
+			if(en.check()){ 
+				parNodes=en();
+				py::api::delitem(d,"parNodes");
+			}
+			else woo::TypeError("DemField(parNodes=...) must be an integer (-1, 0, 1; or True, False).");
+		}
+		for(const auto& p: ex()) particles->pyAppend(p,parNodes);
 		py::api::delitem(d,"par");
-		// this->collectNodes(); // useless, we added nodes above already
 	}
 }
 

@@ -358,12 +358,11 @@ class TestIO(unittest.TestCase):
 		import woo.system
 		failed=set()
 		for c in woo.system.childClasses(woo.core.Object):
-			woo.master.reset()
-			S=woo.master.scene
+			t=woo.core.WooTestClass()
 			try:
-				S.any=[c()]
-				S.saveTmp(quiet=True)
-				S=Scene.loadTmp()
+				t.any=c()
+				t.saveTmp(quiet=True)
+				woo.master.loadTmpAny()
 			except (RuntimeError,ValueError):
 				failed.add(c.__name__)
 		failed=list(failed); failed.sort()

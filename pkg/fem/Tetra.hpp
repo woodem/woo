@@ -109,25 +109,27 @@ struct Gl1_Tetra: public GlShapeFunctor{
 	//void drawEdges(const Tetra& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire);
 	//void glVertex(const Tetra& f, int i);
 	RENDERS(Tetra);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Tetra,GlShapeFunctor,"Renders :obj:`Tetra` object",
-		((bool,wire,false,AttrTrait<>().buttons({"All tetrahedra solid","import woo\nfor p in woo.master.scene.dem.par:\n\tif isinstance(p.shape,woo.fem.Tetra): p.shape.wire=False\n","","All tetrahedra wire","import woo\nfor p in woo.master.scene.dem.par:\n\tif isinstance(p.shape,woo.fem.Tetra): p.shape.wire=True\n",""}),"Only show wireframe."))
-		((int,wd,1,AttrTrait<>().range(Vector2i(1,20)),"Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)"))
+	#define woo_dem_Gl1_Tetra__CLASS_BASE_DOC_ATTRS \
+		Gl1_Tetra,GlShapeFunctor,"Renders :obj:`Tetra` object", \
+		((bool,wire,false,AttrTrait<>().buttons({"All tetrahedra solid","import woo\nfor p in woo.master.scene.dem.par:\n\tif isinstance(p.shape,woo.fem.Tetra): p.shape.wire=False\n","","All tetrahedra wire","import woo\nfor p in woo.master.scene.dem.par:\n\tif isinstance(p.shape,woo.fem.Tetra): p.shape.wire=True\n",""}),"Only show wireframe.")) \
+		((int,wd,1,AttrTrait<>().range(Vector2i(1,20)),"Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)")) \
 		((Real,fastDrawLim,1e-3,,"If performing fast draw (during camera manipulation) and the distance of centroid to the first node is smaller than *fastDrawLim* times scene radius, skip rendering of that tetra."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Tetra__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Gl1_Tetra);
 
 struct Gl1_Tet4: public Gl1_Tetra{	
 	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
 	RENDERS(Tet4);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Tet4,Gl1_Tetra,"Renders :obj:`Tet4` object; :obj:`Tetra` itself is rendered via :obj:`Gl1_Tetra`.",
-		((bool,node,false,,"Show local frame node"))
-		((bool,rep,true,,"Show GlRep of the frame node (without showing the node itself)"))
-		((bool,refConf,false,,"Show reference configuration, rotated to the current local frame"))
-		((Vector3r,refColor,Vector3r(0,.5,0),AttrTrait<>().rgbColor(),"Color for the reference shape"))
-		((int,refWd,1,,"Line width for the reference shape"))
+	#define woo_dem_Gl1_Tet4__CLASS_BASE_DOC_ATTRS \
+		Gl1_Tet4,Gl1_Tetra,"Renders :obj:`Tet4` object; :obj:`Tetra` itself is rendered via :obj:`Gl1_Tetra`.", \
+		((bool,node,false,,"Show local frame node")) \
+		((bool,rep,true,,"Show GlRep of the frame node (without showing the node itself)")) \
+		((bool,refConf,false,,"Show reference configuration, rotated to the current local frame")) \
+		((Vector3r,refColor,Vector3r(0,.5,0),AttrTrait<>().rgbColor(),"Color for the reference shape")) \
+		((int,refWd,1,,"Line width for the reference shape")) \
 		((int,uWd,2,,"Width of displacement lines"))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Tet4__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Gl1_Tet4);
 		

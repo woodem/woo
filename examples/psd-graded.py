@@ -30,8 +30,8 @@ S.engines=[
 
 S.one()
 
-woo.gl.Gl1_DemField.colorBy='radius'
-woo.gl.Renderer.iniViewDir=(0,-1,0)
+S.gl.demField.colorBy='radius'
+S.gl.renderer.iniViewDir=(0,-1,0)
 
 # abuse DEM nodes to stick labels on the top
 #for i,t in enumerate(['graded','inverted (capsules)','discrete','reordered','radial']):

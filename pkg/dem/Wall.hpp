@@ -77,9 +77,10 @@ WOO_REGISTER_OBJECT(Cg2_Wall_Facet_L6Geom);
 struct Gl1_Wall: public GlShapeFunctor{	
 	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool,const GLViewInfo&) WOO_CXX11_OVERRIDE;
 	WOO_DECL_LOGGER;
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Wall,GlShapeFunctor,"Renders :obj:`woo.dem.Wall` object",
+	#define woo_dem_Gl1_Wall__CLASS_BASE_DOC_ATTRS \
+		Gl1_Wall,GlShapeFunctor,"Renders :obj:`woo.dem.Wall` object", \
 		((int,div,20,,"Number of divisions of the wall inside visible scene part."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Wall__CLASS_BASE_DOC_ATTRS);
 	RENDERS(Wall);
 };
 WOO_REGISTER_OBJECT(Gl1_Wall);

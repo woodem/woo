@@ -10,9 +10,9 @@ S.engines=woo.utils.defaultEngines(dynDtPeriod=100,damping=.4)
 S.saveTmp()
 
 # view setup
-woo.gl.Gl1_DemField.cPhys=True
-woo.gl.Gl1_CPhys.relMaxRad=.1
-woo.gl.Renderer.allowFast=False
-woo.gl.Renderer.iniViewDir=(0,-1,0)
-woo.gl.Gl1_Capsule.smooth=True
+S.gl.demField.cPhys=True
+S.gl.cPhys.relMaxRad=.1
+S.gl.renderer.allowFast=False
+S.gl.renderer.iniViewDir=(0,-1,0)
+S.gl.capsule.smooth=True
 

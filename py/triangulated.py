@@ -150,7 +150,7 @@ def box(dim,center,**kw):
 :param dim: dimensions along x, y, z axes;
 :param center: a :obj:`minieigen:Vector3` (box aligned with global axes) or :obj:`woo.core.Node` (local coordinate system) giving the center of the box;
 '''
-	if isinstance(center,Vector3): c=woo.core.Node(pos=center)
+	if not isinstance(center,woo.core.Node): c=woo.core.Node(pos=center)
 	else: c=center
 	nn=[woo.core.Node(pos=c.loc2glob(Vector3(.5*sgn[0]*dim[0],.5*sgn[1]*dim[1],.5*sgn[2]*dim[2]))) for sgn in ((-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),(-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1))]
 	indices=[(0,2,1),(0,3,2),(0,1,5),(0,5,4),(0,4,3),(3,4,7),(1,2,6),(1,6,5),(2,3,7),(2,7,6),(4,5,6),(4,6,7)]

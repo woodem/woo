@@ -61,9 +61,11 @@ void Suspicious::run(){
 		if(fn>avgFn*relThreshold){ LOG_ERROR("S.dem.con["<<C->pyId1()<<","<<C->pyId2()<<"]: overlap "<<un<<" exceeds the limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<un/avgFn<<"]"); errCon.push_back(C); }
 		if(ft>avgFt*relThreshold){ LOG_ERROR("S.dem.con["<<C->pyId1()<<","<<C->pyId2()<<"]: overlap "<<un<<" exceeds the limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<un/avgFt<<"]"); errCon.push_back(C); }
 	}
+	#if 0 // SSS: TODO or remove
 	#ifdef WOO_OPENGL
 		if(!parForceOk) Gl1_DemField::glyph=Gl1_DemField::GLYPH_FORCE;
 		if(!parVelOk) Gl1_DemField::glyph=Gl1_DemField::GLYPH_VEL;
+	#endif
 	#endif
 
 	if(!allOk) throw std::runtime_error("Suspicious conditions, summary above in the terminal.");

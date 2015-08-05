@@ -242,7 +242,7 @@ def prepareCylTriax(pre):
 
 	try:
 		import woo.gl
-		S.any=[woo.gl.Renderer(dispScale=(5,5,2),rotScale=0,cell=False),woo.gl.Gl1_DemField(),woo.gl.Gl1_CPhys(),woo.gl.Gl1_Membrane(phiSplit=False,phiWd=1,relPhi=0.,uScale=0.,slices=-1,wire=True),woo.gl.Gl1_Facet(wd=2,slices=-1)]
+		S.gl(woo.gl.Renderer(dispScale=(5,5,2),rotScale=0,cell=False),woo.gl.Gl1_DemField(),woo.gl.Gl1_CPhys(),woo.gl.Gl1_Membrane(phiSplit=False,phiWd=1,relPhi=0.,uScale=0.,slices=-1,wire=True),woo.gl.Gl1_Facet(wd=2,slices=-1))
 	except ImportError: pass
 
 	return S

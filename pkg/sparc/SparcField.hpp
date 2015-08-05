@@ -466,14 +466,15 @@ struct Gl1_SparcField: public GlFieldFunctor{
 	GLViewInfo* viewInfo;
 	shared_ptr<SparcField> sparc; // used by do* methods
 	RENDERS(SparcField);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_SparcField,GlFieldFunctor,"Render Sparc field.",
-		((bool,nodes,true,,"Show local node coordinate systems"))
-		((bool,nid,false,,"Show node ids for Sparc models"))
-		((bool,neighbors,false,,"Whether to show neighbors in the 3d view (FIXME: should go to Gl1_SparcField, once it is created). When a node is selected, neighbors are shown nevertheless."))
-		((vector<int>,conn,,,"Sequence of node IDs which will be connected; every invalid id (such as -1) interrupts the line."))
-		((vector<Vector3r>,connColors,{Vector3r(0,1,0)},,"Colors for connecting lines (successive segments advance, colors are cycled through)"))
-		/* attrs */
-	);
+	#define woo_sparc_Gl1_SparcField__CLASS_BASE_DOC_ATTRS \
+		Gl1_SparcField,GlFieldFunctor,"Render Sparc field.", \
+		((bool,nodes,true,,"Show local node coordinate systems")) \
+		((bool,nid,false,,"Show node ids for Sparc models")) \
+		((bool,neighbors,false,,"Whether to show neighbors in the 3d view (FIXME: should go to Gl1_SparcField, once it is created). When a node is selected, neighbors are shown nevertheless.")) \
+		((vector<int>,conn,,,"Sequence of node IDs which will be connected; every invalid id (such as -1) interrupts the line.")) \
+		((vector<Vector3r>,connColors,{Vector3r(0,1,0)},,"Colors for connecting lines (successive segments advance, colors are cycled through)")) 
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_sparc_Gl1_SparcField__CLASS_BASE_DOC_ATTRS);
+	
 };
 WOO_REGISTER_OBJECT(Gl1_SparcField);
 

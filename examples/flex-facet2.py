@@ -2,6 +2,7 @@ from woo.core import *
 from woo.dem import *
 from woo.fem import *
 import woo
+woo.master.usesApi=10102
 import woo.gl
 import math
 from math import pi
@@ -10,14 +11,12 @@ from minieigen import *
 import woo.log
 woo.log.setLevel('Membrane',woo.log.TRACE)
 
-woo.gl.Gl1_DemField.nodes=True
-woo.gl.Gl1_Node.wd=4
-woo.gl.Gl1_Node.len=.2
-woo.gl.Gl1_Membrane.phiSplit=True
-woo.gl.Gl1_Membrane.phiRel=1
-woo.gl.Gl1_Membrane.phiWd=10
-woo.gl.Gl1_Membrane.arrows=False
-woo.gl.Gl1_Membrane.wire=True
+S=woo.master.scene=Scene(fields=[DemField()])
+
+S.gl.demField.nodes=True
+S.gl.node.wd=4
+S.gl.node.len=.2
+S.gl(woo.gl.Gl1_Membrane(phiSplit=True,relPhi=1,phiWd=10,arrows=False,wire=True))
 #nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,1))]
 nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,0))]
 for n in nn:
@@ -43,7 +42,6 @@ nn[0].dem.vel=.2*Vector3(0,0,2.)
 #nn[0].ori=Quaternion(Matrix3(-Vector3.UnitY,-Vector3.UnitZ,Vector3.UnitX))
 #nn[0].dem.angVel=10.*Vector3.UnitY
 
-S=woo.master.scene=Scene(fields=[DemField()])
 S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat()),nodes=True)
 for n in nn: n.dem.addParRef(S.dem.par[-1])
 

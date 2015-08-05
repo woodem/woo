@@ -29,11 +29,11 @@ namespace woo{
 		//
 		void setFromRaw(const Vector3r& _center, const Real& _radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) WOO_CXX11_OVERRIDE;
 		void asRaw(Vector3r& _center, Real& _radius, vector<shared_ptr<Node>>&nn, vector<Real>& raw) const WOO_CXX11_OVERRIDE;
-
-		WOO_CLASS_BASE_DOC_ATTRS_CTOR(Ellipsoid,Shape,"Ellipsoidal particle.",
-			((Vector3r,semiAxes,Vector3r(NaN,NaN,NaN),AttrTrait<>().lenUnit(),"Semi-principal axes.")),
+		#define woo_dem_Ellipsoid__CLASS_BASE_DOC_ATTRS_CTOR \
+			Ellipsoid,Shape,"Ellipsoidal particle.", \
+			((Vector3r,semiAxes,Vector3r(NaN,NaN,NaN),AttrTrait<>().lenUnit(),"Semi-principal axes.")), \
 			createIndex(); /*ctor*/
-		);
+		WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Ellipsoid__CLASS_BASE_DOC_ATTRS_CTOR);
 		REGISTER_CLASS_INDEX(Ellipsoid,Shape);
 	};
 };
@@ -42,8 +42,9 @@ WOO_REGISTER_OBJECT(Ellipsoid);
 struct Bo1_Ellipsoid_Aabb: public Bo1_Sphere_Aabb{
 	void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
 	FUNCTOR1D(Ellipsoid);
-	WOO_CLASS_BASE_DOC_ATTRS(Bo1_Ellipsoid_Aabb,Bo1_Sphere_Aabb,"Functor creating :obj:`Aabb` from :obj:`Ellipsoid`.\n\n.. todo:: Handle rotation which is not detected by verlet distance!\n\n.. warning:: :obj:`woo.dem.Bo1_Sphere_Aabb.distFactor` is ignored.",
-	);
+	#define woo_dem_Bo1_Ellipsoid_Aabb__CLASS_BASE_DOC \
+		Bo1_Ellipsoid_Aabb,Bo1_Sphere_Aabb,"Functor creating :obj:`Aabb` from :obj:`Ellipsoid`.\n\n.. todo:: Handle rotation which is not detected by verlet distance!\n\n.. warning:: :obj:`woo.dem.Bo1_Sphere_Aabb.distFactor` is ignored."
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Ellipsoid_Aabb__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Bo1_Ellipsoid_Aabb);
 
@@ -101,7 +102,9 @@ struct Gl1_Ellipsoid: public Gl1_Sphere{
 	virtual void go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) WOO_CXX11_OVERRIDE {
 		Gl1_Sphere::renderScaledSphere(shape,shift,wire2,glInfo,/*radius*/1.0,shape->cast<Ellipsoid>().semiAxes);
 	}
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Ellipsoid,Gl1_Sphere,"Renders :obj:`woo.dem.Ellipsoid` object",);
+	#define woo_dem_Gl1_Ellipsoid__CLASS_BASE_DOC_ATTRS \
+		Gl1_Ellipsoid,Gl1_Sphere,"Renders :obj:`woo.dem.Ellipsoid` object"
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_Gl1_Ellipsoid__CLASS_BASE_DOC_ATTRS);
 	RENDERS(Ellipsoid);
 };
 WOO_REGISTER_OBJECT(Gl1_Ellipsoid);

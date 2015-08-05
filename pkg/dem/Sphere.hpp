@@ -96,19 +96,17 @@ class Gl1_Sphere: public GlShapeFunctor{
 		virtual void go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) WOO_CXX11_OVERRIDE {
 			renderScaledSphere(sh,shift,wire2,glInfo,sh->cast<Sphere>().radius);
 		}
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Sphere,GlShapeFunctor,"Renders :obj:`Sphere` object",
-		((Real,quality,1.0,AttrTrait<>().range(Vector2r(0,8)),"Change discretization level of spheres. quality>1 for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color sphres are displayed (:obj:`stripes` = `False`), quality mutiplies :obj:`glutSlices` and :obj:`glutStacks`. If striped spheres are displayed (:obj:`stripes = `True`), only integer increments are meaningful: quality=1 and quality=1.9 will give the same result, quality=2 will give a finer result."))
-		((bool,wire,false,,"Only show wireframe (controlled by :obj:`glutSlices` and :obj:`glutStacks`."))
-		((bool,smooth,false,,"Render lines smooth (it makes them thicker and less clear if there are many spheres.)"))
-		((Real,scale,1.,AttrTrait<>().range(Vector2r(.1,2.)),"Scale sphere radii"))
-		/*
-			TODO: re-enable this
-			((bool,stripes,false,,"In non-wire rendering, show stripes clearly showing particle rotation."))
-			((bool,localSpecView,true,,"Compute specular light in local eye coordinate system."))
-		*/
-		((int,glutSlices,12,AttrTrait<Attr::noSave>().readonly(),"Base number of sphere slices, multiplied by :obj:`Gl1_Sphere.quality` before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)"))
+	#define woo_dem_Gl1_Sphere__CLASS_BASE_DOC_ATTRS \
+		Gl1_Sphere,GlShapeFunctor,"Renders :obj:`Sphere` object", \
+		((Real,quality,1.0,AttrTrait<>().range(Vector2r(0,8)),"Change discretization level of spheres. quality>1 for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color sphres are displayed (:obj:`stripes` = `False`), quality mutiplies :obj:`glutSlices` and :obj:`glutStacks`. If striped spheres are displayed (:obj:`stripes = `True`), only integer increments are meaningful: quality=1 and quality=1.9 will give the same result, quality=2 will give a finer result.")) \
+		((bool,wire,false,,"Only show wireframe (controlled by :obj:`glutSlices` and :obj:`glutStacks`.")) \
+		((bool,smooth,false,,"Render lines smooth (it makes them thicker and less clear if there are many spheres.)")) \
+		((Real,scale,1.,AttrTrait<>().range(Vector2r(.1,2.)),"Scale sphere radii")) \
+		/* TODO: re-enable this ((bool,stripes,false,,"In non-wire rendering, show stripes clearly showing particle rotation.")) ((bool,localSpecView,true,,"Compute specular light in local eye coordinate system.")) */ \
+		((int,glutSlices,12,AttrTrait<Attr::noSave>().readonly(),"Base number of sphere slices, multiplied by :obj:`Gl1_Sphere.quality` before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)")) \
 		((int,glutStacks,6,AttrTrait<Attr::noSave>().readonly(),"Base number of sphere stacks, multiplied by :obj:`Gl1_Sphere.quality` before use; not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)"))
-	);
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Sphere__CLASS_BASE_DOC_ATTRS);
 	RENDERS(Sphere);
 };
 WOO_REGISTER_OBJECT(Gl1_Sphere);

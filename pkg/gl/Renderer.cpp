@@ -10,6 +10,7 @@
 #include<woo/core/Field.hpp>
 
 #include<woo/pkg/gl/GlWooLogo.hpp>
+#include<woo/pkg/gl/GlSetup.hpp>
 
 // #include<woo/pkg/dem/Particle.hpp>
 
@@ -21,89 +22,37 @@ WOO_PLUGIN(gl,(Renderer)(GlExtraDrawer));
 WOO_IMPL_LOGGER(Renderer);
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_PY);
+
+
+
+// declaration in core/Scene.hpp (!!!)
+void Scene::ensureGl(){ if(!gl){ gl=make_shared<GlSetup>(); gl->init(); } }
+shared_ptr<Renderer> Scene::ensureAndGetRenderer() { ensureGl(); return gl->getRenderer(); }
+shared_ptr<Object> Scene::pyEnsureAndGetRenderer(){ return ensureAndGetRenderer(); }
+shared_ptr<GlSetup> Scene::pyGetGl(){ ensureGl(); return gl; }
+void Scene::pySetGl(const shared_ptr<GlSetup>& g){ if(!g) throw std::runtime_error("Scene.gl: must not be None."); gl=g; glDirty=true; }
+
+
+
 
 void GlExtraDrawer::render(){ throw runtime_error("GlExtraDrawer::render called from class "+getClassName()+". (did you forget to override it in the derived class?)"); }
 
-vector<Vector3r> Renderer::clipPlaneNormals;
-bool Renderer::initDone=false;
-Vector3r Renderer::viewDirection; // updated from GLViewer regularly
-GLViewInfo Renderer::viewInfo; // update from GLView regularly
 Vector3r Renderer::highlightEmission0;
 Vector3r Renderer::highlightEmission1;
-const int Renderer::numClipPlanes;
-string Renderer::snapFmt;
-int Renderer::fast;
 
-GlFieldDispatcher Renderer::fieldDispatcher;
-GlShapeDispatcher Renderer::shapeDispatcher;
-GlBoundDispatcher Renderer::boundDispatcher;
-GlNodeDispatcher Renderer::nodeDispatcher;
-GlCPhysDispatcher Renderer::cPhysDispatcher;
-shared_ptr<Scene> Renderer::scene;
-bool Renderer::withNames;
-bool Renderer::fastDraw;
-vector<shared_ptr<Object>> Renderer::glNamedObjects;
-vector<shared_ptr<Node>> Renderer::glNamedNodes;
-
-bool Renderer::scaleOn;
-Vector3r Renderer::dispScale;
-Real Renderer::rotScale;
-Real Renderer::zClipCoeff;
-Vector3r Renderer::lightPos;
-Vector3r Renderer::light2Pos;
-Vector3r Renderer::lightColor;
-Vector3r Renderer::light2Color;
-Vector3r Renderer::bgColor;
-bool Renderer::light1;
-bool Renderer::light2;
-bool Renderer::ghosts;
-bool Renderer::cell;
-shared_ptr<Object> Renderer::selObj;
-shared_ptr<Node> Renderer::selObjNode;
-string Renderer::selFunc;
-vector<Vector3r> Renderer::clipPlanePos;
-vector<Quaternionr> Renderer::clipPlaneOri;
-vector<bool> Renderer::clipPlaneActive;
-vector<shared_ptr<GlExtraDrawer>> Renderer::extraDrawers;
-bool Renderer::engines;
-bool Renderer::ranges;
-Vector3r Renderer::iniUp;
-Vector3r Renderer::iniViewDir;
-
-int Renderer::showTime=TIME_STEP|TIME_VIRT;
-bool Renderer::showDate;
-Vector3r Renderer::dateColor;
-Vector3r Renderer::virtColor;
-Vector3r Renderer::realColor;
-Vector3r Renderer::stepColor;
-int Renderer::grid;
-bool Renderer::oriAxes;
-int Renderer::oriAxesPx;
-
-Vector3r Renderer::colorX;
-Vector3r Renderer::colorY;
-Vector3r Renderer::colorZ;
-
-int Renderer::logoSize;
-Vector2i Renderer::logoPos;
-Vector3r Renderer::logoColor;
-Real Renderer::logoWd;
-
-int Renderer::maxFps;
-Real Renderer::renderTime;
-Real Renderer::fastRenderTime;
-
-void Renderer::init(){
+void Renderer::init(const shared_ptr<Scene>& scene){
 	LOG_DEBUG("Renderer::init()");
-	#define _TRY_ADD_FUNCTOR(functorT,dispatcher,className) if(Master::instance().isInheritingFrom_recursive(className,#functorT)){ shared_ptr<functorT> f(static_pointer_cast<functorT>(Master::instance().factorClass(className))); dispatcher.add(f); continue; }
-	for(auto& item: Master::instance().getClassBases()){
-		_TRY_ADD_FUNCTOR(GlFieldFunctor,fieldDispatcher,item.first);
-		_TRY_ADD_FUNCTOR(GlShapeFunctor,shapeDispatcher,item.first);
-		_TRY_ADD_FUNCTOR(GlBoundFunctor,boundDispatcher,item.first);
-		_TRY_ADD_FUNCTOR(GlNodeFunctor,nodeDispatcher,item.first);
-		_TRY_ADD_FUNCTOR(GlCPhysFunctor,cPhysDispatcher,item.first);
-	}
+	if(!scene->gl) throw std::logic_error("Renderer::init: !scene->gl.");
+	if(scene->gl->getRenderer().get()!=this) throw std::logic_error("Renderer::init: scene->gl->getRenderer().get()!=this.");
+	scene->autoRanges.clear();
+	fieldDispatcher.setFunctors_getRanges(scene->gl->objs,scene->autoRanges);
+	nodeDispatcher.setFunctors_getRanges(scene->gl->objs,scene->autoRanges);
+	for(const auto& e: scene->engines) e->getRanges(scene->autoRanges);
+
 	clipPlaneNormals.resize(numClipPlanes);
+	initDone=true;
+
 	static bool glutInitDone=false;
 	if(!glutInitDone){
 		char* argv[]={NULL};
@@ -113,13 +62,6 @@ void Renderer::init(){
 		/* transparent spheres (still not working): glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE | GLUT_ALPHA); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE); */
 		glutInitDone=true;
 	}
-	// this is not initialized properly for some reason?!
-	showTime=TIME_STEP|TIME_VIRT;
-	// somehwere on the way, resets to 1,1,1 (??)
-	// in case user-overridden, don't set to 10,10,10
-	if(dispScale==Vector3r::Ones()) dispScale=Vector3r(10,10,10);
-
-	initDone=true;
 }
 
 bool Renderer::pointClipped(const Vector3r& p){
@@ -135,7 +77,7 @@ const Vector3r& Renderer::axisColor(short ax){
 
 
 /* this function is called from field renderers for all field nodes */
-void Renderer::setNodeGlData(const shared_ptr<Node>& n, bool updateRefPos){
+void Renderer::setNodeGlData(const shared_ptr<Node>& n){
 	bool scaleRotations=(rotScale!=1.0 && scaleOn);
 	bool scaleDisplacements=(dispScale!=Vector3r::Ones() && scaleOn);
 	const bool isPeriodic=scene->isPeriodic;
@@ -147,8 +89,8 @@ void Renderer::setNodeGlData(const shared_ptr<Node>& n, bool updateRefPos){
 	bool rendered=!pointClipped(cellPos);
 	// this encodes that the node is clipped
 	if(!rendered){ gld.dGlPos=Vector3r(NaN,NaN,NaN); return; }
-	if(updateRefPos || isnan(gld.refPos[0])) gld.refPos=n->pos;
-	if(updateRefPos || isnan(gld.refOri.x())) gld.refOri=n->ori;
+	if(setRefNow || isnan(gld.refPos[0])) gld.refPos=n->pos;
+	if(setRefNow || isnan(gld.refOri.x())) gld.refOri=n->ori;
 	const Vector3r& pos=n->pos; const Vector3r& refPos=gld.refPos;
 	const Quaternionr& ori=n->ori; const Quaternionr& refOri=gld.refOri;
 	// if no scaling and no periodic, return quickly
@@ -272,8 +214,22 @@ void Renderer::setLighting(){
 };
 
 
+
+void Renderer::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+	if(py::len(kw)>0){
+		string keys; py::list k(kw.keys());
+		for(int i=0; i<py::len(k); i++) keys+=(i>0?", ":"")+py::extract<string>(k[i])();
+		Master().instance().checkApi(10102,"Constructing Renderer with keywords ("+keys+") will have no effect unless passed to GlSetup/S.gl.",/*pyWarn*/true);
+	}
+}
+
+
 void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fastDraw){
-	if(!initDone) init();
+	if(!initDone || _scene->glDirty || (_scene->gl && _scene->gl->dirty)){
+		init(_scene);
+		_scene->glDirty=false;
+		if(_scene->gl) _scene->gl->dirty=false;
+	}
 	assert(initDone);
 
 	switch(fast){
@@ -282,14 +238,15 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 		case FAST_NEVER: fastDraw=false; break;
 	}
 
+	// make a copy to see if it were true the whole time
+	bool wasSetRefNow(setRefNow);
+
 	withNames=_withNames; // used in many methods
 	if(withNames) glNamedObjects.clear();
-	
-	// assign new scene; use GIL lock to avoid crash
-	if(scene.get()!=_scene.get()){
-		GilLock lock;
-		scene=_scene;
-	}
+
+	// acquire shared_ptr to scene
+	{ scene=_scene; }
+
 	// smuggle scene and ourselves into GLViewInfo for use with GlRep and field functors
 	viewInfo.scene=scene.get();
 	viewInfo.renderer=this;
@@ -319,8 +276,15 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 			d->render();
 		glPopMatrix();
 	}
+	
+	// if ref positions were set the whole time, unset here, it is done for all nodes
+	if(setRefNow && wasSetRefNow){ setRefNow=false; }
 
 	if(withNames) cerr<<"render(withNames==true) done, "<<glNamedObjects.size()<<" objects inserted"<<endl;
+
+	// release the shared_ptr; must be GIL-protected since descruction of Python-constructed object without GIL causes crash
+	{ GilLock lock; scene.reset(); }
+
 
 }
 
@@ -340,7 +304,7 @@ void Renderer::renderRawNode(shared_ptr<Node> node){
 		if(isnan(x[0])) return;
 	}
 	else{ x=(scene->isPeriodic?scene->cell->canonicalizePt(node->pos):node->pos); }
-	if(likely(!Renderer::fastDraw)){
+	if(likely(!fastDraw)){
 		Quaternionr ori=(node->hasData<GlData>()?node->getData<GlData>().dGlOri:Quaternionr::Identity())*node->ori;
 		glPushMatrix();
 			GLUtils::setLocalCoords(x,ori);

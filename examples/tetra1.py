@@ -2,7 +2,7 @@ from woo.dem import *
 from woo.fem import *
 from woo.core import *
 import woo.utils
-woo.master.usesApi=10101
+woo.master.usesApi=10102
 mat=woo.utils.defaultMaterial()
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-10))])
@@ -29,4 +29,4 @@ S.lab.collider.dead=True
 S.saveTmp()
 
 from woo.gl import *
-Gl1_DemField(nodes=True,glyph=Gl1_DemField.glyphForce)
+S.gl(Gl1_DemField(nodes=True,glyph=Gl1_DemField.glyphForce))

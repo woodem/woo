@@ -29,17 +29,18 @@ struct SnapshotEngine: public PeriodicEngine{
 	virtual void run() WOO_CXX11_OVERRIDE;
 	virtual bool needsField() WOO_CXX11_OVERRIDE { return false; }
 	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) WOO_CXX11_OVERRIDE;
-	WOO_CLASS_BASE_DOC_ATTRS(SnapshotEngine,PeriodicEngine,"Periodically save snapshots of GLView(s) as .png files. Files are named :obj:`fileBase` + :obj:`counter` + ``.png`` (counter is left-padded by 0s, i.e. snap00004.png).",
-		((string,fileBase,"",,"Basename for snapshots"))
-		((string,format,"PNG",AttrTrait<>().choice({"JPEG","PNG","EPS","PS","PPM","BMP"}),"Format of snapshots (one of JPEG, PNG, EPS, PS, PPM, BMP) `QGLViewer documentation <http://www.libqglviewer.com/refManual/classQGLViewer.html#abbb1add55632dced395e2f1b78ef491c>`_. File extension will be lowercased :obj:`format`. Validity of format is not checked."))
-		((int,counter,0,AttrTrait<Attr::readonly>(),"Number that will be appended to fileBase when the next snapshot is saved (incremented at every save)."))
-		((string,plot,,,"Name of field in :obj:`woo.core.Plot.imgData` to which taken snapshots will be appended automatically."))
-		((vector<string>,snapshots,,AttrTrait<>().startGroup("Saved files").readonly().noGui(),"Files that have been created so far"))
-		((bool,ignoreErrors,true,AttrTrait<>().startGroup("Error handling"),"Only report errors instead of throwing exceptions, in case of timeouts."))
-		((int,msecSleep,0,,"number of msec to sleep after snapshot (to prevent 3d hw problems) [ms]"))
-		((Real,deadTimeout,3,,"Timeout for 3d operations (opening new view, saving snapshot); after timing out, throw exception (or only report error if :obj:`ignoreErrors`) and make myself :obj:`dead <Engine.dead>`. [s]"))
+	#define woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS \
+		SnapshotEngine,PeriodicEngine,"Periodically save snapshots of GLView(s) as .png files. Files are named :obj:`fileBase` + :obj:`counter` + ``.png`` (counter is left-padded by 0s, i.e. snap00004.png).", \
+		((string,fileBase,"",,"Basename for snapshots")) \
+		((string,format,"PNG",AttrTrait<>().choice({"JPEG","PNG","EPS","PS","PPM","BMP"}),"Format of snapshots (one of JPEG, PNG, EPS, PS, PPM, BMP) `QGLViewer documentation <http://www.libqglviewer.com/refManual/classQGLViewer.html#abbb1add55632dced395e2f1b78ef491c>`_. File extension will be lowercased :obj:`format`. Validity of format is not checked.")) \
+		((int,counter,0,AttrTrait<Attr::readonly>(),"Number that will be appended to fileBase when the next snapshot is saved (incremented at every save).")) \
+		((string,plot,,,"Name of field in :obj:`woo.core.Plot.imgData` to which taken snapshots will be appended automatically.")) \
+		((vector<string>,snapshots,,AttrTrait<>().startGroup("Saved files").readonly().noGui(),"Files that have been created so far")) \
+		((bool,ignoreErrors,true,AttrTrait<>().startGroup("Error handling"),"Only report errors instead of throwing exceptions, in case of timeouts.")) \
+		((int,msecSleep,0,,"number of msec to sleep after snapshot (to prevent 3d hw problems) [ms]")) \
+		((Real,deadTimeout,3,,"Timeout for 3d operations (opening new view, saving snapshot); after timing out, throw exception (or only report error if :obj:`ignoreErrors`) and make myself :obj:`dead <Engine.dead>`. [s]")) \
 		((bool,tryOpenView,false,,"Attempt to open new view if there is none; this is very unreliable (off by default)."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS);
 	WOO_DECL_LOGGER;
 };
 WOO_REGISTER_OBJECT(SnapshotEngine);
@@ -123,6 +124,7 @@ class GLViewer : public QGLViewer
 		set<int> boundClipPlanes;
 		shared_ptr<qglviewer::LocalConstraint> xyPlaneConstraint;
 		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+lexical_cast<string>(i+1);return ret;}
+
 		// set initial view as specified by Renderer::iniViewDir and friends
 		void setInitialView();
 		// boost::posix_time::ptime last_user_event;
@@ -143,15 +145,22 @@ class GLViewer : public QGLViewer
 		#if 0
 			virtual void paintGL();
 		#endif
+		shared_ptr<Renderer> renderer;
+		shared_ptr<Scene> scene;
+
+		// called from all entry points (draw() and fastDraw()), returns false if there is nothing to do
+		// otherwise makes sure scene and renderer are set
+		bool setSceneAndRenderer();
+
 		// do fastDraw when regular (non-fast) rendering is slower than max FPS
 		// if rendering is faster, draw normally, sicne manipulation will not be slown down
-		void fastDraw() WOO_CXX11_OVERRIDE { draw(/*withNames*/false,/*fast*/!(Renderer::renderTime<(1./Renderer::maxFps))
+		void fastDraw() WOO_CXX11_OVERRIDE { if(!setSceneAndRenderer()) return; draw(/*withNames*/false,/*fast*/!(renderer->renderTime<(1./renderer->maxFps))
 		);}
-		void draw() WOO_CXX11_OVERRIDE { draw(/*withNames*/false,
-			// /*fast*/(!hasFocus() && ((currentFPS()<.9*Renderer::maxFps && framesDone>100))));
-			/*fast*/(!hasFocus() && Renderer::renderTime>.9*(1./Renderer::maxFps)) && framesDone>100);
+		void draw() WOO_CXX11_OVERRIDE {
+			if(!setSceneAndRenderer()) return;
+			draw(/*withNames*/false,/*fast*/(!hasFocus() && renderer->renderTime>.9*(1./renderer->maxFps)) && framesDone>100);
 		}
-		void drawWithNames() WOO_CXX11_OVERRIDE { draw(/*withNames*/true); }
+		void drawWithNames() WOO_CXX11_OVERRIDE { if(!setSceneAndRenderer()) return; draw(/*withNames*/true); }
 		// this one is not virtual
 		void draw(bool withNames, bool fast=false);
 		void displayMessage(const std::string& s, int delay=2000){ QGLViewer::displayMessage(QString(s.c_str()),delay);}
@@ -191,6 +200,10 @@ class GLViewer : public QGLViewer
 		// http://stackoverflow.com/a/20425778/761090
 		GLuint logoTextureId;
 		QImage loadTexture(const char *filename, GLuint &textureID);
+	
+		// rendering things
+		void renderRange(ScalarRange& range, int i);
+
 
 
 		WOO_DECL_LOGGER;

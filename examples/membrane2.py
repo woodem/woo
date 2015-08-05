@@ -9,23 +9,23 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.master.usesApi=10101
+woo.master.usesApi=10102
 import woo.log
 #woo.log.setLevel('In2_Membrane_ElastMat',woo.log.TRACE)
 #woo.log.setLevel('DynDt',woo.log.DEBUG)
 
-woo.gl.Gl1_Node.wd=2
-woo.gl.Gl1_Node.len=.05
-#woo.gl.Gl1_DemField.glyph=woo.gl.Gl1_DemField.glyphForce
 
-woo.gl.Gl1_Membrane.uScale=1.
-woo.gl.Gl1_Membrane.relPhi=.1
-woo.gl.Gl1_Membrane.phiSplit=False
-woo.gl.Gl1_Membrane.phiWd=5
-
-
-woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorVel
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))])
+
+S.gl.node.wd=2
+S.gl.node.len=.05
+S.gl.membrane.uScale=1.
+S.gl.membrane.relPhi=.1
+S.gl.membrane.phiSplit=False
+S.gl.membrane.phiWd=5
+S.gl.demField.colorBy='vel'
+
+
 if 1:
 	import woo.pack, woo.utils, numpy
 	scenario=['youtube','plain','inverse'][0]
@@ -37,22 +37,18 @@ if 1:
 		mat.young*=.1
 		ff=woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface([[(x,y,0) for x in numpy.linspace(0,xmax,num=xdiv)] for y in numpy.linspace(0,ymax,num=ydiv)]),flex=True,halfThick=.01,mat=mat)
 		S.dem.par.add(ff)
-		woo.gl.Renderer.dispScale=(10,10,10)
-		woo.gl.Gl1_Membrane.node=False
-		woo.gl.Gl1_Membrane.refConf=False
-		woo.gl.Gl1_Membrane.uScale=0.
-		woo.gl.Gl1_Membrane.relPhi=0.
-		woo.gl.Gl1_DemField.shape=woo.gl.Gl1_DemField.shapeNonSpheres
-		woo.gl.Gl1_DemField.colorBy=woo.gl.Gl1_DemField.colorDisplacement
-		woo.gl.Gl1_DemField.vecAxis='norm'
-		woo.gl.Gl1_DemField.colorBy2=woo.gl.Gl1_DemField.colorVel
-		woo.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
+		S.gl(
+			woo.gl.Renderer(dispScale=(10,10,10)),
+			woo.gl.Gl1_Membrane(node=False,refConf=False,uScale=0.,relPhi=0.),
+			woo.gl.Gl1_DemField(shape='nsph',colorBy='disp',vecAxis='norm',colorBy2='vel')
+		)
+		S.gl.demField.colorRange2.mnmx=(0,2.)
 	else:
-		woo.gl.Renderer.dispScale=(10,10,100)
-		woo.gl.Renderer.scaleOn=True
-		woo.gl.Gl1_DemField.nodes=True
-		woo.gl.Gl1_DemField.glyphRelSz=.3
-		woo.gl.Gl1_Membrane.node=True
+		S.gl.renderer.dispScale=(10,10,100)
+		S.gl.renderer.scaleOn=True
+		S.gl.demField.nodes=True
+		S.gl.demField.glyphRelSz=.3
+		S.gl.membrane.node=True
 		## this triggers weirdness in rotation computation!! (quaternion wrapping around?!)
 		if scenario=='inverse':
 			f=woo.utils.facet([(0,0,0),(0,.2,0),(.2,0,0)],flex=True) #!!!

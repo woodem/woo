@@ -5,7 +5,8 @@
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+// functor types
+#include<woo/pkg/dem/Gl1_DemField.hpp>
 #endif
 
 struct Aabb: public Bound{

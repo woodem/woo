@@ -81,21 +81,22 @@ struct Gl1_Membrane: public Gl1_Facet{
 	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
 	void drawLocalDisplacement(const Vector2r& nodePt, const Vector2r& xy, const shared_ptr<ScalarRange>& range, bool split, char arrow, int lineWd, const Real z=NaN);
 	RENDERS(Membrane);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Membrane,Gl1_Facet,"Renders :obj:`Membrane` object; :obj:`Facet` itself is rendered via :obj:`Gl1_Facet`.",
-		((bool,node,false,,"Show local frame node"))
-		((bool,refConf,true,,"Show reference configuration, rotated to the current local frame"))
-		((Vector3r,refColor,Vector3r(0,.5,0),AttrTrait<>().rgbColor(),"Color for the reference shape"))
-		((int,refWd,1,,"Line width for the reference shape"))
-		((Real,uScale,1.,,"Scale of displacement lines (zero to disable)"))
-		((int,uWd,2,,"Width of displacement lines"))
-		((bool,uSplit,false,,"Show x and y displacement components separately"))
-		((Real,relPhi,.2,,"Length of unit rotation (one radian), relative to scene radius (zero to disable)"))
-		((int,phiWd,2,,"Width of rotation lines"))
-		((bool,phiSplit,true,,"Show x and y displacement components separately"))
-		((bool,arrows,false,,"Show displacements and rotations as arrows rather than lines"))
-		((shared_ptr<ScalarRange>,uRange,make_shared<ScalarRange>(),,"Range for displacements (colors only)"))
+	#define woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS \
+		Gl1_Membrane,Gl1_Facet,"Renders :obj:`Membrane` object; :obj:`Facet` itself is rendered via :obj:`Gl1_Facet`.", \
+		((bool,node,false,,"Show local frame node")) \
+		((bool,refConf,true,,"Show reference configuration, rotated to the current local frame")) \
+		((Vector3r,refColor,Vector3r(0,.5,0),AttrTrait<>().rgbColor(),"Color for the reference shape")) \
+		((int,refWd,1,,"Line width for the reference shape")) \
+		((Real,uScale,1.,,"Scale of displacement lines (zero to disable)")) \
+		((int,uWd,2,,"Width of displacement lines")) \
+		((bool,uSplit,false,,"Show x and y displacement components separately")) \
+		((Real,relPhi,.2,,"Length of unit rotation (one radian), relative to scene radius (zero to disable)")) \
+		((int,phiWd,2,,"Width of rotation lines")) \
+		((bool,phiSplit,true,,"Show x and y displacement components separately")) \
+		((bool,arrows,false,,"Show displacements and rotations as arrows rather than lines")) \
+		((shared_ptr<ScalarRange>,uRange,make_shared<ScalarRange>(),,"Range for displacements (colors only)")) \
 		((shared_ptr<ScalarRange>,phiRange,make_shared<ScalarRange>(),,"Range for rotations (colors only)"))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Gl1_Membrane);
 #endif

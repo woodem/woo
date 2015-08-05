@@ -9,6 +9,7 @@ import math
 from minieigen import *
 import woo.models
 
+
 class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 	r'''Preprocessor for triaxial test with rigid boundary. The test is run in 2 stages:
 	
@@ -81,6 +82,7 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
 def prepareTriax(pre):
 	import woo
+	woo.master.usesApi=10102
 	S=woo.core.Scene(fields=[DemField()])
 	S.pre=pre.deepcopy()
 	S.lab.partMat=pre.model.mats[0]
@@ -142,7 +144,7 @@ def prepareTriax(pre):
 
 	try:
 		import woo.gl
-		S.any=[woo.gl.Renderer(dispScale=(5,5,2),rotScale=0,cell=True if pre.shape=='cell' else False),woo.gl.Gl1_DemField(colorBy=woo.gl.Gl1_DemField.colorRadius),woo.gl.Gl1_CPhys(),woo.gl.Gl1_Wall(div=3)]
+		S.gl(woo.gl.Renderer(dispScale=(5,5,2),rotScale=0,cell=True if pre.shape=='cell' else False),woo.gl.Gl1_DemField(colorBy='radius'),woo.gl.Gl1_CPhys(),woo.gl.Gl1_Wall(div=3))
 	except ImportError: pass
 	
 	return S

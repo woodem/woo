@@ -44,6 +44,7 @@ class FallingHorse(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
 def prepareHorse(pre):
 	import sys, os, woo
+	woo.master.usesApi=10102
 	import woo.gts as gts # not sure whether this is necessary
 	import woo.pack, woo.utils, woo.core, woo
 	import pkg_resources
@@ -152,10 +153,10 @@ def prepareHorse(pre):
 	S.dtSafety=pre.dtSafety
 	import woo.config
 	if 'opengl' in woo.config.features:
-		S.any=[
-			woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeSpheres,colorBy=woo.gl.Gl1_DemField.colorVel,deadNodes=False),
+		S.gl(
+			woo.gl.Gl1_DemField(shape='spheroids',colorBy='vel',deadNodes=False),
 			woo.gl.Gl1_Membrane(relPhi=0.),
-		]
+		)
 	return S
 
 def plotBatchResults(db):

@@ -331,8 +331,8 @@ string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>&
 #ifdef WOO_OPENGL
 #include<woo/lib/opengl/GLUtils.hpp>
 #include<woo/pkg/gl/Renderer.hpp>
-	void FlowAnalysis::render(const GLViewInfo&){
-		if(Renderer::fastDraw) GLUtils::AlignedBox(box,color);
+	void FlowAnalysis::render(const GLViewInfo& glInfo){
+		if(glInfo.renderer->fastDraw) GLUtils::AlignedBox(box,color);
 		else GLUtils::AlignedBoxWithTicks(box,Vector3r::Constant(cellSize),Vector3r::Constant(cellSize),color);
 	}
 #endif /* WOO_OPENGL */

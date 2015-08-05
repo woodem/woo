@@ -11,7 +11,7 @@ S.dem.par.add([
 	woo.dem.Sphere.make((.8,.5,.8),radius=.1,color=.5),
 	woo.dem.Sphere.make((.8,.8,.5),radius=.1,color=1),
 ])
-woo.gl.Gl1_Sphere.wire=True
+S.gl.sphere.wire=True
 # for n in S.dem.nodes: n.dem.isAspherical=False
 S.periodic=True
 S.cell.nextGradV=(((0,1,1),(-1,0,1),(-1,-1,0)))

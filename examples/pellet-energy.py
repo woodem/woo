@@ -23,5 +23,5 @@ S.plot.plots={'i':('**S.energy',None,('Eerr','g--'))}
 S.plot.plot()
 S.run(500)
 #from woo import gl
-#gl.Gl1_Wall.div=10
-#gl.Gl1_InfCylinder.wire=True
+#S.gl.wall.div=10
+#S.gl.infCylinder.wire=True

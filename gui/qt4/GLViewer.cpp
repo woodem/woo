@@ -22,6 +22,8 @@
 #include<woo/lib/base/CompUtils.hpp>
 #include<woo/lib/opengl/GLUtils.hpp>
 
+#include<boost/range/join.hpp>
+
 #include<woo/pkg/dem/Gl1_DemField.hpp>
 
 using boost::algorithm::iends_with;
@@ -33,12 +35,12 @@ using boost::algorithm::iends_with;
 #include<QtGui/QMessageBox>
 #include<QtGui/QIcon>
 
-WOO_PLUGIN(_qt,(SnapshotEngine));
-
 /*****************************************************************************
 *********************************** SnapshotEngine ***************************
 *****************************************************************************/
 
+WOO_PLUGIN(_qt,(SnapshotEngine));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL_LOGGER(SnapshotEngine);
 
 void SnapshotEngine::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
@@ -219,8 +221,11 @@ GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QW
 }
 
 void GLViewer::setInitialView(){
+	const auto& s=Master::instance().getScene();
+	if(!s) return;
+	const auto& rr=s->ensureAndGetRenderer();
 	// set initial orientation, z up
-	Vector3r &u(Renderer::iniUp), &v(Renderer::iniViewDir);
+	Vector3r &u(rr->iniUp), &v(rr->iniViewDir);
 	qglviewer::Vec up(u[0],u[1],u[2]), vDir(v[0],v[1],v[2]);
 	camera()->setViewDirection(vDir);
 	camera()->setUpVector(up);
@@ -291,11 +296,11 @@ void GLViewer::resetManipulation(){
 }
 
 void GLViewer::startClipPlaneManipulation(int planeNo){
-	assert(planeNo<Renderer::numClipPlanes);
+	assert(planeNo<renderer->numClipPlanes);
 	resetManipulation();
 	mouseMovesManipulatedFrame(xyPlaneConstraint.get());
 	manipulatedClipPlane=planeNo;
-	const Vector3r& pos(Renderer::clipPlanePos[planeNo]); const Quaternionr& ori(Renderer::clipPlaneOri[planeNo]);
+	const Vector3r& pos(renderer->clipPlanePos[planeNo]); const Quaternionr& ori(renderer->clipPlaneOri[planeNo]);
 	manipulatedFrame()->setPositionAndOrientation(qglviewer::Vec(pos[0],pos[1],pos[2]),qglviewer::Quaternion(ori.x(),ori.y(),ori.z(),ori.w()));
 	string grp=strBoundGroup();
 	displayMessage("Manipulating clip plane #"+lexical_cast<string>(planeNo+1)+(grp.empty()?grp:" (bound planes:"+grp+")"));
@@ -377,7 +382,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	if(false){}
 	/* special keys: Escape and Space */
 	else if(e->key()==Qt::Key_A){
-		if(e->modifiers() & Qt::ShiftModifier){ Renderer::oriAxes=!Renderer::oriAxes; }
+		if(e->modifiers() & Qt::ShiftModifier){ renderer->oriAxes=!renderer->oriAxes; }
 		else { toggleAxisIsDrawn(); }
 		return;
 	}
@@ -394,7 +399,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 				nextSnapFile=QFileDialog::getSaveFileName(NULL,"Save screenshot",QDir::currentPath(),filters).toStdString();
 			#else
 				Scene* scene=Master::instance().getScene().get();
-				string out=scene->expandTags(Renderer::snapFmt);
+				string out=scene->expandTags(renderer->snapFmt);
 				if(boost::algorithm::contains(out,"{#}")){
 					for(int i=0; ;i++){
 						std::ostringstream fss; fss<<std::setw(4)<<std::setfill('0')<<i;
@@ -405,25 +410,25 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 				LOG_INFO("Will save snapshot to "<<nextSnapFile);
 			#endif
 		} else if (e->modifiers() & Qt::ShiftModifier){
-			Gl1_DemField::updateRefPos=true;
+			renderer->setRefNow=true;
 			displayMessage("Will use current positions/orientations for scaling.");
 		} else {
-			Renderer::scaleOn=!Renderer::scaleOn;
-			displayMessage("Scaling is "+(Renderer::scaleOn?string("on (displacements ")+lexical_cast<string>(Renderer::dispScale.transpose())+", rotations "+lexical_cast<string>(Renderer::rotScale)+")":string("off")));
+			renderer->scaleOn=!renderer->scaleOn;
+			displayMessage("Scaling is "+(renderer->scaleOn?string("on (displacements ")+lexical_cast<string>(renderer->dispScale.transpose())+", rotations "+lexical_cast<string>(renderer->rotScale)+")":string("off")));
 			return;
 		}
 	}
 	else if(e->key()==Qt::Key_Escape){
 		if(!isManipulating()){ 
 			// reset selection
-			Renderer::selObj=shared_ptr<Object>(); Renderer::selObjNode=shared_ptr<Node>();
+			renderer->selObj=shared_ptr<Object>(); renderer->selObjNode=shared_ptr<Node>();
 			LOG_INFO("Calling onSelection with None to deselect");
-			if(!Renderer::selFunc.empty()) pyRunString(Renderer::selFunc+"(None);");
+			if(!renderer->selFunc.empty()) pyRunString(renderer->selFunc+"(None);");
 		}
 		else { resetManipulation(); displayMessage("Manipulating scene."); }
 	}
 	else if(e->key()==Qt::Key_Space){
-		if(manipulatedClipPlane>=0) {displayMessage("Clip plane #"+lexical_cast<string>(manipulatedClipPlane+1)+(Renderer::clipPlaneActive[manipulatedClipPlane]?" de":" ")+"activated"); Renderer::clipPlaneActive[manipulatedClipPlane]=!Renderer::clipPlaneActive[manipulatedClipPlane]; }
+		if(manipulatedClipPlane>=0) {displayMessage("Clip plane #"+lexical_cast<string>(manipulatedClipPlane+1)+(renderer->clipPlaneActive[manipulatedClipPlane]?" de":" ")+"activated"); renderer->clipPlaneActive[manipulatedClipPlane]=!renderer->clipPlaneActive[manipulatedClipPlane]; }
 		else{
 			Scene* scene=Master::instance().getScene().get();
 			if(scene->running()) scene->pyStop();
@@ -433,20 +438,20 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	/* function keys */
 	else if(e->key()==Qt::Key_F1 || e->key()==Qt::Key_F2 || e->key()==Qt::Key_F3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_F1) n=1; else if(e->key()==Qt::Key_F2) n=2; else if(e->key()==Qt::Key_F3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=Renderer::numClipPlanes) return;
+		if(planeId>=renderer->numClipPlanes) return;
 		if(planeId!=manipulatedClipPlane) startClipPlaneManipulation(planeId);
 	}
 	/* numbers */
 	else if(e->key()==Qt::Key_0 && (e->modifiers() & Qt::AltModifier)) { boundClipPlanes.clear(); displayMessage("Cleared bound planes group.");}
 	else if(e->key()==Qt::Key_1 || e->key()==Qt::Key_2 || e->key()==Qt::Key_3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_1) n=1; else if(e->key()==Qt::Key_2) n=2; else if(e->key()==Qt::Key_3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=Renderer::numClipPlanes) return; // no such clipping plane
+		if(planeId>=renderer->numClipPlanes) return; // no such clipping plane
 		if(e->modifiers() & Qt::AltModifier){
 			if(boundClipPlanes.count(planeId)==0) {boundClipPlanes.insert(planeId); displayMessage("Added plane #"+lexical_cast<string>(planeId+1)+" to the bound group: "+strBoundGroup());}
 			else {boundClipPlanes.erase(planeId); displayMessage("Removed plane #"+lexical_cast<string>(planeId+1)+" from the bound group: "+strBoundGroup());}
 		}
 		else if(manipulatedClipPlane>=0 && manipulatedClipPlane!=planeId) {
-			const Quaternionr& o=Renderer::clipPlaneOri[planeId];
+			const Quaternionr& o=renderer->clipPlaneOri[planeId];
 			manipulatedFrame()->setOrientation(qglviewer::Quaternion(o.x(),o.y(),o.z(),o.w()));
 			displayMessage("Copied orientation from plane #1");
 		}
@@ -469,13 +474,13 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		else if(e->key()==Qt::Key_D &&(e->modifiers() & Qt::AltModifier)){ /*Body::id_t id; if((id=Master::instance().getScene()->selection)>=0){ const shared_ptr<Body>& b=Body::byId(id); b->setDynamic(!b->isDynamic()); LOG_INFO("Body #"<<id<<" now "<<(b->isDynamic()?"":"NOT")<<" dynamic"); }*/ LOG_INFO("Selection not supported!!"); }
 	#endif
 	else if(e->key()==Qt::Key_D) {
-		if(e->modifiers() & Qt::ShiftModifier) Renderer::showDate=!Renderer::showDate;
+		if(e->modifiers() & Qt::ShiftModifier) renderer->showDate=!renderer->showDate;
 		else {
-			Renderer::showTime+=1;
-			if(Renderer::showTime>Renderer::TIME_ALL) Renderer::showTime=Renderer::TIME_NONE;
+			renderer->showTime+=1;
+			if(renderer->showTime>renderer->TIME_ALL) renderer->showTime=renderer->TIME_NONE;
 		}
 	}
-	else if(e->key()==Qt::Key_G) { if(e->modifiers() & Qt::ShiftModifier){ Renderer::grid=(Renderer::grid>0?0:7); return; } else Renderer::grid++; if(Renderer::grid>=8) Renderer::grid=0; }
+	else if(e->key()==Qt::Key_G) { if(e->modifiers() & Qt::ShiftModifier){ renderer->grid=(renderer->grid>0?0:7); return; } else renderer->grid++; if(renderer->grid>=8) renderer->grid=0; }
 	else if (e->key()==Qt::Key_M && selectedName() >= 0){ 
 		if(!(isMoving=!isMoving)){displayMessage("Moving done."); mouseMovesCamera();}
 		else{ displayMessage("Moving selected object"); mouseMovesManipulatedFrame();}
@@ -485,7 +490,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	else if(e->key()==Qt::Key_P) camera()->setFieldOfView(camera()->fieldOfView()*1.1);
 	else if(e->key()==Qt::Key_Q){ // display quality control
 		if(e->modifiers()==Qt::NoModifier){
-			int& f(Renderer::maxFps);
+			int& f(renderer->maxFps);
 			if(f<5) f=5;
 			else if(f<10) f=10;
 			else if(f<15) f=15;
@@ -494,7 +499,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		}
 		else if(e->modifiers() & Qt::ShiftModifier){
 			// toggle fast draw
-			int& f(Renderer::fast);
+			int& f(renderer->fast);
 			switch(f){
 				case Renderer::FAST_NEVER: f=Renderer::FAST_UNFOCUSED; displayMessage("Fast: manipulating/unfocused."); break;
 				case Renderer::FAST_UNFOCUSED: f=Renderer::FAST_ALWAYS; displayMessage("Fast: always."); break;
@@ -503,9 +508,9 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		}
 	}
 	else if(e->key()==Qt::Key_R){ // reverse the clipping plane; revolve around scene center if no clipping plane selected
-		if(manipulatedClipPlane>=0 && manipulatedClipPlane<Renderer::numClipPlanes){
-			/* here, we must update both manipulatedFrame orientation and Renderer::clipPlaneOri in the same way */
-			Quaternionr& ori=Renderer::clipPlaneOri[manipulatedClipPlane];
+		if(manipulatedClipPlane>=0 && manipulatedClipPlane<renderer->numClipPlanes){
+			/* here, we must update both manipulatedFrame orientation and renderer->clipPlaneOri in the same way */
+			Quaternionr& ori=renderer->clipPlaneOri[manipulatedClipPlane];
 			ori=Quaternionr(AngleAxisr(M_PI,Vector3r(0,1,0)))*ori; 
 			manipulatedFrame()->setOrientation(qglviewer::Quaternion(qglviewer::Vec(0,1,0),M_PI)*manipulatedFrame()->orientation());
 			displayMessage("Plane #"+lexical_cast<string>(manipulatedClipPlane+1)+" reversed.");
@@ -609,15 +614,20 @@ void GLViewer::centerScene(){
 	showEntireScene();
 }
 
+bool GLViewer::setSceneAndRenderer(){
+	if(scene.get()!=Master::instance().getScene().get()) scene=Master::instance().getScene();
+	if(!scene) return false;
+	renderer=scene->ensureAndGetRenderer();
+	return true;
+}
+
+
 void GLViewer::draw(bool withNames, bool fast)
 {
 	const shared_ptr<Scene>& scene=Master::instance().getScene();
 	if(!scene) return; // nothing to do, really
 	/* scene and renderer setup */
 
-	// TODO: copy renderer from GlSetup, this is used only while it has all attributes static anyway
-	if(!scene->renderer) scene->renderer=make_shared<Renderer>();
-	const shared_ptr<Renderer>& renderer(scene->renderer);
 	// FIXME: reload detection will not work now anymore, we'd have to get the old renderer instance somehow...
 	#if 0
 		if(Renderer::scene.get()!=scene.get()){
@@ -666,6 +676,9 @@ void GLViewer::draw(bool withNames, bool fast)
 
 	camera()->setZClippingCoefficient(renderer->zClipCoeff);
 
+	// mark autoRanges as unused, so that only those which were used are displayed
+	for(auto& r: scene->autoRanges){ if(r) r->setUsed(false); }
+
 	// do the actual rendering
 	renderer->render(scene,withNames,fast);
 
@@ -680,33 +693,33 @@ void GLViewer::postSelection(const QPoint& point)
 	LOG_DEBUG("Selection is "<<selectedName());
 	//cerr<<"Selection is "<<selectedName()<<endl;
 	int selection=selectedName();
-	if(selection<0 || selection>=(int)Renderer::glNamedObjects.size()) return;
+	if(selection<0 || selection>=(int)renderer->glNamedObjects.size()) return;
 
-	Renderer::selObj=Renderer::glNamedObjects[selection];
+	renderer->selObj=renderer->glNamedObjects[selection];
 
-	auto prevSelNode=Renderer::selObjNode;
-	Renderer::selObjNode=Renderer::glNamedNodes[selection];
-	Renderer::glNamedObjects.clear(); Renderer::glNamedNodes.clear();
+	auto prevSelNode=renderer->selObjNode;
+	renderer->selObjNode=renderer->glNamedNodes[selection];
+	renderer->glNamedObjects.clear(); renderer->glNamedNodes.clear();
 	// selection Node can be None
-	if(Renderer::selObjNode){
-		Vector3r pos=Renderer::selObjNode->pos;
-		if(Renderer::scene->isPeriodic) pos=Renderer::scene->cell->canonicalizePt(pos);
+	if(renderer->selObjNode){
+		Vector3r pos=renderer->selObjNode->pos;
+		if(renderer->scene->isPeriodic) pos=renderer->scene->cell->canonicalizePt(pos);
 		setSceneCenter(qglviewer::Vec(pos[0],pos[1],pos[2]));
 		{
-			//cerr<<"Selected object #"<<selection<<" is a "<<Renderer::selObj->getClassName()<<endl;
+			//cerr<<"Selected object #"<<selection<<" is a "<<renderer->selObj->getClassName()<<endl;
 			GilLock lock;
-			cerr<<"Selected "<<py::extract<string>(py::str(py::object(Renderer::selObj)))()<<endl;
+			cerr<<"Selected "<<py::extract<string>(py::str(py::object(renderer->selObj)))()<<endl;
 		}
-		cerr<<"\tat "<<Renderer::selObjNode->pos.transpose()<<endl;
+		cerr<<"\tat "<<renderer->selObjNode->pos.transpose()<<endl;
 		if(prevSelNode){
-			Vector3r dPos=Renderer::selObjNode->pos-prevSelNode->pos;
+			Vector3r dPos=renderer->selObjNode->pos-prevSelNode->pos;
 			cerr<<"\tdistance from previous "<<dPos.norm()<<" (dx="<<dPos.transpose()<<")"<<endl;
 			qglviewer::Vec vd0=camera()->viewDirection();
 			Vector3r vd(vd0[0],vd0[1],vd0[2]);
 			displayMessage("distance "+to_string(dPos.norm())+" ("+to_string((dPos-vd*dPos.dot(vd)).norm())+" view perp.)",/*delay*/6000);
 		}
 	}
-	if(!Renderer::selFunc.empty()) pyRunString("import woo.gl\n"+Renderer::selFunc+"(woo.gl.Renderer.selObj);");
+	if(!renderer->selFunc.empty()) pyRunString("import woo.gl\n"+renderer->selFunc+"(woo.gl.Renderer.selObj);");
 }
 
 // maybe new object will be selected.
@@ -727,9 +740,9 @@ float GLViewer::displayedSceneRadius(){
 void GLViewer::postDraw(){
 	Real wholeDiameter=QGLViewer::camera()->sceneRadius()*2;
 
-	Renderer::viewInfo.sceneRadius=QGLViewer::camera()->sceneRadius();
+	renderer->viewInfo.sceneRadius=QGLViewer::camera()->sceneRadius();
 	qglviewer::Vec c=QGLViewer::camera()->sceneCenter();
-	Renderer::viewInfo.sceneCenter=Vector3r(c[0],c[1],c[2]);
+	renderer->viewInfo.sceneCenter=Vector3r(c[0],c[1],c[2]);
 
 	Real dispDiameter=min(wholeDiameter,max((Real)displayedSceneRadius()*2,wholeDiameter/1e2)); // limit to avoid drawing 1e5 lines with big zoom level
 	//qglviewer::Vec center=QGLViewer::camera()->sceneCenter();
@@ -744,18 +757,18 @@ void GLViewer::postDraw(){
 	nSegments *= 2; // there's an error in QGLViewer::drawGrid(), fix it by '* 2'
 	// XYZ grids
 	glLineWidth(.5);
-	int& grid(Renderer::grid);
-	if(grid & 1) {glColor3v(Renderer::axisColor(0)); glPushMatrix(); glRotated(90.,0.,1.,0.); QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
-	if(grid & 2) {glColor3v(Renderer::axisColor(1)); glPushMatrix(); glRotated(90.,1.,0.,0.); QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
-	if(grid & 4) {glColor3v(Renderer::axisColor(2)); glPushMatrix(); /*glRotated(90.,0.,1.,0.);*/ QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
+	int& grid(renderer->grid);
+	if(grid & 1) {glColor3v(renderer->axisColor(0)); glPushMatrix(); glRotated(90.,0.,1.,0.); QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
+	if(grid & 2) {glColor3v(renderer->axisColor(1)); glPushMatrix(); glRotated(90.,1.,0.,0.); QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
+	if(grid & 4) {glColor3v(renderer->axisColor(2)); glPushMatrix(); /*glRotated(90.,0.,1.,0.);*/ QGLViewer::drawGrid(realSize,nSegments); glPopMatrix();}
 	if(gridSubdivide){
-		if(grid & 1) {glColor3v((Renderer::axisColor(0)*.5).eval()); glPushMatrix(); glRotated(90.,0.,1.,0.); QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
-		if(grid & 2) {glColor3v((Renderer::axisColor(1)*.5).eval()); glPushMatrix(); glRotated(90.,1.,0.,0.); QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
-		if(grid & 4) {glColor3v((Renderer::axisColor(2)*.5).eval()); glPushMatrix(); /*glRotated(90.,0.,1.,0.);*/ QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
+		if(grid & 1) {glColor3v((renderer->axisColor(0)*.5).eval()); glPushMatrix(); glRotated(90.,0.,1.,0.); QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
+		if(grid & 2) {glColor3v((renderer->axisColor(1)*.5).eval()); glPushMatrix(); glRotated(90.,1.,0.,0.); QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
+		if(grid & 4) {glColor3v((renderer->axisColor(2)*.5).eval()); glPushMatrix(); /*glRotated(90.,0.,1.,0.);*/ QGLViewer::drawGrid(realSize,nSegments*10); glPopMatrix();}
 	}
 	
 	// scale
-	if(Renderer::oriAxes && Renderer::oriAxesPx>10){
+	if(renderer->oriAxes && renderer->oriAxesPx>10){
 		Real segmentSize=10*scaleStep; // we divide every time in the loop
 		qglviewer::Vec screenDxDy[3]; // dx,dy for x,y,z scale segments
 		int extremalDxDy[2]={0,0};
@@ -771,7 +784,7 @@ void GLViewer::postDraw(){
 				for(int xy=0;xy<2;xy++)extremalDxDy[xy]=(axis>0 ? min(extremalDxDy[xy],(int)screenDxDy[axis][xy]) : screenDxDy[axis][xy]);
 				maxSqLen=max(maxSqLen,1.*screenDxDy[axis].squaredNorm());
 			}
-		} while(maxSqLen>pow(Renderer::oriAxesPx,2));
+		} while(maxSqLen>pow(renderer->oriAxesPx,2));
 
 		//LOG_DEBUG("Screen offsets for axes: "<<" x("<<screenDxDy[0][0]<<","<<screenDxDy[0][1]<<") y("<<screenDxDy[1][0]<<","<<screenDxDy[1][1]<<") z("<<screenDxDy[2][0]<<","<<screenDxDy[2][1]<<")");
 		int margin=10; // screen pixels
@@ -784,7 +797,7 @@ void GLViewer::postDraw(){
 			glLineWidth(3.0);
 			for(int axis=0; axis<3; axis++){
 				// Vector3r color(.4,.4,.4); color[axis]=.9;
-				glColor3v(Renderer::axisColor(axis));
+				glColor3v(renderer->axisColor(axis));
 				glBegin(GL_LINES);
 				glVertex2f(scaleCenter[0],scaleCenter[1]);
 				glVertex2f(scaleCenter[0]+screenDxDy[axis][0],scaleCenter[1]+screenDxDy[axis][1]);
@@ -800,16 +813,16 @@ void GLViewer::postDraw(){
 	// cutting planes (should be moved to Renderer perhaps?)
 	// only painted if one of those is being manipulated
 	if(manipulatedClipPlane>=0){
-		for(int planeId=0; planeId<Renderer::numClipPlanes; planeId++){
-			if(!Renderer::clipPlaneActive[planeId] && planeId!=manipulatedClipPlane) continue;
+		for(int planeId=0; planeId<renderer->numClipPlanes; planeId++){
+			if(!renderer->clipPlaneActive[planeId] && planeId!=manipulatedClipPlane) continue;
 			glPushMatrix();
-				const Vector3r& pos=Renderer::clipPlanePos[planeId];
-				const Quaternionr& ori=Renderer::clipPlaneOri[planeId];
+				const Vector3r& pos=renderer->clipPlanePos[planeId];
+				const Quaternionr& ori=renderer->clipPlaneOri[planeId];
 				AngleAxisr aa(ori);	
 				glTranslatef(pos[0],pos[1],pos[2]);
 				glRotated(aa.angle()*(180./M_PI),aa.axis()[0],aa.axis()[1],aa.axis()[2]);
 				Real cff=1;
-				if(!Renderer::clipPlaneActive[planeId]) cff=.4;
+				if(!renderer->clipPlaneActive[planeId]) cff=.4;
 				glColor3f(max((Real)0.,cff*cos(planeId)),max((Real)0.,cff*sin(planeId)),planeId==manipulatedClipPlane); // variable colors
 				QGLViewer::drawGrid(realSize,2*nSegments);
 				drawArrow(wholeDiameter/6);
@@ -820,11 +833,11 @@ void GLViewer::postDraw(){
 	Scene* scene=Master::instance().getScene().get();
 	#define _W3 std::setw(3)<<std::setfill('0')
 	#define _W2 std::setw(2)<<std::setfill('0')
-	if(Renderer::showTime!=Renderer::TIME_NONE || Renderer::showDate){
+	if(renderer->showTime!=Renderer::TIME_NONE || renderer->showDate){
 		const int lineHt=13;
 		unsigned x=10,y=height()-3-lineHt*2;
-		if(Renderer::showDate){
-			glColor3v(Renderer::dateColor);
+		if(renderer->showDate){
+			glColor3v(renderer->dateColor);
 			time_t rawtime;
 			time(&rawtime);
 			struct tm* timeinfo=localtime(&rawtime);;
@@ -833,8 +846,8 @@ void GLViewer::postDraw(){
 			QGLViewer::drawText(x,y,buffer);
 			y-=lineHt;
 		}
-		if(Renderer::showTime & Renderer::TIME_VIRT){
-			glColor3v(Renderer::virtColor);
+		if(renderer->showTime & Renderer::TIME_VIRT){
+			glColor3v(renderer->virtColor);
 			std::ostringstream oss;
 			const Real& t=scene->time;
 			const Real& dt=scene->dt;
@@ -856,20 +869,20 @@ void GLViewer::postDraw(){
 			y-=lineHt;
 		}
 		glColor3v(Vector3r(0,.5,.5));
-		if(Renderer::showTime & Renderer::TIME_REAL){
-			glColor3v(Renderer::realColor);
+		if(renderer->showTime & Renderer::TIME_REAL){
+			glColor3v(renderer->realColor);
 			QGLViewer::drawText(x,y,getRealTimeString().c_str() /* virtual, since player gets that from db */);
 			y-=lineHt;
 		}
-		if(Renderer::showTime & Renderer::TIME_STEP){
-			glColor3v(Renderer::stepColor);
+		if(renderer->showTime & Renderer::TIME_STEP){
+			glColor3v(renderer->stepColor);
 			std::ostringstream oss;
 			oss<<"#"<<scene->step;
 			if(scene->stopAtStep>scene->step) oss<<" ("<<std::setiosflags(std::ios::fixed)<<std::setw(3)<<std::setprecision(1)<<std::setfill('0')<<(100.*scene->step)/scene->stopAtStep<<"%)";
 			QGLViewer::drawText(x,y,oss.str().c_str());
 			y-=lineHt;
 		}
-		if(Renderer::grid){
+		if(renderer->grid){
 			glColor3v(Vector3r(1,1,0));
 			std::ostringstream oss;
 			oss<<"grid: "<<std::setprecision(4)<<gridStep;
@@ -899,7 +912,7 @@ void GLViewer::postDraw(){
 				for(short ax:{0,1,2}){
 					std::ostringstream oss;
 					oss<<(isnan(p3v[ax])?"*":to_string(p3v[ax]));
-					glColor3v(Renderer::axisColor(ax));
+					glColor3v(renderer->axisColor(ax));
 					QGLViewer::drawText(p.x()+20,p.y()+14*(ax+1),oss.str().c_str());
 				}
 				// cross-hair
@@ -916,130 +929,39 @@ void GLViewer::postDraw(){
 		}
 	}
 
+	// SCALAR RANGES
 
-	/* draw colormapped ranges, on the right */
-	if(Renderer::ranges && (prevSize[0]!=width() || prevSize[1]!=height())){
-		Vector2i curr(width(),height());
-		FOREACH(const shared_ptr<ScalarRange>& r, scene->ranges){
-			// positions normalized to window size
-			r->dispPos=Vector2i(curr[0]*(r->dispPos[0]*1./prevSize[0]),curr[1]*(r->dispPos[1]*1./prevSize[1]));
-			if(r->movablePtr) r->movablePtr->pos=QPoint(r->dispPos[0],r->dispPos[1]);
-		};
-		prevSize=curr;
-	}
-	if(Renderer::ranges && scene->ranges.size()>0){
-		glDisable(GL_LIGHTING);
-		const int pixDiv=100; // show number every 100 px approximately
-		const int scaleWd=20; // width in pixels
-		const int nDiv=60; // draw colorline with this many segments (for gradients)
-		int yDef=.2*height(); // default y position, if current is not valid
-		glLineWidth(scaleWd);
-		for(size_t i=0; i<scene->ranges.size(); i++){
-			if(!scene->ranges[i]) continue;
-			ScalarRange& range(*scene->ranges[i]);
-			if(!range.isOk() || range.isHidden()) continue;
-			int xDef=width()-50-i*70; /* 70px / scale horizontally */ // default x position, if current not valid
-			if(!range.movablePtr){ range.movablePtr=make_shared<QglMovableObject>(xDef,yDef);  }
-			QglMovableObject& mov(*range.movablePtr);
-			// reset flag from the UI
-			if(mov.reset){ mov.reset=false; range.reset(); continue; }
-			// length was changed (mouse wheel), do it here
-			if(mov.dL!=0){
-				// dL is 120 for one wheel "tick"
-				//cerr<<"length was "<<range.length<<", dL="<<mov.dL<<endl;
-				if(range.length>0) range.length=max(50.,range.length-mov.dL*.4);
-				if(range.length<0) range.length=min(-.05,range.length-mov.dL*5e-4);
-				mov.dL=0;
-				//cerr<<"new length "<<range.length<<endl;
-			}
-			// adjust if off-screen
-
-			// adjust if too long/short
-			// first value of ht, before adjustments
-			int ht=int(range.length<0?abs((!range.landscape?height():width())*range.length):range.length); 
-
-			bool flipped=false;
-			// flip range if close to window edge
-			if(mov.pos.x()<10 || mov.pos.x()>width()-10-(range.landscape?ht:scaleWd)){ 
-				if(range.landscape){ flipped=true; range.landscape=false; }
-				if(mov.pos.x()<10) mov.pos.setX(10);
-				// 20 instead of 10 avoids orientation-change loop
-				else mov.pos.setX(width()-10-(range.landscape?ht:scaleWd));
-			}
-			if(mov.pos.y()<10 || mov.pos.y()>height()-10-(range.landscape?scaleWd:ht)){
-				if(!range.landscape && !flipped){
-					flipped=true; range.landscape=true;
-					if(mov.pos.x()>width()-10-ht) mov.pos.setX(width()-20-ht);
-				}
-				if(mov.pos.y()<10) mov.pos.setY(10);
-				else mov.pos.setY(height()-10-(range.landscape?scaleWd:ht));
-			}
-			// 
-			// adjust if too long/short
-			if(range.length<0) CompUtils::clamp(range.length,-.7,-.1);
-			else CompUtils::clamp(range.length,(!range.landscape?height():width())*.1,(!range.landscape?height():width())*.7);
-			// length in pixels (second value, after adjustments)
-			ht=int(range.length<0?abs((!range.landscape?height():width())*range.length):range.length); 
-			Real yStep=ht*1./nDiv;
-			// update dimensions of the grabber object
-			int y0, x;
-			if(!range.landscape){
-				mov.dim=QPoint(scaleWd,ht);
-				y0=mov.pos.y(); // upper edge y-position
-				x=mov.pos.x()+scaleWd/2; // upper-edge center x-position
-				range.dispPos=Vector2i(x,y0); // for loading & saving
-			} else {
-				mov.dim=QPoint(ht,scaleWd);
-				y0=mov.pos.x();
-				x=mov.pos.y()+scaleWd/2;
-				range.dispPos=Vector2i(y0,x);
-			}
-			startScreenCoordinatesSystem();
-			const bool& reversed(range.isReversed());
-			glBegin(GL_LINE_STRIP);
-				for(int j=0; j<=nDiv; j++){
-					Real val=(nDiv-j)*(1./nDiv); // value in 0..1
-					if(reversed) val=1-val; // reversed range
-					glColor3v(CompUtils::mapColor(val,range.cmap));
-					if(!range.landscape) glVertex2f(x,y0+yStep*j);
-					else glVertex2f(y0+(ht-yStep*j),x);
-					//cerr<<"RG "<<i<<": lin "<<j<<": "<<(range.landscape?Vector2r(y0+(ht-yStep*j),x):Vector2r(x,y0+yStep*j))<<endl;
-				};
-			glEnd();
-			stopScreenCoordinatesSystem();
-			// show some numbers
-			int nNum=max(1,ht/pixDiv); // label every pixDiv approx, but at least start and end will be labeled
-			//cerr<<"RG "<<i<<": ht="<<ht<<" nNum="<<nNum<<" pixDiv="<<pixDiv<<" y0="<<y0<<endl;
-			for(int j=0; j<=nNum; j++){
-				// static void GLDrawText(const std::string& txt, const Vector3r& pos, const Vector3r& color=Vector3r(1,1,1), bool center=false, void* font=NULL, const Vector3r& bgColor=Vector3r(-1,-1,-1));
-				startScreenCoordinatesSystem();
-					Real yy=y0+((!range.landscape?nNum-j:j)*ht*1./nNum);
-					Vector3r pos=!range.landscape?Vector3r(x,yy-6/*lower baseline*/,0):Vector3r(yy,x-5/*lower baseline*/,0);
-					//cerr<<"RG "<<i<<": num "<<j<<": "<<Vector2r(pos[0],pos[1])<<endl;
-					GLUtils::GLDrawText((boost::format("%.2g")%range.normInv(j*1./nNum)).str(),pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/(j>0&&j<nNum)?NULL:GLUT_BITMAP_9_BY_15,/*bgColor*/Vector3r::Zero(),/*shiftIfNeg*/false);
-				stopScreenCoordinatesSystem();
-			}
-			// show label, if any
-			if(!range.label.empty()){
-				startScreenCoordinatesSystem();
-					Vector3r pos=!range.landscape?Vector3r(x,y0-20,0):Vector3r(y0+ht/2,x-25,0);
-					GLUtils::GLDrawText(range.label,pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/GLUT_BITMAP_9_BY_15,Vector3r::Zero(),/*shiftIfNeg*/true);
-				stopScreenCoordinatesSystem();
-			}
+	/* update positions if window was resized (prehaps move inside renderRange?) */
+	if(renderer->ranges){
+		if( (prevSize[0]!=width() || prevSize[1]!=height())){
+			Vector2i curr(width(),height());
+			for(const shared_ptr<ScalarRange>& r: boost::join(scene->autoRanges,scene->ranges)){
+				if(!r) continue;
+				// positions normalized to window size
+				r->dispPos=Vector2i(curr[0]*(r->dispPos[0]*1./prevSize[0]),curr[1]*(r->dispPos[1]*1./prevSize[1]));
+				if(r->movablePtr) r->movablePtr->pos=QPoint(r->dispPos[0],r->dispPos[1]);
+			};
+			prevSize=curr;
 		}
-		glLineWidth(1);
-		glEnable(GL_LIGHTING);
-	};
+		if(scene->ranges.size()+scene->autoRanges.size()>0){
+			const int scaleWd=20; // width in pixels; MUST be the same as scaleWd in GLViewer::renderRange!
+			glDisable(GL_LIGHTING);	glLineWidth(scaleWd);
+			size_t i=0;
+			// autoRanges are shown only if really used, user ranges always
+			for(const auto& r: scene->ranges)     if(r && r->isOk() && !r->isHidden()) renderRange(*r,i++);
+			for(const auto& r: scene->autoRanges) if(r && r->isOk() && !r->isHidden() && r->isUsed()) renderRange(*r,i++);
+			glLineWidth(1); glEnable(GL_LIGHTING);
+		}
+	}
 
-
-	/* show Woo logo */
-	if(Renderer::logoWd>0){
+	// WOO LOGO
+	if(renderer->logoWd>0){
 		startScreenCoordinatesSystem();
-		Renderer::renderLogo(width(),height());
+		renderer->renderLogo(width(),height());
 		stopScreenCoordinatesSystem();
 	}
 
-	if(Renderer::fastDraw){
+	if(renderer->fastDraw){
 		startScreenCoordinatesSystem();
 		GLUtils::GLDrawText("[FAST]",Vector3r(0,height()/2,0),/*color*/Vector3r(0,0,1),/*center*/false);
 		stopScreenCoordinatesSystem();
@@ -1073,6 +995,105 @@ void GLViewer::postDraw(){
 		nextSnapMsg=true; // show next message, unless disabled again
 	}
 }
+
+
+void GLViewer::renderRange(ScalarRange& range, int i){
+
+	const int pixDiv=100; // show number every 100 px approximately
+	const int scaleWd=20; // width in pixels
+	const int nDiv=60; // draw colorline with this many segments (for gradients)
+	int yDef=.2*height(); // default y position, if current is not valid
+
+	int xDef=width()-50-i*70; /* 70px / scale horizontally */ // default x position, if current not valid
+	if(!range.movablePtr){ range.movablePtr=make_shared<QglMovableObject>(xDef,yDef);  }
+	QglMovableObject& mov(*range.movablePtr);
+	// reset flag from the UI
+	if(mov.reset){ mov.reset=false; range.reset(); return; }
+	// length was changed (mouse wheel), do it here
+	if(mov.dL!=0){
+		// dL is 120 for one wheel "tick"
+		//cerr<<"length was "<<range.length<<", dL="<<mov.dL<<endl;
+		if(range.length>0) range.length=max(50.,range.length-mov.dL*.4);
+		if(range.length<0) range.length=min(-.05,range.length-mov.dL*5e-4);
+		mov.dL=0;
+		//cerr<<"new length "<<range.length<<endl;
+	}
+	// adjust if off-screen
+
+	// adjust if too long/short
+	// first value of ht, before adjustments
+	int ht=int(range.length<0?abs((!range.landscape?height():width())*range.length):range.length); 
+
+	bool flipped=false;
+	// flip range if close to window edge
+	if(mov.pos.x()<10 || mov.pos.x()>width()-10-(range.landscape?ht:scaleWd)){ 
+		if(range.landscape){ flipped=true; range.landscape=false; }
+		if(mov.pos.x()<10) mov.pos.setX(10);
+		// 20 instead of 10 avoids orientation-change loop
+		else mov.pos.setX(width()-10-(range.landscape?ht:scaleWd));
+	}
+	if(mov.pos.y()<10 || mov.pos.y()>height()-10-(range.landscape?scaleWd:ht)){
+		if(!range.landscape && !flipped){
+			flipped=true; range.landscape=true;
+			if(mov.pos.x()>width()-10-ht) mov.pos.setX(width()-20-ht);
+		}
+		if(mov.pos.y()<10) mov.pos.setY(10);
+		else mov.pos.setY(height()-10-(range.landscape?scaleWd:ht));
+	}
+	// 
+	// adjust if too long/short
+	if(range.length<0) CompUtils::clamp(range.length,-.7,-.1);
+	else CompUtils::clamp(range.length,(!range.landscape?height():width())*.1,(!range.landscape?height():width())*.7);
+	// length in pixels (second value, after adjustments)
+	ht=int(range.length<0?abs((!range.landscape?height():width())*range.length):range.length); 
+	Real yStep=ht*1./nDiv;
+	// update dimensions of the grabber object
+	int y0, x;
+	if(!range.landscape){
+		mov.dim=QPoint(scaleWd,ht);
+		y0=mov.pos.y(); // upper edge y-position
+		x=mov.pos.x()+scaleWd/2; // upper-edge center x-position
+		range.dispPos=Vector2i(x,y0); // for loading & saving
+	} else {
+		mov.dim=QPoint(ht,scaleWd);
+		y0=mov.pos.x();
+		x=mov.pos.y()+scaleWd/2;
+		range.dispPos=Vector2i(y0,x);
+	}
+	startScreenCoordinatesSystem();
+	const bool& reversed(range.isReversed());
+	glBegin(GL_LINE_STRIP);
+		for(int j=0; j<=nDiv; j++){
+			Real val=(nDiv-j)*(1./nDiv); // value in 0..1
+			if(reversed) val=1-val; // reversed range
+			glColor3v(CompUtils::mapColor(val,range.cmap));
+			if(!range.landscape) glVertex2f(x,y0+yStep*j);
+			else glVertex2f(y0+(ht-yStep*j),x);
+			//cerr<<"RG "<<i<<": lin "<<j<<": "<<(range.landscape?Vector2r(y0+(ht-yStep*j),x):Vector2r(x,y0+yStep*j))<<endl;
+		};
+	glEnd();
+	stopScreenCoordinatesSystem();
+	// show some numbers
+	int nNum=max(1,ht/pixDiv); // label every pixDiv approx, but at least start and end will be labeled
+	//cerr<<"RG "<<i<<": ht="<<ht<<" nNum="<<nNum<<" pixDiv="<<pixDiv<<" y0="<<y0<<endl;
+	for(int j=0; j<=nNum; j++){
+		// static void GLDrawText(const std::string& txt, const Vector3r& pos, const Vector3r& color=Vector3r(1,1,1), bool center=false, void* font=NULL, const Vector3r& bgColor=Vector3r(-1,-1,-1));
+		startScreenCoordinatesSystem();
+			Real yy=y0+((!range.landscape?nNum-j:j)*ht*1./nNum);
+			Vector3r pos=!range.landscape?Vector3r(x,yy-6/*lower baseline*/,0):Vector3r(yy,x-5/*lower baseline*/,0);
+			//cerr<<"RG "<<i<<": num "<<j<<": "<<Vector2r(pos[0],pos[1])<<endl;
+			GLUtils::GLDrawText((boost::format("%.2g")%range.normInv(j*1./nNum)).str(),pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/(j>0&&j<nNum)?NULL:GLUT_BITMAP_9_BY_15,/*bgColor*/Vector3r::Zero(),/*shiftIfNeg*/true);
+		stopScreenCoordinatesSystem();
+	}
+	// show label, if any
+	if(!range.label.empty()){
+		startScreenCoordinatesSystem();
+			Vector3r pos=!range.landscape?Vector3r(x,y0-20,0):Vector3r(y0+ht/2,x-25,0);
+			GLUtils::GLDrawText(range.label,pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/GLUT_BITMAP_9_BY_15,Vector3r::Zero(),/*shiftIfNeg*/true);
+		stopScreenCoordinatesSystem();
+	}
+}
+
 
 string GLViewer::getRealTimeString(){
 	std::ostringstream oss;
@@ -1143,15 +1164,15 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 		} else QGLViewer::wheelEvent(event);
 		return;
 	}
-	assert(manipulatedClipPlane<Renderer::numClipPlanes);
+	assert(manipulatedClipPlane<renderer->numClipPlanes);
 	float distStep=1e-3*sceneRadius();
 	//const float wheelSensitivityCoef = 8E-4f;
 	//Vec trans(0.0, 0.0, -event->delta()*wheelSensitivity()*wheelSensitivityCoef*(camera->position()-position()).norm());
 	float dist=event->delta()*manipulatedFrame()->wheelSensitivity()*distStep;
-	Vector3r normal=Renderer::clipPlaneOri[manipulatedClipPlane]*Vector3r(0,0,1);
+	Vector3r normal=renderer->clipPlaneOri[manipulatedClipPlane]*Vector3r(0,0,1);
 	qglviewer::Vec newPos=manipulatedFrame()->position()+qglviewer::Vec(normal[0],normal[1],normal[2])*dist;
 	manipulatedFrame()->setPosition(newPos);
-	Renderer::clipPlanePos[manipulatedClipPlane]=Vector3r(newPos[0],newPos[1],newPos[2]);
+	renderer->clipPlanePos[manipulatedClipPlane]=Vector3r(newPos[0],newPos[1],newPos[2]);
 	updateGL();
 	/* in draw, bound cutting planes will be moved as well */
 }

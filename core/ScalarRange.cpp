@@ -39,6 +39,7 @@ void ScalarRange::adjust(const Real& v){
 
 
 Real ScalarRange::norm(Real v, bool clamp){
+	markUsed();
 	if(isAutoAdjust()) adjust(v);
 	if(!isLog()){
 		Real n=(v-mnmx[0])/(mnmx[1]-mnmx[0]);
@@ -53,11 +54,13 @@ Real ScalarRange::norm(Real v, bool clamp){
 };
 
 Real ScalarRange::normInv(Real norm){
+	markUsed();
 	if(!isLog()) return mnmx[0]+norm*(mnmx[1]-mnmx[0]);
 	else return exp(logMnmx[0]+norm*(logMnmx[1]-logMnmx[0]));
 }
 
 Vector3r ScalarRange::color(Real v){
+	// markUsed called inside norm()
 	Real n=norm(v,/*clamp*/!isClip());
 	if(isClip() &&	(n<0 || n>1)) return Vector3r(NaN,NaN,NaN);
 	return CompUtils::mapColor(n,cmap,isReversed());

@@ -3,6 +3,8 @@
 
 WOO_PLUGIN(dem,(Capsule)(Bo1_Capsule_Aabb)(Cg2_Sphere_Capsule_L6Geom)(Cg2_Wall_Capsule_L6Geom)(Cg2_Facet_Capsule_L6Geom)(Cg2_InfCylinder_Capsule_L6Geom)(Cg2_Capsule_Capsule_L6Geom));
 
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Capsule_Aabb__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Capsule_Capsule_L6Geom__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Capsule_L6Geom__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Capsule_L6Geom__CLASS_BASE_DOC);
@@ -10,6 +12,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_InfCylinder_Capsule_L6Geom__CLASS_BASE_DOC)
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Sphere_Capsule_L6Geom__CLASS_BASE_DOC);
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_Capsule));
+	WOO_IMPL__CLASS_BASE_DOC(woo_dem_Gl1_Capsule__CLASS_BASE_DOC);
 #endif
 
 
@@ -412,7 +415,7 @@ void Gl1_Capsule::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool
 	const auto& capsule(shape->cast<Capsule>());
 	Real r=scale*capsule.radius;
 	Real shaft=scale*capsule.shaft;
-	bool doPoints=(Renderer::fastDraw || quality<0 || (int)(quality*glutSlices)<2 || (int)(quality*glutStacks)<2);
+	bool doPoints=(glInfo.renderer->fastDraw || quality<0 || (int)(quality*glutSlices)<2 || (int)(quality*glutStacks)<2);
 	if(doPoints){
 		if(smooth) glEnable(GL_POINT_SMOOTH);
 		else glDisable(GL_POINT_SMOOTH);

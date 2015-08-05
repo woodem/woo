@@ -23,11 +23,12 @@ struct Capsule: public Shape{
 	AlignedBox3r alignedBox() const WOO_CXX11_OVERRIDE;
 	Vector3r endPt(short i) const { return nodes[0]->loc2glob(Vector3r((i==0?-.5:.5)*shaft,0,0)); }
 	void applyScale(Real scale) WOO_CXX11_OVERRIDE;
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR(Capsule,Shape,"Cylinder with half-spherical caps on both sides, Mindowski sum of segment with sphere.",
-		((Real,radius,NaN,AttrTrait<>().lenUnit(),"Radius of the capsule -- of half-spherical caps and also of the middle part."))
-		((Real,shaft,NaN,AttrTrait<>().lenUnit(),"Length of the middle segment"))
-		,/*ctor*/createIndex();
-	);
+	#define woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR \
+		Capsule,Shape,"Cylinder with half-spherical caps on both sides, Mindowski sum of segment with sphere.", \
+		((Real,radius,NaN,AttrTrait<>().lenUnit(),"Radius of the capsule -- of half-spherical caps and also of the middle part.")) \
+		((Real,shaft,NaN,AttrTrait<>().lenUnit(),"Length of the middle segment")) \
+		,/*ctor*/createIndex(); 
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR);
 	REGISTER_CLASS_INDEX(Capsule,Shape);
 };
 WOO_REGISTER_OBJECT(Capsule);
@@ -35,7 +36,9 @@ WOO_REGISTER_OBJECT(Capsule);
 struct Bo1_Capsule_Aabb: public BoundFunctor{
 	virtual void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
 	FUNCTOR1D(Capsule);
-	WOO_CLASS_BASE_DOC(Bo1_Capsule_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Capsule`");
+	#define woo_dem_Bo1_Capsule_Aabb__CLASS_BASE_DOC \
+		Bo1_Capsule_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Capsule`"
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Capsule_Aabb__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Bo1_Capsule_Aabb);
 
@@ -99,7 +102,9 @@ WOO_REGISTER_OBJECT(Cg2_Facet_Capsule_L6Geom);
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Capsule: public Gl1_Sphere{
 	virtual void go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) WOO_CXX11_OVERRIDE;
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_Capsule,Gl1_Sphere,"Renders :obj:`woo.dem.Capsule` object",);
+	#define woo_dem_Gl1_Capsule__CLASS_BASE_DOC \
+		Gl1_Capsule,Gl1_Sphere,"Renders :obj:`woo.dem.Capsule` object"
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_Gl1_Capsule__CLASS_BASE_DOC);
 	RENDERS(Capsule);
 };
 WOO_REGISTER_OBJECT(Gl1_Capsule);

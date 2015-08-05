@@ -118,7 +118,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 				woo.core.PyRunner(100,'import woo.pre.depot; S.pre.checkProgress(S)'),
 			],
 		)
-		if 'opengl' in woo.config.features: S.any=[woo.gl.Gl1_DemField(colorBy='radius')]
+		if 'opengl' in woo.config.features: S.gl.demField.colorBy='radius'
 		return S
 
 	def checkProgress(self,S):

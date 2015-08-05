@@ -72,6 +72,7 @@ class Master: public Singleton<Master>{
 	int api_get() const; void api_set(int);
 	int usesApi; // 0 by default, set by the user
 	int usesApi_get() const; void usesApi_set(py::object o); 
+	vector<string> usesApi_locations; // store where usesApi was set, and to which value
 
 	void checkApi(int minApi, const string& msg, bool pyWarn) const;
 

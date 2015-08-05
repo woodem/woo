@@ -6,12 +6,15 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.gl.Gl1_DemField.nodes=True
-woo.gl.Gl1_Node.wd=4
-woo.gl.Gl1_Node.len=.1
-woo.gl.Gl1_Membrane.phiSplit=True
-woo.gl.Gl1_Membrane.phiWd=10
-woo.gl.Gl1_Membrane.arrows=True
+
+S=woo.master.scene=Scene(fields=[DemField()])
+S.gl.demField.nodes=True
+S.gl.node.wd=4
+S.gl.node.len=.1
+S.gl.membrane.phiSplit=True
+S.gl.membrane.phiWd=10
+S.gl.membrane.arrows=True
+
 #nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,1))]
 nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,1))]
 for n in nn:
@@ -37,7 +40,6 @@ nn[2].dem.angVel=2*(nn[2].ori*Vector3.UnitZ)
 #nn[0].ori=Quaternion(Matrix3(-Vector3.UnitY,-Vector3.UnitZ,Vector3.UnitX))
 #nn[0].dem.angVel=10.*Vector3.UnitY
 
-S=woo.master.scene=Scene(fields=[DemField()])
 S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat()))
 for n in nn: n.dem.addParRef(S.dem.par[-1])
 

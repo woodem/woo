@@ -10,9 +10,11 @@ from math import pi
 from minieigen import *
 woo.master.usesApi=10101
 
-woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False)
-woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel)
-woo.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
+S.gl=GlSetup(
+	woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False),
+	woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel),
+)
+S.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))],dtSafety=.8)
 

@@ -68,10 +68,7 @@ WOO_REGISTER_OBJECT(BoxTraceTimeSetter);
 struct Tracer: public PeriodicEngine{
 	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
 	void resetNodesRep(bool setupEmpty=false, bool includeDead=true);
-	// bool notifyDead() WOO_CXX11_OVERRIDE(){ showHideRange(!dead); }
-	#ifdef WOO_OPENGL
-		void showHideRange(bool show);
-	#endif
+	void getRanges(vector<shared_ptr<ScalarRange>>& sr) const WOO_CXX11_OVERRIDE { sr.push_back(lineColor); };
 
 	void postLoad(Tracer&, void* attr);
 

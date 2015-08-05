@@ -28,32 +28,50 @@ void GlSetup::postLoad(GlSetup&,void*){
 	if(ok){
 		for(size_t i=0; i<objs.size(); i++){
 			const auto oPtr=objs[i].get();
-			if((objs[i]?std::type_index(typeid(*oPtr)):std::type_index(typeid(void)))!=objTypeIndices[i]){
-				LOG_WARN("GlSetup.objs[i]: incorrect type (is "+(objs[i]?objs[i]->pyStr():"None")+", should be a "+objTypeNames[i]+", falling back to defaults.");
+			if((oPtr?std::type_index(typeid(*oPtr)):std::type_index(typeid(void)))!=objTypeIndices[i]){
+				LOG_WARN("GlSetup.objs["+to_string(i)+"]: incorrect type (is "+(oPtr?objs[i]->pyStr():"None")+", should be a "+objTypeNames[i]+", falling back to defaults.");
+				ok=false;
 				break;
 			}
 		}
 	}
 	if(!ok) objs=makeObjs();
+	dirty=true;
 }
 
-void GlSetup::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+
+py::object GlSetup::pyCallStatic(py::tuple args, py::dict kw){
+	if(py::len(kw)>0) woo::RuntimeError("Keyword arguments not accepted.");
+	py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
+	return py::object();
+}
+
+
+void GlSetup::pyCall(const py::tuple& args){
 	for(int i=0; i<py::len(args); i++){
 		py::extract<shared_ptr<Object>> ex(args[i]);
 		if(!ex.check()) woo::TypeError("Only instances of woo.core.Object can be given as arguments.");
 		const auto o(ex()); const auto oPtr=o.get();
 		if(!o) woo::TypeError("None not accepted as argument.");
 		auto I=std::find(objTypeIndices.begin(),objTypeIndices.end(),std::type_index(typeid(*oPtr)));
-		if(I==objTypeIndices.end()) woo::TypeError(o->pyStr()+" has type not understood by GlSetup.");
+		if(I==objTypeIndices.end()) woo::TypeError(o->pyStr()+" is of type not understood by GlSetup.");
 		objs[I-objTypeIndices.begin()]=o;
+		dirty=true;
 	}
+}
+
+
+void GlSetup::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+	pyCall(args);
 	args=py::tuple();
+	// not sure this is really useful
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
 		py::tuple item=py::extract<py::tuple>(kwl[i]);
 		string key=py::extract<string>(item[0]);
 		auto I=std::find(objAccessorNames.begin(),objAccessorNames.end(),key);
-		if(I==objAccessorNames.end()) woo::KeyError("Invalid key "+key+".)");
+		// we don't consume unknown keys, Object's business to use them or error out
+		if(I==objAccessorNames.end()) continue; 
 		size_t index=I-objAccessorNames.begin();
 		py::extract<shared_ptr<Object>> ex(item[1]);
 		if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
@@ -61,10 +79,22 @@ void GlSetup::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
 		if(!o) woo::TypeError(key+" must not be None.");
 		if(std::type_index(typeid(*oPtr))!=objTypeIndices[index]) woo::TypeError(key+" must be a "+objTypeNames[index]+" (not "+o->getClassName()+").");
 		objs[index]=o;
+		py::api::delitem(kw,key.c_str());
 	}
-	kw=py::dict();
 }
 
+py::list GlSetup::getObjNames() const{
+	py::list ret;
+	for(const auto& s: objAccessorNames) ret.append(s);
+	return ret;
+}
+
+
+shared_ptr<Renderer> GlSetup::getRenderer() const {
+	if(objs.empty()) throw std::runtime_error("GlSetup::getRenderer: objs.empty()");
+	if(!objs[0]->isA<Renderer>()) throw std::runtime_error("GlSetup::getRenderer: !objs[0]->isA<Renderer>()");
+	return static_pointer_cast<Renderer>(objs[0]);
+}
 
 vector<shared_ptr<Object>> GlSetup::makeObjs() {
 	// functors for dispatcher types

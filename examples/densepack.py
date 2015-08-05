@@ -28,4 +28,4 @@ sp3.translate((0,0.1,0))
 sp3.toDem(S,S.dem,mat=FrictMat())
 
 import woo.gl
-woo.gl.Gl1_DemField.colorBy='radius'
+S.gl.demField.colorBy='radius'

@@ -5,7 +5,7 @@ from woo.dem import *
 from woo import plot
 from woo import *
 import woo.log
-woo.master.usesApi=10101
+woo.master.usesApi=10102
 woo.log.setLevel('LawTester',woo.log.INFO)
 woo.log.setLevel('Law2_L6Geom_PelletPhys_Pellet',woo.log.TRACE)
 m=FrictMat(density=1e3,young=1e7,ktDivKn=.2,tanPhi=.5)
@@ -35,7 +35,7 @@ S.trackEnergy=True
 S.plot.plots={'i':('u_xx',None,('f_xx','g--')),'u_xx':('f_xx',),'i ':('**S.energy'),' i':('k_xx',None,('dt','g-'))}
 S.plot.plot()
 import woo.gl
-S.any=[woo.gl.Gl1_DemField(glyph=woo.gl.Gl1_DemField.glyphForce)]
+S.gl.demField.glyph='force'
 S.saveTmp()
 #S.run()
 S.one()

@@ -134,12 +134,9 @@ void Leapfrog::run(){
 	assert(dem);
 	bool hasGravity(dem->gravity!=Vector3r::Zero());
 
-	/* temporary hack */
-	if(dem->nodes.empty() && !dontCollect){
-		int i=dem->collectNodes();
-		if(i>0) LOG_WARN("No DEM nodes were defined, "<<i<<" nodes were collected from particles.");
+	if(dem->nodes.empty()){
+		Master::instance().checkApi(/*minApi*/10101,"DemField.nodes is empty; woo.dem.Leapfrog no longer calls DemField.collectNodes() automatically.",/*pyWarn*/true); // can happen in bg thread?
 	}
-	
 
 	size_t size=dem->nodes.size();
 	const auto& nodes=dem->nodes;

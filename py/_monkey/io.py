@@ -360,14 +360,15 @@ woo.core.WooJSONEncoder=WooJSONEncoder
 woo.core.WooJSONDecoder=WooJSONDecoder
 
 # call the arg __e to avoid clash with math.e if there is 'from math import *' in the magic string
-def wooExprEval(__e):
+def wooExprEval(__e,__f):
 	'''
 	Evaluate expression created with :obj:`SerializerToExpr`. Comments starting with ``#:`` are executed as python code, which is in particular useful for importing necessary modules.
 	'''
 	import woo,math,textwrap
 	# exec all lines starting with #: as a piece of code
 	exec (textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')])))
-	return eval(__e)
+	# return the expression
+	return eval(compile(__e,__f,'eval'))
 
 def Object_loads(typ,data,format='auto'):
 	'Load object from file, with format auto-detection; when *typ* is None, no type-checking is performed.'
@@ -391,7 +392,7 @@ def Object_loads(typ,data,format='auto'):
 	if format=='auto': IOError("Format detection failed on data: "%data)
 	## format detected now
 	if format=='expr':
-		return typeChecked(wooExprEval(data),typ)
+		return typeChecked(wooExprEval(data,'<string>'),typ)
 	elif format=='pickle':
 		return typeChecked(pickle.loads(data,typ))
 	elif format=='json':
@@ -445,7 +446,7 @@ def Object_load(typ,inFile,format='auto'):
 		return typeChecked(Object._boostLoad(str(inFile)),typ) # convert unicode to str, if necessary, as the c++ type is std::string
 	elif format=='expr':
 		buf=codecs.open(inFile,'rb','utf-8').read()
-		return typeChecked(wooExprEval(buf),typ)
+		return typeChecked(wooExprEval(buf,inFile),typ)
 	elif format=='pickle':
 		return typeChecked(pickle.load(open(inFile,'rb')),typ)
 	elif format=='json':

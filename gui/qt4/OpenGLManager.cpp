@@ -34,23 +34,29 @@ void OpenGLManager::timerEvent(QTimerEvent* event){
 	if(!lock) return;
 	if(views.size()>1) LOG_WARN("Only one (primary) view will be rendered.");
 	Real t;
-	bool measure=(frameMeasureTime>=Renderer::maxFps);
+	// access renderer from scene, if defined
+	// ugly
+	const auto& s=Master::instance().getScene();
+	if(!s) return;
+	shared_ptr<Renderer> renderer=s->ensureAndGetRenderer();
+	//Renderer* renderer(s->renderer.get());
+	bool measure=(renderer && frameMeasureTime>=renderer->maxFps);
 	if(measure){ t=woo::TimingInfo::getNow(/*evenIfDisabled*/true); }
 	views[0]->updateGL();
 	if(measure){
 		frameMeasureTime=0;
 		t=1e-9*(woo::TimingInfo::getNow(/*evenIfDisabled*/true)-t); // in seconds
-		Real& dt(Renderer::fastDraw?Renderer::fastRenderTime:Renderer::renderTime);
+		Real& dt(renderer->fastDraw?renderer->fastRenderTime:renderer->renderTime);
 		if(isnan(dt)) dt=t;
 		dt=.6*dt+.4*(t);
 	} else {
 		frameMeasureTime++;
 	}
 
-	if(maxFps!=Renderer::maxFps){
+	if(renderer && maxFps!=renderer->maxFps){
 		killTimer(renderTimerId);
-		maxFps=Renderer::maxFps;
-		renderTimerId=startTimer(1000/Renderer::maxFps);
+		maxFps=renderer->maxFps;
+		renderTimerId=startTimer(1000/renderer->maxFps);
 	}
 	//for(const auto& view: views){
 	//	if(view) view->updateGL();
@@ -101,11 +107,15 @@ void OpenGLManager::closeViewSlot(int id){
 }
 void OpenGLManager::centerAllViews(){
 	boost::mutex::scoped_lock lock(viewsMutex);
-	FOREACH(const shared_ptr<GLViewer>& g, views){ if(!g) continue; g->centerScene(); }
+	for(const shared_ptr<GLViewer>& g: views){ if(!g) continue; g->centerScene(); }
 }
 void OpenGLManager::startTimerSlot(){
-	maxFps=Renderer::maxFps; // remember the last value
-	renderTimerId=startTimer(1000/Renderer::maxFps);
+	// get scene and renderer directly the first time
+	const auto& s=Master::instance().getScene();
+	if(!s) return; // should not happen
+	const auto& rr=s->ensureAndGetRenderer();
+	maxFps=(rr?rr->maxFps:15); // remember the last value
+	renderTimerId=startTimer(1000/maxFps);
 }
 
 int OpenGLManager::waitForNewView(float timeout,bool center){

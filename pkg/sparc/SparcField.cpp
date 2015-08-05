@@ -1074,13 +1074,8 @@ Real StaticEquilibriumSolver::gradVError(const shared_ptr<Node>& n, int rPow){
 
 
 WOO_PLUGIN(gl,(Gl1_SparcField)(SparcConstraintGlRep));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_sparc_Gl1_SparcField__CLASS_BASE_DOC_ATTRS);
 
-
-bool Gl1_SparcField::nodes;
-bool Gl1_SparcField::nid;
-bool Gl1_SparcField::neighbors;
-vector<int> Gl1_SparcField::conn;
-vector<Vector3r> Gl1_SparcField::connColors;
 
 void Gl1_SparcField::go(const shared_ptr<Field>& sparcField, GLViewInfo* _viewInfo){
 	sparc=static_pointer_cast<SparcField>(sparcField);
@@ -1088,8 +1083,8 @@ void Gl1_SparcField::go(const shared_ptr<Field>& sparcField, GLViewInfo* _viewIn
 
 	for(const shared_ptr<Node>& n: sparc->nodes){
 		Renderer::glScopedName name(n);
-		Renderer::setNodeGlData(n); // assures that GlData is defined
-		if(nodes) Renderer::renderRawNode(n);
+		_viewInfo->renderer->setNodeGlData(n); // assures that GlData is defined
+		if(nodes) viewInfo->renderer->renderRawNode(n);
 		if(n->rep){ n->rep->render(n,viewInfo); }
 		// GLUtils::GLDrawText((boost::format("%d")%n->getData<SparcData>().nid).str(),n->pos,/*color*/Vector3r(1,1,1), /*center*/true,/*font*/NULL);
 		int nnid=n->getData<SparcData>().nid;

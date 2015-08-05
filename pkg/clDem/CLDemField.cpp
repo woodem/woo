@@ -822,16 +822,6 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 
 #ifdef WOO_OPENGL
 
-bool Gl1_CLDemField::parWire;
-Real Gl1_CLDemField::quality;
-Vector2r Gl1_CLDemField::quality_range;
-bool Gl1_CLDemField::bboxes;
-bool Gl1_CLDemField::par;
-bool Gl1_CLDemField::pot;
-bool Gl1_CLDemField::con;
-shared_ptr<ScalarRange> Gl1_CLDemField::parRange;
-shared_ptr<ScalarRange> Gl1_CLDemField::conRange;
-
 void Gl1_CLDemField::renderBboxes(){
 	glColor3v(Vector3r(.4,.7,.2));
 	for(size_t i=0; i<sim->par.size(); i++){

@@ -53,16 +53,6 @@ from woo.gl import *
 rr=qt.Renderer()
 rr.extraDrawers=[GlExtra_AnisoPorosityAnalyzer(analyzer=S.lab.apa,num=0)]
 rr.nodes=False
-#rr.shape
-#rr.wire=True
-#forceRange=ScalarRange(label='contF')
-#torqueRange=ScalarRange(label='T')
-#scene.ranges=[Gl1_CPhys.range,Gl1_CPhys.shearRange,forceRange,torqueRange]
-#Gl1_CPhys.range.label='Fn'
-#Gl1_CPhys.shearRange.label='Fs'
-#Gl1_CPhys.shearColor=True
-
-S.any=[Gl1_CPhys()]
 
 # from yade import log
 #log.setLevel('AnisoPorosityAnalyzer',log.TRACE)

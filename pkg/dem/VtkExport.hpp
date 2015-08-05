@@ -60,7 +60,7 @@ struct VtkExport: public PeriodicEngine{
 	typedef map<string,vector<string>> map_string_vector_string;
 
 	#define woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY \
-		VtkExport,PeriodicEngine,ClassTrait().doc("Export DEM simulation to VTK files for post-processing.").section("Export","TODO",{"FlowAnalysis","VtkFlowExport"}), \
+		VtkExport,PeriodicEngine,ClassTrait().doc("Export DEM simulation to VTK files for post-processing.").section("Export","TODO",{"FlowAnalysis"}), \
 		((string,out,,AttrTrait<>().buttons({"Open in Paraview","import woo.paraviewscript\nwith self.scene.paused(): woo.paraviewscript.fromVtkExport(self,launch=True)",""},/*showBefore*/true),"Filename prefix to write into; :obj:`woo.core.Scene.tags` written as {tagName} are expanded at the first run.")) \
 		((bool,compress,true,,"Compress output XML files")) \
 		((bool,ascii,false,,"Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``")) \
