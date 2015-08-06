@@ -90,7 +90,7 @@ void Scene::backgroundLoop(){
 		}
 	} catch(std::exception& e){
 		LOG_ERROR("Exception: "<<endl<<e.what());
-		except=make_shared<std::exception>(e);
+		except=boost::make_shared<std::exception>(e);
 		{ boost::mutex::scoped_lock l(runMutex); runningFlag=false; }
 		return;
 	}
