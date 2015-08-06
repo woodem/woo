@@ -669,7 +669,11 @@ void GLViewer::draw(bool withNames, bool fast)
 	#endif
 	if(manipulatedClipPlane>=0){
 		assert(manipulatedClipPlane<renderer->clipPlanes.size());
+#if QGLVIEWER_VERSION>=0x020603
+		qreal v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
+#else
 		float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
+#endif
 		double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);
 		Vector3r newPos(v0,v1,v2); Quaternionr newOri(q0,q1,q2,q3);
 		const Vector3r& oldPos(renderer->clipPlanes[manipulatedClipPlane]->pos);
