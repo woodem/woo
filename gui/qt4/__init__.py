@@ -195,6 +195,7 @@ class ControllerClass(QWidget,Ui_Controller):
 		self.generatorComboSlot(None)
 		self.movieButton.setEnabled(False)
 		self.lastScene=None
+		self.lastGl=None
 		self.traceCheckboxToggled(isOn=None) # detect on/off
 		self.movieActive=False
 		self.movieFileEdit.setText(woo.utils.fixWindowsPath(str(self.movieFileEdit.text()))) # fix /tmp on windows
@@ -663,8 +664,9 @@ class ControllerClass(QWidget,Ui_Controller):
 				glob=globals(); glob.update(__main__.__dict__)
 				exec S.uiBuild in glob, {'S':S,'area':self.customArea}
 		## renderer change
-		if self.lastScene!=S or self.lastScene.renderer!=S.renderer:
+		if self.lastGl!=S.gl:
 			self.displayComboSlot(self.displayCombo.currentText())
+			self.lastGl=S.gl
 			
 
 		

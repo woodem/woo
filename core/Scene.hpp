@@ -16,7 +16,7 @@
 #ifdef WOO_OPENGL
 	#include<woo/core/DisplayParameters.hpp>
 	struct Renderer;
-	// TODO: move GlSetup to core so that we keep modules neatly separated
+	// TODO? move GlSetup to core so that we keep modules neatly separated
 	#include<woo/pkg/gl/GlSetup.hpp>
 #endif
 
@@ -65,7 +65,6 @@ struct Scene: public Object{
 		#endif
 
 		#ifdef WOO_OPENGL
-			//shared_ptr<Renderer> renderer;
 			// implementation is in pkg/gl/Renderer(!!!)
 			void ensureGl();
 			shared_ptr<Renderer> ensureAndGetRenderer();
@@ -156,7 +155,7 @@ struct Scene: public Object{
 			#define woo_core_Scene__ATTRS__OPENGL \
 				((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states.")) \
 				((shared_ptr<GlSetup>,gl,/* no default since the type is incomplete here ... really?! */,AttrTrait<Attr::hidden>(),"Settings related to rendering; default instance is created on-the-fly when requested from Python.")) \
-				((bool,glDirty,true,AttrTrait<Attr::readonly>(),"Flag to re-initalize functors and colorscales before rendering."))
+				((bool,glDirty,true,AttrTrait<Attr::readonly>(),"Flag to re-initalize functors, colorscales and restore QGLViewer before rendering."))
 			#define woo_core_Scene__PY__OPENGL .add_property("renderer",&Scene::pyEnsureAndGetRenderer) /* for retrieving from Python */ .add_property("gl",&Scene::pyGetGl,&Scene::pySetGl)
 		#else
 			#define woo_core_Scene__ATTRS__OPENGL

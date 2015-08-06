@@ -50,7 +50,6 @@ struct Renderer: public Object{
 	private:
 		void resetSpecularEmission();
 		void setLighting();
-		void setClippingPlanes();
 
 	public:
 		GlFieldDispatcher fieldDispatcher;
@@ -110,12 +109,9 @@ struct Renderer: public Object{
 	enum{TIME_ALL=TIME_VIRT|TIME_REAL|TIME_STEP};
 	enum{FAST_ALWAYS=0,FAST_UNFOCUSED,FAST_NEVER};
 
-	void postLoad(Renderer&,void* attr){
-		if(attr==&dispScale && dispScale!=Vector3r::Ones()) scaleOn=true;
-		if(attr==&rotScale && rotScale!=1.) scaleOn=true;
-	}
+	void postLoad(Renderer&,void* attr);
 
-	#define woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_PY \
+	#define woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Renderer,Object,"Class responsible for rendering scene on OpenGL devices.", \
 		((bool,initDone,false,AttrTrait<Attr::hidden|Attr::noSave>(),"Track initialization (don't save, since this initialized GLUT as well, which is needed at every run again).")) \
 		/* GENERAL */ \
@@ -159,9 +155,7 @@ struct Renderer: public Object{
 		((Vector3r,logoColor,Vector3r(1.,1.,1.),AttrTrait<>().rgbColor(),"Logo color")) \
 		((Real,logoWd,1.8,AttrTrait<>().range(Vector2r(0,10)),"Width of the logo stroke; set to non-positive value to disable the logo.")) \
 		/* SELECTION AND CLIPPING */ \
-		((vector<Vector3r>,clipPlanePos,vector<Vector3r>(numClipPlanes,Vector3r::Zero()),AttrTrait<>().startGroup("Selection and clipping"),"Position and orientation of clipping planes")) \
-		((vector<Quaternionr>,clipPlaneOri,vector<Quaternionr>(numClipPlanes,Quaternionr::Identity()),,"Position and orientation of clipping planes")) \
-		((vector<bool>,clipPlaneActive,vector<bool>(numClipPlanes,false),,"Activate/deactivate respective clipping planes")) \
+		((vector<shared_ptr<Node>>,clipPlanes,,AttrTrait<Attr::triggerPostLoad>().startGroup("Selection & Clipping"),"Clipping plane definitions (local :math:`x`-axis defines the clipping plane; activity of the plane is determined by whether :obj:`woo.core.Node.rep` is something (active; otherwise unused object) or ``None``.)")) \
 		((shared_ptr<Object>,selObj,,,"Object which was selected by the user (access only via woo.qt.selObj).")) \
 		((shared_ptr<Node>,selObjNode,,AttrTrait<Attr::readonly>(),"Node associated to the selected object (recenters scene on that object upon selection)")) \
 		((string,selFunc,"import woo.qt\nwoo.qt.onSelection",,"Python expression to be called (by textually appending '(woo.gl.Renderer.selOBj)' or '(None)') at object selection/deselection. If empty, no function will be called. Any imports must be explicitly mentioned in the string.")) \
@@ -169,13 +163,14 @@ struct Renderer: public Object{
 		((int,maxFps,10,AttrTrait<>().startGroup("Performance"),"Maximum frame rate for the OpenGL display")) \
 		((Real,renderTime,NaN,AttrTrait<>().readonly().timeUnit(),"Time for rendering one frame (smoothed)")) \
 		((Real,fastRenderTime,NaN,AttrTrait<>().readonly().timeUnit(),"Time for fast-rendering one frame (smoothed)")) \
+		,/*ctor*/ postLoad(*this,NULL); /* initializes clipPlanes */ \
 		,/*py*/ \
 			.def_readonly("nodeDispatcher",&Renderer::nodeDispatcher) \
 			; \
 			_classObj.attr("timeVirt")=(int)Renderer::TIME_VIRT; \
 			_classObj.attr("timeReal")=(int)Renderer::TIME_REAL; \
 			_classObj.attr("timeStep")=(int)Renderer::TIME_STEP; 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_PY);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(Renderer);
 

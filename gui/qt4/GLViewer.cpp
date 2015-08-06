@@ -34,6 +34,7 @@ using boost::algorithm::iends_with;
 #include<QtGui/qfiledialog.h>
 #include<QtGui/QMessageBox>
 #include<QtGui/QIcon>
+#include<QtCore/QTextStream>
 
 /*****************************************************************************
 *********************************** SnapshotEngine ***************************
@@ -296,11 +297,11 @@ void GLViewer::resetManipulation(){
 }
 
 void GLViewer::startClipPlaneManipulation(int planeNo){
-	assert(planeNo<renderer->numClipPlanes);
+	assert(planeNo<renderer->clipPlanes.size());
 	resetManipulation();
 	mouseMovesManipulatedFrame(xyPlaneConstraint.get());
 	manipulatedClipPlane=planeNo;
-	const Vector3r& pos(renderer->clipPlanePos[planeNo]); const Quaternionr& ori(renderer->clipPlaneOri[planeNo]);
+	const Vector3r& pos(renderer->clipPlanes[planeNo]->pos); const Quaternionr& ori(renderer->clipPlanes[planeNo]->ori);
 	manipulatedFrame()->setPositionAndOrientation(qglviewer::Vec(pos[0],pos[1],pos[2]),qglviewer::Quaternion(ori.x(),ori.y(),ori.z(),ori.w()));
 	string grp=strBoundGroup();
 	displayMessage("Manipulating clip plane #"+lexical_cast<string>(planeNo+1)+(grp.empty()?grp:" (bound planes:"+grp+")"));
@@ -354,15 +355,23 @@ void GLViewer::saveDisplayParameters(size_t n){
 }
 
 string GLViewer::getState(){
-	QString origStateFileName=stateFileName();
-	string tmpFile=Master::instance().tmpFilename();
-	setStateFileName(QString(tmpFile.c_str())); saveStateToFile(); setStateFileName(origStateFileName);
-	LOG_DEBUG("State saved to temp file "<<tmpFile);
-	// read tmp file contents and return it as string
-	// this will replace all whitespace by space (nowlines will disappear, which is what we want)
-	std::ifstream in(tmpFile.c_str()); string ret; while(!in.eof()){string ss; in>>ss; ret+=" "+ss;}; in.close();
-	boost::filesystem::remove(boost::filesystem::path(tmpFile));
-	return ret;
+	#if 0
+		QString origStateFileName=stateFileName();
+		string tmpFile=Master::instance().tmpFilename();
+		setStateFileName(QString(tmpFile.c_str())); saveStateToFile(); setStateFileName(origStateFileName);
+		LOG_DEBUG("State saved to temp file "<<tmpFile);
+		// read tmp file contents and return it as string
+		// this will replace all whitespace by space (nowlines will disappear, which is what we want)
+		std::ifstream in(tmpFile.c_str()); string ret; while(!in.eof()){string ss; in>>ss; ret+=" "+ss;}; in.close();
+		boost::filesystem::remove(boost::filesystem::path(tmpFile));
+		return ret;
+	#else
+		QDomDocument doc("QGLVIEWER");
+		doc.appendChild(QGLViewer::domElement("QGLViewer",doc));
+		QString buf; QTextStream stream(&buf);
+		doc.save(stream,/*indent*/2);
+		return buf.toStdString();
+	#endif
 }
 
 void GLViewer::setState(string state){
@@ -428,8 +437,12 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		else { resetManipulation(); displayMessage("Manipulating scene."); }
 	}
 	else if(e->key()==Qt::Key_Space){
-		if(manipulatedClipPlane>=0) {displayMessage("Clip plane #"+lexical_cast<string>(manipulatedClipPlane+1)+(renderer->clipPlaneActive[manipulatedClipPlane]?" de":" ")+"activated"); renderer->clipPlaneActive[manipulatedClipPlane]=!renderer->clipPlaneActive[manipulatedClipPlane]; }
-		else{
+		if(manipulatedClipPlane>=0) {
+			bool active(renderer->clipPlanes[manipulatedClipPlane]->rep);
+			if(active) renderer->clipPlanes[manipulatedClipPlane]->rep.reset();
+			else renderer->clipPlanes[manipulatedClipPlane]->rep=make_shared<NodeVisRep>();
+			displayMessage("Clip plane #"+to_string(manipulatedClipPlane+1)+(active?" de":" ")+"activated");
+		}else{
 			Scene* scene=Master::instance().getScene().get();
 			if(scene->running()) scene->pyStop();
 			else scene->pyRun();
@@ -438,20 +451,20 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	/* function keys */
 	else if(e->key()==Qt::Key_F1 || e->key()==Qt::Key_F2 || e->key()==Qt::Key_F3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_F1) n=1; else if(e->key()==Qt::Key_F2) n=2; else if(e->key()==Qt::Key_F3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=renderer->numClipPlanes) return;
+		if(planeId>=renderer->clipPlanes.size()) return;
 		if(planeId!=manipulatedClipPlane) startClipPlaneManipulation(planeId);
 	}
 	/* numbers */
 	else if(e->key()==Qt::Key_0 && (e->modifiers() & Qt::AltModifier)) { boundClipPlanes.clear(); displayMessage("Cleared bound planes group.");}
 	else if(e->key()==Qt::Key_1 || e->key()==Qt::Key_2 || e->key()==Qt::Key_3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_1) n=1; else if(e->key()==Qt::Key_2) n=2; else if(e->key()==Qt::Key_3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=renderer->numClipPlanes) return; // no such clipping plane
+		if(planeId>=renderer->clipPlanes.size()) return; // no such clipping plane
 		if(e->modifiers() & Qt::AltModifier){
 			if(boundClipPlanes.count(planeId)==0) {boundClipPlanes.insert(planeId); displayMessage("Added plane #"+lexical_cast<string>(planeId+1)+" to the bound group: "+strBoundGroup());}
 			else {boundClipPlanes.erase(planeId); displayMessage("Removed plane #"+lexical_cast<string>(planeId+1)+" from the bound group: "+strBoundGroup());}
 		}
 		else if(manipulatedClipPlane>=0 && manipulatedClipPlane!=planeId) {
-			const Quaternionr& o=renderer->clipPlaneOri[planeId];
+			const Quaternionr& o=renderer->clipPlanes[planeId]->ori;
 			manipulatedFrame()->setOrientation(qglviewer::Quaternion(o.x(),o.y(),o.z(),o.w()));
 			displayMessage("Copied orientation from plane #1");
 		}
@@ -508,9 +521,9 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		}
 	}
 	else if(e->key()==Qt::Key_R){ // reverse the clipping plane; revolve around scene center if no clipping plane selected
-		if(manipulatedClipPlane>=0 && manipulatedClipPlane<renderer->numClipPlanes){
+		if(manipulatedClipPlane>=0 && manipulatedClipPlane<renderer->clipPlanes.size()){
 			/* here, we must update both manipulatedFrame orientation and renderer->clipPlaneOri in the same way */
-			Quaternionr& ori=renderer->clipPlaneOri[manipulatedClipPlane];
+			Quaternionr& ori=renderer->clipPlanes[manipulatedClipPlane]->ori;
 			ori=Quaternionr(AngleAxisr(M_PI,Vector3r(0,1,0)))*ori; 
 			manipulatedFrame()->setOrientation(qglviewer::Quaternion(qglviewer::Vec(0,1,0),M_PI)*manipulatedFrame()->orientation());
 			displayMessage("Plane #"+lexical_cast<string>(manipulatedClipPlane+1)+" reversed.");
@@ -655,23 +668,23 @@ void GLViewer::draw(bool withNames, bool fast)
 		}
 	#endif
 	if(manipulatedClipPlane>=0){
-		assert(manipulatedClipPlane<renderer->numClipPlanes);
+		assert(manipulatedClipPlane<renderer->clipPlanes.size());
 		float v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
 		double q0,q1,q2,q3; manipulatedFrame()->getOrientation(q0,q1,q2,q3);
 		Vector3r newPos(v0,v1,v2); Quaternionr newOri(q0,q1,q2,q3);
-		const Vector3r& oldPos(renderer->clipPlanePos[manipulatedClipPlane]);
-		const Quaternionr& oldOri(renderer->clipPlaneOri[manipulatedClipPlane]);
+		const Vector3r& oldPos(renderer->clipPlanes[manipulatedClipPlane]->pos);
+		const Quaternionr& oldOri(renderer->clipPlanes[manipulatedClipPlane]->ori);
 		for(int planeId: boundClipPlanes){
-			if(planeId>=renderer->numClipPlanes || !renderer->clipPlaneActive[planeId] || planeId==manipulatedClipPlane) continue;
-			Vector3r& boundPos(renderer->clipPlanePos[planeId]); Quaternionr& boundOri(renderer->clipPlaneOri[planeId]);
+			if(planeId>=renderer->clipPlanes.size() || !renderer->clipPlanes[planeId]->rep || planeId==manipulatedClipPlane) continue;
+			Vector3r& boundPos(renderer->clipPlanes[planeId]->pos); Quaternionr& boundOri(renderer->clipPlanes[planeId]->ori);
 			Quaternionr relOrient=oldOri.conjugate()*boundOri; relOrient.normalize();
 			Vector3r relPos=oldOri.conjugate()*(boundPos-oldPos);
 			boundPos=newPos+newOri*relPos;
 			boundOri=newOri*relOrient;
 			boundOri.normalize();
 		}
-		renderer->clipPlanePos[manipulatedClipPlane]=newPos;
-		renderer->clipPlaneOri[manipulatedClipPlane]=newOri;
+		renderer->clipPlanes[manipulatedClipPlane]->pos=newPos;
+		renderer->clipPlanes[manipulatedClipPlane]->ori=newOri;
 	}
 
 	camera()->setZClippingCoefficient(renderer->zClipCoeff);
@@ -813,16 +826,16 @@ void GLViewer::postDraw(){
 	// cutting planes (should be moved to Renderer perhaps?)
 	// only painted if one of those is being manipulated
 	if(manipulatedClipPlane>=0){
-		for(int planeId=0; planeId<renderer->numClipPlanes; planeId++){
-			if(!renderer->clipPlaneActive[planeId] && planeId!=manipulatedClipPlane) continue;
+		for(int planeId=0; planeId<renderer->clipPlanes.size(); planeId++){
+			if(!renderer->clipPlanes[planeId]->rep && planeId!=manipulatedClipPlane) continue;
 			glPushMatrix();
-				const Vector3r& pos=renderer->clipPlanePos[planeId];
-				const Quaternionr& ori=renderer->clipPlaneOri[planeId];
+				const Vector3r& pos=renderer->clipPlanes[planeId]->pos;
+				const Quaternionr& ori=renderer->clipPlanes[planeId]->ori;
 				AngleAxisr aa(ori);	
 				glTranslatef(pos[0],pos[1],pos[2]);
 				glRotated(aa.angle()*(180./M_PI),aa.axis()[0],aa.axis()[1],aa.axis()[2]);
 				Real cff=1;
-				if(!renderer->clipPlaneActive[planeId]) cff=.4;
+				if(!renderer->clipPlanes[planeId]->rep) cff=.4;
 				glColor3f(max((Real)0.,cff*cos(planeId)),max((Real)0.,cff*sin(planeId)),planeId==manipulatedClipPlane); // variable colors
 				QGLViewer::drawGrid(realSize,2*nSegments);
 				drawArrow(wholeDiameter/6);
@@ -1164,15 +1177,15 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 		} else QGLViewer::wheelEvent(event);
 		return;
 	}
-	assert(manipulatedClipPlane<renderer->numClipPlanes);
+	assert(manipulatedClipPlane<renderer->clipPlanes.size());
 	float distStep=1e-3*sceneRadius();
 	//const float wheelSensitivityCoef = 8E-4f;
 	//Vec trans(0.0, 0.0, -event->delta()*wheelSensitivity()*wheelSensitivityCoef*(camera->position()-position()).norm());
 	float dist=event->delta()*manipulatedFrame()->wheelSensitivity()*distStep;
-	Vector3r normal=renderer->clipPlaneOri[manipulatedClipPlane]*Vector3r(0,0,1);
+	Vector3r normal=renderer->clipPlanes[manipulatedClipPlane]->ori*Vector3r::UnitZ();
 	qglviewer::Vec newPos=manipulatedFrame()->position()+qglviewer::Vec(normal[0],normal[1],normal[2])*dist;
 	manipulatedFrame()->setPosition(newPos);
-	renderer->clipPlanePos[manipulatedClipPlane]=Vector3r(newPos[0],newPos[1],newPos[2]);
+	renderer->clipPlanes[manipulatedClipPlane]->pos=Vector3r(newPos[0],newPos[1],newPos[2]);
 	updateGL();
 	/* in draw, bound cutting planes will be moved as well */
 }

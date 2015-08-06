@@ -65,7 +65,8 @@ struct GlSetup: public Object{
 	#define woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY \
 		GlSetup,Object,"Proxy object for accessing all GL-related settings uniformly from the scene.", \
 		((vector<shared_ptr<Object>>,objs,makeObjs(),AttrTrait<Attr::readonly>().noGui(),"List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.")) \
-		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui(),"Set after modifying functors, so that they can be regenerated.")) \
+		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui().noDump(),"Set after modifying functors, so that they can be regenerated.")) \
+		((string,qglviewerState,"",AttrTrait<Attr::readonly>().noGui(),"XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).")) \
 		,/*py*/ .add_property("objNames",&GlSetup::getObjNames).def("__call__",py::raw_function(&GlSetup::pyCallStatic,/*the instance*/1),"Replace all current functors by those passed as arguments."); \
 			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
 			for(size_t i=0; i<oo.size(); i++){ \

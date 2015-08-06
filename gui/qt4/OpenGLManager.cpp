@@ -21,6 +21,7 @@ OpenGLManager::OpenGLManager(QObject* parent): QObject(parent){
 	// Renderer::init(); called automatically when Renderer::render() is called for the first time
 	viewsMutexMissed=0;
 	frameMeasureTime=0;
+	frameSaveState=0;
 	connect(this,SIGNAL(createView()),this,SLOT(createViewSlot()));
 	connect(this,SIGNAL(resizeView(int,int,int)),this,SLOT(resizeViewSlot(int,int,int)));
 	connect(this,SIGNAL(closeView(int)),this,SLOT(closeViewSlot(int)));
@@ -34,15 +35,22 @@ void OpenGLManager::timerEvent(QTimerEvent* event){
 	if(!lock) return;
 	if(views.size()>1) LOG_WARN("Only one (primary) view will be rendered.");
 	Real t;
-	// access renderer from scene, if defined
-	// ugly
 	const auto& s=Master::instance().getScene();
 	if(!s) return;
 	shared_ptr<Renderer> renderer=s->ensureAndGetRenderer();
-	//Renderer* renderer(s->renderer.get());
+		
+	if(s->glDirty && s->gl){
+		if(s->gl->qglviewerState.empty()){ LOG_INFO("Not setting QGLViewer state (empty)"); }
+		else { LOG_INFO("Setting QGLViewer state."); views[0]->setState(s->gl->qglviewerState); }
+	}
+
 	bool measure=(renderer && frameMeasureTime>=renderer->maxFps);
 	if(measure){ t=woo::TimingInfo::getNow(/*evenIfDisabled*/true); }
+
+	/* ------------------ */
 	views[0]->updateGL();
+	/* -------------------*/
+
 	if(measure){
 		frameMeasureTime=0;
 		t=1e-9*(woo::TimingInfo::getNow(/*evenIfDisabled*/true)-t); // in seconds
@@ -53,14 +61,16 @@ void OpenGLManager::timerEvent(QTimerEvent* event){
 		frameMeasureTime++;
 	}
 
+	// every 50 frames, save state
+	if(frameSaveState<views[0]->framesDone+50){
+		s->gl->qglviewerState=views[0]->getState();
+	}
+
 	if(renderer && maxFps!=renderer->maxFps){
 		killTimer(renderTimerId);
 		maxFps=renderer->maxFps;
 		renderTimerId=startTimer(1000/renderer->maxFps);
 	}
-	//for(const auto& view: views){
-	//	if(view) view->updateGL();
-	//}
 #else
 	// this implementation makes the GL idle on subsequent timers, if the rednering took longer than one timer shot
 	// as many tim ers as the waiting took are the idle

@@ -22,7 +22,8 @@ string GlSetup::accessorName(const string&s ){
 	return ret;
 }
 
-void GlSetup::postLoad(GlSetup&,void*){
+void GlSetup::postLoad(GlSetup&,void* attr){
+	// the rest is used when loading
 	bool ok=true;
 	if(objs.size()!=objTypeIndices.size()){ LOG_WARN("GlSetup.objs: incorrect size, falling back to defaults."); ok=false; }
 	if(ok){

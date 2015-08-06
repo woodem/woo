@@ -22,7 +22,7 @@ WOO_PLUGIN(gl,(Renderer)(GlExtraDrawer));
 WOO_IMPL_LOGGER(Renderer);
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY);
-WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
 
 
@@ -41,6 +41,14 @@ void GlExtraDrawer::render(){ throw runtime_error("GlExtraDrawer::render called 
 Vector3r Renderer::highlightEmission0;
 Vector3r Renderer::highlightEmission1;
 
+void Renderer::postLoad(Renderer&, void* attr){
+	if(attr==&dispScale && dispScale!=Vector3r::Ones()) scaleOn=true;
+	if(attr==&rotScale && rotScale!=1.) scaleOn=true;
+	if(clipPlanes.empty()) clipPlanes.resize(numClipPlanes);
+	// don't allow None clipping plane
+	for(size_t i=0; i<clipPlanes.size(); i++) if(!clipPlanes[i]) clipPlanes[i]=make_shared<Node>();
+}
+
 void Renderer::init(const shared_ptr<Scene>& scene){
 	LOG_DEBUG("Renderer::init()");
 	if(!scene->gl) throw std::logic_error("Renderer::init: !scene->gl.");
@@ -50,7 +58,6 @@ void Renderer::init(const shared_ptr<Scene>& scene){
 	nodeDispatcher.setFunctors_getRanges(scene->gl->objs,scene->autoRanges);
 	for(const auto& e: scene->engines) e->getRanges(scene->autoRanges);
 
-	clipPlaneNormals.resize(numClipPlanes);
 	initDone=true;
 
 	static bool glutInitDone=false;
@@ -65,8 +72,8 @@ void Renderer::init(const shared_ptr<Scene>& scene){
 }
 
 bool Renderer::pointClipped(const Vector3r& p){
-	if(numClipPlanes<1) return false;
-	for(int i=0;i<numClipPlanes;i++) if(clipPlaneActive[i]&&(p-clipPlanePos[i]).dot(clipPlaneNormals[i])<0) return true;
+	if(clipPlanes.empty()) return false;
+	for(const auto& cp: clipPlanes) if(cp->rep && cp->glob2loc(p).z()<0.) return true;
 	return false;
 }
 
@@ -124,21 +131,6 @@ void Renderer::drawPeriodicCell(){
 			GLUtils::Parallelepiped(hSize.col(0),hSize.col(1),hSize.col(2));
 		}
 	glPopMatrix();
-}
-
-void Renderer::setClippingPlanes(){
-	// clipping
-	assert(clipPlaneNormals.size()==(size_t)numClipPlanes);
-	for(size_t i=0;i<(size_t)numClipPlanes; i++){
-		// someone could have modified those from python and truncate the vectors; fill those here in that case
-		if(i==clipPlanePos.size()) clipPlanePos.push_back(Vector3r::Zero());
-		if(i==clipPlaneOri.size()) clipPlaneOri.push_back(Quaternionr::Identity());
-		if(i==clipPlaneActive.size()) clipPlaneActive.push_back(false);
-		if(i==clipPlaneNormals.size()) clipPlaneNormals.push_back(Vector3r::UnitX());
-		// end filling stuff modified from python
-		if(clipPlaneActive[i]) clipPlaneNormals[i]=clipPlaneOri[i]*Vector3r(0,0,1);
-		/* glBegin(GL_LINES);glVertex3v(clipPlanePos[i]);glVertex3v(clipPlanePos[i]+clipPlaneNormals[i]);glEnd(); */
-	}
 }
 
 void Renderer::resetSpecularEmission(){
@@ -251,7 +243,6 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 	viewInfo.scene=scene.get();
 	viewInfo.renderer=this;
 
-	setClippingPlanes();
 	setLighting();
 	drawPeriodicCell();
 
