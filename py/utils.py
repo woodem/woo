@@ -200,9 +200,17 @@ def wall(position,axis,sense=0,glAB=None,fixed=True,mass=0,color=None,mat=defaul
 	return p
 
 def wallBox(box,which=(1,1,1,1,1,1),**kw):
-	'''Return box delimited by walls, created by :obj:`woo.dem.Wall.make`, which receives most arguments. *which* determines which walls are created, in the order -x, -y, -z, +x, +y, +z.'''
+	'''Return box delimited by walls, created by :obj:`woo.dem.Wall.make`, which receives most arguments. :obj:`Wall.glAB <woo.dem.Wall.glAB>` are computed automatically so that walls visually end at the edges.
+	
+	.. note:: Since :obj:`walls <woo.dem.Wall>` are infinite, they will still interact with other particle beyond this box; use :obj:`woo.triangulated.box` for true box with arbitrary orientation.
+	
+	:param box: axis-aligned box determining positions of walls.
+	:param which: determines which of the 6 walls are created (boolean values), in the order -x, -y, -z, +x, +y, +z. For instance, to create a box which does not have the top, say ``which=(1,1,1,1,1,0)``).
+	:returns: list of :obj:`~woo.dem.Particle` objects.
+	'''
 	ret=[]
-	if len(which)!=6: raise ValueError("Wall.makeBox: which must be a sequence of boolean-convertible.")
+	box=AlignedBox3(box) # force conversion
+	if len(which)!=6: raise ValueError("Wall.makeBox: which must be a sequence of 6 boolean-convertibles.")
 	for sense,ix,coord in [(1,0,box.min),(-1,1,box.max)]:
 		for ax in (0,1,2):
 			if not which[3*ix+ax]: continue
