@@ -62,6 +62,13 @@ class TestObjectInstantiation(unittest.TestCase):
 		"Core: class ctor's attributes"
 		# attributes passed when using the Foo(attr1=value1,attr2=value2) syntax
 		gm=Shape(color=1.); self.assert_(gm.color==1.)
+
+	def testDeepcopy(self):
+		'Core: Object.deepcopy'
+		t=woo.core.WooTestClass()
+		t.mass=0.
+		t2=t.deepcopy(mass=1.0)	
+		self.assert_(t2.mass==1.0 and t.mass==0.)
 	def testDispatcherCtor(self):
 		"Core: dispatcher ctors with functors"
 		# dispatchers take list of their functors in the ctor
@@ -113,7 +120,6 @@ class TestObjectInstantiation(unittest.TestCase):
 		S.saveTmp(quiet=True); S=Scene.loadTmp()
 		S.dem.par[0].mat.young=9087438484
 		self.assert_(S.dem.par[0].mat.young==S.dem.par[1].mat.young)
-
 	##
 	## attribute flags
 	##
@@ -526,6 +532,9 @@ class TestPyDerived(unittest.TestCase):
 		t2=self.t.deepcopy()
 		self.assert_(t2.aF==2.)
 		self.assert_(t2.aNode.pos==Vector3(0,0,0))
+		t.mass=0.
+		t3=self.t.deepcopy(mass=1.0) # with kw arg
+		self.assert_(t2.mass==1. and self.t.mass==0.)
 	def testTypeCoerceFloats(self):
 		'PyDerived: type coercion (primitive types)'
 		# numbers and number sequences			

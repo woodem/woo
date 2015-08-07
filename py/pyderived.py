@@ -384,11 +384,13 @@ class PyWooObject:
 			for k,v in st.items(): setattr(self,k,v)
 			# call postLoad as if after loading
 			if hasattr(derivedClass,'postLoad'): self.postLoad(None)
-		def deepcopy(self):
+		def deepcopy(self,**kw):
 			'''The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
-			is called from python, this function gets precende over the c++ one.'''
+			is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.'''
 			import pickle
-			return pickle.loads(pickle.dumps(self))
+			copy=pickle.loads(pickle.dumps(self))
+			for k in kw: setattr(copy,k,kw[k])
+			return copy
 		def save_error(self,out):
 			raise IOError('%s.save not allowed for Python classes, use %s.dump instead (only attributes of the closest c++ base class would be saved with save with boost::serialization, losing all python-only data).'%(derivedClass.__name__,derivedClass.__name__,))
 		derivedClass.__getstate__=__getstate__

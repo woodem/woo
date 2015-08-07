@@ -107,6 +107,8 @@ class Master: public Singleton<Master>{
 
 		/* temporary storage */
 		shared_ptr<woo::Object> deepcopy(shared_ptr<woo::Object> obj);
+		// static, first arg ist Mater instance (http://stackoverflow.com/questions/27488096/boost-python-raw-function-method)
+		static py::object pyDeepcopy(py::tuple args, py::dict kw);
 		shared_ptr<woo::Object> loadTmp(const string& name);
 		void saveTmp(shared_ptr<woo::Object> s, const string& name, bool quiet=false);
 		void rmTmp(const string& name);

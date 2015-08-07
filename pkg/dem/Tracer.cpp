@@ -26,6 +26,7 @@ void BoxTraceTimeSetter::run(){
 	}
 }
 
+#ifdef WOO_OPENGL
 void BoxTraceTimeSetter::render(const GLViewInfo&){
 	if(isnan(glColor)) return;
 	if(!node) GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
@@ -36,6 +37,7 @@ void BoxTraceTimeSetter::render(const GLViewInfo&){
 		glPopMatrix();
 	}
 }
+#endif
 
 
 

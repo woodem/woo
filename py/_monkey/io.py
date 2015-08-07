@@ -461,9 +461,9 @@ def Object_loadTmp(typ,name=''):
 	return obj
 def Object_saveTmp(obj,name='',quiet=False):
 	woo.master.saveTmpAny(obj,name,quiet)
-def Object_deepcopy(obj):
+def Object_deepcopy(obj,**kw):
 	'Make object deepcopy by serializing to memory and deserializing.'
-	return woo.master.deepcopy(obj)
+	return woo.master.deepcopy(obj,**kw)
 
 Object._getAllTraits=Object_getAllTraits
 Object._getAllTraitsWithClasses=Object_getAllTraitsWithClasses

@@ -115,7 +115,7 @@ void Master::pyRegisterClass(){
 		.add_property("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
 		// tmp storage
 		.def("loadTmpAny",&Master::loadTmp,(py::arg("name")=""),"Load any object from named temporary store.")
-		.def("deepcopy",&Master::deepcopy,(py::arg("obj")),"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew.")
+		.def("deepcopy",py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``.")
 		.def("saveTmpAny",&Master::saveTmp,(py::arg("obj"),py::arg("name")="",py::arg("quiet")=false),"Save any object to named temporary store; *quiet* will supress warning if the name is already used.")
 		.def("lsTmp",&Master::pyLsTmp,"Return list of all memory-saved simulations.")
 		.def("rmTmp",&Master::rmTmp,py::arg("name"),"Remove memory-saved simulation.")
@@ -196,6 +196,14 @@ bool Master::isInheritingFrom_recursive(const string& className, const string& b
 		if(isInheritingFrom_recursive(parent,baseClassName)) return true;
 	}
 	return false;
+}
+
+py::object Master::pyDeepcopy(py::tuple args, py::dict kw){
+	if(py::len(args)>2) woo::RuntimeError("Master.deepcopy takes no extra unnamed arguments (besides the implicit Master instance, and the Object).");
+	py::extract<shared_ptr<Master>> m(args[0]);
+	shared_ptr<Object> copy=m()->deepcopy(py::extract<shared_ptr<Object>>(args[1])());
+	copy->pyUpdateAttrs(kw);
+	return py::object(copy);
 }
 
 shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
