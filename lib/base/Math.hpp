@@ -47,22 +47,26 @@
 			register const Scalar* __restrict A0 = lhs + j*lhsStride;
 	we silence this warning with diagnostic pragmas:
 */
-#ifdef __clang__
+#if defined(__GNUC__) || defined(__clang__)
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wdeprecated"
+	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-	#define EIGEN_NO_DEBUG
-	#include<Eigen/Core>
-	#include<Eigen/Geometry>
-	#include<Eigen/Eigenvalues>
-	#include<Eigen/QR>
-	#include<Eigen/LU>
-	#include<Eigen/SVD>
-	#include<float.h>
-	#ifdef WOO_ALIGN
-		#include<unsupported/Eigen/AlignedVector3>
-	#endif
-#ifdef __clang__
+
+#define EIGEN_NO_DEBUG
+#include<Eigen/Core>
+#include<Eigen/Geometry>
+#include<Eigen/Eigenvalues>
+#include<Eigen/QR>
+#include<Eigen/LU>
+#include<Eigen/SVD>
+#include<float.h>
+#ifdef WOO_ALIGN
+	#include<unsupported/Eigen/AlignedVector3>
+#endif
+
+
+#if defined(__GNUC__) || defined(__clang__)
 	#pragma GCC diagnostic pop
 #endif
 
