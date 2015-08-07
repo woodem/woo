@@ -144,18 +144,23 @@ def quadrilateral(A,B,C,D,size=0,div=Vector2i(0,0),**kw):
 	pts=[[A+ac*AC+ab*(B+ac*BD-(A+ac*AC)) for ac in aacc] for ab in aabb]
 	return woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface(pts),**kw)
 
-def box(dim,center,**kw):
+def box(dim,center,which=Vector6i(1,1,1,1,1,1),**kw):
 	'''Return box created from facets. ``**kw`` args are passed to :obj:`woo.dem.Facet.make`. If facets have thickness, node masses and inertia will be computed automatically.
 
-:param dim: dimensions along x, y, z axes;
+:param Vector3 dim: dimensions along x, y, z axes;
 :param center: a :obj:`minieigen:Vector3` (box aligned with global axes) or :obj:`woo.core.Node` (local coordinate system) giving the center of the box;
+:param Vector6i which: select walls which are to be included (all by default); the order is -x, -y, -z, +x, +y, +z. Thuus, e.g., to make box without top, say ``which=(1,1,1,1,1,0)``.
 '''
 	if not isinstance(center,woo.core.Node): c=woo.core.Node(pos=center)
 	else: c=center
 	nn=[woo.core.Node(pos=c.loc2glob(Vector3(.5*sgn[0]*dim[0],.5*sgn[1]*dim[1],.5*sgn[2]*dim[2]))) for sgn in ((-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),(-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1))]
-	indices=[(0,2,1),(0,3,2),(0,1,5),(0,5,4),(0,4,3),(3,4,7),(1,2,6),(1,6,5),(2,3,7),(2,7,6),(4,5,6),(4,6,7)]
-	ff=[woo.dem.Facet.make((nn[i[0]],nn[i[1]],nn[i[2]]),**kw) for i in indices]
+	# vertex indices of faces of unit cube (two facets per face)
+	indices=((0,2,1),(0,3,2),(0,1,5),(0,5,4),(0,4,3),(3,4,7),(1,2,6),(1,6,5),(2,3,7),(2,7,6),(4,5,6),(4,6,7))
+	# mapping face to which (first two are -z, and so on)
+	whichMap=(2,2,1,1,0,0, 3,3,4,4,5,5)
+	ff=[woo.dem.Facet.make((nn[ii[0]],nn[ii[1]],nn[ii[2]]),**kw) for i,ii in enumerate(indices) if bool(which[whichMap[i]])]
 	if ff[0].shape.halfThick>0:
+		# it is harmless to run those on nodes which are unused due to `which`
 		for n in nn: woo.dem.DemData.setOriMassInertia(n)
 	return ff
 
