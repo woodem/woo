@@ -90,6 +90,7 @@ void Scene::backgroundLoop(){
 		}
 	} catch(std::exception& e){
 		LOG_ERROR("Exception: "<<endl<<e.what());
+		// gcc 5.1 says that make_shared is ambiguous here for some reason (ADL?)
 		except=boost::make_shared<std::exception>(e);
 		{ boost::mutex::scoped_lock l(runMutex); runningFlag=false; }
 		return;
