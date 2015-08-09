@@ -532,9 +532,9 @@ class TestPyDerived(unittest.TestCase):
 		t2=self.t.deepcopy()
 		self.assert_(t2.aF==2.)
 		self.assert_(t2.aNode.pos==Vector3(0,0,0))
-		t.mass=0.
-		t3=self.t.deepcopy(mass=1.0) # with kw arg
-		self.assert_(t2.mass==1. and self.t.mass==0.)
+		self.t.aF=0.
+		t3=self.t.deepcopy(aF=1.0) # with kw arg
+		self.assert_(t3.aF==1. and self.t.aF==0.)
 	def testTypeCoerceFloats(self):
 		'PyDerived: type coercion (primitive types)'
 		# numbers and number sequences			
