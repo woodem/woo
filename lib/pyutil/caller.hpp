@@ -1,8 +1,10 @@
 // http://stackoverflow.com/questions/16933418/calling-c-functions-who-is-calling
 #include<frameobject.h>
+#include<woo/lib/pyutil/gil.hpp>
 
 namespace woo {
 	static bool pyCallerInfo(string& file, string& func, int& line){
+		GilLock l; // auto-desctructed at the end of scope
 		PyFrameObject* frame=PyEval_GetFrame(); if(!frame || !frame->f_code) return false;
 		file=py::extract<string>(frame->f_code->co_filename);
 		func=py::extract<string>(frame->f_code->co_name);

@@ -135,7 +135,7 @@ void Leapfrog::run(){
 	bool hasGravity(dem->gravity!=Vector3r::Zero());
 
 	if(dem->nodes.empty()){
-		Master::instance().checkApi(/*minApi*/10101,"DemField.nodes is empty; woo.dem.Leapfrog no longer calls DemField.collectNodes() automatically.",/*pyWarn*/true); // can happen in bg thread?
+		Master::instance().checkApi(/*minApi*/10101,"DemField.nodes is empty; woo.dem.Leapfrog no longer calls DemField.collectNodes() automatically.",/*pyWarn*/false); // can happen in bg thread?
 	}
 
 	size_t size=dem->nodes.size();

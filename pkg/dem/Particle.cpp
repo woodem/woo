@@ -417,8 +417,8 @@ vector<shared_ptr<Node>> DemField::splitNode(const shared_ptr<Node>& node, const
 }
 
 
-int DemField::collectNodes(){
-	Master::instance().checkApi(/*minApi*/10101,"S.dem.collectNodes() is largely obsoleted by calling S.dem.par.add(...,nodes=True|False).",/*pyWarn*/true);
+int DemField::collectNodes(bool fromCxx){
+	Master::instance().checkApi(/*minApi*/10101,"S.dem.collectNodes() is largely obsoleted by calling S.dem.par.add(...,nodes=True|False).",/*pyWarn*/fromCxx?false:true);
 	std::set<void*> seen;
 	// ack nodes which are already there
 	for(const auto& n: nodes) seen.insert((void*)n.get());

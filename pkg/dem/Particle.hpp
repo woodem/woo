@@ -286,7 +286,7 @@ template<> struct NodeData::Index<DemData>{enum{value=Node::ST_DEM};};
 
 struct DemField: public Field{
 	WOO_DECL_LOGGER;
-	int collectNodes();
+	int collectNodes(bool fromCxx=true); // default is true for c++ but false for Python
 	void clearDead(){ deadNodes.clear(); deadParticles.clear(); }
 	void removeParticle(Particle::id_t id);
 	void removeClump(size_t id);
@@ -334,7 +334,7 @@ struct DemField: public Field{
 		((vector<shared_ptr<Particle>>,deadParticles,,AttrTrait<Attr::readonly>().noGui(),"Deleted particles; only used if :obj:`saveDead` is ``True``")) \
 		, /* ctor */ createIndex(); postLoad(*this,NULL); /* to make sure pointers are OK */ \
 		, /*py*/ \
-		.def("collectNodes",&DemField::collectNodes,"Collect nodes from all particles and clumps and insert them to nodes defined for this field. Nodes are not added multiple times, even if they are referenced from different particles.") \
+		.def("collectNodes",&DemField::collectNodes,(py::arg("fromCxx")=false),"Collect nodes from all particles and clumps and insert them to nodes defined for this field. Nodes are not added multiple times, even if they are referenced from different particles.") \
 		.def("clearDead",&DemField::clearDead) \
 		.def("nodesAppend",&DemField::pyNodesAppend,"Append given node to :obj:`nodes`, and set :obj:`DemData.linIx` to the correct value automatically.") \
 		.def("nodesAppend",&DemField::pyNodesAppendList,"Append given list of nodes to :obj:`nodes`, and set :obj:`DemData.linIx` to the correct value automatically.") \
