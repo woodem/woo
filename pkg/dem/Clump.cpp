@@ -66,6 +66,8 @@ void SphereClumpGeom::ensureApproxPos(){
 
 void SphereClumpGeom::translate(const Vector3r& offset){
 	for(auto& c: centers) c+=offset;
+	// translation of the centroid
+	ShapeClump::pos+=offset;
 }
 
 shared_ptr<ShapeClump> SphereClumpGeom::copy() const {

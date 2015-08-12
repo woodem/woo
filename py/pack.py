@@ -979,12 +979,10 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
 	sp.cellSize=(0,0,0) # make aperiodic
 	# translate current center to predicate center
 	sp.translate(predicate.center()-spCenter)
-	#sp.translate(box.min()) #.5*(boxSize-iniBoxSize)) # translate middle to the predicate's middle
 	if memoizeDir:
 		print 'saving to',memo
 		sp.save(memo)
 	return sp.filtered(predicate)
-	# return sp
 
 
 
