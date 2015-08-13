@@ -187,12 +187,16 @@ def wooPrepareQt4():
 		# pyuic is a batch file, which is not runnable from mingw shell directly
 		# find the real exacutable then
 		import PyQt4.uic
-		pyuic4=['python',PyQt4.uic.__file__[:-12]+'pyuic.py']
+		pyuic4=PyQt4.uic.__file__[:-12]+'pyuic.py' # strip "__init__.py" form the end
 	else:
-		pyuic4=['pyuic4']
-	for tool,opts,inOut,enabled in [(['pyrcc4'],['-py3' if PY3K else '-py2'],rccInOut,True),(pyuic4,[],uicInOut,True),(['moc'],['-DWOO_OPENGL','-DWOO_QT4'],mocInOut,('opengl' in features)),(['rcc'],['-name','GLViewer'],cxxRccInOut,('opengl' in features))]:
+		pyuic4='pyuic4'
+	for tool0,isPy,opts,inOut,enabled in [('pyrcc4',False,['-py3' if PY3K else '-py2'],rccInOut,True),(pyuic4,True,[],uicInOut,True),('moc',False,['-DWOO_OPENGL','-DWOO_QT4'],mocInOut,('opengl' in features)),('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))]:
 		if not enabled: continue
 		for fIn,fOut in inOut:
+			tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
+			if not tool: raise RuntimError('Tool %s not found?'%tool0)
+			# run python scripts the same interpreter, needed for virtual environments				
+			if isPy: tool=[sys.executable]+tool
 			cmd=tool+opts+[fIn,'-o',fOut]
 			# no need to recreate, since source is older
 			if sameVer and os.path.exists(fOut) and os.path.getmtime(fIn)<os.path.getmtime(fOut): continue
