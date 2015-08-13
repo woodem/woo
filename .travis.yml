@@ -10,6 +10,10 @@ matrix:
         env: WOO_EXEC=woo
       - python: "3.4"
         env: WOO_EXEC=woo-py3
+# use APT packages from virtualenv
+# http://danielnouri.org/notes/2012/11/23/use-apt-get-to-install-python-dependencies-for-travis-ci/
+virtualenv:
+  system_site_packages: true
 install:
    #  APT stuff is below separately
    - pip install colour_runner # optional
