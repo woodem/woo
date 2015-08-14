@@ -203,8 +203,10 @@ def wooPrepareQt4():
 		for fIn,fOut in inOut:
 			tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
 			if not tool: raise RuntimError('Tool %s not found?'%tool0)
-			# run python scripts the same interpreter, needed for virtual environments				
-			if isPy: tool=[sys.executable]+tool
+			# DAMN... Debian needs to run pyuic4 with python2 (even when building with py3k)
+			# and right now travis does not build with Qt, so we just call tool directly and rely on the shebang there
+			## run python scripts the same interpreter, needed for virtual environments
+			## if isPy: tool=[sys.executable]+tool
 			cmd=tool+opts+[fIn,'-o',fOut]
 			# no need to recreate, since source is older
 			if sameVer and os.path.exists(fOut) and os.path.getmtime(fIn)<os.path.getmtime(fOut): continue
