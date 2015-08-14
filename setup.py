@@ -16,6 +16,12 @@ if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
 WIN=(sys.platform=='win32')
 PY3K=(sys.version_info[0]==3)
 
+headless=False
+if 'WOO_FLAVOR' in os.environ:
+	f=os.environ['WOO_FLAVOR']
+	if f=='headless': headless=True
+	else: raise ValueError("Unknown value '%s' for the environment variable WOO_FLAVOR. Recognized values are: headless.")
+
 if not DISTBUILD: # don't do parallel at buildbot
 	# monkey-patch for parallel compilation
 	def parallelCCompile(self, sources, output_dir=None, macros=None, include_dirs=None, debug=0, extra_preargs=None, extra_postargs=None, depends=None):
@@ -74,9 +80,9 @@ if not version:
 ##
 ## build options
 ##
-features=['qt4','vtk','opengl','gts','openmp']
-if 'CC' in os.environ and os.environ['CC'].endswith('clang'): features.remove('openmp')
+features=['vtk','gts','openmp']+(['qt4','opengl'] if not headless else [])
 flavor='' #('' if WIN else 'distutils')
+if headless: flavor+=('-' if flavor else '')+'headless'
 if PY3K: flavor+=('-' if flavor else '')+'py3'
 debug=False
 chunkSize=1 # (1 if WIN else 10)
@@ -219,7 +225,7 @@ def pkgconfig(packages):
 # if the following file is missing, we are being run from sdist, which has tree already prepared
 # otherwise, install headers, chunks and scripts where they should be
 if os.path.exists('examples'):
-	wooPrepareQt4()
+	if 'qt4' in features: wooPrepareQt4()
 	wooPrepareHeaders()
 	wooPrepareChunks()
 # files are in chunks

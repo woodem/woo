@@ -7,17 +7,13 @@ language: python
 matrix:
    include:
       - python: "2.7"
-        env: WOO_EXEC=woo
+        env: WOO_EXEC=woo-headless
       - python: "3.4"
-        env: WOO_EXEC=woo-py3
-# use APT packages from virtualenv
-# http://danielnouri.org/notes/2012/11/23/use-apt-get-to-install-python-dependencies-for-travis-ci/
-virtualenv:
-  system_site_packages: true
+        env: WOO_EXEC=woo-headless-py3
 install:
-   #  APT stuff is below separately
-   - pip install colour_runner # optional
-   - python setup.py install
+	# use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
+   - pip install xlrd xlwt-future numpy matplotlib colorama genshi psutil minieigen imaging h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools
+   - WOO_FLAVOR=headless python setup.py install
 script:
    - timeout 60 $WOO_EXEC --test # py3 stalls?!
 ## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
@@ -27,49 +23,9 @@ addons:
       packages:
          - python-all
          - python-all-dev
-         - python-setuptools
-         - python3-setuptools
          - python3-all
          - python3-all-dev
-         - debhelper
          - libboost-all-dev
-         - pyqt4-dev-tools
-         - libqt4-dev
-         - libqt4-dev-bin
-         - qt4-dev-tools
-         - libgle3-dev
-         - libqglviewer-dev
-         - libqt4-opengl-dev
          - libvtk5-dev
          - libgts-dev
          - libeigen3-dev
-         - freeglut3-dev
-         - python-xlrd
-         - python-xlwt
-         - python-numpy
-         - python-matplotlib
-         - python-colorama
-         - python-qt4
-         - python-xlib
-         - python-genshi
-         - python-psutil
-         - python-minieigen
-         - python-imaging
-         - python-h5py
-         - python-lockfile
-         - ipython
-         - python3-xlrd
-         - python3-xlsxwriter
-         - python3-numpy
-         - python3-matplotlib
-         - python3-colorama
-         - python3-pyqt4
-         - python3-xlib
-         - python3-genshi
-         - python3-psutil
-         - python3-minieigen
-         - python3-imaging
-         - python3-h5py
-         - python3-lockfile
-         - ipython3
-         - python3-prettytable
