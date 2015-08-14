@@ -17,6 +17,9 @@ install:
 script:
    - timeout 60 $WOO_EXEC --test # py3 stalls?!
 ## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
+## add libvtk5-dev and libgts-dev when those are approved
+## https://github.com/travis-ci/apt-package-whitelist/issues/779
+## https://github.com/travis-ci/apt-package-whitelist/issues/526 
 sudo: false
 addons:
    apt:
@@ -26,6 +29,5 @@ addons:
          - python3-all
          - python3-all-dev
          - libboost-all-dev
-         - libvtk5-dev
-         - libgts-dev
          - libeigen3-dev
+         - libhdf5-dev
