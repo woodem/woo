@@ -23,7 +23,7 @@ void Cp2_IceMat_IcePhys::go(const shared_ptr<Material>& m1, const shared_ptr<Mat
 	Vector3r beta=.5*(mat1.beta+mat2.beta);
 	const Real& A(g.contA);
 	ph.brkNT=Vector2r(cn*A,beta[0]*cn*A);
-	ph.brkWR=Vector2r(beta[2],beta[1]).cwiseProduct(ph.brkNT)*sqrt(A);
+	ph.brkWR=Vector2r(beta[1],beta[2]).cwiseProduct(ph.brkNT)*sqrt(A);
 	// rolling friction
 	ph.mu=min(mat1.mu,mat2.mu);
 	// bonding
@@ -70,7 +70,7 @@ bool Law2_L6Geom_IcePhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys
 	// breakage conditions: if any breakable bond breaks, all other bonds break, too
 	if((ph.isBrkBondX(0) && Fn>ph.brkNT[0]) ||
 		(ph.isBrkBondX(1) && Ft.squaredNorm()>pow(ph.brkNT[1],2)) ||
-		(ph.isBrkBondX(2) && abs(Tw)>ph.brkWR[1]) ||
+		(ph.isBrkBondX(2) && abs(Tw)>ph.brkWR[0]) ||
 		(ph.isBrkBondX(3) && Tr.squaredNorm()>pow(ph.brkWR[1],2))
 	) ph.setAllBroken();
 
