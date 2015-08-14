@@ -7,13 +7,13 @@ language: python
 matrix:
    include:
       - python: "2.7"
-        env: WOO_EXEC=woo-headless
+        env: WOO_EXEC=woo-travis
       - python: "3.4"
-        env: WOO_EXEC=woo-headless-py3
+        env: WOO_EXEC=woo-travis-py3
 install:
    # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
-   - pip install xlrd xlwt-future numpy matplotlib colorama genshi psutil minieigen imaging h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools
-   - WOO_FLAVOR=headless python setup.py install
+   - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools
+   - WOO_FLAVOR=travis python setup.py install
 script:
    - timeout 60 $WOO_EXEC --test # py3 stalls?!
 ## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)

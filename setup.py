@@ -16,11 +16,11 @@ if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
 WIN=(sys.platform=='win32')
 PY3K=(sys.version_info[0]==3)
 
-headless=False
+travis=False
 if 'WOO_FLAVOR' in os.environ:
 	f=os.environ['WOO_FLAVOR']
-	if f=='headless': headless=True
-	else: raise ValueError("Unknown value '%s' for the environment variable WOO_FLAVOR. Recognized values are: headless.")
+	if f=='travis': travis=True
+	else: raise ValueError("Unknown value '%s' for the environment variable WOO_FLAVOR. Recognized values are: travis.")
 
 if not DISTBUILD: # don't do parallel at buildbot
 	# monkey-patch for parallel compilation
@@ -80,9 +80,10 @@ if not version:
 ##
 ## build options
 ##
-features=['vtk','gts','openmp']+(['qt4','opengl'] if not headless else [])
+features=['vtk','gts','openmp','qt4','opengl']
+if travis: features=['openmp'] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
 flavor='' #('' if WIN else 'distutils')
-if headless: flavor+=('-' if flavor else '')+'headless'
+if travis: flavor+=('-' if flavor else '')+'travis'
 if PY3K: flavor+=('-' if flavor else '')+'py3'
 debug=False
 chunkSize=1 # (1 if WIN else 10)
