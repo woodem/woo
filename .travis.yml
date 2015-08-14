@@ -30,4 +30,4 @@ addons:
          - python3-all-dev
          - libboost-all-dev
          - libeigen3-dev
-         - libhdf5-dev
+         - libhdf5-serial-dev
