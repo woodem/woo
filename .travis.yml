@@ -23,6 +23,8 @@ script:
 sudo: false
 addons:
    apt:
+      sources:
+         - ubuntu-toolchain-r-test
       packages:
          - python-all
          - python-all-dev
@@ -31,3 +33,4 @@ addons:
          - libboost-all-dev
          - libeigen3-dev
          - libhdf5-serial-dev
+         - g++-4.8
