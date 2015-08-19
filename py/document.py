@@ -186,7 +186,7 @@ def makeTraitInfo(obj,klass,trait):
 			if val.__class__.__module__=='minieigen': tt=':obj:`%s <minieigen:minieigen.%s>`'%(val.__class__.__name__,val.__class__.__name__)
 			else: tt=trait.cxxType
 		if not tt:
-			if trait.cxxType in ('int','string','bool','Real','long','size_t','ContainerT','PendingContact','std::vector<PendingContact','list<id_t>','shared_ptr<SpherePack>','list<id_t>','boost_multi_array_real_5','py::object'): tt=trait.cxxType
+			if trait.cxxType in ('int','string','bool','Real','long','size_t','ContainerT','PendingContact','std::vector<PendingContact>','list<id_t>','shared_ptr<SpherePack>','list<id_t>','boost_multi_array_real_5','py::object'): tt=trait.cxxType
 		if not tt:
 			l=guessListTypeFromCxxType(klass,trait,warnFail=False)
 			if l and l[0].__module__!='__builtin__': tt=trait.cxxType.replace(l[0].__name__,':obj:`%s <%s.%s>`'%(l[0].__name__,l[0].__module__,l[0].__name__))
@@ -348,8 +348,12 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
 		kOut.write('.. autoclass:: %s\n'%k.__name__)
 		#kOut.write('   :members: %s\n'%(','.join([m for m in dir(k) if (not m.startswith('_') and m not in set(trait.name for trait in k._attrTraits))])))
 		kOut.write('   :members:\n')
-		ex=[t.name for t in k._attrTraits]
-		if ex: kOut.write('   :exclude-members: %s\n\n'%(', '.join(ex)))
+		# exclude __init__ which would be shown by special-memebrs, but is really useless for Object (always the same)
+		ex=['__init__']+[t.name for t in k._attrTraits]
+		if ex: kOut.write('   :exclude-members: %s\n'%(', '.join(ex)))
+		kOut.write('   :special-members:\n')
+
+		kOut.write('\n')
 
 		srcXref=classSrcHyperlink(k)
 		if srcXref: kOut.write('\n   '+srcXref+'\n\n')
