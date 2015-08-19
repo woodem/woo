@@ -507,6 +507,7 @@ def batch(sysArgv=None):
 				self.winBatch=woo.master.tmpFilename()+'.bat'
 				batch='@ECHO OFF\n' # don's show commands in terminal
 				batch+='set OMP_NUM_THREADS=%d\n'%job.nCores
+				batch+='set PYTHONIOENCODING=utf_8\n'%job.nCores
 				#batch+='set WOO_BATCH={self.table}:{self.lineNo}:{self.resultsDb}\n'.format(self=self)
 				#batch+='start /B /WAIT /LOW '
 				batch+='{self.executable} -x -n {batchOpts} {self.script} {debugFlag} > {self.log} 2>&1 \n'.format(self=self,batchOpts=batchOpts,debugFlag=('-D' if self.debug else ''))
@@ -522,7 +523,7 @@ def batch(sysArgv=None):
 				elif self.nCores: ompOpt='--threads=%d'%(self.nCores)
 				if self.nice: niceOpt='--nice=%d'%self.nice
 				if self.debug: debugOpt='--debug'
-				self.command='{self.executable} -x -n {batchOpts} {ompOpt} {niceOpt} {debugOpt} {self.script} > {logFile} 2>&1'.format(self=self,batchOpts=batchOpts,ompOpt=ompOpt,niceOpt=niceOpt,debugOpt=debugOpt,logFile=pipes.quote(self.log))
+				self.command='PYTHONIOENCODING=utf_8 {self.executable} -x -n {batchOpts} {ompOpt} {niceOpt} {debugOpt} {self.script} > {logFile} 2>&1'.format(self=self,batchOpts=batchOpts,ompOpt=ompOpt,niceOpt=niceOpt,debugOpt=debugOpt,logFile=pipes.quote(self.log))
 				self.hrefCommand+='<br><tt>'+self.command+'</tt>'
 			
 		def saveInfo(self):
