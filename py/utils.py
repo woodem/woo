@@ -360,6 +360,21 @@ def importNmesh(filename,mat,mask,trsf=None,dem=None,surf=True,surfMat=None,surf
 	return nn,t4+f3
 
 
+def ensureDir(d,msg='Creating directory %s'):
+	'Ensure that directory ``d`` exists. If ``d`` is empty, return immediately (signifies usually the current directory). Otherwise try to create the directory. *msg* is an optional message to be printed to stdout only when something is actually done, and must include %s which will be replaced by the directory.'
+	if d=='': return # current dir
+	# this checks only if something will be created; may not see it in some corner cases... doesn't matter, just diagnostics
+	if not os.path.exists(d) and msg: print msg%d
+	# http://stackoverflow.com/a/14364249/761090
+	if py3k:
+		os.makedirs(d,exist_ok=True)
+	else:
+		try:
+			os.makedirs(d)
+		except OSError:
+			if not os.path.isdir(d): raise
+
+
 
 if 0:
 	def aabbWalls(extrema=None,thickness=None,oversizeFactor=1.5,**kw):
