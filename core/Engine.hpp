@@ -96,7 +96,7 @@ class Engine: public Object {
 		.add_property("execTime",&Engine::timingInfo_nsec_get,&Engine::timingInfo_nsec_set,"Cummulative time this Engine took to run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
 		.add_property("execCount",&Engine::timingInfo_nExec_get,&Engine::timingInfo_nExec_set,"Cummulative count this engine was run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
 		.def_readonly("timingDeltas",&Engine::timingDeltas,"Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and :obj:`Master.timingEnabled`\\ ==\\ ``True``.") \
-		.def("__call__",&Engine::explicitRun) \
+		.def("__call__",&Engine::explicitRun,(py::arg("scene"),py::arg("field")=shared_ptr<Field>()),"Run the engine just once, using *scene*. If *field* is not given as the engine requires it, it will be obtained from *scene* automatically (with the same rules as for engines which don't have an explicit field: if one field is found, it is used, no or more compatible fields raise an exception.)") \
 		.def("acceptsField",&Engine::acceptsField) \
 		.add_property("field",&Engine::field_get,&Engine::field_set,"Field to run this engine on; if unassigned, or set to *None*, automatic field selection is triggered.") \
 		.add_property("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
