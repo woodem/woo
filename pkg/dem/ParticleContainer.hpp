@@ -187,12 +187,12 @@ struct ParticleContainer: public Object{
 			.def("add",&ParticleContainer::pyAppend,(py::arg("par"),py::arg("nodes")=-1),"Add single particle, and maybe also add its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`. *nodes* can be 1/True (always), 0/False (never) or -1 (maybe -- based on heuristics). The heuristics is defined in :obj:`woo.dem.DemData.guessMoving`.") /* wrapper checks if the id is not already assigned */ \
 			.def("add",&ParticleContainer::pyAppendList,(py::args("pars"),py::arg("nodes")=-1),"Add list of particles, and optionally also adding its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`; see :obj:`add` for explanation of *nodes*.") \
 			.def("addClumped",&ParticleContainer::pyAppendClumped,(py::arg("par"),py::arg("centralNode")=shared_ptr<Node>()),"Add particles as rigid aggregate. Add resulting clump node (which is *not* a particle) to Scene.dem.nodes, subject to integration. *centralNode* must be provided if particles have zero mass (in that case, clump position cannot be computed), all DOFs will be blocked automatically in that case; centralNode.dem will be set with a new instance of :obj:`ClumpData` and the old value, if any, discarded. Clump node is added automatically to :obj:`DemField.nodes <woo.core.Field.nodes>`.") \
-			.def("remove",&ParticleContainer::pyRemove)  \
-			.def("remove",&ParticleContainer::pyRemoveList)  \
-			.def("exists",&ParticleContainer::exists) \
+			.def("remove",&ParticleContainer::pyRemove,(py::arg("id")),"Remove single particle given its :obj:`~woo.dem.Particle.id`.")  \
+			.def("remove",&ParticleContainer::pyRemoveList,(py::arg("ids")),"Remove multiple particles, given their :obj:`ids <woo.dem.Particle.id>` as sequence.")  \
+			.def("exists",&ParticleContainer::exists,(py::arg("id")),"Tell whether particle with this :obj:`~woo.dem.Particle.id` exists in the container.") \
 			.def("__getitem__",&ParticleContainer::pyGetItem) \
 			.def("__len__",&ParticleContainer::size) \
-			.def("clear",&ParticleContainer::clear) \
+			.def("clear",&ParticleContainer::clear,"Brute-force removal of all particles; bypasses any consistency checks (like node-particle refcounting), **do not use**.") \
 			.def("__iter__",&ParticleContainer::pyIter) \
 			.def("_freeIds",&ParticleContainer::pyFreeIds) \
 			/* remasking */ \
