@@ -173,25 +173,42 @@ void BoxOutlet::render(const GLViewInfo&){
 
 void StackedBoxOutlet::render(const GLViewInfo& gli){
 	if(isnan(glColor)) return;
-	Vector3r color=.7*CompUtils::mapColor(glColor); // darker for subdivision
-	if(!isnan(color.maxCoeff())){
+	if(divColors.empty()){
+		// one global box with darker divisors
+		Vector3r color=.7*CompUtils::mapColor(glColor); // darker for subdivision
+		if(!isnan(color.maxCoeff())){
+			if(node){ glPushMatrix(); GLUtils::setLocalCoords(node->pos,node->ori); }
+			glColor3v(color);
+			short ax1((axis+1)%3),ax2((axis+2)%3);
+			for(size_t d=0; d<divs.size(); d++){
+				glBegin(GL_LINE_LOOP);
+					Vector3r v;
+					v[axis]=divs[d];
+					for(size_t i=0; i<4; i++){
+						v[ax1]=(i/2?box.min()[ax1]:box.max()[ax1]);
+						v[ax2]=((!(i%2)!=!(i/2))?box.min()[ax2]:box.max()[ax2]); // XOR http://stackoverflow.com/a/1596970/761090
+						glVertex3v(v);
+					}
+				glEnd();
+			}
+			if(node){ glPopMatrix(); }
+			}
+		BoxOutlet::render(gli); // render the rest
+	} else { 
+		// individual boxes with different colors
 		if(node){ glPushMatrix(); GLUtils::setLocalCoords(node->pos,node->ori); }
-		glColor3v(color);
-		short ax1((axis+1)%3),ax2((axis+2)%3);
-		for(size_t d=0; d<divs.size(); d++){
-			glBegin(GL_LINE_LOOP);
-				Vector3r v;
-				v[axis]=divs[d];
-				for(size_t i=0; i<4; i++){
-					v[ax1]=(i/2?box.min()[ax1]:box.max()[ax1]);
-					v[ax2]=((!(i%2)!=!(i/2))?box.min()[ax2]:box.max()[ax2]); // XOR http://stackoverflow.com/a/1596970/761090
-					glVertex3v(v);
-				}
-			glEnd();
+		Real hair=box.sizes()[axis]*1e-4; // move edges by this much so that they are better visible
+		for(size_t d=0; d<=divs.size(); d++){ // one extra; upper bound is always divs[d]
+			Vector3r color=d<divColors.size()?CompUtils::mapColor(divColors[d]):Vector3r(.7*CompUtils::mapColor(glColor));
+			AlignedBox3r b(box);
+			if(d>0) b.min()[axis]=divs[d-1]+hair;
+			if(d<divs.size()) b.max()[axis]=divs[d]-hair;
+			GLUtils::AlignedBox(b,color);
 		}
 		if(node){ glPopMatrix(); }
+		// render the rest, but no need to render the box again
+		Outlet::renderMassAndRate(node?node->loc2glob(box.center()):box.center());
 	}
-	BoxOutlet::render(gli); // render the rest
 }
 #endif
 

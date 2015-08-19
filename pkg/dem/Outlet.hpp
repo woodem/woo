@@ -73,6 +73,7 @@ struct StackedBoxOutlet: public BoxOutlet{
 	#define woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS \
 		StackedBoxOutlet,BoxOutlet,"Box outlet with subdivision along one axis, so that more precise location can be obtained; this is functionally equivalent to multiple adjacent :obj:`BoxOutlet's <BoxOutlet>`, but faster since it is a single engine.", \
 		((vector<Real>,divs,,,"Coordinates of division between boxes in the stack; must be an increasing sequence.")) \
+		((vector<Real>,divColors,,,"Colors for rendering the dividers; if not given, use darkened :obj:`~woo.dem.BoxOutlet.color`, same for all dividers.")) \
 		((short,axis,0,,"Axis along which the :obj:`box` is subdivided."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS);
 };
