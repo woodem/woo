@@ -165,13 +165,14 @@ def box(dim,center,which=Vector6i(1,1,1,1,1,1),**kw):
 	return ff
 
 
-def sweep2d(pts,zz,node=None,halfThick=0.,shift=True,shorten=False,**kw):
+def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**kw):
 	'''
 	Build surface by perpendicularly sweeping list of 2d points along the 3rd axis (in global/local coordinates).
 
 	:param pts: list of :obj:`minieigen:Vector2` containing :math:`xy` coordinates of points in local axes. If the point is ``(nan,nan)`` or ``None``, the line is split at this point. If the point contains ``(nan,i)``, then it refers to ``i``-th point which has been constructed up to now: positive number from the beginning of the line, negative from the end.
 	:param zz: tuple or :obj:`minieigen:Vector2` containing ``(z0,z1)`` coordinates for all points.
 	:param node: optional instance of :obj:`woo.core.Node` defining local coordinate system; if not given, global coordinates are used.
+	:param float fakeVel: assign :obj:`~woo.dem.Facet.fakeVel` to facets, in the sweeping direction at every face
 	:param halfThick: if given and *halfThick* is ``True``, shift points so that *pts* give points of the outer surface (and nodes are shifted inwards); in this case, the ordering of pts is important.
 	:param shift: activate point shifting, in conjunction with *halfThick*;
 	:param shorten: move endpoints away from the endpoint (along the segment) by *halfThick*;
@@ -241,9 +242,12 @@ def sweep2d(pts,zz,node=None,halfThick=0.,shift=True,shorten=False,**kw):
 				A,B=refNodes(pts,i-1,negRefAdd=negRefAdd)
 			else: A,B=nn[-4],nn[-3]
 			assert len(nn)>=4 # there must be at least 4 points already
+			# fakeVel
+			if fakeVel==0.: fv=Vector3.Zero
+			else: fv=(C.pos-A.pos).normalized()*fakeVel
 			ff+=[
-				woo.dem.Facet.make((A,C,D),halfThick=halfThick,**kw),
-				woo.dem.Facet.make((A,D,B),halfThick=halfThick,**kw)
+				woo.dem.Facet.make((A,C,D),halfThick=halfThick,fakeVel=fv,**kw),
+				woo.dem.Facet.make((A,D,B),halfThick=halfThick,fakeVel=fv,**kw)
 			]
 	return ff
 
