@@ -128,7 +128,7 @@ void OpenGLManager::startTimerSlot(){
 	renderTimerId=startTimer(1000/maxFps);
 }
 
-int OpenGLManager::waitForNewView(float timeout,bool center){
+int OpenGLManager::waitForNewView(float timeout){
 	size_t origViewCount=views.size();
 	emitCreateView();
 	float t=0;
@@ -140,7 +140,6 @@ int OpenGLManager::waitForNewView(float timeout,bool center){
 			LOG_ERROR("Timeout waiting for the new view to open, giving up."); return -1;
 		}
 	}
-	if(center)(*views.rbegin())->centerScene();
 	return (*views.rbegin())->viewId; 
 }
 

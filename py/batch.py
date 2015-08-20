@@ -72,13 +72,14 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
 	S=scene
 	if inBatch() and hasBatchTable(): table,line,db=wooOptions.batchTable,wooOptions.batchLine,wooOptions.batchResults
 	else: table,line,db='',-1,(defaultDb if not wooOptions.batchResults else wooOptions.batchResults)
+	if not db: raise ValueError('No database to write results to (forgot to pass --batch-results?).')
 	newDb=not os.path.exists(db)
 	if not quiet: print 'Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing')
 	if dbFmt==None:
 		ext=os.path.splitext(db)[-1]
-		if ext in ('.sqlite','.db',b'.sqlite',b'.db'): dbFmt='sqlite'
-		elif ext in ('.h5','.hdf5','.he5','.hdf',b'.h5',b'.hdf5',b'.he4',b'.hdf'): dbFmt='hdf5'
-		else: raise ValueError("Unable to determine database format from file extension: must be *.h5, *.hdf5, *.he5, *.hdf, *.sqlite, *.db.")
+		if ext in ('.sqlite','.db',b'.sqlite',b'.db',u'.sqlite',u'.db'): dbFmt='sqlite'
+		elif ext in ('.h5','.hdf5','.he5','.hdf',b'.h5',b'.hdf5',b'.he4',b'.hdf',u'.h5',u'.hdf5',u'.he5',u'.hdf'): dbFmt='hdf5'
+		else: raise ValueError("Unable to determine database format from '"+db+"' (extension '"+ext+"'): must be *.h5, *.hdf5, *.he5, *.hdf, *.sqlite, *.db.")
 
 	# make sure keys are unicode objects (which is what json converts to!)
 	if py3k: unicodeTags=dict(S.tags)

@@ -217,20 +217,30 @@ GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QW
 
 	// FIXME: needed for movable scales (why?! we can just detect button pressed, then mouseMoveEvent should be received automatically...?)
 	setMouseTracking(true);
-
+	
 	loadTexture(":/woo-logo.200x200.png",logoTextureId);
 }
 
 void GLViewer::setInitialView(){
+	// this code is mostly copied over from OpenGLManager::timerEvent
 	const auto& s=Master::instance().getScene();
 	if(!s) return;
 	const auto& rr=s->ensureAndGetRenderer();
-	// set initial orientation, z up
-	Vector3r &u(rr->iniUp), &v(rr->iniViewDir);
-	qglviewer::Vec up(u[0],u[1],u[2]), vDir(v[0],v[1],v[2]);
-	camera()->setViewDirection(vDir);
-	camera()->setUpVector(up);
-	centerScene();
+	if(!s->gl->qglviewerState.empty()) {
+		// use previously saved state
+		this->setState(s->gl->qglviewerState);
+	} else {
+		// use defaults
+		Vector3r &u(rr->iniUp), &v(rr->iniViewDir);
+		qglviewer::Vec up(u[0],u[1],u[2]), vDir(v[0],v[1],v[2]);
+		camera()->setViewDirection(vDir);
+		camera()->setUpVector(up);
+		centerScene();
+	}
+	// initial update of the view, so that script can create view and grab sreenshot
+	// oterwise the rendering thread never kicks in and screenshot will be blank
+	updateGL();
+
 	//centerMedianQuartile();
 	//connect(&GLGlobals::redrawTimer,SIGNAL(timeout()),this,SLOT(updateGL()));
 }

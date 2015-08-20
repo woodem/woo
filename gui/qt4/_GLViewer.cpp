@@ -11,6 +11,10 @@
 #include<QApplication>
 #include<QCloseEvent>
 
+#include<boost/algorithm/string.hpp>
+using boost::algorithm::iends_with;
+
+
 #ifdef WOO_LOG4CXX
 static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.qt4");
 #endif
@@ -67,6 +71,10 @@ class pyGLViewer{
 		string pyStr(){return string("<GLViewer for view #")+lexical_cast<string>(viewNo)+">";}
 		void saveDisplayParameters(size_t n){GLV;  glv->saveDisplayParameters(n);}
 		void useDisplayParameters(size_t n){GLV;  glv->useDisplayParameters(n);}
+		void screenshot(const string& out){
+			GLV;
+			glv->nextSnapFile=out;
+		}
 		#undef GLV
 		#undef VEC_GET_SET
 		#undef BOOL_GET_SET
@@ -80,7 +88,7 @@ pyGLViewer createView(){
 	return pyGLViewer((*OpenGLManager::self->views.rbegin())->viewId);
 }
 
-py::list getAllViews(){ py::list ret; FOREACH(const shared_ptr<GLViewer>& v, OpenGLManager::self->views){ if(v) ret.append(pyGLViewer(v->viewId)); } return ret; };
+py::list getAllViews(){ py::list ret; for(const shared_ptr<GLViewer>& v: OpenGLManager::self->views){ if(v) ret.append(pyGLViewer(v->viewId)); } return ret; };
 void centerViews(void){ OpenGLManager::self->centerAllViews(); }
 
 WOO_PYTHON_MODULE(_qt._GLViewer);
@@ -114,6 +122,7 @@ BOOST_PYTHON_MODULE(_GLViewer){
 		.def("__repr__",&pyGLViewer::pyStr).def("__str__",&pyGLViewer::pyStr)
 		.def("close",&pyGLViewer::close)
 		.add_property("selection",&pyGLViewer::get_selection,&pyGLViewer::set_selection)
+		.def("snapshot",&pyGLViewer::screenshot,"Save screenshot of this view to *out*. Recognized extensions are .png, .jpg, .jpeg. Execution of snapshot is deferred and will be carried out after the next frame will have been rendered; the call returns immediately.")
 		;
 }
 #endif /* WOO_OPENGL */
