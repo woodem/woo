@@ -10,7 +10,9 @@
 
 Real pWaveDt(shared_ptr<Scene> _scene=shared_ptr<Scene>(), bool noClumps=false){
 	Scene* scene=(_scene?_scene.get():Master::instance().getScene().get());
-	return DemFuncs::pWaveDt(DemFuncs::getDemField(scene),noClumps);
+	Real dt=DemFuncs::pWaveDt(DemFuncs::getDemField(scene),noClumps);
+	if(isinf(dt)) throw std::runtime_error("utils.pWaveDt: DemFuncs::pWaveDt returns infinity. Are there spheroidal (sphere/ellipsoid/capsule) particles to compute dt from?");
+	return dt;
 }
 
 py::tuple psd(vector<Vector2r> ddmm, bool mass, bool cumulative, bool normalize, Vector2r dRange, int num) {
