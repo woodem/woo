@@ -33,7 +33,7 @@ addons:
          - python-all-dev
          - python3-all
          - python3-all-dev
-         - libboost-all-dev
+         - libboost1.54-all-dev
          - libeigen3-dev
          - libhdf5-serial-dev
          - g++-4.8
