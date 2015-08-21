@@ -77,7 +77,7 @@ def testAll(sysExit=False):
 	except:
 		print 20*'*'+' UNEXPECTED EXCEPTION WHILE RUNNING TESTS '+20*'*'
 		print 20*'*'+' '+str(sys.exc_info()[0])
-		print 20*'*'+" Please report bug to https://github.com/eudoxos/woodem/issues providing the following traceback:"
+		print 20*'*'+" Please report bug to https://github.com/woodem/woo/issues providing the following traceback:"
 		import traceback; traceback.print_exc()
 		print 20*'*'+' Thank you '+20*'*'
 		if sysExit: sys.exit(2)
