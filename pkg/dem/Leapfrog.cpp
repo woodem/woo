@@ -171,7 +171,7 @@ void Leapfrog::run(){
 		Vector3r pprevFluctVel, pprevFluctAngVel;
 
 		// whether to use aspherical rotation integration for this body; for no accelerations, spherical integrator is "exact" (and faster)
-		bool useAspherical=(dyn.isAspherical() && (!dyn.isBlockedAllRot()));
+		bool useAspherical=dyn.useAsphericalLeapfrog(); // shorthand for (dyn.isAspherical() && !dyn.isBlockedAllRot())
 
 		Vector3r linAccel(Vector3r::Zero()), angAccel(Vector3r::Zero());
 		// for particles not totally blocked, compute accelerations; otherwise, the computations would be useless

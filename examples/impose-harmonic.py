@@ -21,7 +21,7 @@ for i,x in enumerate([-2,0,2,4,6,8,10.5,12,14]):
 	c.angVel=(0,2.*(i+1),0)
 	# each of cylinders will move haronically along global x and z axes (not y)
 	c.impose=AlignedHarmonicOscillations(freqs=(1./(10000.*S.dt),float('nan'),1/(((i%3)+3)*1000.*S.dt)),amps=(.3*(i%2+1),0,.4*(i%4+1)))
-	S.dem.par.add(c,nodes=True)
+	S.dem.par.add(c)
 
 try:
 	from woo import gl

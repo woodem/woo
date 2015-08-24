@@ -50,4 +50,35 @@ class TestContactLoop(unittest.TestCase):
 				self.assertEqual(kn1,c.phys.kn)
 
 
-
+class TestImpose(unittest.TestCase):
+	def testCombinedImpose(self):
+		'DEM: CombinedImpose created from Impose()+Impose()'
+		a,b,c=CircularOrbit(),ReadForce(),ConstantForce()
+		d=a+b
+		# normal + normal, instantiates CombinedImpose
+		self.assert_(d.imps==[a,b])
+		self.assert_(d.what==(a.what | b.what)) # what is OR'd from imps
+		# flattening additions
+		# combined + combined
+		self.assert_((d+d).imps==[a,b,a,b])
+		# combined + normal
+		self.assert_((d+c).imps==[a,b,c])
+		# normal + combined
+		self.assert_((c+d).imps==[c,a,b])
+	def testCombinedImposeFunction(self):
+		'DEM: CombinedImpose combines impositions'
+		a=VariableAlignedRotation(axis=0,timeAngVel=[(0,0),(1,1),(2,1)],wrap=False)
+		b=VariableVelocity3d(times=[0,1,2],vels=[(0,0,0),(3,3,3),(3,3,3)])
+		c=InfCylinder.make((0,0,0),radius=.2,axis=1)
+		c.impose=a+b # impose both
+		S=woo.core.Scene(fields=[DemField(par=[c])],engines=DemField.minimalEngines(),dt=1e-3,stopAtTime=1.2)
+		S.run(); S.wait()
+		self.assert_(c.vel==Vector3(3,3,3))
+		self.assert_(c.angVel[0]==1.)
+	def testUselessRotationImpose(self):
+		'DEM: selfTest errro when imposing rotation on aspherical particles (would have no effect)'
+		for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)):
+			a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion((1,0,0),1))
+			a.impose=i
+			S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines())
+			self.assertRaises(RuntimeError,lambda : S.selfTest())

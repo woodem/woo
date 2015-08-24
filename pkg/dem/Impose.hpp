@@ -88,6 +88,7 @@ struct RadialForce: public Impose{
 WOO_REGISTER_OBJECT(RadialForce);
 
 struct Local6Dofs: public Impose{
+	void selfTest(const shared_ptr<Node>& n, const shared_ptr<DemData>& dyn, const string& prefix) const WOO_CXX11_OVERRIDE;
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE { doImpose(scene,n,/*velocity*/true); }
 	void force(const Scene* scene, const shared_ptr<Node>& n)   WOO_CXX11_OVERRIDE { doImpose(scene,n,/*velocity*/false); }
 	void doImpose(const Scene* scene, const shared_ptr<Node>& n, bool velocity);
@@ -105,6 +106,7 @@ struct Local6Dofs: public Impose{
 WOO_REGISTER_OBJECT(Local6Dofs);
 
 struct VariableAlignedRotation: public Impose{
+	void selfTest(const shared_ptr<Node>& n, const shared_ptr<DemData>& dyn, const string& prefix) const WOO_CXX11_OVERRIDE;
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
 	void postLoad(VariableAlignedRotation&,void*);
 	size_t _interpPos; // cookie for interpolation routine, does not need to be saved
@@ -119,6 +121,7 @@ struct VariableAlignedRotation: public Impose{
 WOO_REGISTER_OBJECT(VariableAlignedRotation);
 
 struct InterpolatedMotion: public Impose{
+	void selfTest(const shared_ptr<Node>& n, const shared_ptr<DemData>& dyn, const string& prefix) const WOO_CXX11_OVERRIDE;
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
 	void postLoad(InterpolatedMotion&,void*);
 	size_t _interpPos; // cookies for interpolation routine, does not need to be saved
@@ -163,3 +166,32 @@ struct VelocityAndReadForce: public Impose{
 };
 WOO_REGISTER_OBJECT(VelocityAndReadForce);
 
+struct VariableVelocity3d: public Impose{
+	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	void postLoad(VariableVelocity3d&,void*);
+	size_t _interpPos; // cookie for interpolation routine, does not need to be saved
+	#define woo_dem_VariableVelocity3d__CLASS_BASE_DOC_ATTRS_CTOR \
+		VariableVelocity3d,Impose,"Impose velocity in 3 independent senses, interpolated from piecewise-linear velocity function values, optional periodic in time; NaN values of velocity will impose nothing in that direction.",\
+		((vector<Real>,times,,,"Time values for :obj:`vels`.")) \
+		((vector<Vector3r>,vels,,,"Components of velocity, in local coordinates defined by :obj:`ori`.")) \
+		((Quaternionr,ori,Quaternionr::Identity(),,"Orientation of coordinate axes (by default, impose velocity along global axes)")) \
+		((bool,diff,false,,"Prescribed velocity can be applied as total velocity value (with ``diff==False``) or as difference added to the actual nodal velocity (with ``diff==True``).")) \
+		((bool,wrap,false,,"Wrap time around the last time value (float modulo), if greater.")) \
+		((Real,t0,0.,,"Time offset which is subtracted from t (after wrapping, if :obj:`wrap` is used).")) \
+		,/*ctor*/ what=Impose::VELOCITY; _interpPos=0;
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableVelocity3d__CLASS_BASE_DOC_ATTRS_CTOR);
+};
+WOO_REGISTER_OBJECT(VariableVelocity3d);
+
+struct CombinedImpose: public Impose{
+	void velocity(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	void force(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	void readForce(const Scene* scene, const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE;
+	void selfTest(const shared_ptr<Node>&, const shared_ptr<DemData>&, const string& prefix) const WOO_CXX11_OVERRIDE;
+	void postLoad(CombinedImpose&,void*);
+	#define woo_dem_CombinedImpose__CLASS_BASE_DOC_ATTRS \
+		CombinedImpose,Impose,"Combine several impositions and apply them one after another.", \
+		((vector<shared_ptr<Impose>>,imps,,AttrTrait<Attr::triggerPostLoad>(),"Impositions which are combined together, always called in this order."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_CombinedImpose__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(CombinedImpose);

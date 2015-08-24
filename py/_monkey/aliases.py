@@ -110,6 +110,7 @@ try:
 	dem.Facet.make=staticmethod(woo.utils.facet)
 	dem.Rod.make=staticmethod(woo.utils.rod)
 	dem.Truss.make=staticmethod(woo.utils.truss)
+
 except ImportError:
 	core.Scene.hasDem=lambda o: False
 

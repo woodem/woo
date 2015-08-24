@@ -20,6 +20,7 @@ struct MatState;
 struct Bound;
 struct Shape;
 struct Impose;
+struct DemData;
 
 struct ScalarRange;
 
@@ -123,6 +124,8 @@ struct Particle: public Object{
 WOO_REGISTER_OBJECT(Particle);
 
 struct Impose: public Object{
+	// called from DemData::selfTest, testing nothing by default
+	virtual void selfTest(const shared_ptr<Node>&, const shared_ptr<DemData>&, const string& prefix) const {}
 	virtual void velocity(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::velocity."); }
 	virtual void force(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::force."); }
 	virtual void readForce(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::readForce."); }
@@ -137,14 +140,18 @@ struct Impose: public Object{
 	boost::mutex lock;
 	// INIT_VELOCITY is used in LawTesterStage, but not by Impose classes
 	enum{ NONE=0, VELOCITY=1, FORCE=2, INIT_VELOCITY=4, READ_FORCE=8 };
+
+	// create CombinedImpose !! implemented in pkg/dem/Impose.hpp !!
+	shared_ptr<Impose> pyAdd(const shared_ptr<Impose>& b);
 	#define woo_dem_Impose__CLASS_BASE_DOC_ATTRS_PY \
 		Impose,Object,"Impose arbitrary changes in Node and DemData, at certain hook points during motion integration. Velocity is imposed after motion integration (and again after computing acceleration from forces, to make sure forces don't alter what is prescribed), force is imposed when forces from the previous step are being reset (thus additional force may be applied on the node as usual); readForce is a special imposition before resetting force, which is meant to look at summary force applied onto node(s)." , \
-		((int,what,,AttrTrait<>().bits({"vel","force","iniVel","readForce"}),"What values are to be imposed; this is set by the derived engine automatically depending on what is to be prescribed.")) \
+		((int,what,NONE,AttrTrait<>().bits({"vel","force","iniVel","readForce"}),"What values are to be imposed; this is set by the derived engine automatically depending on what is to be prescribed.")) \
 		((long,stepLast,-1,AttrTrait<>().readonly(),"Step in which this imposition was last used; updated atomically by callers from c++ by calling isFirstStepRun.")) \
-		,/*py*/ ; \
+		,/*py*/ .def("__add__",&Impose::pyAdd,"Return combined imposition, a new instance of :obj:`CombinedImpose`.") ; \
 			_classObj.attr("none")=(int)NONE; \
 			_classObj.attr("velocity")=(int)VELOCITY; \
-			_classObj.attr("force")=(int)FORCE;
+			_classObj.attr("force")=(int)FORCE; \
+			woo::converters_cxxVector_pyList_2way<shared_ptr<Impose>>();
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Impose__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Impose);
@@ -193,7 +200,7 @@ public:
 	void blocked_vec_set(const std::string& dofs);
 
 	// called from DemField.selfTest for every node in DemField
-	virtual void selfTest(const shared_ptr<Node>& n, const string& prefix) const;
+	virtual void selfTest(const shared_ptr<Node>& n, const string& prefix);
 
 	// tell whether the node is by default motion-integrated
 	// used from S.dem.par.add with nodes=-1, when deciding whether to add the node to S.dem.nodes
@@ -253,6 +260,8 @@ public:
 	void postLoad(DemData&,void*);
 
 	bool isAspherical() const{ return !((inertia[0]==inertia[1] && inertia[1]==inertia[2])); }
+
+	bool useAsphericalLeapfrog() const { return isAspherical() && !isBlockedAllRot(); }
 
 	#define woo_dem_DemData__CLASS_BASE_DOC_ATTRS_PY \
 		DemData,NodeData,"Dynamic state of node.", \

@@ -575,7 +575,7 @@ void DemField::selfTest(){
 		const auto& n=nodes[i];
 		if(!n) throw std::logic_error("DemField.nodes["+to_string(i)+"]=None, DemField.nodes should be contiguous");
 		if(!n->hasData<DemData>()) throw std::logic_error("DemField.nodes["+to_string(i)+"] does not define DemData.");
-		const auto& dyn=n->getData<DemData>();
+		auto& dyn=n->getData<DemData>();
 		if(dyn.linIx!=(int)i) throw std::logic_error("DemField.nodes["+to_string(i)+"].dem.linIx="+to_string(dyn.linIx)+", should be "+to_string(i)+" (use DemField.nodesAppend instead of DemField.nodes.append to have linIx set automatically in python)");
 		if(dyn.isClump()){
 			if(!dynamic_pointer_cast<ClumpData>(n->getDataPtr<DemData>())) throw std::logic_error("DemField.nodes["+to_string(i)+".dem.clump=True, but does not define ClumpData.");
@@ -606,13 +606,14 @@ void DemField::selfTest(){
 }
 
 
-void DemData::selfTest(const shared_ptr<Node>& n, const string& prefix) const {
+void DemData::selfTest(const shared_ptr<Node>& n, const string& prefix) {
 	if(!n->hasData<DemData>()) throw std::logic_error(prefix+": node does not have DemData attached (programming error).");
 	if(n->getDataPtr<DemData>().get()!=this) throw std::logic_error(prefix+": node does not have "+this->pyStr()+" as DemData, has "+n->getData<DemData>().pyStr()+" (programming error).");
 	if(!isBlockedAllTrans() && !isClumped() && !(mass>0)) throw std::runtime_error(prefix+".mass="+to_string(mass)+" is non-positive, but not all translational DoFs are blocked (and the node is not clumped).");
 	for(int ax:{0,1,2}){
 		if(!isBlockedAxisDOF(ax,/*rot*/true) && !isClumped() && !(inertia[ax]>0)) throw std::runtime_error(prefix+".inertia["+to_string(ax)+"]="+to_string(inertia[ax])+" is non-positive, but the corresponding rotational DoF is not blocked (and the node is not clumped).");
 	}
+	if(impose) impose->selfTest(n,static_pointer_cast<DemData>(shared_from_this()),prefix+".impose");
 }
 
 bool DemData::guessMoving() const {
