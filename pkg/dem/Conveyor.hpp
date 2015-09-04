@@ -30,13 +30,13 @@ struct ConveyorInlet: public Inlet{
 		ConveyorInlet,Inlet,"Inlet producing infinite band of particles from packing periodic in the x-direction. Clumps are fully supported.", \
 		((shared_ptr<Material>,material,,AttrTrait<>().startGroup("Particles"),"Material for new particles")) \
 		((shared_ptr<SpherePack>,spherePack,,AttrTrait<Attr::noSave|Attr::triggerPostLoad>().noGui(),":obj:`woo.pack.SpherePack` object; when specified, :obj:`centers`, :obj:`radii` (and :obj:`clumps`, if clumps are contained) are discarded  and will be computed from this :obj:`SpherePack`. The attribute is reset afterwards.")) \
-		((shared_ptr<ShapePack>,shapePack,,AttrTrait<Attr::triggerPostLoad>(),"Purely geomerical description of particles to be generated (will replace :obj:`spherePack`, :obj:`centers`, :obj:`radii`, :obj:`clumps` and :obj:`cellLen` in the future).")) \
+		((shared_ptr<ShapePack>,shapePack,,AttrTrait<Attr::triggerPostLoad>().noDump(),"Purely geomerical description of particles to be generated (will replace :obj:`spherePack`, :obj:`centers`, :obj:`radii`, :obj:`clumps` and :obj:`cellLen` in the future).")) \
 		((bool,zTrim,false,AttrTrait<>().noGui(),"Trim packing from above so that the ratio of :obj:`vel` / :obj:`packVel` is as small as possible. Spheres/clumps will be discarded from above and this flag will be set to false once trimming is done (it will not be called again explicitly even if :obj:`massRate` or :obj:`vel` change.")) \
 		((Real,zTrimHt,NaN,AttrTrait<>().noGui(),"Height at which the packing was trimmed if :obj:`zTrim` was set.")) \
 		((Real,cellLen,NaN,AttrTrait<>().lenUnit(),"Length of the band cell, which is repeated periodically (if :obj:`spherePack` is given and is periodic, this value is deduced)")) \
-		((vector<Real>,radii,,AttrTrait<Attr::triggerPostLoad>().noGui(),"Radii for the packing (if :obj:`spherePack` is given, radii are computed)")) \
-		((vector<Vector3r>,centers,,AttrTrait<Attr::triggerPostLoad>().noGui(),"Centers of spheres/clumps in the packing (if :obj:`spherePack` is given, centers are computed)")) \
-		((vector<shared_ptr<SphereClumpGeom>>,clumps,,AttrTrait<Attr::triggerPostLoad>().noGui(),"Clump geometry, corresponding to each :obj:`radii` and :obj:`centers`. (if :obj:`spherePack` is given, clumps are computed)")) \
+		((vector<Real>,radii,,AttrTrait<Attr::triggerPostLoad>().noGui().noDump(),"Radii for the packing (if :obj:`spherePack` is given, radii are computed)")) \
+		((vector<Vector3r>,centers,,AttrTrait<Attr::triggerPostLoad>().noGui().noDump(),"Centers of spheres/clumps in the packing (if :obj:`spherePack` is given, centers are computed)")) \
+		((vector<shared_ptr<SphereClumpGeom>>,clumps,,AttrTrait<Attr::triggerPostLoad>().noGui().noDump(),"Clump geometry, corresponding to each :obj:`radii` and :obj:`centers`. (if :obj:`spherePack` is given, clumps are computed)")) \
 		((Real,massRate,NaN,AttrTrait<Attr::triggerPostLoad>().massRateUnit(),"Average mass flow rate; if given, :obj:`vel` is adjusted (if both are given, :obj:`massRate` takes precedence).")) \
 		((Real,vel,NaN,AttrTrait<Attr::triggerPostLoad>().velUnit(),"Velocity of particles; if specified, :obj:`massRate` is adjusted (of both are given, such as in constructor, :obj:`massRate` has precedence and a warning is issued if the two don't match)")) \
 		((Real,packVel,NaN,AttrTrait<>().readonly().velUnit(),"Velocity by which the packing is traversed and new particles emmited; always smaller than or equal to :obj:`vel`. Computed automatically.")) \

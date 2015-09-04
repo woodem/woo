@@ -158,6 +158,7 @@ struct VelocityAndReadForce: public Impose{
 		((Real,vel,0.,AttrTrait<>(),"Prescribed velocity magnitude.")) \
 		((bool,latBlock,true,,"Whether lateral velocity (perpendicular to :obj:`vel`) is set to zero, or left free.")) \
 		((OpenMPAccumulator<Real>,sumF,,AttrTrait<>().readonly(),"Summary force on nodes with this imposition, in the direction of :obj:`vel`.")) \
+		((bool,invF,false,,"Invert force value (so that it has the meaning of reactin rather than force exerted).")) \
 		((Real,dist,0,,"Cumulative displacement of this imposition.")) \
 		((string,energyName,"",AttrTrait<Attr::triggerPostLoad>(),"If given, and :obj:`~woo.core.Scene.trackEnergy` is ``True``, cumulate work done by this imposition under this name")) \
 		((int,workIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for fast access to the energy.")) \

@@ -166,7 +166,7 @@ void VelocityAndReadForce::readForce(const Scene* scene, const shared_ptr<Node>&
 	}
 	// the rest is thread-safe
 	Real f=n->getData<DemData>().force.dot(dir);
-	sumF+=f;
+	sumF+=(invF?-1:1)*f;
 	if(scene->trackEnergy && !energyName.empty()) scene->energy->add(f*scene->dt*vel,energyName,workIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
 }
 

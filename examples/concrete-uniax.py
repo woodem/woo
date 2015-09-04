@@ -3,7 +3,7 @@ from woo.dem import *
 from woo.core import *
 from woo.gl import *
 from minieigen import *
-woo.master.usesApi=10101
+woo.master.usesApi=10102
 
 
 S=woo.master.scene=Scene(fields=[DemField()],dtSafety=.9)
@@ -51,7 +51,7 @@ S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='co
 # take boundary nodes an prescribe velocity to those
 lc=.5*S.lab.table.specimenLength-3*S.lab.table.sphereRadius
 # impositions for top/bottom
-S.lab.topImpose,S.lab.botImpose=VelocityAndReadForce(dir=Vector3.UnitZ),VelocityAndReadForce(dir=-Vector3.UnitZ)
+S.lab.topImpose,S.lab.botImpose=VelocityAndReadForce(dir=Vector3.UnitZ,invF=True),VelocityAndReadForce(dir=-Vector3.UnitZ,invF=True)
 for n in S.dem.nodes:
 	if abs(n.pos[2])>lc:
 		n.dem.impose=(S.lab.topImpose if n.pos[2]>0 else S.lab.botImpose)
@@ -60,7 +60,7 @@ def addPlotData(S):
 	stage=(0 if S.lab.topImpose.vel>0 else 1)
 	u=S.lab.topImpose.dist+S.lab.botImpose.dist
 	eps=u/S.lab.table.specimenLength
-	Ftop,Fbot=-S.lab.topImpose.sumF,-S.lab.botImpose.sumF
+	Ftop,Fbot=S.lab.topImpose.sumF,S.lab.botImpose.sumF
 	sig=.5*(Ftop+Fbot)/(math.pi*S.lab.minRad**2)
 	# in this case, we went to tension actually (dynamic), just don't record that as we then fail to detect pak in 
 	if stage==0 and Ftop<0: pass
