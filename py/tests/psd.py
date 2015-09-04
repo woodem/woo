@@ -64,7 +64,7 @@ class PsdSphereGeneratorTest(unittest.TestCase):
 		oPsdNcum=self.gen.psd(mass=self.gen.mass,normalize=False,num=150,cumulative=False)
 		iInt=numpy.trapz(*iPsd)
 		oInt=numpy.trapz(*oPsd)
-		if 1: # enable to show graphical output
+		if 0: # enable to show graphical output
 			import pylab
 			pylab.figure()
 

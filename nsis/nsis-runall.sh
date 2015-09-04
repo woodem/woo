@@ -81,7 +81,7 @@ else
 			"$MAKENSIS" defines.nsh nsis-wwoo-libs.nsh
 		fi
 		if $DO_WOO; then
-			echo "!define VERSION 0.99-r$REVNO" > defines.nsh
+			echo "!define VERSION 1.0-r$REVNO" > defines.nsh
 			"$MAKENSIS" defines.nsh nsis-wwoo-main.nsh
 		fi
 		if $DO_EXTRA; then
