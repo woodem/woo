@@ -50,7 +50,7 @@ struct FlowAnalysis: public PeriodicEngine{
 	#endif
 
 	// number of floats to store for each point
-	enum {PT_FLOW_X=0, PT_FLOW_Y, PT_FLOW_Z, PT_EK, PT_SUM_WEIGHT, PT_SUM_DIAM, PT_SUM_PORO, NUM_PT_DATA};
+	enum {PT_FLOW_X=0, PT_FLOW_Y, PT_FLOW_Z, PT_VEL_X, PT_VEL_Y, PT_VEL_Z, PT_EK, PT_SUM_WEIGHT, PT_SUM_DIAM, PT_SUM_RELVOL, NUM_PT_DATA};
 	enum {OP_CROSS=0,OP_WEIGHTED_DIFF=1};
 
 	#define woo_dem_FlowAnalysis__CLASS_BASE_DOC_ATTRS_PY \
