@@ -88,7 +88,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		}
 		if(capsule){
 			#ifdef WOO_VTK
-				int subdiv=min(4.,ceil(M_PI/(acos(1-tol/capsule->radius))));
+				int subdiv=max(4.,ceil(M_PI/(acos(1-tol/capsule->radius))));
 				std::tie(pts,tri)=VtkExport::triangulateCapsule(static_pointer_cast<Capsule>(p->shape),subdiv);
 			#else
 				throw std::runtime_error("Triangulation of capsules is (for internal and entirely fixable reasons) only available when compiled with the 'vtk' features.");

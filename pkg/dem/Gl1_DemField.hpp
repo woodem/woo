@@ -51,7 +51,7 @@ struct Gl1_DemField: public GlFieldFunctor{
 	
 	#define GL1_DEMFIELD_COLORBY_NAMEDENUM {{COLOR_SOLID,{"solid"}},{COLOR_SHAPE,{"Shape.color","shape"}},{COLOR_RADIUS,{"radius","r"}},{COLOR_DIAM_MM,{"diameter (mm)","diameter","diam","d"}},{COLOR_VEL,{"velocity","vel","v"}},{COLOR_ANGVEL,{"angular velocity","angVel"}},{COLOR_MASS,{"mass","m"}},{COLOR_MASK,{"mask"}},{COLOR_POS,{"position","pos"}},{COLOR_DISPLACEMENT,{"ref. displacement","disp","displacement"}},{COLOR_ROTATION,{"ref. rotation","rot","rotation"}},{COLOR_REFPOS,{"refpos coord","refpos"}},{COLOR_MAT_ID,{"material id","mat id"}},{COLOR_MATSTATE,{"Particle.matState","mat state"}},{COLOR_SIG_N,{"normal stress","sigN"}},{COLOR_SIG_T,{"shear stress","sigT"}},{COLOR_NUM_CON,{"number of contacts","num contacts","numCon"}},{COLOR_FLAGS,{"flags"}},{COLOR_INVISIBLE,{"invisible","-"}}}
 
-	#define woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_PY \
+	#define woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Gl1_DemField,GlFieldFunctor,"Render DEM field.", \
 		((int,shape,SHAPE_ALL,AttrTrait<Attr::triggerPostLoad|Attr::namedEnum>().namedEnum({{SHAPE_NONE,{"none",""}},{SHAPE_ALL,{"all"}},{SHAPE_SPHERES,{"spheroids","sph"}},{SHAPE_NONSPHERES,{"non-spheroids","nsph"}},{SHAPE_MASK,{"mask"}}}).startGroup("Shape"),"Render only particles matching selected filter.")) \
 		((uint,mask,0,,"Only shapes/bounds of particles with this group will be shown; 0 matches all particles.")) \
@@ -90,6 +90,7 @@ struct Gl1_DemField: public GlFieldFunctor{
 		((shared_ptr<GlShapeDispatcher>,shapeDispatcher,make_shared<GlShapeDispatcher>(),AttrTrait<>().readonly().noGui(),"Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.")) \
 		((shared_ptr<GlBoundDispatcher>,boundDispatcher,make_shared<GlBoundDispatcher>(),AttrTrait<>().readonly().noGui(),"Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.")) \
 		((shared_ptr<GlCPhysDispatcher>,cPhysDispatcher,make_shared<GlCPhysDispatcher>(),AttrTrait<>().readonly().noGui(),"Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.")) \
+		, /*ctor*/ initAllRanges(); \
 		, /*py*/ \
 			; \
 			_classObj.attr("glyphKeep")=(int)Gl1_DemField::GLYPH_KEEP; \
@@ -127,7 +128,7 @@ struct Gl1_DemField: public GlFieldFunctor{
 			_classObj.attr("cNodeNode")=(int)Gl1_DemField::CNODE_NODE; \
 			_classObj.attr("cNodePotLine")=(int)Gl1_DemField::CNODE_POTLINE;
 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_PY);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(Gl1_DemField);
 #endif

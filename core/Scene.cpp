@@ -289,6 +289,8 @@ void Scene::postLoad(Scene&,void*){
 		e->setField();
 		i++;
 	}
+	// assign Scene to Fields (just in case it is needed right away, without running engines on it first)
+	for(auto& f: fields){ f->scene=this; }
 	// TODO: this can be removed, as labels should be saved just fine
 	// manage labeled engines
 	for(const shared_ptr<Engine>& e: engines){
