@@ -133,7 +133,7 @@ def wooPrepareChunks():
 	# make chunks from sources
 	global chunkSize
 	if chunkSize<0: chunkSize=10000
-	srcs=[glob('lib/*/*.cpp'),glob('py/*.cpp'),glob('py/*/*.cpp')]
+	srcs=[glob('lib/*/*.cpp')+['lib/voro++/voro++.cc'],glob('py/*.cpp'),glob('py/*/*.cpp')]
 	if WIN: srcs=[[s] for s in sum(srcs,[])] # compile each file separately even amongst base files
 	if 'opengl' in features: srcs+=[glob('gui/qt4/*.cpp')+glob('gui/qt4/*.cc')]
 	if 'gts' in features: srcs+=[[f] for f in glob('py/3rd-party/pygts-0.3.1/*.cpp')]

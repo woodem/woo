@@ -8,8 +8,7 @@ S.dem.par.add(woo.dem.Wall.makeBox(box))
 S.engines=woo.dem.DemField.minimalEngines(damping=.3)+[
 	woo.dem.BoxInlet(
 		box=box,
-		generator=woo.dem.PsdSphereGenerator(psdPts=[(.05,0),(.1,.4),(.2,1)],discrete=False,mass=True),
-		# spatialBias=woo.dem.PsdAxialBias(psdPts=[(.05,0),(.1,.4),(.2,1)],axis=2,fuzz=.1,discrete=False),
+		generator=woo.dem.PsdSphereGenerator(psdPts=[(.05,0),(.1,1)],discrete=False,mass=True),
 		maxMass=-1,maxNum=-1,massRate=0,maxAttempts=5000,materials=[woo.dem.FrictMat(density=1000,young=1e6,tanPhi=.9)],nDo=1
 	),
 	woo.core.PyRunner(50,'recomputePorosity(S)')
