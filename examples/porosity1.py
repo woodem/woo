@@ -50,9 +50,8 @@ S.plot.plots={'i':('p-x','p-xy','p-y','p-xz','p-xyz','p-yz','p-z'),
 }
 
 from woo.gl import *
-rr=qt.Renderer()
-rr.extraDrawers=[GlExtra_AnisoPorosityAnalyzer(analyzer=S.lab.apa,num=0)]
-rr.nodes=False
+S.gl.renderer.extraDrawers=[GlExtra_AnisoPorosityAnalyzer(analyzer=S.lab.apa,num=0)]
+S.gl.renderer.nodes=False
 
 # from yade import log
 #log.setLevel('AnisoPorosityAnalyzer',log.TRACE)

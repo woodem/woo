@@ -29,8 +29,8 @@ pyObjects+=[env.SharedObject(s) for s in pkgSrcs]
 ## LIB
 pyObjects.append(
 	env.SharedObject('woo-support',
-		## ['voro++/voro++.cc']+ # included directly in sources, due to templates
-		env.Combine('woo-support.cpp',env.Glob('lib/*/*.cpp'))
+		 # included directly in sources, due to templates
+		env.Combine('woo-support.cpp',env.Glob('lib/*/*.cpp')+['lib/voro++/voro++.cc'])
 	)
 )
 ## CORE

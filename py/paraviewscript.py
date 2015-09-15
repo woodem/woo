@@ -161,6 +161,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
 	'''
 	def fixPath(p):
 		import os,os.path
+		p=p.replace('\\','/') # fix backslashes which might expand when written out ('c:\temp' to 'c: emp', for instance) 
 		if not p or os.path.isabs(p): return p         # empty or absolute, nothing to do
 		if os.path.dirname(out)==os.getcwd(): return p # script in the current directory, so relative is OK
 		return os.path.relpath(p,os.path.dirname(out)) # relative to where the script is being written
