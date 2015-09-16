@@ -26,60 +26,60 @@ O.engines=[IGeomDispatcher([Ig2_Sphere_Sphere_ScGeom()]),IPhysDispatcher([Ip2_Cp
 i2=utils.createInteraction(2,3)
 
 O.engines=[
-	InteractionLoop([],[],[Law2_ScGeom_CpmPhys_Cpm(),Law2_Dem3DofGeom_CpmPhys_Cpm(yieldSurfType=0)]),
-	StepDisplacer(ids=[1,3],setVelocities=True,label='jumper'), # displace non-dynamic #1, set velocity on #3
-	NewtonIntegrator(damping=0),
-	PyRunner(iterPeriod=1,initRun=True,command='plotData()'),
+    InteractionLoop([],[],[Law2_ScGeom_CpmPhys_Cpm(),Law2_Dem3DofGeom_CpmPhys_Cpm(yieldSurfType=0)]),
+    StepDisplacer(ids=[1,3],setVelocities=True,label='jumper'), # displace non-dynamic #1, set velocity on #3
+    NewtonIntegrator(damping=0),
+    PyRunner(iterPeriod=1,initRun=True,command='plotData()'),
 ]
 
 def plotData():
-	allData={}
-	# gather same data for both configurations, suffix their labels with -DD/-Sc
-	for i,key,sphere in zip([i1,i2],['-DD','-Sc'],[1,3]):
-		data=dict(
-			zRot=O.bodies[sphere].state.ori.toAxisAngle()[1],
-			zShift=O.bodies[sphere].state.pos[2],
-			epsT=i.phys.epsT.norm() if key=='-Sc' else i.geom.strainT().norm(),
-			Ft=i.phys.shearForce.norm(),
-			epsN=i.phys.epsN,
-			epsPlSum=i.phys.epsPlSum,
-			relResStr=i.phys.relResidualStrength,
-			dist=(O.bodies[i.id1].state.pos-O.bodies[i.id2].state.pos).norm(),
-			sigmaT=i.phys.sigmaT.norm()
-		)
-		for k in data: allData[k+key]=data[k]
-	plot.addData(allData)
+    allData={}
+    # gather same data for both configurations, suffix their labels with -DD/-Sc
+    for i,key,sphere in zip([i1,i2],['-DD','-Sc'],[1,3]):
+        data=dict(
+            zRot=O.bodies[sphere].state.ori.toAxisAngle()[1],
+            zShift=O.bodies[sphere].state.pos[2],
+            epsT=i.phys.epsT.norm() if key=='-Sc' else i.geom.strainT().norm(),
+            Ft=i.phys.shearForce.norm(),
+            epsN=i.phys.epsN,
+            epsPlSum=i.phys.epsPlSum,
+            relResStr=i.phys.relResidualStrength,
+            dist=(O.bodies[i.id1].state.pos-O.bodies[i.id2].state.pos).norm(),
+            sigmaT=i.phys.sigmaT.norm()
+        )
+        for k in data: allData[k+key]=data[k]
+    plot.addData(allData)
 
 if mode=='mov':
-	jumper.mov=Vector3(0,0,1/(1e4*nSteps))
+    jumper.mov=Vector3(0,0,1/(1e4*nSteps))
 elif mode=='rot':
-	jumper.rot=Quaternion(Vector3.UnitZ,1/(1e4*nSteps))
+    jumper.rot=Quaternion(Vector3.UnitZ,1/(1e4*nSteps))
 
 O.run(nSteps,True)
 if mode=='mov':
-	plot.plots={'zShift-DD':(
-		#('epsT-DD','g-'),('epsT-Sc','r^'),
-		('dist-DD','g-'),('dist-Sc','r^'),
-		None,
-		('sigmaT-DD','b-'),('sigmaT-Sc','m^')
-		#('relResStr-DD','b-'),('relResStr-Sc','m^')
-		#('epsN-DD','b-'),('epsN-Sc','m^')
-	)}
+    plot.plots={'zShift-DD':(
+        #('epsT-DD','g-'),('epsT-Sc','r^'),
+        ('dist-DD','g-'),('dist-Sc','r^'),
+        None,
+        ('sigmaT-DD','b-'),('sigmaT-Sc','m^')
+        #('relResStr-DD','b-'),('relResStr-Sc','m^')
+        #('epsN-DD','b-'),('epsN-Sc','m^')
+    )}
 elif mode=='rot':
-	plot.plots={'zRot-DD':(
-		('epsT-DD','g|'),('epsT-Sc','r-'),
-		None,
-		('sigmaT-DD','b-'),('sigmaT-Sc','mv')
-	)}
+    plot.plots={'zRot-DD':(
+        ('epsT-DD','g|'),('epsT-Sc','r-'),
+        None,
+        ('sigmaT-DD','b-'),('sigmaT-Sc','mv')
+    )}
 
 
 
 if 1:
-	f='/tmp/cpm-geom-'+mode+'.pdf'
-	plot.plot(noShow=True).savefig(f)
-	print 'Plot saved to '+f
-	quit()
+    f='/tmp/cpm-geom-'+mode+'.pdf'
+    plot.plot(noShow=True).savefig(f)
+    print 'Plot saved to '+f
+    quit()
 else:
-	plot.plot()
+    plot.plot()
 
 

@@ -18,9 +18,9 @@ sphereMat=O.materials.append(ViscElMat(density=Density,frictionAngle=frictionAng
 facetId=O.bodies.append(utils.facet( [ (-1,0,0), (1,1,0), (1,-1,0)], material=facetMat,color=(1,0,0)))
 
 sphIds=O.bodies.append([
-	utils.sphere( (0,0,0.1),0.1, material=sphereMat,color=(0,1,0)), 
-	utils.sphere( (0.9,0,0.1),0.1, material=sphereMat,color=(0,1,0))
-	])
+    utils.sphere( (0,0,0.1),0.1, material=sphereMat,color=(0,1,0)), 
+    utils.sphere( (0.9,0,0.1),0.1, material=sphereMat,color=(0,1,0))
+    ])
 
 O.bodies[sphIds[1]].state.blockedDOFs='XYZ'
 
@@ -29,16 +29,16 @@ O.dt=.1*tc
 
 ## Engines 
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	GravityEngine(gravity=[0,0,-9.81]),
-	NewtonIntegrator(damping=0),
-	RotationEngine(ids=[facetId],rotationAxis=[0,0,1],rotateAroundZero=True,angularVelocity=0.1)
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    GravityEngine(gravity=[0,0,-9.81]),
+    NewtonIntegrator(damping=0),
+    RotationEngine(ids=[facetId],rotationAxis=[0,0,1],rotateAroundZero=True,angularVelocity=0.1)
 ]
 
 from woo import qt

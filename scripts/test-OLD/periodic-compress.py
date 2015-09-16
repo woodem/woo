@@ -5,20 +5,20 @@ O.materials.append(FrictMat(young=30e9,density=2400))
 p=pack.SpherePack()
 p.makeCloud(Vector3().ZERO,O.cell.refSize,1,.5,700,True)
 for sph in p:
-	O.bodies.append(utils.sphere(sph[0],sph[1]))
+    O.bodies.append(utils.sphere(sph[0],sph[1]))
 
 log.setLevel("PeriIsoCompressor",log.DEBUG)
 O.timingEnabled=True
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
-	),
-	PeriIsoCompressor(charLen=.5,stresses=[-50e9,-1e8],doneHook="print 'FINISHED'; O.pause() ",keepProportions=True),
-	NewtonIntegrator(damping=.4,homotheticCellResize=1)
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
+    ),
+    PeriIsoCompressor(charLen=.5,stresses=[-50e9,-1e8],doneHook="print 'FINISHED'; O.pause() ",keepProportions=True),
+    NewtonIntegrator(damping=.4,homotheticCellResize=1)
 ]
 O.dt=utils.PWaveTimeStep()
 O.saveTmp()
@@ -28,7 +28,7 @@ O.run()
 O.wait()
 timing.stats()
 #while True:
-#	O.step()
+#    O.step()
 
 
 # now take that packing and pad some larger volume with it
@@ -39,4 +39,4 @@ timing.stats()
 #sp.cellFill((30,30,30))
 #print sp.cellSize
 #for s in sp:
-#	O.bodies.append(utils.sphere(s[0],s[1]))
+#    O.bodies.append(utils.sphere(s[0],s[1]))

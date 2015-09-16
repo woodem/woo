@@ -32,15 +32,15 @@ sphMass = utils.getSpheresVolume()*density*9.81
 
 # Create engines
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	GravityEngine(gravity=[0.0,0.0,-9.81]),
-	NewtonIntegrator(damping=0.0)
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    GravityEngine(gravity=[0.0,0.0,-9.81]),
+    NewtonIntegrator(damping=0.0)
 ]
 
 
@@ -51,5 +51,5 @@ print ("Precalculated weight %f" % sphMass)
 print ("Obtained weight %f" % curForce)
 
 if (((sphMass-curForce)/curForce)>tolerance):
-	resultStatus += 1
+    resultStatus += 1
 

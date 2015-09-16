@@ -22,33 +22,33 @@ sp.toSimulation(rot=rot)
 plot.live=False
 plot.plots={'iter':('sx','sy','sz','syz','szx','sxy',),'iter_':('ex','ey','ez','eyz','ezx','exy',),'exy':('sxy',)}
 def plotAddData():
-	plot.addData(
-		iter=O.iter,iter_=O.iter,
-		sx=p3d.stress[0],sy=p3d.stress[1],sz=p3d.stress[2],
-		syz=p3d.stress[3],szx=p3d.stress[4],sxy=p3d.stress[5],
-		ex=p3d.strain[0],ey=p3d.strain[1],ez=p3d.strain[2],
-		eyz=p3d.strain[3],ezx=p3d.strain[4],exy=p3d.strain[5],
-	)
+    plot.addData(
+        iter=O.iter,iter_=O.iter,
+        sx=p3d.stress[0],sy=p3d.stress[1],sz=p3d.stress[2],
+        syz=p3d.stress[3],szx=p3d.stress[4],sxy=p3d.stress[5],
+        ex=p3d.strain[0],ey=p3d.strain[1],ez=p3d.strain[2],
+        eyz=p3d.strain[3],ezx=p3d.strain[4],exy=p3d.strain[5],
+    )
 
 O.dt=utils.PWaveTimeStep()/2
 
 # define the first part of simulation, hydrostatic compression
 enlargeFactor=1.5
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(aabbEnlargeFactor=enlargeFactor,label='bo1s')]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom(distFactor=enlargeFactor,label='ig2ss')],
-		[Ip2_CpmMat_CpmMat_CpmPhys()],[Law2_Dem3DofGeom_CpmPhys_Cpm()]),
-	NewtonIntegrator(),
-	Peri3dController(	goal=(0,0,0, 0,0,5e-3), # Vector6 of prescribed final values
-							stressMask=0b011111,
-							nSteps=2000,
-							doneHook='print "Simulation with Peri3dController finished."; O.pause()',
-							maxStrain=.5,
-							label='p3d'
-							),
-	PyRunner(command='plotAddData()',iterPeriod=1),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(aabbEnlargeFactor=enlargeFactor,label='bo1s')]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom(distFactor=enlargeFactor,label='ig2ss')],
+        [Ip2_CpmMat_CpmMat_CpmPhys()],[Law2_Dem3DofGeom_CpmPhys_Cpm()]),
+    NewtonIntegrator(),
+    Peri3dController(    goal=(0,0,0, 0,0,5e-3), # Vector6 of prescribed final values
+                            stressMask=0b011111,
+                            nSteps=2000,
+                            doneHook='print "Simulation with Peri3dController finished."; O.pause()',
+                            maxStrain=.5,
+                            label='p3d'
+                            ),
+    PyRunner(command='plotAddData()',iterPeriod=1),
 ]
 O.step()
 bo1s.aabbEnlargeFactor=ig2ss.distFactor=-1

@@ -15,29 +15,29 @@ maxMag=1e5 # maximum magnitude of applied force
 magnitudes=[.5*maxMag*(sin(t*(freq*2*pi))+1) for t in times] # generate points on sine wave over 1 period, but shifted up to be ∈(0,2)
 
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_ScGeom_FrictPhys_CundallStrack()]
-	),
-	# ids: what bodies is force applied to
-	# direction: direction of the force (normalized automatically), constant
-	# magnitudes: series of force magnitude
-	# times: time points at which magnitudes are defined
-	# wrap: continue from t0 once t_last is reached
-	# label: automatically defines python variable of that name pointing to this engine
-	InterpolatingDirectedForceEngine(ids=[1],direction=[0,0,-1],magnitudes=magnitudes,times=times,wrap=True,label='forcer'),
-	# without damping, the interaction never stabilizes and oscillates wildly… try it
-	NewtonIntegrator(damping=0.01),
-	# collect some data to plot periodically (every 50 steps)
-	PyRunner(iterPeriod=1,command='myAddPlotData()')
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_ScGeom_FrictPhys_CundallStrack()]
+    ),
+    # ids: what bodies is force applied to
+    # direction: direction of the force (normalized automatically), constant
+    # magnitudes: series of force magnitude
+    # times: time points at which magnitudes are defined
+    # wrap: continue from t0 once t_last is reached
+    # label: automatically defines python variable of that name pointing to this engine
+    InterpolatingDirectedForceEngine(ids=[1],direction=[0,0,-1],magnitudes=magnitudes,times=times,wrap=True,label='forcer'),
+    # without damping, the interaction never stabilizes and oscillates wildly… try it
+    NewtonIntegrator(damping=0.01),
+    # collect some data to plot periodically (every 50 steps)
+    PyRunner(iterPeriod=1,command='myAddPlotData()')
 ]
 
 O.bodies.append([
-	utils.sphere([0,0,0],1,dynamic=False,color=[1,0,0]),
-	utils.sphere([0,0,2],1,color=[0,1,0])
+    utils.sphere([0,0,0],1,dynamic=False,color=[1,0,0]),
+    utils.sphere([0,0,2],1,color=[0,1,0])
 ])
 
 # elastic timestep
@@ -46,14 +46,14 @@ O.dt=.5*utils.PWaveTimeStep()
 # callback for plotDataCollector
 import woo.plot as yp
 def myAddPlotData():
-	yp.addData(t=O.time,F_applied=forcer.force[2],supportReaction=O.forces.f(0)[2])
+    yp.addData(t=O.time,F_applied=forcer.force[2],supportReaction=O.forces.f(0)[2])
 
 O.saveTmp()
 
 # try open 3d view, if not running in pure console mode
 try:
-	import woo.qt
-	woo.qt.View()
+    import woo.qt
+    woo.qt.View()
 except ImportError: pass
 
 # run so many steps such that prescribed number of pulses is done

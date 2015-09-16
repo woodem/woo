@@ -18,10 +18,10 @@ S.gl.membrane.arrows=True
 #nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,1))]
 nn=[Node(pos=(1,0,0)),Node(pos=(0,1,0)),Node(pos=(0,0,1))]
 for n in nn:
-	n.dem=DemData(inertia=(1,1,1))
-	n.dem.blocked='xyzXYZ'
-	rotvec=Vector3.Random()
-	n.ori=Quaternion(rotvec.norm(),rotvec.normalized())
+    n.dem=DemData(inertia=(1,1,1))
+    n.dem.blocked='xyzXYZ'
+    rotvec=Vector3.Random()
+    n.ori=Quaternion(rotvec.norm(),rotvec.normalized())
 
 #nn[0].dem.vel=(1.,0,0)
 ### orientation is computed WRONG:
@@ -33,8 +33,8 @@ for n in nn:
 #nn[2].dem.vel=(0,0,0)
 
 #for i,n in enumerate(nn):
-#	#n.dem.vel=Vector3.Random()
-#	n.dem.angVel=2.*(n.ori*Vector3.Unit(i))
+#    #n.dem.vel=Vector3.Random()
+#    n.dem.angVel=2.*(n.ori*Vector3.Unit(i))
 nn[2].dem.angVel=2*(nn[2].ori*Vector3.UnitZ)
 
 #nn[0].ori=Quaternion(Matrix3(-Vector3.UnitY,-Vector3.UnitZ,Vector3.UnitX))

@@ -47,32 +47,32 @@ MovingSphere.dynamic=False
 
 #### define addPlotData
 def addPlotData():
-	if O.iter < 1:
-		plot.addData( Fn=0., un=0. )
-		#plot.saveGnuplot('net-2part-displ')
-	else:
-		try:
-			i=O.interactions[FixedSphere.id,MovingSphere.id]
-			plot.addData( Fn=i.phys.normalForce.norm(), un=(O.bodies[1].state.pos[1]-O.bodies[0].state.pos[1])-a )
-			#plot.saveGnuplot('net-2part-displ')
-		except:
-			print "No interaction!"
-			O.pause()
+    if O.iter < 1:
+        plot.addData( Fn=0., un=0. )
+        #plot.saveGnuplot('net-2part-displ')
+    else:
+        try:
+            i=O.interactions[FixedSphere.id,MovingSphere.id]
+            plot.addData( Fn=i.phys.normalForce.norm(), un=(O.bodies[1].state.pos[1]-O.bodies[0].state.pos[1])-a )
+            #plot.saveGnuplot('net-2part-displ')
+        except:
+            print "No interaction!"
+            O.pause()
 
 
 #### define simulation to create link
 interactionRadius=2.
 O.engines = [
-	ForceResetter(),
-	InsertionSortCollider( [Bo1_Sphere_Aabb(aabbEnlargeFactor=interactionRadius,label='aabb')] ), 
+    ForceResetter(),
+    InsertionSortCollider( [Bo1_Sphere_Aabb(aabbEnlargeFactor=interactionRadius,label='aabb')] ), 
 
-	InteractionLoop(
-	[Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=interactionRadius,label='Ig2ssGeom')],
-	[Ip2_WireMat_WireMat_WirePhys(linkThresholdIteration=1,label='interactionPhys')],
-	[Law2_ScGeom_WirePhys_WirePM(linkThresholdIteration=1,label='interactionLaw')]
-	),
-	NewtonIntegrator(damping=0.),
-	PyRunner(initRun=True,iterPeriod=1,command='addPlotData()')
+    InteractionLoop(
+    [Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=interactionRadius,label='Ig2ssGeom')],
+    [Ip2_WireMat_WireMat_WirePhys(linkThresholdIteration=1,label='interactionPhys')],
+    [Law2_ScGeom_WirePhys_WirePM(linkThresholdIteration=1,label='interactionLaw')]
+    ),
+    NewtonIntegrator(damping=0.),
+    PyRunner(initRun=True,iterPeriod=1,command='addPlotData()')
 ]
 
 

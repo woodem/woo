@@ -5,10 +5,10 @@ with given parameters.
 Be sure LSMGenGeo library is installed.
 
 The result is:
-	2 files:
-		"cyl.geo" is the geometry file which can be imported into YADE with ymport.gengeoFile() function
-		"cyl.vtk" is the VTK-filed which can be opened by any VTK-based software, for example Paraview
-	spheres, imported into the YADE simulation, according to generated geometry
+    2 files:
+        "cyl.geo" is the geometry file which can be imported into YADE with ymport.gengeoFile() function
+        "cyl.vtk" is the VTK-filed which can be opened by any VTK-based software, for example Paraview
+    spheres, imported into the YADE simulation, according to generated geometry
 
 http://www.access.edu.au/lsmgengeo_python_doc/current/pythonapi/html/GenGeo-module.html
 https://svn.esscc.uq.edu.au/svn/esys3/lsm/contrib/LSMGenGeo/
@@ -18,9 +18,9 @@ from woo import utils
 from math import *
 
 try:
-	from GenGeo import *
+    from GenGeo import *
 except ImportError:
-	from gengeo import *
+    from gengeo import *
 
 import sys
 
@@ -80,8 +80,8 @@ kw={'material':0}
 O.bodies.append(ymport.gengeo(mntable,shift=[-1.0,-1.0,-1.0],scale=2.0,color=(1,1,0),**kw))
 
 try:
-	from woo import qt
-	qt.Controller()
-	qt.View()
+    from woo import qt
+    qt.Controller()
+    qt.View()
 except ImportError: pass
 

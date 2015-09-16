@@ -12,18 +12,18 @@ baseMask=0b0011
 fallMask=0b0101
 
 for x in numpy.arange(-1,1,.2):
-	for y in numpy.arange(-1,1,.3):
-		S.dem.par.add(woo.utils.ellipsoid(center=(x,y,.2*sqrt(x**2+y**2)-.2),ori=Quaternion.Identity,semiAxes=(.1+.1*random(),.15+.1*random(),.1+.1*random()),fixed=True,mask=baseMask,wire=True,color=.5))
+    for y in numpy.arange(-1,1,.3):
+        S.dem.par.add(woo.utils.ellipsoid(center=(x,y,.2*sqrt(x**2+y**2)-.2),ori=Quaternion.Identity,semiAxes=(.1+.1*random(),.15+.1*random(),.1+.1*random()),fixed=True,mask=baseMask,wire=True,color=.5))
 import woo.pack
 cloud=woo.pack.SpherePack()
 cloud.makeCloud((-.8,-.8,.4),(.8,.8,5.5),rMean=.15,rRelFuzz=.6)
 for c,r in cloud:
-	semiAxes=r*Vector3(.5*random()+.5,.5*random()+.5,.5*random()+.5)
-	angVel=.5*Vector3(random(),random(),random())
-	ori=Quaternion(angVel.normalized(),random()*pi)
-	S.dem.par.add(
-		woo.utils.ellipsoid(center=c,semiAxes=semiAxes,ori=ori,angVel=angVel,fixed=False,mask=fallMask)
-	)
+    semiAxes=r*Vector3(.5*random()+.5,.5*random()+.5,.5*random()+.5)
+    angVel=.5*Vector3(random(),random(),random())
+    ori=Quaternion(angVel.normalized(),random()*pi)
+    S.dem.par.add(
+        woo.utils.ellipsoid(center=c,semiAxes=semiAxes,ori=ori,angVel=angVel,fixed=False,mask=fallMask)
+    )
 S.dem.par.add(woo.utils.wall(-.2,axis=2,sense=1),nodes=False)
 S.dtSafety=.8
 S.engines=[Leapfrog(reset=True,damping=.4),InsertionSortCollider([Bo1_Ellipsoid_Aabb(),Bo1_Wall_Aabb()]),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl()]),DynDt(stepPeriod=1000)]

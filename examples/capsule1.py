@@ -5,11 +5,11 @@ woo.master.usesApi=10102
 S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))])
 m=woo.dem.FrictMat(density=5000,young=5e6,ktDivKn=.5)
 S.dem.par.add([
-	woo.utils.capsule((.33,.33,.7),shaft=.3,radius=.2,ori=Quaternion((0,1,0),pi/3.),mat=m),
-	woo.utils.facet([(1,0,0),(0,1,0),(-1,0,0)],halfThick=0,mat=m),
-	woo.utils.sphere((.23,.34,1.3),radius=.15,mat=m),
-	woo.utils.wall(-.5,axis=2,mat=m),
-	woo.utils.infCylinder((.33,.33,0),radius=.3,axis=0,mat=m),
+    woo.utils.capsule((.33,.33,.7),shaft=.3,radius=.2,ori=Quaternion((0,1,0),pi/3.),mat=m),
+    woo.utils.facet([(1,0,0),(0,1,0),(-1,0,0)],halfThick=0,mat=m),
+    woo.utils.sphere((.23,.34,1.3),radius=.15,mat=m),
+    woo.utils.wall(-.5,axis=2,mat=m),
+    woo.utils.infCylinder((.33,.33,0),radius=.3,axis=0,mat=m),
 ])
 S.dem.par[-1].angVel=(1,0,0)
 S.engines=woo.utils.defaultEngines(damping=.4)

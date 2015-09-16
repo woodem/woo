@@ -17,7 +17,7 @@ padder.maxNumberOfSpheres=8500
 
 # would otherwise raise RuntimeError
 if 'CGAL' in config.features:
-	padder.densify()
+    padder.densify()
 
 #padder.save_mgpost("mgp.out.001")
 sp=padder.asSpherePack()

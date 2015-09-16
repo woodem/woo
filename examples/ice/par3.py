@@ -13,14 +13,14 @@ s2=Sphere.make(q*(0,0,0),radius=r2,mat=mat,fixed=True)
 s3=Sphere.make(q*(r2+r3-eps,0,0),radius=r3,mat=mat,fixed=True)
 # create the scene objects
 S=woo.master.scene=woo.core.Scene(
-	# put the 3 spheres in here
-	fields=[DemField(par=[s1,s2,s3])],
-	# not really needed, but perhaps one day...
-	trackEnergy=True,
-	# usual engines plus collecting data for plotting
-	engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='ice'))+[
-		PyRunner(1,'S.plot.addData(i=S.step,z2=S.lab.s2.pos[2],F2=S.lab.s2.f[2],Fx01=(S.dem.con[0,1].phys.force[0] if S.dem.con.existsReal(0,1) else float("nan")),Fx12=(S.dem.con[1,2].phys.force[0] if S.dem.con.existsReal(1,2) else float("nan")))')
-	]
+    # put the 3 spheres in here
+    fields=[DemField(par=[s1,s2,s3])],
+    # not really needed, but perhaps one day...
+    trackEnergy=True,
+    # usual engines plus collecting data for plotting
+    engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='ice'))+[
+        PyRunner(1,'S.plot.addData(i=S.step,z2=S.lab.s2.pos[2],F2=S.lab.s2.f[2],Fx01=(S.dem.con[0,1].phys.force[0] if S.dem.con.existsReal(0,1) else float("nan")),Fx12=(S.dem.con[1,2].phys.force[0] if S.dem.con.existsReal(1,2) else float("nan")))')
+    ]
 )
 # minimalEngines with ContactModeSelector creates the right functors
 # the Cp2 functor is accessible as S.lab.cp2

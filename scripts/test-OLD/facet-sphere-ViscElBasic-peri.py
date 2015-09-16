@@ -19,29 +19,29 @@ sphereMat=O.materials.append(ViscElMat(density=density,frictionAngle=frictionAng
 n=5.
 s=1./n
 for i in range(0,n):
-	for j in range(0,n):
-		O.bodies.append([
-			utils.facet( [(i*s,j*s,0.1),(i*s,(j+1)*s,0.1),((i+1)*s,(j+1)*s,0.1)],material=facetMat),
-			utils.facet( [(i*s,j*s,0.1),((i+1)*s,j*s,0.1),((i+1)*s,(j+1)*s,0.1)],material=facetMat),
-		])
+    for j in range(0,n):
+        O.bodies.append([
+            utils.facet( [(i*s,j*s,0.1),(i*s,(j+1)*s,0.1),((i+1)*s,(j+1)*s,0.1)],material=facetMat),
+            utils.facet( [(i*s,j*s,0.1),((i+1)*s,j*s,0.1),((i+1)*s,(j+1)*s,0.1)],material=facetMat),
+        ])
 
 # Spheres
 sphId=O.bodies.append([
-	utils.sphere( (0.5,0.5,0.2), 0.1, material=sphereMat),
-	])
+    utils.sphere( (0.5,0.5,0.2), 0.1, material=sphereMat),
+    ])
 O.bodies[sphId[-1]].state.vel=(0.5,0,0)
 
 ## Engines 
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	InteractionLoop(
-		[Ig2_Facet_Sphere_ScGeom()],
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	GravityEngine(gravity=[0,0,-9.81]),
-	NewtonIntegrator(damping=0),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    InteractionLoop(
+        [Ig2_Facet_Sphere_ScGeom()],
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    GravityEngine(gravity=[0,0,-9.81]),
+    NewtonIntegrator(damping=0),
 ]
 
 O.periodic=True

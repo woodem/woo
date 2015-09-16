@@ -33,27 +33,27 @@ O.dt=.2*tc
 
 ## Engines 
 O.engines=[
-	## Resets forces and momenta the act on bodies
-	ForceResetter(),
-	## Using bounding boxes find possible body collisions.
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	## Interactions
-	InteractionLoop(
-		## Create geometry information about each potential collision.
-		[Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
-		## Create physical information about the interaction.
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		## Constitutive law
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	## Apply gravity
-	GravityEngine(gravity=[0,-9.81,0]),
-	## Cundall damping must been disabled!
-	NewtonIntegrator(damping=0),
+    ## Resets forces and momenta the act on bodies
+    ForceResetter(),
+    ## Using bounding boxes find possible body collisions.
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    ## Interactions
+    InteractionLoop(
+        ## Create geometry information about each potential collision.
+        [Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
+        ## Create physical information about the interaction.
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        ## Constitutive law
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    ## Apply gravity
+    GravityEngine(gravity=[0,-9.81,0]),
+    ## Cundall damping must been disabled!
+    NewtonIntegrator(damping=0),
 ## Saving results
-	#VTKRecorder(virtPeriod=0.04,fileName='/tmp/stlimp-',recorders=['spheres','facets']),
-	## Apply kinematics to walls
-	RotationEngine(ids=fctIds,rotationAxis=[0,0,1],rotateAroundZero=True,angularVelocity=0.5)
+    #VTKRecorder(virtPeriod=0.04,fileName='/tmp/stlimp-',recorders=['spheres','facets']),
+    ## Apply kinematics to walls
+    RotationEngine(ids=fctIds,rotationAxis=[0,0,1],rotateAroundZero=True,angularVelocity=0.5)
 ]
 
 from woo import qt

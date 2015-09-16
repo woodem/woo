@@ -11,30 +11,30 @@ from math import *
 
 m=woo.utils.defaultMaterial()
 S=woo.master.scene=Scene(
-	engines=DemField.minimalEngines(damping=.4)+[IntraForce([In2_Membrane_ElastMat(applyBary=True)])],
-	fields=[DemField(
-		gravity=(0,0,-10),
-		loneMask=0, # no loneMask at all
-	)],
+    engines=DemField.minimalEngines(damping=.4)+[IntraForce([In2_Membrane_ElastMat(applyBary=True)])],
+    fields=[DemField(
+        gravity=(0,0,-10),
+        loneMask=0, # no loneMask at all
+    )],
 )
 
 ## very strange: when this comes after the facets, there are sometimes crashes in sysmalloc... probably having to do with simultaneous call to Bo1_Facet_Aabb (that's where the crash happens), perhaps as Aabb.createIndex is called?!
 S.dem.par.add([
-	Facet.make([(-2,-2,0),(2,0,0),(0,2,0)],halfThick=.6,mat=m,fixed=True,wire=True),
-	Wall.make(-.7,sense=1,axis=2,mat=m),
-	InfCylinder.make((0,-2,-.5),radius=1.,axis=0,mat=m,wire=True)
+    Facet.make([(-2,-2,0),(2,0,0),(0,2,0)],halfThick=.6,mat=m,fixed=True,wire=True),
+    Wall.make(-.7,sense=1,axis=2,mat=m),
+    InfCylinder.make((0,-2,-.5),radius=1.,axis=0,mat=m,wire=True)
 ])
 
 for i in range(200):
-	o=Vector3((1.3+1e-2*i)*sin(i*.9),(1.3+1e-2*i)*cos(i*.9),.18*i+1)
-	q=Quaternion(Vector3(rnd(),rnd(),rnd()),rnd())
-	q.normalize();
-	pp=[Vector3(0,0,0),Vector3(.3,0,0),Vector3(0,.4,0)]
-	f=Membrane.make([o+q*p for p in pp],halfThick=.1+.2*rnd(),mat=m,fixed=False,wire=False)
-	for n in f.shape.nodes:
-		n.dem.mass=100
-		n.dem.inertia=(10,10,10)
-	S.dem.par.addClumped([f])
+    o=Vector3((1.3+1e-2*i)*sin(i*.9),(1.3+1e-2*i)*cos(i*.9),.18*i+1)
+    q=Quaternion(Vector3(rnd(),rnd(),rnd()),rnd())
+    q.normalize();
+    pp=[Vector3(0,0,0),Vector3(.3,0,0),Vector3(0,.4,0)]
+    f=Membrane.make([o+q*p for p in pp],halfThick=.1+.2*rnd(),mat=m,fixed=False,wire=False)
+    for n in f.shape.nodes:
+        n.dem.mass=100
+        n.dem.inertia=(10,10,10)
+    S.dem.par.addClumped([f])
 
 
 S.dt=3e-3

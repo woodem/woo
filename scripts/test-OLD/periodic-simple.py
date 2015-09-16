@@ -7,16 +7,16 @@ from woo import log,timing
 
 #log.setLevel("InsertionSortCollider",log.DEBUG)
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()],label='collider'),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
-	),
-	GravityEngine(gravity=[0,0,-10]),
-	TranslationEngine(translationAxis=(1,0,0),velocity=10,ids=[0]),
-	NewtonIntegrator(damping=.4)
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()],label='collider'),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
+    ),
+    GravityEngine(gravity=[0,0,-10]),
+    TranslationEngine(translationAxis=(1,0,0),velocity=10,ids=[0]),
+    NewtonIntegrator(damping=.4)
 ]
 O.bodies.append(utils.sphere([-4,0,11],2,dynamic=False))
 O.bodies.append(utils.sphere([0,-2,5.5],2))

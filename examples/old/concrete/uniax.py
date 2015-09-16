@@ -40,32 +40,32 @@ is 1000 for tension and 100 for compression.
 
 # default parameters or from table
 utils.readParamsFromTable(noTableOk=True, # unknownOk=True,
-	young=24e9,
-	poisson=.2,
-	G_over_E=.20,
+    young=24e9,
+    poisson=.2,
+    G_over_E=.20,
 
-	sigmaT=3.5e6,
-	frictionAngle=atan(0.8),
-	epsCrackOnset=1e-4,
-	relDuctility=30,
+    sigmaT=3.5e6,
+    frictionAngle=atan(0.8),
+    epsCrackOnset=1e-4,
+    relDuctility=30,
 
-	intRadius=1.5,
-	dtSafety=.8,
-	damping=0.4,
-	strainRateTension=.05,
-	strainRateCompression=.5,
-	setSpeeds=True,
-	# 1=tension, 2=compression (ANDed; 3=both)
-	doModes=3,
+    intRadius=1.5,
+    dtSafety=.8,
+    damping=0.4,
+    strainRateTension=.05,
+    strainRateCompression=.5,
+    setSpeeds=True,
+    # 1=tension, 2=compression (ANDed; 3=both)
+    doModes=3,
 
-	specimenLength=.15,
-	sphereRadius=3.5e-3,
+    specimenLength=.15,
+    sphereRadius=3.5e-3,
 
-	# isotropic confinement (should be negative)
-	isoPrestress=0,
+    # isotropic confinement (should be negative)
+    isoPrestress=0,
 
-	# use the ScGeom variant
-	scGeom=False
+    # use the ScGeom variant
+    scGeom=False
 )
 
 from woo.params.table import *
@@ -91,18 +91,18 @@ coord_25,coord_50,coord_75=mm+.25*(mx-mm),mm+.5*(mx-mm),mm+.75*(mx-mm)
 area_25,area_50,area_75=utils.approxSectionArea(coord_25,axis),utils.approxSectionArea(coord_50,axis),utils.approxSectionArea(coord_75,axis)
 
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(aabbEnlargeFactor=intRadius,label='is2aabb'),],sweepLength=.05*sphereRadius,nBins=5,binCoeff=5),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom(distFactor=intRadius,label='ss2d3dg') if not scGeom else Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=intRadius,label='ss2sc')],
-		[Ip2_CpmMat_CpmMat_CpmPhys()],
-		[Law2_Dem3DofGeom_CpmPhys_Cpm(epsSoft=0) if not scGeom else Law2_ScGeom_CpmPhys_Cpm()],
-	),
-	NewtonIntegrator(damping=damping,label='damper'),
-	CpmStateUpdater(realPeriod=1),
-	UniaxialStrainer(strainRate=strainRateTension,axis=axis,asymmetry=0,posIds=posIds,negIds=negIds,crossSectionArea=crossSectionArea,blockDisplacements=False,blockRotations=False,setSpeeds=setSpeeds,label='strainer'),
-	PyRunner(virtPeriod=1e-6/strainRateTension,realPeriod=1,command='addPlotData()',label='plotDataCollector',initRun=True),
-	PyRunner(realPeriod=4,command='stopIfDamaged()',label='damageChecker'),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(aabbEnlargeFactor=intRadius,label='is2aabb'),],sweepLength=.05*sphereRadius,nBins=5,binCoeff=5),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom(distFactor=intRadius,label='ss2d3dg') if not scGeom else Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=intRadius,label='ss2sc')],
+        [Ip2_CpmMat_CpmMat_CpmPhys()],
+        [Law2_Dem3DofGeom_CpmPhys_Cpm(epsSoft=0) if not scGeom else Law2_ScGeom_CpmPhys_Cpm()],
+    ),
+    NewtonIntegrator(damping=damping,label='damper'),
+    CpmStateUpdater(realPeriod=1),
+    UniaxialStrainer(strainRate=strainRateTension,axis=axis,asymmetry=0,posIds=posIds,negIds=negIds,crossSectionArea=crossSectionArea,blockDisplacements=False,blockRotations=False,setSpeeds=setSpeeds,label='strainer'),
+    PyRunner(virtPeriod=1e-6/strainRateTension,realPeriod=1,command='addPlotData()',label='plotDataCollector',initRun=True),
+    PyRunner(realPeriod=4,command='stopIfDamaged()',label='damageChecker'),
 ]
 #O.miscParams=[Gl1_CpmPhys(dmgLabel=False,colorStrain=False,epsNLabel=False,epsT=False,epsTAxes=False,normal=False,contactLine=True)]
 
@@ -117,66 +117,66 @@ global mode
 mode='tension' if doModes & 1 else 'compression'
 
 def initTest():
-	global mode
-	print "init"
-	if O.iter>0:
-		O.wait();
-		O.loadTmp('initial')
-		print "Reversing plot data"; plot.reverseData()
-	else: plot.plot()
-	strainer.strainRate=abs(strainRateTension) if mode=='tension' else -abs(strainRateCompression)
-	try:
-		from woo import qt
-		renderer=qt.Renderer()
-		renderer.dispScale=(1000,1000,1000) if mode=='tension' else (100,100,100)
-	except ImportError: pass
-	print "init done, will now run."
-	O.step(); # to create initial contacts
-	# now reset the interaction radius and go ahead
-	if not scGeom: ss2d3dg.distFactor=-1.
-	else: ss2sc.interactionDetectionFactor=1.
-	is2aabb.aabbEnlargeFactor=-1.
+    global mode
+    print "init"
+    if O.iter>0:
+        O.wait();
+        O.loadTmp('initial')
+        print "Reversing plot data"; plot.reverseData()
+    else: plot.plot()
+    strainer.strainRate=abs(strainRateTension) if mode=='tension' else -abs(strainRateCompression)
+    try:
+        from woo import qt
+        renderer=qt.Renderer()
+        renderer.dispScale=(1000,1000,1000) if mode=='tension' else (100,100,100)
+    except ImportError: pass
+    print "init done, will now run."
+    O.step(); # to create initial contacts
+    # now reset the interaction radius and go ahead
+    if not scGeom: ss2d3dg.distFactor=-1.
+    else: ss2sc.interactionDetectionFactor=1.
+    is2aabb.aabbEnlargeFactor=-1.
 
-	O.run()
+    O.run()
 
 def stopIfDamaged():
-	global mode
-	if O.iter<2 or not plot.data.has_key('sigma'): return # do nothing at the very beginning
-	sigma,eps=plot.data['sigma'],plot.data['eps']
-	extremum=max(sigma) if (strainer.strainRate>0) else min(sigma)
-	minMaxRatio=0.5 if mode=='tension' else 0.5
-	if extremum==0: return
-	# uncomment to get graph for the very first time stopIfDamaged() is called
-	#eudoxos.estimatePoissonYoung(principalAxis=axis,stress=strainer.avgStress,plot=True,cutoff=0.3)
-	print O.tags['id'],mode,strainer.strain,sigma[-1]
-	import sys;	sys.stdout.flush()
-	if abs(sigma[-1]/extremum)<minMaxRatio or abs(strainer.strain)>(5e-3 if isoPrestress==0 else 5e-2):
-		if mode=='tension' and doModes & 2: # only if compression is enabled
-			mode='compression'
-			O.save('/tmp/uniax-tension.woo.gz')
-			print "Saved /tmp/uniax-tension.woo.gz (for use with interaction-histogram.py and uniax-post.py)"
-			print "Damaged, switching to compression... "; O.pause()
-			# important! initTest must be launched in a separate thread;
-			# otherwise O.load would wait for the iteration to finish,
-			# but it would wait for initTest to return and deadlock would result
-			import thread; thread.start_new_thread(initTest,())
-			return
-		else:
-			print "Damaged, stopping."
-			ft,fc=max(sigma),min(sigma)
-			print 'Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft))
-			title=O.tags['description'] if 'description' in O.tags.keys() else O.tags['params']
-			print 'gnuplot',plot.saveGnuplot(O.tags['id'],title=title)
-			print 'Bye.'
-			#O.pause()
-			sys.exit(0)
-		
+    global mode
+    if O.iter<2 or not plot.data.has_key('sigma'): return # do nothing at the very beginning
+    sigma,eps=plot.data['sigma'],plot.data['eps']
+    extremum=max(sigma) if (strainer.strainRate>0) else min(sigma)
+    minMaxRatio=0.5 if mode=='tension' else 0.5
+    if extremum==0: return
+    # uncomment to get graph for the very first time stopIfDamaged() is called
+    #eudoxos.estimatePoissonYoung(principalAxis=axis,stress=strainer.avgStress,plot=True,cutoff=0.3)
+    print O.tags['id'],mode,strainer.strain,sigma[-1]
+    import sys;    sys.stdout.flush()
+    if abs(sigma[-1]/extremum)<minMaxRatio or abs(strainer.strain)>(5e-3 if isoPrestress==0 else 5e-2):
+        if mode=='tension' and doModes & 2: # only if compression is enabled
+            mode='compression'
+            O.save('/tmp/uniax-tension.woo.gz')
+            print "Saved /tmp/uniax-tension.woo.gz (for use with interaction-histogram.py and uniax-post.py)"
+            print "Damaged, switching to compression... "; O.pause()
+            # important! initTest must be launched in a separate thread;
+            # otherwise O.load would wait for the iteration to finish,
+            # but it would wait for initTest to return and deadlock would result
+            import thread; thread.start_new_thread(initTest,())
+            return
+        else:
+            print "Damaged, stopping."
+            ft,fc=max(sigma),min(sigma)
+            print 'Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft))
+            title=O.tags['description'] if 'description' in O.tags.keys() else O.tags['params']
+            print 'gnuplot',plot.saveGnuplot(O.tags['id'],title=title)
+            print 'Bye.'
+            #O.pause()
+            sys.exit(0)
+        
 def addPlotData():
-	woo.plot.addData({'t':O.time,'i':O.iter,'eps':strainer.strain,'sigma':strainer.avgStress+isoPrestress,
-		'sigma.25':utils.forcesOnCoordPlane(coord_25,axis)[axis]/area_25+isoPrestress,
-		'sigma.50':utils.forcesOnCoordPlane(coord_50,axis)[axis]/area_50+isoPrestress,
-		'sigma.75':utils.forcesOnCoordPlane(coord_75,axis)[axis]/area_75+isoPrestress,
-		})
+    woo.plot.addData({'t':O.time,'i':O.iter,'eps':strainer.strain,'sigma':strainer.avgStress+isoPrestress,
+        'sigma.25':utils.forcesOnCoordPlane(coord_25,axis)[axis]/area_25+isoPrestress,
+        'sigma.50':utils.forcesOnCoordPlane(coord_50,axis)[axis]/area_50+isoPrestress,
+        'sigma.75':utils.forcesOnCoordPlane(coord_75,axis)[axis]/area_75+isoPrestress,
+        })
 plot.plot()
 O.run()
 initTest()

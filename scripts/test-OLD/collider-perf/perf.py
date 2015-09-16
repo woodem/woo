@@ -7,12 +7,12 @@ fast='@stride' in collider
 
 import os
 if not os.path.exists(spheresFile):
-	print "Generating packing"
-	p=TriaxialTest(numberOfGrains=nSpheres,radiusMean=1e-3,lowerCorner=[0,0,0],upperCorner=[1,1,1],noFiles=True)
-	p.load()
-	utils.spheresToFile(spheresFile)
-	O.reset()
-	print "Packing %s done"%spheresFile
+    print "Generating packing"
+    p=TriaxialTest(numberOfGrains=nSpheres,radiusMean=1e-3,lowerCorner=[0,0,0],upperCorner=[1,1,1],noFiles=True)
+    p.load()
+    utils.spheresToFile(spheresFile)
+    O.reset()
+    print "Packing %s done"%spheresFile
 else: print "Packing found (%s), using it."%spheresFile
 
 from woo import timing

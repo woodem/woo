@@ -11,11 +11,11 @@ import traceback
 # out-of-class docstrings for some classes
 try: from . import extraDocs
 except AttributeError:
-	print 'WARN: Error importing woo._monkey.extraDocs'
-	traceback.print_exc()
+    print 'WARN: Error importing woo._monkey.extraDocs'
+    traceback.print_exc()
 # attribute aliases
 try: from . import aliases
 except AttributeError:
-	print 'WARN: Error importing woo._monkey.aliases.py'
-	traceback.print_exc()
+    print 'WARN: Error importing woo._monkey.aliases.py'
+    traceback.print_exc()
 

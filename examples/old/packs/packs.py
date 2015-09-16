@@ -28,23 +28,23 @@ kwBoxes={'color':[1,0,0],'wire':False,'dynamic':False,'material':0}
 kwMeshes={'color':[1,1,0],'wire':True,'dynamic':False,'material':0}
 
 O.bodies.append(
-	pack.regularHexa(
-		(pack.inSphere((0,0,4),2)-pack.inSphere((0,-2,5),2)) & pack.notInNotch(centerPoint=(0,0,4),edge=(0,1,0),normal=(-1,1,-1),aperture=.2)
-		,radius=rad,gap=gap,color=(0,1,0),material=0) # head
-	+[utils.sphere((.8,1.9,5),radius=.2,color=(.6,.6,.6),material=0),utils.sphere((-.8,1.9,5),radius=.2,color=(.6,.6,.6),material=0),utils.sphere((0,2.4,4),radius=.4,color=(1,0,0),material=0)] # eyes and nose
-	+pack.regularHexa(pack.inCylinder((-1,2.2,3.3),(1,2.2,3.3),2*rad),radius=rad,gap=gap/3,color=(0.929,0.412,0.412),material=0) #mouth
+    pack.regularHexa(
+        (pack.inSphere((0,0,4),2)-pack.inSphere((0,-2,5),2)) & pack.notInNotch(centerPoint=(0,0,4),edge=(0,1,0),normal=(-1,1,-1),aperture=.2)
+        ,radius=rad,gap=gap,color=(0,1,0),material=0) # head
+    +[utils.sphere((.8,1.9,5),radius=.2,color=(.6,.6,.6),material=0),utils.sphere((-.8,1.9,5),radius=.2,color=(.6,.6,.6),material=0),utils.sphere((0,2.4,4),radius=.4,color=(1,0,0),material=0)] # eyes and nose
+    +pack.regularHexa(pack.inCylinder((-1,2.2,3.3),(1,2.2,3.3),2*rad),radius=rad,gap=gap/3,color=(0.929,0.412,0.412),material=0) #mouth
 )
 groundId=O.bodies.append(utils.facet([(12,0,-6),(0,12,-6,),(-12,-12,-6)],dynamic=False)) # ground
 
 for part in [
-	pack.regularHexa (
-		pack.inAlignedBox((-2,-2,-2),(2,2,2))-pack.inCylinder((0,-2,0),(0,2,0),1),
-		radius=1.5*rad,gap=2*gap,color=(1,0,1),**kw), # body,
-	pack.regularOrtho(pack.inEllipsoid((-1,0,-4),(1,1,2)),radius=rad,gap=0,color=(0,1,1),**kw), # left leg
-	pack.regularHexa (pack.inCylinder((+1,1,-2.5),(0,3,-5),1),radius=rad,gap=gap,color=(0,1,1),**kw), # right leg
-	pack.regularHexa (pack.inHyperboloid((+2,0,1),(+6,0,0),1,.5),radius=rad,gap=gap,color=(0,0,1),**kw), # right hand
-	pack.regularOrtho(pack.inCylinder((-2,0,2),(-5,0,4),1),radius=rad,gap=gap,color=(0,0,1),**kw) # left hand
-	]: O.bodies.appendClumped(part)
+    pack.regularHexa (
+        pack.inAlignedBox((-2,-2,-2),(2,2,2))-pack.inCylinder((0,-2,0),(0,2,0),1),
+        radius=1.5*rad,gap=2*gap,color=(1,0,1),**kw), # body,
+    pack.regularOrtho(pack.inEllipsoid((-1,0,-4),(1,1,2)),radius=rad,gap=0,color=(0,1,1),**kw), # left leg
+    pack.regularHexa (pack.inCylinder((+1,1,-2.5),(0,3,-5),1),radius=rad,gap=gap,color=(0,1,1),**kw), # right leg
+    pack.regularHexa (pack.inHyperboloid((+2,0,1),(+6,0,0),1,.5),radius=rad,gap=gap,color=(0,0,1),**kw), # right hand
+    pack.regularOrtho(pack.inCylinder((-2,0,2),(-5,0,4),1),radius=rad,gap=gap,color=(0,0,1),**kw) # left hand
+    ]: O.bodies.appendClumped(part)
 
 
 # Example of geom.facetBox usage 
@@ -73,17 +73,17 @@ SpheresID+=O.bodies.append(ymport.gengeoFile('LSMGenGeo.geo',shift=Vector3(-7.0,
 #Demonstration of spheresPackDimensions function. The "Edge" particles are colored with blue color
 geometryParameters = bodiesHandling.spheresPackDimensions(SpheresID)
 for v in [geometryParameters['minId'],geometryParameters['maxId']]:
-	for i in v:
-		O.bodies[int(i)].shape.color = Vector3(0,0,1)
+    for i in v:
+        O.bodies[int(i)].shape.color = Vector3(0,0,1)
 
 #Example of bodiesHandling.spheresModify()
 hat=O.bodies.append(pack.regularOrtho(pack.inCylinder((0,0,6),(0,0,7),20*rad),radius=0.2,gap=0,color=(1,0,0))) # hat
 oriBody = Quaternion(Vector3(0,1,0),(math.pi/8))
-hat_upper=O.bodies.append(bodiesHandling.spheresModify(hat,shift=(0.0,0.0,1.4),scale=0.7,orientation=oriBody,copy=True))		#Duplicate the "heart", shifting, scaling and rotating it
+hat_upper=O.bodies.append(bodiesHandling.spheresModify(hat,shift=(0.0,0.0,1.4),scale=0.7,orientation=oriBody,copy=True))        #Duplicate the "heart", shifting, scaling and rotating it
 
 #change the color of upper part of the hat
 for hatTmp in hat_upper:
-	O.bodies[hatTmp].shape.color=(0.9,0.5,0.59)
+    O.bodies[hatTmp].shape.color=(0.9,0.5,0.59)
 
 
 #facetBunker Demonstration
@@ -104,32 +104,32 @@ vibrationRotationPlate = O.bodies.append(geom.facetBox((-15,5,-5),(2,2,2),wallMa
 O.bodies.append(utils.wall((0,0,-10),axis=2))
 
 try:
-	from woo import qt
-	qt.Controller()
-	qt.View()
+    from woo import qt
+    qt.Controller()
+    qt.View()
 except ImportError: pass
 
 #log.setLevel('SubdomainBalancer',log.TRACE)
 
 O.engines=[
-	#SubdomainBalancer(colorize=True,initRun=True,iterPeriod=100),
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb()],label='collider'),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(),Ig2_Facet_Sphere_ScGeom(),Ig2_Wall_Sphere_ScGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_ScGeom_FrictPhys_CundallStrack()],
-	),
-	GravityEngine(gravity=(1e-2,1e-2,-1000)),
-	NewtonIntegrator(damping=.1,exactAsphericalRot=True),
-	RotationEngine(
-		ids=rotateIDs,
-		angularVelocity=100.0,
-		rotationAxis=[0,-1,0],
-		rotateAroundZero=1,
-		zeroPoint=[-7.0,-6.0,-5.0]),
-	HarmonicMotionEngine(A=[0,0,0.5], f=[0,0,20.0], fi = [0.0,0.0,pi], ids = vibrationPlate),
-	HarmonicRotationEngine(A=0.2, f=20.0, fi = pi, rotationAxis=[1.0,0.0,0.0], rotateAroundZero = True, zeroPoint = [-15.0,3.0,-7.0], ids = vibrationRotationPlate) 
+    #SubdomainBalancer(colorize=True,initRun=True,iterPeriod=100),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb()],label='collider'),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(),Ig2_Facet_Sphere_ScGeom(),Ig2_Wall_Sphere_ScGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_ScGeom_FrictPhys_CundallStrack()],
+    ),
+    GravityEngine(gravity=(1e-2,1e-2,-1000)),
+    NewtonIntegrator(damping=.1,exactAsphericalRot=True),
+    RotationEngine(
+        ids=rotateIDs,
+        angularVelocity=100.0,
+        rotationAxis=[0,-1,0],
+        rotateAroundZero=1,
+        zeroPoint=[-7.0,-6.0,-5.0]),
+    HarmonicMotionEngine(A=[0,0,0.5], f=[0,0,20.0], fi = [0.0,0.0,pi], ids = vibrationPlate),
+    HarmonicRotationEngine(A=0.2, f=20.0, fi = pi, rotationAxis=[1.0,0.0,0.0], rotateAroundZero = True, zeroPoint = [-15.0,3.0,-7.0], ids = vibrationRotationPlate) 
 ]
 # we don't care about physical accuracy here, (over)critical step is fine as long as the simulation doesn't explode
 O.dt=utils.PWaveTimeStep()
