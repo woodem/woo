@@ -3,12 +3,12 @@
 #include<woo/pkg/dem/IntraForce.hpp>
 
 struct DynDt: public PeriodicEngine{
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	void nodalStiffAdd(const shared_ptr<Node>&, Vector3r& kt, Vector3r& kr) const;
 	Real nodalCritDtSq(const shared_ptr<Node>&) const;
-	virtual void run() WOO_CXX11_OVERRIDE;
+	virtual void run() override;
 	// virtual func common to all engines
-	Real critDt() WOO_CXX11_OVERRIDE { return critDt_compute(); }
+	Real critDt() override { return critDt_compute(); }
 	// non-virtual func called from run() and from critDt(), the actual implementation
 	Real critDt_stiffness() const;
 	Real critDt_compute(const shared_ptr<Scene>& s, const shared_ptr<DemField>& f){ scene=s.get(); field=f; return critDt_compute(); }

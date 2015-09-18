@@ -9,7 +9,7 @@ struct SphereClumpGeom;
 struct RawShape: public Object{
 	// extra ctor straight from shape
 	RawShape(const shared_ptr<Shape>& sh);
-	string pyStr() const WOO_CXX11_OVERRIDE {	return "<"+getClassName()+" @ "+boost::lexical_cast<string>(this)+": "+className+">"; }
+	string pyStr() const override {	return "<"+getClassName()+" @ "+boost::lexical_cast<string>(this)+": "+className+">"; }
 	// if density is given, create DemData (and GlData) so that it is ready to be inserted into the simulation
 	shared_ptr<Shape> toShape(Real density=NaN, Real scale=1.) const;
 	void translate(const Vector3r& offset);
@@ -73,13 +73,13 @@ WOO_REGISTER_OBJECT(ShapeCompound);
 
 struct RawShapeClump: public ShapeClump {
 	WOO_DECL_LOGGER;
-	void recompute(int div, bool failOk=false, bool fastOnly=false) WOO_CXX11_OVERRIDE;
-	std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> makeParticles(const shared_ptr<Material>&, const Vector3r& pos, const Quaternionr& ori, int mask, Real scale=1.) WOO_CXX11_OVERRIDE;
+	void recompute(int div, bool failOk=false, bool fastOnly=false) override;
+	std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> makeParticles(const shared_ptr<Material>&, const Vector3r& pos, const Quaternionr& ori, int mask, Real scale=1.) override;
 
-	void translate(const Vector3r& offset) WOO_CXX11_OVERRIDE;
-	shared_ptr<ShapeClump> copy() const WOO_CXX11_OVERRIDE;
+	void translate(const Vector3r& offset) override;
+	shared_ptr<ShapeClump> copy() const override;
 
-	// void ensureApproxPos() WOO_CXX11_OVERRIDE;
+	// void ensureApproxPos() override;
 	bool isSphereOnly() const;
 	shared_ptr<SphereClumpGeom> asSphereClumpGeom() const;
 	#define woo_dem_RawShapeClump__CLASS_BASE_DOC_ATTRS \

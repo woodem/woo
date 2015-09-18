@@ -21,7 +21,7 @@ struct G3Geom: public CGeom{
 WOO_REGISTER_OBJECT(G3Geom);
 
 struct Cg2_Sphere_Sphere_G3Geom: public CGeomFunctor{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	WOO_CLASS_BASE_DOC_ATTRS(Cg2_Sphere_Sphere_G3Geom,CGeomFunctor,"Incrementally compute :obj:`G3Geom` for contact of 2 spheres. Detailed documentation in py/_extraDocs.py",
 		((bool,noRatch,true,,"FIXME: document what it really does."))
 		((bool,useAlpha,true,,"Use alpha correction proposed by McNamara, see source code for details"))
@@ -33,7 +33,7 @@ struct Cg2_Sphere_Sphere_G3Geom: public CGeomFunctor{
 WOO_REGISTER_OBJECT(Cg2_Sphere_Sphere_G3Geom);
 
 struct Cg2_Wall_Sphere_G3Geom: public CGeomFunctor{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	WOO_CLASS_BASE_DOC_ATTRS(Cg2_Wall_Sphere_G3Geom,CGeomFunctor,"Incrementally compute :obj:`G3Geom` for contact of 2 spheres. Detailed documentation in py/_extraDocs.py",
 	);
 	FUNCTOR2D(Wall,Sphere);
@@ -51,7 +51,7 @@ struct G3GeomCData: public CData{
 WOO_REGISTER_OBJECT(G3GeomCData);
 
 struct Law2_G3Geom_FrictPhys_IdealElPl: public LawFunctor{
-	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(G3Geom,FrictPhys);
 	WOO_CLASS_BASE_DOC_ATTRS(Law2_G3Geom_FrictPhys_IdealElPl,LawFunctor,"Ideally elastic-plastic behavior, for use with G3Geom.",
 		((bool,noSlip,false,,"Disable plastic slipping"))

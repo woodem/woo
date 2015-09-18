@@ -103,7 +103,7 @@ struct ConcretePhys: public FrictPhys {
 WOO_REGISTER_OBJECT(ConcretePhys);
 
 struct Cp2_ConcreteMat_ConcretePhys: public CPhysFunctor{
-	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(ConcreteMat,ConcreteMat);
 	WOO_DECL_LOGGER;
 	#define woo_dem_Cp2_ConcreteMat_ConcretePhys__CLASS_BASE_DOC_ATTRS \
@@ -136,7 +136,7 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 		return max(0.,ret);
 	}
 
-	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(L6Geom,ConcretePhys);
 	WOO_DECL_LOGGER;
 	#define woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY \

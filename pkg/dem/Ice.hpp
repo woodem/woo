@@ -55,7 +55,7 @@ WOO_REGISTER_OBJECT(IceCData);
 
 
 struct Cp2_IceMat_IcePhys: public Cp2_FrictMat_FrictPhys{
-	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(IceMat,IceMat);
 	#define woo_dem_Cp2_IceMat_IcePhys__CLASS_BASE_DOC_ATTRS \
 		Cp2_IceMat_IcePhys,Cp2_FrictMat_FrictPhys,"Compute :obj:`IcePhys` given two instances of :ref`IceMat`.", \
@@ -67,7 +67,7 @@ struct Cp2_IceMat_IcePhys: public Cp2_FrictMat_FrictPhys{
 WOO_REGISTER_OBJECT(Cp2_IceMat_IcePhys);
 
 struct Law2_L6Geom_IcePhys: public LawFunctor{
-	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 
 	template<typename ValueT>
 	void slipXd(ValueT& x, const Real& norm, const Real& mx, const Real& stiff, Scene* scene, const char* eName, int& eIndex){

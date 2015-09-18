@@ -9,16 +9,16 @@ struct SphereClumpGeom: public ShapeClump {
 	WOO_DECL_LOGGER;
 	void postLoad(SphereClumpGeom&,void*);
 	// may fail when called from postLoad, but not from ensureOk()
-	void recompute(int div, bool failOk=false, bool fastOnly=false) WOO_CXX11_OVERRIDE;
+	void recompute(int div, bool failOk=false, bool fastOnly=false) override;
 	void makeInvalid(){ volume=equivRad=NaN; inertia=Vector3r(NaN,NaN,NaN); pos=Vector3r::Zero(); ori=Quaternionr::Identity(); }
 	bool isOk() const { return !isnan(volume); }
 	void ensureOk() { if(!isOk()) recompute(div,/*failOk*/false); }
-	std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> makeParticles(const shared_ptr<Material>&, const Vector3r& pos, const Quaternionr& ori, int mask, Real scale=1.) WOO_CXX11_OVERRIDE;
-	// void ensureApproxPos() WOO_CXX11_OVERRIDE;
+	std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> makeParticles(const shared_ptr<Material>&, const Vector3r& pos, const Quaternionr& ori, int mask, Real scale=1.) override;
+	// void ensureApproxPos() override;
 	static vector<shared_ptr<SphereClumpGeom>> fromSpherePack(const shared_ptr<SpherePack>& sp, int div=5);
 
-	void translate(const Vector3r& offset) WOO_CXX11_OVERRIDE;
-	shared_ptr<ShapeClump> copy() const WOO_CXX11_OVERRIDE;
+	void translate(const Vector3r& offset) override;
+	shared_ptr<ShapeClump> copy() const override;
 
 	#define woo_dem_SphereClumpGeom__CLASS_BASE_DOC_ATTRS_PY \
 		SphereClumpGeom,ShapeClump,"Defines geometry of spherical clumps. Each clump is described by spheres it is made of (position and radius).", \

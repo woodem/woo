@@ -5,14 +5,14 @@
 #include<woo/pkg/dem/FrictMat.hpp>
 
 struct Tetra: public Shape {
-	int numNodes() const WOO_CXX11_OVERRIDE { return 4; }
-	void selfTest(const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	int numNodes() const override { return 4; }
+	void selfTest(const shared_ptr<Particle>&) override;
 	void canonicalizeVertexOrder();
 	// Vector3r getNormal() const;
 	Vector3r getCentroid() const;
 	Real getVolume() const;
-	void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) WOO_CXX11_OVERRIDE;
-	void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>& nn, vector<Real>& raw) const WOO_CXX11_OVERRIDE;
+	void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) override;
+	void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>& nn, vector<Real>& raw) const override;
 	#ifdef WOO_OPENGL
 		Vector3r getGlNormal(int f) const;
 		Vector3r getGlVertex(int i) const;
@@ -30,7 +30,7 @@ struct Tetra: public Shape {
 	// generic routine: return nearest point on triangle closes to *pt*, given triangle vertices and its normal
 	// static Vector3r getNearestTrianglePt(const Vector3r& pt, const Vector3r& A, const Vector3r& B, const Vector3r& C, const Vector3r& normal);
 
-	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) WOO_CXX11_OVERRIDE;
+	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
 
 	#define woo_fem_Tetra__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Tetra,Shape,"Tetra (triangle in 3d) particle.", \
@@ -80,7 +80,7 @@ struct Tet4: public Tetra{
 WOO_REGISTER_OBJECT(Tet4);
 
 struct Bo1_Tetra_Aabb: public BoundFunctor{
-	void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Tetra);
 	#define woo_fem_Bo1_Tetra_Aabb__CLASS_BASE_DOC Bo1_Tetra_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Tetra`."
 	WOO_DECL__CLASS_BASE_DOC(woo_fem_Bo1_Tetra_Aabb__CLASS_BASE_DOC);
@@ -89,8 +89,8 @@ WOO_REGISTER_OBJECT(Bo1_Tetra_Aabb);
 
 
 struct In2_Tet4_ElastMat: public IntraFunctor{
-	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const WOO_CXX11_OVERRIDE;
-	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override;
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	FUNCTOR2D(Tet4,ElastMat);
 	WOO_DECL_LOGGER;
 	#define woo_dem_In2_Tet4_ElastMat__CLASS_BASE_DOC_ATTRS \
@@ -105,7 +105,7 @@ WOO_REGISTER_OBJECT(In2_Tet4_ElastMat);
 #ifdef WOO_OPENGL
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Tetra: public GlShapeFunctor{	
-	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	//void drawEdges(const Tetra& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire);
 	//void glVertex(const Tetra& f, int i);
 	RENDERS(Tetra);
@@ -119,7 +119,7 @@ struct Gl1_Tetra: public GlShapeFunctor{
 WOO_REGISTER_OBJECT(Gl1_Tetra);
 
 struct Gl1_Tet4: public Gl1_Tetra{	
-	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	RENDERS(Tet4);
 	#define woo_dem_Gl1_Tet4__CLASS_BASE_DOC_ATTRS \
 		Gl1_Tet4,Gl1_Tetra,"Renders :obj:`Tet4` object; :obj:`Tetra` itself is rendered via :obj:`Gl1_Tetra`.", \

@@ -81,8 +81,8 @@ WOO_REGISTER_OBJECT(SparcField);
 
 
 struct SparcData: public NodeData{
-	const char* getterName() const WOO_CXX11_OVERRIDE { return "sparc"; }
-	void setDataOnNode(Node& n) WOO_CXX11_OVERRIDE { n.setData(static_pointer_cast<SparcData>(shared_from_this())); }
+	const char* getterName() const override { return "sparc"; }
+	void setDataOnNode(Node& n) override { n.setData(static_pointer_cast<SparcData>(shared_from_this())); }
 
 	Matrix3r getD() const{ return .5*(gradV+gradV.transpose()); }
 	Matrix3r getW() const{ return .5*(gradV-gradV.transpose()); }

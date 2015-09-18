@@ -26,7 +26,7 @@ WOO_REGISTER_OBJECT(PelletMat);
 #endif
 
 struct PelletMatState: public MatState{
-	string getScalarName(int index) WOO_CXX11_OVERRIDE {
+	string getScalarName(int index) override {
 		switch(index){
 			case 0: return "normal+shear dissipation";
 			case 1: return "agglom. rate [kg/s]";
@@ -35,7 +35,7 @@ struct PelletMatState: public MatState{
 			default: return "";
 		}
 	}
-	Real getScalar(int index, const long& step, const Real& smooth=0) WOO_CXX11_OVERRIDE {
+	Real getScalar(int index, const long& step, const Real& smooth=0) override {
 		switch(index){
 			case 0: return normPlast+shearPlast;
 			// invalid value if not yet updated in this step
@@ -69,7 +69,7 @@ class PelletPhys: public FrictPhys{
 WOO_REGISTER_OBJECT(PelletPhys);
 
 struct Cp2_PelletMat_PelletPhys: public Cp2_FrictMat_FrictPhys{
-	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(PelletMat,PelletMat);
 	#define woo_dem_Cp2_PelletMat_PelletPhys_CLASS_BASE_DOC \
 		Cp2_PelletMat_PelletPhys,Cp2_FrictMat_FrictPhys,"Compute :obj:`PelletPhys` given two instances of :ref`PelletMat`. :obj:`PelletMat.normPlastCoeff` is averaged into :obj:`PelletPhys.normPlastCoeff`, while minimum of :obj:`PelletMat.kaDivKn` is taken to compute :obj:`PelletPhys.ka`."
@@ -79,7 +79,7 @@ WOO_REGISTER_OBJECT(Cp2_PelletMat_PelletPhys);
 
 
 struct Law2_L6Geom_PelletPhys_Pellet: public LawFunctor{
-	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) WOO_CXX11_OVERRIDE;
+	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 	enum { DISSIP_NORM_PLAST=0, DISSIP_SHEAR_PLAST=1};
 	void tryAddDissipState(int what, Real E, const shared_ptr<Contact>& C);
 
@@ -122,8 +122,8 @@ WOO_REGISTER_OBJECT(PelletCData);
 
 struct PelletAgglomerator: public Engine{
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
-	void run() WOO_CXX11_OVERRIDE;
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
+	void run() override;
 	#define woo_dem_PelletAgglomerator__CLASS_BASE_DOC_ATTRS \
 		PelletAgglomerator,Engine,"Compute agglomeration of pellets due to contact some special particles, or wearing due to impacts (only applies to particles with :obj:`PelletMat`.", \
 		((vector<shared_ptr<Particle>>,agglomSrcs,,,"Sources of agglomerating mass; particles in contact with this source will have their radius increased based on their relative angular velocity.")) \

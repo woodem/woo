@@ -11,7 +11,7 @@ struct PotentialFunctor: public Functor1D</*dispatch types*/ Shape,/*return type
 	typedef std::function<Vector3r(const Vector3r&)> GradFuncType;
 	virtual PotFuncType funcPotentialValue(const shared_ptr<Shape>&);
 	virtual GradFuncType funcPotentialGradient(const shared_ptr<Shape>&);
-	Real go(const shared_ptr<Shape>&, const Vector3r& pos) WOO_CXX11_OVERRIDE;
+	Real go(const shared_ptr<Shape>&, const Vector3r& pos) override;
 	// return bounding sphere radius, for uninodal particles only
 	virtual Real boundingSphereRadius(const shared_ptr<Shape>&){ return NaN; }
 	#define woo_dem_PotentialFunctor__CLASS_BASE_DOC_PY PotentialFunctor,Functor,"Functor for creating/updating :obj:`woo.dem.Potential`.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<PotentialFunctor>>();
@@ -27,9 +27,9 @@ WOO_REGISTER_OBJECT(PotentialDispatcher);
 
 #include<woo/pkg/dem/Sphere.hpp>
 struct Pot1_Sphere: public PotentialFunctor{
-	Real boundingSphereRadius(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	Real boundingSphereRadius(const shared_ptr<Shape>&) override;
 	Real pot(const shared_ptr<Shape>& s, const Vector3r& x);
-	PotFuncType funcPotentialValue(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	PotFuncType funcPotentialValue(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Sphere);
 	#define woo_dem_Pot1_Sphere__CLASS_BASE_DOC Pot1_Sphere,PotentialFunctor,"Fuctor computing potential for spheres."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Pot1_Sphere__CLASS_BASE_DOC);
@@ -39,7 +39,7 @@ WOO_REGISTER_OBJECT(Pot1_Sphere);
 #include<woo/pkg/dem/Wall.hpp>
 struct Pot1_Wall: public PotentialFunctor{
 	Real pot(const shared_ptr<Shape>& s, const Vector3r& x);
-	PotFuncType funcPotentialValue(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	PotFuncType funcPotentialValue(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Wall);
 	#define woo_dem_Pot1_Wall__CLASS_BASE_DOC Pot1_Wall,PotentialFunctor,"Fuctor computing potential for spheres."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Pot1_Wall__CLASS_BASE_DOC);
@@ -48,7 +48,7 @@ WOO_REGISTER_OBJECT(Pot1_Wall);
 
 struct Cg2_Shape_Shape_L6Geom__Potential: public Cg2_Any_Any_L6Geom__Base{
 	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C);
-	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) override;
 	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d);
 	#define woo_dem_Cg2_Shape_Shape_L6Geom__Potential__CLASS_BASE_DOC_ATTRS \
 		Cg2_Shape_Shape_L6Geom__Potential,Cg2_Any_Any_L6Geom__Base,"Compute contact configuration from potential functions for respective colliding particles.", \

@@ -45,7 +45,7 @@ struct Renderer: public Object{
 		void drawPeriodicCell();
 		
 		// check API -- and nothing else
-		void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) WOO_CXX11_OVERRIDE;
+		void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
 
 	private:
 		void resetSpecularEmission();

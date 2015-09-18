@@ -105,11 +105,8 @@ using std::abs;
 
 // override keyword not supported until gcc 4.7
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ < 7
-	// #define WOO_CXX11_OVERRIDE
+	// #define override
 	#error GCC<=4.6 is no longer supported
-#else
-	// c++11
-	#define WOO_CXX11_OVERRIDE override
 #endif
 
 // includes python headers, which also define PY_MAJOR_VERSION

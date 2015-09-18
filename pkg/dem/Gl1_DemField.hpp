@@ -18,7 +18,7 @@ GL_DISPATCHER(GlCPhysDispatcher,GlCPhysFunctor);
 
 
 struct Gl1_DemField: public GlFieldFunctor{
-	virtual void go(const shared_ptr<Field>&, GLViewInfo*) WOO_CXX11_OVERRIDE;
+	virtual void go(const shared_ptr<Field>&, GLViewInfo*) override;
 	GLViewInfo* viewInfo; // set when called, so that it does not have to be passed around
 	shared_ptr<DemField> dem; // used by do* methods
 	void doShape();
@@ -32,7 +32,7 @@ struct Gl1_DemField: public GlFieldFunctor{
 	void initAllRanges();
 
 
-	void setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr) WOO_CXX11_OVERRIDE;
+	void setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr) override;
 
 
 	Vector3r getNodeVel(const shared_ptr<Node>& n) const;

@@ -7,8 +7,8 @@
 
 
 struct Rod: public Shape{
-	int numNodes() const WOO_CXX11_OVERRIDE { return 2; }
-	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) WOO_CXX11_OVERRIDE;
+	int numNodes() const override { return 2; }
+	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
 	#define woo_dem_Rod__CLASS_BASE_DOC_ATTRS_CTOR \
 		Rod,Shape,"Line element without internal forces, wyth circular cross-section and hemi-spherical caps at both ends. Geometrically the same :obj:`Capsule`, but with 2 nodes.", \
 		((Real,radius,NaN,,"Radius of the rod.")) \
@@ -34,7 +34,7 @@ struct Truss: public Rod{
 WOO_REGISTER_OBJECT(Truss);
 
 struct Cg2_Rod_Sphere_L6Geom: public Cg2_Any_Any_L6Geom__Base{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	#define woo_dem_Cg2_Rod_Sphere_L6Geom__CLASS_BASE_DOC \
 		Cg2_Rod_Sphere_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact between :obj:`Rod` and :obj:`Sphere`. Uses attributes of :obj:`Cg2_Sphere_Sphere_L6Geom`."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Cg2_Rod_Sphere_L6Geom__CLASS_BASE_DOC);
@@ -48,7 +48,7 @@ WOO_REGISTER_OBJECT(Cg2_Rod_Sphere_L6Geom);
 #ifdef WOO_OPENGL
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Rod: public GlShapeFunctor{
-	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	FUNCTOR1D(Rod);
 	#define woo_dem_Gl1_Rod__CLASS_BASE_DOC_ATTRS \
 		Gl1_Rod,GlShapeFunctor,"Render truss particles", \
@@ -63,16 +63,16 @@ WOO_REGISTER_OBJECT(Gl1_Rod);
 #endif
 
 struct Bo1_Rod_Aabb: public BoundFunctor{
-	void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Rod);
 	WOO_CLASS_BASE_DOC(Bo1_Rod_Aabb,BoundFunctor,"Compute :obj:`woo.dem.Aabb` of a :obj:`Rod` particle")
 };
 WOO_REGISTER_OBJECT(Bo1_Rod_Aabb);
 
 struct In2_Truss_ElastMat: public IntraFunctor{
-	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	FUNCTOR2D(Truss,ElastMat);
-	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const WOO_CXX11_OVERRIDE;
+	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override;
 	WOO_CLASS_BASE_DOC_ATTRS(In2_Truss_ElastMat,IntraFunctor,"Compute elastic response of cylinder determined by 2 nodes.",
 		((bool,setL0,true,,"Automatically set equilibrium length of truss, when first encountered."))
 		/*attrs*/

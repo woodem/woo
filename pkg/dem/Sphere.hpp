@@ -8,18 +8,18 @@
 // NB: workaround for https://bugs.launchpad.net/woo/+bug/528509 removed
 namespace woo{
 	struct Sphere: public Shape{
-		void selfTest(const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
-		int numNodes() const WOO_CXX11_OVERRIDE { return 1; }
-		void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) WOO_CXX11_OVERRIDE;
-		void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>&nn, vector<Real>& raw) const WOO_CXX11_OVERRIDE;
-		bool isInside(const Vector3r& pt) const WOO_CXX11_OVERRIDE;
+		void selfTest(const shared_ptr<Particle>&) override;
+		int numNodes() const override { return 1; }
+		void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) override;
+		void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>&nn, vector<Real>& raw) const override;
+		bool isInside(const Vector3r& pt) const override;
 		// update dynamic properties (mass, intertia) of the sphere based on current radius
-		void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) WOO_CXX11_OVERRIDE;
-		virtual string pyStr() const WOO_CXX11_OVERRIDE { return "<Sphere r="+to_string(radius)+" @ "+lexical_cast<string>(this)+">"; }
-		Real equivRadius() const WOO_CXX11_OVERRIDE { return radius; }
-		Real volume() const WOO_CXX11_OVERRIDE;
-		AlignedBox3r alignedBox() const WOO_CXX11_OVERRIDE;
-		void applyScale(Real scale) WOO_CXX11_OVERRIDE;
+		void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
+		virtual string pyStr() const override { return "<Sphere r="+to_string(radius)+" @ "+lexical_cast<string>(this)+">"; }
+		Real equivRadius() const override { return radius; }
+		Real volume() const override;
+		AlignedBox3r alignedBox() const override;
+		void applyScale(Real scale) override;
 		#define woo_dem_Sphere__CLASS_BASE_DOC_ATTRS_CTOR \
 			Sphere,Shape,"Spherical particle.", \
 			((Real,radius,NaN,AttrTrait<>().lenUnit(),"Radius.")), \
@@ -31,7 +31,7 @@ namespace woo{
 WOO_REGISTER_OBJECT(Sphere);
 
 struct Bo1_Sphere_Aabb: public BoundFunctor{
-	void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&) override;
 	void goGeneric(const shared_ptr<Shape>& sh, Vector3r halfSize);
 	FUNCTOR1D(Sphere);
 	#define woo_dem_Bo1_Sphere_Aabb__CLASS_BASE_DOC_ATTRS \
@@ -42,7 +42,7 @@ struct Bo1_Sphere_Aabb: public BoundFunctor{
 WOO_REGISTER_OBJECT(Bo1_Sphere_Aabb);
 
 struct In2_Sphere_ElastMat: public IntraFunctor{
-	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	FUNCTOR2D(Sphere,ElastMat);
 	#ifdef WOO_DEBUG
 		#define woo_dem_In2_Sphere_ElastMat__watch__DEBUG ((Vector2i,watch,Vector2i(-1,-1),,"Print detailed information about contact having those ids (debugging only)"))
@@ -61,8 +61,8 @@ WOO_REGISTER_OBJECT(In2_Sphere_ElastMat);
 
 
 struct Cg2_Sphere_Sphere_L6Geom: public Cg2_Any_Any_L6Geom__Base{
-	bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
-	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
+	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) override;
 	#define woo_dem_Cg2_Sphere_Sphere_L6Geom__CLASS_BASE_DOC_ATTRS \
 		Cg2_Sphere_Sphere_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact of 2 spheres. Detailed documentation in py/_extraDocs.py", \
 		((Real,distFactor,1,,"Create interaction if spheres are not futher than ``|distFactor|*(r1+r2)``. If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the 'zero' one)."))
@@ -93,7 +93,7 @@ class Gl1_Sphere: public GlShapeFunctor{
 		// radius is radius for sphere, and it can be set to 1.0 for ellipsoid (containing radii inside scale)
 		void renderScaledSphere(const shared_ptr<Shape>&, const Vector3r&, bool,const GLViewInfo&, const Real& radius, const Vector3r& scaleAxes=Vector3r(NaN,NaN,NaN));
 	public:
-		virtual void go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) WOO_CXX11_OVERRIDE {
+		virtual void go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) override {
 			renderScaledSphere(sh,shift,wire2,glInfo,sh->cast<Sphere>().radius);
 		}
 	#define woo_dem_Gl1_Sphere__CLASS_BASE_DOC_ATTRS \

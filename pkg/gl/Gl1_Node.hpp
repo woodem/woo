@@ -4,7 +4,7 @@
 
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Node: public GlNodeFunctor{
-	virtual void go(const shared_ptr<Node>&, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	virtual void go(const shared_ptr<Node>&, const GLViewInfo&) override;
 	RENDERS(Node);
 	#define woo_dem_Gl1_Node__CLASS_BASE_DOC_ATTRS \
 		Gl1_Node,GlNodeFunctor,"Render generic :obj:`woo.dem.Node`.", \

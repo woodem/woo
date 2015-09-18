@@ -3,10 +3,10 @@
 
 struct Suspicious: public PeriodicEngine {
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
-	void run() WOO_CXX11_OVERRIDE;
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
+	void run() override;
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 		boost::mutex errMutex; // guard errPar and errCon while the engine is active
 	#endif
 	#define woo_dem_Suspicious__CLASS_BASE_DOC_ATTRS \

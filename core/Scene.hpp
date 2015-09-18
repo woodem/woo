@@ -145,7 +145,7 @@ struct Scene: public Object{
 		PausedContextManager* pyPaused(){ return new PausedContextManager(static_pointer_cast<Scene>(shared_from_this())); }
 
 		// override Object::boostSave, to set lastSave correctly
-		void boostSave(const string& out) WOO_CXX11_OVERRIDE;
+		void boostSave(const string& out) override;
 		void saveTmp(const string& slot, bool quiet=true);
 
 		// expand {tagName} in given string

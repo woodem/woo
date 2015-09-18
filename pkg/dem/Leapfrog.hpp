@@ -7,15 +7,15 @@
 #endif
 
 struct ForceResetter: public Engine{
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
-	void run() WOO_CXX11_OVERRIDE;
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
+	void run() override;
 	#define woo_dem_ForceResetter__CLASS_BASE_DOC ForceResetter,Engine,"Reset forces on nodes in DEM field."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_ForceResetter__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(ForceResetter);
 
 struct Leapfrog: public Engine {
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 
 	void nonviscDamp1st(Vector3r& force, const Vector3r& vel);
 	void nonviscDamp2nd(const Real& dt, const Vector3r& force, const Vector3r& vel, Vector3r& accel);
@@ -37,7 +37,7 @@ struct Leapfrog: public Engine {
 	Real dt; // updated from scene at every call
 	Matrix3r dGradV, midGradV; // dtto
 
-	void run() WOO_CXX11_OVERRIDE;
+	void run() override;
 
 	#define woo_dem_Leapfrog__CLASS_BASE_DOC_ATTRS \
 		Leapfrog,Engine,ClassTrait().doc("Engine integrating newtonian motion equations, using the leap-frog scheme. See :ref:`theory-motion-integration` for details.").section("Motion integration","TODO",{"ForceResetter","DynDt","DemData","Impose","Tracer","AxialGravity"}), \

@@ -76,11 +76,11 @@ struct ParticleGenerator: public Object{
 WOO_REGISTER_OBJECT(ParticleGenerator);
 
 struct MinMaxSphereGenerator: public ParticleGenerator{
-	std::tuple<Real,vector<ParticleAndBox>> operator()(const shared_ptr<Material>&m, const Real& time) WOO_CXX11_OVERRIDE;
-	Real critDt(Real density, Real young) WOO_CXX11_OVERRIDE; 
-	bool isSpheresOnly() const WOO_CXX11_OVERRIDE { return true; }
-	Real padDist() const WOO_CXX11_OVERRIDE{ return dRange.minCoeff()/2.; }
-	Vector2r minMaxDiam() const WOO_CXX11_OVERRIDE { return dRange; }
+	std::tuple<Real,vector<ParticleAndBox>> operator()(const shared_ptr<Material>&m, const Real& time) override;
+	Real critDt(Real density, Real young) override; 
+	bool isSpheresOnly() const override { return true; }
+	Real padDist() const override{ return dRange.minCoeff()/2.; }
+	Vector2r minMaxDiam() const override { return dRange; }
 	#define woo_dem_MinMaxSphereGenerator_CLASS_BASE_DOC_ATTRS \
 		MinMaxSphereGenerator,ParticleGenerator,"Generate particles with given minimum and maximum radius", \
 		((Vector2r,dRange,Vector2r(NaN,NaN),,"Minimum and maximum radius of generated spheres")) 
@@ -97,7 +97,7 @@ struct ParticleShooter: public Object{
 WOO_REGISTER_OBJECT(ParticleShooter);
 
 struct AlignedMinMaxShooter: public ParticleShooter{
-	void operator()(const shared_ptr<Node>& n) WOO_CXX11_OVERRIDE {
+	void operator()(const shared_ptr<Node>& n) override {
 		if(isnan(vRange.maxCoeff())){ throw std::runtime_error("AlignedMinMaxShooter.vRange: must not contain NaN."); }
 		n->getData<DemData>().vel=dir*(vRange[0]+Mathr::UnitRandom()*(vRange[1]-vRange[0]));
 		n->getData<DemData>().angVel=Vector3r::Zero();
@@ -124,7 +124,7 @@ WOO_REGISTER_OBJECT(SpatialBias);
 
 struct AxialBias: public SpatialBias{
 	void postLoad(AxialBias&,void*);
-	Vector3r unitPos(const Real& diam) WOO_CXX11_OVERRIDE;
+	Vector3r unitPos(const Real& diam) override;
 	#define woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS \
 		AxialBias,SpatialBias,"Bias position (within unit interval) along :obj:`axis` :math:`p`, so that radii are distributed along :obj:`axis`, as in :math:`p=\\frac{d-d_0}{d_1-d_0}+f\\left(a-\\frac{1}{2}\\right)`, where :math:`f` is the :obj:`fuzz`, :math:`a` is unit random number, :math:`d` is the current particle diameter and :math:`d_0` and :math:`d_1` are diameters at the lower and upper end (:obj:`d01`). :math:`p` is clamped to :math:`\\rangle0,1\\langle` after the computation.", \
 			((int,axis,0,AttrTrait<Attr::triggerPostLoad>(),"Axis which is biased.")) \
@@ -136,7 +136,7 @@ WOO_REGISTER_OBJECT(AxialBias);
 
 struct PsdAxialBias: public AxialBias {
 	void postLoad(PsdAxialBias&,void*);
-	Vector3r unitPos(const Real& diam) WOO_CXX11_OVERRIDE;
+	Vector3r unitPos(const Real& diam) override;
 	#define woo_dem_PsdAxialBias__CLASS_BASE_DOC_ATTRS \
 		PsdAxialBias,AxialBias,"Bias position based on PSD curve, so that fractions get the amount of space they require according to their percentage. The PSD must be specified with mass fractions, using With :obj:`discrete` (suitable for use with :obj:`PsdParticleGenerator.discrete`), the whole interval between the current and previous radius will be used with uniform probability, allowing for layered particle arangement. The :obj:`d01` attribute is ignored with PSD.", \
 			((vector<Vector2r>,psdPts,,AttrTrait<Attr::triggerPostLoad>(),"Points of the mapping function, similar to :obj:`PsdParticleGenerator.psdPts`."))\
@@ -151,7 +151,7 @@ WOO_REGISTER_OBJECT(PsdAxialBias);
 
 struct LayeredAxialBias: public AxialBias {
 	void postLoad(LayeredAxialBias&,void*);
-	Vector3r unitPos(const Real& diam) WOO_CXX11_OVERRIDE;
+	Vector3r unitPos(const Real& diam) override;
 	#define woo_dem_LayeredAxialBias__CLASS_BASE_DOC_ATTRS \
 		LayeredAxialBias,AxialBias,"Bias position so that particles occupy different layers based on their diameter. This is similar to :obj:`PsdAxialBias` with :obj:`~PsdAxialBias.discrete`, but allows for more flexibility, such as one fraction occupying multiple non-adjacent layers.", \
 		((vector<VectorXr>,layerSpec,,AttrTrait<Attr::triggerPostLoad>(),"Vector specifying layering; each item contains the following numbers: ``dMin, dMax, xMin0, xMax0, xMin1, xMax1, ...``. A particle which falls within ``dMin, dMax`` will be placed, with uniform probability, into intervals specified by other couples. Coordinates are given in normalized space, so ``xMin..xMax`` must lie in in 〈0,1〉. Particles which do not fall into any fraction will not be biased (thus placed uniformly randomly), and a warning will be issued.")) \
@@ -163,7 +163,7 @@ WOO_REGISTER_OBJECT(LayeredAxialBias);
 
 struct NonuniformAxisPlacementBias: public SpatialBias{
 	void postLoad(NonuniformAxisPlacementBias&,void*);
-	Vector3r unitPos(const Real& diam) WOO_CXX11_OVERRIDE;
+	Vector3r unitPos(const Real& diam) override;
 	#define woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS \
 		NonuniformAxisPlacementBias,SpatialBias,"Distribute particle placement probability non-uniformly along given :obj:`axis`, following a piecewise-linear probability density function. ", \
 		((int,axis,0,AttrTrait<Attr::triggerPostLoad>(),"Biased axis.")) \
@@ -180,12 +180,12 @@ struct Collider;
 
 struct RandomInlet: public Inlet{
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	virtual Vector3r randomPosition(const Real& read, const Real& padDist){ throw std::runtime_error("Calling RandomInlet.randomPosition	(abstract method); use derived classes."); }
 	virtual bool validateBox(const AlignedBox3r& b) { throw std::runtime_error("Calling ParticleFactor.validateBox (abstract method); use derived classes."); }
-	void run() WOO_CXX11_OVERRIDE;
+	void run() override;
 	void pyClear(){ if(generator) generator->clear(); num=0; mass=0; stepGoalMass=0; /* do not reset stepPrev! */ }
-	Real critDt() WOO_CXX11_OVERRIDE; 
+	Real critDt() override; 
 	shared_ptr<Collider> collider;
 	enum{MAXATT_ERROR=0,MAXATT_DEAD,MAXATT_WARN,MAXATT_SILENT};
 	bool spheresOnly; // set at each step, queried from the generator
@@ -223,16 +223,16 @@ new particles can cross the boundary; note however that this is not properly sup
 */
 	// #define BOX_FACTORY_PERI
 struct BoxInlet: public RandomInlet{
-	Vector3r randomPosition(const Real& rad, const Real& padDist) WOO_CXX11_OVERRIDE;
+	Vector3r randomPosition(const Real& rad, const Real& padDist) override;
 	#ifdef BOX_FACTORY_PERI
-		bool validateBox(const AlignedBox3r& b) WOO_CXX11_OVERRIDE { return scene->isPeriodic?box.contains(b):validatePeriodicBox(b); }
+		bool validateBox(const AlignedBox3r& b) override { return scene->isPeriodic?box.contains(b):validatePeriodicBox(b); }
 		bool validatePeriodicBox(const AlignedBox3r& b) const;
 	#else
-		bool validateBox(const AlignedBox3r& b) WOO_CXX11_OVERRIDE { return box.contains(b); }
+		bool validateBox(const AlignedBox3r& b) override { return box.contains(b); }
 	#endif
 
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE {
+		void render(const GLViewInfo&) override {
 			if(isnan(glColor)) return;
 			GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
 			renderMassAndRate(box.center());
@@ -254,10 +254,10 @@ struct BoxInlet: public RandomInlet{
 WOO_REGISTER_OBJECT(BoxInlet);
 
 struct CylinderInlet: public RandomInlet{
-	Vector3r randomPosition(const Real& rad, const Real& padDist) WOO_CXX11_OVERRIDE; /* http://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly */
-	bool validateBox(const AlignedBox3r& b) WOO_CXX11_OVERRIDE; /* check all corners are inside the cylinder */
+	Vector3r randomPosition(const Real& rad, const Real& padDist) override; /* http://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly */
+	bool validateBox(const AlignedBox3r& b) override; /* check all corners are inside the cylinder */
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 	#endif
 
 	#define woo_dem_CylinderInlet__CLASS_BASE_DOC_ATTRS \
@@ -274,7 +274,7 @@ WOO_REGISTER_OBJECT(CylinderInlet);
 
 struct BoxInlet2d: public BoxInlet{
 	Vector2r flatten(const Vector3r& v){ return Vector2r(v[(axis+1)%3],v[(axis+2)%3]); }
-	bool validateBox(const AlignedBox3r& b) WOO_CXX11_OVERRIDE { return AlignedBox2r(flatten(box.min()),flatten(box.max())).contains(AlignedBox2r(flatten(b.min()),flatten(b.max()))); }
+	bool validateBox(const AlignedBox3r& b) override { return AlignedBox2r(flatten(box.min()),flatten(box.max())).contains(AlignedBox2r(flatten(b.min()),flatten(b.max()))); }
 	#define woo_dem_BoxInlet2d__CLASS_BASE_DOC_ATTRS \
 		BoxInlet2d,BoxInlet,"Generate particles inside axis-aligned plane (its normal axis is given via the :obj:`axis` attribute; particles are allowed to stick out of that plane.", \
 		((short,axis,2,,"Axis normal to the plane in which particles are generated.")) 
@@ -283,11 +283,11 @@ struct BoxInlet2d: public BoxInlet{
 WOO_REGISTER_OBJECT(BoxInlet2d);
 
 struct ArcInlet: public RandomInlet{
-	Vector3r randomPosition(const Real& rad, const Real& padDist) WOO_CXX11_OVERRIDE;
-	bool validateBox(const AlignedBox3r& b) WOO_CXX11_OVERRIDE;
+	Vector3r randomPosition(const Real& rad, const Real& padDist) override;
+	bool validateBox(const AlignedBox3r& b) override;
 	void postLoad(ArcInlet&, void* attr);
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 	#endif
 	#define woo_dem_ArcInlet__CLASS_BASE_DOC_ATTRS \
 		ArcInlet,RandomInlet,"Inlet generating particles in prismatic arc (revolved rectangle) specified using `cylindrical coordinates <http://en.wikipedia.org/wiki/Cylindrical_coordinate_system>`__ (with the ``ISO 31-11`` convention, as mentioned at the Wikipedia page) in a local system.", \
@@ -301,7 +301,7 @@ WOO_REGISTER_OBJECT(ArcInlet);
 
 #if 0
 struct ArcShooter: public ParticleShooter{
-	void operator()(const shared_ptr<Node>& node) WOO_CXX11_OVERRIDE {
+	void operator()(const shared_ptr<Node>& node) override {
 	}
 	// void postLoad(ArcShooter&, void*){ dir.normalize(); }
 	#define woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS \
