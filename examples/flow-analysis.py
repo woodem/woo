@@ -22,7 +22,7 @@ S=woo.master.scene=Scene(
             materials=[m],
         ),
         VtkExport(stepPeriod=1,nDo=1,out='/tmp/{id}',mkDir=True), # to export mesh, which is visible in flow analysis 
-        FlowAnalysis(stepPeriod=50,box=domain,dLim=[.02],cellSize=.01),
+        FlowAnalysis(stepPeriod=50,box=domain,dLim=[.02],cellSize=.01,porosity=True),
         PyRunner(20000,initRun=False,nDo=1,command='import woo.paraviewscript\nwoo.paraviewscript.fromFlowAnalysis(S.engines[-2],launch=True); S.stop()')
     ]
 )

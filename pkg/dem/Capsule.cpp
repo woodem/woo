@@ -19,6 +19,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Sphere_Capsule_L6Geom__CLASS_BASE_DOC);
 void Capsule::selfTest(const shared_ptr<Particle>& p){
 	if(!(radius>0.) || !(shaft>=0.)) throw std::runtime_error("Capsule #"+to_string(p->id)+": radius must be positive and shaft non-negative (current: radius="+to_string(radius)+", shaft="+to_string(shaft)+").");
 	if(!numNodesOk()) throw std::runtime_error("Capsule #"+to_string(p->id)+": numNodesOk() failed: must be 1, not "+to_string(nodes.size())+".");
+	Shape::selfTest(p);
 }
 
 Real Capsule::volume() const {

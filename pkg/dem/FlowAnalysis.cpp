@@ -2,6 +2,7 @@
 
 #include<woo/pkg/dem/FlowAnalysis.hpp>
 #include<woo/pkg/dem/Sphere.hpp>
+#include<woo/pkg/dem/Funcs.hpp>
 
 #include<vtkUniformGrid.h>
 #include<vtkPoints.h>
@@ -46,7 +47,7 @@ void FlowAnalysis::setupGrid(){
 }
 
 
-void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const shared_ptr<Node>& node){
+void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const Real& solidRatio, const shared_ptr<Node>& node){
 	const auto& dyn(node->getData<DemData>());
 	Real V(pow(cellSize,3));
 	// all things saved are actually densities over the volume of a single cell
@@ -80,6 +81,9 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const s
 	// The rest is checked in the loop below with validIjkRange;
 	// that ensure that even points just touching the grid from outside are accounted for correctly.
 	Vector3r n=(node->pos-ijk2xyz(ijk))/cellSize; // normalized coordinate in the cube (0..1)x(0..1)x(0..1)
+	if(n.minCoeff()<0 || n.maxCoeff()>1){
+		LOG_ERROR("n="<<n.transpose()<<", ijk="<<ijk.transpose()<<", pos="<<node->pos.transpose()<<", ijk2xyz="<<ijk2xyz(ijk));
+	}
 	// trilinear interpolation
 	const Real& x(n[0]); const Real& y(n[1]); const Real& z(n[2]);
 	Real X(1-x), Y(1-y), Z(1-z);
@@ -102,7 +106,7 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const s
 		if(!validIjkRange.contains(pts[ii])) continue;
 		// subarray where we write the actual data for this point
 		auto pt(data[fraction][pts[ii][0]][pts[ii][1]][pts[ii][2]]); 
-		const Real& w(weights[ii]);
+		const Real& w(weights[ii]); /* ensured by validIjkRange */ assert(w>0);
 		pt[PT_FLOW_X]+=w*momentum_V[0];
 		pt[PT_FLOW_Y]+=w*momentum_V[1];
 		pt[PT_FLOW_Z]+=w*momentum_V[2];
@@ -112,7 +116,7 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const s
 		pt[PT_EK]+=w*Ek_V;
 		pt[PT_SUM_WEIGHT]+=w*1.;
 		pt[PT_SUM_DIAM]+=w*diameter; // the average is computed later, dividing by PT_SUM_WEIGHT
-		pt[PT_SUM_RELVOL]+=w*min(V,M_PI*pow(diameter,3)/6.)/V; // relative solid volume (0<=v<=1)
+		if(!isnan(solidRatio)) pt[PT_SUM_SOLID_RATIO]+=w*solidRatio;
 		assert(!isnan(pt[PT_FLOW_X]) && !isnan(pt[PT_FLOW_Y]) && !isnan(pt[PT_FLOW_Z]) && !isnan(pt[PT_EK]) && !isnan(pt[PT_SUM_WEIGHT]));
 	}
 };
@@ -120,13 +124,16 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const s
 void FlowAnalysis::addCurrentData(){
 	// point which would even just touch the box are interesting for us
 	AlignedBox3r enlargedBox(box.min()-Vector3r::Ones()*cellSize,box.max()+Vector3r::Ones()*cellSize);
+	vector<Real> poroData;
+	if(porosity) poroData=DemFuncs::boxPorosity(static_pointer_cast<DemField>(field),enlargedBox);
 	for(const auto& p: *(dem->particles)){
 		if(mask!=0 && (p->mask&mask)==0) continue;
 		//if(!p->shape->isA<Sphere>()) continue;
 		Real radius=p->shape->equivRadius();
 		if(isnan(radius)) continue;
 		if(!enlargedBox.contains(p->shape->nodes[0]->pos)) continue;
-		addOneParticle(radius*2.,p->mask,p->shape->nodes[0]);
+		assert(!(porosity && poroData.size()<=p->id));
+		addOneParticle(radius*2.,p->mask,(porosity?1-poroData[p->id]:NaN),p->shape->nodes[0]);
 	}
 };
 
@@ -165,12 +172,14 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 	if(nFractions<=0) throw std::runtime_error("FlowAnalysis.nFractions<=0?!!");
 	auto grid=vtkMakeGrid();
 	auto flow=vtkMakeArray(grid,"flow (momentum density)",3);
-	auto vel=vtkMakeArray(grid,"velocity",3);
 	auto flowNorm=vtkMakeArray(grid,"|flow|",1);
 	auto ek=vtkMakeArray(grid,"Ek density",1);
 	auto hitRate=vtkMakeArray(grid,"hit rate",1);
+	auto sumWeight=vtkMakeArray(grid,"sum weight",1);
+
 	auto diam=vtkMakeArray(grid,"avg. diameter",1);
-	auto poro=vtkMakeArray(grid,"avg. porosity",1);
+	auto solid=vtkMakeArray(grid,"avg. solid ratio",1);
+	auto vel=vtkMakeArray(grid,"avg. velocity",3);
 	// no fractions given, export all of them together
 	if(fractions.empty()){ for(size_t i=0; i<(size_t)nFractions; i++) fractions.push_back(i); }
 
@@ -185,34 +194,27 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 					if(cellData) dataId=grid->ComputeCellId(ijk);
 					else dataId=grid->ComputePointId(ijk);
 					const auto ptData(data[fraction][i][j][k]);
-					// increment flow vector
-					double f[3];
-					flow->GetTupleValue(dataId,f);
-					f[0]+=ptData[PT_FLOW_X]/timeSpan;
-					f[1]+=ptData[PT_FLOW_Y]/timeSpan;
-					f[2]+=ptData[PT_FLOW_Z]/timeSpan;
-					flow->SetTupleValue(dataId,f);
-					// increment scalars
+					/* quantities SUMMED over fractions */
+					// flow vector
+					Vector3r f;
+					flow->GetTupleValue(dataId,f.data());
+					flow->SetTupleValue(dataId,(f+Vector3r(ptData[PT_FLOW_X],ptData[PT_FLOW_Y],ptData[PT_FLOW_Z])/timeSpan).eval().data());
+					// scalars
 					*(ek->GetPointer(dataId))+=ptData[PT_EK]/timeSpan;
 					*(hitRate->GetPointer(dataId))+=ptData[PT_SUM_WEIGHT]/timeSpan;
-					// avoid NaNs due to division
-					if(ptData[PT_SUM_WEIGHT]!=0.){
-						*(diam->GetPointer(dataId))+=ptData[PT_SUM_DIAM]/ptData[PT_SUM_WEIGHT];
-						// sums solid ratio, 1-solidRatio computed in the next loop
-						/* consider only relative fraction weight in this cell */
-						Real ws=0.; for(int _z=0; _z<nFractions; _z++) ws+=data[_z][i][j][k][PT_SUM_WEIGHT];
-						*(poro->GetPointer(dataId))+=ptData[PT_SUM_RELVOL]*(ptData[PT_SUM_WEIGHT]/ws);
-						// average velocity (added to other fractions avg.)
-						Vector3r v;
-						vel->GetTupleValue(dataId,v.data());
-						v+=Vector3r(ptData[PT_VEL_X],ptData[PT_VEL_Y],ptData[PT_VEL_Z])/ptData[PT_SUM_WEIGHT];
-						vel->SetTupleValue(dataId,v.data());
-					}
+					*(sumWeight->GetPointer(dataId))+=ptData[PT_SUM_WEIGHT];
+
+					/* quantities AVERAGED over fractions (summed here and divided by summary weight in the next loop) */
+					*(diam ->GetPointer(dataId))+=ptData[PT_SUM_DIAM];
+					*(solid->GetPointer(dataId))+=ptData[PT_SUM_SOLID_RATIO];
+					Vector3r v;
+					vel->GetTupleValue(dataId,v.data());
+					vel->SetTupleValue(dataId,(v+Vector3r(ptData[PT_VEL_X],ptData[PT_VEL_Y],ptData[PT_VEL_Z])).eval().data());
 				}
 			}
 		}
 	}
-	// extra loop to fill the |flow| and poro
+	// extra loop to fill the |flow|
 	// (cannot be done incrementally above, as sum or norms does not equal norm of sums)
 	for(int i=0; i<boxCells[0]; i++){
 		for(int j=0; j<boxCells[1]; j++){
@@ -221,13 +223,22 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 				vtkIdType dataId;
 				if(cellData) dataId=grid->ComputeCellId(ijk);
 				else dataId=grid->ComputePointId(ijk);
-				double f[3];
-				flow->GetTupleValue(dataId,f);
-				flowNorm->SetValue(dataId,sqrt(f[0]*f[0]+f[1]*f[1]+f[2]*f[2]));
-				// porosity computed from cumulated solid fraction
-				// FIXME: clamped temporarily guards against some out-of-range values,
-				// and it should be understood where they come from
-				poro->SetValue(dataId,CompUtils::clamped(1-poro->GetValue(dataId),0,1));
+				Vector3r f;
+				flow->GetTupleValue(dataId,f.data());
+				flowNorm->SetValue(dataId,f.norm());
+				// averages over all fractions
+				Real wAll=0.;
+				for(size_t fraction: fractions) wAll+=data[fraction][i][j][k][PT_SUM_WEIGHT];
+				if(wAll!=0){
+					*(diam ->GetPointer(dataId))/=wAll;
+					*(solid->GetPointer(dataId))/=wAll;
+					Vector3r v; vel->GetTupleValue(dataId,v.data()); vel->SetTupleValue(dataId,(v/wAll).eval().data());
+				} else {
+					*(diam ->GetPointer(dataId))=NaN;
+					*(solid->GetPointer(dataId))=0;
+					vel->SetTupleValue(dataId,Vector3r::Zero().eval().data());
+				}
+
 			}
 		}
 	}

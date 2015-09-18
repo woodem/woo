@@ -375,7 +375,7 @@ struct Shape: public Object, public Indexable{
 	// check that we have the right number of nodes and that each nodes has DemData; raise python exception on failures
 	void checkNodesHaveDemData() const;
 	// this will be called from DemField::selfTest for each particle
-	virtual void selfTest(const shared_ptr<Particle>& p){};
+	virtual void selfTest(const shared_ptr<Particle>& p);
 	// color manipulation
 	Real getSignedBaseColor(){ return color-trunc(color); }
 	Real getBaseColor(){ return abs(color)-trunc(abs(color)); }

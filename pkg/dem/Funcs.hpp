@@ -135,6 +135,9 @@ struct DemFuncs{
 		static bool vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<DemField>& dem, const string& filename, const Vector2i& moduloOffset=Vector2i::Zero());
 	#endif
 
+	/* return porosity of particles, compued as void volume fraction after radical Voronoi tesselation */
+	static vector<Real> boxPorosity(const shared_ptr<DemField>&, const AlignedBox3r& box);
+
 };
 
 

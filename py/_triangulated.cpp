@@ -9,7 +9,6 @@
 #include<woo/pkg/dem/Ellipsoid.hpp>
 #include<woo/pkg/dem/VtkExport.hpp>
 
-#include<woo/lib/voro++/voro++.hh>
 
 #ifdef WOO_LOG4CXX
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.triangulated");
@@ -159,59 +158,14 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 	return numTri;
 }
 
-
-// from voro++ example, http://math.lbl.gov/voro++/examples/irregular/
-// Create a wall class that, whenever called, will replace the Voronoi cell
-// with a prescribed shape, in this case a dodecahedron
-class wall_initial_shape : public voro::wall {
-	public:
-		wall_initial_shape() {
-			const double Phi=0.5*(1+sqrt(5.0));
-			// Create a dodecahedron
-			v.init(-2,2,-2,2,-2,2);
-			v.plane(0,Phi,1);v.plane(0,-Phi,1);v.plane(0,Phi,-1);
-			v.plane(0,-Phi,-1);v.plane(1,0,Phi);v.plane(-1,0,Phi);
-			v.plane(1,0,-Phi);v.plane(-1,0,-Phi);v.plane(Phi,1,0);
-			v.plane(-Phi,1,0);v.plane(Phi,-1,0);v.plane(-Phi,-1,0);
-		};
-		bool point_inside(double x,double y,double z) {return true;}
-		bool cut_cell(voro::voronoicell &c,double x,double y,double z) {
-			// Set the cell to be equal to the dodecahedron
-			c=v;
-			return true;
-		}
-		bool cut_cell(voro::voronoicell_neighbor &c,double x,double y,double z) {
-			// Set the cell to be equal to the dodecahedron
-			c=v;
-			return true;
-		}
-	private:
-		voro::voronoicell v;
-};
-
-
 py::list porosity(shared_ptr<DemField>& dem, const AlignedBox3r& box){
-	voro::container_poly con(box.min()[0],box.max()[0],box.min()[1],box.max()[1],box.min()[2],box.max()[2],5,5,5,false,false,false,8);
-	wall_initial_shape wis;
-	con.add_wall(wis);
-	for(const auto& p: *dem->particles){
-		if(!p->shape) continue;
-		const auto& sh(p->shape);
-		if(!(sh->isA<Sphere>() || sh->isA<Capsule>() || sh->isA<Ellipsoid>())) continue;
-		assert(sh->nodes.size()==1);
-		const auto& pos(sh->nodes[0]->pos);
-		if(!box.contains(pos)) continue;
-		con.put(p->id,pos[0],pos[1],pos[2],sh->equivRadius());
-	}
-	voro::c_loop_all cla(con);
-	voro::voronoicell c;
+	vector<Real> poro=DemFuncs::boxPorosity(dem,box);
 	py::list ret;
-	if(cla.start()) do if(con.compute_cell(c,cla)){
-		int id;
-		double x,y,z,r;
-		cla.pos(id,x,y,z,r);
-		ret.append(py::make_tuple(id,Vector3r(x,y,z),1-(*dem->particles)[id]->shape->volume()/c.volume()));
-	} while(cla.inc());
+	for(size_t id=0; id<poro.size(); id++){
+		if(isnan(poro[id])) continue;
+		const auto& sh((*dem->particles)[id]->shape);
+		ret.append(py::make_tuple(id,sh->nodes[0]->pos,poro[id]));
+	}
 	return ret;
 }
 
