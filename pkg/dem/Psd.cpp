@@ -9,9 +9,15 @@
 #endif
 
 
-WOO_PLUGIN(dem,(PsdSphereGenerator));
+WOO_PLUGIN(dem,(PsdSphereGenerator)(PsdClumpGenerator)(PsdCapsuleGenerator)(PharmaCapsuleGenerator));
 WOO_IMPL_LOGGER(PsdSphereGenerator);
+
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_PsdSphereGenerator__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdClumpGenerator__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdCapsuleGenerator__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdEllipsoidGenerator__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PharmaCapsuleGenerator__CLASS_BASE_DOC_ATTRS);
+
 
 
 void PsdSphereGenerator::sanitizePsd(vector<Vector2r>& psdPts, const string& src) {
@@ -203,7 +209,6 @@ py::tuple PsdSphereGenerator::pyInputPsd(bool normalize, bool cumulative, int nu
               PsdClumpGenerator
 **********************************************/
 
-WOO_PLUGIN(dem,(PsdClumpGenerator));
 WOO_IMPL_LOGGER(PsdClumpGenerator);
 
 Real PsdClumpGenerator::critDt(Real density, Real young) {
@@ -301,7 +306,6 @@ PsdClumpGenerator::operator()(const shared_ptr<Material>&mat,const Real& time){
               PsdCapsuleGenerator
 **********************************************/
 
-WOO_PLUGIN(dem,(PsdCapsuleGenerator)(PharmaCapsuleGenerator));
 WOO_IMPL_LOGGER(PsdCapsuleGenerator);
 
 
