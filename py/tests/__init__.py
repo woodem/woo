@@ -30,59 +30,59 @@ allTests=[m for m in dir() if type(eval(m))==types.ModuleType and eval(m).__name
 import woo.linterpolation,woo.log,woo.pack,woo.plot,woo.post2d,woo.timing,woo.utils,woo.batch,woo.comp,woo.triangulated
 allModules=(woo.linterpolation,woo.log,woo.pack,woo.plot,woo.post2d,woo.timing,woo.utils,woo.batch,woo.comp,woo.triangulated)
 try:
-	import woo.qt
-	allModules+=(woo.qt,)
+    import woo.qt
+    allModules+=(woo.qt,)
 except ImportError: pass
 
 # fully qualified module names
 allTestsFQ=['woo.tests.'+test for test in allTests]
 
 try:
-	import colour_runner.runner
-	MyTestRunner=colour_runner.runner.ColourTextTestRunner
+    import colour_runner.runner
+    MyTestRunner=colour_runner.runner.ColourTextTestRunner
 except ImportError:
-	print '(colour-runner not installed, using uncolored output for tests; see https://github.com/meshy/colour-runner/)'
-	MyTestRunner=unittest.TextTestRunner
+    print '(colour-runner not installed, using uncolored output for tests; see https://github.com/meshy/colour-runner/)'
+    MyTestRunner=unittest.TextTestRunner
 
 def testModule(module):
-	"""Run all tests defined in the module specified, return TestResult object 
-	(http://docs.python.org/library/unittest.html#unittest.TextTestResult)
-	for further processing.
+    """Run all tests defined in the module specified, return TestResult object 
+    (http://docs.python.org/library/unittest.html#unittest.TextTestResult)
+    for further processing.
 
-	@param module: fully-qualified module name, e.g. woo.tests.core
-	"""
-	suite=unittest.defaultTestLoader().loadTestsFromName(module)
-	return MyTestRunner(verbosity=2).run(suite)
+    @param module: fully-qualified module name, e.g. woo.tests.core
+    """
+    suite=unittest.defaultTestLoader().loadTestsFromName(module)
+    return MyTestRunner(verbosity=2).run(suite)
 
 def testAll(sysExit=False):
-	"""Run all tests defined in all woo.tests.* modules. Return
-	TestResult object for further examination. If *sysExit* is true, call sys.exit
-	with status 0 (all tests passed), 1 (some tests failed),
-	2 (an exception was raised).
-	"""
-	suite=unittest.defaultTestLoader.loadTestsFromNames(allTestsFQ)
-	import doctest, sys
-	for mod in allModules:
-		suite.addTest(doctest.DocTestSuite(mod))
-	try:
-		result=MyTestRunner(verbosity=2).run(suite)
-		if not sysExit: return result
-		if result.wasSuccessful():
-			print '*** ALL TESTS PASSED ***'
-			sys.exit(0)
-		else:
-			print 20*'*'+' SOME TESTS FAILED '+20*'*'
-			sys.exit(1)
-	except SystemExit: raise # re-raise
-	except:
-		print 20*'*'+' UNEXPECTED EXCEPTION WHILE RUNNING TESTS '+20*'*'
-		print 20*'*'+' '+str(sys.exc_info()[0])
-		print 20*'*'+" Please report bug to https://github.com/woodem/woo/issues providing the following traceback:"
-		import traceback; traceback.print_exc()
-		print 20*'*'+' Thank you '+20*'*'
-		if sysExit: sys.exit(2)
-		raise
+    """Run all tests defined in all woo.tests.* modules. Return
+    TestResult object for further examination. If *sysExit* is true, call sys.exit
+    with status 0 (all tests passed), 1 (some tests failed),
+    2 (an exception was raised).
+    """
+    suite=unittest.defaultTestLoader.loadTestsFromNames(allTestsFQ)
+    import doctest, sys
+    for mod in allModules:
+        suite.addTest(doctest.DocTestSuite(mod))
+    try:
+        result=MyTestRunner(verbosity=2).run(suite)
+        if not sysExit: return result
+        if result.wasSuccessful():
+            print '*** ALL TESTS PASSED ***'
+            sys.exit(0)
+        else:
+            print 20*'*'+' SOME TESTS FAILED '+20*'*'
+            sys.exit(1)
+    except SystemExit: raise # re-raise
+    except:
+        print 20*'*'+' UNEXPECTED EXCEPTION WHILE RUNNING TESTS '+20*'*'
+        print 20*'*'+' '+str(sys.exc_info()[0])
+        print 20*'*'+" Please report bug to https://github.com/woodem/woo/issues providing the following traceback:"
+        import traceback; traceback.print_exc()
+        print 20*'*'+' Thank you '+20*'*'
+        if sysExit: sys.exit(2)
+        raise
 
 
-	
+    
 

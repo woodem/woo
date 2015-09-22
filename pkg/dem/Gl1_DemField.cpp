@@ -27,7 +27,7 @@ WOO_PLUGIN(gl,
 );
 
 WOO_IMPL_LOGGER(Gl1_DemField);
-WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_gl_Gl1_DemField__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
 
 void Gl1_DemField::setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr){

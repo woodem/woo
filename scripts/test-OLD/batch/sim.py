@@ -1,10 +1,10 @@
 import woo, woo.batch, woo.core
 S=woo.master.scene
 woo.batch.readParamsFromTable(unknownOk=True,
-	important=6,
-	unimportant='foo',
-	this=-1,
-	notInTable='notInTable'
+    important=6,
+    unimportant='foo',
+    this=-1,
+    notInTable='notInTable'
 )
 from woo.params import table
 print S.tags['description']

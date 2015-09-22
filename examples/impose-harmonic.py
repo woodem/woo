@@ -17,16 +17,16 @@ S.dtSafety=.5
 S.dt=.5*utils.pWaveDt() # to compute oscillation freqs below
 # create cylinders
 for i,x in enumerate([-2,0,2,4,6,8,10.5,12,14]):
-	c=InfCylinder.make((x,0,3),radius=.8,axis=1,mat=mat,glAB=(-1,11))
-	c.angVel=(0,2.*(i+1),0)
-	# each of cylinders will move haronically along global x and z axes (not y)
-	c.impose=AlignedHarmonicOscillations(freqs=(1./(10000.*S.dt),float('nan'),1/(((i%3)+3)*1000.*S.dt)),amps=(.3*(i%2+1),0,.4*(i%4+1)))
-	S.dem.par.add(c)
+    c=InfCylinder.make((x,0,3),radius=.8,axis=1,mat=mat,glAB=(-1,11))
+    c.angVel=(0,2.*(i+1),0)
+    # each of cylinders will move haronically along global x and z axes (not y)
+    c.impose=AlignedHarmonicOscillations(freqs=(1./(10000.*S.dt),float('nan'),1/(((i%3)+3)*1000.*S.dt)),amps=(.3*(i%2+1),0,.4*(i%4+1)))
+    S.dem.par.add(c)
 
 try:
-	from woo import gl
-	S.gl.wall.div=10
-	S.gl.infCylinder.wire=True
+    from woo import gl
+    S.gl.wall.div=10
+    S.gl.infCylinder.wire=True
 except ImportError: pass
 
 S.saveTmp()

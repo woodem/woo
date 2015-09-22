@@ -4,8 +4,8 @@ from woo import utils,pack,export,qt
 import gts,os
 
 def Plane(v1,v2,v3,v4):
-	pts = [ [Vector3(v1),Vector3(v2),Vector3(v3),Vector3(v4)] ]
-	return pack.sweptPolylines2gtsSurface(pts,capStart=True,capEnd=True)
+    pts = [ [Vector3(v1),Vector3(v2),Vector3(v3),Vector3(v4)] ]
+    return pack.sweptPolylines2gtsSurface(pts,capStart=True,capEnd=True)
 
 # Parameters
 tc=0.001# collision time 
@@ -38,22 +38,22 @@ sp=pack.SpherePack();
 sp.makeCloud(Vector3(-.5, -.5, 0),Vector3(.5, .5, .2), Rs, Rf, int(nSpheres), False)
 spheres=O.bodies.append([utils.sphere(s[0],s[1],color=(0.929,0.412,0.412),material=dfltSpheresMat) for s in sp])
 for id in spheres:
-	s=O.bodies[id]
-	p=utils.getViscoelasticFromSpheresInteraction(s.state['mass'],tc,en,es)
-	s.mat['kn'],s.mat['cn'],s.mat['ks'],s.mat['cs']=p['kn'],p['cn'],p['ks'],p['cs']
+    s=O.bodies[id]
+    p=utils.getViscoelasticFromSpheresInteraction(s.state['mass'],tc,en,es)
+    s.mat['kn'],s.mat['cn'],s.mat['ks'],s.mat['cs']=p['kn'],p['cn'],p['ks'],p['cs']
 
 # Create engines
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	GravityEngine(gravity=[0,0,-9.81]),
-	NewtonIntegrator(damping=0),
-	ResetRandomPosition(factoryFacets=fctIds,velocity=(0,0,-2),virtPeriod=0.01,ids=spheres,point=(0,0,-.5),normal=(0,0,1),maxAttempts=100),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()],
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    GravityEngine(gravity=[0,0,-9.81]),
+    NewtonIntegrator(damping=0),
+    ResetRandomPosition(factoryFacets=fctIds,velocity=(0,0,-2),virtPeriod=0.01,ids=spheres,point=(0,0,-.5),normal=(0,0,1),maxAttempts=100),
 ]
 
 #renderer = qt.Renderer()

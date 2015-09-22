@@ -2,24 +2,24 @@ print 30*'*'+' WARNING '+30*'*'+'\nFor hardware/driver/...? reasons related to 3
 TriaxialTest(noFiles=True).load()
 from woo import qt,utils
 O.engines=O.engines+[
-	qt.SnapshotEngine(fileBase=O.tmpFilename(),label='snapshotter',iterPeriod=5,ignoreErrors=False),
-	PyRunner(iterPeriod=500,command='finito()')
+    qt.SnapshotEngine(fileBase=O.tmpFilename(),label='snapshotter',iterPeriod=5,ignoreErrors=False),
+    PyRunner(iterPeriod=500,command='finito()')
 ]
 rr=qt.Renderer()
 rr.shape,rr.intrPhys=False,True
 
 def finito():
-	"""This function will be called after 500 steps. Since SnapshotEngine waits for a new 3d view to open,
-	it must run after the script has finished and the command line appears
-	(see https://bugs.launchpad.net/woo/+bug/622669).
+    """This function will be called after 500 steps. Since SnapshotEngine waits for a new 3d view to open,
+    it must run after the script has finished and the command line appears
+    (see https://bugs.launchpad.net/woo/+bug/622669).
 
-	For that reason, O.run() is at the end of the script and this function will be called
-	once we want to exit really.
-	"""
-	utils.makeVideo(snapshotter.snapshots,out='/tmp/video.avi')
-	print "Video saved in /tmp/video.avi"
-	import sys
-	sys.exit(0)
+    For that reason, O.run() is at the end of the script and this function will be called
+    once we want to exit really.
+    """
+    utils.makeVideo(snapshotter.snapshots,out='/tmp/video.avi')
+    print "Video saved in /tmp/video.avi"
+    import sys
+    sys.exit(0)
 
 O.run()
 

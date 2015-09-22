@@ -26,9 +26,9 @@
 *********************************** SnapshotEngine ***************************
 *****************************************************************************/
 struct SnapshotEngine: public PeriodicEngine{
-	virtual void run() WOO_CXX11_OVERRIDE;
-	virtual bool needsField() WOO_CXX11_OVERRIDE { return false; }
-	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) WOO_CXX11_OVERRIDE;
+	virtual void run() override;
+	virtual bool needsField() override { return false; }
+	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
 	#define woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS \
 		SnapshotEngine,PeriodicEngine,"Periodically save snapshots of GLView(s) as .png files. Files are named :obj:`fileBase` + :obj:`counter` + ``.png`` (counter is left-padded by 0s, i.e. snap00004.png).", \
 		((string,fileBase,"",,"Basename for snapshots")) \
@@ -154,13 +154,13 @@ class GLViewer : public QGLViewer
 
 		// do fastDraw when regular (non-fast) rendering is slower than max FPS
 		// if rendering is faster, draw normally, sicne manipulation will not be slown down
-		void fastDraw() WOO_CXX11_OVERRIDE { if(!setSceneAndRenderer()) return; draw(/*withNames*/false,/*fast*/!(renderer->renderTime<(1./renderer->maxFps))
+		void fastDraw() override { if(!setSceneAndRenderer()) return; draw(/*withNames*/false,/*fast*/!(renderer->renderTime<(1./renderer->maxFps))
 		);}
-		void draw() WOO_CXX11_OVERRIDE {
+		void draw() override {
 			if(!setSceneAndRenderer()) return;
 			draw(/*withNames*/false,/*fast*/(!hasFocus() && renderer->renderTime>.9*(1./renderer->maxFps)) && framesDone>100);
 		}
-		void drawWithNames() WOO_CXX11_OVERRIDE { if(!setSceneAndRenderer()) return; draw(/*withNames*/true); }
+		void drawWithNames() override { if(!setSceneAndRenderer()) return; draw(/*withNames*/true); }
 		// this one is not virtual
 		void draw(bool withNames, bool fast=false);
 		void displayMessage(const std::string& s, int delay=2000){ QGLViewer::displayMessage(QString(s.c_str()),delay);}
@@ -185,9 +185,9 @@ class GLViewer : public QGLViewer
 		qglviewer::Vec displayedSceneCenter();
 
 		//! Adds our attributes to the QGLViewer state that can be saved
-		QDomElement domElement(const QString& name, QDomDocument& document) const  WOO_CXX11_OVERRIDE;
+		QDomElement domElement(const QString& name, QDomDocument& document) const  override;
 		//! Adds our attributes to the QGLViewer state that can be restored
-		void initFromDOMElement(const QDomElement& element) WOO_CXX11_OVERRIDE;
+		void initFromDOMElement(const QDomElement& element) override;
 
 		// if defined, snapshot will be saved to this file right after being drawn and the string will be reset.
 		// this way the caller will be notified of the frame being saved successfully.
@@ -208,18 +208,18 @@ class GLViewer : public QGLViewer
 
 		WOO_DECL_LOGGER;
 	protected:
-		virtual void keyPressEvent(QKeyEvent *e) WOO_CXX11_OVERRIDE;
-		virtual void postDraw() WOO_CXX11_OVERRIDE;
+		virtual void keyPressEvent(QKeyEvent *e) override;
+		virtual void postDraw() override;
 		// overridden in the player that doesn't get time from system clock but from the db
 		virtual string getRealTimeString();
-		virtual void closeEvent(QCloseEvent *e) WOO_CXX11_OVERRIDE;
-		virtual void postSelection(const QPoint& point) WOO_CXX11_OVERRIDE;
-		virtual void endSelection(const QPoint &point) WOO_CXX11_OVERRIDE;
-		virtual void mouseDoubleClickEvent(QMouseEvent *e) WOO_CXX11_OVERRIDE;
-		virtual void wheelEvent(QWheelEvent* e) WOO_CXX11_OVERRIDE;
+		virtual void closeEvent(QCloseEvent *e) override;
+		virtual void postSelection(const QPoint& point) override;
+		virtual void endSelection(const QPoint &point) override;
+		virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
+		virtual void wheelEvent(QWheelEvent* e) override;
 		// hijacked to optionally freeze cursor when rotating
-		virtual void mouseMoveEvent(QMouseEvent *e) WOO_CXX11_OVERRIDE;
-		virtual void mousePressEvent(QMouseEvent *e) WOO_CXX11_OVERRIDE;
+		virtual void mouseMoveEvent(QMouseEvent *e) override;
+		virtual void mousePressEvent(QMouseEvent *e) override;
 };
 
 /*! Get unconditional lock on a GL view.

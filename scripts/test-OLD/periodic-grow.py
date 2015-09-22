@@ -4,18 +4,18 @@ once in a while."""
 from woo import log,timing
 log.setLevel("InsertionSortCollider",log.TRACE)
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
-	),
-	NewtonIntegrator(damping=.6,homotheticCellResize=1)
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_Dem3DofGeom_FrictPhys_CundallStrack()],
+    ),
+    NewtonIntegrator(damping=.6,homotheticCellResize=1)
 ]
 import random
 for i in xrange(250):
-	O.bodies.append(utils.sphere(Vector3(10*random.random(),10*random.random(),10*random.random()),.5+random.random()))
+    O.bodies.append(utils.sphere(Vector3(10*random.random(),10*random.random(),10*random.random()),.5+random.random()))
 cubeSize=20
 # absolute positioning of the cell is not important
 O.periodic=True
@@ -28,9 +28,9 @@ O.run(200,True)
 rate=-1e-3*cubeSize/(O.dt*200)*Matrix3.Identity
 O.cell.velGrad=rate
 for i in range(0,25):
-	O.run(2000,True)
-	F,stiff=utils.totalForceInVolume()
-	dim=O.cell.refSize; A=Vector3(dim[1]*dim[2],dim[0]*dim[2],dim[0]*dim[1])
-	avgStress=sum([F[i]/A[i] for i in 0,1,2])/3.
-	print 'strain',(cubeSize-dim[0])/cubeSize,'avg. stress ',avgStress,'unbalanced ',utils.unbalancedForce()
+    O.run(2000,True)
+    F,stiff=utils.totalForceInVolume()
+    dim=O.cell.refSize; A=Vector3(dim[1]*dim[2],dim[0]*dim[2],dim[0]*dim[1])
+    avgStress=sum([F[i]/A[i] for i in 0,1,2])/3.
+    print 'strain',(cubeSize-dim[0])/cubeSize,'avg. stress ',avgStress,'unbalanced ',utils.unbalancedForce()
 #O.timingEnabled=True; timing.reset(); O.run(200000,True); timing.stats()

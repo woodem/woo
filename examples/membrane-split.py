@@ -11,8 +11,8 @@ from minieigen import *
 woo.master.usesApi=10101
 
 S.gl=GlSetup(
-	woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False),
-	woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel),
+    woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False),
+    woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel),
 )
 S.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
 
@@ -33,15 +33,15 @@ sp.toSimulation(S,mat=mat)
 
 # set boundary conditions and set some fake masses and inertia of mesh nodes
 for n in S.dem.nodes:
-	n.dem.blocked=''
-	if n.pos[0]==0 or (n.pos[1]==0): n.dem.blocked='xyz'
+    n.dem.blocked=''
+    if n.pos[0]==0 or (n.pos[1]==0): n.dem.blocked='xyz'
 
 # split the plate along the most part of the diagonal
 for n in [n for n in S.dem.nodes if n.pos[0]==n.pos[1]]:
-	# make the other end of the diagonal fixed as well, just so that the split effect is better visible
-	if n.pos[1]==1.: n.dem.blocked='xyz'
-	# if n.pos[0]<.2: continue
-	S.dem.splitNode(n,[p for p in n.dem.parRef if p.shape.getCentroid()[0]>p.shape.getCentroid()[1]])
+    # make the other end of the diagonal fixed as well, just so that the split effect is better visible
+    if n.pos[1]==1.: n.dem.blocked='xyz'
+    # if n.pos[0]<.2: continue
+    S.dem.splitNode(n,[p for p in n.dem.parRef if p.shape.getCentroid()[0]>p.shape.getCentroid()[1]])
 
 S.engines=DemField.minimalEngines(damping=.4,verletDist=-0.01)+[IntraForce([In2_Membrane_ElastMat(thickness=.01,bending=True,bendThickness=.01)]),BoxOutlet(box=((-.1,-.1,-1),(1.1,1.1,1)),glColor=float('nan'))]
 

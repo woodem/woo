@@ -11,9 +11,9 @@ S.cell.setBox(2.4,2.4,2.4)
 S.cell.nextGradV=Matrix3(0.,.1,.1, -.1,0,.1, .1,-.1,-.01)
 woo.log.setLevel('MeshVolume',woo.log.TRACE)
 S.engines=[
-	woo.dem.MeshVolume(stepPeriod=1,label='meshVolume'),
-	woo.dem.Leapfrog(reset=True),
-	woo.core.PyRunner(1,'S.plot.addData(i=S.step,V=S.lab.meshVolume.vol,Vcell=S.cell.volume,ratio=S.lab.meshVolume.vol/S.cell.volume)'),
+    woo.dem.MeshVolume(stepPeriod=1,label='meshVolume'),
+    woo.dem.Leapfrog(reset=True),
+    woo.core.PyRunner(1,'S.plot.addData(i=S.step,V=S.lab.meshVolume.vol,Vcell=S.cell.volume,ratio=S.lab.meshVolume.vol/S.cell.volume)'),
 ]
 S.dt=1e-4
 S.plot.plots={'i':('V','Vcell',None,'ratio')}

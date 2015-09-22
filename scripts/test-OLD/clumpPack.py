@@ -9,16 +9,16 @@ sp.toSimulation()
 O.bodies.append(utils.wall(position=0,axis=2))
 
 O.engines=[
-	#SubdomainBalancer(),
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Wall_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(),Ig2_Wall_Sphere_ScGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_ScGeom_FrictPhys_CundallStrack()]
-	),
-	GravityEngine(gravity=(0,0,-100)),
-	NewtonIntegrator(damping=.4)
+    #SubdomainBalancer(),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Wall_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(),Ig2_Wall_Sphere_ScGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_ScGeom_FrictPhys_CundallStrack()]
+    ),
+    GravityEngine(gravity=(0,0,-100)),
+    NewtonIntegrator(damping=.4)
 ]
 O.dt=.7*utils.PWaveTimeStep()
 O.saveTmp()

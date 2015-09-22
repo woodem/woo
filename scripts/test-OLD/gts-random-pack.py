@@ -15,7 +15,7 @@ thetas=arange(0,pi/2,pi/24)
 # There is origin (translation) and orientation arguments, allowing to transform all the 3d points once computed.
 #
 # without these transformation, it would look a little simpler:
-# 	pts=pack.revolutionSurfaceMeridians([[(pt[0],pt[1]+2e-3*theta) for pt in poly] for theta in thetas],thetas
+#     pts=pack.revolutionSurfaceMeridians([[(pt[0],pt[1]+2e-3*theta) for pt in poly] for theta in thetas],thetas
 #
 pts=pack.revolutionSurfaceMeridians([[(pt[0],pt[1]+1e-2*theta) for pt in poly] for theta in thetas],thetas,origin=Vector3(0,-.05,.1),orientation=Quaternion((1,1,0),pi/4))
 # connect meridians to make surfaces
@@ -37,11 +37,11 @@ O.bodies.append(pack.randomDensePack(pack.inGtsSurface(surf),radius=5e-3,rRelFuz
 # since horse discard most volume of its bounding box
 # Here, we would use a very crude one, however
 if 1:
-	import gts
-	horse=gts.read(open('horse.coarse.gts')) #; horse.scale(.25,.25,.25)
-	O.bodies.append(pack.gtsSurface2Facets(horse))
-	O.bodies.append(pack.randomDensePack(pack.inGtsSurface(horse),radius=5e-3,memoizeDb=memoizeDb))
-	horse.translate(.07,0,0)
-	O.bodies.append(pack.gtsSurface2Facets(horse))
-	# specifying spheresInCell makes the packing periodic, with the given number of spheres, proportions being equal to that of the predicate
-	O.bodies.append(pack.randomDensePack(pack.inGtsSurface(horse),radius=1e-3,spheresInCell=2000,memoizeDb=memoizeDb))
+    import gts
+    horse=gts.read(open('horse.coarse.gts')) #; horse.scale(.25,.25,.25)
+    O.bodies.append(pack.gtsSurface2Facets(horse))
+    O.bodies.append(pack.randomDensePack(pack.inGtsSurface(horse),radius=5e-3,memoizeDb=memoizeDb))
+    horse.translate(.07,0,0)
+    O.bodies.append(pack.gtsSurface2Facets(horse))
+    # specifying spheresInCell makes the packing periodic, with the given number of spheres, proportions being equal to that of the predicate
+    O.bodies.append(pack.randomDensePack(pack.inGtsSurface(horse),radius=1e-3,spheresInCell=2000,memoizeDb=memoizeDb))

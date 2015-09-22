@@ -24,33 +24,33 @@ sortCollider=InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Wall_Aabb()],verletDis
 
 
 S.engines=[
-	Leapfrog(damping=0.3,reset=True),
-	(sortCollider if 'sort' in sys.argv else gridCollider),
-	ContactLoop(
-		[Cg2_Sphere_Sphere_L6Geom(),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom()],
-		[Cp2_FrictMat_FrictPhys()],
-		[Law2_L6Geom_FrictPhys_IdealElPl(noSlip=True)],
-		applyForces=True,
-		label='contactLoop',
-	),
-	PyRunner(1000,'import woo.timing; print("step %d, %d contacts, %g%% real"%(S.step,len(S.dem.con),S.dem.con.realRatio()*100)); woo.timing.stats(); woo.timing.reset(); S.lab.collider.nFullRuns=0;'),
+    Leapfrog(damping=0.3,reset=True),
+    (sortCollider if 'sort' in sys.argv else gridCollider),
+    ContactLoop(
+        [Cg2_Sphere_Sphere_L6Geom(),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom()],
+        [Cp2_FrictMat_FrictPhys()],
+        [Law2_L6Geom_FrictPhys_IdealElPl(noSlip=True)],
+        applyForces=True,
+        label='contactLoop',
+    ),
+    PyRunner(1000,'import woo.timing; print("step %d, %d contacts, %g%% real"%(S.step,len(S.dem.con),S.dem.con.realRatio()*100)); woo.timing.stats(); woo.timing.reset(); S.lab.collider.nFullRuns=0;'),
 ]
 
 if 0:
-	for c,r in [((0,0,.4),.2),((1,1,1),.3),((1.3,2,2),.5),((.5,.5,.5),rr)]:
-		S.dem.par.add(Sphere.make(c,r,mask=S.lab.spheMask))
-	S.lab.collider.renderCells=True
+    for c,r in [((0,0,.4),.2),((1,1,1),.3),((1.3,2,2),.5),((.5,.5,.5),rr)]:
+        S.dem.par.add(Sphere.make(c,r,mask=S.lab.spheMask))
+    S.lab.collider.renderCells=True
 else:
-	import woo.pack
-	sp=woo.pack.SpherePack()
-	print 'Making cloud...'
-	sp.makeCloud((.1,.1,.0),(1.1,1.1,1.0),rMean=rr,rRelFuzz=.3)
-	print 'Generated cloud with %d spheres'%(len(sp))
-	sp.toSimulation_fast(S,mat=mat,mask=S.lab.spheMask)
-	print 'Spheres added to Scene'
+    import woo.pack
+    sp=woo.pack.SpherePack()
+    print 'Making cloud...'
+    sp.makeCloud((.1,.1,.0),(1.1,1.1,1.0),rMean=rr,rRelFuzz=.3)
+    print 'Generated cloud with %d spheres'%(len(sp))
+    sp.toSimulation_fast(S,mat=mat,mask=S.lab.spheMask)
+    print 'Spheres added to Scene'
 S.dem.par.add([
-	Wall.make(0,axis=2,sense=1,mat=mat,mask=S.lab.wallMask),
-	Wall.make(1.9,axis=0,sense=-1,mat=mat,mask=S.lab.wallMask)
+    Wall.make(0,axis=2,sense=1,mat=mat,mask=S.lab.wallMask),
+    Wall.make(1.9,axis=0,sense=-1,mat=mat,mask=S.lab.wallMask)
 ],nodes=False)
 
 S.saveTmp()

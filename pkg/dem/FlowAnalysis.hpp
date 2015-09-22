@@ -10,19 +10,23 @@
 
 struct FlowAnalysis: public PeriodicEngine{
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	DemField* dem; // temp only
 	typedef boost::multi_array<Real,5> boost_multi_array_real_5;
 	typedef boost::multi_array<Vector3r,3> boost_multi_array_Vector3_3;
 	typedef boost::multi_array<Real,3> boost_multi_array_real_3;
 
 	// return grid point lower or equal to this spatial point
-	inline Vector3i xyz2ijk(const Vector3r& xyz) const { /* cast rounds down properly */ return ((xyz-box.min())/cellSize).cast<int>(); }
+	inline Vector3i xyz2ijk(const Vector3r& xyz) const { 
+		// ((xyz-box.min())/cellSize).cast<int>() rounds towards zero, but we need to round down always, hence..
+		Vector3r t=(xyz-box.min())/cellSize;
+		return Vector3i(floor(t[0]),floor(t[1]),floor(t[2]));
+	}
 	// return lower grid point for this cell coordinate
 	inline Vector3r ijk2xyz(const Vector3i& ijk) const { return box.min()+ijk.cast<Real>()*cellSize; }
 
 	void setupGrid();
-	void addOneParticle(const Real& radius, const int& mask, const shared_ptr<Node>& node);
+	void addOneParticle(const Real& radius, const int& mask, const Real& solidRatio, const shared_ptr<Node>& node);
 	void addCurrentData();
 	Real avgFlowNorm(const vector<size_t> &fractions);
 
@@ -40,17 +44,15 @@ struct FlowAnalysis: public PeriodicEngine{
 	string vtkExportVectorOps(const string& out, const vector<size_t>& fracA, const vector<size_t>& fracB);
 
 
-
-
-	void run() WOO_CXX11_OVERRIDE;
+	void run() override;
 	void reset();
 
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 	#endif
 
 	// number of floats to store for each point
-	enum {PT_FLOW_X=0, PT_FLOW_Y, PT_FLOW_Z, PT_VEL_X, PT_VEL_Y, PT_VEL_Z, PT_EK, PT_SUM_WEIGHT, PT_SUM_DIAM, PT_SUM_RELVOL, NUM_PT_DATA};
+	enum {PT_FLOW_X=0, PT_FLOW_Y, PT_FLOW_Z, PT_VEL_X, PT_VEL_Y, PT_VEL_Z, PT_EK, PT_SUM_WEIGHT, PT_SUM_DIAM, PT_SUM_SOLID_RATIO, NUM_PT_DATA};
 	enum {OP_CROSS=0,OP_WEIGHTED_DIFF=1};
 
 	#define woo_dem_FlowAnalysis__CLASS_BASE_DOC_ATTRS_PY \
@@ -64,6 +66,7 @@ struct FlowAnalysis: public PeriodicEngine{
 		((Vector3i,boxCells,Vector3i::Zero(),AttrTrait<Attr::readonly>(),"Number of cells in the box (computed automatically)")) \
 		((int,mask,0,,"Particles to consider in the flow analysis (0 to consider everything).")) \
 		((bool,cellData,false,,"Write flow rate as cell data rather than point data.")) \
+		((bool,porosity,false,,"Compute (and export) solid ratio (1-porosity) for all spheroidal particles (requires triangulation of the domain at every step, hence slow and not enabled by default.")) \
 		((Real,timeSpan,0.,,"Total time that the analysis has been running.")) \
 		((Vector3r,color,Vector3r(1,1,0),AttrTrait<>().rgbColor(),"Color for rendering the domain")) \
 		, /*py*/ \

@@ -12,8 +12,8 @@ namespace clDem{ class Simulation; class Particle; };
 
 class CLDemData: public NodeData{
 public:
-	const char* getterName() const WOO_CXX11_OVERRIDE { return "clDem"; }
-	void setDataOnNode(Node& n) WOO_CXX11_OVERRIDE { n.setData(static_pointer_cast<CLDemData>(shared_from_this())); }
+	const char* getterName() const override { return "clDem"; }
+	void setDataOnNode(Node& n) override { n.setData(static_pointer_cast<CLDemData>(shared_from_this())); }
 	
 	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemData,NodeData,"Dynamic state of node.",
 		((long,clIx,,,"Index of object belonging to this node within clDem arrays (particle/contact)"))

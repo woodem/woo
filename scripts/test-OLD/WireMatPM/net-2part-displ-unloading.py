@@ -3,7 +3,7 @@
 from woo import utils, ymport, qt, plot
 
 from woo import log
-log.setLevel('Law2_ScGeom_WirePhys_WirePM',log.TRACE)	# must compile with debug option to get logs 
+log.setLevel('Law2_ScGeom_WirePhys_WirePM',log.TRACE)    # must compile with debug option to get logs 
 
 ## definition of some colors for colored text output in terminal
 BLUE = '\033[94m'
@@ -51,31 +51,31 @@ FixedSphere.dynamic=False
 MovingSphere.dynamic=False
 
 def addPlotData():
-	if O.iter < 1:
-		plot.addData( Fn=0., un=0. )
-		#plot.saveGnuplot('net-2part-displ-unloading')
-	else:
-		try:
-			i=O.interactions[FixedSphere.id,MovingSphere.id]
-			plot.addData( Fn=i.phys.normalForce.norm(), un=(O.bodies[1].state.pos[1]-O.bodies[0].state.pos[1])-a )
-			#plot.saveGnuplot('net-2part-displ-unloading')
-		except:
-			print "No interaction!"
-			O.pause()
+    if O.iter < 1:
+        plot.addData( Fn=0., un=0. )
+        #plot.saveGnuplot('net-2part-displ-unloading')
+    else:
+        try:
+            i=O.interactions[FixedSphere.id,MovingSphere.id]
+            plot.addData( Fn=i.phys.normalForce.norm(), un=(O.bodies[1].state.pos[1]-O.bodies[0].state.pos[1])-a )
+            #plot.saveGnuplot('net-2part-displ-unloading')
+        except:
+            print "No interaction!"
+            O.pause()
 
 #### define simulation to create link
 interactionRadius=2.
 O.engines = [
-	ForceResetter(),
-	InsertionSortCollider( [Bo1_Sphere_Aabb(aabbEnlargeFactor=interactionRadius,label='aabb')] ), 
+    ForceResetter(),
+    InsertionSortCollider( [Bo1_Sphere_Aabb(aabbEnlargeFactor=interactionRadius,label='aabb')] ), 
 
-	InteractionLoop(
-	[Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=interactionRadius,label='Ig2ssGeom')],
-	[Ip2_WireMat_WireMat_WirePhys(linkThresholdIteration=1,label='interactionPhys')],
-	[Law2_ScGeom_WirePhys_WirePM(linkThresholdIteration=1,label='interactionLaw')]
-	),
-	NewtonIntegrator(damping=0.),
-	PyRunner(initRun=True,iterPeriod=1,command='addPlotData()')
+    InteractionLoop(
+    [Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=interactionRadius,label='Ig2ssGeom')],
+    [Ip2_WireMat_WireMat_WirePhys(linkThresholdIteration=1,label='interactionPhys')],
+    [Law2_ScGeom_WirePhys_WirePM(linkThresholdIteration=1,label='interactionLaw')]
+    ),
+    NewtonIntegrator(damping=0.),
+    PyRunner(initRun=True,iterPeriod=1,command='addPlotData()')
 ]
 
 

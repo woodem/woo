@@ -17,15 +17,15 @@ S.cell.setBox(1,1,2)
 # attributes common to all inlets
 inletKw=dict(maxMass=-1,maxNum=-1,massRate=0,maxAttempts=200,materials=[mat])
 S.engines=[
-	woo.dem.InsertionSortCollider([woo.dem.Bo1_Sphere_Aabb(),woo.dem.Bo1_Wall_Aabb(),woo.dem.Bo1_Facet_Aabb()]),
-	# regular bias
-	woo.dem.BoxInlet(
-		box=((0,0,.2),(1,1,2)),
-		generator=woo.dem.PsdSphereGenerator(psdPts=psd),
-		# spatialBias=woo.dem.AxialBias(d01=(.02,.1),axis=2,fuzz=.5),
-		spatialBias=woo.dem.PsdAxialBias(psdPts=psd,axis=2,fuzz=.1),
-		**inletKw
-	),
+    woo.dem.InsertionSortCollider([woo.dem.Bo1_Sphere_Aabb(),woo.dem.Bo1_Wall_Aabb(),woo.dem.Bo1_Facet_Aabb()]),
+    # regular bias
+    woo.dem.BoxInlet(
+        box=((0,0,.2),(1,1,2)),
+        generator=woo.dem.PsdSphereGenerator(psdPts=psd),
+        # spatialBias=woo.dem.AxialBias(d01=(.02,.1),axis=2,fuzz=.5),
+        spatialBias=woo.dem.PsdAxialBias(psdPts=psd,axis=2,fuzz=.1),
+        **inletKw
+    ),
 ]
 
 S.one()
@@ -35,7 +35,7 @@ S.gl.renderer.iniViewDir=(0,-1,0)
 
 # abuse DEM nodes to stick labels on the top
 #for i,t in enumerate(['graded','inverted (capsules)','discrete','reordered','radial']):
-#	S.dem.nodesAppend(woo.core.Node((1+i*1.5,0,2.2),dem=woo.dem.DemData(),rep=woo.gl.LabelGlRep(text=t)))
+#    S.dem.nodesAppend(woo.core.Node((1+i*1.5,0,2.2),dem=woo.dem.DemData(),rep=woo.gl.LabelGlRep(text=t)))
 
 # woo.log.setLevel('PsdSphereGenerator',woo.log.TRACE)
 S.trackEnergy=True

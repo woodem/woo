@@ -29,6 +29,7 @@ WOO_IMPL_LOGGER(Tetra);
 void Tetra::selfTest(const shared_ptr<Particle>& p){
 	if(!numNodesOk()) throw std::runtime_error("Tetra #"+to_string(p->id)+": numNodesOk() failed (has "+to_string(nodes.size())+" nodes)");
 	for(int i:{0,1,2,3}) if((nodes[i]->pos-nodes[(i+1)%4]->pos).squaredNorm()==0) throw std::runtime_error("Tetra #"+to_string(p->id)+": nodes "+to_string(i)+" and "+to_string((i+1)%4)+" are coincident.");
+	Shape::selfTest(p);
 }
 
 Vector3r Tetra::getCentroid() const {

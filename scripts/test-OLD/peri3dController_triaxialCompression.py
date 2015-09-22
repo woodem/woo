@@ -24,56 +24,56 @@ sp.toSimulation(rot=rot)
 plot.live=False
 plot.plots={'iter':('sx','sy','sz','syz','szx','sxy',),'iter_':('ex','ey','ez','eyz','ezx','exy',),'ez':('sz',)}
 def plotAddData():
-	plot.addData(
-		iter=O.iter,iter_=O.iter,
-		sx=p3d.stress[0],sy=p3d.stress[1],sz=p3d.stress[2],
-		syz=p3d.stress[3],szx=p3d.stress[4],sxy=p3d.stress[5],
-		ex=p3d.strain[0],ey=p3d.strain[1],ez=p3d.strain[2],
-		eyz=p3d.strain[3],ezx=p3d.strain[4],exy=p3d.strain[5],
-	)
+    plot.addData(
+        iter=O.iter,iter_=O.iter,
+        sx=p3d.stress[0],sy=p3d.stress[1],sz=p3d.stress[2],
+        syz=p3d.stress[3],szx=p3d.stress[4],sxy=p3d.stress[5],
+        ex=p3d.strain[0],ey=p3d.strain[1],ez=p3d.strain[2],
+        eyz=p3d.strain[3],ezx=p3d.strain[4],exy=p3d.strain[5],
+    )
 
 O.dt=utils.PWaveTimeStep()/2
 
 # define the first part of simulation, hydrostatic compression
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],[Law2_Dem3DofGeom_FrictPhys_CundallStrack()]),
-	NewtonIntegrator(),
-	Peri3dController(	goal=(-1e7,-1e7,-1e7, 0,0,0), # Vector6 of prescribed final values
-							stressMask=0b000111,
-							nSteps=500,
-							doneHook='print "Hydrostatic load reached."; O.pause()',
-							youngEstimation=.5e9, # needed, when only nonzero prescribed values are stress
-							maxStrain=.5,
-							label='p3d'
-							),
-	PyRunner(command='plotAddData()',iterPeriod=1),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],[Law2_Dem3DofGeom_FrictPhys_CundallStrack()]),
+    NewtonIntegrator(),
+    Peri3dController(    goal=(-1e7,-1e7,-1e7, 0,0,0), # Vector6 of prescribed final values
+                            stressMask=0b000111,
+                            nSteps=500,
+                            doneHook='print "Hydrostatic load reached."; O.pause()',
+                            youngEstimation=.5e9, # needed, when only nonzero prescribed values are stress
+                            maxStrain=.5,
+                            label='p3d'
+                            ),
+    PyRunner(command='plotAddData()',iterPeriod=1),
 ]
 O.run(); O.wait()
 
 # second part, z-axis straining and constant transversal stress
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_Dem3DofGeom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],[Law2_Dem3DofGeom_FrictPhys_CundallStrack()]),
-	NewtonIntegrator(),
-	Peri3dController(	goal=(-1e7,-1e7,-4e-1, 0,0,0), # Vector6 of prescribed final values
-							stressMask=0b000011,
-							nSteps=1000,
-							xxPath=[(0,1),(1,1)], # the first (time) zero defines the initial value of stress considered nonzero
-							yyPath=[(0,1),(1,1)],
-							doneHook='print "Simulation with Peri3dController finished."; O.pause()',
-							maxStrain=.5,
-							label='p3d',
-							strain=p3d.strain, # continue from value reached in previous part
-							stressIdeal=Vector6(-1e7,-1e7,0, 0,0,0), # continue from value reached in previous part
-							),
-	PyRunner(command='plotAddData()',iterPeriod=1),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_Dem3DofGeom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],[Law2_Dem3DofGeom_FrictPhys_CundallStrack()]),
+    NewtonIntegrator(),
+    Peri3dController(    goal=(-1e7,-1e7,-4e-1, 0,0,0), # Vector6 of prescribed final values
+                            stressMask=0b000011,
+                            nSteps=1000,
+                            xxPath=[(0,1),(1,1)], # the first (time) zero defines the initial value of stress considered nonzero
+                            yyPath=[(0,1),(1,1)],
+                            doneHook='print "Simulation with Peri3dController finished."; O.pause()',
+                            maxStrain=.5,
+                            label='p3d',
+                            strain=p3d.strain, # continue from value reached in previous part
+                            stressIdeal=Vector6(-1e7,-1e7,0, 0,0,0), # continue from value reached in previous part
+                            ),
+    PyRunner(command='plotAddData()',iterPeriod=1),
 ]
 O.run();O.wait()
 plot.plot()

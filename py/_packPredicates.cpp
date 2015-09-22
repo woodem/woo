@@ -38,8 +38,8 @@ NOTE: you still have to call base class ctor in your class' ctor derived in pyth
 super(inGtsSurface,self).__init__() so that virtual methods work as expected.
 */
 struct PredicateWrap: Predicate, py::wrapper<Predicate>{
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE { return this->get_override("__call__")(pt,pad);}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return this->get_override("aabb")(); }
+	bool operator()(const Vector3r& pt, Real pad=0.) const override { return this->get_override("__call__")(pt,pad);}
+	AlignedBox3r aabb() const override { return this->get_override("aabb")(); }
 };
 
 /*********************************************************************************
@@ -61,32 +61,32 @@ class PredicateBoolean: public Predicate{
 class PredicateUnion: public PredicateBoolean{
 	public:
 		PredicateUnion(const shared_ptr<Predicate>& _A, const shared_ptr<Predicate>& _B): PredicateBoolean(_A,_B){}
-		bool operator()(const Vector3r& pt,Real pad) const WOO_CXX11_OVERRIDE {return (*A)(pt,pad)||(*B)(pt,pad);}
-		AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return A->aabb().merged(B->aabb()); }
+		bool operator()(const Vector3r& pt,Real pad) const override {return (*A)(pt,pad)||(*B)(pt,pad);}
+		AlignedBox3r aabb() const override { return A->aabb().merged(B->aabb()); }
 };
 PredicateUnion makeUnion(const shared_ptr<Predicate>& A, const shared_ptr<Predicate>& B){ return PredicateUnion(A,B);}
 
 class PredicateIntersection: public PredicateBoolean{
 	public:
 		PredicateIntersection(const shared_ptr<Predicate>& _A, const shared_ptr<Predicate>& _B): PredicateBoolean(_A,_B){}
-		bool operator()(const Vector3r& pt,Real pad) const WOO_CXX11_OVERRIDE {return (*A)(pt,pad) && (*B)(pt,pad);}
-		AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return AlignedBox3r(A->aabb()).intersection(B->aabb()); }
+		bool operator()(const Vector3r& pt,Real pad) const override {return (*A)(pt,pad) && (*B)(pt,pad);}
+		AlignedBox3r aabb() const override { return AlignedBox3r(A->aabb()).intersection(B->aabb()); }
 };
 PredicateIntersection makeIntersection(const shared_ptr<Predicate>& A, const shared_ptr<Predicate>& B){ return PredicateIntersection(A,B);}
 
 class PredicateDifference: public PredicateBoolean{
 	public:
 		PredicateDifference(const shared_ptr<Predicate>& _A, const shared_ptr<Predicate>& _B): PredicateBoolean(_A,_B){}
-		bool operator()(const Vector3r& pt,Real pad) const WOO_CXX11_OVERRIDE {return (*A)(pt,pad) && !(*B)(pt,-pad);}
-		AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return A->aabb(); }
+		bool operator()(const Vector3r& pt,Real pad) const override {return (*A)(pt,pad) && !(*B)(pt,-pad);}
+		AlignedBox3r aabb() const override { return A->aabb(); }
 };
 PredicateDifference makeDifference(const shared_ptr<Predicate>& A, const shared_ptr<Predicate>& B){ return PredicateDifference(A,B);}
 
 class PredicateSymmetricDifference: public PredicateBoolean{
 	public:
 		PredicateSymmetricDifference(const shared_ptr<Predicate>& _A, const shared_ptr<Predicate>& _B): PredicateBoolean(_A,_B){}
-		bool operator()(const Vector3r& pt,Real pad) const WOO_CXX11_OVERRIDE {bool inA=(*A)(pt,pad), inB=(*B)(pt,pad); return (inA && !inB) || (!inA && inB);}
-		AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return AlignedBox3r(A->aabb()).extend(B->aabb()); }
+		bool operator()(const Vector3r& pt,Real pad) const override {bool inA=(*A)(pt,pad), inB=(*B)(pt,pad); return (inA && !inB) || (!inA && inB);}
+		AlignedBox3r aabb() const override { return AlignedBox3r(A->aabb()).extend(B->aabb()); }
 };
 PredicateSymmetricDifference makeSymmetricDifference(const shared_ptr<Predicate>& A, const shared_ptr<Predicate>& B){ return PredicateSymmetricDifference(A,B);}
 
@@ -100,8 +100,8 @@ class inSphere: public Predicate {
 	Vector3r center; Real radius;
 public:
 	inSphere(const Vector3r& _center, Real _radius){center=_center; radius=_radius;}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE { return ((pt-center).norm()-pad<=radius-pad); }
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE {return AlignedBox3r(Vector3r(center[0]-radius,center[1]-radius,center[2]-radius),Vector3r(center[0]+radius,center[1]+radius,center[2]+radius));}
+	bool operator()(const Vector3r& pt, Real pad=0.) const override { return ((pt-center).norm()-pad<=radius-pad); }
+	AlignedBox3r aabb() const override {return AlignedBox3r(Vector3r(center[0]-radius,center[1]-radius,center[2]-radius),Vector3r(center[0]+radius,center[1]+radius,center[2]+radius));}
 };
 
 class inAlignedHalfspace: public Predicate{
@@ -110,14 +110,14 @@ public:
 	inAlignedHalfspace(int _axis, const Real& _coord, bool _lower=true): axis(_axis), coord(_coord), lower(_lower){
 		if(!(axis==0 || axis==1 || axis==2)) throw std::runtime_error("inAlignedHalfSpace.axis: must be in {0,1,2} (not "+to_string(axis)+")");
 	}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		if(lower){
 			return pt[axis]+pad<coord;
 		} else {
 			return pt[axis]-pad>coord;
 		}
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { AlignedBox3r ret(Vector3r(-Inf,-Inf,-Inf),Vector3r(Inf,Inf,Inf)); if(lower) ret.max()[axis]=coord; else ret.min()[axis]=coord; return ret; }
+	AlignedBox3r aabb() const override { AlignedBox3r ret(Vector3r(-Inf,-Inf,-Inf),Vector3r(Inf,Inf,Inf)); if(lower) ret.max()[axis]=coord; else ret.min()[axis]=coord; return ret; }
 };
 
 class inAxisRange: public Predicate{
@@ -126,10 +126,10 @@ class inAxisRange: public Predicate{
 		inAxisRange(int _axis, const Vector2r& _range): axis(_axis), range(_range ){
 			if(!(axis==0 || axis==1 || axis==2)) throw std::runtime_error("inAxisRange.axis: must be in {0,1,2} (not "+to_string(axis)+")");
 		}
-		bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+		bool operator()(const Vector3r& pt, Real pad=0.) const override {
 			return (pt[axis]-pad>=range[0] && pt[axis]+pad<=range[1]);
 		}
-		AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { AlignedBox3r ret(Vector3r(-Inf,-Inf,-Inf),Vector3r(Inf,Inf,Inf)); ret.min()[axis]=range[0]; ret.max()[axis]=range[1]; return ret; }
+		AlignedBox3r aabb() const override { AlignedBox3r ret(Vector3r(-Inf,-Inf,-Inf),Vector3r(Inf,Inf,Inf)); ret.min()[axis]=range[0]; ret.max()[axis]=range[1]; return ret; }
 };
 
 /*! Axis-aligned box predicate */
@@ -138,13 +138,13 @@ class inAlignedBox: public Predicate{
 public:
 	inAlignedBox(const Vector3r& _mn, const Vector3r& _mx): mn(_mn), mx(_mx) {}
 	inAlignedBox(const AlignedBox3r& box): mn(box.min()), mx(box.max()) {}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		return
 			mn[0]+pad<=pt[0] && mx[0]-pad>=pt[0] &&
 			mn[1]+pad<=pt[1] && mx[1]-pad>=pt[1] &&
 			mn[2]+pad<=pt[2] && mx[2]-pad>=pt[2];
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return AlignedBox3r(mn,mx); }
+	AlignedBox3r aabb() const override { return AlignedBox3r(mn,mx); }
 };
 
 class inOrientedBox: public Predicate{
@@ -153,12 +153,12 @@ class inOrientedBox: public Predicate{
 	AlignedBox3r box;
 public:
 	inOrientedBox(const Vector3r& _pos, const Quaternionr& _ori, const AlignedBox3r& _box): pos(_pos),ori(_ori),box(_box){};
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE{
+	bool operator()(const Vector3r& pt, Real pad=0.) const override{
 		// shrunk box
 		AlignedBox3r box2; box2.min()=box.min()+Vector3r::Ones()*pad; box2.max()=box.max()-Vector3r::Ones()*pad;
 		return box2.contains(ori.conjugate()*(pt-pos));
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE {
+	AlignedBox3r aabb() const override {
 		AlignedBox3r ret;
 		// box containing all corners after transformation
 		for(const auto& corner: {AlignedBox3r::BottomLeftFloor, AlignedBox3r::BottomRightFloor, AlignedBox3r::TopLeftFloor, AlignedBox3r::TopRightFloor, AlignedBox3r::BottomLeftCeil, AlignedBox3r::BottomRightCeil, AlignedBox3r::TopLeftCeil, AlignedBox3r::TopRightCeil}) ret.extend(pos+ori*box.corner(corner));
@@ -182,11 +182,11 @@ public:
 		mn=mx=vertices[0];
 		for(int i=1; i<8; i++){ mn=mn.array().min(vertices[i].array()).matrix(); mx=mx.array().max(vertices[i].array()).matrix(); }
 	}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		for(int i=0; i<6; i++) if((pt-pts[i]).dot(n[i])>-pad) return false;
 		return true;
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE { return AlignedBox3r(mn,mx); }
+	AlignedBox3r aabb() const override { return AlignedBox3r(mn,mx); }
 };
 
 /*! Arbitrarily oriented cylinder predicate */
@@ -275,7 +275,7 @@ public:
 		Real uMax=sqrt(pow(R/a,2)-1); c=ht/(2*uMax);
 	}
 	// WARN: this is not accurate, since padding is taken as perpendicular to the axis, not the the surface
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		Real v=(pt.dot(c12)-c1.dot(c12))/(ht*ht); // normalized coordinate along the c1--c2 axis
 		if((v*ht<0+pad) || (v*ht>ht-pad)) return false; // out of cylinder along the axis
 		Real u=(v-.5)*ht/c; // u from the wolfram parametrization; u is 0 in the center
@@ -284,7 +284,7 @@ public:
 		if(axisDist>rHere-pad) return false;
 		return true;
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE {
+	AlignedBox3r aabb() const override {
 		// the lazy way
 		return inCylinder(c1,c2,R).aabb();
 	}
@@ -295,7 +295,7 @@ class inEllipsoid: public Predicate{
 	Vector3r c, abc;
 public:
 	inEllipsoid(const Vector3r& _c, const Vector3r& _abc) {c=_c; abc=_abc;}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		//Define the ellipsoid X-coordinate of given Y and Z
 		Real x = sqrt((1-pow((pt[1]-c[1]),2)/((abc[1]-pad)*(abc[1]-pad))-pow((pt[2]-c[2]),2)/((abc[2]-pad)*(abc[2]-pad)))*((abc[0]-pad)*(abc[0]-pad)))+c[0]; 
 		Vector3r edgeEllipsoid(x,pt[1],pt[2]); // create a vector of these 3 coordinates
@@ -303,7 +303,7 @@ public:
 		if ((pt-c).norm()<=(edgeEllipsoid-c).norm()) return true;
 		else return false;
 	}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE {
+	AlignedBox3r aabb() const override {
 		const Vector3r& center(c); const Vector3r& ABC(abc);
 		return AlignedBox3r(Vector3r(center[0]-ABC[0],center[1]-ABC[1],center[2]-ABC[2]),Vector3r(center[0]+ABC[0],center[1]+ABC[1],center[2]+ABC[2]));
 	}
@@ -437,7 +437,7 @@ public:
 		if((tree=gts_bb_tree_surface(surf))==NULL) throw runtime_error("Could not create GTree.");
 	}
 	~inGtsSurface(){g_node_destroy(tree);}
-	AlignedBox3r aabb() const WOO_CXX11_OVERRIDE {
+	AlignedBox3r aabb() const override {
 		Real inf=std::numeric_limits<Real>::infinity();
 		pair<Vector3r,Vector3r> bb; bb.first=Vector3r(inf,inf,inf); bb.second=Vector3r(-inf,-inf,-inf);
 		gts_surface_foreach_vertex(surf,(GtsFunc)vertex_aabb,&bb);
@@ -447,7 +447,7 @@ public:
 		GtsPoint gp; gp.x=pt[0]; gp.y=pt[1]; gp.z=pt[2];
 		return (bool)gts_point_is_inside_surface(&gp,tree,is_open);
 	}
-	bool operator()(const Vector3r& pt, Real pad=0.) const WOO_CXX11_OVERRIDE {
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		if(noPad){
 			if(pad!=0. && noPadWarned) LOG_WARN("inGtsSurface constructed with noPad; requested non-zero pad set to zero.");
 			return ptCheck(pt);

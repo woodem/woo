@@ -24,9 +24,9 @@ sizeBox = (lengthKnife-(numBoxes[1]-1)*gapBetweenBoxes)/numBoxes[1]
 ### from facets, using GTS
 Knife=[]
 for i in linspace(pi, pi*3/2, num=numKnifeParts, endpoint=True):
-	Knife.append(Vector3(radiusKnife*cos(i),0,radiusKnife*sin(i)))
+    Knife.append(Vector3(radiusKnife*cos(i),0,radiusKnife*sin(i)))
 
-	
+    
 KnifeP=[Knife,[p+Vector3(0,lengthKnife,0) for p in Knife]]
 KnifePoly=pack.sweptPolylines2gtsSurface(KnifeP,threshold=1e-4)
 KnifeIDs=[]
@@ -51,28 +51,28 @@ colorsph1.normalize();
 colorsph2.normalize();
 colorSph=colorsph1
 for xyz in itertools.product(arange(0,numBoxes[0]),arange(0,numBoxes[1]),arange(0,numBoxes[2])):
-	ids_spheres=O.bodies.appendClumped(pack.regularHexa(pack.inEllipsoid((xyz[0]*(sizeBox+gapBetweenBoxes),xyz[1]*(sizeBox+gapBetweenBoxes)+sizeBox*0.5,xyz[2]*(sizeBox+gapBetweenBoxes)-radiusKnife+sizeBox*0.6),(sizeBox/2,sizeBox/2,sizeBox/2)),radius=radiusSph,gap=0,color=colorSph))
-	if (colorSph==colorsph1):
-		colorSph=colorsph2
-	else:
-		colorSph=colorsph1
+    ids_spheres=O.bodies.appendClumped(pack.regularHexa(pack.inEllipsoid((xyz[0]*(sizeBox+gapBetweenBoxes),xyz[1]*(sizeBox+gapBetweenBoxes)+sizeBox*0.5,xyz[2]*(sizeBox+gapBetweenBoxes)-radiusKnife+sizeBox*0.6),(sizeBox/2,sizeBox/2,sizeBox/2)),radius=radiusSph,gap=0,color=colorSph))
+    if (colorSph==colorsph1):
+        colorSph=colorsph2
+    else:
+        colorSph=colorsph1
 
 
 from woo import qt
 
 O.dt=2*utils.PWaveTimeStep() # We do not need now a high accuracy
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_L3Geom(),Ig2_Facet_Sphere_L3Geom()],
-		[Ip2_FrictMat_FrictMat_FrictPhys()],
-		[Law2_L3Geom_FrictPhys_ElPerfPl()],
-	),
-	GravityEngine(gravity=(0,0,-9.8)),
-	TranslationEngine(translationAxis=[1,0,0],velocity=5,ids=KnifeIDs), # Buldozer motion
-	NewtonIntegrator(damping=.3),
-	#qt.SnapshotEngine(iterPeriod=100,fileBase='/tmp/bulldozer-',label='snapshooter'),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_L3Geom(),Ig2_Facet_Sphere_L3Geom()],
+        [Ip2_FrictMat_FrictMat_FrictPhys()],
+        [Law2_L3Geom_FrictPhys_ElPerfPl()],
+    ),
+    GravityEngine(gravity=(0,0,-9.8)),
+    TranslationEngine(translationAxis=[1,0,0],velocity=5,ids=KnifeIDs), # Buldozer motion
+    NewtonIntegrator(damping=.3),
+    #qt.SnapshotEngine(iterPeriod=100,fileBase='/tmp/bulldozer-',label='snapshooter'),
 ]
 
 O.saveTmp()

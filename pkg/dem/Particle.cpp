@@ -163,6 +163,15 @@ bool Shape::isInside(const Vector3r& pt) const { throw std::runtime_error(pyStr(
 AlignedBox3r Shape::alignedBox() const { throw std::runtime_error(pyStr()+" does not implement Shape.alignedBox."); }
 void Shape::applyScale(Real s) { throw std::runtime_error(pyStr()+" does not implement Shape.applyScale."); }
 
+void Shape::selfTest(const shared_ptr<Particle>& p){
+	if(!numNodesOk()) throw std::runtime_error(pyStr()+"="+p->pyStr()+".shape: numNodes returns "+to_string(numNodes())+" but there are "+to_string(nodes.size())+" nodes.");
+	Real rad=this->equivRadius(), vol=this->volume();
+	if(nodes.size()!=1 && !isnan(rad)) throw std::runtime_error(pyStr()+"="+p->pyStr()+".shape: particle has "+to_string(nodes.size())+" nodes but returns "+to_string(rad)+" as equivalent radius (should be NaN).");
+	if(isnan(rad)!=isnan(vol)) throw std::runtime_error(pyStr()+"="+p->pyStr()+".shape: must have both equivRadius and volume, or both of them must be NaN (equivRadius="+to_string(rad)+", volume="+to_string(vol)+").");
+	// only test if they are not NaN
+	if(!isnan(rad) && (!(rad>=0) || !(vol>=0))) throw std::runtime_error(pyStr()+"="+p->pyStr()+".shape: both equivRadius and volume must be positive (equivRadius="+to_string(rad)+", volume="+to_string(vol)+").");
+}
+
 #if 0
 shared_ptr<Particle> Shape::make(const shared_ptr<Shape>& shape, const shared_ptr<Material>& mat, py::dict kwargs){
 	int mask=1;

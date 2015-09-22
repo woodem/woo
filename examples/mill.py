@@ -28,9 +28,9 @@ packHt=.8*millRad # size of the area
 bboxes=[(Vector3(-.5*millDp,-.5*packHt,-.5*packHt),Vector3(.5*millDp,0,.5*packHt)),(Vector3(-.5*millDp,0,-.5*packHt),Vector3(.5*millDp,.5*packHt,.5*packHt))]
 colors=.2,.7
 for i in (0,1): # red and blue spheres
-	sp=woo.pack.SpherePack(); bb=bboxes[i]; vol=(bb[1][0]-bb[0][0])*(bb[1][1]-bb[0][1])*(bb[1][2]-bb[0][2])
-	sp.makeCloud(bb[0],bb[1],sphRad,sphRadFuzz)
-	S.dem.par.add([woo.dem.Sphere.make(s[0],s[1],color=colors[i]) for s in sp])
+    sp=woo.pack.SpherePack(); bb=bboxes[i]; vol=(bb[1][0]-bb[0][0])*(bb[1][1]-bb[0][1])*(bb[1][2]-bb[0][2])
+    sp.makeCloud(bb[0],bb[1],sphRad,sphRadFuzz)
+    S.dem.par.add([woo.dem.Sphere.make(s[0],s[1],color=colors[i]) for s in sp])
 
 ###
 ### mill geometry (parameteric)
@@ -46,16 +46,16 @@ centralNode.dem.angVel=(-5,0,0)
 
 # S.dt=.9*woo.utils.pWaveDt()
 S.engines=woo.utils.defaultEngines(damping=.3)+[
-	woo.core.PyRunner(10,'S.plot.addData(i=S.step,dt=S.dt,dynDt=S.lab.dyndt.dt)'),woo.dem.DynDt(stepPeriod=200,dryRun=False,label='dyndt',maxRelInc=1e-4)
+    woo.core.PyRunner(10,'S.plot.addData(i=S.step,dt=S.dt,dynDt=S.lab.dyndt.dt)'),woo.dem.DynDt(stepPeriod=200,dryRun=False,label='dyndt',maxRelInc=1e-4)
 ]
 
 S.plot.plots={'i':('dt','dynDt')}
 
 S.saveTmp()
 try:
-	from woo import qt
-	v=qt.View()
-	v.eyePosition=(3,.8,.96); v.upVector=(-.4,-.4,.8); v.viewDir=(-.9,-.25,-.3); v.axes=True; v.sceneRadius=1.9
+    from woo import qt
+    v=qt.View()
+    v.eyePosition=(3,.8,.96); v.upVector=(-.4,-.4,.8); v.viewDir=(-.9,-.25,-.3); v.axes=True; v.sceneRadius=1.9
 except ImportError: pass
 #O.run(20000); O.wait()
 #utils.encodeVideoFromFrames(snapshooter['savedSnapshots'],out='/tmp/mill.ogg',fps=30)

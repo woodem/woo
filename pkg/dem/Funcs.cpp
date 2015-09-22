@@ -7,6 +7,7 @@
 #include<woo/pkg/dem/Capsule.hpp>
 #include<woo/pkg/fem/Membrane.hpp>
 #include<woo/pkg/dem/DynDt.hpp>
+#include<woo/lib/base/CompUtils.hpp>
 
 #include<cstdint>
 #include<iostream>
@@ -614,3 +615,64 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 }
 
 #endif /* WOO_VTK */
+
+
+#include<woo/lib/voro++/voro++.hh>
+
+
+// from voro++ example, http://math.lbl.gov/voro++/examples/irregular/
+// Create a wall class that, whenever called, will replace the Voronoi cell
+// with a prescribed shape, in this case a dodecahedron
+class _wall_initial_shape : public voro::wall {
+	public:
+		_wall_initial_shape() {
+			const double Phi=0.5*(1+sqrt(5.0));
+			// Create a dodecahedron
+			v.init(-2,2,-2,2,-2,2);
+			v.plane(0,Phi,1);v.plane(0,-Phi,1);v.plane(0,Phi,-1);
+			v.plane(0,-Phi,-1);v.plane(1,0,Phi);v.plane(-1,0,Phi);
+			v.plane(1,0,-Phi);v.plane(-1,0,-Phi);v.plane(Phi,1,0);
+			v.plane(-Phi,1,0);v.plane(Phi,-1,0);v.plane(-Phi,-1,0);
+		};
+		bool point_inside(double x,double y,double z) {return true;}
+		bool cut_cell(voro::voronoicell &c,double x,double y,double z) {
+			// Set the cell to be equal to the dodecahedron
+			c=v;
+			return true;
+		}
+		bool cut_cell(voro::voronoicell_neighbor &c,double x,double y,double z) {
+			// Set the cell to be equal to the dodecahedron
+			c=v;
+			return true;
+		}
+	private:
+		voro::voronoicell v;
+};
+
+
+vector<Real> DemFuncs::boxPorosity(const shared_ptr<DemField>& dem, const AlignedBox3r& box){
+	voro::container_poly con(box.min()[0],box.max()[0],box.min()[1],box.max()[1],box.min()[2],box.max()[2],5,5,5,false,false,false,8);
+	_wall_initial_shape wis;
+	con.add_wall(wis);
+	vector<Real> ret(dem->particles->size(),NaN); // return array, same ordering as particles; filled with NaN
+	for(const auto& p: *dem->particles){
+		if(!p->shape) continue;
+		const auto& sh(p->shape);
+		Real rad=p->shape->equivRadius();
+		if(isnan(rad)) continue; // invalid radius (this includes multinodal shapes)
+		assert(rad>0); /* tested in Shape::selfTest */
+		const auto& pos(sh->nodes[0]->pos);
+		if(!box.contains(pos)) continue;
+		con.put(p->id,pos[0],pos[1],pos[2],rad);
+	}
+	voro::c_loop_all cla(con);
+	voro::voronoicell c;
+	if(cla.start()) do if(con.compute_cell(c,cla)){
+		int id; double x,y,z,r;
+		cla.pos(id,x,y,z,r);
+		const auto& sh=(*dem->particles)[id]->shape;
+		ret[id]=1-CompUtils::clamped(sh->volume()/c.volume(),0,1);
+	} while(cla.inc());
+	return ret;
+}
+

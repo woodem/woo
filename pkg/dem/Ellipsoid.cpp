@@ -21,6 +21,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Ellipsoid_L6Geom__CLASS_BASE_DOC);
 void woo::Ellipsoid::selfTest(const shared_ptr<Particle>& p){
 	if(!(semiAxes.minCoeff()>0)) throw std::runtime_error("Ellipsoid #"+to_string(p->id)+": all semi-princial semiAxes must be positive (current minimum is "+to_string(semiAxes.minCoeff())+")");
 	if(!numNodesOk()) throw std::runtime_error("Ellipsoid #"+to_string(p->id)+": numNodesOk() failed: must be 1, not "+to_string(nodes.size())+".");
+	Shape::selfTest(p);
 }
 
 Real woo::Ellipsoid::equivRadius() const {

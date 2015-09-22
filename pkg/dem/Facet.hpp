@@ -7,12 +7,12 @@
 
 
 struct Facet: public Shape {
-	int numNodes() const WOO_CXX11_OVERRIDE { return 3; }
-	void selfTest(const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	int numNodes() const override { return 3; }
+	void selfTest(const shared_ptr<Particle>&) override;
 	Vector3r getNormal() const;
 	Vector3r getCentroid() const;
-	void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) WOO_CXX11_OVERRIDE;
-	void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>&nn, vector<Real>& raw) const WOO_CXX11_OVERRIDE;
+	void setFromRaw(const Vector3r& center, const Real& radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) override;
+	void asRaw(Vector3r& center, Real& radius, vector<shared_ptr<Node>>&nn, vector<Real>& raw) const override;
 	#ifdef WOO_OPENGL
 		Vector3r getGlNormal() const;
 		Vector3r getGlVertex(int i) const;
@@ -31,7 +31,7 @@ struct Facet: public Shape {
 	// generic routine: return nearest point on triangle closes to *pt*, given triangle vertices and its normal
 	static Vector3r getNearestTrianglePt(const Vector3r& pt, const Vector3r& A, const Vector3r& B, const Vector3r& C, const Vector3r& normal);
 
-	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) WOO_CXX11_OVERRIDE;
+	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
 	//
 	#define woo_dem_Facet__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Facet,Shape,"Facet (triangle in 3d) particle.", \
@@ -49,7 +49,7 @@ struct Facet: public Shape {
 WOO_REGISTER_OBJECT(Facet);
 
 struct Bo1_Facet_Aabb: public BoundFunctor{
-	void go(const shared_ptr<Shape>&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Facet);
 	#define woo_dem_Bo1_Facet_Aabb__CLASS_BASE_DOC Bo1_Facet_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Facet`."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Facet_Aabb__CLASS_BASE_DOC);
@@ -57,8 +57,8 @@ struct Bo1_Facet_Aabb: public BoundFunctor{
 WOO_REGISTER_OBJECT(Bo1_Facet_Aabb);
 
 struct In2_Facet: public IntraFunctor {
-	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const WOO_CXX11_OVERRIDE{/*no internal stiffness in Facets*/};
-	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override{/*no internal stiffness in Facets*/};
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	// this does the actual job
 	void distributeForces(const shared_ptr<Particle>&, const Facet& f, bool bary);
 	FUNCTOR2D(Facet,Material);
@@ -70,9 +70,9 @@ WOO_REGISTER_OBJECT(In2_Facet);
 
 
 struct Cg2_Facet_Sphere_L6Geom: public Cg2_Any_Any_L6Geom__Base{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	// virtual bool goReverse(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){ throw std::logic_error("ContactLoop should swap interaction arguments, should be Facet+Sphere, but is "+s1->getClassName()+"+"+s2->getClassName()); }
-	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE { C->minDist00Sq=-1; }
+	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) override { C->minDist00Sq=-1; }
 	#define woo_dem_Cg2_Facet_Sphere_L6Geom__CLASS_BASE_DOC \
 		Cg2_Facet_Sphere_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact between :obj:`Facet` and :obj:`Sphere`."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Sphere_L6Geom__CLASS_BASE_DOC);
@@ -84,8 +84,8 @@ WOO_REGISTER_OBJECT(Cg2_Facet_Sphere_L6Geom);
 
 
 struct Cg2_Facet_Facet_L6Geom: public Cg2_Any_Any_L6Geom__Base{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
-	void setMinDist00Sq(const shared_ptr<Shape>&, const shared_ptr<Shape>&, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE { C->minDist00Sq=-1; }
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
+	void setMinDist00Sq(const shared_ptr<Shape>&, const shared_ptr<Shape>&, const shared_ptr<Contact>& C) override { C->minDist00Sq=-1; }
 	#define woo_dem_Cg2_Facet_Facet_L6Geom__CLASS_BASE_DOC \
 		Cg2_Facet_Facet_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact between two :obj:`Facet` shapes."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Facet_L6Geom__CLASS_BASE_DOC);
@@ -96,8 +96,8 @@ struct Cg2_Facet_Facet_L6Geom: public Cg2_Any_Any_L6Geom__Base{
 WOO_REGISTER_OBJECT(Cg2_Facet_Facet_L6Geom);
 
 struct Cg2_Facet_InfCylinder_L6Geom: public Cg2_Any_Any_L6Geom__Base{
-	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE;
-	void setMinDist00Sq(const shared_ptr<Shape>&, const shared_ptr<Shape>&, const shared_ptr<Contact>& C) WOO_CXX11_OVERRIDE { C->minDist00Sq=-1; }
+	virtual bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
+	void setMinDist00Sq(const shared_ptr<Shape>&, const shared_ptr<Shape>&, const shared_ptr<Contact>& C) override { C->minDist00Sq=-1; }
 	#define woo_dem_Cg2_Facet_InfCylinder_L6Geom__CLASS_BASE_DOC \
 		Cg2_Facet_InfCylinder_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact between :obj:`Facet` and :obj:`InfCylinder`."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_InfCylinder_L6Geom__CLASS_BASE_DOC);
@@ -112,7 +112,7 @@ WOO_REGISTER_OBJECT(Cg2_Facet_InfCylinder_L6Geom);
 #ifdef WOO_OPENGL
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Facet: public GlShapeFunctor{	
-	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	void drawEdges(const Facet& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire);
 	void glVertex(const Facet& f, int i);
 	RENDERS(Facet);

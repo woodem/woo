@@ -23,14 +23,14 @@
 
 struct GridCollider: public Collider{
 	WOO_DECL_LOGGER;
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	DemField* dem;
 	void postLoad(GridCollider&, void*);
-	void selfTest() WOO_CXX11_OVERRIDE;
+	void selfTest() override;
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 	#endif
-	void run() WOO_CXX11_OVERRIDE;
+	void run() override;
 	// templated so that the compiler can optimize better
 	// with sameGridCell, the cell is being compared with itself
 	template<bool sameGridCell, bool addContacts=true> void processCell(const shared_ptr<GridStore>& gridA, const Vector3i& ijkA, const shared_ptr<GridStore>& gridB, const Vector3i& ijkB) const;
@@ -43,11 +43,11 @@ struct GridCollider: public Collider{
 	void prepareGridCurr();
 	void fillGridCurr();
 
-	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) WOO_CXX11_OVERRIDE;
-	void getLabeledObjects(const shared_ptr<LabelMapper>&) WOO_CXX11_OVERRIDE;
+	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
+	void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
 
 	// forces reinitialization
-	void invalidatePersistentData() WOO_CXX11_OVERRIDE { gridPrev.reset(); }
+	void invalidatePersistentData() override { gridPrev.reset(); }
 
 	#define woo_dem_GridCollider__CLASS_BASE_DOC_ATTRS \
 		GridCollider,Collider,ClassTrait().doc("Grid-based collider.").section("","",{"GridStore"}), \

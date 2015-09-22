@@ -5,21 +5,21 @@
 
 ## list of engines
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Box_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom(),Ig2_Box_Sphere_ScGeom()],
-		[Ip2_FrictMat_FrictMat_MindlinPhys()],
-		[Law2_ScGeom_MindlinPhys_Mindlin()]
-	),
-	GravityEngine(gravity=(10,0,0)),
-	NewtonIntegrator(damping=0.0),
-	###
-	### NOTE this extra engine:
-	###
-	### You want snapshot to be taken every 1 sec (realTimeLim) or every 50 iterations (iterLim),
-	### whichever comes soones. virtTimeLim attribute is unset, hence virtual time period is not taken into account.
-	PyRunner(iterPeriod=1,command='myAddPlotData()')
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Box_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom(),Ig2_Box_Sphere_ScGeom()],
+        [Ip2_FrictMat_FrictMat_MindlinPhys()],
+        [Law2_ScGeom_MindlinPhys_Mindlin()]
+    ),
+    GravityEngine(gravity=(10,0,0)),
+    NewtonIntegrator(damping=0.0),
+    ###
+    ### NOTE this extra engine:
+    ###
+    ### You want snapshot to be taken every 1 sec (realTimeLim) or every 50 iterations (iterLim),
+    ### whichever comes soones. virtTimeLim attribute is unset, hence virtual time period is not taken into account.
+    PyRunner(iterPeriod=1,command='myAddPlotData()')
 ]
 
 ## define and append material
@@ -55,9 +55,9 @@ plot.plots={'un':('fn')}
 ## if a datum is not specified (but exists), it will be NaN and will not be plotted
 
 def myAddPlotData():
-	i=O.interactions[0,1]
-	## store some numbers under some labels
-	plot.addData(fn=i.phys.normalForce[0],step=O.iter,un=2*s0.shape.radius-s1.state.pos[0]+s0.state.pos[0],kn=i.phys.kn)	
+    i=O.interactions[0,1]
+    ## store some numbers under some labels
+    plot.addData(fn=i.phys.normalForce[0],step=O.iter,un=2*s0.shape.radius-s1.state.pos[0]+s0.state.pos[0],kn=i.phys.kn)    
 
 O.run(100,True); plot.plot()
 

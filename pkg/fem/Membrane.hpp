@@ -50,8 +50,8 @@ struct Membrane: public Facet{
 WOO_REGISTER_OBJECT(Membrane);
 
 struct In2_Membrane_ElastMat: public In2_Facet{
-	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const WOO_CXX11_OVERRIDE;
-	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) WOO_CXX11_OVERRIDE;
+	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override;
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	FUNCTOR2D(Membrane,ElastMat);
 	WOO_DECL_LOGGER;
 	#define woo_dem_In2_Membrane_ElastMat__CLASS_BASE_DOC_ATTRS \
@@ -78,7 +78,7 @@ WOO_REGISTER_OBJECT(In2_Membrane_FrictMat);
 #ifdef WOO_OPENGL
 #include<woo/pkg/gl/Functors.hpp>
 struct Gl1_Membrane: public Gl1_Facet{	
-	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) WOO_CXX11_OVERRIDE;
+	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	void drawLocalDisplacement(const Vector2r& nodePt, const Vector2r& xy, const shared_ptr<ScalarRange>& range, bool split, char arrow, int lineWd, const Real z=NaN);
 	RENDERS(Membrane);
 	#define woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS \

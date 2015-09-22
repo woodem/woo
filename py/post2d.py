@@ -65,290 +65,290 @@ import math
 nan=float('nan')
 
 class Flatten:
-	"""Abstract class for converting 3d point into 2d. Used by post2d.data2d."""
-	def __init__(self,dispScale=1.):
-		self.dispScale=dispScale
-	def __call__(self,b):
-		"Given a :obj:`woo.dem.Particle` / :obj:`woo.dem.Contact` instance, should return either 2d coordinates as a 2-tuple, or None if the Body should be discarded." 
-		pass
-	def planar(self,pos,vec):
-		"Given position and vector value, project the vector value to the flat plane and return its 2 in-plane components."
-	def normal(self,pos,vec):
-		"Given position and vector value, return lenght of the vector normal to the flat plane."
-	def scaledPos(self,p):
-		if self.dispScale==1: return p.pos
-		else: return p.refPos+self.dispScale*(p.pos-p.refPos)
+    """Abstract class for converting 3d point into 2d. Used by post2d.data2d."""
+    def __init__(self,dispScale=1.):
+        self.dispScale=dispScale
+    def __call__(self,b):
+        "Given a :obj:`woo.dem.Particle` / :obj:`woo.dem.Contact` instance, should return either 2d coordinates as a 2-tuple, or None if the Body should be discarded." 
+        pass
+    def planar(self,pos,vec):
+        "Given position and vector value, project the vector value to the flat plane and return its 2 in-plane components."
+    def normal(self,pos,vec):
+        "Given position and vector value, return lenght of the vector normal to the flat plane."
+    def scaledPos(self,p):
+        if self.dispScale==1: return p.pos
+        else: return p.refPos+self.dispScale*(p.pos-p.refPos)
 
 class HelixFlatten(Flatten):
-	"""Class converting 3d point to 2d based on projection from helix.
-	The y-axis in the projection corresponds to the rotation axis"""
-	def __init__(self,useRef,thetaRange,dH_dTheta,axis=2,periodStart=0,dispScale=1.):
-		"""
-		:param bool useRef:       use reference positions rather than actual positions
-		:param (θmin,θmax) thetaRange: particles outside this range will be discarded
-		:param float dH_dTheta:   inclination of the spiral (per radian)
-		:param {0,1,2} axis:      axis of rotation of the spiral
-		:param float periodStart: height of the spiral for zero angle
-		"""
-		Flatten.__init__(self,dispScale)
-		self.useRef,self.thetaRange,self.dH_dTheta,self.axis,self.periodStart=useRef,thetaRange,dH_dTheta,axis,periodStart
-		self.ax1,self.ax2=(axis+1)%3,(axis+2)%3
-	def _getPos(self,b):
-		return b.refPos if self.useRef else self.scaledPos(b)
-	def __call__(self,b):
-		import woo.utils
-		xy,theta=woo.utils.spiralProject(_getPos(b),self.dH_dTheta,self.axis,self.periodStart)
-		if theta<thetaRange[0] or theta>thetaRange[1]: return None
-		return xy
-	def planar(self,b,vec):
-		from math import sqrt
-		pos=_getPos(b)
-		pos[self.axis]=0; pos.Normalize()
-		return pos.Dot(vec),vec[axis]
-	def normal(self,pos,vec):
-		ax=Vector3(0,0,0); ax[axis]=1; pos=_getPos(b)
-		circum=ax.Cross(pos); circum.Normalize()
-		return circum.Dot(vec)
-		
+    """Class converting 3d point to 2d based on projection from helix.
+    The y-axis in the projection corresponds to the rotation axis"""
+    def __init__(self,useRef,thetaRange,dH_dTheta,axis=2,periodStart=0,dispScale=1.):
+        """
+        :param bool useRef:       use reference positions rather than actual positions
+        :param (θmin,θmax) thetaRange: particles outside this range will be discarded
+        :param float dH_dTheta:   inclination of the spiral (per radian)
+        :param {0,1,2} axis:      axis of rotation of the spiral
+        :param float periodStart: height of the spiral for zero angle
+        """
+        Flatten.__init__(self,dispScale)
+        self.useRef,self.thetaRange,self.dH_dTheta,self.axis,self.periodStart=useRef,thetaRange,dH_dTheta,axis,periodStart
+        self.ax1,self.ax2=(axis+1)%3,(axis+2)%3
+    def _getPos(self,b):
+        return b.refPos if self.useRef else self.scaledPos(b)
+    def __call__(self,b):
+        import woo.utils
+        xy,theta=woo.utils.spiralProject(_getPos(b),self.dH_dTheta,self.axis,self.periodStart)
+        if theta<thetaRange[0] or theta>thetaRange[1]: return None
+        return xy
+    def planar(self,b,vec):
+        from math import sqrt
+        pos=_getPos(b)
+        pos[self.axis]=0; pos.Normalize()
+        return pos.Dot(vec),vec[axis]
+    def normal(self,pos,vec):
+        ax=Vector3(0,0,0); ax[axis]=1; pos=_getPos(b)
+        circum=ax.Cross(pos); circum.Normalize()
+        return circum.Dot(vec)
+        
 
 class CylinderFlatten(Flatten):
-	"""Class for converting 3d point to 2d based on projection onto plane from circle.
-	The y-axis in the projection corresponds to the rotation axis; the x-axis is distance form the axis.
-	"""
-	def __init__(self,axis=2,useRef=False,origin=Vector3(0,0,0),dispScale=1.):
-		"""
-		:param useRef: (bool) use reference positions rather than actual positions
-		:param axis: axis of the cylinder, ∈{0,1,2}
-		"""
-		if axis not in (0,1,2): raise IndexError("axis must be one of 0,1,2 (not %d)"%axis)
-		self.useRef,self.axis,self.origin=useRef,axis,Vector3(origin)
-		Flatten.__init__(self,dispScale)
-	def _getPos(self,b):
-		return (b.refPos if self.useRef else self.scaledPos(b))-self.origin
-	def __call__(self,b):
-		p=self._getPos(b)
-		pp=Vector2(p[(self.axis+1)%3],p[(self.axis+2)%3])
-		return pp.norm(),p[self.axis]
-	def planar(self,b,vec):
-		pos=self._getPos(b)
-		pos[self.axis]=0;
-		pos.normalize()
-		return pos.dot(vec),vec[self.axis]
-	def normal(self,b,vec):
-		pos=self._getPos(b)
-		ax=Vector3(0,0,0); ax[axis]=1
-		circum=ax.cross(pos).normalized();
-		return circum.Dot(vec)
+    """Class for converting 3d point to 2d based on projection onto plane from circle.
+    The y-axis in the projection corresponds to the rotation axis; the x-axis is distance form the axis.
+    """
+    def __init__(self,axis=2,useRef=False,origin=Vector3(0,0,0),dispScale=1.):
+        """
+        :param useRef: (bool) use reference positions rather than actual positions
+        :param axis: axis of the cylinder, ∈{0,1,2}
+        """
+        if axis not in (0,1,2): raise IndexError("axis must be one of 0,1,2 (not %d)"%axis)
+        self.useRef,self.axis,self.origin=useRef,axis,Vector3(origin)
+        Flatten.__init__(self,dispScale)
+    def _getPos(self,b):
+        return (b.refPos if self.useRef else self.scaledPos(b))-self.origin
+    def __call__(self,b):
+        p=self._getPos(b)
+        pp=Vector2(p[(self.axis+1)%3],p[(self.axis+2)%3])
+        return pp.norm(),p[self.axis]
+    def planar(self,b,vec):
+        pos=self._getPos(b)
+        pos[self.axis]=0;
+        pos.normalize()
+        return pos.dot(vec),vec[self.axis]
+    def normal(self,b,vec):
+        pos=self._getPos(b)
+        ax=Vector3(0,0,0); ax[axis]=1
+        circum=ax.cross(pos).normalized();
+        return circum.Dot(vec)
 
 
 class AxisFlatten(Flatten):
-	def __init__(self,axis=2,useRef=False,swapAxes=False,dispScale=1.):
-		"""
-		:param bool useRef: use reference positions rather than actual positions (only meaningful when operating on Particles)
-		:param {0,1,2}	axis: axis normal to the plane; the return value will be simply position with this component dropped.
-		"""
-		if axis not in (0,1,2): raise IndexError("axis must be one of 0,1,2 (not %d)"%axis)
-		self.useRef,self.axis=useRef,axis
-		self.ax1,self.ax2=(self.axis+1)%3,(self.axis+2)%3
-		if swapAxes: self.ax1,self.ax2=self.ax2,self.ax1
-		Flatten.__init__(self,dispScale)
-	def _getPos(self,b):
-		return ((b.refPos if self.useRef else self.scaledPos(b)) if isinstance(b,Particle) else b.geom.node.pos)
-	def __call__(self,b):
-		p=self._getPos(b)
-		return (p[self.ax1],p[self.ax2])
-	def planar(self,pos,vec):
-		return vec[self.ax1],vec[self.ax2]
-	def normal(self,pos,vec):
-		return vec[self.axis]
+    def __init__(self,axis=2,useRef=False,swapAxes=False,dispScale=1.):
+        """
+        :param bool useRef: use reference positions rather than actual positions (only meaningful when operating on Particles)
+        :param {0,1,2}    axis: axis normal to the plane; the return value will be simply position with this component dropped.
+        """
+        if axis not in (0,1,2): raise IndexError("axis must be one of 0,1,2 (not %d)"%axis)
+        self.useRef,self.axis=useRef,axis
+        self.ax1,self.ax2=(self.axis+1)%3,(self.axis+2)%3
+        if swapAxes: self.ax1,self.ax2=self.ax2,self.ax1
+        Flatten.__init__(self,dispScale)
+    def _getPos(self,b):
+        return ((b.refPos if self.useRef else self.scaledPos(b)) if isinstance(b,Particle) else b.geom.node.pos)
+    def __call__(self,b):
+        p=self._getPos(b)
+        return (p[self.ax1],p[self.ax2])
+    def planar(self,pos,vec):
+        return vec[self.ax1],vec[self.ax2]
+    def normal(self,pos,vec):
+        return vec[self.axis]
 
 class LocalAxisFlatten(AxisFlatten):
-	def __init__(self,pos,ori,axis=2,useRef=False,swapAxes=False,dispScale=1.):
-		'''Like :obj:`AxisFlatten`, but transform the point to local coordinates first, using given position (Vector3) and orientation (Quaternion).'''
-		AxisFlatten.__init__(self,axis=axis,useRef=useRef,swapAxes=swapAxes,dispScale=dispScale)
-		self.pos,self.ori=pos,ori
-	def _getPos(self,b):
-		return self.ori.conjugate()*(AxisFlatten._getPos(self,b)-self.pos)
-	def planar(self,pos,vec):
-		return AxisFlatten.planar(self,self.ori.conjugate()*(pos-self.pos),self.ori.conjugate()*(pos-self.pos))
-	def normal(self,pos,vec):
-		return AxisFlatten.normal(self,self.ori.conjugate()*(pos-self.pos),self.ori.conjugate()*(pos-self.pos))
+    def __init__(self,pos,ori,axis=2,useRef=False,swapAxes=False,dispScale=1.):
+        '''Like :obj:`AxisFlatten`, but transform the point to local coordinates first, using given position (Vector3) and orientation (Quaternion).'''
+        AxisFlatten.__init__(self,axis=axis,useRef=useRef,swapAxes=swapAxes,dispScale=dispScale)
+        self.pos,self.ori=pos,ori
+    def _getPos(self,b):
+        return self.ori.conjugate()*(AxisFlatten._getPos(self,b)-self.pos)
+    def planar(self,pos,vec):
+        return AxisFlatten.planar(self,self.ori.conjugate()*(pos-self.pos),self.ori.conjugate()*(pos-self.pos))
+    def normal(self,pos,vec):
+        return AxisFlatten.normal(self,self.ori.conjugate()*(pos-self.pos),self.ori.conjugate()*(pos-self.pos))
 
 
 def data(scene,extractor,flattener,con=False,onlyDynamic=True,stDev=None,relThreshold=3.,perArea=0,div=(50,50),margin=(0,0),radius=1):
-	"""Filter all particles/contacts, project them to 2d and extract required scalar value;
-	return either discrete array of positions and values, or smoothed data, depending on whether the stDev
-	value is specified.
+    """Filter all particles/contacts, project them to 2d and extract required scalar value;
+    return either discrete array of positions and values, or smoothed data, depending on whether the stDev
+    value is specified.
 
-	The ``con`` parameter determines whether we operate on particles or contacts;
-	the extractor provided should expect to receive body/interaction.
+    The ``con`` parameter determines whether we operate on particles or contacts;
+    the extractor provided should expect to receive body/interaction.
 
-	:param callable extractor: receives :obj:`woo.dem.Particle` (or :obj:`woo.dem.Contact`, if ``con`` is ``True``) instance, should return scalar, a 2-tuple (vector fields) or None (to skip that body/interaction)
-	:param callable flattener: :obj:`woo.post2d.Flatten` instance, receiving body/interaction, returns its 2d coordinates or ``None`` (to skip that body/interaction)
-	:param bool con: operate on contacts rather than particles
-	:param bool onlyDynamic: skip all non-dynamic particles
-	:param float/None stDev: standard deviation for averaging, enables smoothing; ``None`` (default) means raw mode, where discrete points are returned
-	:param float relThreshold: threshold for the gaussian weight function relative to stDev (smooth mode only)
-	:param int perArea: if 1, compute weightedSum/weightedArea rather than weighted average (weightedSum/sumWeights); the first is useful to compute average stress; if 2, compute averages on subdivision elements, not using weight function
-	:param (int,int) div: number of cells for the gaussian grid (smooth mode only)
-	:param (float,float) margin: x,y margins around bounding box for data (smooth mode only)
-	:param float/callable radius: Fallback value for radius (for raw plotting) for non-spherical particles or contacts; if a callable, receives body/interaction and returns radius
-	:return: dictionary
-	
-	Returned dictionary always containing keys 'type' (one of 'rawScalar','rawVector','smoothScalar','smoothVector', depending on value of smooth and on return value from extractor), 'x', 'y', 'bbox'.
-	
-	Raw data further contains 'radii'.
-	
-	Scalar fields contain 'val' (value from *extractor*), vector fields have 'valX' and 'valY' (2 components returned by the *extractor*).
-	"""
-	from minieigen import Vector3
-	from woo.dem import Sphere
-	xx,yy,dd1,dd2,rr=[],[],[],[],[]
-	nDim=0
-	objects=scene.dem.con if con else scene.dem.par
-	for b in objects:
-		if not con and (len(b.shape.nodes)!=1 or (onlyDynamic and b.blocked=='xyzXYZ')): continue
-		xy,d=flattener(b),extractor(b)
-		if xy==None or d==None or math.isnan(d): continue
-		if nDim==0: nDim=1 if isinstance(d,float) else 2
-		if nDim==1: dd1.append(d);
-		elif len(d)==2:
-			dd1.append(d[0]); dd2.append(d[1])
-		elif len(d)==3:
-			d1,d2=flattener.planar(b,Vector3(d))
-			dd1.append(d1); dd2.append(d2)
-		else:
-			raise RuntimeError("Extractor must return float or 2 or 3 (not %d) floats"%nDim)
-		if stDev==None: # radii are needed in the raw mode exclusively
-			if nDim==1 and math.isnan(d): rr.append(nan) # add NaN if value was also invalid
-			else:
-				if not con and isinstance(b.shape,Sphere): r=b.shape.radius
-				else: r=(radius(b) if callable(radius) else radius)
-				rr.append(r)
-		xx.append(xy[0]); yy.append(xy[1]);
-	if stDev==None:
-		bbox=(min(xx),min(yy)),(max(xx),max(yy))
-		if nDim==1: return {'type':'rawScalar','x':xx,'y':yy,'val':dd1,'radii':rr,'bbox':bbox}
-		else: return {'type':'rawVector','x':xx,'y':yy,'valX':dd1,'valY':dd2,'radii':rr,'bbox':bbox}
-	
-	from woo.WeightedAverage2d import GaussAverage
-	import numpy
-	if min(len(xx),len(yy)==0): raise RuntimeError('Nothing to plot (extractor did not return any values)')
-	lo,hi=(min(xx),min(yy)),(max(xx),max(yy))
-	llo=lo[0]-margin[0],lo[1]-margin[1]; hhi=hi[0]+margin[0],hi[1]+margin[1]
-	ga=GaussAverage(llo,hhi,div,stDev,relThreshold)
-	ga2=GaussAverage(llo,hhi,div,stDev,relThreshold)
-	for i in range(0,len(xx)):
-		ga.add(dd1[i],(xx[i],yy[i]))
-		if nDim>1: ga2.add(dd2[i],(xx[i],yy[i]))
-	step=[(hhi[i]-llo[i])/float(div[i]) for i in [0,1]]
-	xxx,yyy=[numpy.arange(llo[i]+.5*step[i],hhi[i],step[i]) for i in [0,1]]
-	ddd=numpy.zeros((len(yyy),len(xxx)),float)
-	ddd2=numpy.zeros((len(yyy),len(xxx)),float)
-	# set the type of average we are going to use
-	if perArea==0:
-		def compAvg(gauss,coord,cellCoord): return float(gauss.avg(coord))
-	elif perArea==1:
-		def compAvg(gauss,coord,cellCoord): return gauss.avgPerUnitArea(coord)
-	elif perArea==2:
-		def compAvg(gauss,coord,cellCoord):
-			s=gauss.cellSum(cellCoord);
-			return (s/gauss.cellArea) if s>0 else nan
-	elif perArea==3:
-		def compAvg(gauss,coord,cellCoord):
-			s=gauss.cellSum(cellCoord);
-			return s if s>0 else nan
-	else: raise RuntimeError('Invalid value of *perArea*, must be one of 0,1,2,3.')
-	#
-	for cx in range(0,div[0]):
-		for cy in range(0,div[1]):
-			ddd[cy,cx]=compAvg(ga,(xxx[cx],yyy[cy]),(cx,cy))
-			if nDim>1: ddd2[cy,cx]=compAvg(ga2,(xxx[cx],yyy[cy]),(cx,cy))
-	if nDim==1: return {'type':'smoothScalar','x':xxx,'y':yyy,'val':ddd,'bbox':(llo,hhi),'perArea':perArea,'grid':ga} 
-	else: return {'type':'smoothVector','x':xxx,'y':yyy,'valX':ddd,'valY':ddd2,'bbox':(llo,hhi),'grid':ga,'grid2':ga2}
-	
+    :param callable extractor: receives :obj:`woo.dem.Particle` (or :obj:`woo.dem.Contact`, if ``con`` is ``True``) instance, should return scalar, a 2-tuple (vector fields) or None (to skip that body/interaction)
+    :param callable flattener: :obj:`woo.post2d.Flatten` instance, receiving body/interaction, returns its 2d coordinates or ``None`` (to skip that body/interaction)
+    :param bool con: operate on contacts rather than particles
+    :param bool onlyDynamic: skip all non-dynamic particles
+    :param float/None stDev: standard deviation for averaging, enables smoothing; ``None`` (default) means raw mode, where discrete points are returned
+    :param float relThreshold: threshold for the gaussian weight function relative to stDev (smooth mode only)
+    :param int perArea: if 1, compute weightedSum/weightedArea rather than weighted average (weightedSum/sumWeights); the first is useful to compute average stress; if 2, compute averages on subdivision elements, not using weight function
+    :param (int,int) div: number of cells for the gaussian grid (smooth mode only)
+    :param (float,float) margin: x,y margins around bounding box for data (smooth mode only)
+    :param float/callable radius: Fallback value for radius (for raw plotting) for non-spherical particles or contacts; if a callable, receives body/interaction and returns radius
+    :return: dictionary
+    
+    Returned dictionary always containing keys 'type' (one of 'rawScalar','rawVector','smoothScalar','smoothVector', depending on value of smooth and on return value from extractor), 'x', 'y', 'bbox'.
+    
+    Raw data further contains 'radii'.
+    
+    Scalar fields contain 'val' (value from *extractor*), vector fields have 'valX' and 'valY' (2 components returned by the *extractor*).
+    """
+    from minieigen import Vector3
+    from woo.dem import Sphere
+    xx,yy,dd1,dd2,rr=[],[],[],[],[]
+    nDim=0
+    objects=scene.dem.con if con else scene.dem.par
+    for b in objects:
+        if not con and (len(b.shape.nodes)!=1 or (onlyDynamic and b.blocked=='xyzXYZ')): continue
+        xy,d=flattener(b),extractor(b)
+        if xy==None or d==None or math.isnan(d): continue
+        if nDim==0: nDim=1 if isinstance(d,float) else 2
+        if nDim==1: dd1.append(d);
+        elif len(d)==2:
+            dd1.append(d[0]); dd2.append(d[1])
+        elif len(d)==3:
+            d1,d2=flattener.planar(b,Vector3(d))
+            dd1.append(d1); dd2.append(d2)
+        else:
+            raise RuntimeError("Extractor must return float or 2 or 3 (not %d) floats"%nDim)
+        if stDev==None: # radii are needed in the raw mode exclusively
+            if nDim==1 and math.isnan(d): rr.append(nan) # add NaN if value was also invalid
+            else:
+                if not con and isinstance(b.shape,Sphere): r=b.shape.radius
+                else: r=(radius(b) if callable(radius) else radius)
+                rr.append(r)
+        xx.append(xy[0]); yy.append(xy[1]);
+    if stDev==None:
+        bbox=(min(xx),min(yy)),(max(xx),max(yy))
+        if nDim==1: return {'type':'rawScalar','x':xx,'y':yy,'val':dd1,'radii':rr,'bbox':bbox}
+        else: return {'type':'rawVector','x':xx,'y':yy,'valX':dd1,'valY':dd2,'radii':rr,'bbox':bbox}
+    
+    from woo.WeightedAverage2d import GaussAverage
+    import numpy
+    if min(len(xx),len(yy)==0): raise RuntimeError('Nothing to plot (extractor did not return any values)')
+    lo,hi=(min(xx),min(yy)),(max(xx),max(yy))
+    llo=lo[0]-margin[0],lo[1]-margin[1]; hhi=hi[0]+margin[0],hi[1]+margin[1]
+    ga=GaussAverage(llo,hhi,div,stDev,relThreshold)
+    ga2=GaussAverage(llo,hhi,div,stDev,relThreshold)
+    for i in range(0,len(xx)):
+        ga.add(dd1[i],(xx[i],yy[i]))
+        if nDim>1: ga2.add(dd2[i],(xx[i],yy[i]))
+    step=[(hhi[i]-llo[i])/float(div[i]) for i in [0,1]]
+    xxx,yyy=[numpy.arange(llo[i]+.5*step[i],hhi[i],step[i]) for i in [0,1]]
+    ddd=numpy.zeros((len(yyy),len(xxx)),float)
+    ddd2=numpy.zeros((len(yyy),len(xxx)),float)
+    # set the type of average we are going to use
+    if perArea==0:
+        def compAvg(gauss,coord,cellCoord): return float(gauss.avg(coord))
+    elif perArea==1:
+        def compAvg(gauss,coord,cellCoord): return gauss.avgPerUnitArea(coord)
+    elif perArea==2:
+        def compAvg(gauss,coord,cellCoord):
+            s=gauss.cellSum(cellCoord);
+            return (s/gauss.cellArea) if s>0 else nan
+    elif perArea==3:
+        def compAvg(gauss,coord,cellCoord):
+            s=gauss.cellSum(cellCoord);
+            return s if s>0 else nan
+    else: raise RuntimeError('Invalid value of *perArea*, must be one of 0,1,2,3.')
+    #
+    for cx in range(0,div[0]):
+        for cy in range(0,div[1]):
+            ddd[cy,cx]=compAvg(ga,(xxx[cx],yyy[cy]),(cx,cy))
+            if nDim>1: ddd2[cy,cx]=compAvg(ga2,(xxx[cx],yyy[cy]),(cx,cy))
+    if nDim==1: return {'type':'smoothScalar','x':xxx,'y':yyy,'val':ddd,'bbox':(llo,hhi),'perArea':perArea,'grid':ga} 
+    else: return {'type':'smoothVector','x':xxx,'y':yyy,'valX':ddd,'valY':ddd2,'bbox':(llo,hhi),'grid':ga,'grid2':ga2}
+    
 def plot(data,axes=None,clabel=True,cbar=False,rawVecColorRadius=True,bbox=None,aspect='equal',**kw):
-	"""Given output from post2d.data, plot the scalar as discrete or smooth plot.
+    """Given output from post2d.data, plot the scalar as discrete or smooth plot.
 
-	For raw discrete data, plot filled circles with radii of particles, colored by the scalar value.
+    For raw discrete data, plot filled circles with radii of particles, colored by the scalar value.
 
-	For smooth discrete data, plot image with optional contours and contour labels.
+    For smooth discrete data, plot image with optional contours and contour labels.
 
-	For vector data (raw or smooth), plot quiver (vector field), with arrows colored by the magnitude.
+    For vector data (raw or smooth), plot quiver (vector field), with arrows colored by the magnitude.
 
-	:param axes: matplotlib.axes\ instance where the figure will be plotted; if None, will be created from scratch.
-	:param data: value returned by :obj:`woo.post2d.data`
-	:param bool clabel: show contour labels (smooth mode only), or annotate cells with numbers inside (with perArea==2)
-	:param bool cbar: show colorbar (equivalent to calling pylab.colorbar(mappable) on the returned mappable)
-	:param rawVecColorRadius: if True, use radius associated with each point to color arrows in raw quiver plot.
-	:param bbox: if given, use this as axes limits instead of bbox computed from data points
-	:param clip_path: clip plotted image maps, contour lines or patches with this clip path (should be an instance of ``matplotlib.patches.Patch``). 
+    :param axes: matplotlib.axes\ instance where the figure will be plotted; if None, will be created from scratch.
+    :param data: value returned by :obj:`woo.post2d.data`
+    :param bool clabel: show contour labels (smooth mode only), or annotate cells with numbers inside (with perArea==2)
+    :param bool cbar: show colorbar (equivalent to calling pylab.colorbar(mappable) on the returned mappable)
+    :param rawVecColorRadius: if True, use radius associated with each point to color arrows in raw quiver plot.
+    :param bbox: if given, use this as axes limits instead of bbox computed from data points
+    :param clip_path: clip plotted image maps, contour lines or patches with this clip path (should be an instance of ``matplotlib.patches.Patch``). 
 
-	:return: tuple of ``(axes,mappable)``; mappable can be used in further calls to pylab.colorbar.
-	"""
-	import matplotlib.figure, math
-	if not axes:
-		# see http://stackoverflow.com/a/18261110/761090 
-		fig=matplotlib.figure.Figure()
-		axes=fig.add_subplot(1,1,1)
-		# this is to make sure the 
-		#canvas=matplotlib.backends.backend_agg.FigureCanvasAgg(fig)
-		#import matplotlib.figure, matplotlib.backends.backend_agg
-	if data['type']=='rawScalar':
-		from matplotlib.patches import Circle
-		import matplotlib.collections,numpy
-		patches=[]
-		for x,y,d,r in zip(data['x'],data['y'],data['val'],data['radii']):
-			patches.append(Circle(xy=(x,y),radius=r))
-		coll=matplotlib.collections.PatchCollection(patches,linewidths=0.,**kw)
-		coll.set_array(numpy.array(data['val']))
-		# if clip_path: coll.set_clip_path(clip_path)
-		axes.add_collection(coll)
-		if bbox:
-			axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
-		else:
-			bb=coll.get_datalim(coll.get_transform())
-			axes.set_xlim(bb.xmin,bb.xmax); axes.set_ylim(bb.ymin,bb.ymax)
-		if cbar: axes.get_figure().colorbar(coll)
-		axes.grid(True); axes.set_aspect(aspect)
-		return axes,coll
-	elif data['type']=='smoothScalar':
-		# for imshow - do not depend on axes limits (if passed as the bbox param)
-		imgExtent=data['bbox'][0][0],data['bbox'][1][0],data['bbox'][0][1],data['bbox'][1][1] 
-		if not bbox: bbox=data['bbox']
-		if data['perArea'] in (0,1):
-			img=axes.imshow(data['val'],extent=imgExtent,origin='lower',aspect=aspect,**kw)
-			ct=axes.contour(data['x'],data['y'],data['val'],colors='k',origin='lower',extend='both')
-			#if clip_path and 0:
-			#	img.set_clip_path(clip_path)
-			#	# XXX: does not work
-			#	# http://matplotlib.1069221.n5.nabble.com/Clipping-Contours-td39474.html
-			#	# for coll in ct.collections: coll.set_clip_path(clip_path)
-			if clabel: axes.clabel(ct,inline=1,fontsize=10)
-		else:
-			img=axes.imshow(data['val'],extent=imgExtent,origin='lower',aspect=aspect,interpolation='nearest',**kw)
-			# if clip_path: img.set_clip_path(clip_path)
-			xStep=(data['x'][1]-data['x'][0]) if len(data['x'])>1 else 0
-			for y,valLine in zip(data['y'],data['val']):
-				for x,val in zip(data['x'],valLine): axes.text(x-.4*xStep,y,('-' if math.isnan(val) else '%5g'%val),size=4)
-		axes.update_datalim(bbox)
-		axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
-		if cbar: axes.get_figure().colorbar(img)
-		axes.grid(True if data['perArea'] in (0,1) else False); axes.set_aspect(aspect)
-		return axes,img
-	elif data['type'] in ('rawVector','smoothVector'):
-		import numpy
-		if not bbox: bbox=data['bbox']
-		valX,valY=numpy.array(data['valX']),numpy.array(data['valY']) # rawVector data are plain python lists
-		if data['type']=='rawVector' and rawVecColorRadius: scalars=numpy.array(data['radii'])
-		else: scalars=numpy.sqrt(valX**2+valY**2) # use vector magnitudes
-		# numpy.sqrt computes element-wise sqrt
-		quiv=axes.quiver(data['x'],data['y'],data['valX'],data['valY'],scalars,**kw)
-		# if clip_path: quiv.set_clip_path(clip_path)
-		#axes.update_datalim(bbox)
-		axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
-		if cbar: axes.get_figure().colorbar(coll)
-		axes.grid(True); axes.set_aspect(aspect)
-		return axes,quiv
+    :return: tuple of ``(axes,mappable)``; mappable can be used in further calls to pylab.colorbar.
+    """
+    import matplotlib.figure, math
+    if not axes:
+        # see http://stackoverflow.com/a/18261110/761090 
+        fig=matplotlib.figure.Figure()
+        axes=fig.add_subplot(1,1,1)
+        # this is to make sure the 
+        #canvas=matplotlib.backends.backend_agg.FigureCanvasAgg(fig)
+        #import matplotlib.figure, matplotlib.backends.backend_agg
+    if data['type']=='rawScalar':
+        from matplotlib.patches import Circle
+        import matplotlib.collections,numpy
+        patches=[]
+        for x,y,d,r in zip(data['x'],data['y'],data['val'],data['radii']):
+            patches.append(Circle(xy=(x,y),radius=r))
+        coll=matplotlib.collections.PatchCollection(patches,linewidths=0.,**kw)
+        coll.set_array(numpy.array(data['val']))
+        # if clip_path: coll.set_clip_path(clip_path)
+        axes.add_collection(coll)
+        if bbox:
+            axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
+        else:
+            bb=coll.get_datalim(coll.get_transform())
+            axes.set_xlim(bb.xmin,bb.xmax); axes.set_ylim(bb.ymin,bb.ymax)
+        if cbar: axes.get_figure().colorbar(coll)
+        axes.grid(True); axes.set_aspect(aspect)
+        return axes,coll
+    elif data['type']=='smoothScalar':
+        # for imshow - do not depend on axes limits (if passed as the bbox param)
+        imgExtent=data['bbox'][0][0],data['bbox'][1][0],data['bbox'][0][1],data['bbox'][1][1] 
+        if not bbox: bbox=data['bbox']
+        if data['perArea'] in (0,1):
+            img=axes.imshow(data['val'],extent=imgExtent,origin='lower',aspect=aspect,**kw)
+            ct=axes.contour(data['x'],data['y'],data['val'],colors='k',origin='lower',extend='both')
+            #if clip_path and 0:
+            #    img.set_clip_path(clip_path)
+            #    # XXX: does not work
+            #    # http://matplotlib.1069221.n5.nabble.com/Clipping-Contours-td39474.html
+            #    # for coll in ct.collections: coll.set_clip_path(clip_path)
+            if clabel: axes.clabel(ct,inline=1,fontsize=10)
+        else:
+            img=axes.imshow(data['val'],extent=imgExtent,origin='lower',aspect=aspect,interpolation='nearest',**kw)
+            # if clip_path: img.set_clip_path(clip_path)
+            xStep=(data['x'][1]-data['x'][0]) if len(data['x'])>1 else 0
+            for y,valLine in zip(data['y'],data['val']):
+                for x,val in zip(data['x'],valLine): axes.text(x-.4*xStep,y,('-' if math.isnan(val) else '%5g'%val),size=4)
+        axes.update_datalim(bbox)
+        axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
+        if cbar: axes.get_figure().colorbar(img)
+        axes.grid(True if data['perArea'] in (0,1) else False); axes.set_aspect(aspect)
+        return axes,img
+    elif data['type'] in ('rawVector','smoothVector'):
+        import numpy
+        if not bbox: bbox=data['bbox']
+        valX,valY=numpy.array(data['valX']),numpy.array(data['valY']) # rawVector data are plain python lists
+        if data['type']=='rawVector' and rawVecColorRadius: scalars=numpy.array(data['radii'])
+        else: scalars=numpy.sqrt(valX**2+valY**2) # use vector magnitudes
+        # numpy.sqrt computes element-wise sqrt
+        quiv=axes.quiver(data['x'],data['y'],data['valX'],data['valY'],scalars,**kw)
+        # if clip_path: quiv.set_clip_path(clip_path)
+        #axes.update_datalim(bbox)
+        axes.set_xlim(bbox[0][0],bbox[1][0]); axes.set_ylim(bbox[0][1],bbox[1][1])
+        if cbar: axes.get_figure().colorbar(coll)
+        axes.grid(True); axes.set_aspect(aspect)
+        return axes,quiv
 
 

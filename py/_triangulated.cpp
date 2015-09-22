@@ -9,6 +9,7 @@
 #include<woo/pkg/dem/Ellipsoid.hpp>
 #include<woo/pkg/dem/VtkExport.hpp>
 
+
 #ifdef WOO_LOG4CXX
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.triangulated");
 #endif
@@ -88,7 +89,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		}
 		if(capsule){
 			#ifdef WOO_VTK
-				int subdiv=min(4.,ceil(M_PI/(acos(1-tol/capsule->radius))));
+				int subdiv=max(4.,ceil(M_PI/(acos(1-tol/capsule->radius))));
 				std::tie(pts,tri)=VtkExport::triangulateCapsule(static_pointer_cast<Capsule>(p->shape),subdiv);
 			#else
 				throw std::runtime_error("Triangulation of capsules is (for internal and entirely fixable reasons) only available when compiled with the 'vtk' features.");
@@ -157,6 +158,18 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 	return numTri;
 }
 
+py::list porosity(shared_ptr<DemField>& dem, const AlignedBox3r& box){
+	vector<Real> poro=DemFuncs::boxPorosity(dem,box);
+	py::list ret;
+	for(size_t id=0; id<poro.size(); id++){
+		if(isnan(poro[id])) continue;
+		const auto& sh((*dem->particles)[id]->shape);
+		ret.append(py::make_tuple(id,sh->nodes[0]->pos,poro[id]));
+	}
+	return ret;
+}
+
+
 WOO_PYTHON_MODULE(_triangulated);
 BOOST_PYTHON_MODULE(_triangulated){
 	WOO_SET_DOCSTRING_OPTS;
@@ -166,5 +179,7 @@ BOOST_PYTHON_MODULE(_triangulated){
 	py::def("spheroidsToSTL",spheroidsToSTL,(py::arg("stl"),py::arg("dem"),py::arg("tol"),py::arg("solid")="woo_export",py::arg("mask")=0,py::arg("append")=false,py::arg("cellClip")=false),"Export spheroids (:obj:`spheres <woo.dem.Sphere>`, :obj:`capsules <woo.dem.Capsule>`, :obj:`ellipsoids <woo.dem.Ellipsoid>`) to STL file. *tol* is the maximum distance between triangulation and smooth surface; if negative, it is relative to the smallest equivalent radius of particles for export. *mask* (if non-zero) only selects particles with matching :obj:`woo.dem.Particle.mask`. The exported STL ist ASCII.\n\nSpheres and ellipsoids are exported as tesselated icosahedra, with tesselation level determined from *tol*. The maximum error is :math:`e=r\\left(1-\\cos \\frac{2\\pi}{5}\\frac{1}{2}\\frac{1}{n}\\right)` for given tesselation level :math:`n` (1 for icosahedron, each level quadruples the number of triangles), with :math:`r` being the sphere's :obj:`radius <woo.dem.Sphere.radius>` (or ellipsoid's smallest :obj:`semiAxis <woo.dem.Ellipsoid.semiAxes>`); it follows that :math:`n=\\frac{\\pi}{5\\arccos\\left(1-\\frac{e}{r}\\right)}`, where :math:`n` will be rounded up.\n\nCapsules are triangulated in polar coordinates (slices, stacks). The error for regular :math:`n`-gon is :math:`e=r\\left(1-\\cos\\frac{2\\pi}{2n}\\right)` and it follows that :math:`n=\\frac{\\pi}{\\arccos\\left(1-\\frac{e}{r}\\right)}`; the minimum is restricted to be 4, to avoid degenerate shapes.\n\nThe number of facets written to the STL file is returned.\n\nWith periodic boundaries, *clipCell* will cause all triangles entirely outside of the periodic cell to be discarded.\n\n*solid* specified name of ``solid`` inside the STL file; this is useful in conjunction with *append* (which writes at the end of the file) when writing multi-part STL suitable e.g. for `snappyHexMesh <http://www.openfoam.org/docs/user/snappyHexMesh.php>`__.");
 
 	py::def("facetsToSTL",facetsToSTL,(py::arg("stl"),py::arg("dem"),py::arg("solid"),py::arg("mask")=0,py::arg("append")=false),"Export :obj:`facets <woo.dem.Facet>` to STL file. Periodic boundaries are not handled in any special way.");
+
+	py::def("porosity",porosity,(py::arg("dem"),py::arg("box")),"Return list of `(id,position,porosity)`, where porosity is computed as 1-Vs/Vv, where Vs is particle volume (sphere, capsule, ellipsoid only) and Vv is cell volume using radical Voronoi tesselation around particles. Highly experimental and subject to further changes.");
 
 };

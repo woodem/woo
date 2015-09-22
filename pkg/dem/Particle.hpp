@@ -62,7 +62,7 @@ struct Particle: public Object{
 	#endif
 	void setRefPos(const Vector3r&);
 	std::vector<shared_ptr<Node> > getNodes();
-	virtual string pyStr() const WOO_CXX11_OVERRIDE { return "<Particle #"+to_string(id)+" @ "+lexical_cast<string>(this)+">"; }
+	virtual string pyStr() const override { return "<Particle #"+to_string(id)+" @ "+lexical_cast<string>(this)+">"; }
 	int countRealContacts() const;
 	void postLoad(Particle&,void*);
 
@@ -176,8 +176,8 @@ WOO_REGISTER_OBJECT(MatState);
 struct DemData: public NodeData{
 public:
 	WOO_DECL_LOGGER;
-	const char* getterName() const WOO_CXX11_OVERRIDE { return "dem"; }
-	void setDataOnNode(Node& n) WOO_CXX11_OVERRIDE { n.setData(static_pointer_cast<DemData>(shared_from_this())); }
+	const char* getterName() const override { return "dem"; }
+	void setDataOnNode(Node& n) override { n.setData(static_pointer_cast<DemData>(shared_from_this())); }
 
 
 	// bits for flags
@@ -232,7 +232,7 @@ public:
 	bool isDampingSkip() const { return flags&DAMPING_SKIP; }
 	void setDampingSkip(bool skip) { if(!skip) flags&=~DAMPING_SKIP; else flags|=DAMPING_SKIP; }
 
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) WOO_CXX11_OVERRIDE;
+	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
 	void addForceTorque(const Vector3r& f, const Vector3r& t=Vector3r::Zero()){ boost::mutex::scoped_lock l(lock); force+=f; torque+=t; }
 	void addForce(const Vector3r& f){ boost::mutex::scoped_lock l(lock); force+=f; }
 
@@ -300,20 +300,20 @@ struct DemField: public Field{
 	void removeParticle(Particle::id_t id);
 	void removeClump(size_t id);
 	vector<shared_ptr<Node>> splitNode(const shared_ptr<Node>&, const vector<shared_ptr<Particle>>& pp, const Real massMult=NaN, const Real inertiaMult=NaN);
-	AlignedBox3r renderingBbox() const WOO_CXX11_OVERRIDE; // overrides Field::renderingBbox
+	AlignedBox3r renderingBbox() const override; // overrides Field::renderingBbox
 	boost::mutex nodesMutex; // sync adding nodes with the renderer, which might otherwise crash
 
-	void selfTest() WOO_CXX11_OVERRIDE;
+	void selfTest() override;
 
 	void pyNodesAppend(const shared_ptr<Node>& n);
 	void pyNodesAppendList(const vector<shared_ptr<Node>> nn);
 	void pyNodesAppendFromParticles(const vector<shared_ptr<Particle>>& pp);
 
 
-	Real critDt() WOO_CXX11_OVERRIDE;
+	Real critDt() override;
 
 	// for passing particles to the ctor
-	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) WOO_CXX11_OVERRIDE;
+	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
 
 	enum {
 		// first bit: normally novable particles
@@ -375,7 +375,7 @@ struct Shape: public Object, public Indexable{
 	// check that we have the right number of nodes and that each nodes has DemData; raise python exception on failures
 	void checkNodesHaveDemData() const;
 	// this will be called from DemField::selfTest for each particle
-	virtual void selfTest(const shared_ptr<Particle>& p){};
+	virtual void selfTest(const shared_ptr<Particle>& p);
 	// color manipulation
 	Real getSignedBaseColor(){ return color-trunc(color); }
 	Real getBaseColor(){ return abs(color)-trunc(abs(color)); }

@@ -11,7 +11,7 @@ struct TraceVisRep: public NodeVisRep{
 	void addPoint(const Vector3r& p, const Real& scalar);
 	void compress(int ratio);
 	#ifdef WOO_OPENGL
-		void render(const shared_ptr<Node>&,const GLViewInfo*) WOO_CXX11_OVERRIDE;
+		void render(const shared_ptr<Node>&,const GLViewInfo*) override;
 	#endif
 	void setHidden(bool hidden){ if(!hidden)flags&=~FLAG_HIDDEN; else flags|=FLAG_HIDDEN; }
 	bool isHidden() const { return flags&FLAG_HIDDEN; }
@@ -50,10 +50,10 @@ struct TraceVisRep: public NodeVisRep{
 WOO_REGISTER_OBJECT(TraceVisRep);
 
 struct BoxTraceTimeSetter: public PeriodicEngine{
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
-	virtual void run() WOO_CXX11_OVERRIDE;
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
+	virtual void run() override;
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) WOO_CXX11_OVERRIDE;
+		void render(const GLViewInfo&) override;
 	#endif
 	#define woo_dem_BoxTraceTimeSetter__CLASS_BASE_DOC_ATTRS \
 		BoxTraceTimeSetter,PeriodicEngine,"Set :obj:`TraceVisRep.t0` of nodes inside :obj:`box` to the current `time <Scene.time>`; this is used for tracking how long has a particle been away from that region.", \
@@ -66,13 +66,13 @@ struct BoxTraceTimeSetter: public PeriodicEngine{
 WOO_REGISTER_OBJECT(BoxTraceTimeSetter);
 
 struct Tracer: public PeriodicEngine{
-	bool acceptsField(Field* f) WOO_CXX11_OVERRIDE { return dynamic_cast<DemField*>(f); }
+	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	void resetNodesRep(bool setupEmpty=false, bool includeDead=true);
-	void getRanges(vector<shared_ptr<ScalarRange>>& sr) const WOO_CXX11_OVERRIDE { sr.push_back(lineColor); };
+	void getRanges(vector<shared_ptr<ScalarRange>>& sr) const override { sr.push_back(lineColor); };
 
 	void postLoad(Tracer&, void* attr);
 
-	virtual void run() WOO_CXX11_OVERRIDE;
+	virtual void run() override;
 	enum{SCALAR_NONE=0,SCALAR_TIME,SCALAR_TRACETIME,SCALAR_VEL,SCALAR_ANGVEL,SCALAR_SIGNED_ACCEL,SCALAR_RADIUS,SCALAR_NUMCON,SCALAR_SHAPE_COLOR,SCALAR_KINETIC,SCALAR_ORDINAL,SCALAR_MATSTATE};
 	#define woo_dem_Tracer__CLASS_BASE_DOC_ATTRS_PY \
 		Tracer,PeriodicEngine,"Save trace of node's movement", \

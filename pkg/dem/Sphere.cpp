@@ -12,6 +12,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Sphere_Sphere_L6Geom__CLASS_BASE_DOC_
 void woo::Sphere::selfTest(const shared_ptr<Particle>& p){
 	if(radius<=0) throw std::runtime_error("Sphere #"+to_string(p->id)+": radius must be positive (not "+to_string(radius)+")");
 	if(!numNodesOk()) throw std::runtime_error("Sphere #"+to_string(p->id)+": numNodesOk() failed (has "+to_string(nodes.size())+" nodes)");
+	Shape::selfTest(p);
 }
 
 Real woo::Sphere::volume() const { return (4/3.)*M_PI*pow(radius,3); }

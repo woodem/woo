@@ -1,6 +1,6 @@
 a=1.; r=a/4.
 O.bodies.append(
-	[utils.sphere(c,r) for c in [(r,r,r),(3*r,r,r),(3*r,3*r,r),(r,3*r,r),(r,r,3*r),(3*r,r,3*r),(3*r,3*r,3*r),(r,3*r,3*r)]]
+    [utils.sphere(c,r) for c in [(r,r,r),(3*r,r,r),(3*r,3*r,r),(r,3*r,r),(r,r,3*r),(3*r,r,3*r),(3*r,3*r,3*r),(r,3*r,3*r)]]
 )
 O.periodic=True
 O.cell.refSize=(a,a,a)

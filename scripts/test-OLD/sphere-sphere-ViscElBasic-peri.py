@@ -17,22 +17,22 @@ sphereMat=O.materials.append(ViscElMat(density=density,frictionAngle=frictionAng
 
 # Spheres
 sphId=O.bodies.append([
-	utils.sphere( (0.4,0.5,0.5), 0.1, material=sphereMat),
-	utils.sphere( (0.6,0.5,0.5), 0.1, material=sphereMat)
-	])
+    utils.sphere( (0.4,0.5,0.5), 0.1, material=sphereMat),
+    utils.sphere( (0.6,0.5,0.5), 0.1, material=sphereMat)
+    ])
 O.bodies[sphId[-1]].state.vel=(0.5,0,0)
 O.bodies[sphId[0]].state.vel=(-0.5,0,0)
 
 ## Engines 
 O.engines=[
-	ForceResetter(),
-	InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
-	InteractionLoop(
-		[Ig2_Sphere_Sphere_ScGeom()],
-		[Ip2_ViscElMat_ViscElMat_ViscElPhys()],
-		[Law2_ScGeom_ViscElPhys_Basic()],
-	),
-	NewtonIntegrator(damping=0),
+    ForceResetter(),
+    InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb()]),
+    InteractionLoop(
+        [Ig2_Sphere_Sphere_ScGeom()],
+        [Ip2_ViscElMat_ViscElMat_ViscElPhys()],
+        [Law2_ScGeom_ViscElPhys_Basic()],
+    ),
+    NewtonIntegrator(damping=0),
 ]
 
 O.periodic=True
