@@ -21,6 +21,11 @@ void HalfspaceBuoyancy::run(){
 		if(isnan(rad)) continue; // but we check anyway...
 		// depth, in local coordinates
 		Real h=node->glob2loc(p->shape->nodes[0]->pos).z();
+		Real relh=h-waterHeight;
+		Real relH=rad-relh; 
+		Real vS = (4*M_PI*(rad*rad*rad))/3;
+		Real vD = 0;
+		Real grav = (node->ori.conjugate()*dem.gravity).z();
 		// entirely above the liquid level, no force to apply
 		if(h>=2*rad) continue;
 
@@ -31,13 +36,61 @@ void HalfspaceBuoyancy::run(){
 		// implement something meaningful here
 		// gravity is dem.gravity (a Vector3r in global CS)
 		F=T=Vector3r::Zero();
-		//F=Vector3r(0,0,-1*(node->ori.conjugate()*dem.gravity).z());
-		//Buoyancy = Submerged Volume * Density of Water * Gravity
-		Real vS = 4*M_PI*(rad*rad*rad);
-		Real dens = 1000;
-		F=Vector3r(0,0,-1*(vS*dens)*(node->ori.conjugate()*dem.gravity).z());
+
+		Vector3r Fd=Vector3r::Zero();
+		Vector3r Fad=Vector3r::Zero();
 
 
+		Vector3r Fb = Vector3r::Zero();
+
+		//Simple Buoyancy = Submerged Volume * Density of Water * Gravity
+		if(relH<2*rad){
+			if(waterHeight>h){
+				vD=(M_PI*relH*relH*((3*rad)-relH))/3;
+				Fb=Vector3r(0,0,liqRho*vD*-grav);	
+				if(drag){
+					Real alpha1=acos((waterHeight-h)/rad);
+					Real area=2*M_PI*rad*rad*(M_PI-alpha1)/M_PI+rad*sin(alpha1)*(waterHeight-h);
+					auto pVel=p->getVel();
+					auto pAngVel=p->getAngVel();
+					for(int i=0;i<3;i++){
+						Fd[i]=-0.5*liqRho*dragCoef*abs(pVel[i])*pVel[i]*area;
+						Fad[i]=-(4.0/15.0)*liqRho*dragCoef*abs(pAngVel[i])*pow(rad,5);
+					}
+				}
+			}
+			else if(waterHeight<=h){
+				vD=(M_PI*relH*relH*((3*rad)-relH))/3;
+				Fb=Vector3r(0,0,liqRho*vD*-grav);
+				if(drag){
+					Real alpha1=acos((h-waterHeight)/rad);
+					Real area=2*M_PI*rad*rad*alpha1/M_PI-rad*sin(alpha1)*(h-waterHeight);
+					auto pVel=p->getVel();
+					auto pAngVel=p->getAngVel();
+					for(int i=0;i<3;i++){
+						Fd[i]=-0.5*liqRho*dragCoef*abs(pVel[i])*pVel[i]*area;
+						Fad[i]=-(4.0/15.0)*liqRho*dragCoef*abs(pAngVel[i])*pow(rad,5);
+					}
+				}
+			}
+		}
+
+		else{
+			Fb=Vector3r(liqRho*vS*-grav);
+			if(drag){
+				Real area=M_PI*rad*rad;
+				auto pVel=p->getVel();
+				auto pAngVel=p->getAngVel();
+				for(int i=0;i<3;i++){
+					Fd[i]=-0.5*liqRho*dragCoef*abs(pVel[i])*pVel[i]*area;
+					Fad[i]=-(4.0/15.0)*liqRho*dragCoef*abs(pAngVel[i])*pow(rad,5);
+				}
+			}	
+		}
+		F += Fb;
+		if(drag){
+			F += Fd;
+		}
 		// DemData instance for the node
 		auto& dyn(p->shape->nodes[0]->getData<DemData>());
 		// if we were in parallel section, use this for access sync: dyn.addForceTorque(F,T);

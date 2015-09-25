@@ -10,7 +10,9 @@ struct HalfspaceBuoyancy: public Engine{
 		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"local coordinate system, of which :math:`-z` halfspace is active.")) \
 		((uint,mask,uint(DemField::defaultMovableMask),,"Mask for particles Buoyancy is applied to.")) \
 		((Real,liqRho,1000,,"Density of the medium.")) \
-		((Real,dragCoef,0.47,,"Drag coefficient."))
+		((Real,dragCoef,0.47,,"Drag coefficient.")) \
+		((bool,drag,false,,"Flag for turning water drag on or off")) \
+		((Real,waterHeight,1.0,,"Water height from origin"))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_HalfspaceBuoyancy_CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(HalfspaceBuoyancy);
