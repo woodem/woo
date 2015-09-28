@@ -134,6 +134,7 @@ def mkFacetCyl(aabb,cylDiv,suppMat,sideMat,suppMask,sideMask,suppBlock,sideBlock
 
 def prepareCylTriax(pre):
     import woo
+    woo.master.usesApi=10102
     margin=1.5
     rad,ht=.5*pre.htDiam[1],pre.htDiam[0]
     bot,top=margin*ht,(1+margin)*ht
