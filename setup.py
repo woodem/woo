@@ -122,7 +122,7 @@ if 'opengl' in features and 'qt4' not in features: raise ValueError("The 'opengl
 def wooPrepareHeaders():
 	'Copy headers to build-src-tree/woo/ subdirectory'
 	if not os.path.exists(pathHeaders): os.makedirs(pathHeaders)
-	hpps=sum([glob(pat) for pat in ('lib/*/*.hpp','lib/multimethods/loki/*.h','core/*.hpp','pkg/*/*.hpp','pkg/*/*.hpp')],[])
+	hpps=sum([glob(pat) for pat in ('lib/*/*.hpp','lib/*/*.hh','lib/multimethods/loki/*.h','core/*.hpp','pkg/*/*.hpp','pkg/*/*.hpp')],[])
 	for hpp in hpps:
 		d=join(pathHeaders,dirname(hpp))
 		if not os.path.exists(d): os.makedirs(d)
