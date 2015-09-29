@@ -16,7 +16,7 @@ install:
    # see what's there really
    - dpkg -l 
    # use non-default version of gcc (ubuntu 14.04)
-   - WOO_FLAVOR=travis CC=gcc-4.7 CXX=g++-4.7 python setup.py install 
+   - WOO_FLAVOR=travis CC=clang CXX=clang++ python setup.py install 
 script:
    - timeout 60 $WOO_EXEC --test # py3 stalls?!
 ## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
@@ -36,7 +36,7 @@ addons:
          - python3-all-dev
          - libeigen3-dev
          - libhdf5-serial-dev
-         - g++-4.7
          - binutils-gold
          - libboost1.55-all-dev
+         - clang
 
