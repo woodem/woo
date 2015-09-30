@@ -82,7 +82,8 @@ if not version:
 ## build options
 ##
 features=['vtk','gts','openmp','qt4','opengl']
-if travis: features=['openmp'] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
+# disable even openmp for travis, since gcc 4.7 & 4.8 ICE and clang's version there does not support OpenMP yet
+if travis: features=[] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
 flavor='' #('' if WIN else 'distutils')
 if travis: flavor+=('-' if flavor else '')+'travis'
 if PY3K: flavor+=('-' if flavor else '')+'py3'
