@@ -260,6 +260,10 @@ void RandomInlet::run(){
 		}
 	}
 
+	#if 0
+		if(massRate<=0) Master::instance().checkApi(/*minApi*/10103,"RandomInlet.massRate<=0 newly honors RandomInlet.atMaxAttempts; to restore the old behavior, say atMaxAttempts='silent'.",/*pyWarn*/false);
+	#endif
+
 	while(true){
 		// finished forever
 		if(everythingDone()) return;
@@ -290,11 +294,14 @@ void RandomInlet::run(){
 					}
 					case MAXATT_WARN: LOG_WARN("maxAttempts "<<maxAttempts<<" reached before required mass amount was generated; continuing, since maxAttemptsError==False"); break;
 					case MAXATT_SILENT: break;
+					case MAXATT_DONE: Engine::runPy(doneHook); break;
 					default: throw std::invalid_argument("Invalid value of RandomInlet.atMaxAttempts="+to_string(atMaxAttempts)+".");
 				}
+				goto stepDone;
 			}
 			/***** each maxAttempts/attPerPar, try a new particles *****/	
-			if((attempt%(maxAttempts/attemptPar))==0){
+			// the first condition after || guards against FPE in attempt%0
+			if(attempt==0 || ((maxAttempts/attemptPar>0) && (attempt%(maxAttempts/attemptPar))==0)){
 				LOG_DEBUG("attempt "<<attempt<<": trying with a new particle.");
 				if(attempt>0) generator->revokeLast(); // if not at the beginning, revoke the last particle
 

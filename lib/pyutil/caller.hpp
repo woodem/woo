@@ -1,3 +1,4 @@
+#pragma once
 // http://stackoverflow.com/questions/16933418/calling-c-functions-who-is-calling
 #include<frameobject.h>
 #include<woo/lib/pyutil/gil.hpp>

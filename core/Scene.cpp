@@ -104,7 +104,10 @@ void Scene::PausedContextManager::__enter__(){
 	// not release the lock, and we would get deadlocked.
 
 	// this fails to detect when called from within engine with S.step() rather than S.run()
-	if(boost::this_thread::get_id()==scene->bgThreadId) throw std::runtime_error("Scene.paused() may not be called from the engine thread!");
+	if(boost::this_thread::get_id()==scene->bgThreadId){
+		if(allowBg){ locked=false; return; }
+		throw std::runtime_error("Scene.paused() may not be called from the engine thread!");
+	}
 	#ifdef WOO_LOOP_MUTEX_HELP
 		engineLoopMutexWaiting=true;
 	#endif
@@ -121,6 +124,7 @@ void Scene::PausedContextManager::__enter__(){
 }
 // exception information are not used, but we need to accept those args
 void Scene::PausedContextManager::__exit__(py::object exc_type, py::object exc_value, py::object traceback){
+	if(!locked) return;
 	scene->engineLoopMutex.unlock();
 	LOG_DEBUG("Scene.paused(): unlocked");
 }

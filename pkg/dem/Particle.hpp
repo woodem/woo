@@ -433,11 +433,11 @@ struct Shape: public Object, public Indexable{
 		((Real,color,Mathr::UnitRandom(),,"Normalized color for rendering; negative values render with wire (rather than solid), :math:`|\\text{color}|`>2 means invisible. (use *wire*, *hi* and *visible* to manipulate those)")) \
 		,/*ctor*/ createIndex(); \
 		,/*py*/ \
-			.add_property("wire",&Shape::getWire,&Shape::setWire) \
-			.add_property("hi",&Shape::getHighlighted,&Shape::setHighlighted) \
-			.add_property("visible",&Shape::getVisible,&Shape::setVisible) \
-			.add_property("equivRadius",&Shape::equivRadius) \
-			.add_property("volume",&Shape::volume) \
+			.add_property("wire",&Shape::getWire,&Shape::setWire,"Display this shape as wire or non-wire (unless overrideden by GL functor); internally encoded in :obj:`color`.") \
+			.add_property("hi",&Shape::getHighlighted,&Shape::setHighlighted,"Display this shape as highlighted (blinking color); internally encoded in :obj:`color`.") \
+			.add_property("visible",&Shape::getVisible,&Shape::setVisible,"Set the shape as invisible; internally encoded in :obj:`color`.") \
+			.add_property("equivRadius",&Shape::equivRadius,"Volumetrically equivalent radius of this shape. Returns NaN if the shape is multinodal or infinite.") \
+			.add_property("volume",&Shape::volume,"Volume of this shape; returns NaN for multinodal or infinite shapes.") \
 			.def("asRaw",&Shape::pyAsRaw) \
 			.def("setFromRaw",&Shape::setFromRaw) \
 			.def("isInside",&Shape::isInside) \

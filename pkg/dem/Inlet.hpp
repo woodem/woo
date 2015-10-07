@@ -28,7 +28,7 @@ struct Inlet: public PeriodicEngine{
 		((int,mask,((void)":obj:`DemField.defaultInletMask`",DemField::defaultInletMask),,":obj:`~woo.dem.Particle.mask` for new particles.")) \
 		((Real,maxMass,-1,AttrTrait<>().massUnit(),"Mass at which the engine will not produce any particles (inactive if not positive)")) \
 		((long,maxNum,-1,,"Number of generated particles after which no more will be produced (inactive if not positive)")) \
-		((string,doneHook,"",,"Python string to be evaluated when :obj:`maxMass` or :obj:`maxNum` have been reached. The engine is made dead automatically even if doneHook is not specified.")) \
+		((string,doneHook,"",,"Python string to be evaluated when :obj:`maxMass` or :obj:`maxNum` have been reached (or with :obj:`RandomInlet`, :obj:`maxAttempts` were exhausted and :obj:`RandomInlet.atMaxAttempts` equals ``'done'``). The engine is made dead automatically even if doneHook is not specified.")) \
 		((Real,mass,0,AttrTrait<>().massUnit(),"Generated mass total")) \
 		((long,num,0,,"Number of generated particles")) \
 		((Real,currRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Current value of mass flow rate")) \
@@ -187,18 +187,18 @@ struct RandomInlet: public Inlet{
 	void pyClear(){ if(generator) generator->clear(); num=0; mass=0; stepGoalMass=0; /* do not reset stepPrev! */ }
 	Real critDt() override; 
 	shared_ptr<Collider> collider;
-	enum{MAXATT_ERROR=0,MAXATT_DEAD,MAXATT_WARN,MAXATT_SILENT};
+	enum{MAXATT_ERROR=0,MAXATT_DEAD,MAXATT_WARN,MAXATT_SILENT,MAXATT_DONE};
 	bool spheresOnly; // set at each step, queried from the generator
 	#define woo_dem_RandomInlet__CLASS_BASE_DOC_ATTRS_PY \
 		RandomInlet,Inlet,"Inlet generating new particles. This class overrides :obj:`woo.core.Engine.critDt`, which in turn calls :obj:`woo.dem.ParticleGenerator.critDt` with all possible :obj:`materials` one by one.", \
-		((Real,massRate,NaN,AttrTrait<>().massRateUnit(),"Mass flow rate; if zero, generate as many particles as possible, until maxAttemps is reached.")) \
+		((Real,massRate,NaN,AttrTrait<>().massRateUnit(),"Mass flow rate; if non-positive, keep generating and placing new particles  until :obj:`maxAttempts` is exhausted and :obj:`atMaxAttempts` is used to decide what to do next.")) \
 		((vector<shared_ptr<Material>>,materials,,,"Set of materials for new particles, randomly picked from")) \
 		((shared_ptr<ParticleGenerator>,generator,,,"Particle generator instance")) \
 		((shared_ptr<ParticleShooter>,shooter,,,"Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.")) \
 		((shared_ptr<SpatialBias>,spatialBias,,,"Make random position biased based on the radius of the current particle; if unset, distribute uniformly.")) \
 		((int,maxAttempts,5000,,"Maximum attempts to position new particles randomly, without collision. If 0, no limit is imposed. When reached, :obj:`atMaxAttempts` determines, what will be done. Each particle is tried maxAttempts/maxMetaAttempts times, then a new particle is tried.")) \
 		((int,attemptPar,5,,"Number of trying a different particle to position (each will be tried maxAttempts/attemptPar times)")) \
-		((int,atMaxAttempts,MAXATT_ERROR,AttrTrait<Attr::namedEnum>().namedEnum({{MAXATT_ERROR,{"error"}},{MAXATT_DEAD,{"dead"}},{MAXATT_WARN,{"warn"}},{MAXATT_SILENT,{"silent",""}}}),"What to do when maxAttempts is reached.")) \
+		((int,atMaxAttempts,MAXATT_ERROR,AttrTrait<Attr::namedEnum>().namedEnum({{MAXATT_ERROR,{"error"}},{MAXATT_DEAD,{"dead"}},{MAXATT_WARN,{"warn"}},{MAXATT_SILENT,{"silent","nothing","ignore",""}},{MAXATT_DONE,{"doneHook","done"}}}),"What to do when maxAttempts is reached.")) \
 		((Real,padDist,0.,AttrTrait<Attr::readonly>(),"Pad geometry by this distance inside; random points will be chosen inside the shrunk geometry, whereas boxes will be validated in the larger one. This attribute must be set by the generator.")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
 		((Real,color,NaN,,"Color for new particles (NaN for random; negative for keeping color assigned by the generator).")) \

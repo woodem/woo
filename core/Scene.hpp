@@ -127,11 +127,13 @@ struct Scene: public Object{
 		boost::timed_mutex engineLoopMutex;
 		struct PausedContextManager{
 			shared_ptr<Scene> scene;
+			bool allowBg;
+			bool locked=true;
 			#ifdef WOO_LOOP_MUTEX_HELP
 				bool& engineLoopMutexWaiting;
 			#endif
 			// stores reference to mutex, but does not lock it yet
-			PausedContextManager(const shared_ptr<Scene>& _scene): scene(_scene)
+			PausedContextManager(const shared_ptr<Scene>& _scene, bool _allowBg): scene(_scene),allowBg(_allowBg)
 				#ifdef WOO_LOOP_MUTEX_HELP
 					, engineLoopMutexWaiting(scene->engineLoopMutexWaiting)
 				#endif
@@ -142,7 +144,7 @@ struct Scene: public Object{
 				py::class_<PausedContextManager,boost::noncopyable>("PausedContextManager",py::no_init).def("__enter__",&PausedContextManager::__enter__).def("__exit__",&PausedContextManager::__exit__);
 			}
 		};
-		PausedContextManager* pyPaused(){ return new PausedContextManager(static_pointer_cast<Scene>(shared_from_this())); }
+		PausedContextManager* pyPaused(bool allowBg=false){ return new PausedContextManager(static_pointer_cast<Scene>(shared_from_this()),allowBg); }
 
 		// override Object::boostSave, to set lastSave correctly
 		void boostSave(const string& out) override;
@@ -234,7 +236,7 @@ struct Scene: public Object{
 		.def("one",&Scene::pyOne) \
 		.def("wait",&Scene::pyWait) \
 		.add_property("running",&Scene::running) \
-		.def("paused",&Scene::pyPaused,py::return_value_policy<py::manage_new_object>()) \
+		.def("paused",&Scene::pyPaused,(py::arg("allowBg")=false),py::return_value_policy<py::manage_new_object>(),"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
 		.def("selfTest",&Scene::pySelfTest,"Run self-tests (they are usually run automatically with, see :obj:`selfTestEvery`).") \
 		.def("expandTags",&Scene::expandTags,"Expand :obj:`tags` written as ``{tagName}``, returns the expanded string.") \
 		; /* define nested class */ \
