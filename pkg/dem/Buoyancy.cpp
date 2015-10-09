@@ -92,7 +92,7 @@ void HalfspaceBuoyancy::run(){
 		F += Fb;
 		if(drag){
 			F += Fd;
-			T += Fad;
+			T += Md;
 		}
 		// if we were in parallel section, use this for access sync: dyn.addForceTorque(F,T);
 		dyn.force+=node->ori*F; dyn.torque+=node->ori*T;
