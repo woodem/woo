@@ -211,7 +211,7 @@ def addPlotData_checkProgress(S):
 
     if not S.plot.plots:
         S.plot.plots={
-            'i':('unbalanced',None,'vol'),'i ':(('sxx','syy','szz') if S.pre.planeStrain else ('srr','szz')),' i':('err','ezz','eVol'),'i  ':('dotE_z','dotEMax_z'),
+            'i':('unbalanced',None,'vol'),'i ':(('sxx','syy','szz') if S.pre.planeStrain else ('srr','szz')),' i':(('exx','eyy','ezz','eVol') if S.pre.planeStrain else ('err','ezz','eVol')),'i  ':('dotE_z','dotEMax_z'),
             'eDev':(('qDivP','g-'),None,('eVol','r-')),'p':('q',),
             # energy plot
             #' i ':(O.energy.keys,None,'Etot'),
