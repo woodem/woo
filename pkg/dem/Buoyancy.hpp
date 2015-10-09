@@ -12,6 +12,7 @@ struct HalfspaceBuoyancy: public Engine{
 		((Real,liqRho,1000,,"Density of the medium.")) \
 		((Real,dragCoef,0.47,,"Drag coefficient.")) \
 		((bool,drag,false,,"Flag for turning water drag on or off")) \
+		((Vector3r,surfacePoint,Vector3r(0,0,1.0),,"Point on liquid surface")) \
 		((Real,waterHeight,1.0,,"Water height from origin"))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_HalfspaceBuoyancy_CLASS_BASE_DOC_ATTRS);
 };
