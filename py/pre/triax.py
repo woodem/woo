@@ -15,7 +15,7 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     
         * **compaction** where random loose packing is compressed to attain :math:`\sigma_{\rm iso}` (:obj:`sigIso`) in all directions. The compaction finishes when the stress level is sufficiently close to :obj:`sigIso` and unbalanced force drops below :obj:`maxUnbalanced`.
 
-        * **Triaxial compression**: displacement-controlled compression along the ``z``-axis, with strain rate increasing until :obj:`maxRates` is reached; the test finished when axial strain attains :obj:`stopStrain`.
+        * **Triaxial compression**: displacement-controlled compression along the ``z``-axis, with strain rate increasing until :obj:`maxRates` is reached; the test finished when axial strain attains :obj:`stopStrain`. During this phase, lateral (:math:`x` and :math:`y`) stresses are maintained at :math:`\sigma_{\rm iso}`, as much as possible.
 
     .. youtube:: qWZBCQbS6x4
 
@@ -49,8 +49,9 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
         # noGui would make startGroup being ignored
         _PAT(float,'sigIso',-500e3,unit='kPa',startGroup='General',doc='Confining stress (isotropic during compaction)'),
-        _PAT(Vector2,'maxRates',(2e-1,2e-1),'Maximum strain rate during the compaction phase, and during the triaxial phase in axial sense'),
+        _PAT(Vector3,'maxRates',(2e-1,2e-1,1.),'Maximum strain rate during the compaction phase (for all directions), during the triaxial phase in axial sense, and during the triaxial phase in radial sense(s).'),
         _PAT(float,'stopStrain',-.3,unit=r'%',doc='Goal value of axial deformation in the triaxial phase'),
+        _PAT(bool,'planeStrain',False,doc='(For demonstration purposes only:) during the triaxial phase, prescribe zero displacement along :math:`x` and stress-control only :math:`y`-axis.'),
         _PAT(str,'shape','cell',choice=('cell','box','cylinder'),doc='Shape of the volume being compressed; *cell* is rectangular periodic cell, *box* is rectangular :obj:`~woo.dem.Wall`-delimited box, *cylinder* is triangulated cylinder aligned with the :math:`z`-axis'),
         _PAT(Vector3,'iniSize',(.3,.3,.6),unit='m',doc='Initial size of the volume; when :obj:`shape` is ``cylinder``, the second (:math:`y`) dimension is ignored.'),
         _PAT(woo.dem.ParticleGenerator,'generator',woo.dem.PsdCapsuleGenerator(psdPts=[(.01,0),(.04,1.)],shaftRadiusRatio=(.6,1.2)),
@@ -210,7 +211,7 @@ def addPlotData_checkProgress(S):
 
     if not S.plot.plots:
         S.plot.plots={
-            'i':('unbalanced',None,'vol'),'i ':('srr','szz'),' i':('err','ezz','eVol'),'i  ':('dotE_z','dotEMax_z'),
+            'i':('unbalanced',None,'vol'),'i ':(('sxx','syy','szz') if S.pre.planeStrain else ('srr','szz')),' i':('err','ezz','eVol'),'i  ':('dotE_z','dotEMax_z'),
             'eDev':(('qDivP','g-'),None,('eVol','r-')),'p':('q',),
             # energy plot
             #' i ':(O.energy.keys,None,'Etot'),
@@ -226,7 +227,6 @@ def addPlotData_checkProgress(S):
     ## adjust rate in the triaxial stage
     if S.lab.stage=='triax':
         t.maxStrainRate[2]=min(t.maxStrainRate[2]+S.pre.rateStep*S.pre.maxRates[1],S.pre.maxRates[1])
-        S.lab.contactLoop.updatePhys=False # was turned on when changing friction angle
 
 
 def compactionDone(S):
@@ -239,16 +239,21 @@ def compactionDone(S):
     S.cell.refHSize=S.cell.hSize
     S.cell.nextGradV=Matrix3.Zero # avoid spurious strain from the last gradV value
     ##  S.lab.leapfrog.damping=.7 # increase damping to a larger value
-    t.stressMask=0b0000 # strain control in all directions
-    t.goal=(0,0,S.pre.stopStrain)
-    t.maxStrainRate=(0,0,S.pre.rateStep*S.pre.maxRates[1]) # start with small rate, increases later
+    if not S.pre.planeStrain:
+        t.stressMask=0b0011 # z is strain-controlled, xy are stress-controlled
+        t.goal=(S.pre.sigIso,S.pre.sigIso,S.pre.stopStrain)
+    else:
+        t.stressMask=0b0001 # z is strain-controlled, y has zero strain, x is stress-controlled
+        t.goal=(S.pre.sigIso,0,S.pre.stopStrain)
+    # start with small rate, increases later
+    t.maxStrainRate=(S.pre.maxRates[2],S.pre.maxRates[2],S.pre.rateStep*S.pre.maxRates[1]) 
     t.maxUnbalanced=10 # don't care about that
     t.doneHook='import woo.pre.triax; woo.pre.triax.triaxDone(S)'
 
     # recover friction angle
     S.lab.partMat.tanPhi=S.pre.model.mats[0].tanPhi
     # force update of contact parameters
-    S.lab.contactLoop.updatePhys=True
+    S.lab.contactLoop.updatePhys='once'
 
 
     try:
