@@ -255,9 +255,9 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 	#endif
 
 	static bool _w=false;
-	if(!_w && yieldSurfType!=YIELD_MOHRCOULOMB && phys.G!=0){
+	if(!_w && (yieldSurfType==YIELD_ELLIPTIC || yieldSurfType==YIELD_ELLIPTIC_LOG)){
 		_w=true;
-		LOG_ERROR("The concrete model has bugs in yield surface equations (except for the linear (=Mohr-Coulomb) yieldSurfType). This is your case now, expect bogus results. The investigation of this is ongoing.");
+		LOG_ERROR("Elliptic yield surface equations in the concrete model are incorrect (and never were). Expect bogus results.");
 	}
 
 

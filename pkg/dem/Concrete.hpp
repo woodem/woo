@@ -122,13 +122,16 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 		switch(yieldSurfType){
 			case YIELD_MOHRCOULOMB: ret=coh0*(1-omega)-sigmaN*tanPhi; break;
 			case YIELD_PARABOLIC: ret=sqrt(pow(coh0,2)-2*coh0*tanPhi*sigmaN)-coh0*omega; break;
-			case YIELD_LOG: ret=( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1))); break;
+			case YIELD_LOG:
+				ret=( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1)));
+				break;
 			case YIELD_LOG_LIN:
-				if(sigmaN>0) ret=coh0*(1-omega)-sigmaN*tanPhi; break;
-				ret=((sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1))); break;
+				if(sigmaN>0){ ret=coh0*(1-omega)-sigmaN*tanPhi; break; }
+				ret=( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1)));
+				break;
 			case YIELD_ELLIPTIC:
 			case YIELD_ELLIPTIC_LOG:
-				if(yieldSurfType==YIELD_ELLIPTIC && sigmaN>0) ret=coh0*(1-omega)-sigmaN*tanPhi; break;
+				if(yieldSurfType==YIELD_ELLIPTIC && sigmaN>0){ ret=coh0*(1-omega)-sigmaN*tanPhi; break; }
 				ret=(pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2)))>=1 ? 0 : sqrt((-coh0*((1-omega)*tanPhi)*yieldEllipseShift+pow(coh0,2))*(1-pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2))))-omega*coh0; break;
 			default: throw std::logic_error("Law2_L6Geom_ConcretePhys::yieldSigmaTNorm: invalid value of yieldSurfType="+to_string(yieldSurfType));
 		}
@@ -141,7 +144,7 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 	WOO_DECL_LOGGER;
 	#define woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY \
 		Law2_L6Geom_ConcretePhys,LawFunctor,"Constitutive law for concrete.", \
-		((int,yieldSurfType,YIELD_LOG_LIN,AttrTrait<Attr::namedEnum>().namedEnum({{YIELD_MOHRCOULOMB,{"linear","lin","MC","mc","Mohr-Coulomb"}},{YIELD_PARABOLIC,{"para","parabolic"}},{YIELD_LOG,{"log","logarithmic"}},{YIELD_LOG_LIN,{"logarithmic, linear tension","loglin","log+lin"}},{YIELD_ELLIPTIC,{"elliptic","ell"}},{YIELD_ELLIPTIC_LOG,{"elliptic+logarithmic","ell+log"}}}),"yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log")) \
+		((int,yieldSurfType,YIELD_LOG_LIN,AttrTrait<Attr::namedEnum>().namedEnum({{YIELD_MOHRCOULOMB,{"linear","lin","MC","mc","Mohr-Coulomb"}},{YIELD_PARABOLIC,{"para","parabolic"}},{YIELD_LOG,{"log","logarithmic"}},{YIELD_LOG_LIN,{"log+lin","logarithmic, linear tension","loglin"}},{YIELD_ELLIPTIC,{"elliptic","ell"}},{YIELD_ELLIPTIC_LOG,{"elliptic+logarithmic","ell+log"}}}),"yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log")) \
 		((Real,yieldLogSpeed,.1,,"scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)")) \
 		((Real,yieldEllipseShift,NaN,,"horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)")) \
 		((Real,omegaThreshold,((void)">=1. to deactivate, i.e. never delete any contacts",1.),,"damage after which the contact disappears (<1), since omega reaches 1 only for strain →+∞")) \

@@ -46,7 +46,7 @@ sp=woo.pack.randomDensePack(
 sp.cellSize=(0,0,0) # make aperiodic
 
 sp.toSimulation(S,mat=mat)
-S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping),lawKw=dict(yieldSurfType='lin'))+[PyRunner(10,'addPlotData(S)')]
+S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping),lawKw=dict(yieldSurfType='log+lin'))+[PyRunner(10,'addPlotData(S)')]
 
 # take boundary nodes an prescribe velocity to those
 lc=.5*S.lab.table.specimenLength-3*S.lab.table.sphereRadius
