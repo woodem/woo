@@ -42,6 +42,11 @@ BOOST_PYTHON_MODULE(config){
 		#endif
 		#ifdef WOO_QT4
 			features.append("qt4");
+			features.append("qt");
+		#endif
+		#ifdef WOO_QT5
+			features.append("qt5");
+			features.append("qt");
 		#endif
 		#ifdef WOO_CLDEM
 			features.append("cldem");

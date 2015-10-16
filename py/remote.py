@@ -10,7 +10,7 @@ import SocketServer,xmlrpclib,socket
 import sys,time,os,math
 
 useQThread=False
-"Set before using any of our classes to use QThread for background execution instead of the standard thread module. Mixing the two (in case the qt4 UI is running, for instance) does not work well."
+"Set before using any of our classes to use QThread for background execution instead of the standard thread module. Mixing the two (in case the qt UI is running, for instance) does not work well."
 
 plotImgFormat,plotImgMimetype='png','image/png'
 #plotImgFormat,plotImgMimetype='svg','image/svg+xml'
@@ -105,7 +105,9 @@ class PythonConsoleSocketEmulator(SocketServer.BaseRequestHandler):
 
 def _runInBackground(func):
     if useQThread:
-        from PyQt4.QtCore import QThread
+        import woo.config
+        if 'qt4' in woo.config.features: from PyQt4.QtCore import QThread
+        else: from PyQt5.QtCotr import QThread
         class WorkerThread(QThread):
             def __init__(self,func_): QThread.__init__(self); self.func=func_
             def run(self): self.func()

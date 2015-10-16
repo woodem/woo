@@ -1,8 +1,13 @@
 # encoding: utf-8
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4 import QtGui
-#from PyQt4 import Qwt5
+import woo.config
+if 'qt4' in woo.config.features:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4 import QtGui
+else:
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5 import QtGui
 
 from minieigen import *
 # don't import * from woo, it would be circular import
@@ -67,7 +72,7 @@ def getColormapIcons():
 
 
 class WidgetUpdatesDisabled():
-    'Context manager/decorator for disabling updates of qt4 widgets temporarily'
+    'Context manager/decorator for disabling updates of qt widgets temporarily'
     def __init__(self,widget): self.widget=widget
     def __enter__(self): self.widget.setUpdatesEnabled(False)
     def __exit__(self,eType,eValue,eTrace): self.widget.setUpdatesEnabled(True)

@@ -49,7 +49,7 @@ pyObjects.append(env.SharedObject('config','py/config.cxx',
 	]
 ))
 
-if 'qt4' in env['features']:
+if 'qt' in env['features']:
 	pyObjects+=['gui/qt4/GLViewer.cpp','gui/qt4/GLViewer.qrc','gui/qt4/_GLViewer.cpp','gui/qt4/OpenGLManager.cpp']
 
 if 'gts' in env['features']:
@@ -113,15 +113,16 @@ if sum(exits)>0:
 
 
 
-if 'qt4' in env['features']:
+if 'qt' in env['features']:
+	qtVer=(4 if 'qt4' in env['features'] else 5)
 	env.Install('$LIBDIR/woo/qt',[
 		env.Glob('gui/qt4/*.py'),
 		# mention generated files explicitly			
 		env.File('gui/qt4/img_rc.py'),
 		env.File('gui/qt4/ui_controller.py'),
 	])
-	env.Command('gui/qt4/img_rc.py','gui/qt4/img.qrc','pyrcc4 -o $buildDir/gui/qt4/img_rc.py gui/qt4/img.qrc')
-	env.Command('gui/qt4/ui_controller.py','gui/qt4/controller.ui','pyuic4 -o $buildDir/gui/qt4/ui_controller.py gui/qt4/controller.ui')
+	env.Command('gui/qt4/img_rc.py','gui/qt4/img.qrc','pyrcc%d -o $buildDir/gui/qt4/img_rc.py gui/qt4/img.qrc'%qtVer)
+	env.Command('gui/qt4/ui_controller.py','gui/qt4/controller.ui','pyuic%d -o $buildDir/gui/qt4/ui_controller.py gui/qt4/controller.ui'%qtVer)
 
 # install .egg-info so that pkg_resources work with woo when installed via scons
 # http://svn.python.org/projects/sandbox/trunk/setuptools/doc/formats.txt

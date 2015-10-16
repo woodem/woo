@@ -10,8 +10,12 @@ from minieigen import *
 nan=float('nan')
 
 try:
-    from PyQt4.QtGui import *
-    from PyQt4.QtCore import *
+    if 'qt4' in woo.config.features:
+        from PyQt4.QtGui import *
+        from PyQt4.QtCore import *
+    else:
+        from PyQt5.QtGui import *
+        from PyQt5.QtCore import *
 except ImportError: pass
 
 

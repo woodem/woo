@@ -120,7 +120,7 @@ opts.AddVariables(
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
 	EnumVariable('PGO','Whether to "gen"erate or "use" Profile-Guided Optimization','',['','gen','use'],{'no':'','0':'','false':''},1),
-	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','cldem','sparc','noxml','voro','oldabi','never_use_this_one']),
+	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','cldem','sparc','noxml','voro','oldabi','never_use_this_one']),
 	('jobs','Number of jobs to run at the same time (same as -j, but saved)',2,None,int),
 	#('extraModules', 'Extra directories with their own SConscript files (must be in-tree) (whitespace separated)',None,None,Split),
 	('cxxstd','Name of the c++ standard (or dialect) to compile with. With gcc, use gnu++11 (gcc >=4.7) or gnu++0x (with gcc 4.5, 4.6)','c++11'),
@@ -133,6 +133,7 @@ opts.AddVariables(
 	('LIBPATH','Additional paths for the linker (colon-separated)',None),
 	('libstdcxx','Specify libstdc++ location by hand (opened dynamically at startup), usually not needed',None),
 	('QT4DIR','Directory where Qt4 is installed','/usr/share/qt4'),
+	('QT5DIR','Directory where Qt5 is installed','/usr/share/qt5'),
 	('PATH','Path (not imported automatically from the shell) (colon-separated)',None),
 	('CXX','The c++ compiler','g++'),
 	('CXXFLAGS','Additional compiler flags for compilation (like -march=core2).',None,None,Split),
@@ -154,6 +155,12 @@ if str(env['features'])=='all':
 	Exit(1)
 
 if saveFlavor: opts.Save(optsFile,env)
+
+if 'qt4' in env['features'] and 'qt5' in env['features']:
+	print 'ERROR: qt4 and qt5 features are mutually exclusive, but both were given.'
+	Exit(1)
+if 'qt4' in env['features'] or 'qt5' in env['features']: env.Append(features=['qt'])
+
 # set optimization based on debug, if required 
 if env['optimize']<0: env['optimize']=(None if env['debug'] else -env['optimize']) 
 
@@ -353,7 +360,8 @@ def CheckPythonModules(context):
 	context.Message("Checking for required python modules... ")
 	mods=[('IPython','ipython'),('numpy','python-numpy'),('matplotlib','python-matplotlib'),('genshi','python-genshi'),('xlwt','python-xlwt'),('xlrd','python-xlrd'),('h5py','python-h5py'),('lockfile','python-lockfile'),('pkg_resources','python-pkg-resources')]
 	if 'qt4' in context.env['features']: mods.append(('PyQt4.QtGui','python-qt4'))
-	if 'qt4' in context.env['features'] or 'opengl' in context.env['features']: mods.append(('Xlib','python-xlib'))
+	if 'qt5' in context.env['features']: mods.append(('PyQt5.QtGui','python-qt5'))
+	if 'qt' in context.env['features'] or 'opengl' in context.env['features']: mods.append(('Xlib','python-xlib'))
 	failed=[]
 	for m,pkg in mods:
 		try:
@@ -409,6 +417,17 @@ if not env.GetOption('clean'):
 			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1):
 				env['QGLVIEWER_LIB']='libQGLViewer'
 			else: featureNotOK('qt4','Building with Qt4 implies the QGLViewer library installed (package libqglviewer-qt4-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
+		if 'qt5' in env['features']:
+			env['ENV']['PKG_CONFIG_PATH']='/usr/bin/pkg-config'
+			env.Tool('qt5')
+			env.EnableQt5Modules(['QtGui','QtCore','QtXml','QtOpenGL'])
+			if not conf.TryAction(env.Action('pyrcc5'),'','qrc'): featureNotOK('qt5','The pyrcc5 program is not operational (package pyqt5-dev-tools)')
+			if not conf.TryAction(env.Action('pyuic5'),'','ui'): featureNotOK('qt5','The pyuic5 program is not operational (package pyqt5-dev-tools)')
+			if conf.CheckLibWithHeader(['qglviewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt5'
+			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer'
+			# Fedora naming, maybe: https://lists.fedoraproject.org/pipermail/devel/2014-March/196395.html 
+			elif conf.CheckLibWithHeader(['libQGLViewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer-qt5'
+			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-qt5-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)

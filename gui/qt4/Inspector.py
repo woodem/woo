@@ -1,11 +1,15 @@
 # encoding: utf-8
+import woo.config
+if 'qt4' in woo.config.features:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+else:
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 from woo.qt.ObjectEditor import *
 import woo
 import woo.qt
-import woo.config
 from woo.dem import *
 #from woo.sparc import *
 from woo.core import *

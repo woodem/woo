@@ -10,7 +10,7 @@
 #include<woo/pkg/gl/Renderer.hpp>
 #include<woo/lib/base/CompUtils.hpp>
 
-#ifdef WOO_QT4
+#if 0 // defined(WOO_QT4) || defined(WOO_QT5)
 	#include<QCoreApplication>
 	// http://stackoverflow.com/questions/12201823/ipython-and-qt4-c-qcoreapplicationprocessevents-blocks
 	#define PROCESS_GUI_EVENTS_SOMETIMES // { static int _i=0; if(guiEvery>0 && _i++>guiEvery){ _i=0; /*QCoreApplication::processEvents();*/ QCoreApplication::sendPostedEvents(); } }

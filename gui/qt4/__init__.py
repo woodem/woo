@@ -18,7 +18,7 @@ else:
         import woo.runtime, wooMain
         if wooMain.options.forceNoGui:
             woo.runtime.hasDisplay=False
-            raise ImportError("Woo was started with the -n switch; woo.qt4 insterface will not be enabled.")
+            raise ImportError("Woo was started with the -n switch; woo.qt interface will not be enabled.")
         # ignore some warnings from Xlib
         import warnings
         warnings.filterwarnings('ignore',category=DeprecationWarning,module='Xlib')
@@ -46,7 +46,8 @@ else:
                 woo.runtime.hasDisplay=False
                 raise ImportError("Connecting to $DISPLAY failed, unable to activate the woo.qt4 interface.")
                 
-    if 1:
+    # not necessary for qt5
+    if 'qt4' in woo.config.features:
         # API compatibility for PySide vs. PyQt
         # must be called before PyQt4 is ever imported
         # don't do that if someone imported PyQt4/PySide already
@@ -60,7 +61,9 @@ else:
                 except AttributeError: pass
 
     if 1: # initialize QApplication
-        from PyQt4 import QtGui
+        if 'qt4' in woo.config.features: from PyQt4 import QtGui
+        else: from PyQt5 import QtGui
+
         if woo.runtime.ipython_version()==10:
             wooQApp=QtGui.QApplication(sys.argv)
         elif useQtConsole:
@@ -81,7 +84,7 @@ else:
             # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
 
             import IPython.lib.inputhook #guisupport
-            wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4')
+            wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
 
             #from IPython.lib.guisupport import start_event_loop_qt4
             #start_event_loop_qt4(wooQApp)
@@ -97,9 +100,12 @@ else:
                     QtGui.QApplication.setPalette(QtGui.QApplication.style().standardPalette())
                     break
             
-    
-from PyQt4.QtGui import *
-from PyQt4 import QtCore
+if 'qt4' in woo.config.features:
+    from PyQt4.QtGui import *
+    from PyQt4 import QtCore
+else:
+    from PyQt5.QtGui import *
+    from PyQt5 import QtCore
 
 
 from woo.qt.ui_controller import Ui_Controller

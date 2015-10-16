@@ -322,13 +322,14 @@ def main(sysArgv=None):
     #
     try:
         import woo.qt # this import fails if running with -n or $DISPLAY can't be connected to
-        gui='qt4'
+        if 'qt4' in woo.config.features: gui='qt4'
+        else: gui='qt5'
     except ImportError:
         gui=None
 
     # run remote access things, before actually starting the user session
     from woo import remote, batch
-    woo.remote.useQThread=(gui==('qt4' and not opts.fakeDisplay))
+    woo.remote.useQThread=(gui in ('qt4','qt5') and not opts.fakeDisplay)
     # only run XMLRPC server when in batch
     # do not run the TCP command prompt, is probably useless now
     woo.remote.runServers(xmlrpc=batch.inBatch(),tcpPy=False)
@@ -340,18 +341,18 @@ def main(sysArgv=None):
 
     if gui==None or opts.fakeDisplay:
         ipythonSession(opts)
-    elif gui=='qt4':
+    elif gui in ('qt4','qt5'):
         ## we already tested that DISPLAY is available and can be opened
         ### otherwise Qt4 might crash at this point
         #import woo.qt # this handles all Qt imports
-        ipythonSession(opts,qt4=True,qapp=woo.qt.wooQApp,qtConsole=woo.qt.useQtConsole)
+        ipythonSession(opts,qt=True,qapp=woo.qt.wooQApp,qtConsole=woo.qt.useQtConsole)
     #woo.master.exitNoBacktrace()
     # uninstall crash handlers
     woo.master.disableGdb()
     return 0
 
 
-def ipythonSession(opts,qt4=False,qapp=None,qtConsole=False):
+def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
     # prepare nice namespace for users
     import woo, woo.runtime, woo.config
     import sys, traceback, site
@@ -360,7 +361,7 @@ def ipythonSession(opts,qt4=False,qapp=None,qtConsole=False):
 
     if len(sys.argv)>0:
         arg0=sys.argv[0]
-        if qt4: woo.qt.Controller();
+        if qt: woo.qt.Controller();
         if arg0.endswith('.py'):
             # the script is reponsible for consuming all other arguments
             def runScript(script):
@@ -418,7 +419,7 @@ def ipythonSession(opts,qt4=False,qapp=None,qtConsole=False):
         sys.stdout.write('Woo: normal exit.\n') # fake normal exit (so that batch looks fine if we crash at shutdown)
         sys.exit(0)
     # common ipython configuration
-    banner='[[ ^L clears screen, ^U kills line. '+', '.join(['F12 controller']+(['F11 3d view','F10 both'] if 'opengl' in woo.config.features else [])+(['F9 generator'] if (qt4) else [])+['F8 plot'])+'. ]]'
+    banner='[[ ^L clears screen, ^U kills line. '+', '.join(['F12 controller']+(['F11 3d view','F10 both'] if 'opengl' in woo.config.features else [])+(['F9 generator'] if qt else [])+['F8 plot'])+'. ]]'
     ipconfig=dict( # ipython options, see e.g. http://www.cv.nrao.edu/~rreid/casa/tips/ipy_user_conf.py
         prompt_in1='Waa [\#]: ',
         prompt_in2='    .\D.: ',
@@ -428,13 +429,13 @@ def ipythonSession(opts,qt4=False,qapp=None,qtConsole=False):
             'tab: complete',
             # only with the gui; the escape codes might not work on non-linux terminals.
             ]
-            +(['"\e[24~": "\C-Uwoo.qt.Controller();\C-M"']+(['"\e[23~": "\C-Uwoo.qt.View();\C-M"','"\e[21~": "\C-Uwoo.qt.Controller(), woo.qt.View();\C-M"'] if 'opengl' in woo.config.features else [])+['"\e[20~": "\C-Uwoo.qt.Generator();\C-M"'] if (qt4) else []) # F12,F11,F10,F9
+            +(['"\e[24~": "\C-Uwoo.qt.Controller();\C-M"']+(['"\e[23~": "\C-Uwoo.qt.View();\C-M"','"\e[21~": "\C-Uwoo.qt.Controller(), woo.qt.View();\C-M"'] if 'opengl' in woo.config.features else [])+['"\e[20~": "\C-Uwoo.qt.Generator();\C-M"'] if qt else []) # F12,F11,F10,F9
             +['"\e[19~": "\C-Uwoo.master.scene.plot.plot();\C-M"', #F8
                 '"\e[A": history-search-backward', '"\e[B": history-search-forward', # incremental history forward/backward
         ]
     )
     # shortcuts don't really work under windows, show controller directly in that case
-    if qt4 and WIN: woo.qt.Controller()
+    if qt and WIN: woo.qt.Controller()
 
     # show python console
 

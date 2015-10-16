@@ -9,6 +9,7 @@ __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMar
 
 
 import sys
+import collections
 PY3K=sys.version_info[0]==3
 
 pilOk=False
@@ -21,7 +22,7 @@ try:
     pilOk=True
 except ImportError: pass
 
-if not pilOk: print 'WARN: PIL/Image module (python-imaging) not importable, embedding images into plots will give errors.'
+if not pilOk: print('WARN: PIL/Image module (python-imaging) not importable, embedding images into plots will give errors.')
 
 
 # PY3K
@@ -53,7 +54,7 @@ except ImportError: pass
 
 import woo.runtime, wooMain, woo.config
 if wooMain.options.fakeDisplay: woo.runtime.hasDisplay=False
-if 'qt4' not in woo.config.features: woo.runtime.hasDisplay=False
+if 'qt' not in woo.config.features: woo.runtime.hasDisplay=False
 
 if woo.runtime.hasDisplay==None: # not yet set
     raise RuntimeError('woo.plot imported before woo.runtime.hasDisplay is set. This should not really happen, please report.')
@@ -61,7 +62,9 @@ if not woo.runtime.hasDisplay:
     #from matplotlib.backends.backend_agg import FigureCanvasAgg as WooFigureCanvas
     matplotlib.use('Agg') ## pylab API
 else:
-    matplotlib.use('Qt4Agg') # pylab API
+    if 'qt4' in woo.config.features: matplotlib.use('Qt4Agg') # pylab API
+    elif 'qt5' in woo.config.features: matplotlib.use('Qt5Agg')
+    else: raise RuntimeError("woo.runtime.hasDisplay set, but neither qt4 nor qt5 is in features.")
     #from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as WooFigureCanvas
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as _HeadlessFigureCanvas
@@ -124,9 +127,9 @@ def Scene_plot_reverseData(P):
 
 def addDataColumns(data,dd):
     '''Add new columns with NaN data, without adding anything to other columns. Does nothing for columns that already exist'''
-    numSamples=len(data[data.keys()[0]]) if len(data)>0 else 0
+    numSamples=len(data[list(data.keys())[0]]) if len(data)>0 else 0
     for d in dd:
-        if d in data.keys(): continue
+        if d in list(data.keys()): continue
         data[d]=[nan for i in range(numSamples)]
 
 def Scene_plot_autoData(P,**kw):
@@ -192,7 +195,7 @@ def Scene_plot_autoData(P,**kw):
         except:
             import traceback 
             traceback.print_exc()
-            print 'WARN: ignoring exception raised while evaluating auto-column `'+expr+"'%s."%('' if name==expr else ' ('+name+')')
+            print('WARN: ignoring exception raised while evaluating auto-column `'+expr+"'%s."%('' if name==expr else ' ('+name+')'))
             
     cols={}
     S=P.scene
@@ -216,8 +219,8 @@ def Scene_plot_autoData(P,**kw):
                 except:
                     import traceback
                     traceback.print_exc()
-                    print 'WARN: ignoring exception raised while evaluating dictionary-returning expression "'+yy1[2:]+':'
-                for k,v in dd.items(): cols[k]=v
+                    print('WARN: ignoring exception raised while evaluating dictionary-returning expression "'+yy1[2:]+':')
+                for k,v in list(dd.items()): cols[k]=v
             elif yy1.startswith('*'):
                 ee=eval(yy1[1:],{'S':S})
                 for e in ee: colDictUpdate(e,cols,{'S':S})
@@ -263,14 +266,14 @@ def Scene_plot_addData(P,*d_in,**kw):
     """
     data,imgData=P.data,P.imgData
     import numpy
-    if len(data)>0: numSamples=len(data[data.keys()[0]])
+    if len(data)>0: numSamples=len(data[list(data.keys())[0]])
     else: numSamples=0
     # align with imgData, if there is more of them than data
-    if len(imgData)>0 and numSamples==0: numSamples=max(numSamples,len(imgData[imgData.keys()[0]]))
+    if len(imgData)>0 and numSamples==0: numSamples=max(numSamples,len(imgData[list(imgData.keys())[0]]))
     d=(d_in[0] if len(d_in)>0 else {})
     d.update(**kw)
     # handle types composed of multiple values (vectors, matrices)
-    dNames=d.keys()[:] # make copy, since dict cannot change size if iterated over directly
+    dNames=list(d.keys())[:] # make copy, since dict cannot change size if iterated over directly
     for name in dNames:
         if type(d[name]) in componentSuffixes:
             val=d[name]
@@ -281,7 +284,7 @@ def Scene_plot_addData(P,*d_in,**kw):
         elif hasattr(d[name],'__len__'):
             raise ValueError('plot.addData given unhandled sequence type (is a '+type(d[name]).__name__+', must be number or '+'/'.join([k.__name__ for k in componentSuffixes])+')')
     for name in d:
-        if not name in data.keys(): data[name]=[]
+        if not name in list(data.keys()): data[name]=[]
     for name in data:
         data[name]+=(numSamples-len(data[name]))*[nan]
         data[name].append(d[name] if name in d else nan)
@@ -294,26 +297,26 @@ def Scene_plot_addImgData(P,**kw):
     for k in kw:
         if k not in imgData: imgData[k]=[]
     # align imgData with data
-    if len(data.keys())>0 and len(imgData.keys())>0:
-        nData,nImgData=len(data[data.keys()[0]]),len(imgData[imgData.keys()[0]])
+    if len(list(data.keys()))>0 and len(list(imgData.keys()))>0:
+        nData,nImgData=len(data[list(data.keys())[0]]),len(imgData[list(imgData.keys())[0]])
         #if nImgData>nData-1: raise RuntimeError("imgData is already the same length as data?")
         if nImgData<nData-1: # repeat last value
-            for k in imgData.keys():
+            for k in list(imgData.keys()):
                 lastValue=imgData[k][-1] if len(imgData[k])>0 else None
                 imgData[k]+=(nData-len(imgData[k])-1)*[lastValue]
         elif nData<nImgData:
-            for k in data.keys():
+            for k in list(data.keys()):
                 lastValue=data[k][-1] if len(data[k])>0 else nan
                 data[k]+=(nImgData-nData)*[lastValue]   # add one more, because we will append to imgData below
     # add values from kw
-    newLen=(len(imgData[imgData.keys()[0]]) if imgData else 0)+1 # current length plus 1
+    newLen=(len(imgData[list(imgData.keys())[0]]) if imgData else 0)+1 # current length plus 1
     for k in kw:
         if k in imgData and len(imgData[k])>0: imgData[k]+=(newLen-len(imgData[k])-1)*[imgData[k][-1]]+[kw[k]] # repeat last element as necessary
         else: imgData[k]=(newLen-1)*[None]+[kw[k]]  # repeat None if no previous value
     # align values which were not in kw by repeating the last value
     for k in imgData:
         if len(imgData[k])<newLen: imgData[k]+=(newLen-len(imgData[k]))*[imgData[k][-1]]
-    assert len(set([len(i) for i in imgData.values()]))<=1  # no data or all having the same value
+    assert len(set([len(i) for i in list(imgData.values())]))<=1  # no data or all having the same value
 
 
 
@@ -330,7 +333,7 @@ def tuplifyYAxis(pp):
     else: return (pp,)
 def xlateLabel(l,labels):
     "Return translated label; return l itself if not in the labels dict."
-    if l in labels.keys(): return labels[l]
+    if l in list(labels.keys()): return labels[l]
     else: return l
 
 class LineRef:
@@ -440,7 +443,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
         else: axes=figs[-1].add_subplot(subRows,subCols,nPlot+1) # nPlot is 1-based in mpl, for matlab comatibility
         axes.grid(True)
         if plots[p]==None: # image plot
-            if not pStrip in imgData.keys(): imgData[pStrip]=[]
+            if not pStrip in list(imgData.keys()): imgData[pStrip]=[]
             # fake (empty) image if no data yet
             import Image
             if len(imgData[pStrip])==0 or imgData[pStrip][-1]==None: img=Image.new('RGBA',(1,1),(0,0,0,0))
@@ -452,18 +455,18 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
         plots_p=[addPointTypeSpecifier(o) for o in tuplifyYAxis(plots[p])]
         plots_p_y1,plots_p_y2=[],[]; y1=True
         missing=set() # missing data columns
-        if pStrip not in data.keys(): missing.add(pStrip.decode('utf-8','ignore'))
+        if pStrip not in list(data.keys()): missing.add(pStrip.decode('utf-8','ignore'))
         for d in plots_p:
             if d[0]==None:
                 y1=False; continue
-            if not isinstance(d[0],(str,unicode)): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
+            if not isinstance(d[0],str): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
             if y1: plots_p_y1.append(d)
             else: plots_p_y2.append(d)
             try:
                 if (
-                    d[0] not in data.keys()
+                    d[0] not in list(data.keys())
                     # and not callable(d[0])
-                    and not (isinstance(d[0],(str,unicode)) and (d[0].startswith('**') or d[0].startswith('*'))) # hack for callable as strings
+                    and not (isinstance(d[0],str) and (d[0].startswith('**') or d[0].startswith('*'))) # hack for callable as strings
                     # and not hasattr(d[0],'keys')
                 ):
                     missing.add(d[0])
@@ -471,12 +474,12 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                 import warnings
                 warnings.error('UnicodeDecodeError when processing data set '+repr(d[0]))
         if missing:
-            if len(data.keys())==0 or len(data[data.keys()[0]])==0: # no data at all yet, do not add garbage NaNs
+            if len(list(data.keys()))==0 or len(data[list(data.keys())[0]])==0: # no data at all yet, do not add garbage NaNs
                 for m in missing: data[m]=[]
             else:
                 addDataColumns(data,missing)
                 try:
-                    print 'Missing columns in Scene.plot.data, added NaNs:',', '.join([m.encode('utf-8') for m in missing])
+                    print('Missing columns in Scene.plot.data, added NaNs:',', '.join([m.encode('utf-8') for m in missing]))
                 except UnicodeDecodeError:
                     warnings.warn('UnicodeDecodeError reporting missing data columns -- harmless, just wondering...')
         def createLines(pStrip,ySpecs,axes,isY1=True,y2Exists=False):
@@ -490,7 +493,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             yNames=set()
             ySpecs2=[]
             for ys in ySpecs:
-                if not isinstance(ys[0],(str,unicode)): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
+                if not isinstance(ys[0],str): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
                 if ys[0].startswith('**') or ys[0].startswith('*'):
                     evEx=eval(ys[0][(2 if ys[0].startswith('**') else 1):],{'S':P.scene})
                     yNameFuncs.add(evEx)  # add callable or dictionary
@@ -499,12 +502,12 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                     ySpecs2+=[(ret,ys[1]) for ret in evEx] # traverse list or dict keys
                 else: ySpecs2.append(ys)
             if len(ySpecs2)==0:
-                print 'woo.plot: creating fake plot, since there are no y-data yet'
+                print('woo.plot: creating fake plot, since there are no y-data yet')
                 line,=axes.plot([nan],[nan])
                 line2,=axes.plot([nan],[nan])
                 if replace: P.currLineRefs.append(LineRef(line=line,scatter=None,annotation=None,line2=line2,xdata=[nan],ydata=[nan]))
             # set different color series for y1 and y2 so that they are recognizable
-            if matplotlib.rcParams.has_key('axes.color_cycle'): matplotlib.rcParams['axes.color_cycle']='b,g,r,c,m,y,k' if not isY1 else 'm,y,k,b,g,r,c'
+            if 'axes.color_cycle' in matplotlib.rcParams: matplotlib.rcParams['axes.color_cycle']='b,g,r,c,m,y,k' if not isY1 else 'm,y,k,b,g,r,c'
             for d in ySpecs2:
                 yNames.add(d)
                 # should have been handled above already
@@ -512,10 +515,10 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                 #    print 'Missing column %s in Scene.plot.data, added NaN.'%pString
                 #    addDataColumns(data,[pStrip])
                 if d[0] not in data:
-                    print 'Missing column %s in Scene.plot.data, added NaN.'%d[0]
+                    print('Missing column %s in Scene.plot.data, added NaN.'%d[0])
                     addDataColumns(data,[d[0]])
                 line,=axes.plot(data[pStrip],data[d[0]],d[1],label=xlateLabel(d[0],P.labels),**lineKw)
-                lineKwWithoutAlpha=dict([(k,v) for k,v in lineKw.items() if k!='alpha'])
+                lineKwWithoutAlpha=dict([(k,v) for k,v in list(lineKw.items()) if k!='alpha'])
                 line2,=axes.plot([],[],d[1],color=line.get_color(),alpha=afterCurrentAlpha,**lineKwWithoutAlpha)
                 # use (0,0) if there are no data yet
                 scatterPt=[0,0] if len(data[pStrip])==0 else (data[pStrip][current],data[d[0]][current])
@@ -590,18 +593,18 @@ def liveUpdate(P,timestamp):
             if not hasattr(ax,'wooYFuncs') or not ax.wooYFuncs: continue # not defined of empty
             yy=set();
             for f in ax.wooYFuncs:
-                if callable(f): yy.update(f())
+                if isinstance(f, collections.Callable): yy.update(f())
                 elif hasattr(f,'keys'):
-                    yy.update(f.keys())
+                    yy.update(list(f.keys()))
                 else: raise ValueError("Internal error: ax.wooYFuncs items must be callables or dictionary-like objects and nothing else.")
             #print 'callables y names:',yy
             news=yy-ax.wooYNames
             if not news: continue
             for new in news:
                 ax.wooYNames.add(new)
-                if new in data.keys() and id(data[new]) in linesData: continue # do not add when reloaded and the old lines are already there
-                print 'woo.plot: creating new line for',new
-                if not new in data.keys(): data[new]=len(data[ax.wooXName])*[nan] # create data entry if necessary
+                if new in list(data.keys()) and id(data[new]) in linesData: continue # do not add when reloaded and the old lines are already there
+                print('woo.plot: creating new line for',new)
+                if not new in list(data.keys()): data[new]=len(data[ax.wooXName])*[nan] # create data entry if necessary
                 #print 'data',len(data[ax.wooXName]),len(data[new]),data[ax.wooXName],data[new]
                 line,=ax.plot(data[ax.wooXName],data[new],label=xlateLabel(new,P.labels)) # no line specifier
                 line2,=ax.plot([],[],color=line.get_color(),alpha=afterCurrentAlpha)
@@ -647,15 +650,15 @@ def savePlotSequence(P,fileBase,stride=1,imgRatio=(5,7),title=None,titleFrames=2
     sqrtFigs=math.sqrt(len(plots))
     fig.set_size_inches(8*sqrtFigs,5*sqrtFigs) # better readable
     fig.subplots_adjust(left=.05,right=.95,bottom=.05,top=.95) # make it more compact
-    if len(plots)==1 and plots[plots.keys()[0]]==None: # only pure snapshot is there
+    if len(plots)==1 and plots[list(plots.keys())[0]]==None: # only pure snapshot is there
         fig.set_size_inches(5,5)
         fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
     #if not data.keys(): raise ValueError("plot.data is empty.")
-    pltLen=max(len(data[data.keys()[0]]) if data else 0,len(imgData[imgData.keys()[0]]) if imgData else 0)
+    pltLen=max(len(data[list(data.keys())[0]]) if data else 0,len(imgData[list(imgData.keys())[0]]) if imgData else 0)
     if pltLen==0: raise ValueError("Both plot.data and plot.imgData are empty.")
     global current
     ret=[]
-    print 'Saving %d plot frames, it can take a while...'%(pltLen)
+    print('Saving %d plot frames, it can take a while...'%(pltLen))
     for i,n in enumerate(range(0,pltLen,stride)):
         current=n
         for l in P.currLineRefs: l.update()
@@ -796,7 +799,7 @@ def Scene_plot_saveDataTxt(P,fileName,vars=None):
     import bz2,gzip
     data=P.data
     if not vars:
-        vars=data.keys(); vars.sort()
+        vars=list(data.keys()); vars.sort()
     fileName=P.scene.expandTags(fileName)
     if fileName.endswith('.bz2'): f=bz2.BZ2File(fileName,'wb')
     elif fileName.endswith('.gz'): f=gzip.GzipFile(fileName,'wb')
@@ -810,7 +813,7 @@ def Scene_plot_saveDataTxt(P,fileName,vars=None):
 def savePylab(baseName,timestamp=False,title=None):
     '''This function is not finished, do not use it.'''
     import time
-    if len(data.keys())==0: raise RuntimeError("No data for plotting were saved.")
+    if len(list(data.keys()))==0: raise RuntimeError("No data for plotting were saved.")
     if timestamp: baseName+=_mkTimestamp()
     baseNameNoPath=baseName.split('/')[-1]
     saveDataTxt(fileName=baseName+'.data.bz2')
@@ -842,10 +845,10 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
 :return: name of the gnuplot file created.
     """
     data,imgData,plots,labels,xylabels=P.data,P.imgData,P.plots,P.labels,P.xylabels
-    if len(data.keys())==0: raise RuntimeError("No data for plotting were saved.")
+    if len(list(data.keys()))==0: raise RuntimeError("No data for plotting were saved.")
     if timestamp: baseName+=_mkTimestamp()
     baseNameNoPath=baseName.split('/')[-1]
-    vars=data.keys(); vars.sort()
+    vars=list(data.keys()); vars.sort()
     P.saveDataTxt(fileName=baseName+'.data.bz2',vars=vars)
     fPlot=file(baseName+".gnuplot",'w')
     fPlot.write('#!/usr/bin/env gnuplot\n#\n')
@@ -874,13 +877,13 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
             elif pp[0].startswith('**'):
                 try:
                     dd=eval(pp[0][2:],{'S':P.scene})
-                    plots_p2+=[(ppp,'') for ppp in dd.keys() if ppp in data.keys()]
+                    plots_p2+=[(ppp,'') for ppp in list(dd.keys()) if ppp in list(data.keys())]
                 except:
                     import traceback
                     traceback.print_exc()
-                    print 'WARN: ignoring exception raised while evaluating expression "'+pp[0][2:]+'".'
+                    print('WARN: ignoring exception raised while evaluating expression "'+pp[0][2:]+'".')
             elif pp[0].startswith('*'):
-                plots_p2+=[(e,'') for e in eval(pp[0][1:],{'S':P.scene}) if e in data.keys()]
+                plots_p2+=[(e,'') for e in eval(pp[0][1:],{'S':P.scene}) if e in list(data.keys())]
             else: plots_p2.append((pp[0],pp[1]))
         plots_p=plots_p2
         #plots_p=sum([([(pp,'') for pp in p[0]() if pp in data.keys()] if callable(p[0]) else [(p[0],p[1])] ) for p in plots_p],[])
