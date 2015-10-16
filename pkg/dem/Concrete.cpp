@@ -130,9 +130,9 @@ Real ConcretePhys::computeViscoplScalingFactor(Real sigmaTNorm, Real sigmaTYield
 Real ConcretePhys::funcG(const Real& kappaD, const Real& epsCrackOnset, const Real& epsFracture, const bool& neverDamage, const int& damLaw) {
 	if (kappaD<epsCrackOnset || neverDamage) return 0;
 	switch(damLaw){
-		case 0: // linear
+		case ConcreteMat::DAMLAW_LINEAR_SOFT:
 			return (1.-epsCrackOnset/kappaD)/(1.-epsCrackOnset/epsFracture);
-		case 1: // exponential
+		case ConcreteMat::DAMLAW_EXPONENTIAL_SOFT:
 			return 1.-(epsCrackOnset/kappaD)*exp(-(kappaD-epsCrackOnset)/epsFracture);
 	}
 	throw runtime_error("ConcretePhys::funcG: wrong damLaw "+to_string(damLaw)+".");
@@ -140,9 +140,9 @@ Real ConcretePhys::funcG(const Real& kappaD, const Real& epsCrackOnset, const Re
 
 Real ConcretePhys::funcGDKappa(const Real& kappaD, const Real& epsCrackOnset, const Real& epsFracture, const bool& neverDamage, const int& damLaw) {
 	switch(damLaw){
-		case 0: // linear
+		case ConcreteMat::DAMLAW_LINEAR_SOFT:
 			return epsCrackOnset/((1.-epsCrackOnset/epsFracture)*kappaD*kappaD);
-		case 1: // exponential
+		case ConcreteMat::DAMLAW_EXPONENTIAL_SOFT:
 			return epsCrackOnset/kappaD*(1./kappaD+1./epsFracture)*exp(-(kappaD-epsCrackOnset)/epsFracture);
 	}
 	throw runtime_error("ConcretePhys::funcGDKappa: wrong damLaw "+to_string(damLaw)+".");
@@ -151,9 +151,9 @@ Real ConcretePhys::funcGDKappa(const Real& kappaD, const Real& epsCrackOnset, co
 Real ConcretePhys::funcGInv(const Real& omega, const Real& epsCrackOnset, const Real& epsFracture, const bool& neverDamage, const int& damLaw) {
 	if(omega==0. || neverDamage) return 0;
 	switch(damLaw){
-		case 0: // linear
+		case ConcreteMat::DAMLAW_LINEAR_SOFT:
 			return epsCrackOnset/(1.-omega*(1.-epsCrackOnset/epsFracture));
-		case 1: // exponential
+		case ConcreteMat::DAMLAW_EXPONENTIAL_SOFT:
 			// Newton's iterations
 			Real fg, dfg, decr, ret=epsCrackOnset,tol=1e-3;
 			int maxIter = 100;

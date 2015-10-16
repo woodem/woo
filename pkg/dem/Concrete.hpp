@@ -21,13 +21,14 @@ struct ConcreteMat: public FrictMat {
 	//public:
 	//	virtual shared_ptr<State> newAssocState() const { return shared_ptr<State>(new ConcreteMatState); }
 	//	virtual bool stateTypeOk(State* s) const { return s->isA<ConcreteMatState>(); }
+	enum{ DAMLAW_LINEAR_SOFT=0,DAMLAW_EXPONENTIAL_SOFT=1};
 	#define woo_dem_ConcreteMat__CLASS_BASE_DOC_ATTRS_CTOR \
 		ConcreteMat,FrictMat,"Concrete material, for use with other Concrete classes.", \
 		((Real,sigmaT,NaN,,"Initial cohesion [Pa]")) \
 		((bool,neverDamage,false,,"If true, no damage will occur (for testing only).")) \
 		((Real,epsCrackOnset,NaN,,"Limit elastic strain [-]")) \
 		((Real,relDuctility,NaN,,"relative ductility of bonds in normal direction")) \
-		((int,damLaw,1,,"Law for damage evolution in uniaxial tension. 0 for linear stress-strain softening branch, 1 (default) for exponential damage evolution law")) \
+		((int,damLaw,1,AttrTrait<Attr::namedEnum>().namedEnum({{DAMLAW_LINEAR_SOFT,{"linear softening","lin"}},{DAMLAW_EXPONENTIAL_SOFT,{"exponential softening","exp"}}}),"Law for damage evolution in uniaxial tension. 0 for linear stress-strain softening branch, 1 (default) for exponential damage evolution law")) \
 		((Real,dmgTau,((void)"deactivated if negative",-1),,"Characteristic time for normal viscosity. [s]")) \
 		((Real,dmgRateExp,0,,"Exponent for normal viscosity function. [-]")) \
 		((Real,plTau,((void)"deactivated if negative",-1),,"Characteristic time for visco-plasticity. [s]")) \
