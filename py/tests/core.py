@@ -478,9 +478,9 @@ class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
         PAT(str,'sChoice','aa',choice=['aa','bb','cc'],doc='String choice attribute')
     ]
     def postLoad(self,I):
-        if I==None:
+        if I is None:
             self.postLoadCounter+=1
-        elif I==id(self.aF_trigger):
+        elif I=='aF_trigger':
             # print 'postLoad / aF_trigger'
             self.postLoadCounter+=10
             self.aF=self.aF_trigger
@@ -493,7 +493,7 @@ class _TestPyClass2(_TestPyClass):
     'Python class deriving from python base class (which in turn derives from c++).'
     _PAT=woo.pyderived.PyAttrTrait
     def postLoad(self,I):
-        if I==id(self.f2) or I==None: self.f2counter+=1
+        if I=='f2' or I is None: self.f2counter+=1
         else: super(_TestPyClass2,self).postLoad(I)
     _attrTraits=[
         _PAT(int,'f2',0,triggerPostLoad=True,doc='Float attr in derived class'),

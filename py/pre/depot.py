@@ -58,7 +58,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     #defaultPsd=[(.007,0),(.01,.4),(.012,.7),(.02,1)]
     defaultPsd=[(5e-3,.0),(6.3e-3,.12),(8e-3,.53),(10e-3,.8),(12.5e-3,.94),(20e-3,1)]
     def postLoad(self,I):
-        if self.preCooked and (I==None or I==id(self.preCooked)):
+        if self.preCooked and (I is None or I=='preCooked'):
             print 'Applying pre-cooked configuration "%s".'%self.preCooked
             if self.preCooked=='Brisbane 1':
                 self.gen=woo.dem.PsdSphereGenerator(psdPts=[(6.3e-3,0),(12.5e-3,.82222),(20e-3,1)],discrete=False)
@@ -71,7 +71,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
             else: raise RuntimeError('Unknown precooked configuration "%s"'%self.preCooked)
             self.preCooked=''
         self.ht0=self.htDiam[0]/self.relSettle
-        # if I==id(self.estSettle): 
+        # if I=='estSettle': 
     _attrTraits=[
         _PAT(str,'preCooked','',noDump=True,noGui=False,startGroup='General',choice=['','Brisbane 1','Brisbane 2'],triggerPostLoad=True,doc='Apply pre-cooked configuration (i.e. change other parameters); this option is not saved.'),
         _PAT(Vector2,'htDiam',(.45,.1),unit='m',doc='Height and diameter of the resulting cylinder; the initial cylinder has the height of :obj:`ht0`, and particles are, after stabilization, clipped to :obj:`htDiam`, the resulting height.'),

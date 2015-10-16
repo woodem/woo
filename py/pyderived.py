@@ -76,7 +76,7 @@ class PyAttrTrait(object):
     :param filename: `str` attribute representing filename with file picker in the GUI; the file is possibly non-existent.
     :param existingFilename: `str` attribute for existing filename, with file picker in the GUI.
     :param dirname: `str` attribute for existing directory name, with directory picker in the GUI.
-    :param triggerPostLoad: when this attribute is being assigned to, `postLoad(id(self.attr))` will be called.
+    :param triggerPostLoad: when this attribute is being assigned to, `self.postLoad('attrName')` will be called.
 
     '''
     #        
@@ -288,7 +288,7 @@ class PyWooObject:
             ]
             def postLoad(self,I):
                 if I==None: pass                  # called when constructed/loaded
-                elif I==id(self.aF_trigger): pass # called when aF_trigger is modified
+                elif I=='aF_trigger': pass # called when aF_trigger is modified
             def __init__(self,**kw):
                 pass
                 # ...
@@ -303,7 +303,7 @@ class PyWooObject:
     * `id(self.attr)` when `self.attr` is modified; this can be used to check for some particular conditions or modify other variables::
 
         instance=SomeClass()  # calls instance.postLoad(None)
-        instance.aF_trigger=3 # calls instance.postLoad(id(instance.aF_trigger))
+        instance.aF_trigger=3 # calls instance.postLoad('aF_trigger')
     
       .. note:: Pay attention to not call `postLoad` in infinite regression. 
 
@@ -315,7 +315,7 @@ class PyWooObject:
                 _PAT(float,'extraAttr',1.,triggerPostLoad=True,doc='Attributes as usual; postLoad is supported.'),
             ]
             def postLoad(self,I):
-                if I==id(self.extraAttr): pass
+                if I=='extraAttr': pass
                 # don't forget to eventually call parent's class postLoad, if you define postLoad in the derived class
                 # otherwise the triggers from the parents class would not work
                 else: super(SomeChild,self).postLoad(I)
@@ -351,7 +351,7 @@ class PyWooObject:
                 if not hasattr(derivedClass,'postLoad'): raise RuntimeError('%s.%s declared with triggerPostLoad, but %s.postLoad is not defined.'%(derivedClass.__name__,trait.name,derivedClass.__name__))
                 def triggerSetter(self,val,trait=trait):
                     self._attrValues[trait.name]=trait.coerceValue(val)
-                    self.postLoad(id(self._attrValues[trait.name]))
+                    self.postLoad(trait.name)
                 setter=triggerSetter
             # chain validation and actual setting
             def validatingSetter(self,val,trait=trait,setter=setter):
