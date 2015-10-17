@@ -31,10 +31,15 @@ using boost::algorithm::iends_with;
 
 #include<QtGui/qevent.h>
 #include<QtCore/qdir.h>
-#include<QtGui/qfiledialog.h>
-#include<QtGui/QMessageBox>
 #include<QtGui/QIcon>
 #include<QtCore/QTextStream>
+#if QT_VERSION<=0x050000
+	#include<QtGui/qfiledialog.h>
+	#include<QtGui/QMessageBox>
+#else
+	#include<QtWidgets/qfiledialog.h>
+	#include<QtWidgets/QMessageBox>
+#endif
 
 /*****************************************************************************
 *********************************** SnapshotEngine ***************************
