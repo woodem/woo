@@ -442,6 +442,7 @@ if not env.GetOption('clean'):
 		if 'qt5' in env['features']:
 			env['ENV']['PKG_CONFIG_PATH']='/usr/bin/pkg-config'
 			env.Tool('qt5')
+			env.Append(CXXFLAGS=['-fPIC']) # required by Qt5
 			env.EnableQt5Modules(['QtGui','QtWidgets','QtCore','QtXml','QtOpenGL'])
 			if not conf.TryAction(env.Action('pyrcc5'),'','qrc'): featureNotOK('qt5','The pyrcc5 program is not operational (package pyqt5-dev-tools)')
 			if not conf.TryAction(env.Action('pyuic5'),'','ui'): featureNotOK('qt5','The pyuic5 program is not operational (package pyqt5-dev-tools)')
