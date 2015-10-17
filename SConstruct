@@ -93,32 +93,13 @@ def colonSplit(x): return x.split(':')
 #  2. lowercase options influence the building process, compiler options and the like.
 #
 
-## detect virtual environment
-## http://stackoverflow.com/a/1883251/761090
-import sys,site
-VENV=hasattr(sys,'real_prefix')
-if not VENV and not hasattr(site,'getsitepackages'):
-	# avoid this warning for rebuilds using -R, which should actually work just fine
-	if saveFlavor:
-		print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
-	VENV=True
-
-if VENV:
-	defaultEXECDIR=sys.prefix+'/bin'
-	pp=[p for p in sys.path if p.endswith('/site-packages')]
-	defaultLIBDIR=pp[-1] if pp else None
-	if not defaultLIBDIR: print 'WARN: no good default value of LIBDIR was found, you will have to specify one my hand'
-else:
-	defaultEXECDIR='/usr/local/bin'
-	defaultLIBDIR=site.getsitepackages()[0]
-
 # needed for good default for QT5DIR
 # https://wiki.debian.org/Python/MultiArch
 multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
 
 opts.AddVariables(
-	('LIBDIR','Install directory for python modules (the default is obtained via "import site; site.getsitepackages()[0]"; in virtual environments, where getsitepackages it not defined, it MUST be specified; in that case, also specify EXECDIR and use the virtual python interpreter to run SCons)',defaultLIBDIR),
-	('EXECDIR','Install directory for executables; defaults to /usr/local/bin in normal environemtns and to $VIRTUAL_ENV/bin in virtual environments',defaultEXECDIR),
+	('LIBDIR','Install directory for python modules (the default is empty, and obtained via "import site; site.getsitepackages()[0]" using PYTHON interpreter; in virtual environments, where getsitepackages it not defined, it MUST be specified; in that case, also specify EXECDIR and use the virtual python interpreter to run SCons)',None),
+	('EXECDIR','Install directory for executables; default is empty, which translates to /usr/local/bin in normal environemnts, $VIRTUAL_ENV/bin in virtual environments, and $PREFIX/local/bin for foreign interpreter (in the sense of PYTHON variable)',None),
 	BoolVariable('debug', 'Enable debugging information',0),
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
@@ -138,6 +119,7 @@ opts.AddVariables(
 	('QT4DIR','Directory where Qt4 is installed','/usr/share/qt4'),
 	('QT5DIR','Directory where Qt5 is installed','/usr/lib/%s/qt5'%multiarchTriplet),
 	('PATH','Path (not imported automatically from the shell) (colon-separated)',None),
+	('PYTHON','Path for the python interpreter',sys.executable),
 	('CXX','The c++ compiler','g++'),
 	('CXXFLAGS','Additional compiler flags for compilation (like -march=core2).',None,None,Split),
 	('LIBS','Additional libs to link to (like python2.6 for cygwin)',None,None,Split),
@@ -164,6 +146,49 @@ if 'qt4' in env['features'] and 'qt5' in env['features']:
 	Exit(1)
 if 'qt4' in env['features'] or 'qt5' in env['features']: env.Append(features=['qt'])
 
+
+# native python
+if env['PYTHON']==sys.executable:
+	## detect virtual environment
+	## http://stackoverflow.com/a/1883251/761090
+	import sys,site
+	VENV=hasattr(sys,'real_prefix')
+	if not VENV and not hasattr(site,'getsitepackages'):
+		# avoid this warning for rebuilds using -R, which should actually work just fine
+		if saveFlavor:
+			print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+		VENV=True
+	if VENV:
+		defaultEXECDIR=sys.prefix+'/bin'
+		pp=[p for p in sys.path if p.endswith('/site-packages')]
+		defaultLIBDIR=pp[-1] if pp else None
+	else:
+		defaultEXECDIR='/usr/local/bin'
+		defaultLIBDIR=site.getsitepackages()[0]
+else:
+	# foreign python
+	import subprocess
+	pyexe=env['PYTHON']
+	VENV=subprocess.call([pyexe,'-c','import sys; sys.exit(hasattr(sys,"real_prefix"))'])
+	if not VENV and not subprocess.call([pyexe,'-c','import site, sys; sys.exit(hasattr(site,"getsitepackages"))']):
+		# was actually never tested!!
+		# avoid this warning for rebuilds using -R, which should actually work just fine
+		if saveFlavor:
+			print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+		VENV=True
+	if VENV:
+		defaultEXECDIR=subprocess.check_output([pyexe,'-c','import sys; print(sys.prefix)']).strip()+'/bin'
+		pp=subprocess.check_output([pyexe,'-c',r'import sys; print(".\n".join([p for p in sys.path if p.endswith("/site-package")]))']).split('\n')
+		defaultLIBDIR=pp[-1] if pp else None
+	else:
+		defaultEXECDIR=subprocess.check_output([pyexe,'-c','import sys; print(sys.prefix+"/local/bin")']).strip()
+		defaultLIBDIR=subprocess.check_output([pyexe,'-c','import site; print(site.getsitepackages()[0])']).strip()
+
+if 'EXECDIR' not in env: env['EXECDIR']=defaultEXECDIR
+if 'LIBDIR' not in env:
+	if not defaultLIBDIR: print 'WARN: no good default value of LIBDIR was found, you will have to specify one my hand'
+	else: env['LIBDIR']=defaultLIBDIR
+
 # set optimization based on debug, if required 
 if env['optimize']<0: env['optimize']=(None if env['debug'] else -env['optimize']) 
 
@@ -171,6 +196,25 @@ if env['optimize']<0: env['optimize']=(None if env['debug'] else -env['optimize'
 for k in ('CPPPATH','LIBPATH','QTDIR','PATH'):
 	if env.has_key(k):
 		env[k]=colonSplit(env[k])
+
+## detect virtual environment
+## http://stackoverflow.com/a/1883251/761090
+import sys,site
+VENV=hasattr(sys,'real_prefix')
+if not VENV and not hasattr(site,'getsitepackages'):
+	# avoid this warning for rebuilds using -R, which should actually work just fine
+	if saveFlavor:
+		print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+	VENV=True
+
+if VENV:
+	defaultEXECDIR=sys.prefix+'/bin'
+	pp=[p for p in sys.path if p.endswith('/site-packages')]
+	defaultLIBDIR=pp[-1] if pp else None
+	if not defaultLIBDIR: print 'WARN: no good default value of LIBDIR was found, you will have to specify one my hand'
+else:
+	defaultEXECDIR='/usr/local/bin'
+	# defaultLIBDIR=site.getsitepackages()[0]
 
 # do not propagate PATH from outside, to ensure identical builds on different machines
 #env.Append(ENV={'PATH':['/usr/local/bin','/bin','/usr/bin']})
@@ -293,18 +337,38 @@ def CheckPython(context):
 	"Checks for functional python/c API. Sets variables if OK and returns true; otherwise returns false."
 	origs={'LIBS':context.env['LIBS'],'LIBPATH':context.env['LIBPATH'],'CPPPATH':context.env['CPPPATH'],'LINKFLAGS':context.env['LINKFLAGS']}
 	context.Message('Checking for Python development files... ')
+	def pySysConfig(what):
+		pyexe=context.env['PYTHON']
+		# call foreign python interpreter
+		if env['PYTHON']!=sys.executable:
+			import subprocess
+			if what=='CPPPATH':
+				return subprocess.check_output([pyexe,'-c','import distutils.sysconfig as ds; print(ds.get_python_inc())']).rstrip()
+			elif what=='PYVER':
+				return subprocess.check_output([pyexe,'-c','import sys; print("%d%d"%(sys.version_info[0],sys.version_info[1]))']).strip()
+			else:
+				o=subprocess.check_output([pyexe,'-c','import distutils.sysconfig as ds; print(ds.get_config_var("%s"))'%what]).rstrip()
+				return None if o==None else o.split()
+		else:
+			# native
+			import distutils.sysconfig as ds
+			if what=='CPPPATH': return ds.get_python_inc()
+			elif what=='PYVER': return '%d%d'%(sys.version_info[0],sys.version_info[1])
+			else: return None if ds.get_config_var(what) is None else ds.get_config_var(what).split()
+	import distutils.sysconfig, subprocess
 	try:
 		#FIXME: once caught, exception disappears along with the actual message of what happened...
-		import distutils.sysconfig as ds
-		context.env.Append(CPPPATH=ds.get_python_inc(),LIBS=ds.get_config_var('LIBS').split() if ds.get_config_var('LIBS') else None)
+		context.env['PYVER']=pySysConfig('PYVER') # 2-digit code as string
+		context.env.Append(CPPPATH=pySysConfig('CPPPATH'),LIBS=pySysConfig('LIBS'))
 		# FIXME: there is an inconsistency between cygwin and linux here?!
 		if sys.platform=='cygwin':
-			context.env.Append(LINKFLAGS=ds.get_config_var('LINKFORSHARED').split(),LIBS=ds.get_config_var('BLDLIBRARY').split())
+			# cygwin is unused			
+			context.env.Append(LINKFLAGS=pySysConfig('LINKFORSHARED'),LIBS=pySysConfig('BLDLIBRARY'))
 		else:
-			context.env.Append(LINKFLAGS=ds.get_config_var('LINKFORSHARED').split()+ds.get_config_var('BLDLIBRARY').split())
+			context.env.Append(LINKFLAGS=pySysConfig('LINKFORSHARED')+pySysConfig('BLDLIBRARY'))
 		ret=context.TryLink('#include<Python.h>\nint main(int argc, char **argv){Py_Initialize(); Py_Finalize();}\n','.cpp')
 		if not ret: raise RuntimeError
-	except (ImportError,RuntimeError,ds.DistutilsPlatformError):
+	except (ImportError,RuntimeError,distutils.sysconfig.DistutilsPlatformError,subprocess.CalledProcessError):
 		for k in origs.keys(): context.env[k]=origs[k]
 		context.Result('error')
 		return False
@@ -339,7 +403,7 @@ def CheckBoost(context):
 		('boost_regex','boost/regex.hpp','boost::regex("");',True),
 		('boost_chrono','boost/chrono/chrono.hpp','boost::chrono::system_clock::now();',True),
 		('boost_serialization','boost/archive/archive_exception.hpp','try{} catch (const boost::archive::archive_exception& e) {};',True),
-		('boost_python','boost/python.hpp','boost::python::scope();',True),
+		('boost_python-py%s'%env['PYVER'],'boost/python.hpp','boost::python::scope();',True),
 	]
 	failed=[]
 	def checkLib_maybeMT(lib,header,func):
@@ -366,11 +430,20 @@ def CheckPythonModules(context):
 	if 'qt5' in context.env['features']: mods.append(('PyQt5.QtGui','python-qt5'))
 	if 'qt' in context.env['features'] or 'opengl' in context.env['features']: mods.append(('Xlib','python-xlib'))
 	failed=[]
-	for m,pkg in mods:
-		try:
-			exec("import %s"%m)
-		except ImportError:
-			failed.append(m+' (package %s)'%pkg)
+	if sys.executable==context.env['PYTHON']:
+		for m,pkg in mods:
+			try:
+				exec("import %s"%m)
+			except ImportError:
+				failed.append(m+' (package %s)'%pkg)
+	else:
+		for m,pkg in mods:
+			import subprocess
+			try:
+				if subprocess.call([context.env['PYTHON'],'-c','import '+m])==0: continue
+				failed.append(m+' (package %s)'%pkg)
+			except:
+				failed.append(m+' (exception when running import?; package %s)'%pkg)
 	if failed: context.Result('Failures: '+', '.join(failed)); return False
 	context.Result('all ok'); return True
 
@@ -405,6 +478,7 @@ if not env.GetOption('clean'):
 			print "\nYour compiler is broken, no point in continuing. See `%s' for what went wrong and use the CXX/CXXFLAGS parameters to change your compiler."%(buildDir+'/config.log')
 			Exit(1)
 	ok&=conf.CheckLibWithHeader('pthread','pthread.h','c','pthread_exit(NULL);',autoadd=1)
+	if env['PYTHON']!=sys.executable: print '*** Using foreign Python interpreter',env['PYTHON']
 	ok&=(conf.CheckPython() and conf.CheckCXXHeader(['Python.h','numpy/ndarrayobject.h'],'<>'))
 	ok&=conf.CheckPythonModules()
 	ok&=conf.EnsureBoostVersion(14800)
