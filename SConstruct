@@ -112,6 +112,9 @@ else:
 	defaultEXECDIR='/usr/local/bin'
 	defaultLIBDIR=site.getsitepackages()[0]
 
+# needed for good default for QT5DIR
+# https://wiki.debian.org/Python/MultiArch
+multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
 
 opts.AddVariables(
 	('LIBDIR','Install directory for python modules (the default is obtained via "import site; site.getsitepackages()[0]"; in virtual environments, where getsitepackages it not defined, it MUST be specified; in that case, also specify EXECDIR and use the virtual python interpreter to run SCons)',defaultLIBDIR),
@@ -129,11 +132,11 @@ opts.AddVariables(
 	('chunkSize','Maximum files to compile in one translation unit when building plugins. (unlimited if <= 0, per-file linkage is used if 1)',7,None,int),
 	('version','Woo version (if not specified, guess will be attempted)',None),
 	('realVersion','Revision (usually bzr revision); guessed automatically unless specified',None),
-	('CPPPATH', 'Additional paths for the C preprocessor (colon-separated)','/usr/include/vtk-5.8:/usr/include/eigen3:/usr/include/vtk'), # hardy has vtk-5.0
+	('CPPPATH', 'Additional paths for the C preprocessor (colon-separated)','/usr/include/vtk-5.8:/usr/include/eigen3:/usr/include/vtk'),
 	('LIBPATH','Additional paths for the linker (colon-separated)',None),
 	('libstdcxx','Specify libstdc++ location by hand (opened dynamically at startup), usually not needed',None),
 	('QT4DIR','Directory where Qt4 is installed','/usr/share/qt4'),
-	('QT5DIR','Directory where Qt5 is installed','/usr/share/qt5'),
+	('QT5DIR','Directory where Qt5 is installed','/usr/lib/%s/qt5'%multiarchTriplet),
 	('PATH','Path (not imported automatically from the shell) (colon-separated)',None),
 	('CXX','The c++ compiler','g++'),
 	('CXXFLAGS','Additional compiler flags for compilation (like -march=core2).',None,None,Split),
@@ -371,10 +374,29 @@ def CheckPythonModules(context):
 	if failed: context.Result('Failures: '+', '.join(failed)); return False
 	context.Result('all ok'); return True
 
-	
+def CheckLibLinkedTo(context,lib,linkedTo):
+	import subprocess
+	context.Message('Checking whether %s links to %s ...'%(lib,linkedTo))
+	try:
+		cmd=env.subst('$SHCXXCOM -print-file-name='+lib)
+		# print cmd
+		lib2=subprocess.check_output(cmd,shell=True).split('\n')[0]
+	except subprocess.CalledProcessError:
+		context.Result('WARN: error finding path for %s using compiler (proceeding)'%lib)
+		return True
+	try:
+		context.Message(' lib is %s, running ldd ... '%lib2)
+		out=subprocess.check_output(['ldd',lib2])
+		if linkedTo not in out:
+			context.Result('not found')
+			return False
+		context.Result('ok')
+	except subprocess.CalledProcessError:
+		context.Result('WARN: error calling ldd, unable to check whether %s links to %s (proceeding)'%(lib,linkedTo))
+	return True
 
 if not env.GetOption('clean'):
-	conf=env.Configure(custom_tests={'CheckCXX':CheckCXX,'EnsureBoostVersion':EnsureBoostVersion,'CheckBoost':CheckBoost,'CheckPython':CheckPython,'CheckPythonModules':CheckPythonModules}, # 'CheckQt':CheckQt
+	conf=env.Configure(custom_tests={'CheckCXX':CheckCXX,'EnsureBoostVersion':EnsureBoostVersion,'CheckBoost':CheckBoost,'CheckPython':CheckPython,'CheckPythonModules':CheckPythonModules,'CheckLibLinkedTo':CheckLibLinkedTo}, # 'CheckQt':CheckQt
 		conf_dir='$buildDir/.sconf_temp',log_file='$buildDir/config.log'
 	)
 	ok=True
@@ -412,15 +434,15 @@ if not env.GetOption('clean'):
 			env.EnableQt4Modules(['QtGui','QtCore','QtXml','QtOpenGL'])
 			if not conf.TryAction(env.Action('pyrcc4'),'','qrc'): featureNotOK('qt4','The pyrcc4 program is not operational (package pyqt4-dev-tools)')
 			if not conf.TryAction(env.Action('pyuic4'),'','ui'): featureNotOK('qt4','The pyuic4 program is not operational (package pyqt4-dev-tools)')
-			if conf.CheckLibWithHeader(['qglviewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1):
-				env['QGLVIEWER_LIB']='qglviewer-qt4'
-			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1):
-				env['QGLVIEWER_LIB']='libQGLViewer'
+			if conf.CheckLibWithHeader(['qglviewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt4'
+			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer'
 			else: featureNotOK('qt4','Building with Qt4 implies the QGLViewer library installed (package libqglviewer-qt4-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
+			if not conf.CheckLibLinkedTo(env['QGLVIEWER_LIB']+'.so','libQtGui.so.4'): featureNotOK('qt4','%s does not link to libQtGui.so.4 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
+
 		if 'qt5' in env['features']:
 			env['ENV']['PKG_CONFIG_PATH']='/usr/bin/pkg-config'
 			env.Tool('qt5')
-			env.EnableQt5Modules(['QtGui','QtCore','QtXml','QtOpenGL'])
+			env.EnableQt5Modules(['QtGui','QtWidgets','QtCore','QtXml','QtOpenGL'])
 			if not conf.TryAction(env.Action('pyrcc5'),'','qrc'): featureNotOK('qt5','The pyrcc5 program is not operational (package pyqt5-dev-tools)')
 			if not conf.TryAction(env.Action('pyuic5'),'','ui'): featureNotOK('qt5','The pyuic5 program is not operational (package pyqt5-dev-tools)')
 			if conf.CheckLibWithHeader(['qglviewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt5'
@@ -428,6 +450,7 @@ if not env.GetOption('clean'):
 			# Fedora naming, maybe: https://lists.fedoraproject.org/pipermail/devel/2014-March/196395.html 
 			elif conf.CheckLibWithHeader(['libQGLViewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer-qt5'
 			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-qt5-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
+			if not conf.CheckLibLinkedTo(env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)
