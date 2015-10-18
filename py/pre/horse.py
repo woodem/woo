@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import print_function
 from woo.dem import *
 from woo.fem import *
 import woo.core
@@ -187,7 +188,7 @@ def plotBatchResults(db):
         l=ax.legend(loc=loc,labelspacing=.2,prop={'size':7})
         l.get_frame().set_alpha(.4)
     fig.savefig(out)
-    print 'Batch figure saved to file://%s'%os.path.abspath(out)
+    print('Batch figure saved to file://%s'%os.path.abspath(out))
 
     
 
@@ -228,5 +229,5 @@ def finished(S):
         try:
             import woo.paraviewscript
             pvscript=woo.paraviewscript.fromEngines(S,out=S.expandTags(S.pre.vtkPrefix),launch=(not woo.batch.inBatch()))
-            print 'Paraview script written to',pvscript
+            print('Paraview script written to',pvscript)
         except RuntimeError: raise

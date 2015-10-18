@@ -11,6 +11,7 @@ Note that GTS only moves references to surfaces around, therefore e.g. translati
 surface that is part of the union will move also the part of the united surface.
 Therefore, we use the copy() method for deep copy here.
 """
+from __future__ import print_function
 from woo import pack,qt
 import gts
 
@@ -27,7 +28,7 @@ from time import time
 t0=time()
 O.bodies.append(pack.regularHexa(pack.inGtsSurface(s1) | pack.inGtsSurface(s2),radius,gap=0,color=(0,1,0)))
 t1=time()
-print 'Using predicate union: %gs'%(t1-t0)
+print('Using predicate union: %gs'%(t1-t0))
 O.bodies.append(pack.regularHexa(pack.inGtsSurface(s12),radius,gap=0.,color=(1,0,0)))
 t2=time()
-print 'Using surface union: %gs'%(t2-t1)
+print('Using surface union: %gs'%(t2-t1))

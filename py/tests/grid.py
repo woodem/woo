@@ -1,6 +1,7 @@
 # encoding: utf-8
 # 2013 © Václav Šmilauer <eu@doxos.eu>
 
+from __future__ import print_function
 import unittest
 from minieigen import *
 import woo._customConverters
@@ -54,10 +55,10 @@ class TestGridStore(unittest.TestCase):
         for setMinSize in (0,1,2,3):
             g12,g21=g1.complements(g2,setMinSize=setMinSize)
             if 0:
-                print setMinSize,'g1',g1[c1],g1[c2],g1[c3],g1[c4]
-                print setMinSize,'g2',g2[c1],g2[c2],g2[c3],g2[c4]
-                print setMinSize,'g12',g12[c1],g12[c2],g12[c3],g12[c4]
-                print setMinSize,'g21',g21[c1],g21[c2],g21[c3],g12[c4]
+                print(setMinSize,'g1',g1[c1],g1[c2],g1[c3],g1[c4])
+                print(setMinSize,'g2',g2[c1],g2[c2],g2[c3],g2[c4])
+                print(setMinSize,'g12',g12[c1],g12[c2],g12[c3],g12[c4])
+                print(setMinSize,'g21',g21[c1],g21[c2],g21[c3],g12[c4])
             self.assert_(g12[c1]==[0])
             self.assert_(g21[c1]==[2])
             self.assert_(g12[c2]==[1,2,3])

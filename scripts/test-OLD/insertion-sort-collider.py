@@ -1,3 +1,4 @@
+from __future__ import print_function
 o=Omega()
 
 o.engines=[
@@ -38,6 +39,6 @@ if 0:
 else:
     #O.run(100,True)
     O.step()
-    print len(O.interactions)
+    print(len(O.interactions))
     #O.bodies[2].phys['se3']=[-.6,0,.6,1,0,0,0]
     #O.step()

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import woo, woo.batch, woo.core
 S=woo.master.scene
 woo.batch.readParamsFromTable(unknownOk=True,
@@ -7,14 +8,14 @@ woo.batch.readParamsFromTable(unknownOk=True,
     notInTable='notInTable'
 )
 from woo.params import table
-print S.tags['description']
-print 'important',table.important
-print 'unimportant',table.unimportant
+print(S.tags['description'])
+print('important',table.important)
+print('unimportant',table.unimportant)
 import time
 S.engines=[woo.core.PyRunner(1,'import time, sys; time.sleep(.005); sys.stderr.write(".")')]
 S.run(1000,True)
 woo.batch.writeResults(S,**table.__dict__)
-print 'finished'
+print('finished')
 import sys
 sys.stdout.flush()
 sys.exit(0)

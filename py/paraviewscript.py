@@ -1,6 +1,7 @@
 '''
 Convenience module for setting up visualization pipelines for Paraview through python scripts.
 '''
+from __future__ import print_function
 import woo
 import woo.dem
 import logging
@@ -56,10 +57,10 @@ def launchPV(script):
     # will launch it in the background
     pv=findPV()
     if not pv:
-        print 'Paraview not executed since the executable was not found.'
+        print('Paraview not executed since the executable was not found.')
         return
     cmd=[pv,'--script='+script]
-    print 'Running ',' '.join(cmd)
+    print('Running ',' '.join(cmd))
     subprocess.Popen(cmd)
 
 def fromEngines(S,out=None,launch=False,noDataOk=False):

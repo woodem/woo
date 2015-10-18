@@ -1,3 +1,4 @@
+from __future__ import print_function
 O.periodic=True
 O.cell.refSize=(20,20,10)
 from woo import pack,log,timing
@@ -22,7 +23,7 @@ O.engines=[
 ]
 O.dt=utils.PWaveTimeStep()
 O.saveTmp()
-print O.cell.refSize
+print(O.cell.refSize)
 from woo import qt; qt.Controller(); qt.View()
 O.run()
 O.wait()

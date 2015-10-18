@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import print_function
 from woo.dem import *
 import woo.core
 import woo.dem
@@ -25,7 +26,7 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
     def postLoad(self,I):
         if self.preCooked:
-            print 'Applying pre-cooked configuration "%s".'%self.preCooked
+            print('Applying pre-cooked configuration "%s".'%self.preCooked)
             if self.preCooked=='Spheres in cylinder':
                 self.generator=woo.dem.PsdSphereGenerator(psdPts=[(.01,0),(.04,1.)])
                 self.shape='cylinder'
@@ -129,7 +130,7 @@ def prepareTriax(pre):
     S.engines=[factory]
     S.one()
 
-    print 'Number of nodes:',len(S.dem.nodes)
+    print('Number of nodes:',len(S.dem.nodes))
 
     S.periodic=True
     S.cell.setBox((1+2*margin)*pre.iniSize)
@@ -231,7 +232,7 @@ def addPlotData_checkProgress(S):
 
 def compactionDone(S):
     # if S.lab.compactMemoize:
-    print 'Compaction done at step',S.step
+    print('Compaction done at step',S.step)
     import woo
     t=S.lab.triax
     # set the current cell configuration to be the reference one
@@ -265,15 +266,15 @@ def compactionDone(S):
 
     if S.pre.saveFmt:
         out=S.pre.saveFmt.format(stage='compact',S=S,**(dict(S.tags)))
-        print 'Saving to',out
+        print('Saving to',out)
         S.save(out)
 
 
 def triaxDone(S):
-    print 'Triaxial done at step',S.step
+    print('Triaxial done at step',S.step)
     if S.pre.saveFmt:
         out=S.pre.saveFmt.format(stage='done',S=S,**(dict(S.tags)))
-        print 'Saving to',out
+        print('Saving to',out)
         S.save(out)
     S.stop()
     import woo.utils

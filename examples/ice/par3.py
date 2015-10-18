@@ -1,3 +1,4 @@
+from __future__ import print_function
 from woo.dem import *
 from woo.core import *
 from minieigen import *
@@ -39,5 +40,5 @@ S.plot.plots={'i':('z2'),'z2':('F2',None,'Fx01','Fx12')}
 S.saveTmp()
 # check if the contact is created right:
 S.one()
-print 'Bond: ',S.dem.con[0,1].phys.bonds
+print('Bond: ',S.dem.con[0,1].phys.bonds)
 

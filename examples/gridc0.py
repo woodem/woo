@@ -1,3 +1,4 @@
+from __future__ import print_function
 from woo.core import *
 from woo.dem import *
 from woo import timing
@@ -43,11 +44,11 @@ if 0:
 else:
     import woo.pack
     sp=woo.pack.SpherePack()
-    print 'Making cloud...'
+    print('Making cloud...')
     sp.makeCloud((.1,.1,.0),(1.1,1.1,1.0),rMean=rr,rRelFuzz=.3)
-    print 'Generated cloud with %d spheres'%(len(sp))
+    print('Generated cloud with %d spheres'%(len(sp)))
     sp.toSimulation_fast(S,mat=mat,mask=S.lab.spheMask)
-    print 'Spheres added to Scene'
+    print('Spheres added to Scene')
 S.dem.par.add([
     Wall.make(0,axis=2,sense=1,mat=mat,mask=S.lab.wallMask),
     Wall.make(1.9,axis=0,sense=-1,mat=mat,mask=S.lab.wallMask)

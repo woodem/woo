@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # script for testing ScGeom shear computation
 # Runs the same 2-sphere setup for useShear=False and for useShear=True
@@ -22,18 +23,18 @@ O.saveTmp('init')
 def interInfo():
     i=O.interactions[0,1]
     if 1:
-        print O.time,i.phys['shearForce']
+        print(O.time,i.phys['shearForce'])
     else:
         r1,r2=O.bodies[0].shape['radius'],O.bodies[1].shape['radius']
         theta=[e['angularVelocity'] for e in O.engines if e.name=='RotationEngine'][0]
         f=.5*(r1+r2)*theta*O.time*i.phys['ks']
-        print O.time,i.phys['shearForce'],f,i.phys['shearForce'][0]/f
+        print(O.time,i.phys['shearForce'],f,i.phys['shearForce'][0]/f)
 
 
-print '=========== no shear ============'
+print('=========== no shear ============')
 O.run(100000,True)
 nIter=O.iter
-print '============= shear ============='
+print('============= shear =============')
 O.loadTmp('init')
 elasticLaw['useShear']=True
 O.run(nIter,True)

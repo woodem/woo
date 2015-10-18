@@ -1,3 +1,4 @@
+from __future__ import print_function
 import woo.log
 woo.log.setLevel('FacetTopologyAnalyzer',woo.log.TRACE)
 
@@ -50,9 +51,9 @@ if 1:
         for j in range(0,nPoly):
             if i!=0: O.bodies.append(utils.facet([sphPt(i,j),sphPt(i,j+1),sphPt(i+1,j)]))
             if i!=nPoly/2-1: O.bodies.append(utils.facet([sphPt(i+1,j),sphPt(i,j+1),sphPt(i+1,j+1)]))
-    print 'Sphere created, has',len(O.bodies),'facets'
+    print('Sphere created, has',len(O.bodies),'facets')
     O.step()
     assert(topo['commonVerticesFound']==nPoly*(nPoly/2-1)+2)
     assert(topo['commonEdgesFound']==nPoly*((nPoly/2-1)+(nPoly/2-2)*2+2))
-    print topo['commonVerticesFound'],'vertices; ',topo['commonEdgesFound'],'edges'
+    print(topo['commonVerticesFound'],'vertices; ',topo['commonEdgesFound'],'edges')
 #quit()

@@ -1,4 +1,5 @@
 """ Playground for tuning collider strides depending on maximum velocity. """
+from __future__ import print_function
 
 from woo import timing,log
 import os.path
@@ -31,9 +32,9 @@ for i in range(0,5):
     O.run(1000,True)
     timing.stats()
     totalTime+=sum([e.execTime for e in O.engines])
-    print 'Number of interactions: %d (real ratio: %g)'%(len(O.interactions),float(O.interactions.countReal())/len(O.interactions))
-    print '======================================================='
+    print('Number of interactions: %d (real ratio: %g)'%(len(O.interactions),float(O.interactions.countReal())/len(O.interactions)))
+    print('=======================================================')
     timing.reset()
 
-print 'Total time: %g s'%(totalTime/1e9)
+print('Total time: %g s'%(totalTime/1e9))
 #quit()

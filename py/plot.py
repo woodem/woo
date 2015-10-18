@@ -3,6 +3,7 @@
 """
 Module containing utility functions for plotting inside woo. Most functionality is exposed through :obj:`woo.core.Plot`, however.
 """
+from __future__ import print_function
 
 ## all exported names
 __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMarkerKw']
@@ -481,7 +482,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             else:
                 addDataColumns(data,missing)
                 try:
-                    print('Missing columns in Scene.plot.data, added NaNs:',', '.join([m.encode('utf-8') for m in missing]))
+                    print(('Missing columns in Scene.plot.data, added NaNs:',', '.join([m.encode('utf-8') for m in missing])))
                 except UnicodeDecodeError:
                     warnings.warn('UnicodeDecodeError reporting missing data columns -- harmless, just wondering...')
         def createLines(pStrip,ySpecs,axes,isY1=True,y2Exists=False):
@@ -605,7 +606,7 @@ def liveUpdate(P,timestamp):
             for new in news:
                 ax.wooYNames.add(new)
                 if new in list(data.keys()) and id(data[new]) in linesData: continue # do not add when reloaded and the old lines are already there
-                print('woo.plot: creating new line for',new)
+                print(('woo.plot: creating new line for',new))
                 if not new in list(data.keys()): data[new]=len(data[ax.wooXName])*[nan] # create data entry if necessary
                 #print 'data',len(data[ax.wooXName]),len(data[new]),data[ax.wooXName],data[new]
                 line,=ax.plot(data[ax.wooXName],data[new],label=xlateLabel(new,P.labels)) # no line specifier

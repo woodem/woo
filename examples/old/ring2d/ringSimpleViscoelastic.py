@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 from woo import utils
 from woo import ymport
 
@@ -39,7 +40,7 @@ def fill_cylinder_with_spheres(sphereRadius,cylinderRadius,cylinderHeight,cylind
 # Spheres
 spheresCount=0
 spheresCount+=fill_cylinder_with_spheres(sphereRadius,0.5,0.10,[0,0,0],radians(0))
-print "Number of spheres: %d" % spheresCount
+print("Number of spheres: %d" % spheresCount)
 
 
 ## Engines 

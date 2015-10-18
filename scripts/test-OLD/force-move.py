@@ -1,3 +1,4 @@
+from __future__ import print_function
 O.bodies.append(utils.sphere([0,0,0],1,dynamic=True))
 O.engines=[
     ForceResetter(),
@@ -7,5 +8,5 @@ O.engines=[
 
 for i in xrange(0,20):
     O.step()
-    print O.forces.f(0),O.bodies[0].state.pos
+    print(O.forces.f(0),O.bodies[0].state.pos)
 quit()

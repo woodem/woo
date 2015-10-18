@@ -1,4 +1,6 @@
 # encoding: utf-8
+from __future__ import print_function
+from __future__ import absolute_import
 import woo.config
 if 'qt4' in woo.config.features:
     from PyQt4.QtCore import *
@@ -28,7 +30,7 @@ import os.path, os
 PY3K=(sys.version_info[0]==3)
 
 
-from ExceptionDialog import *
+from .ExceptionDialog import *
 
 seqObjectShowType=True # show type headings in serializable sequences (takes vertical space, but makes the type hyperlinked)
 
@@ -433,7 +435,7 @@ class AttrEditor_RgbColor(AttrEditor,QFrame):
             self.rgbWidgets[i].setTextStable(str(rgb[i]))
         if not math.isnan(rgb[0]): self.prevR=rgb[0]
         self.butt.setStyleSheet('QPushButton { background-color: rgb(%s) }'%(self.to256str(rgb)))
-        if sum([math.isnan(rgb[i]) for i in 0,1,2]):
+        if sum([math.isnan(rgb[i]) for i in (0,1,2)]):
             if self.checkBox.isChecked(): self.checkBox.setChecked(False)
         else:
             if not self.checkBox.isChecked(): self.checkBox.setChecked(True)
@@ -1035,7 +1037,7 @@ class ObjectEditor(QFrame):
             if (T in _fundamentalEditorMap):
                 widget=SeqFundamentalEditor(self,getter,setter,T)
                 return widget
-            print 'No widget for (%s,) in %s.%s'%(T.__name__,entry.obj.__class__.__name__,entry.name)
+            print('No widget for (%s,) in %s.%s'%(T.__name__,entry.obj.__class__.__name__,entry.name))
             return None
         # a woo.Object
         if issubclass(entry.T,Object) or entry.T==Object:
@@ -1044,7 +1046,7 @@ class ObjectEditor(QFrame):
             widget=ObjectEditor(getattr(entry.obj,entry.name),parent=self,showType=self.showType,path=(self.path+'.'+entry.name if self.path else None),labelIsVar=self.labelIsVar,showChecks=self.showChecks,showUnits=self.showUnits,objManip=self.objManip,nesting=self.nesting+1)
             widget.setFrameShape(QFrame.Box); widget.setFrameShadow(QFrame.Raised); widget.setLineWidth(1)
             return widget
-        print 'No widget for %s in %s.%s'%(entry.T.__name__,entry.obj.__class__.__name__,entry.name)
+        print('No widget for %s in %s.%s'%(entry.T.__name__,entry.obj.__class__.__name__,entry.name))
         return None
     def serQLabelMenu(self,widget,position):
         menu=QMenu(self)
@@ -1292,7 +1294,7 @@ class ObjectEditor(QFrame):
                     b.setFocusPolicy(Qt.NoFocus)
                     l.setToolTip(bb[i+2])
                     def callButton(cmd):
-                        exec cmd in globals(),dict(self=entry.obj,S=woo.master.scene)
+                        exec(cmd, globals(),dict(self=entry.obj,S=woo.master.scene))
                     # first arg (foo) used by the dispatch
                     # cmd=bb[i+1] binds the current value bb[i+1]
                     b.clicked.connect(lambda foo,cmd=bb[i+1]: callButton(cmd)) 
@@ -1338,7 +1340,7 @@ class ObjectEditor(QFrame):
                     # add buttons after
                     if entry.trait.buttons and entry.trait.buttons[1]==False: addButtonsNow()
                 except RuntimeError:
-                    print 'ERROR while creating widget for entry %s (%s)'%(entry.name,objPath)
+                    print('ERROR while creating widget for entry %s (%s)'%(entry.name,objPath))
                     import traceback
                     traceback.print_exc()
         # close all groups except the first one            
@@ -1545,7 +1547,7 @@ class SeqObjectComboBox(QFrame):
             self.newButton.setEnabled(enableNew)
             self.cloneAction.setEnabled(enableClone)
         except RuntimeError as e:
-            print 'Error refreshing sequence (path %s), ignored.'%self.path
+            print('Error refreshing sequence (path %s), ignored.'%self.path)
             
     def newSlot(self):
         # print 'newSlot called'
@@ -1692,7 +1694,7 @@ class SeqFundamentalEditor(QFrame):
         field=item.widget() if (index>=0 and item) else None
         menu=QMenu(self)
         actNew,actKill,actUp,actDown,actFromClip=[menu.addAction(name) for name in (u'☘ New',u'☠ Remove',u'↑ Up',u'↓ Down',u'↵ From clipboard')]
-        if index<0: [a.setEnabled(False) for a in actKill,actUp,actDown]
+        if index<0: [a.setEnabled(False) for a in (actKill,actUp,actDown)]
         if index==len(seq)-1: actDown.setEnabled(False)
         if index==0: actUp.setEnabled(False)
         # disable until we figure out how to cancel when the no item in the menu is chosen
@@ -1781,16 +1783,16 @@ class SeqFundamentalEditor(QFrame):
             importables={Vector3:(float,3),Vector2:(float,2),Vector6:(float,6),Vector2i:(int,2),Vector2i:(int,3),Vector6i:(int,6),Matrix3:(float,9),float:(float,1),int:(int,1)}
             if self.itemType not in importables: raise NotImplementedError("Type %s is not text-importable"%(self.itemType.__name__))
             elementType,lineLen=importables[self.itemType]
-            print 'Will import lines with %d item(s) of type %s'%(lineLen,elementType.__name__)
+            print('Will import lines with %d item(s) of type %s'%(lineLen,elementType.__name__))
             # get txt from clipboard
             cb=QApplication.clipboard()
             txt=str(cb.text())
-            print 'Got %d lines from clipboard:\n'%(len(txt.split('\n'))),txt
+            print('Got %d lines from clipboard:\n'%(len(txt.split('\n'))),txt)
             # handle unit conversions here
             if self.multiplier:
                 if isinstance(self.multiplier,tuple): mult=[1./m for m in self.multiplier]
                 else: mult=[1./self.multiplier]*lineLen
-                print 'Input will be scaled by',mult,' to match selected units'
+                print('Input will be scaled by',mult,' to match selected units')
             else: mult=[1.]*lineLen
             #
             seq=[]
@@ -1798,11 +1800,11 @@ class SeqFundamentalEditor(QFrame):
                 l=ll.split()
                 if len(l)==0: continue # skip empty lines
                 if len(l)!=lineLen: raise ValueError("Line %d has %d elements (should have %d)"%(i,len(l),lineLen))
-                print 'Line tuple is',tuple([val for val in l])
+                print('Line tuple is',tuple([val for val in l]))
                 lineItems=[elementType(eval(val))*mult[i] for i,val in enumerate(l)]
                 if lineLen>1: seq.append(tuple(lineItems))
                 else: seq.append(lineItems[0]) # sequences of floats/ints are imported as sequence, not as sequence of tuples
-            print 'Imported sequence',seq
+            print('Imported sequence',seq)
         except Exception as e:
             import traceback
             traceback.print_exc()

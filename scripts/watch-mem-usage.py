@@ -1,3 +1,4 @@
+from __future__ import print_function
 # collect data about max memory usage of processes matching some patterns
 import psutil, re, operator, time, sys
 sampleTime=.5 # seconds
@@ -18,14 +19,14 @@ while True:
             key=m.group(cmdKeyGroup)
             mem=p.get_memory_info()[1] # tuple of RSS (resident set size) and VMS (virtual memory size)
             if key not in maxMem:
-                print 'New process with key',key
+                print('New process with key',key)
                 maxMem[key]=mem
             elif maxMem[key]<mem: maxMem[key]=mem
         time.sleep(sampleTime)
     except (KeyboardInterrupt,SystemExit):
         # print summary, exit
         for k,v in sorted(maxMem.iteritems(),key=operator.itemgetter(1)):
-            print '{:>10.1f}  {}'.format(1e-6*v,k)
+            print('{:>10.1f}  {}'.format(1e-6*v,k))
         sys.exit(0)
 
 

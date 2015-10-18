@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 from pprint import pprint
 dd={}
@@ -48,7 +49,7 @@ for k in sorted(dd.keys()):
 # pprint(out)
 # print out
 for o in out:
-    print '\t'.join([str(oo) for oo in o])
+    print('\t'.join([str(oo) for oo in o]))
 
 import pylab
 cores=set([k[1] for k in dd.keys() if k[0]==cmpTag])
@@ -59,7 +60,7 @@ if 0:
     for core in cores:
         for step in steps:
             nPar=sorted(list(set([k[2] for k in dd.keys() if (cmpTag,core,k[2],step) in dd.keys() and (refTag,core,k[2],step) in dd.keys()])))
-            print core,step,nPar
+            print(core,step,nPar)
             pylab.plot(nPar,[dd[refTag,core,N,step][1] for N in nPar],label='%s, %d cores'%(refTag,core))
             pylab.plot(nPar,[dd[cmpTag,core,N,step][1] for N in nPar],label='%s, %d cores'%(cmpTag,core),linewidth=4,alpha=.5)
 
@@ -73,7 +74,7 @@ if 1:
     for core in cores:
         for step in steps:
             nPar=sorted(list(set([k[2] for k in dd.keys() if (cmpTag,core,k[2],step) in dd.keys() and (refTag,core,k[2],step) in dd.keys()])))
-            print core,step,nPar
+            print(core,step,nPar)
             pylab.plot(nPar,[dd[refTag,core,N,step][0] for N in nPar],label='%s, %d cores'%(refTag,core))
             pylab.plot(nPar,[dd[cmpTag,core,N,step][0] for N in nPar],label='%s, %d cores'%(cmpTag,core),linewidth=4,alpha=.5)
     pylab.xlabel('Number of particles')

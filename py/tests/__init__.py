@@ -1,6 +1,7 @@
 # encoding: utf-8
 # 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 """All defined functionality tests for woo."""
+from __future__ import print_function
 import unittest, types
 
 # import all test suites so that they can be picked up by testAll
@@ -41,7 +42,7 @@ try:
     import colour_runner.runner
     MyTestRunner=colour_runner.runner.ColourTextTestRunner
 except ImportError:
-    print '(colour-runner not installed, using uncolored output for tests; see https://github.com/meshy/colour-runner/)'
+    print('(colour-runner not installed, using uncolored output for tests; see https://github.com/meshy/colour-runner/)')
     MyTestRunner=unittest.TextTestRunner
 
 def testModule(module):
@@ -68,18 +69,18 @@ def testAll(sysExit=False):
         result=MyTestRunner(verbosity=2).run(suite)
         if not sysExit: return result
         if result.wasSuccessful():
-            print '*** ALL TESTS PASSED ***'
+            print('*** ALL TESTS PASSED ***')
             sys.exit(0)
         else:
-            print 20*'*'+' SOME TESTS FAILED '+20*'*'
+            print(20*'*'+' SOME TESTS FAILED '+20*'*')
             sys.exit(1)
     except SystemExit: raise # re-raise
     except:
-        print 20*'*'+' UNEXPECTED EXCEPTION WHILE RUNNING TESTS '+20*'*'
-        print 20*'*'+' '+str(sys.exc_info()[0])
-        print 20*'*'+" Please report bug to https://github.com/woodem/woo/issues providing the following traceback:"
+        print(20*'*'+' UNEXPECTED EXCEPTION WHILE RUNNING TESTS '+20*'*')
+        print(20*'*'+' '+str(sys.exc_info()[0]))
+        print(20*'*'+" Please report bug to https://github.com/woodem/woo/issues providing the following traceback:")
         import traceback; traceback.print_exc()
-        print 20*'*'+' Thank you '+20*'*'
+        print(20*'*'+' Thank you '+20*'*')
         if sysExit: sys.exit(2)
         raise
 

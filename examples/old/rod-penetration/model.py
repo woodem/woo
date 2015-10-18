@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 from woo import utils
 import random
 from woo import ymport
@@ -18,7 +19,7 @@ rod = O.bodies.append(ymport.stl('rod-'+mesh+'.stl',wire=True))
 # Spheres
 sphereRadius = 0.01
 nbSpheres = (32,11,32) 
-print "Creating %d spheres..."%(nbSpheres[0]*nbSpheres[1]*nbSpheres[2]),
+print("Creating %d spheres..."%(nbSpheres[0]*nbSpheres[1]*nbSpheres[2]), end=' ')
 for i in xrange(nbSpheres[0]):
     for j in xrange(nbSpheres[1]):
         for k in xrange(nbSpheres[2]):
@@ -32,7 +33,7 @@ for i in xrange(nbSpheres[0]):
                 dynamic = False
                 color=[0.21,0.22,0.1]
             O.bodies.append(utils.sphere([x,y,z],r,color=color,dynamic=dynamic))
-print "done\n"
+print("done\n")
 
 ## Estimate time step
 #O.dt=utils.PWaveTimeStep()
@@ -69,7 +70,7 @@ O.engines=[
 
 import sys,time
 
-print "Start simulation: " + mesh
+print("Start simulation: " + mesh)
 nbIter=10000
 
 from woo import qt

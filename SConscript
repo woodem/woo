@@ -79,7 +79,7 @@ env.SharedLibrary(pySharedObject,pyObjects,
 #
 import sys
 pyMain='$EXECDIR/woo'+('-'+env['flavor'] if env['flavor'] else '')
-env.InstallAs(pyMain,env.Textfile('main.py','#!%s\nimport wooMain,sys; sys.exit(wooMain.main())\n'%env['PYTHON']))
+env.InstallAs(pyMain,env.Textfile('main.py','#!%s%s\nimport wooMain,sys; sys.exit(wooMain.main())\n'%(env['PYTHON'],' -3' if env['PYVER'].startswith('2') else '')))
 env.InstallAs(pyMain+'-batch',env.Textfile('batch.py','#!%s\nimport wooMain,sys; sys.exit(wooMain.batch())\n'%env['PYTHON']))
 env.AddPostAction(pyMain,Chmod(pyMain,0755))
 env.AddPostAction(pyMain+'-batch',Chmod(pyMain+'-batch',0755))

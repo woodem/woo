@@ -1,6 +1,7 @@
 # encoding: utf-8
 # 2013 © Václav Šmilauer <eu@doxos.eu>
 
+from __future__ import print_function
 import unittest
 from minieigen import *
 import woo._customConverters
@@ -42,18 +43,18 @@ class TestEllipsoid(unittest.TestCase):
             S.dt=.1
             if 0: # debugging stuff
                 l0=scale*(.1+.2)
-                print
-                print 'distance',(S.dem.par[0].pos-S.dem.par[1].pos).norm()
-                print 'distance',l0
+                print()
+                print('distance',(S.dem.par[0].pos-S.dem.par[1].pos).norm())
+                print('distance',l0)
             S.one()
             C=S.dem.con[0]
             if 0: # debugging stuff
-                print C, C.geom.uN
+                print(C, C.geom.uN)
                 l=(S.dem.par[0].pos-S.dem.par[1].pos).norm()
-                print 'distance after',l
-                print S.dem.par[0].pos, S.dem.par[1].pos, 'dist',l0,l
-                print 'displacement',l-l0
-                print 'displacement',C.geom.uN
+                print('distance after',l)
+                print(S.dem.par[0].pos, S.dem.par[1].pos, 'dist',l0,l)
+                print('displacement',l-l0)
+                print('displacement',C.geom.uN)
             # e1 should move by -.1×.1 = .01 towards the first one, which should be the overlap distance
             self.assertAlmostEqual(C.geom.uN,-.01,delta=1e-5*0.01)
     def testNormalDisplacementWall(self):

@@ -1,5 +1,6 @@
 # encoding: utf-8
 '''Define IO routines for arbitrary objects.'''
+from __future__ import print_function
 # various monkey-patches for wrapped c++ classes
 import woo.core
 import woo.system
@@ -178,8 +179,8 @@ class SerializerToHtmlTableGenshi:
                 try:
                     tr=tag.tr(tag.td(tag.a(trait.name,href=woo.document.makeObjectUrl(obj,trait.name),title=_ensureUnicode(trait.doc))))
                 except UnicodeEncodeError:
-                    print 'ERROR: UnicodeEncodeError while formatting the attribute ',obj.__class__.__name__+'.'+trait.name
-                    print 'ERROR: the docstring is',trait.doc
+                    print('ERROR: UnicodeEncodeError while formatting the attribute ',obj.__class__.__name__+'.'+trait.name)
+                    print('ERROR: the docstring is',trait.doc)
                     raise
             # tr=tag.tr(tag.td(trait.name if not self.showDoc else trait.doc.decode('utf-8')))
             # nested object

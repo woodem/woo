@@ -8,6 +8,7 @@ therefore kept in my "private" module here.
 
 They comprise notably oofem export and various CPM-related functions.
 """
+from __future__ import print_function
 
 from math import *
 from woo._eudoxos import * ## c++ implementations
@@ -248,7 +249,7 @@ def oofemDirectExport(fileBase,title=None,negIds=[],posIds=[]):
 
 def displacementsInteractionsExport(fName):
     f=open(fName,'w')
-    print "Writing body displacements and interaction strains."
+    print("Writing body displacements and interaction strains.")
     o=Omega()
     for b in o.bodies:
         x0,y0,z0=b.phys['refSe3'][0:3]; x,y,z=b.phys.pos

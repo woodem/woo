@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys,re
 
 # ncView colormaps 
@@ -8,4 +9,4 @@ for f in sys.argv[1:]:
     name=m.groupdict()['name']
     nums=eval('('+m.groupdict()['nums']+')')
     isLast=(f==sys.argv[-1])
-    print '\t\tColormap{"'+name+'",{'+','.join(['%.4f'%(f/255.) for f in nums])+'}}'+('' if isLast else ',')
+    print('\t\tColormap{"'+name+'",{'+','.join(['%.4f'%(f/255.) for f in nums])+'}}'+('' if isLast else ','))

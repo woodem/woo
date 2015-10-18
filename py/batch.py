@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 # for use with globals() when reading table
+from __future__ import print_function
 nan=float('nan')
 from math import * 
 from minieigen import *
@@ -74,7 +75,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
     else: table,line,db='',-1,(defaultDb if not wooOptions.batchResults else wooOptions.batchResults)
     if not db: raise ValueError('No database to write results to (forgot to pass --batch-results?).')
     newDb=not os.path.exists(db)
-    if not quiet: print 'Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing')
+    if not quiet: print('Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing'))
     if dbFmt==None:
         ext=os.path.splitext(db)[-1]
         if ext in ('.sqlite','.db',b'.sqlite',b'.db',u'.sqlite',u'.db'): dbFmt='sqlite'
@@ -163,7 +164,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
     if syncXls:
         import re
         xls=db+('.xlsx' if py3k else '.xls')
-        if not quiet: print 'Converting %s to file://%s'%(db,os.path.abspath(xls))
+        if not quiet: print('Converting %s to file://%s'%(db,os.path.abspath(xls)))
         dbToSpread(db,out=xls,dialect=('xlsx' if py3k else 'xls'))
     for ph in postHooks: ph(db)
 
@@ -479,13 +480,13 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
                 # perhaps write some header here
                 for col,colName in enumerate(sorted(dic.keys())):
                     if xls and col>255:
-                        print 'WARNING: the data being converted to XLS (%s) contain %d columns, which is more than 255, the limit of the XLS format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic))
+                        print('WARNING: the data being converted to XLS (%s) contain %d columns, which is more than 255, the limit of the XLS format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic)))
                         break
                     sheet.write(0,col,colName,headStyle)
                     rowOffset=1 # length of header
                     for row in range(0,len(dic[colName])):
                         if xls and row+rowOffset>65535:
-                            print 'WARNING: the data being converted to XLS (%s) contain %d rows (with %d header rows), which is more than 65535, the limit of the XLS file format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic[colName]),rowOffset)
+                            print('WARNING: the data being converted to XLS (%s) contain %d rows (with %d header rows), which is more than 65535, the limit of the XLS file format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic[colName]),rowOffset))
                             break
                         val=dic[colName][row]
                         if xlsx and (isnan(val) or isinf(val)): val=str(val)
@@ -551,7 +552,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
             if not noTableOk: raise RuntimeError("No table specified in batch options, but noTableOk was not given.")
             else: return
         allTab=TableParamReader(tableFile).paramDict()
-        if not allTab.has_key(tableLine): raise RuntimeError("Table %s doesn't contain valid line number %d"%(tableFile,tableLine))
+        if tableLine not in allTab: raise RuntimeError("Table %s doesn't contain valid line number %d"%(tableFile,tableLine))
         vv=allTab[tableLine]
         S.tags['line']='l%d'%tableLine
         S.tags['title']=str(vv['title'])
@@ -612,7 +613,7 @@ def runPreprocessor(pre,preFile=None):
             if name[0]=='!': continue # pseudo-variables such as !SCRIPT, !THREADS and so on
             if name=='title': continue
             if val in ('*','-',''): continue
-            print 'VALUE',val
+            print('VALUE',val)
             # postpone evaluation of parameters starting with = so that they can use other params
             if type(val) in (str,unicode) and val.startswith('='): evalParams.append((name,val[1:]))
             elif type(val) in (str,unicode) and val.startswith("'="): evalParams.append((name,val[2:]))
@@ -797,7 +798,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     if val in ('=',''):
                         try:
                             values[l][col]=values[lines[i-1]][col]
-                        except IndexError,KeyError:
+                        except IndexError as KeyError:
                             raise ValueError("The = specifier on line %d, column %d, refers to nonexistent value on previous line?"%(l,col))
     
             nCollapsed=0

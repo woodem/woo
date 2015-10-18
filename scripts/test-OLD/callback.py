@@ -1,3 +1,4 @@
+from __future__ import print_function
 O.materials.append(FrictMat(young=30e9,poisson=.2,density=4000,frictionAngle=.5))
 O.bodies.append([
     utils.sphere((0,0,0),1,dynamic=False),
@@ -20,5 +21,5 @@ disp=utils.typedEngine('InteractionLoop')
 
 disp.callbacks=[SumIntrForcesCb()]
 newton.callbacks=[SumBodyForcesCb()]
-print O.numThreads
+print(O.numThreads)
 O.step()

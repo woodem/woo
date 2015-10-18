@@ -1,5 +1,6 @@
 # -*- coding: utf-8
 
+from __future__ import print_function
 from woo import utils,pack,export,geom,timing,bodiesHandling
 import time,numpy
     
@@ -55,7 +56,7 @@ for z in range(numberTests):
         SpheresID+=O.bodies.append(pack.regularHexa(pack.inSphere((Vector3(0.0,0.0,0.0)),rad),radius=rad/rR,gap=rad/rR*0.5,material=defMat))
         
         geometryParameters = bodiesHandling.spheresPackDimensions(SpheresID)
-        print len(SpheresID)
+        print(len(SpheresID))
         
         floorId=[]
         floorId+=O.bodies.append(geom.facetBox(geometryParameters['center'],geometryParameters['extends']/2.0*1.05,material=defMat)) #Floor
@@ -76,7 +77,7 @@ for z in range(numberTests):
             NewtonIntegrator(damping=0),
         ]
         
-        print "number of bodies %d"%len(O.bodies)
+        print("number of bodies %d"%len(O.bodies))
         O.timingEnabled=True
         tStart=time.time()
         
@@ -84,11 +85,11 @@ for z in range(numberTests):
         O.wait()
         
         tEnd=time.time()
-        print
-        print 'Elapsed ', tEnd-tStart, ' sec'
-        print 'Performance ', nbIter/(tEnd-tStart), ' iter/sec'
-        print 'Extrapolation on 1e5 iters ', (tEnd-tStart)/nbIter*1e5/3600., ' hours'
-        print
+        print()
+        print('Elapsed ', tEnd-tStart, ' sec')
+        print('Performance ', nbIter/(tEnd-tStart), ' iter/sec')
+        print('Extrapolation on 1e5 iters ', (tEnd-tStart)/nbIter*1e5/3600., ' hours')
+        print()
         timing.stats()
         iterVel += [nbIter/(tEnd-tStart)]
         testTime += [tEnd-tStart]
@@ -98,9 +99,9 @@ for z in range(numberTests):
 tEndAll=time.time()
 commonTime = tEndAll-tStartAll
 
-print "Common time ", commonTime, "s"
-print
-print
+print("Common time ", commonTime, "s")
+print()
+print()
 
 scoreIterVel=0.0
 for i in range(len(radRAD)):
@@ -111,15 +112,15 @@ for i in range(len(radRAD)):
     avgVel = numpy.average(iterVelNumpy)
     dispVel = numpy.std(iterVelNumpy)/numpy.average(iterVelNumpy)*100.0
     if (dispVel>10):
-        print "Calculation velocity is unstable, try to close all programs and start performance tests again"
+        print("Calculation velocity is unstable, try to close all programs and start performance tests again")
     
-    print particlesNumber[i]," spheres, velocity=",avgVel, "+-",dispVel,"%"
+    print(particlesNumber[i]," spheres, velocity=",avgVel, "+-",dispVel,"%")
     scoreIterVel+=avgVel/coefCor[i]*1000.0
-print
-print
+print()
+print()
 scoreIterVel = int(scoreIterVel)
-print scoreIterVel
-print "Number of threads ", os.environ['OMP_NUM_THREADS']
-print"___________________________________________________"
-print "CPU info", os.system('cat /proc/cpuinfo')
+print(scoreIterVel)
+print("Number of threads ", os.environ['OMP_NUM_THREADS'])
+print("___________________________________________________")
+print("CPU info", os.system('cat /proc/cpuinfo'))
 sys.exit(0)

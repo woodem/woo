@@ -12,6 +12,7 @@ It loads woo plugins and injects c++ class constructors to the __builtins__
 (that might change in the future, though) namespace, making them available
 everywhere.
 """
+from __future__ import print_function
 
 # FIXME: rename once tested
 from wooMain import options as wooOptions
@@ -50,7 +51,7 @@ wooOsEnviron['LC_NUMERIC']='C'
 if wooOptions.ompCores:
     cc=wooOptions.ompCores
     if wooOptions.ompThreads!=len(cc) and wooOptions.ompThreads>0:
-        print 'wooOptions.ompThreads =',str(wooOptions.ompThreads)
+        print('wooOptions.ompThreads =',str(wooOptions.ompThreads))
         warnings.warn('ompThreads==%d ignored, using %d since ompCores are specified.'%(wooOptions.ompThreads,len(cc)))
     wooOptions.ompThreads=len(cc)
     wooOsEnviron['GOMP_CPU_AFFINITY']=' '.join([str(cc[0])]+[str(c) for c in cc])
@@ -84,7 +85,7 @@ if not WIN and (wooOptions.quirks & wooOptions.quirkIntel) and 'DISPLAY' in os.e
                 glx=subprocess.check_output("LC_ALL=C glxinfo | grep 'OpenGL version string:'",shell=True,stderr=subprocess.STDOUT,universal_newlines=True).split('\n')
                 # this should cover broken drivers down to Ubuntu 12.04 which shipped Mesa 8.0
                 if len(glx)==1 and re.match('.* Mesa (9\.[01]|8\.0)\..*',glx[0]):
-                    print 'Intel GPU + Mesa < 9.2 detected, setting LIBGL_ALWAYS_SOFTWARE=1\n\t(use --quirks=0 to disable)'
+                    print('Intel GPU + Mesa < 9.2 detected, setting LIBGL_ALWAYS_SOFTWARE=1\n\t(use --quirks=0 to disable)')
                     os.environ['LIBGL_ALWAYS_SOFTWARE']='1'
             except subprocess.CalledProcessError: pass # failed glxinfo call, such as when not installed
     except subprocess.CalledProcessError: pass # failed lspci call...?!
@@ -152,16 +153,16 @@ try:
         pidfile=tmpdir+'/'+'pid'
                     
 except ImportError:
-    print 'Error importing woo.%s (--flavor=%s).'%(cxxInternalName,wooOptions.flavor if wooOptions.flavor else ' ')
+    print('Error importing woo.%s (--flavor=%s).'%(cxxInternalName,wooOptions.flavor if wooOptions.flavor else ' '))
     #traceback.print_exc()
     import glob
     sos=glob.glob(re.sub('__init__.py$','',__file__)+'/_cxxInternal_*'+soSuffix)
     flavs=[re.sub('(^.*/_cxxInternal_)(.*)(\\'+soSuffix+'$)',r'\2',so) for so in sos]
     if sos:
         maxFlav=max([len(flav) for flav in flavs])
-        print 'Available flavors are:'
+        print('Available flavors are:')
         for so,flav in zip(sos,flavs):
-            print '\t{0: <{1}}\t{2}'.format(flav,maxFlav,so)
+            print('\t{0: <{1}}\t{2}'.format(flav,maxFlav,so))
     raise
 sys.modules['woo._cxxInternal']=_cxxInternal
 
@@ -178,17 +179,17 @@ from . import apiversion
 #
 if PY3K:
     if sys.version_info<(3,4): 
-        print 'WARNING: in Python 3.x, importing only works in Python >= 3.4 properly. Your version %s will most likely break right here.'%(sys.version)
+        print('WARNING: in Python 3.x, importing only works in Python >= 3.4 properly. Your version %s will most likely break right here.'%(sys.version))
     # will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
     allSubmodules=set()
     import imp
     for mod in master.compiledPyModules:
-        if 'WOO_DEBUG' in os.environ: print 'Loading compiled module',mod,'from',cxxInternalFile
+        if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
         # this inserts the module to sys.modules automatically
         m=imp.load_dynamic(mod,cxxInternalFile)
         # now put the module where it belongs
         mm=mod.split('.')
-        if mm[0]!='woo': print 'ERROR: non-woo module %s imported from the shared lib? Expect troubles.'%mod
+        if mm[0]!='woo': print('ERROR: non-woo module %s imported from the shared lib? Expect troubles.'%mod)
         elif len(mm)==2:
             allSubmodules.add(mm[1])
             globals()[mm[1]]=m
@@ -220,14 +221,14 @@ else:
                     raise
             else: os.symlink(os.path.abspath(cxxInternalFile),linkName)
             if 'WOO_DEBUG' in os.environ:
-                print 'Loading compiled module',mod,'from symlink',linkName
-                print 'modpath =',modpath
+                print('Loading compiled module',mod,'from symlink',linkName)
+                print('modpath =',modpath)
             sys.stdout.flush()
             try: sys.modules[mod]=__import__(modpath[-1])
             except ImportError:
                 # compiled without GTS
                 if mod=='_gts' and False:
-                    if 'WOO_DEBUG' in os.environ: print 'Loading compiled module _gts: _gts module probably not compiled-in (ImportError)'
+                    if 'WOO_DEBUG' in os.environ: print('Loading compiled module _gts: _gts module probably not compiled-in (ImportError)')
                     pass 
                 else: raise # otherwise it is serious
             if len(modpath)==1: pass # nothing to do, adding to sys.modules is enough
@@ -345,9 +346,9 @@ try:
             if hasattr(sys,'frozen') and not hasattr(m,'__loader__') and len(m.__path__)==1:
                 zip=m.__path__[0].split('/wooExtra/')[0].split('\\wooExtra\\')[0]
                 if not (zip.endswith('.zip') or zip.endswith('.egg')):
-                    print 'wooExtra.%s: not a .zip or .egg, no __loader__ set (%s)'%(modname,zip)
+                    print('wooExtra.%s: not a .zip or .egg, no __loader__ set (%s)'%(modname,zip))
                 else:
-                    print 'wooExtra.%s: setting __loader__ and __file__'%modname
+                    print('wooExtra.%s: setting __loader__ and __file__'%modname)
                     m.__loader__=zipimport.zipimporter(zip)
                     m.__file__=os.path.join(m.__path__[0],os.path.basename(m.__file__))
         except ImportError:

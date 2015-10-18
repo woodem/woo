@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 from woo import utils,plot,pack,timing,eudoxos
 import time, sys, os, copy
@@ -84,7 +85,7 @@ O.bodies.append(spheres)
 bb=utils.uniaxialTestFeatures()
 negIds,posIds,axis,crossSectionArea=bb['negIds'],bb['posIds'],bb['axis'],bb['area']
 O.dt=dtSafety*utils.PWaveTimeStep()
-print 'Timestep',O.dt
+print('Timestep',O.dt)
 
 mm,mx=[pt[axis] for pt in utils.aabbExtrema()]
 coord_25,coord_50,coord_75=mm+.25*(mx-mm),mm+.5*(mx-mm),mm+.75*(mx-mm)
@@ -118,11 +119,11 @@ mode='tension' if doModes & 1 else 'compression'
 
 def initTest():
     global mode
-    print "init"
+    print("init")
     if O.iter>0:
         O.wait();
         O.loadTmp('initial')
-        print "Reversing plot data"; plot.reverseData()
+        print("Reversing plot data"); plot.reverseData()
     else: plot.plot()
     strainer.strainRate=abs(strainRateTension) if mode=='tension' else -abs(strainRateCompression)
     try:
@@ -130,7 +131,7 @@ def initTest():
         renderer=qt.Renderer()
         renderer.dispScale=(1000,1000,1000) if mode=='tension' else (100,100,100)
     except ImportError: pass
-    print "init done, will now run."
+    print("init done, will now run.")
     O.step(); # to create initial contacts
     # now reset the interaction radius and go ahead
     if not scGeom: ss2d3dg.distFactor=-1.
@@ -141,33 +142,33 @@ def initTest():
 
 def stopIfDamaged():
     global mode
-    if O.iter<2 or not plot.data.has_key('sigma'): return # do nothing at the very beginning
+    if O.iter<2 or 'sigma' not in plot.data: return # do nothing at the very beginning
     sigma,eps=plot.data['sigma'],plot.data['eps']
     extremum=max(sigma) if (strainer.strainRate>0) else min(sigma)
     minMaxRatio=0.5 if mode=='tension' else 0.5
     if extremum==0: return
     # uncomment to get graph for the very first time stopIfDamaged() is called
     #eudoxos.estimatePoissonYoung(principalAxis=axis,stress=strainer.avgStress,plot=True,cutoff=0.3)
-    print O.tags['id'],mode,strainer.strain,sigma[-1]
+    print(O.tags['id'],mode,strainer.strain,sigma[-1])
     import sys;    sys.stdout.flush()
     if abs(sigma[-1]/extremum)<minMaxRatio or abs(strainer.strain)>(5e-3 if isoPrestress==0 else 5e-2):
         if mode=='tension' and doModes & 2: # only if compression is enabled
             mode='compression'
             O.save('/tmp/uniax-tension.woo.gz')
-            print "Saved /tmp/uniax-tension.woo.gz (for use with interaction-histogram.py and uniax-post.py)"
-            print "Damaged, switching to compression... "; O.pause()
+            print("Saved /tmp/uniax-tension.woo.gz (for use with interaction-histogram.py and uniax-post.py)")
+            print("Damaged, switching to compression... "); O.pause()
             # important! initTest must be launched in a separate thread;
             # otherwise O.load would wait for the iteration to finish,
             # but it would wait for initTest to return and deadlock would result
             import thread; thread.start_new_thread(initTest,())
             return
         else:
-            print "Damaged, stopping."
+            print("Damaged, stopping.")
             ft,fc=max(sigma),min(sigma)
-            print 'Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft))
+            print('Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft)))
             title=O.tags['description'] if 'description' in O.tags.keys() else O.tags['params']
-            print 'gnuplot',plot.saveGnuplot(O.tags['id'],title=title)
-            print 'Bye.'
+            print('gnuplot',plot.saveGnuplot(O.tags['id'],title=title))
+            print('Bye.')
             #O.pause()
             sys.exit(0)
         

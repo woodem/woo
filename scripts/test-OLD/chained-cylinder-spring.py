@@ -1,3 +1,4 @@
+from __future__ import print_function
 #--- bruno.chareyre@hmg.inpg.fr ---
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
@@ -42,8 +43,8 @@ for i in range(0, Ne):
 def outp(id=1):
     for i in O.interactions:
         if i.id1 == 1:
-            print i.phys.shearForce
-            print i.phys.normalForce
+            print(i.phys.shearForce)
+            print(i.phys.normalForce)
             return  i
 
 O.bodies[Ne-1].state.blockedDOFs='xyzXYZ'

@@ -1,6 +1,7 @@
 # encoding: utf-8
 # 2013 © Václav Šmilauer <eu@doxos.eu>
 
+from __future__ import print_function
 import unittest
 from minieigen import *
 import woo._customConverters
@@ -37,7 +38,7 @@ class TestShapePack(unittest.TestCase):
         mat=woo.utils.defaultMaterial()
         sp.toDem(S,S.dem,mat=mat)
         self.assert_(len(S.dem.nodes)==2)
-        print S.dem.par[0].pos
+        print(S.dem.par[0].pos)
         self.assert_(S.dem.par[0].pos==(1,1,1))
         self.assert_(S.dem.par[1].shape.radius==.2)
         self.assert_(not S.dem.par[0].shape.nodes[0].dem.clumped)

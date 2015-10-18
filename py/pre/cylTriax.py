@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import print_function
 from woo.dem import *
 from woo.fem import *
 import woo.core
@@ -169,11 +170,11 @@ def prepareCylTriax(pre):
     if pre.packCacheDir:
         import hashlib,os
         compactMemoize=pre.packCacheDir+'/'+hashlib.sha1(pre.dumps(format='expr')+'ver3').hexdigest()+'.triax-compact'
-        print 'Compaction memoize file is ',compactMemoize
+        print('Compaction memoize file is ',compactMemoize)
     else: compactMemoize='' # no memoize file
 
     if pre.packCacheDir and os.path.exists(compactMemoize):
-        print 'Using memoized compact state'
+        print('Using memoized compact state')
         sp=woo.pack.SpherePack()
         sp.load(compactMemoize)
         meshAabb=eval(sp.userData)
@@ -210,7 +211,7 @@ def prepareCylTriax(pre):
 
     #S.dt=pre.pWaveSafety*woo.utils.pWaveDt(S,noClumps=True)
     S.dtSafety=pre.dtSafety
-    if pre.clumps: print 'WARNING: clumps used, Scene.dt might not be correct; lower CylTriaxTest.dtSafety (currently %g) if the simulation is unstable'%(pre.dtSafety)
+    if pre.clumps: print('WARNING: clumps used, Scene.dt might not be correct; lower CylTriaxTest.dtSafety (currently %g) if the simulation is unstable'%(pre.dtSafety))
     # setup engines
     S.engines=[
         WeirdTriaxControl(goal=(pre.sigIso,pre.sigIso,pre.sigIso),maxStrainRate=(pre.maxRates[0],pre.maxRates[0],pre.maxRates[0]),relVol=math.pi*innerRad**2*ht/S.cell.volume,stressMask=0b0111,maxUnbalanced=pre.maxUnbalanced,mass=pre.massFactor*sumParMass,doneHook='import woo.pre.cylTriax; woo.pre.cylTriax.compactionDone(S)',label='triax',absStressTol=1e4,relStressTol=1e-2),
@@ -391,7 +392,7 @@ def velocityFieldPlots(S,nameBase):
     return outs
 
 def membraneStabilized(S):
-    print 'Membrane stabilized at step',S.step,'with surface pressure',S.lab.surfLoad
+    print('Membrane stabilized at step',S.step,'with surface pressure',S.lab.surfLoad)
     S.lab.triax.goal=(0,0,S.pre.stopStrain)
     S.lab.triax.stressMask=0b0000 # all strain-controlled
     S.lab.triax.maxStrainRate=(0,0,.001*S.pre.maxRates[1])
@@ -419,12 +420,12 @@ def membraneStabilized(S):
 
     if S.pre.saveFmt:
         out=S.pre.saveFmt.format(stage='pre-triax',S=S,**(dict(S.tags)))
-        print 'Saving to',out
+        print('Saving to',out)
         S.save(out)
 
 
 def compactionDone(S):
-    if S.lab.compactMemoize: print 'Compaction done at step',S.step
+    if S.lab.compactMemoize: print('Compaction done at step',S.step)
     import woo
     t=S.lab.triax
     # set the current cell configuration to be the reference one
@@ -454,7 +455,7 @@ def compactionDone(S):
         else: n.dem.blocked=''
     # add surface load
     S.lab.surfLoad=S.pre.sigIso*(1-(.5*S.lab.memThick)/(.5*S.pre.htDiam[1]))
-    print 'Initial surface load',S.lab.surfLoad
+    print('Initial surface load',S.lab.surfLoad)
     for p in S.dem.par:
         if isinstance(p.shape,Membrane): p.shape.surfLoad=S.lab.surfLoad
     # set velocity to 0 (so that when loading packing, the conditions are the same)
@@ -480,7 +481,7 @@ def compactionDone(S):
         sp.fromSimulation(S)
         sp.userData=str(aabb)
         sp.save(S.lab.compactMemoize)
-        print 'Saved compacted packing to',S.lab.compactMemoize
+        print('Saved compacted packing to',S.lab.compactMemoize)
 
     del S.lab.stage # avoid warning 
     S.lab.stage='stabilize'
@@ -562,16 +563,16 @@ def plotBatchResults(db,titleRegex=None,out=None,stressPath=True,sorter=None):
         l=ax.legend(loc=loc,labelspacing=.2,prop={'size':7})
         l.get_frame().set_alpha(.4)
     fig.savefig(out)
-    print 'Included simulations:',', '.join(titlesIncluded)
-    if titlesSkipped: print 'Skipped simulations:',', '.join(titlesSkipped)
-    print 'Batch figure saved to file://%s'%os.path.abspath(out)
+    print('Included simulations:',', '.join(titlesIncluded))
+    if titlesSkipped: print('Skipped simulations:',', '.join(titlesSkipped))
+    print('Batch figure saved to file://%s'%os.path.abspath(out))
 
 
 def triaxDone(S):
-    print 'Triaxial done at step',S.step
+    print('Triaxial done at step',S.step)
     if S.pre.saveFmt:
         out=S.pre.saveFmt.format(stage='done',S=S,**(dict(S.tags)))
-        print 'Saving to',out
+        print('Saving to',out)
         S.save(out)
     S.stop()
     import woo.utils

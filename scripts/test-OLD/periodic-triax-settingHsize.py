@@ -1,6 +1,7 @@
 # coding: utf-8
 # 2011 ©Bruno Chareyre <bruno.chareyre@hmg.inpg.fr>
 "Demonstrate the compression of a periodic cell with non-trivial initial geometry."
+from __future__ import print_function
 from woo import *
 from woo import pack,log,qt
 O.periodic=True
@@ -33,15 +34,15 @@ phase=0
 def triaxDone():
     global phase
     if phase==0:
-        print 'Here we are: stress',triax.stress,'strain',triax.strain
+        print('Here we are: stress',triax.stress,'strain',triax.strain)
         #Here we reset the transformation, the compressed packing corresponds to null strain
         O.cell.trsf=Matrix3.Identity
-        print 'Now εxx will go from 0 to .4 while σzz and σyy will be kept the same.'
+        print('Now εxx will go from 0 to .4 while σzz and σyy will be kept the same.')
         triax.stressMask=6
         triax.goal=(-0.4,-1e4,-1e4)
 
         phase+=1
     elif phase==1:
-        print 'Here we are: stress',triax.stress,'strain',triax.strain
-        print 'Done, pausing now.'
+        print('Here we are: stress',triax.stress,'strain',triax.strain)
+        print('Done, pausing now.')
         O.pause()

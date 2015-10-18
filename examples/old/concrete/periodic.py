@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 from woo import utils,plot,pack
 import time, sys, os, copy
@@ -122,11 +123,11 @@ mode='tension' if doModes & 1 else 'compression'
 
 def initTest():
     global mode
-    print "init"
+    print("init")
     if O.iter>0:
         O.wait();
         O.loadTmp('initial')
-        print "Reversing plot data"; plot.reverseData()
+        print("Reversing plot data"); plot.reverseData()
     maxStrainRate=Vector3(1,1,1);
     goal=Vector3(1,1,1);
     if not biaxial: # uniaxial
@@ -147,7 +148,7 @@ def initTest():
         renderer.scaleDisplacements=True
         renderer.displacementScale=(1000,1000,1000) if mode=='tension' else (100,100,100)
     except ImportError: pass
-    print "init done, will now run."
+    print("init done, will now run.")
     O.step(); O.step(); # to create initial contacts
     # now reset the interaction radius and go ahead
     ss2d3dg.distFactor=-1.
@@ -156,32 +157,32 @@ def initTest():
 
 def stopIfDamaged():
     global mode
-    if O.iter<2 or not plot.data.has_key('sigma'): return # do nothing at the very beginning
+    if O.iter<2 or 'sigma' not in plot.data: return # do nothing at the very beginning
     sigma,eps=plot.data['sigma'],plot.data['eps']
     extremum=max(sigma) if (strainer.maxStrainRate>0) else min(sigma)
     # FIXME: only temporary, should be .5
     minMaxRatio=0.5 if mode=='tension' else 0.5
     if extremum==0: return
-    print O.tags['id'],mode,strainer.strain[axis],sigma[-1]
+    print(O.tags['id'],mode,strainer.strain[axis],sigma[-1])
     #print 'strain',strainer['strain'],'stress',strainer['stress']
     import sys;    sys.stdout.flush()
     if abs(sigma[-1]/extremum)<minMaxRatio or abs(strainer.strain[axis])>6e-3:
         if mode=='tension' and doModes & 2: # only if compression is enabled
             mode='compression'
             #O.save('/tmp/uniax-tension.xml.bz2')
-            print "Damaged, switching to compression... "; O.pause()
+            print("Damaged, switching to compression... "); O.pause()
             # important! initTest must be launched in a separate thread;
             # otherwise O.load would wait for the iteration to finish,
             # but it would wait for initTest to return and deadlock would result
             import thread; thread.start_new_thread(initTest,())
             return
         else:
-            print "Damaged, stopping."
+            print("Damaged, stopping.")
             ft,fc=max(sigma),min(sigma)
-            print 'Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft))
+            print('Strengths fc=%g, ft=%g, |fc/ft|=%g'%(fc,ft,abs(fc/ft)))
             title=O.tags['description'] if 'description' in O.tags.keys() else O.tags['params']
-            print'gnuplot',plot.saveGnuplot(O.tags['id'],title=title)
-            print 'Bye.'
+            print('gnuplot',plot.saveGnuplot(O.tags['id'],title=title))
+            print('Bye.')
             # O.pause()
             sys.exit(0)
         

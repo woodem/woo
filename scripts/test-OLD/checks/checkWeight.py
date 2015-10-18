@@ -3,6 +3,7 @@
 # Several spheres falling down into the box.
 # Their weight is measured and compares with real mass particles
 
+from __future__ import print_function
 from woo import utils,pack,log,export,geom
 
 tc=0.001

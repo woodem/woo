@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import print_function
 import woo
 import woo.core
 import sys
@@ -41,18 +42,18 @@ def _ensureInitialized():
         import pkgutil
         for importer, modname, ispkg in pkgutil.iter_modules(pkg.__path__):
             fqmodname=pkg.__name__+'.'+modname
-            print fqmodname
+            print(fqmodname)
             if exclude and re.match(exclude,fqmodname):
-                print 'Skipping  '+fqmodname
+                print('Skipping  '+fqmodname)
                 continue
             if fqmodname not in sys.modules:
                 sys.stdout.write('Importing '+fqmodname+'... ')
                 try:
                     __import__(fqmodname,pkg.__name__)
-                    print 'ok'
-                except (ImportError, NameError): print '(error, ignoring)'
+                    print('ok')
+                except (ImportError, NameError): print('(error, ignoring)')
             if fqmodname in sys.modules and ispkg:
-                print 'Import submodules from ',fqmodname
+                print('Import submodules from ',fqmodname)
                 subImport(sys.modules[fqmodname])
                 
     modExcludeRegex='^woo\.(_cxxInternal.*)(\..*|$)'
@@ -61,11 +62,11 @@ def _ensureInitialized():
         import wooExtra
         subImport(wooExtra)
     except ImportError:
-        print 'No wooExtra modules imported.'
+        print('No wooExtra modules imported.')
 
     for m in woo.master.compiledPyModules:
         if m not in sys.modules:
-            print 'Importing',m
+            print('Importing',m)
             __import__(m)
 
     # global allWooClasses, allWooMods
@@ -89,15 +90,15 @@ def allWooPackages(outDir='/tmp',skip='^(woo|wooExtra(|\..*))$'):
     # woo.foo.* modules go insides woo.foo
     toplevMods=set([m for m in allWooMods if (m not in modsElsewhere) and len(m.__name__.split('.'))<3])
     rsts=[]
-    print 'TOPLEVEL MODULES',[m.__name__ for m in toplevMods]
-    print 'MODULES DOCUMENTED ELSEWHERE',[m.__name__ for m in modsElsewhere]
+    print('TOPLEVEL MODULES',[m.__name__ for m in toplevMods])
+    print('MODULES DOCUMENTED ELSEWHERE',[m.__name__ for m in modsElsewhere])
 
     for mod in toplevMods:
         if re.match(skip,mod.__name__):
-            print '[SKIPPING %s]'%(mod.__name__)
+            print('[SKIPPING %s]'%(mod.__name__))
             continue
         outFile=outDir+'/%s.rst'%(mod.__name__)
-        print 'WRITING',outFile,mod.__name__
+        print('WRITING',outFile,mod.__name__)
         rsts.append(outFile)
         out=codecs.open(outFile,'w','utf-8')
         oneModuleWithSubmodules(mod,out)
@@ -242,16 +243,16 @@ def classSrcHyperlink(klass):
             md0=hashlib.md5(open(pysrc).read()).hexdigest()
             matches=[m for m in matches if hashlib.md5(open(woo.config.sourceRoot+'/'+m).read()).hexdigest()==md0]
             if len(matches)==0:
-                print 'WARN: no file named %s with matching md5 digest found in source tree?'%pysrc1
+                print('WARN: no file named %s with matching md5 digest found in source tree?'%pysrc1)
                 return None
             elif len(matches)>1:
-                print 'WARN: multiple files named %s with the same md5 found in the source tree, using the one with shortest path.'%pysrc1
+                print('WARN: multiple files named %s with the same md5 found in the source tree, using the one with shortest path.'%pysrc1)
                 matches.sort(key=len)
                 match=matches[0]
             else: match=matches[0]
         elif len(matches)==1: match=matches[0]
         else:
-            print 'WARN: no python source %s found.'%(pysrc1)
+            print('WARN: no python source %s found.'%(pysrc1))
             return None
         return '[:woosrc:`%s <%s#L%s>`]'%(match,match,lineNo)
 
@@ -263,7 +264,7 @@ def classSrcHyperlink(klass):
     elif f.startswith(woo.config.buildRoot): commonRoot=woo.config.buildRoot
     elif not f.startswith('/'): commonRoot=''
     else:
-        print 'File where class is defined (%s) does not start with source root (%s) or build root (%s)'%(f,woo.config.sourceRoot,woo.config.buildRoot)
+        print('File where class is defined (%s) does not start with source root (%s) or build root (%s)'%(f,woo.config.sourceRoot,woo.config.buildRoot))
         return None
     # +1 removes underscore in woo/...
     f2=f[len(commonRoot)+(1 if commonRoot else 0):] 
@@ -280,7 +281,7 @@ def classSrcHyperlink(klass):
     if hppLine>0: ret+=[':woosrc:`%s <%s#L%d>`'%(hpp,hpp,hppLine+1)]
     else:
         if f2.endswith('.hpp'): ret+=[':woosrc:`%s <%s#L%d>`'%(hpp,hpp,klass._classTrait.line)]
-        else: print 'WARN: No header line found for %s in %s'%(klass.__name__,hpp)
+        else: print('WARN: No header line found for %s in %s'%(klass.__name__,hpp))
     if cppLine>0: ret+=[':woosrc:`%s <%s#L%d>`'%(cpp,cpp,cppLine+1)]
     else: pass # print 'No impl. line found for %s in %s'%(klass.__name__,cpp)
     #ret=[':woosrc:`header <%s#L%d>`'%(f2,klass._classTrait.line)]

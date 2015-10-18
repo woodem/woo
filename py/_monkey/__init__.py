@@ -4,6 +4,7 @@ This approach is called `monkey patching <http://en.wikipedia.org/wiki/Monkey_pa
 
 This module is imported automatically by Woo at startup and should not be used directly.
 '''
+from __future__ import print_function
 from . import io
 from . import gts
 import traceback
@@ -11,11 +12,11 @@ import traceback
 # out-of-class docstrings for some classes
 try: from . import extraDocs
 except AttributeError:
-    print 'WARN: Error importing woo._monkey.extraDocs'
+    print('WARN: Error importing woo._monkey.extraDocs')
     traceback.print_exc()
 # attribute aliases
 try: from . import aliases
 except AttributeError:
-    print 'WARN: Error importing woo._monkey.aliases.py'
+    print('WARN: Error importing woo._monkey.aliases.py')
     traceback.print_exc()
 

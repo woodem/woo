@@ -4,6 +4,7 @@
 """
 Functions for accessing woo's internals; only used internally.
 """
+from __future__ import print_function
 import sys
 from woo._customConverters import *
 from woo import runtime
@@ -48,16 +49,16 @@ if 0:
                 return self._make_regex().sub(self, text)
         # use the _deprecated dictionary for translation, but only when matching on words boundary
         xlator=Xlator(_deprecated)
-        if len(scripts)==0: print "No scripts given to --update. Nothing to do."
+        if len(scripts)==0: print("No scripts given to --update. Nothing to do.")
         for s in scripts:
             if not s.endswith('.py'): raise RuntimeError("Refusing to do --update on file '"+s+"' (not *.py)")
             txt=open(s).read()
             txt2=xlator.xlat(txt)
-            if xlator.count==0: print "%s: already up-to-date."%s
+            if xlator.count==0: print("%s: already up-to-date."%s)
             else:
                 os.rename(s,s+'~')
                 out=open(s,'w'); out.write(txt2); out.close()
-                print "%s: %d subtitution%s made, backup in %s~"%(s,xlator.count,'s' if xlator.count>1 else '',s)
+                print("%s: %d subtitution%s made, backup in %s~"%(s,xlator.count,'s' if xlator.count>1 else '',s))
 
 
 def setExitHandlers():

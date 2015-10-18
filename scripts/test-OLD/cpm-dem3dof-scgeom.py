@@ -1,3 +1,4 @@
+from __future__ import print_function
 from woo import plot
 
 # setup 2 interactions on 2 otherwise identical couples of spheres
@@ -77,7 +78,7 @@ elif mode=='rot':
 if 1:
     f='/tmp/cpm-geom-'+mode+'.pdf'
     plot.plot(noShow=True).savefig(f)
-    print 'Plot saved to '+f
+    print('Plot saved to '+f)
     quit()
 else:
     plot.plot()

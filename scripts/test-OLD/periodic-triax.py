@@ -1,6 +1,7 @@
 # coding: utf-8
 # 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 "Test and demonstrate use of PeriTriaxController."
+from __future__ import print_function
 from woo import *
 from woo import pack,log,qt
 log.setLevel('PeriTriaxController',log.TRACE)
@@ -34,13 +35,13 @@ phase=0
 def triaxDone():
     global phase
     if phase==0:
-        print 'Here we are: stress',triax.stress,'strain',triax.strain,'stiffness',triax.stiff
-        print 'Now εz will go from 0 to .2 while σx and σy will be kept the same.'
+        print('Here we are: stress',triax.stress,'strain',triax.strain,'stiffness',triax.stiff)
+        print('Now εz will go from 0 to .2 while σx and σy will be kept the same.')
         triax.goal=(-1e4,-1e4,-0.2)
         phase+=1
     elif phase==1:
-        print 'Here we are: stress',triax.stress,'strain',triax.strain,'stiffness',triax.stiff
-        print 'Done, pausing now.'
+        print('Here we are: stress',triax.stress,'strain',triax.strain,'stiffness',triax.stiff)
+        print('Done, pausing now.')
         O.pause()
         
     

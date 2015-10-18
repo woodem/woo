@@ -20,6 +20,7 @@ Author: Christian Boos
 
 This file is copied from https://github.com/ipython/ipython/blob/66c77ff392ad7425f8443e1343f5bf8c84a7b5d7/IPython/lib/inputhookqt4.py for internal use in Woo.
 """
+from __future__ import print_function
 
 #-----------------------------------------------------------------------------
 #  Copyright (C) 2011  The IPython Development Team

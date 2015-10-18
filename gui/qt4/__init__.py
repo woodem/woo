@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+from __future__ import print_function
+from __future__ import absolute_import
 import math
 useQtConsole=False # does not work yet
 wooQApp=None
@@ -79,7 +81,7 @@ else:
             from IPython.config.configurable import MultipleInstanceError
             try: ipshell=InteractiveShellEmbed.instance()
             except MultipleInstanceError:
-                print 'Already running inside ipython, not embedding new instance.'
+                print('Already running inside ipython, not embedding new instance.')
             # keep the qapp object referenced, otherwise 0.11 will die with "QWidget: Must construct QApplication before a QPaintDevice
             # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
 
@@ -159,7 +161,7 @@ class UiPrefs(woo.core.Object,woo.pyderived.PyWooObject):
 uiPrefs=UiPrefs()
 # if config file exists, uiPrefs are loaded in Controller.__init__
 
-from ExceptionDialog import *
+from .ExceptionDialog import *
 
 #maxWebWindows=1
 #"Number of webkit windows that will be cycled to show help on clickable objects"
@@ -168,8 +170,8 @@ from ExceptionDialog import *
 #webController=None
 
 def onSelection(obj):
-    print 'woo.qt.onSelection:',obj,'was selected'
-    print '   Set woo.gl.Renderer.selFunc to your own callback function.'
+    print('woo.qt.onSelection:',obj,'was selected')
+    print('   Set woo.gl.Renderer.selFunc to your own callback function.')
 
 def openUrl(url):
     import webbrowser
@@ -255,7 +257,7 @@ class ControllerClass(QWidget,Ui_Controller):
             except:
                 # this error is spurious with frozen installs, but probably meaningful otherwise
                 # so we silently skip over when frozen
-                if not hasattr(sys,'frozen'): print "(Error importing woo.pre."+modname+", ignoring.)"    
+                if not hasattr(sys,'frozen'): print("(Error importing woo.pre."+modname+", ignoring.)")    
         #
         preps=[]
         for c in woo.system.childClasses(woo.core.Preprocessor):
@@ -381,7 +383,7 @@ class ControllerClass(QWidget,Ui_Controller):
             dialog=QFileDialog(None,'Save preprocessor parameters to','.',';; '.join([fmt[1] for fmt in formats]))
             dialog.setAcceptMode(QFileDialog.AcceptSave)
             f=dialog.exec_()
-            print 'chosen file',str(dialog.selectedFiles()[0])
+            print('chosen file',str(dialog.selectedFiles()[0]))
             if not f: return # cancelled
         else:
             f=str(QFileDialog.getSaveFileName(self,'Save preprocessor parameters','.'))
@@ -404,7 +406,7 @@ class ControllerClass(QWidget,Ui_Controller):
                     import sys
                     sys.stdout.write('Stopping the current simulation...')
                     woo.master.scene.stop()
-                    print ' ok'
+                    print(' ok')
                 woo.master.scene=newScene
                 controller.setTabActive('simulation')
         except Exception as e:
@@ -465,19 +467,19 @@ class ControllerClass(QWidget,Ui_Controller):
     def movieButtonClicked(self):
         S=woo.master.scene
         if not hasattr(S.lab,'snapshooter_'):
-            print 'No S.lab.snapshooter_, no movie will be created'
+            print('No S.lab.snapshooter_, no movie will be created')
             return
         out=str(self.movieFileEdit.text())
         woo.utils.makeVideo(S.lab.snapshooter_.snapshots,out=out,fps=self.movieFpsSpinbox.value(),kbps=self.movieBitrateSpinbox.value())
         import os.path
         url='file://'+os.path.abspath(out)
-        print 'Video saved to',url
+        print('Video saved to',url)
         import webbrowser
         webbrowser.open(url)
     def resetTraceClicked(self):
         S=woo.master.scene
         if not hasattr(S.lab,'tracer_'):
-            print 'No S.lab.tracer_, will not reset'
+            print('No S.lab.tracer_, will not reset')
             return
         S.lab.tracer_.resetNodesRep(setupEmpty=True)
     def tracerGetEngine(self,S):
@@ -668,7 +670,7 @@ class ControllerClass(QWidget,Ui_Controller):
             if S.uiBuild:
                 import __main__
                 glob=globals(); glob.update(__main__.__dict__)
-                exec S.uiBuild in glob, {'S':S,'area':self.customArea}
+                exec(S.uiBuild, glob, {'S':S,'area':self.customArea})
         ## renderer change
         if self.lastGl!=S.gl:
             self.displayComboSlot(self.displayCombo.currentText())

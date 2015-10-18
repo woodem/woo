@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import print_function
 from woo.dem import *
 from woo.fem import *
 import woo.core, woo.dem, woo.pyderived, woo.models, woo.config
@@ -59,7 +60,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     defaultPsd=[(5e-3,.0),(6.3e-3,.12),(8e-3,.53),(10e-3,.8),(12.5e-3,.94),(20e-3,1)]
     def postLoad(self,I):
         if self.preCooked and (I is None or I=='preCooked'):
-            print 'Applying pre-cooked configuration "%s".'%self.preCooked
+            print('Applying pre-cooked configuration "%s".'%self.preCooked)
             if self.preCooked=='Brisbane 1':
                 self.gen=woo.dem.PsdSphereGenerator(psdPts=[(6.3e-3,0),(12.5e-3,.82222),(20e-3,1)],discrete=False)
                 self.bias=woo.dem.LayeredAxialBias(axis=2,fuzz=0,layerSpec=[VectorX([12.5e-3,1,0,.177777]),VectorX([0,12.5e-3,.177777,1])])
@@ -129,7 +130,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         r,h=S.pre.htDiam[1]/2.,S.pre.htDiam[0]
         # check how much was the settlement
         zz=woo.utils.contactCoordQuantiles(S.dem,[.999])
-        print 'Compaction done, settlement from %g (loose) to %g (dense); rel. %g, relSettle was %g.'%(S.pre.ht0,zz[0],zz[0]/S.pre.ht0,S.pre.relSettle)
+        print('Compaction done, settlement from %g (loose) to %g (dense); rel. %g, relSettle was %g.'%(S.pre.ht0,zz[0],zz[0]/S.pre.ht0,S.pre.relSettle))
         # delete everything abot; run this engine just once, explicitly
         woo.dem.BoxOutlet(box=((-r,-r,0),(r,r,h)))(S,S.dem)
         S.stop()
@@ -148,7 +149,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
             n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[0],solid="lateral")
             n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[1],solid="bottom")
             n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[2],solid="top")
-            print 'Exported %d facets to %s'%(n,S.pre.stlOut)
+            print('Exported %d facets to %s'%(n,S.pre.stlOut))
         else:
-            print 'Not running STL export (stlOut empty)'
+            print('Not running STL export (stlOut empty)')
 

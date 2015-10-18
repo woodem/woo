@@ -18,6 +18,7 @@ For examples, see
 * :woosrc:`examples/gts-horse/gts-horse.py`
 * :woosrc:`examples/WireMatPM/wirepackings.py`
 """
+from __future__ import print_function
 
 import itertools,warnings,os
 from numpy import arange
@@ -212,7 +213,7 @@ class inGtsSurface_py(Predicate):
         mn,mx=[inf,inf,inf],[-inf,-inf,-inf]
         for v in surf.vertices():
             c=v.coords()
-            mn,mx=[min(mn[i],c[i]) for i in 0,1,2],[max(mx[i],c[i]) for i in 0,1,2]
+            mn,mx=[min(mn[i],c[i]) for i in (0,1,2)],[max(mx[i],c[i]) for i in (0,1,2)]
         self.mn,self.mx=tuple(mn),tuple(mx)
         import gts
     def aabb(self): return self.mn,self.mx
@@ -334,8 +335,8 @@ def regularOrtho(predicate,radius,gap,**kw):
     Created spheres will have given radius and will be separated by gap space."""
     ret=[]
     mn,mx=predicate.aabb()
-    if(max([mx[i]-mn[i] for i in 0,1,2])==float('inf')): raise ValueError("Aabb of the predicate must not be infinite (didn't you use union | instead of intersection & for unbounded predicate such as notInNotch?");
-    xx,yy,zz=[arange(mn[i]+radius,mx[i]-radius,2*radius+gap) for i in 0,1,2]
+    if(max([mx[i]-mn[i] for i in (0,1,2)])==float('inf')): raise ValueError("Aabb of the predicate must not be infinite (didn't you use union | instead of intersection & for unbounded predicate such as notInNotch?");
+    xx,yy,zz=[arange(mn[i]+radius,mx[i]-radius,2*radius+gap) for i in (0,1,2)]
     for xyz in itertools.product(xx,yy,zz):
         if predicate(xyz,radius): ret+=[utils.sphere(xyz,radius=radius,**kw)]
     return ret
@@ -414,7 +415,7 @@ def _memoizePacking(memoizeDb,sp,radius,rRelFuzz,wantPeri,fullDim):
     c.execute('insert into packings values (?,?,?,?,?,?,?,?,?)',(radius,rRelFuzz,packDim[0],packDim[1],packDim[2],len(sp),time.time(),wantPeri,packBlob,))
     c.close()
     conn.commit()
-    print "Packing saved to the database",memoizeDb
+    print("Packing saved to the database",memoizeDb)
 
 def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fillPeriodic,spheresInCell,memoDbg=False):
     """Return suitable SpherePack read from *memoizeDb* if found, None otherwise.
@@ -424,7 +425,7 @@ def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fill
     """
     import os,os.path,sqlite3,time,cPickle,sys
     if memoDbg:
-        def memoDbgMsg(s): print s
+        def memoDbgMsg(s): print(s)
     else:
         def memoDbgMsg(s): pass
     if not memoizeDb or not os.path.exists(memoizeDb):
@@ -449,7 +450,7 @@ def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fill
         else:
             if (X<fullDim[0] or Y<fullDim[1] or Z<fullDim[2]): memoDbgMsg("REJECT: not large enough"); continue # not large enough
         memoDbgMsg("ACCEPTED");
-        print "Found suitable packing in %s (radius=%g±%g,N=%g,dim=%g×%g×%g,%s,scale=%g), created %s"%(memoizeDb,R,rDev,NN,X,Y,Z,"periodic" if isPeri else "non-periodic",scale,time.asctime(time.gmtime(timestamp)))
+        print("Found suitable packing in %s (radius=%g±%g,N=%g,dim=%g×%g×%g,%s,scale=%g), created %s"%(memoizeDb,R,rDev,NN,X,Y,Z,"periodic" if isPeri else "non-periodic",scale,time.asctime(time.gmtime(timestamp))))
         c.execute('select pack from packings where timestamp=?',(timestamp,))
         sp=SpherePack(cPickle.loads(str(c.fetchone()[0])))
         sp.scale(scale);
@@ -494,14 +495,14 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
     wantPeri=(spheresInCell>0)
     if 'inGtsSurface' in dir(woo._packPredicates) and type(predicate)==inGtsSurface and useOBB:
         center,dim,orientation=gtsSurfaceBestFitOBB(predicate.surf)
-        print "Best-fit oriented-bounding-box computed for GTS surface, orientation is",orientation
+        print("Best-fit oriented-bounding-box computed for GTS surface, orientation is",orientation)
         dim*=2 # gtsSurfaceBestFitOBB returns halfSize
     else:
         if not dim: dim=predicate.dim()
         if max(dim)==float('inf'): raise RuntimeError("Infinite predicate and no dimension of packing requested.")
         center=predicate.center()
         orientation=None
-    if not wantPeri: fullDim=tuple([dim[i]+4*cropLayers*radius for i in 0,1,2])
+    if not wantPeri: fullDim=tuple([dim[i]+4*cropLayers*radius for i in (0,1,2)])
     else:
         # compute cell dimensions now, as they will be compared to ones stored in the db
         # they have to be adjusted to not make the cell to small WRT particle radius
@@ -519,7 +520,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
             sp.cellSize=(0,0,0) # resetting cellSize avoids warning when rotating, plus we don't want periodic packing anyway
             if orientation: sp.rotate(*orientation.toAxisAngle())
             return filterSpherePack(predicate,sp,mat=mat)
-        else: print "No suitable packing in database found, running",'PERIODIC compression' if wantPeri else 'triaxial'
+        else: print("No suitable packing in database found, running",'PERIODIC compression' if wantPeri else 'triaxial')
         sys.stdout.flush()
     S=core.Scene(fields=[dem.DemField()])
     if wantPeri:
@@ -697,9 +698,9 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         import hashlib
         paramHash=hashlib.sha1(params).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.perifeed'
-        print 'Memoize file is ',memoizeFile
+        print('Memoize file is ',memoizeFile)
         if os.path.exists(memoizeDir+'/'+paramHash+'.perifeed'):
-            print 'Returning memoized result'
+            print('Returning memoized result')
             if not gen:
                 sp=SpherePack()
                 sp.load(memoizeFile)
@@ -715,9 +716,9 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     else: raise NotImplementedError('Generators without PSD do not inform about the biggest particle radius.')
     minSize=rMax*5
     cellSize=Vector3(max(dim[0]/p3,minSize),max(dim[1]/p3,minSize),max(dim[2]/p3,minSize))
-    print 'dimension',dim
-    print 'initial cell size',cellSize
-    print 'psd=',psd
+    print('dimension',dim)
+    print('initial cell size',cellSize)
+    print('psd=',psd)
     import woo.core, woo.dem, math
     S=woo.core.Scene(fields=[woo.dem.DemField()])
     S.periodic=True
@@ -740,7 +741,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         )
     ]
     S.one()
-    print 'Created %d particles, compacting...'%(len(S.dem.par))
+    print('Created %d particles, compacting...'%(len(S.dem.par)))
     S.dt=.9*utils.pWaveDt(S,noClumps=True)
     S.dtSafety=.9
     if clumps: warnings.warn('utils.pWaveDt called with noClumps=True (clumps ignored), the result (S.dt=%g) might be significantly off!'%S.dt)
@@ -756,10 +757,10 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     if gen: sp=woo.dem.ShapePack()
     else: sp=SpherePack()
     sp.fromDem(S,S.dem)
-    print 'Packing size is',sp.cellSize
+    print('Packing size is',sp.cellSize)
     sp.canonicalize()
     if not gen: sp.makeOverlapFree()
-    print 'Loose packing size is',sp.cellSize
+    print('Loose packing size is',sp.cellSize)
     cc,rr=[],[]
     inf=float('inf')
     boxMin=Vector3(0,0,0);
@@ -768,7 +769,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     boxMax[lenAxis]=inf
     box=AlignedBox3(boxMin,boxMax)
     sp2=sp.filtered(inAlignedBox(box))
-    print 'Box is ',box
+    print('Box is ',box)
     #for c,r in sp:
     #    if c-Vector3(r,r,r) not in box or c+Vector3(r,r,r) not in box: continue
     #    cc.append(c); rr.append(r)
@@ -777,7 +778,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         #sp2.fromList(cc,rr)
         #sp2.cellSize=sp.cellSize
         if memoizeDir:
-            print 'Saving to',memoizeFile
+            print('Saving to',memoizeFile)
             # print len(sp2)
             sp2.save(memoizeFile)
         if returnSpherePack or gen:
@@ -796,7 +797,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 :param mat: material for particles
 :param gravity: gravity acceleration (as Vector3)
 '''
-    print 'woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),(gen.dumps(format='expr',width=-1,noMagic=True) if gen is not None else 'None'))
+    print('woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),(gen.dumps(format='expr',width=-1,noMagic=True) if gen is not None else 'None')))
     dim=list(dim) # make modifiable in case of excess width
 
 
@@ -806,12 +807,12 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # too wide band is created by repeating narrower one
     if excessWd:
         if dim[1]>excessWd[0]:
-            print 'makeBandFeedPack: excess with %g>%g, using %g with packing repeated'%(dim[1],excessWd[0],excessWd[1])
+            print('makeBandFeedPack: excess with %g>%g, using %g with packing repeated'%(dim[1],excessWd[0],excessWd[1]))
             retWd=dim[1] # this var is used at the end
             dim[1]=excessWd[1]
             nRepeatCells=int(retWd/dim[1])+1
     cellSize=(dim[0],dim[1],(1+2*porosity)*dim[2])
-    print 'cell size',cellSize,'target height',dim[2]
+    print('cell size',cellSize,'target height',dim[2])
     factoryBottom=.3*cellSize[2] if not botLine else max([b[1] for b in botLine]) # point above which are particles generated
     factoryLeft=0 if not leftLine else max([l[0] for l in leftLine])
     #print 'factoryLeft =',factoryLeft,'leftLine =',leftLine,'cellSize =',cellSize
@@ -822,26 +823,26 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     boundary2d=leftLine+botLine+rightLine
     # boundary clipped to the part filled by particles
     b2c=[Vector2(pt[0],min(pt[1],dim[2])) for pt in boundary2d]
-    print 'Clipped boundary',b2c
+    print('Clipped boundary',b2c)
     b2c+=[b2c[0],b2c[1]] # close the polygon
     area2d=.5*abs(sum([b2c[i][0]*(b2c[i+1][1]-b2c[i-1][1]) for i in range(1,len(b2c)-1)]))
 
     def printBulkParams(sp):
         volume=sp.solidVolume() # works with both ShapePack and SpherePack
         mass=volume*mat.density
-        print 'Particle mass: %g kg (volume %g m3, mass density %g kg/m3).'%(mass,volume,mat.density)
+        print('Particle mass: %g kg (volume %g m3, mass density %g kg/m3).'%(mass,volume,mat.density))
         vol=area2d*sp.cellSize[0]
-        print 'Bulk density: %g kg/m3 (area %g m2, length %g m).'%(mass/vol,area2d,sp.cellSize[0])
-        print 'Porosity: %g %%'%(100*(1-(mass/vol)/mat.density))
+        print('Bulk density: %g kg/m3 (area %g m2, length %g m).'%(mass/vol,area2d,sp.cellSize[0]))
+        print('Porosity: %g %%'%(100*(1-(mass/vol)/mat.density)))
 
     if memoizeDir and not dontBlock:
         params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr')+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr') if gen else '')+'ver5'
         import hashlib
         paramHash=hashlib.sha1(params).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.bandfeed'
-        print 'Memoize file is ',memoizeFile
+        print('Memoize file is ',memoizeFile)
         if os.path.exists(memoizeDir+'/'+paramHash+'.bandfeed'):
-            print 'Returning memoized result'
+            print('Returning memoized result')
             if not gen:
                 sp=SpherePack()
                 sp.load(memoizeFile)
@@ -866,7 +867,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 
 
     massToDo=porosity*mat.density*dim[0]*dim[1]*dim[2]
-    print 'Will generate %g mass'%massToDo
+    print('Will generate %g mass'%massToDo)
 
     ## FIXME: decrease friction angle to help stabilization
     mat0,mat=mat,mat.deepcopy()
@@ -906,7 +907,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     ]
     # S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
     S.dtSafety=.9
-    print 'Inlet box is',S.lab.factory.box
+    print('Inlet box is',S.lab.factory.box)
     if dontBlock: return S
     else: S.run()
     S.wait()
@@ -919,7 +920,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     sp=sp.filtered(woo.pack.inAxisRange(axis=2,range=(0,dim[2])),recenter=False)
     printBulkParams(sp)
     if nRepeatCells:
-        print 'nRepeatCells',nRepeatCells
+        print('nRepeatCells',nRepeatCells)
         sp.cellRepeat(Vector3i(1,nRepeatCells,1))
         sp.translate(Vector3(0,-dim[1]*.5*nRepeatCells,0))
         sp=sp.filtered(woo.pack.inAxisRange(axis=1,range=(-retWd/2.,retWd/2.)),recenter=False)
@@ -927,7 +928,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # only periodic along the x-axis
     sp.cellSize[1]=sp.cellSize[2]=0
     if memoizeDir:
-        print 'Saving to',memoizeFile
+        print('Saving to',memoizeFile)
         sp.saveTxt(memoizeFile)
     if returnSpherePack or gen: return sp
     return zip(*sp)
@@ -944,9 +945,9 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
         import hashlib
         hash=hashlib.sha1('1'+str(box)+str(porosity)+generator.dumps(format='expr')).hexdigest()
         memo=memoizeDir+'/'+hash+'.randomdense'
-        print 'Memoize file is',memo
+        print('Memoize file is',memo)
         if os.path.exists(memo):
-            print 'Returning memoized result'
+            print('Returning memoized result')
             return woo.dem.ShapePack(loadFrom=memo).filtered(predicate)
     boxSize=box.sizes()
     iniBoxSize=boxSize*(1/(porosity**(1/3.)))
@@ -959,7 +960,7 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
         woo.dem.BoxInlet(box=((0,0,0),iniBoxSize),maxMass=-1,maxNum=-1,generator=generator,massRate=0,maxAttempts=5000,materials=[woo.dem.FrictMat(density=1e3,young=1e7,ktDivKn=.5,tanPhi=.1)],shooter=None,mask=1)
     ]
     S.one()
-    print 'Created %d particles, compacting...'%len(S.dem.par)
+    print('Created %d particles, compacting...'%len(S.dem.par))
     minRad=float('inf')
     for p in S.dem.par:
         r=p.shape.equivRadius
@@ -973,14 +974,14 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
     S.run(); S.wait()
     sp=woo.dem.ShapePack()
     sp.fromDem(S,S.dem)
-    print 'Compacted packing size is',sp.cellSize
+    print('Compacted packing size is',sp.cellSize)
     sp.canonicalize()
     spCenter=.5*sp.cellSize
     sp.cellSize=(0,0,0) # make aperiodic
     # translate current center to predicate center
     sp.translate(predicate.center()-spCenter)
     if memoizeDir:
-        print 'saving to',memo
+        print('saving to',memo)
         sp.save(memo)
     return sp.filtered(predicate)
 

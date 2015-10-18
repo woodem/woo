@@ -9,6 +9,7 @@ $ woo-trunk dispatcher-torture.py > /tmp/aa.html
 $ firefox /tmp/aa.html
 
 """
+from __future__ import print_function
 
 import collections
 Dispatch=collections.namedtuple('Dispatch',['basename','types'])
@@ -62,5 +63,5 @@ for D in dispatches:
     else: raise ValueError("Dispatcher must be 1D or 2D, not %dD"%len(D.types))
     outStr+='\n<h1>%sDispatcher</h1>'%D.basename
     outStr+=str(table)
-print outStr
+print(outStr)
 quit()

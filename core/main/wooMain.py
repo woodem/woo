@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import print_function
 __all__=['main','batch','options','WooOptions']
 
 
@@ -155,7 +156,7 @@ def main(sysArgv=None):
     # show version and exit
     if opts.version:
         import woo.config
-        print '%s (%s)'%(woo.config.prettyVersion(),','.join(woo.config.features))
+        print('%s (%s)'%(woo.config.prettyVersion(),','.join(woo.config.features)))
         sys.exit(0)
     # re-build woo so that the binary is up-to-date
     if opts.rebuild: # only possible under Linux
@@ -165,7 +166,7 @@ def main(sysArgv=None):
         if opts.rebuild>1:
             if os.path.exists(woo.config.sourceRoot+'/.git'): cmd=['git','-C',woo.config.sourceRoot,'pull','origin','master']
             elif os.path.exists(woo.config.sourceRoot+'/.bzr'): cmd=['bzr','up',woo.config.sourceRoot]
-            print 'Updating Woo using '+' '.join(cmd)
+            print('Updating Woo using '+' '.join(cmd))
             if subprocess.call(cmd): raise RuntimeError('Error updating Woo from repository.')
             # find updatable dirs in wooExtra
             for d in glob.glob(woo.config.sourceRoot+'/wooExtra/*')+glob.glob(woo.config.sourceRoot+'/wooExtra/*/*'):
@@ -175,25 +176,25 @@ def main(sysArgv=None):
                 if os.path.exists(dd+'/.git'): cmd=['git','-C',dd,'pull','origin','master']
                 elif os.path.exists(dd+'/.bzr'): cmd=['bzr','up',dd]
                 if not cmd: continue
-                print 'Running: '+' '.join(cmd)
+                print('Running: '+' '.join(cmd))
                 if subprocess.call(cmd): raise RuntimeError('Error updating %d from repository.'%(dd))
         # rebuild
         cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [sys.executable,woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
-        print 'Rebuilding Woo using',' '.join(cmd)
+        print('Rebuilding Woo using',' '.join(cmd))
         if subprocess.call(cmd): raise RuntimeError('Error rebuilding Woo (--rebuild).')
         # run ourselves
         if '--rebuild' in sys.argv:
             argv=[v for v in sys.argv if v!='--rebuild']
         else:
             argv=[(v.replace('R','') if re.match('^-[a-zA-Z]*$',v) else v) for v in sys.argv if v!='-R' and v!='-RR']
-        print 'Running Woo using',' '.join(argv)
+        print('Running Woo using',' '.join(argv))
         sys.exit(subprocess.call(argv))
     # QUIRK running in gdb
     if (options.quirks & options.quirkFirePro) and (not options.forceNoGui and 'DISPLAY' in os.environ):
         vgas=os.popen("LC_ALL=C /sbin/lspci -nnk 2>/dev/null | grep VGA -A3").readlines()
         if sum (['FirePro' in vga for vga in vgas]):
             if sum(['fglrx' in vga for vga in vgas]):
-                print 'AMD FirePro GPU detected, will run inside gdb to avoid crash in buggy fglrx.so.'
+                print('AMD FirePro GPU detected, will run inside gdb to avoid crash in buggy fglrx.so.')
                 opts.inGdb=True
                 # disable quirk to avoid infinite loop
                 sys.argv=[sys.argv[0]]+['--quirks=%d'%(options.quirks&(~options.quirkFirePro))]+[a for a in sys.argv[1:] if not a.startswith('--quirks')]
@@ -212,18 +213,18 @@ def main(sysArgv=None):
         if WIN: gdbBatch.close()
         else: gdbBatch.flush()  
         if opts.debug:
-            print 'Spawning: gdb -x '+gdbBatch.name+' '+sys.executable
+            print('Spawning: gdb -x '+gdbBatch.name+' '+sys.executable)
         sys.exit(subprocess.call(['gdb']+([] if opts.debug else ['-batch-silent'])+['-x',gdbBatch.name,sys.executable]))
     if opts.inValgrind:
         import subprocess,urllib,os.path
         saveTo='/tmp/valgrind-python.supp'
         if not os.path.exists(saveTo):
-            print 'Downloading '+saveTo
+            print('Downloading '+saveTo)
             urllib.urlretrieve('http://svn.python.org/projects/python/trunk/Misc/valgrind-python.supp',saveTo)
         else:
-            print 'Using already-downloaded '+saveTo
+            print('Using already-downloaded '+saveTo)
         args=['valgrind','--suppressions='+saveTo,sys.executable]+[a for a in sys.argv if a!='--in-valgrind']
-        print 'Running',' '.join(args)
+        print('Running',' '.join(args))
         sys.exit(subprocess.call(args))
 
     # run this instance inside pdb
@@ -251,7 +252,7 @@ def main(sysArgv=None):
         options.batchTable=batch[0]
         options.batchLine=int(batch[1])
         if len(batch)>2: options.batchResults=batch[2]
-        print 'WOO_BATCH environment variable is still honored, but deprecated. Say --batch-table=%s --batch-line=%d '%(options.batchTable,options.batchLine)+(' --batch-results=%s'%options.batchResults)+' instead.'
+        print('WOO_BATCH environment variable is still honored, but deprecated. Say --batch-table=%s --batch-line=%d '%(options.batchTable,options.batchLine)+(' --batch-results=%s'%options.batchResults)+' instead.')
 
     # c++ boot code checks for WOO_DEBUG at some places; debug verbosity is equivalent
     # do this early, to have debug messages in the boot code (plugin registration etc)
@@ -304,7 +305,7 @@ def main(sysArgv=None):
 
     # be helpful when not overridden
     def onSelection(o):
-        print "You selected an object. Define your own useful *onSelection(obj)* function to process it."
+        print("You selected an object. Define your own useful *onSelection(obj)* function to process it.")
 
     #from math import *
 
@@ -383,7 +384,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
                 obj=woo.core.Object.load(arg0)
             except:
                 traceback.print_exc()
-                print 'Error loading file (wrong format?)',arg0
+                print('Error loading file (wrong format?)',arg0)
                 sys.exit(1)
             if isinstance(obj,woo.core.Scene):
                 sys.stderr.write("Running simulation "+arg0+'\n')
@@ -394,7 +395,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
                 woo.master.scene=woo.batch.runPreprocessor(obj,arg0)
                 woo.master.scene.saveTmp()
             else:
-                print 'ERROR: Object loaded from "%s" is a %s (must be Scene or a Preprocessor)'%(arg0,type(obj).__name__)
+                print('ERROR: Object loaded from "%s" is a %s (must be Scene or a Preprocessor)'%(arg0,type(obj).__name__))
                 sys.exit(1)
             if not opts.paused:
                 woo.master.scene.run() # run the new simulation
@@ -414,7 +415,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             woo.master.scene.run()
             if woo.runtime.opts.exitAfter: woo.master.scene.wait()
     if woo.runtime.opts.commands:
-        exec(woo.runtime.opts.commands) in globals()
+        exec((woo.runtime.opts.commands), globals())
     if woo.runtime.opts.exitAfter:
         sys.stdout.write('Woo: normal exit.\n') # fake normal exit (so that batch looks fine if we crash at shutdown)
         sys.exit(0)
@@ -472,7 +473,7 @@ def batch(sysArgv=None):
     
     match=re.match(r'(.*)[_-]batch(-script\.py|.exe)?$',sys.argv[0])
     if not match:
-        print sys.argv
+        print(sys.argv)
         raise RuntimeError(r'Batch executable "%s"does not match ".*[_-]batch(-script\.py)?"'%sys.argv[0])
     executable=match.group(1)
 
@@ -555,7 +556,7 @@ finished: %s
             if self.status!='RUNNING': return None
             if not self.ensureXmlrpc(): return None
             try: return self.xmlrpcConn.basicInfo()
-            except: print 'Error getting simulation information via XMLRPC'
+            except: print('Error getting simulation information via XMLRPC')
         def updatePlots(self):
             if self.status!='RUNNING': return
             if not self.ensureXmlrpc(): return
@@ -564,7 +565,7 @@ finished: %s
                 return
             img=None
             try: img=self.xmlrpcConn.plot()
-            except: print 'Error getting plot via XMLRPC'
+            except: print('Error getting plot via XMLRPC')
             if not img:
                 if os.path.exists(self.plotsFile): os.remove(self.plotsFile)
                 return
@@ -744,14 +745,14 @@ finished: %s
             try:
                 server=HTTPServer(('',port),HttpStatsServer)
                 import thread; thread.start_new_thread(server.serve_forever,())
-                print "http://localhost:%d shows batch summary"%port
+                print("http://localhost:%d shows batch summary"%port)
                 import webbrowser
                 webbrowser.open('http://localhost:%d'%port)
                 break
             except socket.error:
                 port+=1
         if port==maxPort:
-            print "WARN: No free port in range 9080-11000, not starting HTTP stats server!"
+            print("WARN: No free port in range 9080-11000, not starting HTTP stats server!")
     
     
     def runJob(job):
@@ -760,7 +761,7 @@ finished: %s
         job.prepareToRun()
         job.started=time.time();
         
-        print (bright(yellow('   #{job.num} ({job.id}{nCores}{cores}) started'))+' on {asctime}').format(job=job,nCores=('' if job.nCores==1 else '/%d'%job.nCores),cores=(' ['+','.join([str(c) for c in job.cores])+']') if job.cores else '',asctime=time.asctime())
+        print((bright(yellow('   #{job.num} ({job.id}{nCores}{cores}) started'))+' on {asctime}').format(job=job,nCores=('' if job.nCores==1 else '/%d'%job.nCores),cores=(' ['+','.join([str(c) for c in job.cores])+']') if job.cores else '',asctime=time.asctime()))
         #print '#%d cores',%(job.num,job.cores)
         sys.stdout.flush()
         
@@ -770,7 +771,7 @@ finished: %s
             try:  # fake normal exit, if crashing at the very end
                 if len([l for l in open(job.log) if l.startswith('Woo: normal exit.')])>0: job.exitStatus=0
             except: pass
-        if job.exitStatus!=0: print '   #%d system exit status %d'%(job.num,job.exitStatus)
+        if job.exitStatus!=0: print('   #%d system exit status %d'%(job.num,job.exitStatus))
         job.status='DONE'
         job.finished=time.time()
         dt=job.finished-job.started;
@@ -785,7 +786,7 @@ finished: %s
                 job.plotsFile=f
                 havePlot=True
             except IOError: pass # file deleted in the meantime?
-        print (colorize('   #{job.num} ({job.id}{nCores}) {strStatus}')+'(exit status {job.exitStatus}), duration {job.duration}, log {job.log}{jobPlot}').format(job=job,nCores='' if job.nCores==1 else '/%d'%job.nCores,strStatus=('done    ' if job.exitStatus==0 else 'FAILED '),jobPlot=(', plot %s'%(job.plotsFile) if havePlot else ''))
+        print((colorize('   #{job.num} ({job.id}{nCores}) {strStatus}')+'(exit status {job.exitStatus}), duration {job.duration}, log {job.log}{jobPlot}').format(job=job,nCores='' if job.nCores==1 else '/%d'%job.nCores,strStatus=('done    ' if job.exitStatus==0 else 'FAILED '),jobPlot=(', plot %s'%(job.plotsFile) if havePlot else '')))
         job.saveInfo()
         
     def runJobs(jobs,numCores):
@@ -873,7 +874,7 @@ finished: %s
         import subprocess
         tailProcess=subprocess.call(["tail","--line=+0","-f",globalLog])
     if not WIN and globalLog and False :
-        print 'Redirecting all output to',globalLog
+        print('Redirecting all output to',globalLog)
         # if not deleted, tail detects truncation and outputs multiple times
         if os.path.exists(globalLog): os.remove(globalLog) 
         sys.stderr=open(globalLog,"wb")
@@ -894,14 +895,14 @@ finished: %s
         parser.print_help()
         sys.exit(1)
     
-    print "Will run simulation(s) %s using `%s', nice value %d, using max %d cores."%(scripts,executable,nice,maxJobs)
+    print("Will run simulation(s) %s using `%s', nice value %d, using max %d cores."%(scripts,executable,nice,maxJobs))
     
     if table:
         reader=woo.batch.TableParamReader(table)
         params=reader.paramDict()
         availableLines=params.keys()
     
-        print "Will use table `%s', with available lines"%(table),', '.join([str(i) for i in availableLines])+'.'
+        print("Will use table `%s', with available lines"%(table),', '.join([str(i) for i in availableLines])+'.')
     
         if lineList:
             useLines=[]
@@ -916,9 +917,9 @@ finished: %s
                 if l not in availableLines: logging.warn('Skipping unavailable line %d that was requested from the command line.'%l)
                 else: useLines+=[l]
         else: useLines=availableLines
-        print "Will use lines ",', '.join([str(i)+' (%s)'%params[i]['title'] for i in useLines])+'.'
+        print("Will use lines ",', '.join([str(i)+' (%s)'%params[i]['title'] for i in useLines])+'.')
     else:
-        print "Running %d stand-alone simulation(s) in batch mode."%(len(scripts))
+        print("Running %d stand-alone simulation(s) in batch mode."%(len(scripts)))
         useLines=[]
         params={}
         for i,s in enumerate(scripts):
@@ -938,9 +939,9 @@ finished: %s
         prefExt=('hdf5' if not sys.platform=='win32' else 'sqlite')
         resultsDb='%s.%s'%(table,prefExt) if table else 'batch.'+prefExt
     else: resultsDb=opts.resultsDb
-    print 'Results database is',os.path.abspath(resultsDb)
+    print('Results database is',os.path.abspath(resultsDb))
     if woo.batch.mayHaveStaleLock(resultsDb):
-        print 100*'###'+'\n   The results database (%s) is locked\n\nThe lock might be stale (unless something is really writing results right now) which will make simulation to hang waiting for the lock to be released. If you encounter problems (simulations never finishing), try to break the lock by deleting the lock file (by default, %s.lock)\n\n'%(resultsDb,resultsDb)+100*'###'
+        print(100*'###'+'\n   The results database (%s) is locked\n\nThe lock might be stale (unless something is really writing results right now) which will make simulation to hang waiting for the lock to be released. If you encounter problems (simulations never finishing), try to break the lock by deleting the lock file (by default, %s.lock)\n\n'%(resultsDb,resultsDb)+100*'###')
     
     for i,l in enumerate(useLines):
         script=scripts[0] if len(scripts)>0 else None
@@ -994,7 +995,7 @@ finished: %s
             if opts.timing>0: desc+='[%d]'%j
             jobs.append(JobInfo(jobNum,desc,fullCmd,hrefCmd,logFile2,nCores,script=script,table=(table if table!=None else ''),lineNo=l,affinity=jobAffinity,resultsDb=resultsDb,debug=jobDebug,executable=jobExecutable,nice=nice))
     
-    print "Master process pid",os.getpid()
+    print("Master process pid",os.getpid())
     
     if not WIN:
         # HACK: shell suspends the batch sometimes due to tty output, unclear why (both zsh and bash do that).
@@ -1004,17 +1005,17 @@ finished: %s
     
     
     if opts.rebuild:
-        print "Rebuilding all active executables, since --rebuild was specified"
+        print("Rebuilding all active executables, since --rebuild was specified")
         for e in executables:
             import subprocess
             if subprocess.call([e,'--rebuild','-x']+(['--debug'] if opts.debug else [])):
                  raise RuntimeError('Error rebuilding %s (--rebuild).'%e)
-        print "Rebuilding done."
+        print("Rebuilding done.")
             
     
-    print "Job summary:"
+    print("Job summary:")
     for job in jobs:
-        print (bright('   #{job.num} ({job.id}{cores})')+': {job.table} {job.lineNo} {job.resultsDb}: {job.executable} {job.script} > {job.log}').format(job=job,cores='' if job.nCores==1 else '/%d'%job.nCores)
+        print((bright('   #{job.num} ({job.id}{cores})')+': {job.table} {job.lineNo} {job.resultsDb}: {job.executable} {job.script} > {job.log}').format(job=job,cores='' if job.nCores==1 else '/%d'%job.nCores))
     sys.stdout.flush()
     
     
@@ -1032,28 +1033,28 @@ finished: %s
     # OK, go now
     if not dryRun: runJobs(jobs,maxJobs)
     
-    print 'All jobs finished, total time ',t2hhmmss(totalRunningTime())
+    print('All jobs finished, total time ',t2hhmmss(totalRunningTime()))
     
     plots=[]
     for j in jobs:
         if not os.path.exists(j.plotsFile): continue
         plots.append(j.plotsFile)
-    if plots: print 'Plot files:',' '.join(plots)
+    if plots: print('Plot files:',' '.join(plots))
     
     # for easy grepping in logfiles:
-    print 'Log files:',' '.join([j.log for j in jobs])
+    print('Log files:',' '.join([j.log for j in jobs]))
     
     # write timing table
     if opts.timing>0:
         if opts.timingOut:
-            print 'Writing gathered timing information to',opts.timingOut
+            print('Writing gathered timing information to',opts.timingOut)
             try:
                 out=open(opts.timingOut,'w')
             except IOError:
                 logging.warn('Unable to open file %s for timing output, writing to stdout.'%opts.timingOut)
                 out=sys.stdout
         else:
-            print 'Gathered timing information:'
+            print('Gathered timing information:')
             out=sys.stdout
         # write header
         out.write('## timing data, written '+time.asctime()+' with arguments\n##    '+' '.join(sys.argv)+'\n##\n')
@@ -1069,9 +1070,9 @@ finished: %s
             out.write('%d\t%d\t%.2f\t%.2f\t%.3g\t%.2f\t%.2f\t|\t'%(l,len(jobTimes),tAvg,tDev,tRelDev,tMin,tMax)+'\t'.join([params[l][p] for p in paramNames])+'\n')
     
     if not gnuplotOut:
-        print 'Bye.'
+        print('Bye.')
     else:
-        print 'Assembling gnuplot files…'
+        print('Assembling gnuplot files…')
         for job in jobs:
             for l in file(job.log):
                 if l.startswith('gnuplot '):
@@ -1080,7 +1081,7 @@ finished: %s
         preamble,plots='',[]
         for job in jobs:
             if not 'plot' in job.__dict__:
-                print "WARN: No plot found for job "+job.id
+                print("WARN: No plot found for job "+job.id)
                 continue
             for l in file(job.plot):
                 if l.startswith('plot'):
@@ -1097,10 +1098,10 @@ finished: %s
         gp=file(gnuplotOut,'w')
         gp.write(preamble)
         gp.write('plot '+','.join(plots))
-        print "gnuplot",gnuplotOut
-        print "Plot written, bye."
+        print("gnuplot",gnuplotOut)
+        print("Plot written, bye.")
     if httpWait and time.time()-httpLastServe<30:
-        print "(continue serving http until no longer requested  as per --http-wait)"
+        print("(continue serving http until no longer requested  as per --http-wait)")
         while time.time()-httpLastServe<30:
             time.sleep(1)
     if opts.exitPrompt:

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Test if different algorithm version give same results for TriaxialTest.
 #
 # The first run creates initial sphere packing, and saves resulting positions
@@ -13,10 +14,10 @@ while True:
     if not exists(outSph): break
     i+=1
 inSph='%s-in.spheres'%sph
-if exists(inSph): print "Using existing initial configuration",inSph
+if exists(inSph): print("Using existing initial configuration",inSph)
 else:
     TriaxialTest(noFiles=True).load()
-    print "Using new initial configuration in",inSph
+    print("Using new initial configuration in",inSph)
     utils.spheresToFile(inSph)
 TriaxialTest(importFilename=inSph,noFiles=True).load()
 O.usesTimeStepper=False
@@ -31,5 +32,5 @@ if 1:
     #    O.step()
     O.run(2000,True)
     utils.spheresToFile(outSph)
-    print "Results saved to",outSph
+    print("Results saved to",outSph)
     #quit()

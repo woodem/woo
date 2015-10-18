@@ -6,6 +6,7 @@
 
 """Heap of functions that don't (yet) fit anywhere else.
 """
+from __future__ import print_function
 
 import math,random,doctest
 import woo, woo.dem, woo.core
@@ -364,7 +365,7 @@ def ensureDir(d,msg='Creating directory %s'):
     'Ensure that directory ``d`` exists. If ``d`` is empty, return immediately (signifies usually the current directory). Otherwise try to create the directory. *msg* is an optional message to be printed to stdout only when something is actually done, and must include %s which will be replaced by the directory.'
     if d=='': return # current dir
     # this checks only if something will be created; may not see it in some corner cases... doesn't matter, just diagnostics
-    if not os.path.exists(d) and msg: print msg%d
+    if not os.path.exists(d) and msg: print(msg%d)
     # http://stackoverflow.com/a/14364249/761090
     if py3k:
         os.makedirs(d,exist_ok=True)
@@ -534,7 +535,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     if renameNotOverwrite and os.path.exists(out):
         i=0
         while(os.path.exists(out+"~%d"%i)): i+=1
-        os.rename(out,out+"~%d"%i); print "Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i)
+        os.rename(out,out+"~%d"%i); print("Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i))
     if holdLast<0: holdLast*=-fps
     if isinstance(frameSpec,list) or isinstance(frameSpec,tuple):
         if holdLast>0: frameSpec=list(frameSpec)+int(holdLast)*[frameSpec[-1]]
@@ -576,7 +577,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
             # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
             inputs=['-i',symPattern]
             cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
-        print 'Pass %d:'%passNo,' '.join(cmd)
+        print('Pass %d:'%passNo,' '.join(cmd))
         ret=subprocess.call(cmd)
         if ret!=0: raise RuntimeError("Error running %s."%encExec)
     
@@ -755,7 +756,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
         figFmt='png'
     repName=unicode(repFmt).format(S=S,**(dict(S.tags)))
     rep=codecs.open(repName,'w','utf-8','replace')
-    print 'Writing report to file://'+os.path.abspath(repName)
+    print('Writing report to file://'+os.path.abspath(repName))
     repBase=re.sub('\.x?html$','',repName)
     s=htmlReportHead(S,headline,dialect=dialect,repBase=repBase)
     s+=afterHead
@@ -791,11 +792,11 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
                 import subprocess
                 # may raise OSError if the executable is not found
                 out=subprocess.check_output(['abiword','--to=ODT','--to-name='+odt,html])
-                print 'Report converted to ODT via Abiword: file://'+os.path.abspath(odt)
+                print('Report converted to ODT via Abiword: file://'+os.path.abspath(odt))
             except subprocess.CalledProcessError as e:
-                print 'Report conversion to ODT failed (error when running Abiword), returning %d; the output was: %s.'%(e.returncode,e.output)
+                print('Report conversion to ODT failed (error when running Abiword), returning %d; the output was: %s.'%(e.returncode,e.output))
             except:
-                print 'Report conversion to ODT not done (Abiword not installed?).'
+                print('Report conversion to ODT not done (Abiword not installed?).')
         # if this is run in the background, main process may finish before that thread, leading potentially to some error messages??
         import threading
         threading.Thread(target=convertToOdt,args=(repName,repBase+'.odt')).start()
@@ -821,10 +822,10 @@ def ensureWriteableDir(d):
     import errno, os
     try:
         os.makedirs(d)
-        print 'Created directory:',d
+        print('Created directory:',d)
     except OSError as e:
         if e.errno!=errno.EEXISTS:
-            print 'ERROR: failed to create directory '+d
+            print('ERROR: failed to create directory '+d)
             raise
     if not os.access(d,os.W_OK): raise IOError('Directory %s not writeable.'%d)
 
@@ -832,10 +833,10 @@ def ensureWriteableDir(d):
 def runAllPreprocessors():
     'Run all preprocessors with default parameters, and run the very first step of their simulation.'
     for P in woo.system.childClasses(woo.core.Preprocessor):
-        print 50*'#'+'\n'+10*' '+P.__module__+'.'+P.__name__+'\n'+50*'#'
+        print(50*'#'+'\n'+10*' '+P.__module__+'.'+P.__name__+'\n'+50*'#')
         S=woo.master.scene=P()()
         S.one
-    print 20*'*'+'   ALL OK   '+20*'*'
+    print(20*'*'+'   ALL OK   '+20*'*')
 
 def unbalancedEnergy(S):
     if not S.trackEnergy: raise RuntimeError('Scene.trackEnergy==False')

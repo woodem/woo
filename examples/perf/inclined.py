@@ -1,3 +1,4 @@
+from __future__ import print_function
 from woo.core import *; from woo.dem import *
 import woo, woo.pack, woo.timing
 import os.path, sys
@@ -25,7 +26,7 @@ if periodic:
 #S.lab.dynDt.dead=True # disable dynamic dt update
 #S.dt=1e-3
 #S.lab.collider.ompTuneSort=(1,1000,10000)
-print 'Number of spheres',len(S.dem.par)-1
+print('Number of spheres',len(S.dem.par)-1)
 
 
 woo.master.timingEnabled=True

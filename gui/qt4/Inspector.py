@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import print_function
 import woo.config
 if 'qt4' in woo.config.features:
     from PyQt4.QtCore import *
@@ -81,7 +82,7 @@ def getBodyIdFromLabel(label):
     try:
         return int(unicode(label).split()[0])
     except ValueError:
-        print 'Error with label:',unicode(label)
+        print('Error with label:',unicode(label))
         return -1
 
 class BodyInspector(QWidget):

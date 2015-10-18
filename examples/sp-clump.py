@@ -1,3 +1,4 @@
+from __future__ import print_function
 from woo.pack import SpherePack
 
 sp=SpherePack()
@@ -8,9 +9,9 @@ sp.add((.1,.1,.1),.2,0)
 sp.add((.9,.9,.9),.2,1)
 sp.add((.9,.9,.9),.2,1)
 sp.save('/tmp/aa')
-print sp.maxRelOverlap()
+print(sp.maxRelOverlap())
 # sp.canonicalize()
 sp.makeOverlapFree()
-print sp.maxRelOverlap()
-for s in sp.toList(): print s
+print(sp.maxRelOverlap())
+for s in sp.toList(): print(s)
 

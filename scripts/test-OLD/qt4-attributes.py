@@ -1,3 +1,4 @@
+from __future__ import print_function
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4 import QtGui
@@ -24,7 +25,7 @@ class AttrEditor():
         if hot: p.setColor(QPalette.WindowText,Qt.red);
         self.setPalette(p)
         self.repaint()
-        print self.attr,('hot' if hot else 'cold')
+        print(self.attr,('hot' if hot else 'cold'))
     def sizeHint(self): return QSize(180,12)
 
 class AttrEditor_Bool(AttrEditor,QCheckBox):
@@ -86,7 +87,7 @@ class AttrEditor_Vector3(AttrEditor,QFrame):
             val=getattr(self.ser,self.attr)
             for i in range(3):
                 if self.widgets[i].isModified(): val[i]=float(self.widgets[i].text())
-            print 'setting',val
+            print('setting',val)
             setattr(self.ser,self.attr,val)
         except ValueError: self.refresh()
         self.isHot(False)

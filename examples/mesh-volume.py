@@ -1,3 +1,4 @@
+from __future__ import print_function
 import gts
 import woo.pack,woo.dem,woo.log,woo.core
 from minieigen import *
@@ -18,5 +19,5 @@ S.engines=[
 S.dt=1e-4
 S.plot.plots={'i':('V','Vcell',None,'ratio')}
 S.one()
-print 'Sphere volume is ',S.lab.meshVolume.vol
+print('Sphere volume is ',S.lab.meshVolume.vol)
 S.saveTmp()

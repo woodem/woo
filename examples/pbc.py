@@ -1,3 +1,4 @@
+from __future__ import print_function
 import woo, woo.core, woo.utils, woo.dem, woo.gl
 from minieigen import *
 from math import *
@@ -19,6 +20,6 @@ S.dt=1e-5
 S.throttle=1e-4
 S.engines=woo.utils.defaultEngines()
 S.saveTmp()
-print S.dem.par[0].angVel
+print(S.dem.par[0].angVel)
 S.one()
-print S.dem.par[0].angVel
+print(S.dem.par[0].angVel)

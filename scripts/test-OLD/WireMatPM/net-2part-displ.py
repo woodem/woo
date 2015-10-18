@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # encoding: utf-8
+from __future__ import print_function
 from woo import utils, ymport, qt, plot
 
 ## definition of some colors for colored text output in terminal
@@ -10,7 +11,7 @@ RED = '\033[91m'
 BLACK = '\033[0m'
 
 #### short description of script
-print BLUE+'Simple test for two particles to test contact law with '+RED+'StepDisplacer'+BLUE+'.'+BLACK
+print(BLUE+'Simple test for two particles to test contact law with '+RED+'StepDisplacer'+BLUE+'.'+BLACK)
 
 #### define parameters for the net
 # mesh opening size
@@ -56,7 +57,7 @@ def addPlotData():
             plot.addData( Fn=i.phys.normalForce.norm(), un=(O.bodies[1].state.pos[1]-O.bodies[0].state.pos[1])-a )
             #plot.saveGnuplot('net-2part-displ')
         except:
-            print "No interaction!"
+            print("No interaction!")
             O.pause()
 
 
