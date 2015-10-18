@@ -9,12 +9,15 @@ therefore kept in my "private" module here.
 They comprise notably oofem export and various CPM-related functions.
 """
 from __future__ import print_function
+from builtins import str
+from builtins import range
+from builtins import object
 
 from math import *
 from woo._eudoxos import * ## c++ implementations
 
 
-class IntrSmooth3d():
+class IntrSmooth3d(object):
     r"""Return spatially weigted gaussian average of arbitrary quantity defined on interactions.
 
     At construction time, all real interactions are put inside spatial grid, permitting fast search for

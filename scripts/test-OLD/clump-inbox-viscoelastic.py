@@ -1,3 +1,4 @@
+from builtins import range
 # -*- coding: utf-8
 
 from woo import utils,pack,export,qt
@@ -43,15 +44,15 @@ far = pack.sweptPolylines2gtsSurface([[Vector3(-1,-1,-1),Vector3(-1,1,-1),Vector
 farIds=O.bodies.append(pack.gtsSurface2Facets(far.faces(),material=facetMat,color=(0,1,0)))
 
 # Create clumps...
-for j in xrange(10):
-    clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(0,Rs*2*i,(j+1)*Rs*2),Rs,material=dfltSpheresMat) for i in xrange(4)])
+for j in range(10):
+    clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(0,Rs*2*i,(j+1)*Rs*2),Rs,material=dfltSpheresMat) for i in range(4)])
     for id in sphId:
         s=O.bodies[id]
         p=utils.getViscoelasticFromSpheresInteraction(s.state.mass,tc,en,es)
         s.mat.kn,s.mat.cn,s.mat.ks,s.mat.cs=p['kn'],p['cn'],p['ks'],p['cs']
 
 # ... and spheres
-sphAloneId=O.bodies.append( [utils.sphere( Vector3(0.5,Rs*2*i,(j+1)*Rs*2), Rs, material=dfltSpheresMat) for i in xrange(4) ] )
+sphAloneId=O.bodies.append( [utils.sphere( Vector3(0.5,Rs*2*i,(j+1)*Rs*2), Rs, material=dfltSpheresMat) for i in range(4) ] )
 for id in sphAloneId:
     s=O.bodies[id]
     p=utils.getViscoelasticFromSpheresInteraction(s.state.mass,tc,en,es)

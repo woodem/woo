@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding: utf-8
 from __future__ import print_function
+from builtins import input
 from woo import utils, ymport, qt, plot
 
 from woo import log
@@ -101,21 +102,21 @@ Ig2ssGeom.interactionDetectionFactor=-1.
 O.engines = [StepDisplacer( ids=[1],mov=Vector3(0,+1e-5,0),rot=Quaternion().Identity,setVelocities=False )] + O.engines
 
 print('Loading (press enter)')
-raw_input()
+input()
 O.run(100,True)
 
 #### define simulation unloading
 O.engines = [StepDisplacer( ids=[1],mov=Vector3(0,-1.3e-5,0),rot=Quaternion().Identity,setVelocities=False )] + O.engines[1:]
 
 print('Unloading (press enter)')
-raw_input()
+input()
 O.run(50,True)
 
 #### define simulation reloading
 O.engines = [StepDisplacer( ids=[1],mov=Vector3(0,+1.6e-5,0),rot=Quaternion().Identity,setVelocities=False )] + O.engines[1:]
 
 print('Reloading (press enter)')
-raw_input()
+input()
 O.run(500,True)
 
 
@@ -123,7 +124,7 @@ O.run(500,True)
 O.engines = [StepDisplacer( ids=[1],mov=Vector3(0,-1.45e-5,0),rot=Quaternion().Identity,setVelocities=False )] + O.engines[1:]
 
 print('Reunloading (press enter)')
-raw_input()
+input()
 O.run(10,True)
 
 
@@ -131,7 +132,7 @@ O.run(10,True)
 O.engines = [StepDisplacer( ids=[1],mov=Vector3(0,+1.6e-5,0),rot=Quaternion().Identity,setVelocities=False )] + O.engines[1:]
 
 print('Reloading (press enter)')
-raw_input()
+input()
 O.run(500,True)
 
 

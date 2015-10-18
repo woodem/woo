@@ -79,15 +79,15 @@ class TestLeapfrog(unittest.TestCase):
         for n in S.dem.nodes: n.dem.gravitySkip=True
         S.dem.par[-1].vel=(0,0,-1) # so that we hit ground and have dissipation
         S.run(400,True)
-        self.assert_('grav' not in S.energy)
-        self.assert_(S.energy['nonviscDamp']!=0.)
+        self.assertTrue('grav' not in S.energy)
+        self.assertTrue(S.energy['nonviscDamp']!=0.)
     def testDampingSkip(self):
         'Energy: DemData.dampingSkip'
         S=self.S
         for n in S.dem.nodes: n.dem.dampingSkip=True
         S.run(400,True)
-        self.assert_(S.energy['grav']!=0.)
-        self.assert_('nonviscDamp' not in S.energy)
+        self.assertTrue(S.energy['grav']!=0.)
+        self.assertTrue('nonviscDamp' not in S.energy)
 
 
 

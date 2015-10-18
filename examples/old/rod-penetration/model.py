@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from builtins import range
 from woo import utils
 import random
 from woo import ymport
@@ -20,9 +21,9 @@ rod = O.bodies.append(ymport.stl('rod-'+mesh+'.stl',wire=True))
 sphereRadius = 0.01
 nbSpheres = (32,11,32) 
 print("Creating %d spheres..."%(nbSpheres[0]*nbSpheres[1]*nbSpheres[2]), end=' ')
-for i in xrange(nbSpheres[0]):
-    for j in xrange(nbSpheres[1]):
-        for k in xrange(nbSpheres[2]):
+for i in range(nbSpheres[0]):
+    for j in range(nbSpheres[1]):
+        for k in range(nbSpheres[2]):
             x = (i*2 - nbSpheres[0])*sphereRadius*1.1+sphereRadius*random.uniform(-0.1,0.1)
             y = -j*sphereRadius*2.2-0.01
             z = (k*2 - nbSpheres[2])*sphereRadius*1.1+sphereRadius*random.uniform(-0.1,0.1)

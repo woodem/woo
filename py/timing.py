@@ -6,6 +6,7 @@ See `timing section <https://yade-dem.org/doc/current/prog.html#timing>`_ of the
 
 """
 from __future__ import print_function
+from builtins import str
 
 from woo.core import *
 from woo.dem import *

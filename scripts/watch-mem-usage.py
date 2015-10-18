@@ -25,7 +25,7 @@ while True:
         time.sleep(sampleTime)
     except (KeyboardInterrupt,SystemExit):
         # print summary, exit
-        for k,v in sorted(maxMem.iteritems(),key=operator.itemgetter(1)):
+        for k,v in sorted(iter(maxMem.items()),key=operator.itemgetter(1)):
             print('{:>10.1f}  {}'.format(1e-6*v,k))
         sys.exit(0)
 

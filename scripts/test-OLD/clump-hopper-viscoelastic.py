@@ -1,3 +1,4 @@
+from builtins import range
 # -*- coding: utf-8
 
 from woo import utils,pack,export,qt
@@ -49,7 +50,7 @@ tblIds=O.bodies.append(pack.gtsSurface2Facets(table.faces(),material=facetMat,co
 # Create clumps...
 clumpColor=(0.0, 0.5, 0.5)
 for k,l in itertools.product(arange(0,10),arange(0,10)):
-    clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(x0t+Rs*(k*4+2),y0t+Rs*(l*4+2),i*Rs*2+zt),Rs,color=clumpColor,material=dfltSpheresMat) for i in xrange(4)])
+    clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(x0t+Rs*(k*4+2),y0t+Rs*(l*4+2),i*Rs*2+zt),Rs,color=clumpColor,material=dfltSpheresMat) for i in range(4)])
 
 # ... and spheres
 #spheresColor=(0.4, 0.4, 0.4)

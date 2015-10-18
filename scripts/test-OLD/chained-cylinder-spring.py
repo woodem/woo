@@ -1,4 +1,5 @@
 from __future__ import print_function
+from builtins import range
 #--- bruno.chareyre@hmg.inpg.fr ---
 #!/usr/bin/python
 # -*- coding: utf-8 -*-

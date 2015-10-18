@@ -35,5 +35,5 @@ class TestTet4(unittest.TestCase):
             (-330, -1160, -300, 90, -380, -180, 60, 720, 120, 180, 820, 360),
             (-180, -420, -470, 60, -180, -230, 0, 240, 180, 120, 360, 520)
         ])
-        self.assert_( (K-Kok).norm()<1e-11 )
-        self.assert_( (K-K.transpose()).norm()<1e-11 )
+        self.assertTrue( (K-Kok).norm()<1e-11 )
+        self.assertTrue( (K-K.transpose()).norm()<1e-11 )

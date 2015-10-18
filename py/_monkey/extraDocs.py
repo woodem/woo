@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 """Update docstrings which are not practical to be written in the c++ source code, such as :obj:`woo.dem.Cg2_Sphere_Sphere_L6Geom`.
 
 Don't forget to
@@ -118,7 +120,7 @@ If this functor is called for :obj:`L6Geom`, local rotation is updated as
 '''
 
 
-    woo.dem.PsdClumpGenerator.__doc__=ur'''Generate clump particles following a given Particle Size Distribution    (:obj:`psd`) and selection of :obj:`clump shapes <clumps>`, using the :obj:`woo.dem.SphereClumpGeom.scaleProb` function.
+    woo.dem.PsdClumpGenerator.__doc__=r'''Generate clump particles following a given Particle Size Distribution    (:obj:`psd`) and selection of :obj:`clump shapes <clumps>`, using the :obj:`woo.dem.SphereClumpGeom.scaleProb` function.
 
 For example, with ``psd=[(.1, 0), (.2, .7), (.4, 1.)]``, the PSD function (which is a `cumulative distribution function <http://en.wikipedia.org/wiki/Cumulative_distribution_function>`_) looks like
 
@@ -143,7 +145,6 @@ For every diameter $d$ chosen according to the PSD, values of :obj:`scaleProb <w
 .. tikz:: \begin{axis}[xlabel=\$d\$,ylabel=\$P(d)\$,area style, enlarge x limits=false,stack plots=y] \addplot coordinates { (.1, 0) (.2, 6.06) (.3, 0) (.4,0)} \closedcycle; \addplot coordinates { (.1,0) (.2, .61) (.3, 0.95) (.4,0)} \closedcycle; \addplot coordinates { (.1,0) (.2,0) (.3,2.38) (.4,0) }\closedcycle; \legend{clump 1, clump 2, clump 3} \end{axis}
 
 Selected clump configuration is scaled to $d$ (using its :obj:`equivRad <woo.dem.SphereClumpGeom.equivRad>`).
-
 '''
 
 except ImportError:

@@ -1,6 +1,7 @@
 # -*- coding: utf-8
 
 from __future__ import print_function
+from builtins import range
 from woo import utils,pack,export,geom,timing,bodiesHandling
 import time,numpy
     

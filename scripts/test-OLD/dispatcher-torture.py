@@ -10,6 +10,7 @@ $ firefox /tmp/aa.html
 
 """
 from __future__ import print_function
+from builtins import str
 
 import collections
 Dispatch=collections.namedtuple('Dispatch',['basename','types'])

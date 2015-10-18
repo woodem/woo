@@ -11,15 +11,15 @@ class TestDemField(unittest.TestCase):
     def testGuessMoving(self):
         'DEM: correctly guess that Node.dem needs motion integration'
         d=DemData(blocked='',mass=0)
-        self.assert_(d.guessMoving()==False) # zero mass, don't move
+        self.assertTrue(d.guessMoving()==False) # zero mass, don't move
         d=DemData(blocked='xyz',mass=0)
-        self.assert_(d.guessMoving()==False) # zero mass, don't move
+        self.assertTrue(d.guessMoving()==False) # zero mass, don't move
         d=DemData(blocked='xyzXY',mass=1)
-        self.assert_(d.guessMoving()==True)  # something not blocked, move
+        self.assertTrue(d.guessMoving()==True)  # something not blocked, move
         d=DemData(blocked='xyzXYZ',mass=1)
-        self.assert_(d.guessMoving()==False) # everything blocked, not move
+        self.assertTrue(d.guessMoving()==False) # everything blocked, not move
         d=DemData(blocked='xyzXYZ',vel=(1,1,1),mass=1)
-        self.assert_(d.guessMoving()==True)  # velocity assigned, move
+        self.assertTrue(d.guessMoving()==True)  # velocity assigned, move
 
 class TestContactLoop(unittest.TestCase):
     def testUpdatePhys(self):
@@ -43,10 +43,10 @@ class TestContactLoop(unittest.TestCase):
             m.young=E0
             S.one()
             if up=='always':
-                self.assert_(S.lab.contactLoop.updatePhys=='always')
+                self.assertTrue(S.lab.contactLoop.updatePhys=='always')
                 self.assertAlmostEqual(kn0,c.phys.kn)
             else:
-                self.assert_(S.lab.contactLoop.updatePhys=='never') # once changed to never, or just never
+                self.assertTrue(S.lab.contactLoop.updatePhys=='never') # once changed to never, or just never
                 self.assertEqual(kn1,c.phys.kn)
 
 
@@ -56,15 +56,15 @@ class TestImpose(unittest.TestCase):
         a,b,c=CircularOrbit(),ReadForce(),ConstantForce()
         d=a+b
         # normal + normal, instantiates CombinedImpose
-        self.assert_(d.imps==[a,b])
-        self.assert_(d.what==(a.what | b.what)) # what is OR'd from imps
+        self.assertTrue(d.imps==[a,b])
+        self.assertTrue(d.what==(a.what | b.what)) # what is OR'd from imps
         # flattening additions
         # combined + combined
-        self.assert_((d+d).imps==[a,b,a,b])
+        self.assertTrue((d+d).imps==[a,b,a,b])
         # combined + normal
-        self.assert_((d+c).imps==[a,b,c])
+        self.assertTrue((d+c).imps==[a,b,c])
         # normal + combined
-        self.assert_((c+d).imps==[c,a,b])
+        self.assertTrue((c+d).imps==[c,a,b])
     def testCombinedImposeFunction(self):
         'DEM: CombinedImpose combines impositions'
         a=VariableAlignedRotation(axis=0,timeAngVel=[(0,0),(1,1),(2,1)],wrap=False)
@@ -73,8 +73,8 @@ class TestImpose(unittest.TestCase):
         c.impose=a+b # impose both
         S=woo.core.Scene(fields=[DemField(par=[c])],engines=DemField.minimalEngines(),dt=1e-3,stopAtTime=1.2)
         S.run(); S.wait()
-        self.assert_(c.vel==Vector3(3,3,3))
-        self.assert_(c.angVel[0]==1.)
+        self.assertTrue(c.vel==Vector3(3,3,3))
+        self.assertTrue(c.angVel[0]==1.)
     def testUselessRotationImpose(self):
         'DEM: selfTest errro when imposing rotation on aspherical particles (would have no effect)'
         for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)):

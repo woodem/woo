@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 
 from woo import utils,plot,pack
 import time, sys, os, copy
@@ -65,13 +67,13 @@ packingFile='periCube.pickle'
 if not os.path.exists(packingFile):
     sp=pack.randomPeriPack(radius=.05e-3,rRelFuzz=0.,initSize=Vector3().ONE*1.5e-3)
     dd=dict(cell=(sp.cellSize[0],sp.cellSize[1],sp.cellSize[2]),spheres=sp.toList_pointsAsTuples())
-    import cPickle as pickle
+    import pickle as pickle
     pickle.dump(dd,open(packingFile,'w'))
 
 #
 # load the packing (again);
 #
-import cPickle as pickle
+import pickle as pickle
 concreteId=O.materials.append(CpmMat(young=young,frictionAngle=frictionAngle,poisson=poisson,density=4800,sigmaT=sigmaT,relDuctility=relDuctility,epsCrackOnset=epsCrackOnset,G_over_E=G_over_E,isoPrestress=isoPrestress))
 sphDict=pickle.load(open(packingFile))
 from woo import pack
@@ -174,7 +176,7 @@ def stopIfDamaged():
             # important! initTest must be launched in a separate thread;
             # otherwise O.load would wait for the iteration to finish,
             # but it would wait for initTest to return and deadlock would result
-            import thread; thread.start_new_thread(initTest,())
+            import _thread; _thread.start_new_thread(initTest,())
             return
         else:
             print("Damaged, stopping.")

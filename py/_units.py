@@ -2,6 +2,7 @@
 
 The :obj:`unit` map is exposed as ``woo.unit``, so that expressions like ``16*woo.unit['deg']`` can be used in python.
 '''
+from builtins import str
 
 unit={}
 'Map units to their respective multipliers'

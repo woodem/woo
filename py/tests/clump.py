@@ -2,6 +2,7 @@
 '''
 Various computations affected by the periodic boundary conditions.
 '''
+from builtins import range
 
 import unittest
 import random
@@ -36,13 +37,13 @@ class TestSimpleClump(unittest.TestCase):
         #self.assertEqual(b1.clumpId,bC.id)
         #self.assertEqual(b2.clumpId,bC.id)
         #self.assertEqual(bC.clumpId,bC.id)
-        self.assert_(b1 in bC.dem.nodes)
-        self.assert_(b2 in bC.dem.nodes)
-        self.assert_(bC.dem.clump)
-        self.assert_(b1.dem.clumped)
-        self.assert_(b2.dem.clumped)
-        self.assert_(b1.dem.master==bC)
-        self.assert_(b2.dem.master==bC)
+        self.assertTrue(b1 in bC.dem.nodes)
+        self.assertTrue(b2 in bC.dem.nodes)
+        self.assertTrue(bC.dem.clump)
+        self.assertTrue(b1.dem.clumped)
+        self.assertTrue(b2.dem.clumped)
+        self.assertTrue(b1.dem.master==bC)
+        self.assertTrue(b2.dem.master==bC)
     def testStaticProperties(self):
         "Clump: mass, centroid, intertia"
         S=woo.master.scene
@@ -72,7 +73,7 @@ class TestSimpleClump(unittest.TestCase):
         #print bC.dem.vel,bC.dem.angVel
         bC.dem.vel=(1.,.2,.4)
         bC.dem.angVel=(0,.4,.1)
-        self.assert_(self.b1.dem.master==self.bC)
+        self.assertTrue(self.b1.dem.master==self.bC)
         S.engines=[Leapfrog(reset=True)]; S.one() # update velocities
         # linear velocities
         self.assertEqual(b1.dem.vel,bC.dem.vel+bC.dem.angVel.cross(b1.pos-bC.pos))
@@ -88,8 +89,8 @@ class TestSimpleClump(unittest.TestCase):
         S.engines=[InsertionSortCollider([Bo1_Sphere_Aabb()])]
         S.one()
         for i,j in [(0,1),(1,2),(0,2)]:
-            self.assert_(not woo.dem.Collider.mayCollide(S.dem,S.dem.par[i],S.dem.par[j]))
-        self.assert_(len(S.dem.con)==0)
+            self.assertTrue(not woo.dem.Collider.mayCollide(S.dem,S.dem.par[i],S.dem.par[j]))
+        self.assertTrue(len(S.dem.con)==0)
 
 def sphereClumpPrincipalAxes(cc,rr):
     'Return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres'

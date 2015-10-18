@@ -1,6 +1,10 @@
 # encoding: utf-8
 '''Define IO routines for arbitrary objects.'''
 from __future__ import print_function
+import future.utils
+from builtins import str
+import past.builtins
+py3k=future.utils.PY3
 # various monkey-patches for wrapped c++ classes
 import woo.core
 import woo.system
@@ -8,7 +12,8 @@ import woo.document
 #import woo.dem
 from minieigen import * # for recognizing the types
 
-import StringIO # cStringIO does not handle unicode, so stick with the slower one
+#import StringIO # cStringIO does not handle unicode, so stick with the slower one
+from io import StringIO
 
 from woo.core import Object
 import woo._customConverters # to make sure they are loaded already
@@ -30,9 +35,8 @@ except ImportError:
 nan,inf=float('nan'),float('inf') # for values in expressions
 
 # ensure that the string is unicode
-def _ensureUnicode(s): return s if isinstance(s,unicode) else s.decode('utf-8')
+def _ensureUnicode(s): return s if isinstance(s,str) else s.decode('utf-8')
 
-py3k=(sys.version_info[0]==3)
 
 def Object_getAllTraits(obj):
     'Return list of all trait objects for this instance, recursively including all parent classes.'
@@ -75,7 +79,7 @@ def Object_dumps(obj,format,fragment=False,width=80,noMagic=False,stream=True,sh
 
 def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragment=False,width=80,noMagic=False,showDoc=False):
     '''Dump an object in specified *format*; *out* can be a str/unicode (filename) or a *file* object. Supported formats are: `auto` (auto-detected from *out* extension; raises exception when *out* is an object), `html`, `expr`.'''
-    hasFilename=(isinstance(out,str) or isinstance(out,unicode))
+    hasFilename=isinstance(out,(str,past.builtins.str))
     if hasFilename:
         import os.path
         if os.path.exists(out) and not overwrite: raise IOError("File '%s' exists (use overwrite=True)"%out)
@@ -117,7 +121,7 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
         
 
 
-class SerializerToHtmlTableGenshi:
+class SerializerToHtmlTableGenshi(object):
     'Dump given object to HTML table, using the `Genshi <http://genshi.edgewall.org>`_ templating engine; the produced serialization is XHTML-compliant. Do not use this class directly, say ``object.dump(format="html")`` instead.'
     padding=dict(cellpadding='2px')
     splitStrSeq=1
@@ -227,7 +231,7 @@ class SerializerToHtmlTableGenshi:
 SerializerToHtmlTable=SerializerToHtmlTableGenshi
 
 
-class SerializerToExpr:
+class SerializerToExpr(object):
     '''
     Represent given object as python expression.
     Do not use this class directly, say ``object.dump(format="expr")`` instead.
@@ -245,7 +249,7 @@ class SerializerToExpr:
             delims=(obj.__class__.__module__)+'.'+obj.__class__.__name__+'(',')'
             neededModules.add(obj.__class__.__module__)
         elif isinstance(obj,dict):
-            attrs=obj.items()
+            attrs=list(obj.items())
             delims='{','}'
         # list or mutable list-like objects (NodeList, for instance)
         elif hasattr(obj,'__len__') and hasattr(obj,'__getitem__') and hasattr(obj,'append'):
@@ -345,7 +349,7 @@ class WooJSONDecoder(json.JSONDecoder):
             if i==0: localns[mname]=m
         try:
             if py3k: return eval(klass,globals(),localns)(**d)
-            else: return eval(klass,globals(),localns)(**dict((key.encode('ascii'),(value.encode('ascii') if isinstance(value,unicode) else value)) for key,value in d.items()))
+            else: return eval(klass,globals(),localns)(**dict((key.encode('ascii'),(value.encode('ascii') if isinstance(value,str) else value)) for key,value in d.items()))
         except Exception as e:
             if self.onError=='error': raise
             elif self.onError=='warn':
@@ -380,7 +384,7 @@ def Object_loads(typ,data,format='auto'):
     if format not in ('auto','pickle','expr','json'): raise ValueError('Invalid format %s'%format)
     elif format=='auto':
         if type(data)==bytes and data.startswith(b'##woo-expression##'): format='expr'
-        elif type(data) in (str,unicode) and data.startswith('##woo-expression##'): format='expr'
+        elif type(data) in (str,past.builtins.str) and data.startswith('##woo-expression##'): format='expr'
         else:
             # try pickle
             try:
@@ -437,7 +441,7 @@ def Object_load(typ,inFile,format='auto'):
             except (IOError,KeyError,pickle.UnpicklingError,EOFError): pass
             try: return typeChecked(WooJSONDecoder().decode(codecs.open(inFile,'rb','utf-8').read()),typ)
             except (IOError,ValueError): pass
-        if not format:    raise RuntimeError('File format detection failed on %s (head: %s, bin: %s)'%(inFile,''.join(["\\x%02x"%(x if py3k else ord(x)) for x in head]),unicode(head))) # in py3k, bytes contain integers rather than chars
+        if not format:    raise RuntimeError('File format detection failed on %s (head: %s, bin: %s)'%(inFile,''.join(["\\x%02x"%(x if py3k else ord(x)) for x in head]),str(head))) # in py3k, bytes contain integers rather than chars
     if format not in validFormats: raise RuntimeError("format='%s'??"%format)
     assert format in validFormats
     if format==None:

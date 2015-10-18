@@ -17,9 +17,9 @@ for f in sys.argv[1:]:
             else: dta[collider][N]+=[t*0.01] # the second time is per 100 iterations
 print() 
 
-ISS_N=dta['ISS'].keys(); ISS_N.sort()
-QS_N=dta['QS'].keys(); QS_N.sort()
-IS_N=dta['IS'].keys(); IS_N.sort()
+ISS_N=list(dta['ISS'].keys()); ISS_N.sort()
+QS_N=list(dta['QS'].keys()); QS_N.sort()
+IS_N=list(dta['IS'].keys()); IS_N.sort()
 ISSinit=[dta['ISS'][N][0] for N in ISS_N]; ISSstep=[dta['ISS'][N][1] for N in ISS_N]
 QSinit=[dta['QS'][N][0] for N in QS_N]; QSstep=[dta['QS'][N][1] for N in QS_N]
 ISinit=[dta['IS'][N][0] for N in IS_N]; ISstep=[dta['IS'][N][1] for N in IS_N]

@@ -2,6 +2,7 @@
 It prints strain and average stress (computed from total volume force)
 once in a while."""
 from __future__ import print_function
+from builtins import range
 from woo import log,timing
 log.setLevel("InsertionSortCollider",log.TRACE)
 O.engines=[
@@ -15,7 +16,7 @@ O.engines=[
     NewtonIntegrator(damping=.6,homotheticCellResize=1)
 ]
 import random
-for i in xrange(250):
+for i in range(250):
     O.bodies.append(utils.sphere(Vector3(10*random.random(),10*random.random(),10*random.random()),.5+random.random()))
 cubeSize=20
 # absolute positioning of the cell is not important

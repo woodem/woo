@@ -19,6 +19,12 @@ For examples, see
 * :woosrc:`examples/WireMatPM/wirepackings.py`
 """
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from builtins import zip
+from builtins import range
 
 import itertools,warnings,os
 from numpy import arange
@@ -49,7 +55,7 @@ woo.dem.ParticleGenerator.makeCloud=ParticleGenerator_makeCloud
 if 'product' not in dir(itertools):
     def product(*args, **kwds):
         "http://docs.python.org/library/itertools.html#itertools.product"
-        pools = map(tuple, args) * kwds.get('repeat', 1); result = [[]]
+        pools = list(map(tuple, args)) * kwds.get('repeat', 1); result = [[]]
         for pool in pools: result = [x+[y] for x in result for y in pool]
         for prod in result: yield tuple(prod)
     itertools.product=product
@@ -70,7 +76,7 @@ _docInlineModules=(woo._packPredicates,woo._packSpheres,woo._packObb)
 # extend _packSphere.SpherePack c++ class by these methods
 ##
 def SpherePack_fromSimulation(self,scene,dem=None):
-    ur"""Reset this SpherePack object and initialize it from the current simulation; only spherical particles are taken in account. Periodic boundary conditions are supported, but the hSize matrix must be diagonal. Clumps are supported."""
+    """Reset this SpherePack object and initialize it from the current simulation; only spherical particles are taken in account. Periodic boundary conditions are supported, but the hSize matrix must be diagonal. Clumps are supported."""
     self.reset()
     import woo.dem
     de=scene.dem if not dem else dem
@@ -103,7 +109,7 @@ SpherePack.fromDem=SpherePack_fromDem
 SpherePack.fromSimulation=SpherePack_fromSimulation
 
 def SpherePack_toDem(self,scene,dem=None,rot=Matrix3.Identity,**kw):
-    ur"""Append spheres directly to the simulation. In addition calling :obj:`woo.dem.ParticleContainer.add`,
+    u"""Append spheres directly to the simulation. In addition calling :obj:`woo.dem.ParticleContainer.add`,
 this method also appropriately sets periodic cell information of the simulation.
 
     >>> from woo import pack; from math import *; from woo.dem import *; from woo.core import *
@@ -271,7 +277,7 @@ If threshold is given (>0), then
     if localCoords: ptsGlob=[[localCoords.loc2glob(p) for p in pts1] for pts1 in pts]
     else: ptsGlob=pts
     vtxs=[[gts.Vertex(x,y,z) for x,y,z in pts1] for pts1 in ptsGlob]
-    sectEdges=[[gts.Edge(vtx[i],vtx[i+1]) for i in xrange(0,len(vtx)-1)] for vtx in vtxs]
+    sectEdges=[[gts.Edge(vtx[i],vtx[i+1]) for i in range(0,len(vtx)-1)] for vtx in vtxs]
     interSectEdges=[[] for i in range(0,len(vtxs)-1)]
     for i in range(0,len(vtxs)-1):
         for j in range(0,len(vtxs[i])):
@@ -352,7 +358,7 @@ def regularHexa(predicate,radius,gap,**kw):
     mn,mx=predicate.aabb()
     dim=mx-mn
     if(max(dim)==float('inf')): raise ValueError("Aabb of the predicate must not be infinite (didn't you use union | instead of intersection & for unbounded predicate such as notInNotch?");
-    ii,jj,kk=[range(0,int(dim[0]/a)+1),range(0,int(dim[1]/hy)+1),range(0,int(dim[2]/hz)+1)]
+    ii,jj,kk=[list(range(0,int(dim[0]/a)+1)),list(range(0,int(dim[1]/hy)+1)),list(range(0,int(dim[2]/hz)+1))]
     for i,j,k in itertools.product(ii,jj,kk):
         x,y,z=mn[0]+radius+i*a,mn[1]+radius+j*hy,mn[2]+radius+k*hz
         if j%2==0: x+= a/2. if k%2==0 else -a/2.
@@ -402,7 +408,7 @@ def filterSpherePack(predicate,spherePack,**kw):
 
 def _memoizePacking(memoizeDb,sp,radius,rRelFuzz,wantPeri,fullDim):
     if not memoizeDb: return
-    import cPickle,sqlite3,time,os
+    import pickle,sqlite3,time,os
     if os.path.exists(memoizeDb):
         conn=sqlite3.connect(memoizeDb)
     else:
@@ -410,7 +416,7 @@ def _memoizePacking(memoizeDb,sp,radius,rRelFuzz,wantPeri,fullDim):
         c=conn.cursor()
         c.execute('create table packings (radius real, rRelFuzz real, dimx real, dimy real, dimz real, N integer, timestamp real, periodic integer, pack blob)')
     c=conn.cursor()
-    packBlob=buffer(cPickle.dumps(sp.toList(),cPickle.HIGHEST_PROTOCOL))
+    packBlob=buffer(pickle.dumps(sp.toList(),pickle.HIGHEST_PROTOCOL))
     packDim=sp.cellSize if wantPeri else fullDim
     c.execute('insert into packings values (?,?,?,?,?,?,?,?,?)',(radius,rRelFuzz,packDim[0],packDim[1],packDim[2],len(sp),time.time(),wantPeri,packBlob,))
     c.close()
@@ -423,7 +429,7 @@ def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fill
         :param fillPeriodic: whether to fill fullDim by repeating periodic packing
         :param wantPeri: only consider periodic packings
     """
-    import os,os.path,sqlite3,time,cPickle,sys
+    import os,os.path,sqlite3,time,pickle,sys
     if memoDbg:
         def memoDbgMsg(s): print(s)
     else:

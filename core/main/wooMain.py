@@ -1,6 +1,13 @@
 # encoding: utf-8
 
 from __future__ import print_function
+from past.builtins import execfile
+from future import standard_library
+standard_library.install_aliases()
+from builtins import input
+from builtins import str
+from builtins import range
+from builtins import object
 __all__=['main','batch','options','WooOptions']
 
 
@@ -179,7 +186,7 @@ def main(sysArgv=None):
                 print('Running: '+' '.join(cmd))
                 if subprocess.call(cmd): raise RuntimeError('Error updating %d from repository.'%(dd))
         # rebuild
-        cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [sys.executable,woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
+        cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
         print('Rebuilding Woo using',' '.join(cmd))
         if subprocess.call(cmd): raise RuntimeError('Error rebuilding Woo (--rebuild).')
         # run ourselves
@@ -216,11 +223,11 @@ def main(sysArgv=None):
             print('Spawning: gdb -x '+gdbBatch.name+' '+sys.executable)
         sys.exit(subprocess.call(['gdb']+([] if opts.debug else ['-batch-silent'])+['-x',gdbBatch.name,sys.executable]))
     if opts.inValgrind:
-        import subprocess,urllib,os.path
+        import subprocess,urllib.request,os.path
         saveTo='/tmp/valgrind-python.supp'
         if not os.path.exists(saveTo):
             print('Downloading '+saveTo)
-            urllib.urlretrieve('http://svn.python.org/projects/python/trunk/Misc/valgrind-python.supp',saveTo)
+            urllib.request.urlretrieve('http://svn.python.org/projects/python/trunk/Misc/valgrind-python.supp',saveTo)
         else:
             print('Using already-downloaded '+saveTo)
         args=['valgrind','--suppressions='+saveTo,sys.executable]+[a for a in sys.argv if a!='--in-valgrind']
@@ -464,7 +471,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
 def batch(sysArgv=None):
     '''Entry point for the woo-batch executable. *sysArgv* (if specified) replaces sys.argv, which is used for option processing.
     '''
-    import os, sys, thread, time, logging, pipes, socket, xmlrpclib, re, shutil, random, os.path
+    import os, sys, _thread, time, logging, pipes, socket, xmlrpc.client, re, shutil, random, os.path
     if sysArgv: sys.argv=sysArgv
     
     green,red,yellow,bright=makeColorFuncs(['GREEN','RED','YELLOW','BRIGHT'],dumbWinColors=True)
@@ -487,7 +494,7 @@ def batch(sysArgv=None):
     #re.sub('-batch(|.bat|.py)?$','\\1',sys.argv[0])
     
     
-    class JobInfo():
+    class JobInfo(object):
         def __init__(self,num,id,command,hrefCommand,log,nCores,script,table,lineNo,affinity,resultsDb,debug,executable,nice):
             self.started,self.finished,self.duration,self.durationSec,self.exitStatus=None,None,None,None,None # duration is a string, durationSec is a number
             self.command=command; self.hrefCommand=hrefCommand; self.num=num; self.log=log; self.id=id; self.nCores=nCores; self.cores=set(); self.infoSocket=None
@@ -547,7 +554,7 @@ finished: %s
                 for l in open(self.log,'r'):
                     if not l.startswith('XMLRPC info provider on'): continue
                     url=l[:-1].split()[4]
-                    self.xmlrpcConn=xmlrpclib.ServerProxy(url,allow_none=True)
+                    self.xmlrpcConn=xmlrpc.client.ServerProxy(url,allow_none=True)
                     self.hasXmlrpc=True
                     return True
             except IOError: pass
@@ -650,9 +657,9 @@ finished: %s
         ret+='<p><b>%d</b> total, <b>%d</b> <span style="background-color:yellow">running</span>, <b>%d</b> <span style="background-color:lime">done</span>%s</p>'%(len(jobs),len([j for j in jobs if j.status=='RUNNING']), len([j for j in jobs if j.status=='DONE']),' (<b>%d <span style="background-color:red"><b>failed</b></span>)'%nFailed if nFailed>0 else '')
         return ret
     
-    from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-    import socket,re,SocketServer
-    class HttpStatsServer(SocketServer.ThreadingMixIn,BaseHTTPRequestHandler):
+    from http.server import BaseHTTPRequestHandler,HTTPServer
+    import socket,re,socketserver
+    class HttpStatsServer(socketserver.ThreadingMixIn,BaseHTTPRequestHandler):
         favicon=None # binary favicon, created when first requested
         def do_GET(self):
             if not self.path or self.path=='/': self.sendGlobal()
@@ -744,7 +751,7 @@ finished: %s
         while port<maxPort:
             try:
                 server=HTTPServer(('',port),HttpStatsServer)
-                import thread; thread.start_new_thread(server.serve_forever,())
+                import _thread; _thread.start_new_thread(server.serve_forever,())
                 print("http://localhost:%d shows batch summary"%port)
                 import webbrowser
                 webbrowser.open('http://localhost:%d'%port)
@@ -814,7 +821,7 @@ finished: %s
                         # only set cores if CPU affinity is desired; otherwise, just numer of cores is used
                         if j.affinity: j.cores=list(freeCores)[0:j.nCores] # take required number of free cores
                     # if overloaded, do not assign cores directly
-                    thread.start_new_thread(runJob,(j,))
+                    _thread.start_new_thread(runJob,(j,))
                     break
             # adjust sleepTime if some jobs have already finished
             if done>0:
@@ -881,8 +888,8 @@ finished: %s
         sys.stderr.truncate()
         sys.stdout=sys.stderr
         # try to run tee in separate thread
-        import thread
-        thread.start_new_thread(runTailProcess,(globalLog,))
+        import _thread
+        _thread.start_new_thread(runTailProcess,(globalLog,))
     
     if len([1 for a in args if re.match('.*\.py(/[0-9]+)?',a)])==len(args) and len(args)!=0 or opts.notable:
         # if all args end in .py, they are simulations that we will run
@@ -900,7 +907,7 @@ finished: %s
     if table:
         reader=woo.batch.TableParamReader(table)
         params=reader.paramDict()
-        availableLines=params.keys()
+        availableLines=list(params.keys())
     
         print("Will use table `%s', with available lines"%(table),', '.join([str(i) for i in availableLines])+'.')
     
@@ -909,7 +916,7 @@ finished: %s
             def numRange2List(s):
                 ret=[]
                 for l in s.split(','):
-                    if "-" in l: ret+=range(*[int(s) for s in l.split('-')]); ret+=[ret[-1]+1]
+                    if "-" in l: ret+=list(range(*[int(s) for s in l.split('-')])); ret+=[ret[-1]+1]
                     else: ret+=[int(l)]
                 return ret
             useLines0=numRange2List(lineList)
@@ -1028,7 +1035,7 @@ finished: %s
             for job in jobs:
                 # sys.stderr('Update plots for job %s'%str(job))
                 job.updatePlots()
-        thread.start_new_thread(updateAllPlots,())
+        _thread.start_new_thread(updateAllPlots,())
     
     # OK, go now
     if not dryRun: runJobs(jobs,maxJobs)
@@ -1058,7 +1065,7 @@ finished: %s
             out=sys.stdout
         # write header
         out.write('## timing data, written '+time.asctime()+' with arguments\n##    '+' '.join(sys.argv)+'\n##\n')
-        paramNames=params[params.keys()[0]].keys(); paramNames.sort()
+        paramNames=list(params[list(params.keys())[0]].keys()); paramNames.sort()
         out.write('## line\tcount\tavg\tdev\trelDev\tmin\tmax\t|\t'+'\t'.join(paramNames)+'\n')
         import math
         for i,l in enumerate(useLines):
@@ -1105,7 +1112,7 @@ finished: %s
         while time.time()-httpLastServe<30:
             time.sleep(1)
     if opts.exitPrompt:
-        raw_input('Press Enter to exit (--exit-prompt)...')
+        input('Press Enter to exit (--exit-prompt)...')
     
     if tailProcess: tailProcess.terminate()
     #woo.master.exitNoBacktrace()

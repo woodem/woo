@@ -1,4 +1,7 @@
 from __future__ import print_function
+from builtins import str
+from builtins import range
+from builtins import object
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4 import QtGui
@@ -10,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 #from logging import debug,info,warning,error
 
 
-class AttrEditor():
+class AttrEditor(object):
     def __init__(self,ser,attr):
         self.ser,self.attr=ser,attr
         self.hot=False
@@ -113,7 +116,7 @@ class SerializableEditor(QWidget):
     import collections
     import logging
     # each attribute has one entry associated with itself
-    class EntryData:
+    class EntryData(object):
         def __init__(self,name,T):
             self.name,self.T=name,T
             self.lineNo,self.widget=None,None
@@ -145,12 +148,12 @@ class SerializableEditor(QWidget):
             m=re.match(regexp,cxxT)
             return m
         vecMap={
-            'int':int,'long':int,'Body::id_t':long,'size_t':long,
+            'int':int,'long':int,'Body::id_t':int,'size_t':int,
             'Real':float,'float':float,'double':float,
             'Vector3r':Vector3,'Matrix3r':Matrix3,
             'string':str
         }
-        for T,ret in vecMap.items():
+        for T,ret in list(vecMap.items()):
             if vecTest(T,cxxT):
                 logging.debug("Got type %s from cxx type %s"%(ret.__name__,cxxT))
                 return (ret,)
@@ -158,7 +161,7 @@ class SerializableEditor(QWidget):
         return None
     def mkAttrEntries(self):
         d=self.ser.dict()
-        for attr,val in self.ser.dict().items():
+        for attr,val in list(self.ser.dict().items()):
             if isinstance(val,list):
                 if len(val)==0: t=self.getListTypeFromDocstring(attr)
                 else: t=(val[0].__class__,) # 1-tuple is list of the contained type

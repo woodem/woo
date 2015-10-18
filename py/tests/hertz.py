@@ -43,7 +43,7 @@ class TestHertz(unittest.TestCase):
             #print 'Collision time with v0=%g: %g sim, %g analytical'%(v0,S.lab.tester.stages[0].cTime,tauHertz(rho,Eeff,d,v0))
             delta=0.01*S.lab.tester.stages[0].cTime # 1% relative tolerance
             self.assertAlmostEqual(S.lab.tester.stages[0].cTime,tauHertz(rho,Eeff,d,v0),delta=delta)
-        #self.assert_(1==1)
+        #self.assertTrue(1==1)
 
 
 

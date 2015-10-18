@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 from __future__ import print_function
+from builtins import str
+from builtins import range
 from woo.dem import *
 from woo.fem import *
 import woo.core

@@ -1,3 +1,4 @@
+from builtins import zip
 # pygts - python package for the manipulation of triangulated surfaces
 #
 #   Copyright (C) 2009 Thomas J. Duck
@@ -52,7 +53,7 @@ def get_coords_and_face_indices(s,unzip=False):
     face_indices = s.face_indices(vertices)
 
     if unzip:
-        x,y,z = zip(*coords)
+        x,y,z = list(zip(*coords))
         return x,y,z,face_indices
     else:
         return vertices, coords

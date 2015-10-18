@@ -1,4 +1,5 @@
 from __future__ import print_function
+from builtins import zip
 from woo import plot
 
 # setup 2 interactions on 2 otherwise identical couples of spheres

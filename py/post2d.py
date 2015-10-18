@@ -58,13 +58,16 @@ This example can be found in examples/concrete/uniax-post.py ::
  pylab.show()
 
 """
+from builtins import zip
+from builtins import range
+from builtins import object
 from minieigen import *
 
 from woo.dem import Particle,Sphere
 import math
 nan=float('nan')
 
-class Flatten:
+class Flatten(object):
     """Abstract class for converting 3d point into 2d. Used by post2d.data2d."""
     def __init__(self,dispScale=1.):
         self.dispScale=dispScale

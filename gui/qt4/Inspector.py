@@ -1,5 +1,6 @@
 # encoding: utf-8
 from __future__ import print_function
+from builtins import str
 import woo.config
 if 'qt4' in woo.config.features:
     from PyQt4.QtCore import *
@@ -70,7 +71,7 @@ class SceneInspector(QWidget):
         self.setLayout(grid)
 
 def makeBodyLabel(b):
-    ret=unicode(b.id)+u' '
+    ret=str(b.id)+u' '
     if not b.shape: ret+=u'⬚'
     else:
         typeMap={'Sphere':u'⚫','Facet':u'△','FlexFacet':u'⧋','Wall':u'┃','Box':u'⎕','Cylinder':u'⌭','Clump':u'☍','InfCylinder':u'◎','Ellipsoid':u'⬯','Capsule':u'O'}

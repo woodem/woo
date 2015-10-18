@@ -13,6 +13,9 @@ It loads woo plugins and injects c++ class constructors to the __builtins__
 everywhere.
 """
 from __future__ import print_function
+from builtins import zip
+from builtins import str
+from builtins import object
 
 # FIXME: rename once tested
 from wooMain import options as wooOptions
@@ -23,7 +26,7 @@ WIN=sys.platform=='win32'
 PY3K=(sys.version_info[0]==3)
 
 if WIN:
-    class WooOsEnviron:
+    class WooOsEnviron(object):
         '''Class setting env vars via both CRT and win32 API, so that values can be read back
         with getenv. This is needed for proper setup of OpenMP (which read OMP_NUM_THREADS).'''
         def __setitem__(self,name,val):

@@ -4,6 +4,8 @@
 Module containing utility functions for plotting inside woo. Most functionality is exposed through :obj:`woo.core.Plot`, however.
 """
 from __future__ import print_function
+from builtins import bytes, str, range, object
+import past.builtins
 
 ## all exported names
 __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMarkerKw']
@@ -280,7 +282,7 @@ def Scene_plot_addData(P,*d_in,**kw):
             val=d[name]
             suffixes=componentSuffixes[type(d[name])]
             for ix in suffixes:
-                d[name+componentSeparator+suffixes[ix]]=(d[name][ix] if ix>=0 else d[name].norm())
+                d[name+componentSeparator+suffixes[ix]]=(d[name].norm() if (isinstance(ix,int) and ix<0) else d[name][ix])
             del d[name]
         elif hasattr(d[name],'__len__'):
             raise ValueError('plot.addData given unhandled sequence type (is a '+type(d[name]).__name__+', must be number or '+'/'.join([k.__name__ for k in componentSuffixes])+')')
@@ -339,7 +341,7 @@ def xlateLabel(l,labels):
     if l in list(labels.keys()): return labels[l]
     else: return l
 
-class LineRef:
+class LineRef(object):
     """Holds reference to plot line and to original data arrays (which change during the simulation),
     and updates the actual line using those data upon request."""
     def __init__(self,line,scatter,annotation,line2,xdata,ydata,imgData=None,dataName=None):
@@ -462,7 +464,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
         for d in plots_p:
             if d[0]==None:
                 y1=False; continue
-            if not isinstance(d[0],str): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
+            if not isinstance(d[0],(past.builtins.str,str)): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
             if y1: plots_p_y1.append(d)
             else: plots_p_y2.append(d)
             try:
@@ -496,7 +498,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             yNames=set()
             ySpecs2=[]
             for ys in ySpecs:
-                if not isinstance(ys[0],str): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
+                if not isinstance(ys[0],(past.builtins.str,str)): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
                 if ys[0].startswith('**') or ys[0].startswith('*'):
                     evEx=eval(ys[0][(2 if ys[0].startswith('**') else 1):],{'S':P.scene})
                     yNameFuncs.add(evEx)  # add callable or dictionary

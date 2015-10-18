@@ -24,6 +24,7 @@ fast for sequential reads).
 TODO: Interpolating from within python is not (yet) supported.
 """
 from __future__ import print_function
+from builtins import range
 
 def revIntegrateLinear(I,x0,y0,x1,y1):
     """Helper function, returns value of integral variable x for

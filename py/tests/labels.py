@@ -14,32 +14,32 @@ class TestSceneLabels(unittest.TestCase):
     def testAccess(self):
         'LabelMapper: access'
         self.S.labels['abc']=123
-        self.assert_(self.S.lab.abc==123)
-        self.assert_(self.S.labels._whereIs('abc')==woo.core.LabelMapper.inPy)
+        self.assertTrue(self.S.lab.abc==123)
+        self.assertTrue(self.S.labels._whereIs('abc')==woo.core.LabelMapper.inPy)
         self.S.lab.ghi=456
-        self.assert_(self.S.labels['ghi']==456)
+        self.assertTrue(self.S.labels['ghi']==456)
     def testDel(self):
         'LabelMapper: delete'
         self.S.labels['foo']=123
-        self.assert_(self.S.lab.foo==123)
+        self.assertTrue(self.S.lab.foo==123)
         del self.S.lab.foo
-        self.assert_(self.S.labels._whereIs('foo')==woo.core.LabelMapper.nowhere)
+        self.assertTrue(self.S.labels._whereIs('foo')==woo.core.LabelMapper.nowhere)
     def testSeq(self):
         'LabelMapper: sequences'
         o1,o2,o3=woo.core.Object(),woo.core.Object(),woo.core.Object()
         # from list
         self.S.lab.objs=[None,o1,o2,o3]
-        self.assert_(self.S.lab.objs[1]==o1)
-        self.assert_(self.S.labels._whereIs('objs')==woo.core.LabelMapper.inWooSeq)
+        self.assertTrue(self.S.lab.objs[1]==o1)
+        self.assertTrue(self.S.labels._whereIs('objs')==woo.core.LabelMapper.inWooSeq)
         # from tuple
         self.S.lab.objs2=(None,o1,o2,o3)
-        self.assert_(self.S.lab.objs2[1]==o1)
-        self.assert_(self.S.labels._whereIs('objs2')==woo.core.LabelMapper.inWooSeq)
+        self.assertTrue(self.S.lab.objs2[1]==o1)
+        self.assertTrue(self.S.labels._whereIs('objs2')==woo.core.LabelMapper.inWooSeq)
         # from indexed label
         self.S.labels['objs3[2]']=o2
-        self.assert_(self.S.lab.objs3[0]==None)
-        self.assert_(self.S.lab.objs3[2]==o2)
-        self.assert_(len(self.S.lab.objs3)==3)
+        self.assertTrue(self.S.lab.objs3[0]==None)
+        self.assertTrue(self.S.lab.objs3[2]==o2)
+        self.assertTrue(len(self.S.lab.objs3)==3)
     def testMixedSeq(self):
         'LabelMapper: mixed sequences rejected, undertermined accepted'
         # mixed sequences
@@ -58,25 +58,25 @@ class TestSceneLabels(unittest.TestCase):
         except: self.fail("[woo.Object,None] rejected by LabelMapper as mixed.")
         try: setattr(self.S.lab,'ll4[0]',[])
         except: self.fail("[] rejected in indexed label.")
-        self.assert_(self.S.labels._whereIs('mm')==woo.core.LabelMapper.inWooSeq)
+        self.assertTrue(self.S.labels._whereIs('mm')==woo.core.LabelMapper.inWooSeq)
         # this as well
         try: self.S.lab.nn=[231,None]
         except: self.fail("[python-object,None] rejected by LabelMapper as mixed.")
-        self.assert_(self.S.labels._whereIs('nn')==woo.core.LabelMapper.inPy)
+        self.assertTrue(self.S.labels._whereIs('nn')==woo.core.LabelMapper.inPy)
     def testShared(self):
         'LabelMapper: shared objects'
         o1=woo.core.Object()
         self.S.engines=[woo.core.PyRunner()]
         self.S.lab.someEngine=self.S.engines[0]
-        self.assert_(self.S.labels._whereIs('someEngine')==woo.core.LabelMapper.inWoo)
+        self.assertTrue(self.S.labels._whereIs('someEngine')==woo.core.LabelMapper.inWoo)
         S2=self.S.deepcopy()
-        self.assert_(S2.lab.someEngine==S2.engines[0])
+        self.assertTrue(S2.lab.someEngine==S2.engines[0])
     def testAutoLabel(self):
         'LabelMapper: labeled engines are added automatically'
         ee=woo.core.PyRunner(label='abc')
         self.S.engines=[ee]
-        self.assert_(self.S.lab.abc==ee)
-        self.assert_(self.S.labels._whereIs('abc')==woo.core.LabelMapper.inWoo)
+        self.assertTrue(self.S.lab.abc==ee)
+        self.assertTrue(self.S.labels._whereIs('abc')==woo.core.LabelMapper.inWoo)
     def testPseudoModules(self):
         'LabelMapper: pseudo-modules'
         S=self.S
@@ -85,7 +85,7 @@ class TestSceneLabels(unittest.TestCase):
         # using name which does not exist yet as pseudo-module
         self.assertRaises(NameError,lambda: setattr(S.lab,'abc.defg',1))
         S.lab._newModule('abc')
-        self.assert_(S.lab._whereIs('abc')==woo.core.LabelMapper.inMod)
+        self.assertTrue(S.lab._whereIs('abc')==woo.core.LabelMapper.inMod)
         S.lab.abc.a1=1
         # fail using method on proxyed pseudo-module
         self.assertRaises(AttributeError, lambda: S.lab.abc._newModule('a1')) 
@@ -94,10 +94,10 @@ class TestSceneLabels(unittest.TestCase):
         self.assertRaises(ValueError, lambda: S.lab._newModule('abc'))
         # nested
         S.lab._newModule('foo.bar')
-        self.assert_(S.lab._whereIs('foo')==woo.core.LabelMapper.inMod)
-        #self.assert_(S.lab._whereIs('foo.bar')==woo.core.LabelMapper.inMod)
+        self.assertTrue(S.lab._whereIs('foo')==woo.core.LabelMapper.inMod)
+        #self.assertTrue(S.lab._whereIs('foo.bar')==woo.core.LabelMapper.inMod)
         S.lab.foo.bar.bb=1
-        self.assert_(S.lab.foo.bar.bb==1)
+        self.assertTrue(S.lab.foo.bar.bb==1)
         # this should not raise any exception
         S.labels['foo.bar.baz[0]']=1
     def testWritable(self):
@@ -110,22 +110,22 @@ class TestSceneLabels(unittest.TestCase):
         S=self.S
         S.lab._newModule('foo')
         S.lab.foo.bar=1
-        self.assert_('bar' in S.lab.foo.__dir__())
+        self.assertTrue('bar' in S.lab.foo.__dir__())
     def testHasattr(self):
         'LabelMapper: __hasattr__'
         S=self.S
         S.lab._newModule('foo')
         S.lab.foo.bar=1
         S.lab.foo2=1
-        self.assert_(hasattr(S.lab.foo,'bar'))
-        self.assert_(hasattr(S.lab,'foo2'))
+        self.assertTrue(hasattr(S.lab.foo,'bar'))
+        self.assertTrue(hasattr(S.lab,'foo2'))
     def testGetattrIndexed(self):
         'LabelMapper: getattr with index'
         S=self.S
         S.engines=[woo.core.PyRunner(label='ee[1]'),woo.core.PyRunner(label='ee[2]')]
-        self.assert_(getattr(S.lab,'ee[0]')==None)
-        self.assert_(getattr(S.lab,'ee[1]')==S.engines[0])
-        self.assert_(getattr(S.lab,'ee[2]')==S.engines[1])
+        self.assertTrue(getattr(S.lab,'ee[0]')==None)
+        self.assertTrue(getattr(S.lab,'ee[1]')==S.engines[0])
+        self.assertTrue(getattr(S.lab,'ee[2]')==S.engines[1])
     def testEngineLabels(self):
         'LabelMapper: engine/functor labels (mix of older tests)'
         S=self.S
@@ -134,10 +134,10 @@ class TestSceneLabels(unittest.TestCase):
         cloop=woo.dem.ContactLoop([woo.dem.Cg2_Facet_Sphere_L6Geom(label='cg2fs'),woo.dem.Cg2_Sphere_Sphere_L6Geom(label='cg2ss')],[woo.dem.Cp2_FrictMat_FrictPhys(label='cp2ff')],[woo.dem.Law2_L6Geom_FrictPhys_IdealElPl(label='law2elpl')],)
         S.engines=[woo.core.PyRunner(label='foo'),woo.core.PyRunner(label='bar[2]'),woo.core.PyRunner(label='bar [0]'),cloop]
         # print S.lab.bar,type(S.lab.bar)
-        self.assert_(hasattr(type(S.lab.bar),'__len__'))
-        self.assert_(S.lab.foo==S.engines[0])
-        self.assert_(S.lab.bar[0]==S.engines[2])
-        self.assert_(S.lab.bar[1]==None)
-        self.assert_(S.lab.bar[2]==S.engines[1])
-        self.assert_(type(S.lab.cg2fs)==woo.dem.Cg2_Facet_Sphere_L6Geom)
+        self.assertTrue(hasattr(type(S.lab.bar),'__len__'))
+        self.assertTrue(S.lab.foo==S.engines[0])
+        self.assertTrue(S.lab.bar[0]==S.engines[2])
+        self.assertTrue(S.lab.bar[1]==None)
+        self.assertTrue(S.lab.bar[2]==S.engines[1])
+        self.assertTrue(type(S.lab.cg2fs)==woo.dem.Cg2_Facet_Sphere_L6Geom)
 

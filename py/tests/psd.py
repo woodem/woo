@@ -1,6 +1,7 @@
 '''
 Test particle generator, that the resulting PSD curve matches the one on input.
 '''
+from builtins import range
 import unittest
 from woo.core import *
 from woo.dem import *
@@ -34,15 +35,15 @@ class PsdSphereGeneratorTest(unittest.TestCase):
         # this cannot be checked with numpy.trapz, do it manually
         for i in range(10000): self.gen(self.mat)
         (id,im),(od,om)=self.gen.inputPsd(normalize=False),self.gen.psd(normalize=False)
-        self.assert_(id[0]==id[-1])
+        self.assertTrue(id[0]==id[-1])
         self.assertAlmostEqual(im[-1],om[-1],delta=.04*im[-1])
     def testClippingSpuriousPoints(self):
         'PSD: clipping spurious values'
         self.gen.psdPts=[(0,0),(1,0),(5,5)]
         res=[(1,0),(5,1)]
-        self.assert_(self.gen.psdPts==res)
+        self.assertTrue(self.gen.psdPts==res)
         self.gen.psdPts=[(1,0),(5,2),(5,2),(5,2)]
-        self.assert_(self.gen.psdPts==res)
+        self.assertTrue(self.gen.psdPts==res)
     def testPsdTimeRange(self):
         'PSD: time range for computing PSD'
         # generate radii in different ranges at t=0 and t=1
@@ -53,8 +54,8 @@ class PsdSphereGeneratorTest(unittest.TestCase):
         # now check that max and min in that time correspond
         psdA=self.gen.psd(normalize=True,num=10,tRange=(0,.5))
         psdB=self.gen.psd(normalize=True,num=10,tRange=(.5,2.))
-        self.assert_(psdA[0][0]<.2 and psdA[0][-1]>.1)
-        self.assert_(psdB[0][0]<2 and psdB[0][-1]>1.)
+        self.assertTrue(psdA[0][0]<.2 and psdA[0][-1]>.1)
+        self.assertTrue(psdB[0][0]<2 and psdB[0][-1]>1.)
     def checkOk(self,relDeltaInt=.02,relDeltaD=.04):
         for i in range(10000): self.gen(self.mat)
         iPsd=self.gen.inputPsd(normalize=False)
@@ -107,4 +108,4 @@ class BiasedPositionTest(unittest.TestCase):
         for d in numpy.linspace(.5,2.5):
             p=bb.unitPos(d)[0]
             pMid=numpy.clip((d-d0)/(d1-d0),0,1)
-            self.assert_(abs(p-pMid)<=bb.fuzz/2.)
+            self.assertTrue(abs(p-pMid)<=bb.fuzz/2.)

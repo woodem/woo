@@ -1,6 +1,7 @@
 # -*- coding: utf-8
 
 from __future__ import print_function
+from builtins import range
 from woo import utils,pack,export,qt
 import gts,os,random,itertools
 from numpy import *
@@ -32,7 +33,7 @@ plnSurf1 = pack.sweptPolylines2gtsSurface([[Vector3(-.5,-.5,-.5),Vector3(.5,-.5,
 plnIds1=O.bodies.append(pack.gtsSurface2Facets(plnSurf1.faces(),material=facetMat,color=(0,1,0)))
 
 # Create clumps
-clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(0,Rs*2*i,Rs*2),Rs,material=dfltSpheresMat) for i in xrange(4)])
+clpId,sphId=O.bodies.appendClumped([utils.sphere(Vector3(0,Rs*2*i,Rs*2),Rs,material=dfltSpheresMat) for i in range(4)])
 for id in sphId:
     s=O.bodies[id]
     p=utils.getViscoelasticFromSpheresInteraction(s.state['mass'],tc,en,es)

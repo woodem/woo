@@ -20,11 +20,11 @@ class TestBatchResults(unittest.TestCase):
         self.series['group2/item1']=3*numpy.ones(10)
     def _checkDbContents(self,db):
         r=woo.batch.dbReadResults(db)[0]
-        self.assert_(isinstance(r['pre'],woo.pre.horse.FallingHorse))
-        self.assert_(r['misc']['a']=='a')
-        self.assert_(r['misc']['pi']==math.pi)
-        self.assert_(r['misc']['sphere'].radius==2.3)
-        self.assert_(r['series']['ones'][2]==1)
+        self.assertTrue(isinstance(r['pre'],woo.pre.horse.FallingHorse))
+        self.assertTrue(r['misc']['a']=='a')
+        self.assertTrue(r['misc']['pi']==math.pi)
+        self.assertTrue(r['misc']['sphere'].radius==2.3)
+        self.assertTrue(r['series']['ones'][2]==1)
     def _writeDb(self,db):
         woo.batch.writeResults(self.scene,defaultDb=db,syncXls=False,quiet=True,series=self.series,**self.misc)
     def _writeXls(self,db,xls):

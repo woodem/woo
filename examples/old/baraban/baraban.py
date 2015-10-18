@@ -1,3 +1,4 @@
+from builtins import range
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import time
@@ -19,9 +20,9 @@ fctIds=O.bodies.append(ymport.stl('baraban.stl',color=(1,0,0),material=facetMat)
 sphereRadius = 0.2
 nbSpheres = (10,10,10)
 #nbSpheres = (50,50,50)
-for i in xrange(nbSpheres[0]):
-    for j in xrange(nbSpheres[1]):
-        for k in xrange(nbSpheres[2]):
+for i in range(nbSpheres[0]):
+    for j in range(nbSpheres[1]):
+        for k in range(nbSpheres[2]):
             x = (i*2 - nbSpheres[0])*sphereRadius*1.1
             y = (j*2 - nbSpheres[1])*sphereRadius*1.1
             z = (k*2 - nbSpheres[2])*sphereRadius*1.1

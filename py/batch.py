@@ -2,6 +2,11 @@
 
 # for use with globals() when reading table
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import bytes, zip, str, range, object
+import past.builtins
+
 nan=float('nan')
 from math import * 
 from minieigen import *
@@ -285,12 +290,12 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
         '''
         if ret is None: ret={}
         if isinstance(obj,list):
-            for i,item in enumerate(obj): flatten(item,(path+sep if path else '')+unicode(i),ret=ret)
+            for i,item in enumerate(obj): flatten(item,(path+sep if path else '')+str(i),ret=ret)
         elif isinstance(obj,dict):
-            for key,value in obj.items(): flatten(value,(path+sep if path else '')+unicode(key),ret=ret)
-        elif isinstance(obj,(str,unicode)):
+            for key,value in list(obj.items()): flatten(value,(path+sep if path else '')+str(key),ret=ret)
+        elif isinstance(obj,(past.builtins.str,str)):
             #ret[path]=(obj.encode('utf-8','ignore') if isinstance(obj,unicode) else obj)
-            ret[path]=unicode(obj)
+            ret[path]=str(obj)
         else:
             # other values passed as they are
             ret[path]=obj
@@ -417,7 +422,7 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
         if out==None: raise ValueError('The *out* parameter must be given when using the xls/xlsx dialects (refusing to write binary to standard output).')
         # http://scienceoss.com/write-excel-files-with-python-using-xlwt/
         # http://www.youlikeprogramming.com/2011/04/examples-generating-excel-documents-using-pythons-xlwt/
-        import urllib
+        import urllib.parse
         import datetime
         if xls:
             import xlwt
@@ -448,11 +453,11 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
         if rows: setCell=lambda s,r,c,data,style: write_cell(s,r,c,data,style)
         else: setCell=lambda s,r,c,data,style: write_cell(s,c,r,data,style)
         def write_cell(s,c,r,data,style):
-            hyperlink=isinstance(data,(str,unicode)) and (data.startswith('file://') or data.startswith('http://') or data.startswith('https://'))
+            hyperlink=isinstance(data,(str,str)) and (data.startswith('file://') or data.startswith('http://') or data.startswith('https://'))
             if hyperlink:
                 if xls:
                     data=data.replace('"',"'")
-                    data=xlwt.Formula('HYPERLINK("%s","%s")'%(urllib.quote(data,safe=':/'),data))
+                    data=xlwt.Formula('HYPERLINK("%s","%s")'%(urllib.parse.quote(data,safe=':/'),data))
                     style=hrefStyle
                     s.write(c,r,data,style)
                 else:
@@ -538,7 +543,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
     tagsParams=[]
     # dictParams is what eventually ends up in S.lab.table.* (default+specified values)
     dictDefaults,dictParams={},{}
-    import os, __builtin__,re,math,woo
+    import os, builtins,re,math,woo
     # create the S.lab.table pseudo-module
     S=scene
     S.lab._newModule(under)
@@ -569,7 +574,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
             #print 'ASSIGN',col,vv[col]
             tagsParams+=['%s=%s'%(col,vv[col])];
             # when reading from XLS, data might be numbers; use eval only for strings, otherwise use the thing itself
-            dictParams[col]=eval(vv[col],dict(woo=woo,**math.__dict__)) if type(vv[col]) in (str,unicode) else vv[col]
+            dictParams[col]=eval(vv[col],dict(woo=woo,**math.__dict__)) if isinstance(vv[col],(str,past.builtins.str)) else vv[col]
     # assign remaining (default) keys to python vars
     defaults=[]
     for k in kw.keys():
@@ -615,8 +620,8 @@ def runPreprocessor(pre,preFile=None):
             if val in ('*','-',''): continue
             print('VALUE',val)
             # postpone evaluation of parameters starting with = so that they can use other params
-            if type(val) in (str,unicode) and val.startswith('='): evalParams.append((name,val[1:]))
-            elif type(val) in (str,unicode) and val.startswith("'="): evalParams.append((name,val[2:]))
+            if isinstance(val,(str,past.builtins.str)) and val.startswith('='): evalParams.append((name,val[1:]))
+            elif isinstance(val,(str,past.builtins.str)) and val.startswith("'="): evalParams.append((name,val[2:]))
             else: nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
     # postponed evaluation of computable params
     for name,val in evalParams:
@@ -636,7 +641,7 @@ def runPreprocessor(pre,preFile=None):
     S.tags['tid']=(S.tags['title']+'.'+S.tags['id']).replace('/','_')
     return S
 
-class TableParamReader():
+class TableParamReader(object):
     r"""Class for reading simulation parameters from text file.
 
 Each parameter is represented by one column, each parameter set by one line. Colums are separated by blanks (no quoting).
@@ -746,7 +751,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                         maxCol=max(maxCol,lastDataCol)
                         # if lastDataCol<maxCol: raise RuntimeError('Error in %s: all data rows should have the same number of colums; row %d has only %d columns, should have %d.'%(file,row,lastDataCol+1,maxCol+1))
                 # rows and cols with data
-                cols=range(maxCol+1)
+                cols=list(range(maxCol+1))
                 # print 'maxCol=%d,cols=%s'%(maxCol,cols)
                 # iterate through cells, define rawHeadings, headings, values
                 headings=[sheet.cell(rows[0],c).value for c in cols]
@@ -756,7 +761,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     vv={}
                     for c in cols:
                         v=sheet.cell(r,c).value
-                        if type(v)!=unicode: v=str(v)
+                        if not isinstance(v,(str,past.builtins.str)): v=str(v)
                         # represent numbers with zero fractional part as ints, without trailing ".0" or such
                         # XLS does not know ints
                         # http://stackoverflow.com/questions/8825681/integers-from-excel-files-become-floats
@@ -791,7 +796,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
             #
 
             # replace empty cells or '=' by the previous value of the parameter
-            lines=values.keys(); lines.sort()
+            lines=list(values.keys()); lines.sort()
             # print file,lines
             for i,l in enumerate(lines):
                 for col,val in enumerate(values[l]):
@@ -810,7 +815,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     # merge adjacent cols contents
                     for i,l in enumerate(lines):
                         vv=values[l]
-                        strType=(unicode if (unicode in (type(vv[iv-1]),type(vv[iv]))) else str)
+                        strType=(str if (str in (type(vv[iv-1]),type(vv[iv]))) else past.builtins.str)
                         collapsed=strType(vv[iv-1])+strType(vv[iv])
                         values[l]=vv[:iv-1]+[collapsed]+vv[iv+1:]
             headings=[h for h in headings if h not in ('...',u'...',u'…')]
@@ -834,7 +839,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     for col,head in enumerate(rawHeadings):
                         if hasBangs and head[-1]!='!': continue
                         val=values[l][col]
-                        if type(val) in (str,unicode) and val.strip() in ('','-','*'): continue # default value used
+                        if isinstance(val,(str,past.builtins.str)) and val.strip() in ('','-','*'): continue # default value used
                         ddd.append(head.replace('!','')+'='+('%g'%val if isinstance(val,float) else str(val)))
                     dd=','.join(ddd).replace("'",'').replace('"','')
                     #dd=','.join(head.replace('!','')+'='+('%g'%values[head] if isinstance(values[l][head],float) else str(values[l][head])) for head in bangHeads if (values[l][head].strip()!='-').replace("'",'').replace('"','')
@@ -847,6 +852,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
     def paramDict(self):
         """Return dictionary containing data from file given to constructor. Keys are line numbers (which might be non-contiguous and refer to real line numbers that one can see in text editors), values are dictionaries mapping parameter names to their values given in the file. The special value '=' has already been interpreted, ``!`` (bangs) (if any) were already removed from column titles, ``title`` column has already been added (if absent)."""
         return self.values
+
 
 def cartProdParamTable(params,out,same=''):
     '''Write parameter table (as XLS) where all parameters in pp (which is a dictionary, or :obj:`python:collections.OrderedDict`) are traversed.
@@ -955,19 +961,27 @@ def cartProdParamTable(params,out,same=''):
                 for ii,w in enumerate(v):
                     # print w
                     #print row+1,col,w
-                    if same==None or not prevVV or prevVV[i][ii]!=w: sheet.write(row+1,col,unicode(w))
+                    if same==None or not prevVV or prevVV[i][ii]!=w: sheet.write(row+1,col,str(w))
                     else:
                         if same!='': sheet.write(row+1,col,same)
                     col+=1
             else:
                 #print row+1,col,v
-                if same==None or not prevVV or prevVV[i]!=v: sheet.write(row+1,col,unicode(v))
+                if same==None or not prevVV or prevVV[i]!=v: sheet.write(row+1,col,str(v))
                 else:
                     if same!='': sheet.write(row+1,col,same)
                 col+=1
         prevVV=vv
     xls.save(out)
     return row+1
+
+
+
+# fix docstrings in py3
+import future.utils
+if future.utils.PY3:
+    TableParamReader.__doc__=TableParamReader.__doc__.replace("u'","'")
+    cartProdParamTable.__doc__=cartProdParamTable.__doc__.replace("u'","'")
 
 
 if __name__=="__main__":

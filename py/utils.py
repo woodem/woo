@@ -7,6 +7,10 @@
 """Heap of functions that don't (yet) fit anywhere else.
 """
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 
 import math,random,doctest
 import woo, woo.dem, woo.core
@@ -188,7 +192,7 @@ def wall(position,axis,sense=0,glAB=None,fixed=True,mass=0,color=None,mat=defaul
     p.shape=Wall(sense=sense,axis=axis,color=color if color else random.random())
     if glAB: p.shape.glAB=glAB
     if not fixed and mass<=0: raise ValueError("Non-fixed wall must have positive mass")
-    if isinstance(position,(int,long,float)):
+    if isinstance(position,(int,float)):
         pos2=Vector3(0,0,0); pos2[axis]=position
         node=_mkDemNode(pos=pos2)
     elif isinstance(position,Node): node=position
@@ -624,7 +628,7 @@ if 0:
                     w=s.split()
                     threadsCpu[w[0]]=float(w[8])
                 plot.addData(Iteration=curIter,Iter=curIter,Perfomance=perf,Bodies=len(O.bodies),Interactions=len(O.interactions),**threadsCpu)
-                plot.plots.update({'Iter':threadsCpu.keys()})
+                plot.plots.update({'Iter':list(threadsCpu.keys())})
                 lastTime=time.time();lastIter=O.iter
 
         thread.start_new_thread(__track_perfomance,(updateTime))
@@ -754,7 +758,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
     if dialect in ('html4',) and not figFmt=='png':
         warnings.warn("Dialect '%s' will save images as 'png', not '%s'"%(dialect,figFmt))
         figFmt='png'
-    repName=unicode(repFmt).format(S=S,**(dict(S.tags)))
+    repName=str(repFmt).format(S=S,**(dict(S.tags)))
     rep=codecs.open(repName,'w','utf-8','replace')
     print('Writing report to file://'+os.path.abspath(repName))
     repBase=re.sub('\.x?html$','',repName)

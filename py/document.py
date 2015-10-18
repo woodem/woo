@@ -1,5 +1,9 @@
 # encoding: utf-8
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 import woo
 import woo.core
 import sys
@@ -443,8 +447,8 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
 
     # document any c++ classes in a special way
     # defer writing that to out though so that automodule can exclude classes which are documented manually
-    import StringIO
-    kOut=StringIO.StringIO()
+    import io
+    kOut=io.StringIO()
     for top in tops: _docOneClassWithSectioning(top,level)
 
     # document all remaining classes linearly here, if any

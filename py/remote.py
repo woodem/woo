@@ -6,8 +6,12 @@ Remote connections to woo: authenticated python command-line over telnet and ano
 These classes are used internally in gui/py/PythonUI_rc.py and are not intended for direct use.
 """
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 
-import SocketServer,xmlrpclib,socket
+import socketserver,xmlrpc.client,socket
 import sys,time,os,math
 
 useQThread=False
@@ -18,7 +22,7 @@ plotImgFormat,plotImgMimetype='png','image/png'
 
 bgThreads=[] # needed to keep background threads alive
 
-class InfoProvider:
+class InfoProvider(object):
     def basicInfo(self):
         import woo
         S=woo.master.scene
@@ -37,7 +41,7 @@ class InfoProvider:
             fig.savefig(img)
             f=open(img,'rb'); data=f.read(); f.close(); os.remove(img)
             # print 'returning %s (%d bytes read)'%(plotImgFormat,len(data))
-            return xmlrpclib.Binary(data)
+            return xmlrpc.client.Binary(data)
         except:
             print('Error updating plots:')
             import traceback
@@ -45,7 +49,7 @@ class InfoProvider:
             return None
         
 
-class PythonConsoleSocketEmulator(SocketServer.BaseRequestHandler):
+class PythonConsoleSocketEmulator(socketserver.BaseRequestHandler):
     """Class emulating python command-line over a socket connection.
 
     The connection is authenticated by requiring a cookie.
@@ -72,7 +76,7 @@ class PythonConsoleSocketEmulator(SocketServer.BaseRequestHandler):
         self.request.send(pprint.pformat(s))
     def handle(self):
         if self.client_address not in self.server.authenticated and not self.tryLogin(): return
-        import code,cStringIO,traceback
+        import code,io,traceback
         buf=[]
         while True:
             data = self.request.recv(1024).rstrip()
@@ -80,7 +84,7 @@ class PythonConsoleSocketEmulator(SocketServer.BaseRequestHandler):
                 return
             buf.append(data)
             orig_displayhook,orig_stdout=sys.displayhook,sys.stdout
-            sio=cStringIO.StringIO()
+            sio=io.StringIO()
             continuation=False
             #print "buffer:",buf
             try:
@@ -116,10 +120,10 @@ def _runInBackground(func):
         wt.start()
         global bgThreads; bgThreads.append(wt)
     else:
-        import thread; thread.start_new_thread(func,())
+        import _thread; _thread.start_new_thread(func,())
 
 
-class GenericTCPServer:
+class GenericTCPServer(object):
     "Base class for socket server, handling port allocation, initial logging and thead backgrounding."
     def __init__(self,handler,title,cookie=True,minPort=9000,host='',maxPort=65536,background=True):
         import socket, random, sys
@@ -129,7 +133,7 @@ class GenericTCPServer:
         if maxPort==None: maxPort=minPort
         while self.port==-1 and tryPort<=maxPort:
             try:
-                self.server=SocketServer.ThreadingTCPServer((host,tryPort),handler)
+                self.server=socketserver.ThreadingTCPServer((host,tryPort),handler)
                 self.port=tryPort
                 if cookie:
                     self.server.cookie=''.join([i for i in random.sample('woosucks',6)])
@@ -160,7 +164,7 @@ def runServers(xmlrpc=False,tcpPy=False):
         srv=GenericTCPServer(handler=woo.remote.PythonConsoleSocketEmulator,title='TCP python prompt',cookie=True,minPort=9000)
         woo.runtime.cookie=srv.server.cookie
     if xmlrpc:
-        from SimpleXMLRPCServer import SimpleXMLRPCServer
+        from xmlrpc.server import SimpleXMLRPCServer
         port,maxPort=21000,65535 # minimum port number
         while port<maxPort:
             try:

@@ -2,6 +2,9 @@
 Convenience module for setting up visualization pipelines for Paraview through python scripts.
 '''
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import range
 import woo
 import woo.dem
 import logging
@@ -19,7 +22,7 @@ def findPV():
         # - HKEY_LOCAL_MACHINE\SOFTWARE\Kitware Inc.\ParaView 3.8.X (32bit machines all users)
         #
         # we don't care about 32 bit, do just 64bit
-        import _winreg as winreg
+        import winreg as winreg
         path='SOFTWARE\Wow6432Node\Kitware Inc.'
         paraviews=[]
         for reg in (winreg.HKEY_CURRENT_USER,winreg.HKEY_LOCAL_MACHINE):
@@ -120,7 +123,7 @@ def kwFromFlowAnalysis(flowAnalysis,outPrefix=None,fractions=[],fracA=[],fracB=[
         if fracA and fracB: pass
         else:
             logging.info('Guessing values for fracA and fracB as they were not given')
-            fracA=range(0,fa.nFractions/2); fracB=range(fa.nFractions/2,fa.nFractions)
+            fracA=list(range(0,fa.nFractions//2)); fracB=list(range(fa.nFractions//2,fa.nFractions))
         expSplit=fa.vtkExportVectorOps(outPrefix+'.split',fracA=fracA,fracB=fracB)
         ret['splitFile']=expSplit
     return ret

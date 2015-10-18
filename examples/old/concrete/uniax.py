@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 
 from woo import utils,plot,pack,timing,eudoxos
 import time, sys, os, copy
@@ -160,7 +162,7 @@ def stopIfDamaged():
             # important! initTest must be launched in a separate thread;
             # otherwise O.load would wait for the iteration to finish,
             # but it would wait for initTest to return and deadlock would result
-            import thread; thread.start_new_thread(initTest,())
+            import _thread; _thread.start_new_thread(initTest,())
             return
         else:
             print("Damaged, stopping.")

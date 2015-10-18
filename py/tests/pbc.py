@@ -4,6 +4,7 @@
 '''
 Various computations affected by the periodic boundary conditions.
 '''
+from builtins import range
 
 import unittest
 import random,math
@@ -64,7 +65,7 @@ class TestPBC(unittest.TestCase):
         "PBC: setBox modifies hSize correctly"
         S=woo.master.scene
         S.cell.setBox(2.55,11,45)
-        self.assert_(S.cell.hSize==Matrix3(2.55,0,0, 0,11,0, 0,0,45));
+        self.assertTrue(S.cell.hSize==Matrix3(2.55,0,0, 0,11,0, 0,0,45));
     def testHomotheticResizeVel(self):
         "PBC: homothetic cell deformation adjusts particle velocity (homoDeform==Cell.HomoVel)"
         S=woo.master.scene
@@ -137,12 +138,12 @@ class TestPBCCollisions(unittest.TestCase):
         ])
         S.saveTmp()
         S.one()
-        self.assert_(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
+        self.assertTrue(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
         # move the first sphere elsewhere
         S=S.loadTmp()
         S.dem.nodes[0].pos+=(13,14,15)
         S.one()
-        self.assert_(S.dem.con[0,1].cellDist==Vector3i(13,14,15))
+        self.assertTrue(S.dem.con[0,1].cellDist==Vector3i(13,14,15))
     def testDoubleContact(self):
         'PBC: InsertionSortCollider raises on double-contact of large particles accross the cell'
         S=woo.master.scene
@@ -154,7 +155,7 @@ class TestPBCCollisions(unittest.TestCase):
         S.saveTmp()
         self.assertRaises(RuntimeError,S.one)
         #S.one()
-        #self.assert_(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
+        #self.assertTrue(S.dem.con[0,1].cellDist==Vector3i(0,0,0))
     def testNormalContact(self):
         'PBC: InsertionSortCollider computes collisions and cellDist correctly'
         S=woo.master.scene
@@ -169,7 +170,7 @@ class TestPBCCollisions(unittest.TestCase):
             S.dem.nodes[1].pos+=shift2
             S.one()
             C=S.dem.con[0,1]
-            self.assert_(C.cellDist==-Vector3i(shift2))
+            self.assertTrue(C.cellDist==-Vector3i(shift2))
 
 
 
