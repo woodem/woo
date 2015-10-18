@@ -4,14 +4,26 @@
 #include<woo/pkg/dem/L6Geom.hpp>
 
 struct ConcreteMatState: public MatState {
+	string getScalarName(int index) override {
+		switch(index){
+			case 0: return "num. broken cohesive";
+			default: return "";
+		}
+	}
+	Real getScalar(int index, const long& step, const Real& smooth=0) override {
+		switch(index){
+			case 0: return numBrokenCohesive;
+			default: return NaN;
+		}
+	}
 	#define woo_dem_ConcreteMatState__CLASS_BASE_DOC_ATTRS \
-		ConcreteMatState,MatState,"State information about body use by the concrete model. None of that is used for computation (at least not now), only for post-processing.", \
-		((Real,epsVolumetric,0,,"Volumetric strain around this body (unused for now)")) \
+		ConcreteMatState,MatState,"State information about body use by the concrete model. None of that is used for computation (at least not now), only for visualization and post-processing.", \
+		/*((Real,epsVolumetric,0,,"Volumetric strain around this body (unused for now)"))*/ \
 		((int,numBrokenCohesive,0,,"Number of (cohesive) contacts that damaged completely")) \
-		((int,numContacts,0,,"Number of contacts with this body")) \
-		((Real,normDmg,0,,"Average damage including already deleted contacts (it is really not damage, but 1-relResidualStrength now)")) \
-		((Matrix3r,stress,Matrix3r::Zero(),,"Stress tensor of the spherical particle (under assumption that particle volume = pi*r*r*r*4/3.) for packing fraction 0.62")) \
-		((Matrix3r,damageTensor,Matrix3r::Zero(),,"Damage tensor computed with microplane theory averaging. state.damageTensor.trace() = state.normDmg"))
+		/*((int,numContacts,0,,"Number of contacts with this body"))*/ \
+		/*((Real,normDmg,0,,"Average damage including already deleted contacts (it is really not damage, but 1-relResidualStrength now)"))*/ \
+		/* ((Matrix3r,stress,Matrix3r::Zero(),,"Stress tensor of the spherical particle (under assumption that particle volume = pi*r*r*r*4/3.) for packing fraction 0.62")) */ \
+		/* ((Matrix3r,damageTensor,Matrix3r::Zero(),,"Damage tensor computed with microplane theory averaging. state.damageTensor.trace() = state.normDmg")) */
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ConcreteMatState__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(ConcreteMatState);

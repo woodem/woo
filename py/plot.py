@@ -284,8 +284,10 @@ def Scene_plot_addData(P,*d_in,**kw):
         elif hasattr(d[name],'__len__'):
             raise ValueError('plot.addData given unhandled sequence type (is a '+type(d[name]).__name__+', must be number or '+'/'.join([k.__name__ for k in componentSuffixes])+')')
     for name in d:
-        if not name in list(data.keys()): data[name]=[]
+        if not name in list(data.keys()): data[name]=[] # numpy.array([])
     for name in data:
+        ## new=numpy.full(numSamples-len(data[name]+1),nan)
+        ## new[-1]=(d[name] if name in d else nan)
         data[name]+=(numSamples-len(data[name]))*[nan]
         data[name].append(d[name] if name in d else nan)
     #print [(k,len(data[k])) for k in data.keys()]

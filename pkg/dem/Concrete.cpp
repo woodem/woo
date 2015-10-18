@@ -264,8 +264,8 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 	
 	if(C->isFresh(scene)) phys.uN0=geom.uN;
 
-	/* shorthands */
 	phys.epsN=(geom.uN-phys.uN0)/geom.lens.sum();
+
 	phys.epsT+=scene->dt*geom.vel.tail<2>()/geom.lens.sum();
 
 	Real& epsN(phys.epsN);
@@ -327,15 +327,15 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
    NNAN(sigmaN); NNANV(sigmaT); NNAN(contA);
    if (!neverDamage) { NNAN(kappaD); NNAN(epsFracture); NNAN(omega); }
 
-	/* handle broken contacts */
+	/* broken contact */
 	if (epsN>0. && ((isCohesive && omega>omegaThreshold) || !isCohesive)) {
-		#if 0
-			const shared_ptr<Body>& body1 = Body::byId(I->getId1(),scene), body2 = Body::byId(I->getId2(),scene); assert(body1); assert(body2);
-		 	const shared_ptr<ConcreteMatState>& st1 = YADE_PTR_CAST<ConcreteMatState>(body1->state), st2 = YADE_PTR_CAST<ConcreteMatState>(body2->state);
-			/* nice article about openMP::critical vs. scoped locks: http://www.thinkingparallel.com/2006/08/21/scoped-locking-vs-critical-in-openmp-a-personal-shootout/ */
-			{ boost::mutex::scoped_lock lock(st1->updateMutex); st1->numBrokenCohesive += 1; /* st1->epsPlBroken += epsPlSum; */ }
-			{ boost::mutex::scoped_lock lock(st2->updateMutex); st2->numBrokenCohesive += 1; /* st2->epsPlBroken += epsPlSum; */ }
-		#endif
+		for(const Particle* p: {C->leakPA(), C->leakPB()}){
+			if(!p->matState) continue;
+			assert(p->matState->isA<ConcreteMatState>());
+			auto& cms=p->matState->cast<ConcreteMatState>();
+			boost::mutex::scoped_lock l(cms.lock);
+			cms.numBrokenCohesive+=1;
+		}
 		return false;
 	}
 
