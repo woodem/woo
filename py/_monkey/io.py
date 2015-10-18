@@ -12,8 +12,8 @@ import woo.document
 #import woo.dem
 from minieigen import * # for recognizing the types
 
-#import StringIO # cStringIO does not handle unicode, so stick with the slower one
-from io import StringIO
+if py3k: from io import StringIO
+else: import StringIO # cStringIO does not handle unicode, so stick with the slower one
 
 from woo.core import Object
 import woo._customConverters # to make sure they are loaded already
