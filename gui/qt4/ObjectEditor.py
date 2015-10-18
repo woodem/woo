@@ -1,6 +1,7 @@
 # encoding: utf-8
 from __future__ import print_function
 from __future__ import absolute_import
+from __future__ import division
 import woo.config
 if 'qt4' in woo.config.features:
     from PyQt4.QtCore import *
@@ -1298,8 +1299,8 @@ class ObjectEditor(QFrame):
                     # first arg (foo) used by the dispatch
                     # cmd=bb[i+1] binds the current value bb[i+1]
                     b.clicked.connect(lambda foo,cmd=bb[i+1]: callButton(cmd)) 
-                    entry.widgets['buttons-%d'%(i/3)]=b
-                    entry.widgets['buttonLabels-%d'%(i/3)]=l 
+                    entry.widgets['buttons-%d'%(i//3)]=b
+                    entry.widgets['buttonLabels-%d'%(i//3)]=l 
                 #print 'Buttons',entry.trait.name,entry.trait.buttons,entry.widgets
             self.entryGroups[entry.groupNo].entries.append(entry)
         for i,g in enumerate(self.entryGroups):

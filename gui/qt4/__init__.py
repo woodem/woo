@@ -101,7 +101,8 @@ else:
                     QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(style))
                     QtGui.QApplication.setPalette(QtGui.QApplication.style().standardPalette())
                     break
-            
+
+import woo.config           
 if 'qt4' in woo.config.features:
     from PyQt4.QtGui import *
     from PyQt4 import QtCore
@@ -614,7 +615,7 @@ class ControllerClass(QWidget,Ui_Controller):
             if len(self.stepTimes)==1: self.stepTimes.append(self.stepTimes[0]); self.stepValues.append(self.stepValues[0]) # 2 values, first one is bogus
             self.stepTimes[0]=self.stepTimes[1]; self.stepValues[0]=self.stepValues[1]
             self.stepTimes[1]=rt; self.stepValues[1]=step;
-            self.stepPerSec=(self.stepValues[-1]-self.stepValues[-2])/(self.stepTimes[-1]-self.stepTimes[-2])
+            self.stepPerSec=(self.stepValues[-1]-self.stepValues[-2])*1./(self.stepTimes[-1]-self.stepTimes[-2])
         if not S.running: self.stepPerSec=0
         stopAtStep=S.stopAtStep
         subStepInfo=''
