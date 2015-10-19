@@ -270,7 +270,7 @@ cxxFlags+=['-Wall','-fvisibility=hidden','-std='+cxxStd,'-pipe']
 
 
 cxxLibs+=['m',
-	'boost_python-py%d%d'%(sys.version_info[0],sys.version_info[1]),
+	'boost_python%s'%('-py%d%d'%(sys.version_info[0],sys.version_info[1]) if not WIN else ''),
 	'boost_system',
 	'boost_thread',
 	'boost_date_time',
@@ -387,9 +387,9 @@ setup(name='woo',
 	author='Václav Šmilauer',
 	author_email='eu@doxos.eu',
 	url='http://www.woodem.org',
-	description='Discrete dynamic compuations, especially granular mechanics.',
+	description='Discrete dynamic computations, especially granular mechanics.',
 	long_description='''Extesible and portable framework primarily for mechanics
-granular materials. Computation parts are written in c++ parallelized using
+of granular materials. Computation parts are written in c++ parallelized using
 OpenMP, fully accessible and modifiable from python (ipython console or
 scripts). Arbitrarily complex scene can be scripted. Qt-based user interface
 is provided, featuring flexible OpenGL display, inspection of all objects

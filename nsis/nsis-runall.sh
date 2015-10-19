@@ -54,8 +54,8 @@ echo 'HERE'
 if [ -d /boot ]; then
 	# linux
 	pushd $BINDIR
-		if $DO_LIBS; then makensis -DVERSION=1.0e nsis-wwoo-libs.nsh; fi
-		if $DO_WOO; then makensis -DVERSION=1.0-r$REVNO nsis-wwoo-main.nsh; fi
+		if $DO_LIBS; then makensis -DVERSION=1.1a nsis-wwoo-libs.nsh; fi
+		if $DO_WOO; then makensis -DVERSION=1.1-r$REVNO nsis-wwoo-main.nsh; fi
 		# make installers for extra modules
 		if $DO_EXTRA; then
 			for EGG in wooExtra.*.egg; do
@@ -77,11 +77,11 @@ else
 		# work around msys expanding /D: http://forums.winamp.com/showthread.php?t=253732
 		# omg
 		if $DO_LIBS; then
-			echo "!define VERSION 1.0e" > defines.nsh
+			echo "!define VERSION 1.1a" > defines.nsh
 			"$MAKENSIS" defines.nsh nsis-wwoo-libs.nsh
 		fi
 		if $DO_WOO; then
-			echo "!define VERSION 1.0-r$REVNO" > defines.nsh
+			echo "!define VERSION 1.1-r$REVNO" > defines.nsh
 			"$MAKENSIS" defines.nsh nsis-wwoo-main.nsh
 		fi
 		if $DO_EXTRA; then

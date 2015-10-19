@@ -371,7 +371,7 @@ def wooExprEval(__e,__f):
     '''
     import woo,math,textwrap
     # exec all lines starting with #: as a piece of code
-    exec (textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')])))
+    future.utils.exec_(textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')])))
     # return the expression
     return eval(compile(__e,__f,'eval'))
 

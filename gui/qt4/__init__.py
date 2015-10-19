@@ -673,7 +673,7 @@ class ControllerClass(QWidget,Ui_Controller):
             if S.uiBuild:
                 import __main__
                 glob=globals(); glob.update(__main__.__dict__)
-                exec(S.uiBuild, glob, {'S':S,'area':self.customArea})
+                future.utils.exec_(S.uiBuild, glob, {'S':S,'area':self.customArea})
         ## renderer change
         if self.lastGl!=S.gl:
             self.displayComboSlot(self.displayCombo.currentText())

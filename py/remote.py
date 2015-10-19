@@ -7,6 +7,7 @@ These classes are used internally in gui/py/PythonUI_rc.py and are not intended 
 """
 from __future__ import print_function
 from future import standard_library
+import future.utils
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
@@ -92,7 +93,7 @@ class PythonConsoleSocketEmulator(socketserver.BaseRequestHandler):
                 if comp:
                     sys.displayhook=self.displayhook
                     sys.stdout=sio
-                    exec(comp)
+                    future.utils.exec_(comp)
                     self.request.send(sio.getvalue())
                     buf=[]
                 else:

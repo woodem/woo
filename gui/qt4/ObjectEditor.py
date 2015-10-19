@@ -1296,7 +1296,7 @@ class ObjectEditor(QFrame):
                     b.setFocusPolicy(Qt.NoFocus)
                     l.setToolTip(bb[i+2])
                     def callButton(cmd):
-                        exec(cmd, globals(),dict(self=entry.obj,S=woo.master.scene))
+                        future.utils.exec_(cmd, globals(),dict(self=entry.obj,S=woo.master.scene))
                     # first arg (foo) used by the dispatch
                     # cmd=bb[i+1] binds the current value bb[i+1]
                     b.clicked.connect(lambda foo,cmd=bb[i+1]: callButton(cmd)) 

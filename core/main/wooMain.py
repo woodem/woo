@@ -4,10 +4,8 @@ from __future__ import print_function
 from past.builtins import execfile
 from future import standard_library
 standard_library.install_aliases()
-from builtins import input
-from builtins import str
-from builtins import range
-from builtins import object
+from builtins import input, str, range, object
+import future.utils # for exec_
 __all__=['main','batch','options','WooOptions']
 
 
@@ -422,7 +420,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             woo.master.scene.run()
             if woo.runtime.opts.exitAfter: woo.master.scene.wait()
     if woo.runtime.opts.commands:
-        exec((woo.runtime.opts.commands), globals())
+        future.utils.exec_(woo.runtime.opts.commands,globals(),locals())
     if woo.runtime.opts.exitAfter:
         sys.stdout.write('Woo: normal exit.\n') # fake normal exit (so that batch looks fine if we crash at shutdown)
         sys.exit(0)

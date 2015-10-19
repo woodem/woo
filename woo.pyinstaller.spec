@@ -52,6 +52,14 @@ main=Entrypoint(dist='woo',group='console_scripts',name='wwoo',
 	excludes=['wooExtra','Tkinter']
 )
 
+## lib2to3 datafiles
+main.datas+=[
+	(r'lib2to3/Grammar.txt','lib2to3'),
+	(r'lib2to3/PatternGrammar.txt','lib2to3'),
+	(r'c:/Python27/Lib/lib2to3/Grammar.txt','lib2to3'),
+	(r'c:/Python27/lib/lib2to3/PatternGrammar.txt','lib2to3'),
+]
+
 # hiddenimports already specified for main
 batch=Entrypoint(dist='woo',group='console_scripts',name='wwoo_batch',
 	excludes=['wooExtra','Tkinter']

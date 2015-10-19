@@ -17,7 +17,7 @@ pushd nsis
 	# -e: extras
 	# -l: libs
 	# -u: upload (Linux-only)
-	bash nsis-runall.sh -w -e
+	bash nsis-runall.sh -w -e -l
 popd
 
 exit 0
