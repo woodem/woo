@@ -2,8 +2,8 @@
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
-from builtins import range
+from builtins import str, range
+
 import woo
 import woo.core
 import sys
@@ -174,7 +174,7 @@ def guessListTypeFromCxxType(klass,trait,warnFail=False):
 
 
 def makeTraitInfo(obj,klass,trait):
-    def maybe_decode(a): return (a if isinstance(a,unicode) else unicode(a,'utf-8'))
+    def maybe_decode(a): return (a if isinstance(a,str) else str(a,'utf-8'))
 
     hasVal=True # true if the value is accessible from python
     try: val=getattr(obj,trait.name)

@@ -1,7 +1,8 @@
 # encoding: utf-8
 from __future__ import print_function, absolute_import, division
 from builtins import zip, str, range, object
-import past.builtins
+import past.builtins, future.utils
+PY3K=future.utils.PY3
 
 import woo.config
 if 'qt4' in woo.config.features:
@@ -29,7 +30,6 @@ import woo.document
 import sys
 import os.path, os
 
-PY3K=(sys.version_info[0]==3)
 
 
 from .ExceptionDialog import *
@@ -48,7 +48,7 @@ seqObjectShowType=True # show type headings in serializable sequences (takes ver
 
 colormapIconSize=(50,20)
 
-def _ensureUnicode(s): return s if isinstance(s,unicode) else s.decode('utf-8')
+def _ensureUnicode(s): return s if isinstance(s,str) else s.decode('utf-8')
 
 
 def makeColormapIcons():
@@ -467,7 +467,7 @@ class AttrEditor_FileDir(AttrEditor,QFrame):
         rel=self.rel=QPushButton()
         rel.setCheckable(True)
         rel.setText('rel')
-        rel.setToolTip(u'Toggle absolute/relative path.\nPaths are relative to the current directory,\nwhich is now %s.'%(unicode(os.getcwd())))
+        rel.setToolTip(u'Toggle absolute/relative path.\nPaths are relative to the current directory,\nwhich is now %s.'%(str(os.getcwd())))
         rel.toggled.connect(self.relToggled)
         rel.setStyleSheet('padding: 0px;')
         self.grid.addWidget(rel,0,1)
@@ -725,7 +725,7 @@ class ObjQLabel(QFrame):
         cb.setText(self.path,mode=QClipboard.Selection) # X11 global selection buffer
         event.accept()
 
-def _unicodeUnit(u): return (u if isinstance(u,unicode) else unicode(u,'utf-8'))
+def _unicodeUnit(u): return (u if isinstance(u,str) else str(u,'utf-8'))
 
 def makeLibraryBrowser(parentmenu,callback,types,libName='Library'):
     '''Create menu under *parentmenu* named *libName*. *types* are passed to :obj:`woo.objectlibrary.checkout`. *callback* is called with chosen (name,object) as arguments.'''
@@ -1073,7 +1073,7 @@ class ObjectEditor(QFrame):
         assert obj is not None
         f=QFileDialog.getSaveFileName(self,'Save object: use .json, .expr, .pickle, .html ...','.')
         if not f: return
-        woo._monkey.io.Object_dump(obj,unicode(f),format='auto',fallbackFormat='expr')
+        woo._monkey.io.Object_dump(obj,str(f),format='auto',fallbackFormat='expr')
     # XXX: deprecated chunk
     #def loadObject(self):
     #    assert self.path
@@ -1189,7 +1189,7 @@ class ObjectEditor(QFrame):
             obj=getattr(entry.obj,entry.name)
             f=QFileDialog.getSaveFileName(self,'Save object: use .json, .expr, .pickle, .html ...','.')
             if not f: return
-            woo._monkey.io.Object_dump(obj,unicode(f),format='auto',fallbackFormat='expr')
+            woo._monkey.io.Object_dump(obj,str(f),format='auto',fallbackFormat='expr')
         elif action=='load':
             msg='Load a %s'%entry.T.__name__ if isObj else 'Load'
             f=QFileDialog.getOpenFileName(self,msg,'.')
@@ -1359,7 +1359,7 @@ class ObjectEditor(QFrame):
 
     def search(self,text):
         self.prevSearchText=self.searchText
-        self.searchText=unicode(text)
+        self.searchText=str(text)
         self.refreshEvent()
 
     def refreshEvent(self):
@@ -1410,7 +1410,7 @@ def makeObjectLabel(ser,href=False,addr=True,boldHref=True,num=-1,count=-1):
         else: ret+=u'%d. '%num
     if href: ret+=(u' <b>' if boldHref else u' ')+woo.document.makeObjectHref(ser)+(u'</b> ' if boldHref else u' ')
     else: ret+=ser.__class__.__name__+' '
-    if hasActiveLabel(ser): ret+=u' “'+unicode(ser.label)+u'”'
+    if hasActiveLabel(ser): ret+=u' “'+str(ser.label)+u'”'
     # do not show address if there is a label already
     elif addr and ser!=None:
         ret+='0x%x'%ser._cxxAddr

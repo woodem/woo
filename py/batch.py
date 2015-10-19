@@ -4,8 +4,8 @@
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
-from builtins import bytes, zip, str, range, object
-import past.builtins
+from builtins import bytes, zip, range, object
+import past.builtins, future.utils
 
 nan=float('nan')
 from math import * 
@@ -294,7 +294,6 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
         elif isinstance(obj,dict):
             for key,value in list(obj.items()): flatten(value,(path+sep if path else '')+str(key),ret=ret)
         elif isinstance(obj,(past.builtins.str,str)):
-            #ret[path]=(obj.encode('utf-8','ignore') if isinstance(obj,unicode) else obj)
             ret[path]=str(obj)
         else:
             # other values passed as they are
@@ -760,8 +759,8 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                 for r in rows[1:]:
                     vv={}
                     for c in cols:
-                        v=sheet.cell(r,c).value
-                        if not isinstance(v,(str,past.builtins.str)): v=str(v)
+                        v=str(sheet.cell(r,c).value)
+                        # if not isinstance(v,str): v=str(v)
                         # represent numbers with zero fractional part as ints, without trailing ".0" or such
                         # XLS does not know ints
                         # http://stackoverflow.com/questions/8825681/integers-from-excel-files-become-floats
@@ -785,10 +784,8 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                 usableLines=usableLines[1:] # and remove headindgs from usableLines
                 values={}
                 for l in usableLines:
-                    val=[]; lSplit=ll[l].split()
-                    for i in range(len(headings)):
-                        val.append(lSplit[i])
-                    values[l+firstLine]=val
+                    lSplit=ll[l].split()
+                    values[l+firstLine]=[str(lSplit[i]) for i in range(len(headings))]
             #
             # each format has to define the following:
             #   values={lineNumber:[val,val,...],...}         # values ordered the same as headings
@@ -815,8 +812,8 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     # merge adjacent cols contents
                     for i,l in enumerate(lines):
                         vv=values[l]
-                        strType=(str if (str in (type(vv[iv-1]),type(vv[iv]))) else past.builtins.str)
-                        collapsed=strType(vv[iv-1])+strType(vv[iv])
+                        # strType=(str if (str in (type(vv[iv-1]),type(vv[iv]))) else past.builtins.str)
+                        collapsed=str(vv[iv-1])+str(vv[iv])
                         values[l]=vv[:iv-1]+[collapsed]+vv[iv+1:]
             headings=[h for h in headings if h not in ('...',u'...',u'…')]
 
@@ -827,7 +824,8 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
             # copy to dictionary; that is the way results are supposed to be returned
             dvalues={}
             for i,l in enumerate(lines):
-                dvalues[l]=dict([(headings[c],values[l][c]) for c in range(len(headings))])
+
+                dvalues[l]=dict([(headings[c],str(values[l][c])) for c in range(len(headings))])
 
             # add descriptions, but if they repeat, append line number as well
             if not 'title' in headings:
@@ -844,7 +842,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     dd=','.join(ddd).replace("'",'').replace('"','')
                     #dd=','.join(head.replace('!','')+'='+('%g'%values[head] if isinstance(values[l][head],float) else str(values[l][head])) for head in bangHeads if (values[l][head].strip()!='-').replace("'",'').replace('"','')
                     if dd in descs: dd+='__line=%d__'%l
-                    dvalues[l]['title']=dd.replace('/','_').replace('[','').replace(']','').replace('*woo.unit','')
+                    dvalues[l][u'title']=dd.replace('/','_').replace('[','').replace(']','').replace('*woo.unit','')
                     descs.add(dd)
 
             self.values=dvalues

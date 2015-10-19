@@ -702,7 +702,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         # increase number at the end for every change in the algorithm to make old feeds incompatible
         params=str(dim)+str(psd)+str(goal)+str(damping)+str(porosity)+str(lenAxis)+str(clumps)+('' if not gen else gen.dumps(format='expr'))+'5'
         import hashlib
-        paramHash=hashlib.sha1(params).hexdigest()
+        paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.perifeed'
         print('Memoize file is ',memoizeFile)
         if os.path.exists(memoizeDir+'/'+paramHash+'.perifeed'):
@@ -844,7 +844,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     if memoizeDir and not dontBlock:
         params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr')+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr') if gen else '')+'ver5'
         import hashlib
-        paramHash=hashlib.sha1(params).hexdigest()
+        paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.bandfeed'
         print('Memoize file is ',memoizeFile)
         if os.path.exists(memoizeDir+'/'+paramHash+'.bandfeed'):
@@ -949,7 +949,7 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
     box=predicate.aabb()
     if memoizeDir:
         import hashlib
-        hash=hashlib.sha1('1'+str(box)+str(porosity)+generator.dumps(format='expr')).hexdigest()
+        hash=hashlib.sha1(('1'+str(box)+str(porosity)+generator.dumps(format='expr')).encode('utf-8')).hexdigest()
         memo=memoizeDir+'/'+hash+'.randomdense'
         print('Memoize file is',memo)
         if os.path.exists(memo):

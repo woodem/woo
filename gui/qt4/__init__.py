@@ -3,13 +3,14 @@
 from __future__ import print_function
 from __future__ import absolute_import
 from builtins import str
+import future.utils
 import math
 useQtConsole=False # does not work yet
 wooQApp=None
 
 import wooMain
 import sys
-PY3K=(sys.version_info[0]==3)
+PY3K=future.utils.PY3
 
 if wooMain.options.fakeDisplay:
     # do nothing, let all the imports happen without error
@@ -307,7 +308,7 @@ class ControllerClass(QWidget,Ui_Controller):
                 if type(mod)!=types.ModuleType: continue
                 modName=mod.__name__
                 ver=pkg_resources.get_distribution(modName).version
-                distributor=unicode(getattr(mod,'distributor') if hasattr(mod,'distributor') else u'−')
+                distributor=str(getattr(mod,'distributor') if hasattr(mod,'distributor') else u'−')
                 extras.append(ExInfo(name=exName,mod=mod,version=ver,distributor=distributor))
         except ImportError: pass # no wooExtra modules installed
         user=woo.master.scene.tags['user']
