@@ -453,6 +453,6 @@ tighter integration with python and user-friendliness.
 	# see http://stackoverflow.com/a/10618900/761090
 	zip_safe=False, 
 	# py3k support
-	use_2to3=True,
+	use_2to3=False,
 )
 
