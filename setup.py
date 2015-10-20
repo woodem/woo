@@ -19,7 +19,7 @@ PY3=(sys.version_info[0]==3)
 QT5='WOO_QT5' in os.environ
 # needed for good default for QT5 base directory
 multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
-QT5DIR=multiarchTriplet+'/qt5'
+QT5DIR='/usr/lib/'+multiarchTriplet+'/qt5'
 
 
 travis=False
@@ -213,13 +213,13 @@ def wooPrepareQt():
 	for tool0,isPy,opts,inOut,enabled in [
 			('pyrcc%d'%QTVER,False,['' if QT5 else ('-py3' if PY3 else '-py2')],rccInOut,True),
 			(pyuic,True,[],uicInOut,True),
-			((QT5DIR+'bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
+			((QT5DIR+'/bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
 			('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))
 	]:
 		if not enabled: continue
+		tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
+		if not tool: raise RuntimError('Tool %s not found?'%tool0)
 		for fIn,fOut in inOut:
-			tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
-			if not tool: raise RuntimError('Tool %s not found?'%tool0)
 			# DAMN... Debian needs to run pyuic4 with python2 (even when building with py3k)
 			# and right now travis does not build with Qt, so we just call tool directly and rely on the shebang there
 			## run python scripts the same interpreter, needed for virtual environments
@@ -227,6 +227,7 @@ def wooPrepareQt():
 			cmd=tool+opts+[fIn,'-o',fOut]
 			# no need to recreate, since source is older
 			if sameVer and os.path.exists(fOut) and os.path.getmtime(fIn)<os.path.getmtime(fOut): continue
+			print(tool,cmd)
 			print(' '.join(cmd))
 			status=subprocess.call(cmd)
 			if status: raise RuntimeError("Error %d returned when running %s"%(status,' '.join(cmd)))
