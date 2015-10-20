@@ -12,6 +12,7 @@ if 'qt4' in woo.config.features:
 else:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
     from PyQt5 import QtGui
 
 from minieigen import *
@@ -123,7 +124,7 @@ class AttrEditor_Bool(AttrEditor,QFrame):
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
         self.checkBox=QCheckBox(self)
-        lay=QVBoxLayout(self); lay.setSpacing(0); lay.setMargin(0); lay.addStretch(1); lay.addWidget(self.checkBox); lay.addStretch(1)
+        lay=QVBoxLayout(self); lay.setSpacing(0); lay.setContentsMargins(0,0,0,0); lay.addStretch(1); lay.addWidget(self.checkBox); lay.addStretch(1)
         self.checkBox.clicked.connect(self.update)
     def refresh(self):
         assert(not self.multiplier)
@@ -182,7 +183,7 @@ class AttrEditor_Quaternion(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter):
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
-        self.grid=QHBoxLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QHBoxLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for i in range(4):
             if i==3:
                 f=QFrame(self); f.setFrameShape(QFrame.VLine); f.setFrameShadow(QFrame.Sunken); f.setFixedWidth(4) # add vertical divider (axis | angle)
@@ -211,7 +212,7 @@ class AttrEditor_IntRange(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter): 
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         curr,(mn,mx)=getter()
         self.slider,self.spin=QSlider(self),QSpinBox(self)
         self.grid.addWidget(self.spin,0,0)
@@ -249,7 +250,7 @@ class AttrEditor_FloatRange(AttrEditor,QFrame):
         QFrame.__init__(self,parent)
         curr,(mn,mx)=self.multipliedGetter()
         self.slider,self.edit=QSlider(self),QLineEdit(str(curr))
-        self.grid=QHBoxLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QHBoxLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         self.grid.addWidget(self.edit); self.grid.addWidget(self.slider)
         self.grid.setStretchFactor(self.edit,1); self.grid.setStretchFactor(self.slider,2)
         self.slider.setMinimum(0); self.slider.setMaximum(self.sliDiv)
@@ -323,7 +324,7 @@ class AttrEditor_Choice(AttrEditor,QFrame):
             else:
                 for i in range(len(choices)): self.combo.setItemIcon(i,getColormapIcons()[i])
             self.combo.setIconSize(QSize(colormapIconSize[0],colormapIconSize[1]))
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         self.grid.addWidget(self.combo,0,0)
         self.combo.activated.connect(self.update)
     def refresh(self):
@@ -364,7 +365,7 @@ class AttrEditor_Bits(AttrEditor,QFrame):
         if len(self.bits)<1: raise RuntimeError("There are 0 bits for this attribute?")
         self.checkers=[]
         self.value=0 # current value of checkboxes
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for i,b in enumerate(self.bits):
             w=QCheckBox(self)
             w.setText(b)
@@ -390,7 +391,7 @@ class AttrEditor_RgbColor(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter):
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         self.butt=QPushButton()
         self.butt.clicked.connect(self.dialogShow)
         self.checkBox=QCheckBox('',self)
@@ -452,7 +453,7 @@ class AttrEditor_FileDir(AttrEditor,QFrame):
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
         self.isDir,self.isExisting=isDir,isExisting
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         w=self.nameEdit=QLineEdit('')
         self.grid.addWidget(w,0,0)
         w.textEdited.connect(self.isHot)
@@ -501,7 +502,7 @@ class AttrEditor_Se3(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter):
         AttrEditor.__init__(self,getter,setter)
         QFrame.__init__(self,parent)
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for row,col in itertools.product(range(2),range(5)): # one additional column for vertical line in quaternion
             if (row,col)==(0,3): continue
             if (row,col)==(0,4): self.grid.addWidget(QLabel(u'←<i>pos</i> ↙<i>ori</i>',self),row,col); continue
@@ -539,7 +540,7 @@ class AttrEditor_MatrixX(AttrEditor,QFrame):
         self.idxConverter=idxConverter
         self.setContentsMargins(0,0,0,0)
         val=self.getter()
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for row,col in itertools.product(range(self.rows),range(self.cols)):
             w=QLineEdit('')
             self.grid.addWidget(w,row,col);
@@ -591,7 +592,7 @@ class AttrEditor_MatrixXi(AttrEditor,QFrame):
         self.rows,self.cols=rows,cols
         self.idxConverter=idxConverter
         self.setContentsMargins(0,0,0,0)
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for row,col in itertools.product(range(self.rows),range(self.cols)):
             w=QSpinBox()
             w.setRange(int(-1e9),int(1e9)); w.setSingleStep(1);
@@ -823,9 +824,9 @@ class ObjectEditor(QFrame):
             self.name=name
             self.expander=None
             self.entries=[]
-            style=QtGui.QCommonStyle()
-            self.rightArrow=style.standardIcon(QtGui.QStyle.SP_ArrowRight)
-            self.downArrow =style.standardIcon(QtGui.QStyle.SP_ArrowDown)
+            style=QCommonStyle()
+            self.rightArrow=style.standardIcon(QStyle.SP_ArrowRight)
+            self.downArrow =style.standardIcon(QStyle.SP_ArrowDown)
         def makeExpander(self,expanded):
             self.expander=QPushButton(self.name)
             self.expander.setCheckable(True)
@@ -847,7 +848,7 @@ class ObjectEditor(QFrame):
     def __init__(self,ser,parent=None,ignoredAttrs=set(),objAttrLabelList=None,showType=False,path=None,labelIsVar=True,showChecks=False,showUnits=False,objManip=True,nesting=0):
         "Construct window, *ser* is the object we want to show."
         # print path
-        QtGui.QFrame.__init__(self,parent)
+        QFrame.__init__(self,parent)
         self.ser=ser
         self.oneObject=ser
         self.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Expanding)
@@ -1263,7 +1264,7 @@ class ObjectEditor(QFrame):
                 entry.widgets['unit']=QFrame(self)
                 unitLay=QHBoxLayout(entry.widgets['unit'])
                 entry.unitLayout=unitLay
-                unitLay.setSpacing(0); unitLay.setMargin(0)
+                unitLay.setSpacing(0); unitLay.setContentsMargins(0,0,0,0)
                 entry.widgets['unit'].setLayout(unitLay)
                 assert len(entry.trait.unit)==len(entry.trait.altUnits)
                 assert len(entry.trait.unit)==len(entry.trait.prefUnit)

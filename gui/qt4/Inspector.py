@@ -9,6 +9,7 @@ if 'qt4' in woo.config.features:
 else:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
 
 from woo.qt.ObjectEditor import *
 import woo
@@ -24,14 +25,14 @@ except ImportError: pass
 class EngineInspector(QWidget):
     def __init__(self,parent=None):
         QWidget.__init__(self,parent)
-        grid=QGridLayout(self); grid.setSpacing(0); grid.setMargin(0)
+        grid=QGridLayout(self); grid.setSpacing(0); grid.setContentsMargins(0,0,0,0)
         self.serEd=SeqObject(parent=None,getter=lambda:woo.master.scene.engines,setter=lambda x:setattr(woo.master.scene,'engines',x),T=Engine,trait=[t for t in Scene._attrTraits if t.name=='engines'][0],path='woo.master.scene.engines')
         grid.addWidget(self.serEd)
         self.setLayout(grid)
 #class MaterialsInspector(QWidget):
 #    def __init__(self,parent=None):
 #        QWidget.__init__(self,parent)
-#        grid=QGridLayout(self); grid.setSpacing(0); grid.setMargin(0)
+#        grid=QGridLayout(self); grid.setSpacing(0); grid.setContentsMargins(0,0,0,0)
 #        self.serEd=SeqObject(parent=None,getter=lambda:O.materials,setter=lambda x:setattr(O,'materials',x),serType=Engine)
 #        grid.addWidget(self.serEd)
 #        self.setLayout(grid)
@@ -39,7 +40,7 @@ class EngineInspector(QWidget):
 class CellInspector(QWidget):
     def __init__(self,parent=None):
         QWidget.__init__(self,parent)
-        self.layout=QVBoxLayout(self) #; self.layout.setSpacing(0); self.layout.setMargin(0)
+        self.layout=QVBoxLayout(self) #; self.layout.setSpacing(0); self.layout.setContentsMargins(0,0,0,0)
         self.periCheckBox=QCheckBox('periodic boundary',self)
         self.periCheckBox.clicked.connect(self.update)
         self.layout.addWidget(self.periCheckBox)
@@ -66,7 +67,7 @@ class CellInspector(QWidget):
 class SceneInspector(QWidget):
     def __init__(self,parent=None):
         QWidget.__init__(self,parent)
-        grid=QGridLayout(self); grid.setSpacing(0); grid.setMargin(0)
+        grid=QGridLayout(self); grid.setSpacing(0); grid.setContentsMargins(0,0,0,0)
         self.serEd=ObjectEditor(woo.master.scene,parent=self,showType=False,path='woo.master.scene')
         grid.addWidget(self.serEd)
         self.setLayout(grid)
@@ -104,7 +105,7 @@ class BodyInspector(QWidget):
         self.gotoBodyButton=QPushButton(u'→ #',self)
         self.gotoIntrButton=QPushButton(u'→ #+#',self)
         # id selector
-        topBoxWidget=QWidget(self); topBox=QHBoxLayout(topBoxWidget); topBox.setMargin(0); #topBox.setSpacing(0); 
+        topBoxWidget=QWidget(self); topBox=QHBoxLayout(topBoxWidget); topBox.setContentsMargins(0,0,0,0); #topBox.setSpacing(0); 
         hashLabel=QLabel('#',self); hashLabel.setFixedWidth(8)
         topBox.addWidget(hashLabel)
         topBox.addWidget(self.bodyIdBox)
@@ -117,14 +118,14 @@ class BodyInspector(QWidget):
         topBoxWidget.setLayout(topBox)
         # forces display
         forcesWidget=QFrame(self); forcesWidget.setFrameShape(QFrame.Box); self.forceGrid=QGridLayout(forcesWidget); 
-        self.forceGrid.setVerticalSpacing(0); self.forceGrid.setHorizontalSpacing(9); self.forceGrid.setMargin(4);
+        self.forceGrid.setVerticalSpacing(0); self.forceGrid.setHorizontalSpacing(9); self.forceGrid.setContentsMargins(4,4,4,4);
         for i,j in itertools.product((0,1,2,3),(-1,0,1,2)):
             lab=QLabel('<small>'+('force','torque','move','rot')[i]+'</small>' if j==-1 else ''); self.forceGrid.addWidget(lab,i,j+1);
             if j>=0: lab.setAlignment(Qt.AlignRight)
             if i>1: lab.hide() # do not show forced moves and rotations by default (they will appear if non-zero)
         self.showMovRot=False
         #
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         self.grid.addWidget(topBoxWidget)
         self.grid.addWidget(forcesWidget)
         self.scroll=QScrollArea(self)
@@ -262,7 +263,7 @@ class InteractionInspector(QWidget):
         topBox.addWidget(self.gotoId2Button)
         topBoxWidget.setLayout(topBox)
         self.setWindowTitle(u'No contact')
-        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setMargin(0)
+        self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         self.grid.addWidget(topBoxWidget,0,0)
         self.scroll=QScrollArea(self)
         self.scroll.setWidgetResizable(True)
@@ -342,7 +343,7 @@ class SimulationInspector(QWidget):
             if S.hasDem and f==S.dem: path='woo.master.scene.dem'
             #if S.hasSparc and f==S.sparc: path='woo.master.scene.sparc'
             self.tabWidget.addTab(ObjectEditor(f,parent=None,path=path,showType=True),'%d. '%i+path)
-        grid=QGridLayout(self); grid.setSpacing(0); grid.setMargin(0)
+        grid=QGridLayout(self); grid.setSpacing(0); grid.setContentsMargins(0,0,0,0)
         grid.addWidget(self.tabWidget)
         self.setLayout(grid)
     def changeIntrIds(self,ids):
