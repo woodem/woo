@@ -44,6 +44,7 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
     def __call__(self):
         import woo
+        woo.master.usesApi=10102
         # preprocessor builds the simulation when called
         pre=self # more readable
         S=woo.core.Scene(fields=[woo.dem.DemField()],pre=self.deepcopy())
@@ -109,7 +110,7 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     
         try:
             import woo.gl
-            S.gl.renderer(iniUp=(0,1,0),iniViewDir=(0,0,-1),grid=4)
+            S.gl.renderer=woo.gl.Renderer(iniUp=(0,1,0),iniViewDir=(0,0,-1),grid=4)
         except ImportError: pass
 
         return S

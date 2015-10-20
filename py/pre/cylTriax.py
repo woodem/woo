@@ -171,7 +171,7 @@ def prepareCylTriax(pre):
 
     if pre.packCacheDir:
         import hashlib,os
-        compactMemoize=pre.packCacheDir+'/'+hashlib.sha1(pre.dumps(format='expr')+'ver3').hexdigest()+'.triax-compact'
+        compactMemoize=pre.packCacheDir+'/'+hashlib.sha1((pre.dumps(format='expr',width=-1,noMagic=True)+'ver3').encode('utf-8')).hexdigest()+'.triax-compact'
         print('Compaction memoize file is ',compactMemoize)
     else: compactMemoize='' # no memoize file
 

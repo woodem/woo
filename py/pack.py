@@ -536,7 +536,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
         S.cell.setBox(x1,y1,z1)
         #print cloudPorosity,beta,gamma,N100,x1,y1,z1,S.cell.refSize
         #print x1,y1,z1,radius,rRelFuzz
-        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print "DONE"; S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
+        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print("DONE"); S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
         num=sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,spheresInCell,True)
         mat=dem.FrictMat(young=30e9,tanPhi=.5,density=1e3,ktDivKn=.2)
         for s in sp: S.dem.par.add(woo.dem.Sphere.make(s[0],s[1],mat=mat))
@@ -592,7 +592,7 @@ def randomPeriPack(radius,initSize,rRelFuzz=0.0,memoizeDb=None):
     sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,-1,True)
     from woo import log
     log.setLevel('PeriIsoCompressor',log.DEBUG)
-    S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print "done"; S.stop();',globalUpdateInt=20,keepProportions=True),dem.Leapfrog(damping=.8)]
+    S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print("done"); S.stop();',globalUpdateInt=20,keepProportions=True),dem.Leapfrog(damping=.8)]
     mat=dem.FrictMat(young=30e9,tanPhi=.1,ktDivKn=.3,density=1e3)
     for s in sp: S.dem.par.add(utils.sphere(s[0],s[1],mat=mat))
     S.dt=utils.pWaveDt(S)
@@ -700,7 +700,7 @@ def hexaNet( radius, cornerCoord=[0,0,0], xLength=1., yLength=0.5, mos=0.08, a=0
 def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNum=-1,dontBlock=False,returnSpherePack=False,memoizeDir=None,clumps=None,gen=None):
     if memoizeDir and not dontBlock:
         # increase number at the end for every change in the algorithm to make old feeds incompatible
-        params=str(dim)+str(psd)+str(goal)+str(damping)+str(porosity)+str(lenAxis)+str(clumps)+('' if not gen else gen.dumps(format='expr'))+'5'
+        params=str(dim)+str(psd)+str(goal)+str(damping)+str(porosity)+str(lenAxis)+str(clumps)+('' if not gen else gen.dumps(format='expr',width=-1,noMagic=True))+'5'
         import hashlib
         paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.perifeed'
@@ -752,10 +752,10 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     S.dtSafety=.9
     if clumps: warnings.warn('utils.pWaveDt called with noClumps=True (clumps ignored), the result (S.dt=%g) might be significantly off!'%S.dt)
     S.engines=[
-        woo.dem.PeriIsoCompressor(charLen=2*rMax,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print "done"; S.stop();',globalUpdateInt=1,keepProportions=True,label='peri'),
+        woo.dem.PeriIsoCompressor(charLen=2*rMax,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop();',globalUpdateInt=1,keepProportions=True,label='peri'),
         # plots only useful for debugging - uncomment if needed
         # woo.core.PyRunner(100,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)'),
-        woo.core.PyRunner(100,'print S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced'),
+        woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)'),
     ]+utils.defaultEngines(damping=damping,dynDtPeriod=100)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
     if dontBlock: return S
@@ -842,7 +842,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         print('Porosity: %g %%'%(100*(1-(mass/vol)/mat.density)))
 
     if memoizeDir and not dontBlock:
-        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr')+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr') if gen else '')+'ver5'
+        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr',width=-1,noMagic=True)+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr',width=-1,noMagic=True) if gen else '')+'ver5'
         import hashlib
         paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.bandfeed'
@@ -907,7 +907,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         ),
         #PyRunner(200,'plot.addData(uf=utils.unbalancedForce(),i=O.scene.step)'),
         # woo.core.PyRunner(300,'import woo\nprint "%g/%g mass, %d particles, unbalanced '+('energy' if useEnergy else 'force')+'%g/'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),'+unabalncedFunc+'(S))'),
-        woo.core.PyRunner(300,'import woo\nprint "%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S))'),
+        woo.core.PyRunner(300,'import woo\nprint("%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S)))'),
         woo.core.PyRunner(300,'import woo\nif S.lab.factory.mass>=S.lab.factory.maxMass: S.engines[0].damping=1.5*%g'%damping),
         woo.core.PyRunner(200,'import woo\nif '+unbalancedFunc+'(S)<'+str(goal)+' and S.lab.factory.dead: S.stop()'),
     ]
@@ -949,7 +949,9 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
     box=predicate.aabb()
     if memoizeDir:
         import hashlib
-        hash=hashlib.sha1(('1'+str(box)+str(porosity)+generator.dumps(format='expr')).encode('utf-8')).hexdigest()
+        hashbase='1'+str(box)+str(porosity)+generator.dumps(format='expr',width=-1,noMagic=True)
+        print(hashbase)
+        hash=hashlib.sha1(hashbase.encode('utf-8')).hexdigest()
         memo=memoizeDir+'/'+hash+'.randomdense'
         print('Memoize file is',memo)
         if os.path.exists(memo):
@@ -972,7 +974,7 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
         r=p.shape.equivRadius
         if not math.isnan(r): minRad=min(minRad,r)
     goal=.15
-    S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print "done"; S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced')]+woo.dem.DemField.minimalEngines(damping=.7)
+    S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
     S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
     S.lab.collider.paraPeri=True

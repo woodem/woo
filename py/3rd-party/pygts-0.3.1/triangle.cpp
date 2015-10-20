@@ -880,6 +880,7 @@ compare(PyObject *o1, PyObject *o2)
 }
 #if PY_MAJOR_VERSION >= 3
   static PyObject* rich_compare(PyObject *o1, PyObject* o2, int op){
+    if(o2==Py_None) Py_RETURN_FALSE;
     switch(op){
       case Py_EQ:{
          if(compare(o1,o2)) Py_RETURN_TRUE;

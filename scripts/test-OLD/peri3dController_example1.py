@@ -39,7 +39,7 @@ O.engines=[
                             stressMask=0b101100,    # prescribed ex,ey,sz,syz,ezx,sxy;   e..strain;  s..stress
                             nSteps=nSteps,             # how many time steps the simulation will last
                             # after reaching nSteps do doneHook action
-                            doneHook='print "Simulation with Peri3dController finished."; O.pause()',
+                            doneHook='print("Simulation with Peri3dController finished."); O.pause()',
 
                             # the prescribed path (step,value of stress/strain) can be defined in absolute values
                             xxPath=[(465,5e-4),(934,-5e-4),(1134,10e-4)],

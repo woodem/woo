@@ -1,7 +1,9 @@
 from woo.core import *
 from woo.dem import *
 from minieigen import *
-import woo.models
+import woo.models, woo
+
+woo.master.usesApi=10102
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-10))])
 

@@ -243,7 +243,8 @@ class SerializerToExpr(object):
         self.indentLen=len(indent.replace('\t',3*' '))
         self.maxWd=maxWd
         self.noMagic=noMagic
-    def __call__(self,obj,level=0,neededModules=set()):
+    def __call__(self,obj,level=0,neededModules=None):
+        if neededModules is None: neededModules=set() # instantiate a new one every time
         if isinstance(obj,Object):
             attrs=[(trait.name,getattr(obj,trait.name)) for trait in obj._getAllTraits() if not (trait.hidden or trait.noDump or (trait.hideIf and eval(trait.hideIf,globals(),{'self':obj})))]
             delims=(obj.__class__.__module__)+'.'+obj.__class__.__name__+'(',')'

@@ -39,7 +39,7 @@ S.gl.renderer.iniViewDir=(0,-1,0)
 
 # woo.log.setLevel('PsdSphereGenerator',woo.log.TRACE)
 S.trackEnergy=True
-S.engines=woo.dem.DemField.minimalEngines(damping=.4)+[woo.core.PyRunner(100,'e=woo.utils.unbalancedEnergy(S)\nprint "E",e\nif e<.05: S.stop()')]
+S.engines=woo.dem.DemField.minimalEngines(damping=.4)+[woo.core.PyRunner(100,'e=woo.utils.unbalancedEnergy(S)\nprint("E",e)\nif e<.05: S.stop()')]
 S.lab.collider.paraPeri=True
 S.saveTmp()
 #S.run(); S.wait()

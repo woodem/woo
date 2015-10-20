@@ -44,7 +44,7 @@ O.engines=[
     Peri3dController(    goal=(0,0,0, 0,0,5e-3), # Vector6 of prescribed final values
                             stressMask=0b011111,
                             nSteps=2000,
-                            doneHook='print "Simulation with Peri3dController finished."; O.pause()',
+                            doneHook='print("Simulation with Peri3dController finished."); O.pause()',
                             maxStrain=.5,
                             label='p3d'
                             ),
