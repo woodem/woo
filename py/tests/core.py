@@ -51,7 +51,8 @@ class TestScene(unittest.TestCase):
 class TestObjectInstantiation(unittest.TestCase):
     def setUp(self):
         self.t=woo.core.WooTestClass()
-        self.ts=woo.core.WooTestClassStatic()
+        # usually disabled and will be removed completely
+        if hasattr(woo.core,'WooTestClassStatic'): self.ts=woo.core.WooTestClassStatic()
     def testClassCtors(self):
         "Core: correct types are instantiated"
         # correct instances created with Foo() syntax
@@ -134,6 +135,7 @@ class TestObjectInstantiation(unittest.TestCase):
         t2=woo.core.WooTestClass.loadTmp('t')
         # loaded copy has the default value
         self.assertTrue(t2.noSaveAttr==i0)
+    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
     def testNoSave_static(self):
         'Core: Attr::noSave (static)'
         ts=self.ts
@@ -153,6 +155,7 @@ class TestObjectInstantiation(unittest.TestCase):
         'Core: Attr::readonly'
         self.assertTrue(self.t.meaning42==42)
         self.assertRaises(AttributeError,lambda: setattr(self.t,'meaning42',43))
+    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
     def testReaonly_static(self):
         'Core: Attr::readonly (static)'
         self.assertRaises(AttributeError,lambda: setattr(self.ts,'readonly',2))
@@ -174,6 +177,7 @@ class TestObjectInstantiation(unittest.TestCase):
         # assign to baz to test postLoad again
         self.t.baz=-1
         self.assertTrue(self.t.postLoadStage==WTC.postLoad_baz)
+    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
     def testTriggerPostLoad_static(self):
         'Core: Attr::triggerPostLoad (static)'
         ts=self.ts
@@ -207,6 +211,7 @@ class TestObjectInstantiation(unittest.TestCase):
         self.assertRaises(ValueError,lambda: woo.core.WooTestClass(namedEnum='nonsense'))
         tt=woo.core.WooTestClass(namedEnum='single')
         self.assertTrue(tt.namedEnum=='one')
+    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
     def testNamedEnum_static(self):
         'Core: Attr::namedEnum (static)'
         ts=self.ts
@@ -248,6 +253,7 @@ class TestObjectInstantiation(unittest.TestCase):
         'Core: Attr::hidden'
         # hidden attributes are not wrapped in python at all
         self.assertTrue(not hasattr(self.t,'hiddenAttr'))
+    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
     def testHidden_static(self):
         'Core: Attr::hidden (static)'
         self.assertRaises(AttributeError,lambda: getattr(self.ts,'hidden'))

@@ -73,19 +73,21 @@ namespace woo{
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_WooTestClass__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	};
 
-	struct WooTestClassStatic: public woo::Object {
-		static void postLoadStatic(void* attr){
-			if(attr==&trigger) numTriggered++;
-		}
-		WOO_CLASS_BASE_DOC_STATICATTRS(WooTestClassStatic,Object,"Class for testing static attributes access.",
-			((int,namedEnum,-1,AttrTrait<Attr::namedEnum>().namedEnum({{-1,{"minus one"}},{0,{"zero","NULL"}},{1,{"one"}}}),"Test named enumeration"))
-			((int,readonly,2,AttrTrait<Attr::readonly>(),"Test readonly access"))
-			((int,hidden,0,AttrTrait<Attr::hidden>(),"Test hidden"))
-			((int,noSave,0,AttrTrait<Attr::noSave>(),"test noSave"))
-			((int,numTriggered,0,,"Counter for testing :obj:`trigger`."))
-			((int,trigger,0,AttrTrait<Attr::triggerPostLoad>(),"Test triggerPostLoad"))
-		);
-	};
+    #ifdef WOO_STATIC_ATTRIBUTES
+        struct WooTestClassStatic: public woo::Object {
+            static void postLoadStatic(void* attr){
+                if(attr==&trigger) numTriggered++;
+            }
+            WOO_CLASS_BASE_DOC_STATICATTRS(WooTestClassStatic,Object,"Class for testing static attributes access.",
+                ((int,namedEnum,-1,AttrTrait<Attr::namedEnum>().namedEnum({{-1,{"minus one"}},{0,{"zero","NULL"}},{1,{"one"}}}),"Test named enumeration"))
+                ((int,readonly,2,AttrTrait<Attr::readonly>(),"Test readonly access"))
+                ((int,hidden,0,AttrTrait<Attr::hidden>(),"Test hidden"))
+                ((int,noSave,0,AttrTrait<Attr::noSave>(),"test noSave"))
+                ((int,numTriggered,0,,"Counter for testing :obj:`trigger`."))
+                ((int,trigger,0,AttrTrait<Attr::triggerPostLoad>(),"Test triggerPostLoad"))
+            );
+        };
+    #endif
 
 
 
@@ -98,9 +100,11 @@ namespace woo{
 	};
 };
 using woo::WooTestClass;
-using woo::WooTestClassStatic;
 using woo::WooTestPeriodicEngine;
 WOO_REGISTER_OBJECT(WooTestClass);
-WOO_REGISTER_OBJECT(WooTestClassStatic);
 WOO_REGISTER_OBJECT(WooTestPeriodicEngine);
 
+#ifdef WOO_STATIC_ATTRIBUTES
+    using woo::WooTestClassStatic;
+    WOO_REGISTER_OBJECT(WooTestClassStatic);
+#endif
