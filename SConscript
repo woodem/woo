@@ -122,7 +122,7 @@ if 'qt' in env['features']:
 		env.File('gui/qt4/ui_controller.py'),
 	])
 
-	env.Command('gui/qt4/img_rc.py','gui/qt4/img.qrc','pyrcc%d %s -o $buildDir/gui/qt4/img_rc.py gui/qt4/img.qrc'%(qtVer,('-qt'+env['PYVER'][0] if qtVer==4 else '')))
+	env.Command('gui/qt4/img_rc.py','gui/qt4/img.qrc','pyrcc%d %s -o $buildDir/gui/qt4/img_rc.py gui/qt4/img.qrc'%(qtVer,('-py'+env['PYVER'][0] if qtVer==4 else '')))
 	env.Command('gui/qt4/ui_controller.py','gui/qt4/controller.ui','pyuic%d --from-imports -o $buildDir/gui/qt4/ui_controller.py gui/qt4/controller.ui'%(qtVer))
 
 # install .egg-info so that pkg_resources work with woo when installed via scons
