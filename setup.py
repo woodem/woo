@@ -15,7 +15,12 @@ from os.path import sep,join,basename,dirname
 DISTBUILD=None # set to None if building locally, or to a string when dist-building on a bot
 if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
 WIN=(sys.platform=='win32')
-PY3K=(sys.version_info[0]==3)
+PY3=(sys.version_info[0]==3)
+QT5='WOO_QT5' in os.environ
+# needed for good default for QT5 base directory
+multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
+QT5DIR=multiarchTriplet+'/qt5'
+
 
 travis=False
 if 'WOO_FLAVOR' in os.environ:
@@ -81,12 +86,12 @@ if not version:
 ##
 ## build options
 ##
-features=['vtk','gts','openmp','qt4','opengl']
+features=['vtk','gts','openmp',('qt5' if QT5 else 'qt4'),'opengl']
 # disable even openmp for travis, since gcc 4.7 & 4.8 ICE and clang's version there does not support OpenMP yet
 if travis: features=[] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
 flavor='' #('' if WIN else 'distutils')
 if travis: flavor+=('-' if flavor else '')+'travis'
-if PY3K: flavor+=('-' if flavor else '')+'py3'
+if PY3: flavor+=('-' if flavor else '')+'py3'
 debug=False
 chunkSize=1 # (1 if WIN else 10)
 hotCxx=[] # plugins to be compiled separately despite chunkSize>1
@@ -114,7 +119,7 @@ cxxFlavor=('_'+re.sub('[^a-zA-Z0-9_]','_',flavor) if flavor else '')
 execFlavor=('-'+flavor) if flavor else ''
 cxxInternalModule='_cxxInternal%s%s'%(cxxFlavor,'_debug' if debug else '')
 
-if 'opengl' in features and 'qt4' not in features: raise ValueError("The 'opengl' features is only meaningful in conjunction with 'qt4'.")
+if 'opengl' in features and ('qt4' not in features and 'qt5' not in features): raise ValueError("The 'opengl' features is only meaningful in conjunction with 'qt4' or 'qt5'.")
 
 
 #
@@ -174,10 +179,11 @@ def wooPrepareChunks():
 			if last>os.path.getmtime(chunkPath):
 				print('Updating timestamp of %s (%s -> %s)'%(chunkPath,os.path.getmtime(chunkPath),last+10))
 				os.utime(chunkPath,(last+10,last+10))
-def wooPrepareQt4():
-	'Generate Qt4 files (normally handled by scons); those are only needed with Qt/OpenGL'
+def wooPrepareQt():
+	'Generate Qt files (normally handled by scons); those are only needed with Qt/OpenGL'
 	global features
-	if 'qt4' not in features: return
+	if 'qt4' not in features and 'qt5' not in features: return
+	QTVER=(5 if QT5 else 4)
 	rccInOut=[('gui/qt4/img.qrc','gui/qt4/img_rc.py')]
 	uicInOut=[('gui/qt4/controller.ui','gui/qt4/ui_controller.py')]
 	mocInOut=[
@@ -195,11 +201,21 @@ def wooPrepareQt4():
 		# this is ugly
 		# pyuic is a batch file, which is not runnable from mingw shell directly
 		# find the real exacutable then
-		import PyQt4.uic
-		pyuic4=PyQt4.uic.__file__[:-12]+'pyuic.py' # strip "__init__.py" form the end
+		if QTVER==4:
+			import PyQt4.uic
+			pyuic=PyQt4.uic.__file__[:-12]+'pyuic.py' # strip "__init__.py" form the end
+		else:
+			# this was never really tested				
+			import PyQt5.uic
+			pyuic=PyQt5.uic.__file__[:-12]+'pyuic.py' # strip "__init__.py" form the end
 	else:
-		pyuic4='pyuic4'
-	for tool0,isPy,opts,inOut,enabled in [('pyrcc4',False,['-py3' if PY3K else '-py2'],rccInOut,True),(pyuic4,True,[],uicInOut,True),('moc',False,['-DWOO_OPENGL','-DWOO_QT4'],mocInOut,('opengl' in features)),('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))]:
+		pyuic='pyuic%d'%QTVER
+	for tool0,isPy,opts,inOut,enabled in [
+			('pyrcc%d'%QTVER,False,['' if QT5 else ('-py3' if PY3 else '-py2')],rccInOut,True),
+			(pyuic,True,[],uicInOut,True),
+			((QT5DIR+'bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
+			('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))
+	]:
 		if not enabled: continue
 		for fIn,fOut in inOut:
 			tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
@@ -230,7 +246,7 @@ def pkgconfig(packages):
 # if the following file is missing, we are being run from sdist, which has tree already prepared
 # otherwise, install headers, chunks and scripts where they should be
 if os.path.exists('examples'):
-	if 'qt4' in features: wooPrepareQt4()
+	wooPrepareQt() # no-op if qt4 or qt5 not in features
 	wooPrepareHeaders()
 	wooPrepareChunks()
 # files are in chunks
@@ -290,7 +306,7 @@ if WIN:
 	cppDirs+=['c:/MinGW64/include','c:/MinGW64/include/eigen3','c:/MinGW64/include/boost-1_51']
 	# avoid warnings from other headers
 	# avoid hitting section limit by inlining
-	cxxFlags+=['-Wno-strict-aliasing','-Wno-attributes','-finline-functions'] 	
+	cxxFlags+=['-Wno-strict-aliasing','-Wno-attributes','-finline-functions']	 
 	boostTag='-mgw47-mt-1_51'
 	cxxLibs=[(lib+boostTag if lib.startswith('boost_') else lib) for lib in cxxLibs]
 else:
@@ -338,13 +354,20 @@ if 'opengl' in features:
 				print('info: library check: qglviewer-qt4 found')
 				cxxLibs+=['qglviewer-qt4']
 	# qt4 without OpenGL is pure python and needs no additional compile options
-	if ('qt4' in features):
+	if ('qt4' in features or 'qt5' in features):
 		cppDef+=[('QT_CORE_LIB',None),('QT_GUI_LIB',None),('QT_OPENGL_LIB',None),('QT_SHARED',None)]
+		if 'qt5' in features: cppDef+=[('QT_WIDGETS_LIB',None)]
 		if WIN:
+			if 'qt5' in features: raise ValueError('Qt5 build not supported under Windows (yet?)')
 			cppDirs+=['c:/MinGW64/include/'+component for component in ('QtCore','QtGui','QtOpenGL','QtXml')]
 			cxxLibs+=['QtCore4','QtGui4','QtOpenGL4','QtXml4']
-		else: cppDirs+=['/usr/include/qt4']+['/usr/include/qt4/'+component for component in ('QtCore','QtGui','QtOpenGL','QtXml')]
-		# cxxLibs+=['QtGui4','QtCore4','QtOpenGL4','
+		else:
+			if 'qt5' in features:
+				cppDirs+=[QT5DIR]+[QT5DIR+'/'+component for component in  ('QtCore','QtGui','QtOpenGL','QtXml','QtWidgets')]
+				cxxLibs+=['Qt5Core','Qt5Gui','Qt5Widgets','Qt5Xml','Qt5OpenGL']
+			else:
+				cppDirs+=['/usr/include/qt4']+['/usr/include/qt4/'+component for component in ('QtCore','QtGui','QtOpenGL','QtXml')]
+		    	cxxLibs+=['QtCore4','QtGui4','QtOpenGL4','QtXml4']
 if 'vtk' in features:
 	vtks=(glob('/usr/include/vtk-*') if not WIN else glob('c:/MinGW64/include/vtk-*'))
 	if not vtks: raise ValueError("No header directory for VTK detected.")
@@ -373,7 +396,7 @@ if 'gts' in features:
 wooModules=['woo.'+basename(py)[:-3] for py in glob('py/*.py') if basename(py)!='__init__.py']
 
 # compiler-specific flags, if ever needed:
-# 	http://stackoverflow.com/a/5192738/761090
+#	 http://stackoverflow.com/a/5192738/761090
 #class WooBuildExt(distutils.command.build_ext.build_ext):
 #	def build_extensions(self):
 #		c=self.compiler.compiler_type
@@ -418,7 +441,7 @@ tighter integration with python and user-friendliness.
 	package_dir={'woo':'py','':join('core','main'),'woo.qt':'gui/qt4','woo.pre':'py/pre','woo.gts':'py/3rd-party/pygts-0.3.1'},
 	packages=(
 		['woo','woo._monkey','woo.tests','woo.pre']
-		+(['woo.qt'] if 'qt4' in features else [])
+		+(['woo.qt'] if ('qt4' in features or 'qt5' in features) else [])
 		+(['woo.gts'] if 'gts' in features else [])
 	),
 	
@@ -452,7 +475,7 @@ tighter integration with python and user-friendliness.
 	# woo.__init__ makes symlinks to _cxxInternal, which would not be possible if zipped
 	# see http://stackoverflow.com/a/10618900/761090
 	zip_safe=False, 
-	# py3k support
+	# source supports both python2 and python3 now, no need for translation
 	use_2to3=False,
 )
 
