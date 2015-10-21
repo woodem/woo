@@ -382,7 +382,7 @@ if 'opengl' in features:
                 cxxLibs+=['Qt5Core','Qt5Gui','Qt5Widgets','Qt5Xml','Qt5OpenGL']
             else:
                 cppDirs+=['/usr/include/qt4']+['/usr/include/qt4/'+component for component in ('QtCore','QtGui','QtOpenGL','QtXml')]
-                cxxLibs+=['QtCore4','QtGui4','QtOpenGL4','QtXml4']
+                cxxLibs+=['QtCore','QtGui','QtOpenGL','QtXml']
 if 'vtk' in features:
     vtks=(glob('/usr/include/vtk-*') if not WIN else glob('c:/MinGW64/include/vtk-*'))
     if not vtks: raise ValueError("No header directory for VTK detected.")
