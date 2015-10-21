@@ -226,7 +226,7 @@ def wooPrepareQt():
     else:
         pyuic='pyuic%d'%QTVER
     for tool0,isPy,opts,inOut,enabled in [
-            ('pyrcc%d'%QTVER,False,['' if QT5 else ('-py3' if PY3 else '-py2')],rccInOut,True),
+            ('pyrcc%d'%QTVER,False,[] if QT5 else (['-py3'] if PY3 else ['-py2']),rccInOut,True),
             (pyuic,True,[],uicInOut,True),
             ((QT5DIR+'bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
             ('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))
