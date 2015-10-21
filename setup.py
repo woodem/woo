@@ -19,6 +19,7 @@ PY3=(sys.version_info[0]==3)
 QT5=None # True (qt5), False (qt4), None (qt4/5 not found)
 try:
     import PyQt5
+    print("PyQt5 found.")
     QT5=True
     # needed for good default for QT5 base directory
     multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
@@ -27,11 +28,12 @@ try:
 except ImportError:
     if 'WOO_QT5' in os.environ: raise ValueError('WOO_QT5 was specified, but PyQt5 not importable.')
 # if we force qt5, don't try to look for qt4 at all
-if not 'WOO_QT5' in os.environ:
+if 'WOO_QT5' not in os.environ:
     try:
         import PyQt4
+        print("PyQt4 found.")
         if QT5: print('WARN: both PyQt4 and PyQt5 are importable, using QT4')
-        else: QT5=False
+        QT5=False
     except ImportError: pass
 
 travis=False
