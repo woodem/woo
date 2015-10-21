@@ -267,6 +267,8 @@ def pkgconfig(packages):
     for k,v in ret.items(): ret[k]=list(set(v))
     return ret
 
+log.info('Enabled features: '+(','.join(features)))
+
 # if the following file is missing, we are being run from sdist, which has tree already prepared
 # otherwise, install headers, chunks and scripts where they should be
 if os.path.exists('examples'):
@@ -300,7 +302,7 @@ cxxStd='c++11'
 if DISTBUILD=='debian':
     # c++0x for gcc == 4.6
     gccVer=bytes(subprocess.check_output(['g++','--version'])).split(b'\n')[0].split()[-1]
-    log.info('GCC version is '+gccVer)
+    log.info('GCC version is '+gccVer.decode('utf-8'))
     if gccVer.startswith(b'4.6'):
         cxxStd='c++0x'
         log.info('Compiling with gcc 4.6 (%s), using -std=%s. Adding -pedantic.'%(gccVer,cxxStd))
