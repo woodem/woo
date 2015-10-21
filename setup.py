@@ -22,7 +22,8 @@ try:
     QT5=True
     # needed for good default for QT5 base directory
     multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
-    QT5DIR=multiarchTriplet+'/qt5'
+    QT5DIR='/usr/lib/'+multiarchTriplet+'/qt5'
+    QT5INC='/usr/include/'+multiarchTriplet+'/qt5'
 except ImportError:
     if 'WOO_QT5' in os.environ: raise ValueError('WOO_QT5 was specified, but PyQt5 not importable.')
 # if we force qt5, don't try to look for qt4 at all
@@ -379,7 +380,7 @@ if 'opengl' in features:
             cxxLibs+=['QtCore4','QtGui4','QtOpenGL4','QtXml4']
         else:
             if 'qt5' in features:
-                cppDirs+=[QT5DIR]+[QT5DIR+'/'+component for component in  ('QtCore','QtGui','QtOpenGL','QtXml','QtWidgets')]
+                cppDirs+=[QT5INC]+[QT5INC+'/'+component for component in  ('QtCore','QtGui','QtOpenGL','QtXml','QtWidgets')]
                 cxxLibs+=['Qt5Core','Qt5Gui','Qt5Widgets','Qt5Xml','Qt5OpenGL']
             else:
                 cppDirs+=['/usr/include/qt4']+['/usr/include/qt4/'+component for component in ('QtCore','QtGui','QtOpenGL','QtXml')]
