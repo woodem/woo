@@ -33,7 +33,6 @@ if not 'WOO_QT5' in os.environ:
         else: QT5=False
     except ImportError: pass
 
-
 travis=False
 if 'WOO_FLAVOR' in os.environ:
     f=os.environ['WOO_FLAVOR']
@@ -191,6 +190,7 @@ def wooPrepareChunks():
             if last>os.path.getmtime(chunkPath):
                 print('Updating timestamp of %s (%s -> %s)'%(chunkPath,os.path.getmtime(chunkPath),last+10))
                 os.utime(chunkPath,(last+10,last+10))
+
 def wooPrepareQt():
     'Generate Qt files (normally handled by scons); those are only needed with Qt/OpenGL'
     global features
@@ -228,13 +228,13 @@ def wooPrepareQt():
     for tool0,isPy,opts,inOut,enabled in [
             ('pyrcc%d'%QTVER,False,[] if QT5 else (['-py3'] if PY3 else ['-py2']),rccInOut,True),
             (pyuic,True,[],uicInOut,True),
-            ((QT5DIR+'bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
+            ((QT5DIR+'/bin/moc' if QT5 else 'moc'),False,['-DWOO_OPENGL','-DWOO_QT%d'%QTVER],mocInOut,('opengl' in features)),
             ('rcc',False,['-name','GLViewer'],cxxRccInOut,('opengl' in features))
     ]:
         if not enabled: continue
+        tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
+        if tool[0] is None: raise RuntimError('Tool %s not found?'%tool0)
         for fIn,fOut in inOut:
-            tool=[distutils.spawn.find_executable(tool0)] # full path the the tool
-            if not tool[0]: raise RuntimeError('Tool %s not found?'%tool0)
             # DAMN... Debian needs to run pyuic4 with python2 (even when building with py3k)
             # and right now travis does not build with Qt, so we just call tool directly and rely on the shebang there
             ## run python scripts the same interpreter, needed for virtual environments
@@ -246,6 +246,7 @@ def wooPrepareQt():
             status=subprocess.call(cmd)
             if status: raise RuntimeError("Error %d returned when running %s"%(status,' '.join(cmd)))
             if not os.path.exists(fOut): RuntimeError("No output file (though exit status was zero): %s"%(' '.join(cmd)))
+
 def pkgconfig(packages):
     flag_map={'-I':'include_dirs','-L':'library_dirs','-l':'libraries'}
     ret={'library_dirs':[],'include_dirs':[],'libraries':[]}
