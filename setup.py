@@ -23,12 +23,15 @@ try:
     # needed for good default for QT5 base directory
     multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
     QT5DIR=multiarchTriplet+'/qt5'
-except ImportError: pass
-try:
-    import PyQt4
-    if QT5: print('WARN: both PyQt4 and PyQt5 are importable, using QT4')
-    else: QT5=False
-except ImportError: pass
+except ImportError:
+    if 'WOO_QT5' in os.environ: raise ValueError('WOO_QT5 was specified, but PyQt5 not importable.')
+# if we force qt5, don't try to look for qt4 at all
+if not 'WOO_QT5' in os.environ:
+    try:
+        import PyQt4
+        if QT5: print('WARN: both PyQt4 and PyQt5 are importable, using QT4')
+        else: QT5=False
+    except ImportError: pass
 
 
 travis=False
