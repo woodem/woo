@@ -11,6 +11,9 @@ import distutils.spawn  # for find_executable
 import os.path, os, shutil, re, subprocess, sys, codecs
 from glob import glob
 from os.path import sep,join,basename,dirname
+import logging
+logging.basicConfig(level=logging.INFO)
+log=logging.getLogger('woo/setup.py')
 
 DISTBUILD=None # set to None if building locally, or to a string when dist-building on a bot
 if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
@@ -19,22 +22,24 @@ PY3=(sys.version_info[0]==3)
 QT5=None # True (qt5), False (qt4), None (qt4/5 not found)
 try:
     import PyQt5
-    print("PyQt5 found.")
+    log.info("PyQt5 found.")
     QT5=True
     # needed for good default for QT5 base directory
     multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
     QT5DIR='/usr/lib/'+multiarchTriplet+'/qt5'
     QT5INC='/usr/include/'+multiarchTriplet+'/qt5'
 except ImportError:
+    log.info('PyQt5 not importable:',exc_info=True)
     if 'WOO_QT5' in os.environ: raise ValueError('WOO_QT5 was specified, but PyQt5 not importable.')
 # if we force qt5, don't try to look for qt4 at all
 if 'WOO_QT5' not in os.environ:
     try:
         import PyQt4
-        print("PyQt4 found.")
-        if QT5: print('WARN: both PyQt4 and PyQt5 are importable, using QT4')
+        log.info("PyQt4 found.")
+        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT4.')
         QT5=False
-    except ImportError: pass
+    except ImportError:
+        log.info('PyQt4 not importable:',exc_info=True)
 
 travis=False
 if 'WOO_FLAVOR' in os.environ:
@@ -73,7 +78,7 @@ revno=None
 # on debian, get version from changelog
 if DISTBUILD=='debian':
     version=re.match(r'^[^(]* \(([^)]+)\).*$',codecs.open('debian/changelog','r','utf-8').readlines()[0]).group(1)
-    print('Debian version from changelog: ',version)
+    log.info('Debian version from changelog: '+str(version))
     revno='debian'
 # get version from queryling local bzr repo
 if not version:
@@ -92,7 +97,7 @@ if not version:
             revno=str(branch.last_revision_info()[0])+'+bzr'
         except: pass
     else:
-        print('WARN: unable to determine revision number (no .git or .bzr here, or getting revision failed).')
+        log.warn('Unable to determine revision number (no .git or .bzr here, or getting revision failed).')
         revno='0+na'
     version='1.0.'+revno
     
@@ -191,7 +196,7 @@ def wooPrepareChunks():
             last=max([os.path.getmtime(s) for s in src])
             #for s in src: print(s,os.path.getmtime(s))
             if last>os.path.getmtime(chunkPath):
-                print('Updating timestamp of %s (%s -> %s)'%(chunkPath,os.path.getmtime(chunkPath),last+10))
+                log.info('Updating timestamp of %s (%s -> %s)'%(chunkPath,os.path.getmtime(chunkPath),last+10))
                 os.utime(chunkPath,(last+10,last+10))
 
 def wooPrepareQt():
@@ -245,7 +250,7 @@ def wooPrepareQt():
             cmd=tool+opts+[fIn,'-o',fOut]
             # no need to recreate, since source is older
             if sameVer and os.path.exists(fOut) and os.path.getmtime(fIn)<os.path.getmtime(fOut): continue
-            print(' '.join(cmd))
+            log.info(' '.join(cmd))
             status=subprocess.call(cmd)
             if status: raise RuntimeError("Error %d returned when running %s"%(status,' '.join(cmd)))
             if not os.path.exists(fOut): RuntimeError("No output file (though exit status was zero): %s"%(' '.join(cmd)))
@@ -295,10 +300,10 @@ cxxStd='c++11'
 if DISTBUILD=='debian':
     # c++0x for gcc == 4.6
     gccVer=bytes(subprocess.check_output(['g++','--version'])).split(b'\n')[0].split()[-1]
-    print('GCC version is',gccVer)
+    log.info('GCC version is '+gccVer)
     if gccVer.startswith(b'4.6'):
         cxxStd='c++0x'
-        print('Compiling with gcc 4.6 (%s), using -std=%s. Adding -pedantic.'%(gccVer,cxxStd))
+        log.info('Compiling with gcc 4.6 (%s), using -std=%s. Adding -pedantic.'%(gccVer,cxxStd))
         cxxFlags+=['-pedantic'] # work around for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50478
 
 cxxFlags+=['-Wall','-fvisibility=hidden','-std='+cxxStd,'-pipe']
@@ -367,10 +372,10 @@ if 'opengl' in features:
             #print(e.output)
             #print(60*'=')
             if ' -lqglviewer-qt4' in e.output.decode('utf-8').split('\n')[0]:
-                print('info: library check: qglviewer-qt4 not found, using QGLViewer instead')
+                log.info('library check: qglviewer-qt4 not found, using QGLViewer instead')
                 cxxLibs+=['QGLViewer']
             else:
-                print('info: library check: qglviewer-qt4 found')
+                log.info('library check: qglviewer-qt4 found')
                 cxxLibs+=['qglviewer-qt4']
     # qt4 without OpenGL is pure python and needs no additional compile options
     if ('qt4' in features or 'qt5' in features):
