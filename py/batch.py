@@ -595,9 +595,13 @@ def runPreprocessor(pre,preFile=None):
     """
 
     def nestedSetattr(obj,attr,val):
+        import re
         attrs=attr.split(".")
         for i in attrs[:-1]:
-            obj=getattr(obj,i)
+            #if i.strip().endswith(']')
+            m=re.match(r'([a-zA-Z_0-9]+)\s*\[\s*(-?[0-9]+)\s*\]',i.strip())
+            if m: obj=getattr(obj,m.group(1))[int(m.group(2))]
+            else: obj=getattr(obj,i)
         if not hasattr(obj,attrs[-1]): raise AttributeError('%s: no such attribute: %s.'%(obj.__module__+'.'+type(obj).__name__,attrs[-1]))
         setattr(obj,attrs[-1],val)
 
