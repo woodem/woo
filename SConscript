@@ -105,7 +105,7 @@ if setups:
 	print 'Running setup.py (parallel):',' '.join([os.path.dirname(s) for s in setups])
 
 # http://stackoverflow.com/a/23616229/761090
-pp=[subprocess.Popen([env['PYTHON'],os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s)) for s in setups]
+pp=[subprocess.Popen([env['PYTHON'],'-W','ignore',os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s)) for s in setups]
 exits=[p.wait() for p in pp]
 if sum(exits)>0:
 	print 'Error running:','. '.join([setups[i] for i,e in enumerate(exits) if e>0])

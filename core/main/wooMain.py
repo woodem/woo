@@ -534,7 +534,7 @@ def batch(sysArgv=None):
                 self.hrefCommand+='<br><tt>'+self.command+'</tt>'
             
         def saveInfo(self):
-            log=file(self.log,'a')
+            log=open(self.log,'a')
             log.write("""
 =================== JOB SUMMARY ================
 id      : %s
@@ -729,6 +729,7 @@ finished: %s
             if 'refresh' in headers and headers['refresh']==0: del headers['refresh']
             for h in headers: self.send_header(h,str(headers[h]))
             self.end_headers()
+            if isinstance(data,str): data=data.encode('utf-8') # convert to bytes
             self.wfile.write(data)
             # global httpLastServe
             httpLastServe=time.time()
