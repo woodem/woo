@@ -7,7 +7,7 @@
 
 // attribute flags
 namespace woo{
-	#define ATTR_FLAGS_VALUES noSave=(1<<0), readonly=(1<<1), triggerPostLoad=(1<<2), hidden=(1<<3), noGuiResize=(1<<4), noGui=(1<<5), pyByRef=(1<<6), static_=(1<<7), multiUnit=(1<<8), noDump=(1<<9), activeLabel=(1<<10), rgbColor=(1<<11), filename=(1<<12), existingFilename=(1<<13), dirname=(1<<14), namedEnum=(1<<15), colormap=(1<<16)
+	#define ATTR_FLAGS_VALUES noSave=(1<<0), readonly=(1<<1), triggerPostLoad=(1<<2), hidden=(1<<3), noGuiResize=(1<<4), noGui=(1<<5), pyByRef=(1<<6), static_=(1<<7), multiUnit=(1<<8), noDump=(1<<9), activeLabel=(1<<10), rgbColor=(1<<11), filename=(1<<12), existingFilename=(1<<13), dirname=(1<<14), namedEnum=(1<<15), colormap=(1<<16), deprecated=(1<<17)
 	// this will disappear later
 	namespace Attr { enum flags { ATTR_FLAGS_VALUES }; }
 	// prohibit copies, only references should be passed around
@@ -58,6 +58,7 @@ namespace woo{
 			ATTR_FLAG_DO(dirname,isDirname)
 			ATTR_FLAG_DO(namedEnum,isNamedEnum)
 			ATTR_FLAG_DO(colormap,isColormap)
+			ATTR_FLAG_DO(deprecated,isDeprecated)
 		#undef ATTR_FLAG_DO
 		py::object pyGetIni()const{ return _ini(); }
 		py::object pyGetRange()const{ return _range(); }
@@ -148,6 +149,7 @@ namespace woo{
 				.add_property("dirname",&AttrTraitBase::isDirname)
 				.add_property("namedEnum",&AttrTraitBase::isNamedEnum)
 				.add_property("colormap",&AttrTraitBase::isColormap)
+				.add_property("deprecated",&AttrTraitBase::isDeprecated)
 				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,(py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")=""),"Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
 				.def_readonly("_flags",&AttrTraitBase::_flags)
 				// non-flag attributes
@@ -201,7 +203,12 @@ namespace woo{
 			ATTR_FLAG_DO(existingFilename,isExistingFilename)
 			ATTR_FLAG_DO(dirname,isDirname)
 			ATTR_FLAG_DO(colormap,isColormap) // requires namedEnum (error at runtime if not)
+            //ATTR_FLAG_DO(deprecated,isDeprecated)
 		#undef ATTR_FLAG_DO
+
+        // deprecated sets noDump as side-effect, hence is defined by hand
+        AttrTrait& deprecated(){ _flags|=(int)Flags::deprecated; _flags|=(int)Flags::noDump; _flags|=(int)Flags::noGui; return *this; }
+        bool isDeprecated(){ return _flags&(int)Flags::deprecated; }
 
 		AttrTrait& name(const string& s){ _name=s; return *this; }
 		AttrTrait& className(const string& s){ _className=s; return *this; }

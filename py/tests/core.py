@@ -246,6 +246,10 @@ class TestObjectInstantiation(unittest.TestCase):
         self.assertRaises(AttributeError,lambda: setattr(t,'bit1ro',True))
         self.assertTrue(t.bitsRo==3)
         self.assertTrue((t.bit0ro,t.bit1ro,t.bit2ro)==(True,True,False))
+    def testDeprecated(self):
+        'Core: AttrTrait.deprecated raises exception on access'
+        self.assertRaises(ValueError,lambda: getattr(self.t,'deprecatedAttr'))
+        self.assertRaises(ValueError,lambda: setattr(self.t,'deprecatedAttr',1))
     ## not (yet) supported for static attributes
     # def testBits_static(self):
 
@@ -482,6 +486,7 @@ class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
         PAT([woo.core.Node,],'aNNode',[woo.core.Node(pos=(1,1,1)),woo.core.Node(pos=(2,2,2))],'List of nodes'),
         PAT(float,'aF_trigger',1.,triggerPostLoad=True,doc='Float triggering postLoad, copying its value to aF'),
         PAT(int,'postLoadCounter',0,doc='counter for postLoad (readonly). Incremented by 1 after construction, incremented by 10 when assigning to aF_trigger.'),
+        PAT(int,'deprecAttr',-1,deprecated=True,doc='deprecated, here should be the explanation.'),
         PAT(str,'sChoice','aa',choice=['aa','bb','cc'],doc='String choice attribute')
     ]
     def postLoad(self,I):
@@ -598,6 +603,10 @@ class TestPyDerived(unittest.TestCase):
         'PyDerived: refuses to dump with boost::serialization format (data loss)'
         self.assertRaises(IOError,lambda: self.t.dump('whatever.xml'))
         self.assertRaises(IOError,lambda: self.t2.dump('whatever.xml'))
+    def testDeprecated(self):
+        'PyDerived: deprecated attribute raises ValueError on access'
+        self.assertRaises(ValueError,lambda: getattr(self.t,'deprecAttr'))
+        self.assertRaises(ValueError,lambda: setattr(self.t,'deprecAttr',1))
 
     def testPickle2(self):
         'PyDerived: deepcopy (python parent)'

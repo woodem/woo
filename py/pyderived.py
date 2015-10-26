@@ -112,6 +112,7 @@ class PyAttrTrait(object):
             guiReadonly=False,
             noGuiResize=False,
             colormap=False,
+            deprecated=False
         ):
         # validity checks
         if range:
@@ -156,6 +157,7 @@ class PyAttrTrait(object):
         self.triggerPostLoad=triggerPostLoad
         self.noGuiResize=noGuiResize
         self.colormap=colormap
+        self.deprecated=deprecated
         self.readonly=guiReadonly # this has different meaning in c++ and python, so call it differently
         # those are unsupported in python
         self.noSave=self.hidden=self.pyByRef=self.static=self.activeLabel=self.namedEnum=False
@@ -171,6 +173,9 @@ class PyAttrTrait(object):
         if psd:
             if self.buttons: raise ValueError("%s: psd and buttons are mutually exclusive (psd created a button for displaying the PSD)"%self.name)
             self.buttons=(['Plot the PSD','import pylab; pylab.plot(*zip(*self.%s)); pylab.grid(True); pylab.show();'%(self.name),''],0)
+        # side-effects of deprecated
+        if self.deprecated:
+            self.noGui=self.noDump=True
         # 
         # units
         #
@@ -359,6 +364,9 @@ class PyWooObject(object):
             def validatingSetter(self,val,trait=trait,setter=setter):
                 trait.validate(val)
                 setter(self,val)
+            # deprecated attribute: raise error on any access
+            def accessError(self,_val=None,trait=trait): raise ValueError('Error accessing %s.%s: '+trait.doc)
+            if trait.deprecated: getter=validatingSetter=accessError
             setattr(derivedClass,trait.name,property(getter,validatingSetter,None,trait.doc))
             self._attrValues[trait.name]=trait.ini
         # print derivedClass.__name__,self._attrValues

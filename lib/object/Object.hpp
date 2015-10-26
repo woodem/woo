@@ -149,11 +149,20 @@ template<> struct _register_bit_accessors_if_integral<true> {
 	}
 };
 
+// define accessors raising InvalidArugment at every access
+template<typename classObjT, typename traitT>
+void _wooDef_deprecatedProperty(classObjT& _classObj, traitT& trait){
+	auto errorGetter=py::detail::make_function_aux([trait](py::object self)->void{ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },py::default_call_policies(),boost::mpl::vector<void,py::object>());
+	auto errorSetter=py::detail::make_function_aux([trait](py::object self, py::object val){ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },py::default_call_policies(),boost::mpl::vector<void,py::object,py::object>());
+	_classObj.add_property(trait._name.c_str(),errorGetter,errorSetter,trait._doc.c_str());
+};
+
 template<bool namedEnum> struct  _def_woo_attr__namedEnum{};
 /* instantiation for attribute which IS NOT not a named enumeration */
 template<> struct _def_woo_attr__namedEnum<false>{
 	template<typename classObjT, typename traitT, typename classT, typename attrT, attrT classT::*A>
 	void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName){
+		if(trait.isDeprecated()){ _wooDef_deprecatedProperty(_classObj,trait); return; }
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad(), _ref(!_ro && (woo::py_wrap_ref<attrT>::value || trait.isPyByRef()));
 		const char* docStr(trait._doc.c_str());
 		if      ( _ref && !_ro && !_post) _classObj.def_readwrite(attrName,A,docStr);
@@ -174,6 +183,7 @@ template<> struct _def_woo_attr__namedEnum<false>{
 template<> struct _def_woo_attr__namedEnum<true>{
 	template<typename classObjT, typename traitT, typename classT, typename attrT, attrT classT::*A>
 	void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName){
+		if(trait.isDeprecated()){ _wooDef_deprecatedProperty(_classObj,trait); return; }
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad();
 		const char* docStr(trait._doc.c_str());
 		auto getter=py::detail::make_function_aux([trait](const classT& obj){ return trait.namedEnum_num2name(obj.*A); },py::default_call_policies(),boost::mpl::vector<string,classT>());
@@ -249,21 +259,17 @@ template<> struct _def_woo_attr__namedEnum<true>{
 	#define _DEF_READWRITE_CUSTOM_STATIC(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE(thisClass,attr)::compileFlags & woo::Attr::namedEnum)); _def_woo_attr_static__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),&_ATTR_TRAIT_GET(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
 #endif /* WOO_STATIC_ATTRIBUTES */
 
-// macros for deprecated attribute access
-// gcc<=4.3 is not able to compile this code; we will just not generate any code for deprecated attributes in such case
-#if (defined(__clang__) || !defined(__GNUG__)) || ((defined(__GNUG__) && (__GNUC__ > 4 || (__GNUC__==4 && __GNUC_MINOR__ > 3))))
-	// gcc > 4.3 && non-gcc compilers
-	#define _PYSET_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))){ _DEPREC_WARN(thisClass,z); _DEPREC_NEWNAME(z)=py::extract<decltype(_DEPREC_NEWNAME(z))>(value); return; }
-	#define _PYATTR_DEPREC_DEF(x,thisClass,z) .add_property(BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z)),"[deprecated] alias for :obj:`" BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(z)) " <" BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(z)) ">` (" _DEPREC_COMMENT(z) ")")
-	#define _PYHASKEY_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))) return true;
-	/* accessors functions ussing warning */
-	#define _ACCESS_DEPREC(x,thisClass,z) /*getter*/ decltype(_DEPREC_NEWNAME(z)) BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z))(){_DEPREC_WARN(thisClass,z); return _DEPREC_NEWNAME(z); } /*setter*/ void BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z))(const decltype(_DEPREC_NEWNAME(z))& val){_DEPREC_WARN(thisClass,z); _DEPREC_NEWNAME(z)=val; }
-#else
-	#define _PYSET_ATTR_DEPREC(x,y,z)
-	#define _PYATTR_DEPREC_DEF(x,y,z)
-	#define _PYHASKEY_ATTR_DEPREC(x,y,z)
-	#define _ACCESS_DEPREC(x,y,z)
-#endif
+
+// print warning about deprecated attribute; thisClass is type name, not string
+#define _DEPREC_ERROR(thisClass,deprec) throw std::invalid_argument(BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(deprec)) " is no longer supported: " _DEPREC_COMMENT(deprec));
+/* kw attribute setter */
+#define _PYSET_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))){ _DEPREC_ERROR(thisClass,z); }
+/* expose exception-raising accessors to python */
+#define _PYATTR_DEPREC_DEF(x,thisClass,z) .add_property(BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z)),"Deprecated attribute, raises exception when accessed:" _DEPREC_COMMENT(z))
+#define _PYHASKEY_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))) return false;
+/* accessors functions raising error */
+#define _ACCESS_DEPREC(x,thisClass,z) /*getter*/ int BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z))(){ _DEPREC_ERROR(thisClass,z); /*compiler happy*/return -1; } /*setter*/ void BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z))(const py::object&){_DEPREC_ERROR(thisClass,z); }
+
 
 // static switch to make hidden attributes not settable via ctor args in python
 // this avoids compile-time error with boost::multi_array which with py::extract
@@ -343,8 +349,6 @@ template<> struct _SerializeMaybe<false>{
 	void callPostLoad(void* addr) override { baseClass::callPostLoad(addr); postLoad(*this,addr); }
 
 
-// print warning about deprecated attribute; thisClass is type name, not string
-#define _DEPREC_WARN(thisClass,deprec)  std::cerr<<"WARN: "<<getClassName()<<"."<<BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(deprec))<<" is deprecated, use "<<BOOST_PP_STRINGIZE(thisClass)<<"."<<BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(deprec))<<" instead. "; if(_DEPREC_COMMENT(deprec)){ if(std::string(_DEPREC_COMMENT(deprec))[0]=='!'){ cerr<<endl; throw std::invalid_argument(BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(deprec)) " is deprecated; throwing exception requested. Reason: " _DEPREC_COMMENT(deprec));} else std::cerr<<"("<<_DEPREC_COMMENT(deprec)<<")"; } std::cerr<<endl;
 
 // getters for individual fields
 #define _ATTR_TYP(s) BOOST_PP_TUPLE_ELEM(5,0,s)
@@ -360,9 +364,8 @@ template<> struct _SerializeMaybe<false>{
 #define _ATTR_INI_STR(s) BOOST_PP_STRINGIZE(_ATTR_INI(s))
 
 // deprecated specification getters
-#define _DEPREC_OLDNAME(x) BOOST_PP_TUPLE_ELEM(3,0,x)
-#define _DEPREC_NEWNAME(x) BOOST_PP_TUPLE_ELEM(3,1,x)
-#define _DEPREC_COMMENT(x) BOOST_PP_TUPLE_ELEM(3,2,x) "" // if the argument is omited, return empty string instead of nothing
+#define _DEPREC_OLDNAME(x) BOOST_PP_TUPLE_ELEM(2,0,x)
+#define _DEPREC_COMMENT(x) BOOST_PP_TUPLE_ELEM(2,1,x)
 
 #define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
 	checkPyClassRegistersItself(#thisClass); \
@@ -516,6 +519,10 @@ template<> struct _SerializeMaybe<false>{
 #define _WOO_DECL__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY(klass,base,doc,attrs,ini,ctor,dtor,pyExtras) _WOO_CLASS_DECLARATION(   klass,base,doc,attrs,/*statAttrs*/,/*deprec*/,ini,ctor,dtor,pyExtras)
 #define _WOO_IMPL__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY(klass,base,doc,attrs,ini,ctor,dtor,pyExtras) _WOO_CLASS_IMPLEMENTATION(klass,base,doc,attrs,/*statAttrs*/,/*deprec*/,ini,ctor,dtor,pyExtras)
 
+#define WOO_DECL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(args) _WOO_DECL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(args)
+#define WOO_IMPL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(args) _WOO_IMPL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(args)
+#define _WOO_DECL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(klass,base,doc,attrs,deprec,ini,ctor,dtor,pyExtras) _WOO_CLASS_DECLARATION(   klass,base,doc,attrs,/*statAttrs*/,deprec,ini,ctor,dtor,pyExtras)
+#define _WOO_IMPL__CLASS_BASE_DOC_ATTRS_DEPREC_INI_CTOR_DTOR_PY(klass,base,doc,attrs,deprec,ini,ctor,dtor,pyExtras) _WOO_CLASS_IMPLEMENTATION(klass,base,doc,attrs,/*statAttrs*/,deprec,ini,ctor,dtor,pyExtras)
 
 #define WOO_CLASS_DECLARATION(allArgsTogether) _WOO_CLASS_DECLARATION(allArgsTogether)
 
@@ -563,7 +570,7 @@ template<> struct _SerializeMaybe<false>{
 /* this used to be in lib/factory/Factorable.hpp */
 #define REGISTER_CLASS_AND_BASE(cn,bcn) public: virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
 
-// this is used only in Obejct declaration itself below
+// this is used only in Object declaration itself below
 #define WOO_TOPLEVEL_OBJECT_REGISTER_CLASS_BASE(cn,bcn) public: virtual string getClassName() const {return #cn;}; virtual vector<string> getBaseCLassNames() const {return #bcn; }
  
 namespace woo{

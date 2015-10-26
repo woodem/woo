@@ -1,5 +1,5 @@
 # encoding: utf-8
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str, range
@@ -212,6 +212,7 @@ def makeTraitInfo(obj,klass,trait):
     if trait.noSave: ret.append('not saved')
     if trait.hidden: ret.append('not accessible from python')
     if trait.readonly: ret.append('read-only in python')
+    if trait.deprecated: ret.append('**DEPRECATED**, raises ``ValueError`` when accessed')
     if trait.choice and not trait.namedEnum: # named enums formatted differently below
         if isinstance(trait.choice[0],tuple): ret.append('choices: '+', '.join('%d = %s'%(c[0],c[1] if '|' not in c[1] else '``'+c[1]+'``') for c in trait.choice))
         else: ret.append('choices: '+', '.join(str(c) for c in trait.choice))
