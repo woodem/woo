@@ -338,6 +338,7 @@ struct DemField: public Field{
 		((shared_ptr<ContactContainer>,contacts,make_shared<ContactContainer>(),AttrTrait<>().pyByRef().readonly().ini(),"Linear view on particle contacts")) \
 		((uint,loneMask,((void)":obj:`DemField.defaultLoneMask`",DemField::defaultLoneMask),,"Particle groups which have bits in loneMask in common (i.e. (A.mask & B.mask & loneMask)!=0) will not have contacts between themselves")) \
 		((Vector3r,gravity,Vector3r::Zero(),,"Constant gravity acceleration")) \
+		((Real,distFactor,((void)"deactivated",-1.0),,"Relative enlargement of bounding boxes, and of radii in contacts; only supported by a few functors (:obj:`Bo1_Sphere_Aabb`, :obj:`Cg2_Sphere_Sphere_L6Geom`), storing the value in :obj:`DemField` ensures the values are synchronized between all functors interested. Deactivated if negative; any negative value (``-1`` by default) is equivalent to ``1`` (no enlargement at all).")) \
 		((bool,saveDead,false,AttrTrait<>().buttons({"Clear dead nodes","self.clearDead()",""}),"Save unused nodes of deleted particles, which would be otherwise removed (useful for displaying traces of deleted particles).")) \
 		((vector<shared_ptr<Node>>,deadNodes,,AttrTrait<Attr::readonly>().noGui(),"List of nodes belonging to deleted particles; only used if :obj:`saveDead` is ``True``")) \
 		((vector<shared_ptr<Particle>>,deadParticles,,AttrTrait<Attr::readonly>().noGui(),"Deleted particles; only used if :obj:`saveDead` is ``True``")) \

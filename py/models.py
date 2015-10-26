@@ -221,7 +221,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(Vector2i,'numMat',Vector2i(1,1),noGui=True,guiReadonly=True,triggerPostLoad=True,doc='Minimum and maximum number of material definitions.'),
         _PAT([str,],'matDesc',[],noGui=True,triggerPostLoad=True,doc='List of strings describing individual materials. Keep the description very short (one word) as it will show up in the UI combo box for materials.'),
         _PAT([woo.dem.Material],'mats',[],doc='Material definitions'),
-        _PAT(float,'distFactor',1.,doc='Distance factor for sphere-sphere contacts (copied to :obj:`woo.dem.Bo1_Sphere_Aabb.distFactor` and :obj:`woo.dem.Cg2_Sphere_Sphere_L6Geom.distFactor`)'),
+        _PAT(float,'distFactor',1.,doc='Distance factor for sphere-sphere contacts (copied to :obj:`woo.dem.DemField.distFactor`)'),
         # hertzian models
         _PAT(float,'poisson',.2,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Poisson ratio (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.poisson`)'),
         _PAT(float,'surfEnergy',.01,unit=u'J/m²',hideIf='self.name not in ("DMT","Schwarz")',doc='Surface energy for adhesive models (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.gamma`)'),

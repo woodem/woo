@@ -43,7 +43,7 @@ struct Bo1_Ellipsoid_Aabb: public Bo1_Sphere_Aabb{
 	void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Ellipsoid);
 	#define woo_dem_Bo1_Ellipsoid_Aabb__CLASS_BASE_DOC \
-		Bo1_Ellipsoid_Aabb,Bo1_Sphere_Aabb,"Functor creating :obj:`Aabb` from :obj:`Ellipsoid`.\n\n.. todo:: Handle rotation which is not detected by verlet distance!\n\n.. warning:: :obj:`woo.dem.Bo1_Sphere_Aabb.distFactor` is ignored."
+		Bo1_Ellipsoid_Aabb,Bo1_Sphere_Aabb,"Functor creating :obj:`Aabb` from :obj:`Ellipsoid`.\n\n.. todo:: Handle rotation which is not detected by verlet distance!\n\n.. warning:: :obj:`woo.dem.DemField.distFactor` is ignored."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Ellipsoid_Aabb__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Bo1_Ellipsoid_Aabb);

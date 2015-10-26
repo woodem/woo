@@ -35,8 +35,8 @@ struct Bo1_Sphere_Aabb: public BoundFunctor{
 	void goGeneric(const shared_ptr<Shape>& sh, Vector3r halfSize);
 	FUNCTOR1D(Sphere);
 	#define woo_dem_Bo1_Sphere_Aabb__CLASS_BASE_DOC_ATTRS \
-		Bo1_Sphere_Aabb,BoundFunctor,"Functor creating :obj:`Aabb` from :obj:`Sphere`.", \
-		((Real,distFactor,((void)"deactivated",-1),,"Relative enlargement of the bounding box; deactivated if negative.\n\n.. note::\n\tThis attribute is used to create distant contacts, but is only meaningful with an :obj:`CGeomFunctor` which will not simply discard such interactions: :obj:`Cg2_Sphere_Sphere_L6Geom::distFactor` should have the same value. Any negative value (``-1`` by default) is equivalent to ``1`` (no enlargement)."))
+		Bo1_Sphere_Aabb,BoundFunctor,"Functor creating :obj:`Aabb` from :obj:`Sphere`. Honors :obj:`DemField.distFactor`.", \
+			((Real,distFactor,-1.,AttrTrait<>().deprecated(),"removed in `API 10103 <https://woodem.org/api.html#api-10103>`__, set :obj:`DemField.distFactor` instead."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Bo1_Sphere_Aabb__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Bo1_Sphere_Aabb);
@@ -64,8 +64,8 @@ struct Cg2_Sphere_Sphere_L6Geom: public Cg2_Any_Any_L6Geom__Base{
 	bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	void setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C) override;
 	#define woo_dem_Cg2_Sphere_Sphere_L6Geom__CLASS_BASE_DOC_ATTRS \
-		Cg2_Sphere_Sphere_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact of 2 spheres. Detailed documentation in py/_extraDocs.py", \
-		((Real,distFactor,1,,"Create interaction if spheres are not futher than ``|distFactor|*(r1+r2)``. If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the 'zero' one)."))
+		Cg2_Sphere_Sphere_L6Geom,Cg2_Any_Any_L6Geom__Base,"Incrementally compute :obj:`L6Geom` for contact of 2 spheres. Detailed documentation in py/_monkey/extraDocs.py", \
+			((Real,distFactor,-1.,AttrTrait<>().deprecated(),"removed in `API 10103 <https://woodem.org/api.html#api-10103>`__, set :obj:`DemField.distFactor` instead."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Sphere_Sphere_L6Geom__CLASS_BASE_DOC_ATTRS);
 	FUNCTOR2D(Sphere,Sphere);
 	DEFINE_FUNCTOR_ORDER_2D(Sphere,Sphere);

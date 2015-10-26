@@ -5,6 +5,8 @@ WOO_PLUGIN(dem,(GridBound)(GridBoundFunctor)(GridBoundDispatcher)(Grid1_Sphere)(
 #endif
 
 WOO_IMPL__CLASS_BASE_DOC_PY(woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Sphere__CLASS_BASE_DOC_ATTRS);
+
 
 
 void GridBound::setNodePlay(const shared_ptr<Shape>& s, const Real& verletDist){
@@ -46,6 +48,7 @@ void Grid1_Sphere::go(const shared_ptr<Shape>& sh, const Particle::id_t& id, con
 	const auto& dyn(s.nodes[0]->getData<DemData>());
 	const Real& verletDist(coll->verletDist);
 	const int& verletSteps(coll->verletSteps);
+	const Real& distFactor(field->cast<DemField>().distFactor);
 	// includes shrinkage (if applicable) and distFactor
 	Real radius=max(s.radius-coll->shrink,0.)+(distFactor>1?(distFactor-1):0.)*s.radius;
 	// this is the new branch

@@ -4,9 +4,10 @@
 WOO_PLUGIN(dem,(Sphere)(Cg2_Sphere_Sphere_L6Geom)(Bo1_Sphere_Aabb)(In2_Sphere_ElastMat));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Sphere__CLASS_BASE_DOC_ATTRS_CTOR);
-WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Bo1_Sphere_Aabb__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_In2_Sphere_ElastMat__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Bo1_Sphere_Aabb__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Sphere_Sphere_L6Geom__CLASS_BASE_DOC_ATTRS);
+
 
 
 void woo::Sphere::selfTest(const shared_ptr<Particle>& p){
@@ -50,6 +51,7 @@ bool woo::Sphere::isInside(const Vector3r& pt) const {
 
 void Bo1_Sphere_Aabb::go(const shared_ptr<Shape>& sh){
 	Sphere& s=sh->cast<Sphere>();
+	const Real& distFactor(field->cast<DemField>().distFactor);
 	Vector3r halfSize=(distFactor>0?distFactor:1.)*s.radius*Vector3r::Ones();
 	goGeneric(sh, halfSize);
 }
@@ -82,15 +84,20 @@ void Bo1_Sphere_Aabb::goGeneric(const shared_ptr<Shape>& sh, Vector3r halfSize){
 
 
 void Cg2_Sphere_Sphere_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){
+	const Real& distFactor(field->cast<DemField>().distFactor);
 	C->minDist00Sq=pow(abs(distFactor*(s1->cast<Sphere>().radius+s2->cast<Sphere>().radius)),2);
 }
 
 
 bool Cg2_Sphere_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){
-	const Real& r1=s1->cast<Sphere>().radius; const Real& r2=s2->cast<Sphere>().radius;
+	const Real& r1=s1->cast<Sphere>().radius;
+	const Real& r2=s2->cast<Sphere>().radius;
 	assert(s1->numNodesOk()); assert(s2->numNodesOk());
 	assert(s1->nodes[0]->hasData<DemData>()); assert(s2->nodes[0]->hasData<DemData>());
-	const DemData& dyn1(s1->nodes[0]->getData<DemData>());	const DemData& dyn2(s2->nodes[0]->getData<DemData>());
+	const DemData& dyn1(s1->nodes[0]->getData<DemData>());
+	const DemData& dyn2(s2->nodes[0]->getData<DemData>());
+	const Real& distFactor(field->cast<DemField>().distFactor);
+
 
 	Vector3r relPos=s2->nodes[0]->pos+shift2-s1->nodes[0]->pos;
 	Real unDistSq=relPos.squaredNorm()-pow(abs(distFactor)*(r1+r2),2);

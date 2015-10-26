@@ -377,6 +377,8 @@ void Gl1_DemField::doContactNodes(){
 			shared_ptr<CGeom> geom=C->geom;
 			if(!geom) continue;
 			shared_ptr<Node> node=geom->node;
+			// ensure dGlPos is defined
+			for(const Particle* p: {pA,pB}) if(!p->shape->nodes[0]->hasData<GlData>()) viewInfo->renderer->setNodeGlData(p->shape->nodes[0]);
 			viewInfo->renderer->setNodeGlData(node);
 			Renderer::glScopedName name(*viewInfo,C,node);
 			if((cNode & CNODE_GLREP) && node->rep){ node->rep->render(node,viewInfo); }
@@ -384,6 +386,9 @@ void Gl1_DemField::doContactNodes(){
 				assert(pA->shape && pB->shape);
 				assert(pA->shape->nodes.size()>0); assert(pB->shape->nodes.size()>0);
 				Vector3r x[3]={node->pos,pA->shape->avgNodePos(),pB->shape->avgNodePos()};
+				const Vector3r& dx0(node->getData<GlData>().dGlPos);
+				const Vector3r& dx1(pA->shape->nodes[0]->getData<GlData>().dGlPos);
+				const Vector3r& dx2(pB->shape->nodes[0]->getData<GlData>().dGlPos);
 				if(scene->isPeriodic){
 					Vector3i cellDist;
 					x[0]=scene->cell->canonicalizePt(x[0],cellDist);
@@ -392,23 +397,24 @@ void Gl1_DemField::doContactNodes(){
 				}
 				Vector3r color=CompUtils::mapColor(C->color);
 				if(isnan(color.maxCoeff())) continue;
-				if(pA->shape->isA<Sphere>()) GLUtils::GLDrawLine(x[0],x[1],color);
-				GLUtils::GLDrawLine(x[0],x[2],color);
+				if(pA->shape->isA<Sphere>()) GLUtils::GLDrawLine(x[0]+dx0,x[1]+dx1,color);
+				GLUtils::GLDrawLine(x[0]+dx0,x[2]+dx2,color);
 			}
 			if(cNode & CNODE_NODE) viewInfo->renderer->renderRawNode(node);
 		} else {
 			if(!(cNode & CNODE_POTLINE)) continue;
 			assert(pA->shape && pB->shape);
 			assert(pA->shape->nodes.size()>0); assert(pB->shape->nodes.size()>0);
-			Vector3r A;
-			Vector3r B=pB->shape->avgNodePos();
+			for(const Particle* p: {pA,pB}) if(!p->shape->nodes[0]->hasData<GlData>()) viewInfo->renderer->setNodeGlData(p->shape->nodes[0]);
+			Vector3r A; Vector3r B=pB->shape->avgNodePos();
 			if(pA->shape->isA<Sphere>()) A=pA->shape->nodes[0]->pos;
 			else if(pA->shape->isA<Wall>()){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<Wall>().axis; A[(ax+1)%3]=B[(ax+1)%3]; A[(ax+2)%3]=B[(ax+2)%3]; }
 			else if(pA->shape->isA<InfCylinder>()){ A=pA->shape->nodes[0]->pos; int ax=pA->shape->cast<InfCylinder>().axis; A[ax]=B[ax]; }
 			else if(pA->shape->isA<Facet>()){ A=pA->shape->cast<Facet>().getNearestPt(B); }
 			else A=pA->shape->avgNodePos();
+			const Vector3r& dA(pA->shape->nodes[0]->getData<GlData>().dGlPos); const Vector3r& dB(pB->shape->nodes[0]->getData<GlData>().dGlPos);
 			if(scene->isPeriodic){ B+=scene->cell->intrShiftPos(C->cellDist); }
-			GLUtils::GLDrawLine(A,B,.5*CompUtils::mapColor(C->color));
+			GLUtils::GLDrawLine(A+dA,B+dB,.5*CompUtils::mapColor(C->color));
 		}
 	}
 }

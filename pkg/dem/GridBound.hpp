@@ -58,9 +58,9 @@ WOO_REGISTER_OBJECT(GridBoundDispatcher);
 struct Grid1_Sphere: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Sphere);
-	WOO_CLASS_BASE_DOC_ATTRS(Grid1_Sphere,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Sphere`, used with :obj:`GridCollider`.",
-		((Real,distFactor,((void)"deactivated",-1),,"Relative enlargement of the bounding box; deactivated if negative."))
-	);
+	#define woo_dem_Grid1_Sphere__CLASS_BASE_DOC_ATTRS Grid1_Sphere,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Sphere`, used with :obj:`GridCollider`.", \
+		((Real,distFactor,-1,AttrTrait<>().deprecated(),"removed in `API 10103 <https://woodem.org/api.html#api-10103>`__, set :obj:`DemField.distFactor` instead."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Sphere__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Grid1_Sphere);
 
