@@ -18,13 +18,12 @@ For examples, see
 * :woosrc:`examples/gts-horse/gts-horse.py`
 * :woosrc:`examples/WireMatPM/wirepackings.py`
 """
+
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
-from builtins import map
-from builtins import str
-from builtins import zip
-from builtins import range
+import future.utils
+from builtins import map, str, zip, range
 
 import itertools,warnings,os
 from numpy import arange
@@ -416,7 +415,9 @@ def _memoizePacking(memoizeDb,sp,radius,rRelFuzz,wantPeri,fullDim):
         c=conn.cursor()
         c.execute('create table packings (radius real, rRelFuzz real, dimx real, dimy real, dimz real, N integer, timestamp real, periodic integer, pack blob)')
     c=conn.cursor()
-    packBlob=buffer(pickle.dumps(sp.toList(),pickle.HIGHEST_PROTOCOL))
+    # use protocol=2 so that we are compatible between py2/py3
+    if future.utils.PY3: packBlob=memoryview(pickle.dumps(sp.toList(),protocol=2))
+    else: packBlob=buffer(pickle.dumps(sp.toList(),protocol=2))
     packDim=sp.cellSize if wantPeri else fullDim
     c.execute('insert into packings values (?,?,?,?,?,?,?,?,?)',(radius,rRelFuzz,packDim[0],packDim[1],packDim[2],len(sp),time.time(),wantPeri,packBlob,))
     c.close()
@@ -458,7 +459,7 @@ def _getMemoizedPacking(memoizeDb,radius,rRelFuzz,x1,y1,z1,fullDim,wantPeri,fill
         memoDbgMsg("ACCEPTED");
         print("Found suitable packing in %s (radius=%g±%g,N=%g,dim=%g×%g×%g,%s,scale=%g), created %s"%(memoizeDb,R,rDev,NN,X,Y,Z,"periodic" if isPeri else "non-periodic",scale,time.asctime(time.gmtime(timestamp))))
         c.execute('select pack from packings where timestamp=?',(timestamp,))
-        sp=SpherePack(cPickle.loads(str(c.fetchone()[0])))
+        sp=SpherePack(pickle.loads(bytes(c.fetchone()[0])))
         sp.scale(scale);
         if isPeri and wantPeri:
             sp.cellSize=(X,Y,Z);
@@ -495,7 +496,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
 
     :return: SpherePack object with spheres, filtered by the predicate.
     """
-    import sqlite3, os.path, cPickle, time, sys, woo._packPredicates
+    import sqlite3, os.path, pickle, time, sys, woo._packPredicates
     from woo import log, core, dem
     from math import pi
     wantPeri=(spheresInCell>0)
@@ -944,21 +945,29 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 ## an attempt at a better randomDensePack
 ## currently ShapePack does not support moving, or the interface is not clear, so it just waits here
 
-def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False):
-    import woo, math, woo.core, woo.dem
-    box=predicate.aabb()
+
+def _randomDensePack2_singleCell(generator,iniBoxSize,memoizeDir=None,debug=False):
+    '''Helper function for :obj:`randomDensePack2`, operating on a single cell (no tiling or predicate filtering).
+
+    :param woo.dem.ParticleGenerator generator: predicate generator object
+    :param minieigen.Vector3 iniBoxSize: periodic cell size for loose packing generation
+    :param str or None memoizeDir: directory for memoizing the result
+    :param bool debug: return :obj:`~woo.core.Scene` object for compaction instead of the packing
+    :returns: periodic and canonicalized :obj:`woo.dem.ShapePack` instance (unless *debug* is ``True``)
+    '''
     if memoizeDir:
         import hashlib
-        hashbase='1'+str(box)+str(porosity)+generator.dumps(format='expr',width=-1,noMagic=True)
+        # increase hash version every time the algorithm is tuned
+        hashbase='hash version 2'+str(iniBoxSize)+generator.dumps(format='expr',width=-1,noMagic=True)
         print(hashbase)
         hash=hashlib.sha1(hashbase.encode('utf-8')).hexdigest()
         memo=memoizeDir+'/'+hash+'.randomdense'
         print('Memoize file is',memo)
         if os.path.exists(memo):
             print('Returning memoized result')
-            return woo.dem.ShapePack(loadFrom=memo).filtered(predicate)
-    boxSize=box.sizes()
-    iniBoxSize=boxSize*(1/(porosity**(1/3.)))
+            return woo.dem.ShapePack(loadFrom=memo)
+
+    # compaction scene
     S=woo.core.Scene(fields=[woo.dem.DemField()])
     S.dtSafety=.9
     S.periodic=True
@@ -969,12 +978,8 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
     ]
     S.one()
     print('Created %d particles, compacting...'%len(S.dem.par))
-    minRad=float('inf')
-    for p in S.dem.par:
-        r=p.shape.equivRadius
-        if not math.isnan(r): minRad=min(minRad,r)
     goal=.15
-    S.engines=[woo.dem.PeriIsoCompressor(charLen=2*minRad,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
+    S.engines=[woo.dem.PeriIsoCompressor(charLen=generator.minMaxDiam()[0],stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
     S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
     S.lab.collider.paraPeri=True
@@ -984,14 +989,62 @@ def randomDensePack2(predicate,generator,porosity=.5,memoizeDir=None,debug=False
     sp.fromDem(S,S.dem)
     print('Compacted packing size is',sp.cellSize)
     sp.canonicalize()
+
+    if memoizeDir:
+        print('saving to',memo)
+        sp.save(memo)
+    return sp
+    
+
+
+def randomDensePack2(predicate,generator,settle=.3,approxLoosePoro=.1,maxNum=5000,memoizeDir=None,debug=False,porosity=None):
+    '''Return dense arrangement of particles clipped by predicate. Particle are losely generated in cuboid volume of sufficient dimensions; the cuboid might be made smaller if *maxNum* were significantly exceeded, and tiled into the predicate volume afterwards
+
+    :param woo.pack.Predicate predicate: volume definition
+    :param woo.dem.ParticleGenerator generator: particle definition
+    :param float settle: relative final volume of dense packing, relative to the loose packing used for generation; usually not necessary to adjust for usual particles, but might have to be made smaller is the initial packing is very loose (significantly elongated particles or clumps and similar)
+    :param int maxNum: maximum number of initial particle; if the number of particles for the initial volume were higher, the predicate volume will be split into smaller periodic cells and the packing will be simply repeated (tiled) to cover the entire predicate volume afterwards.
+    :param float approxLoosePoro: estimate of loose (random) packing proosity for given particles, used for estimating number of particles. **This number is NOT related to the resulting porosity,**, it only has effect on how the predicate volume is partitioned, and thus does not need to be set in most cases.
+    :param memoizeDir: path where memoized packings (named as hashed parameters, plus the `.randomdense` extension) are stored; if None, returned packings are not memoized. If memoized result is found, it is returned immediately, instead of running (often costly) simulation of compaction.
+    :param bool debug: if True, returns :obj:`woo.core.Scene` used for compaction, which can be inspected (instead of the usual :obj:`woo.dem.ShapePack` with dense packing)
+
+    :returns: :obj:`woo.dem.ShapePack`, unless *debug* is ``True``, in which case a :obj:`~woo.core.Scene` is returned.
+    '''
+    # remove at some point
+    if porosity is not None:
+        warnings.warn('*porosity* argument is no longer supported, use *settle* instead (porosity will be passed on instead of settle for backwards compatibility).',DeprecationWarning)
+        settle=porosity
+
+    import woo, math, woo.core, woo.dem
+    box=predicate.aabb()
+    boxSize=box.sizes()
+    iniBoxSize=boxSize*(1./(settle**(1/3.)))
+    dMin,dMax=generator.minMaxDiam()
+    vMid=.5*math.pi/6.*(dMin**3+dMax**3)
+    tiling=Vector3i(1,1,1)
+    # number of volume tiles so that the predicate is covered
+    while True:
+        nApprox=iniBoxSize.prod()*(1-approxLoosePoro)/vMid
+        if nApprox<=maxNum: break # OK, finished
+        # find longest side of iniBoxSize
+        iMax=sorted([0,1,2],key=lambda i: iniBoxSize[i],reverse=True)[0]
+        # split it in half, adjust tiling
+        iniBoxSize[iMax]/=2.; tiling[iMax]*=2
+    print('Dense packing tiling: '+str(tiling))
+
+    # this does the hard work
+    sp=_randomDensePack2_singleCell(generator=generator,iniBoxSize=iniBoxSize,memoizeDir=memoizeDir,debug=debug)
+    if debug: return sp # in this case a Scene object
+
+    # compute tiling necessary
+    tiling2=Vector3i(0,0,0)
+    for i in (0,1,2): tiling2[i]=int(math.ceil(boxSize[i]/sp.cellSize[i]))
+    # do we need to warn in case of difference...?
+    if tiling!=tiling2: print('WARN: expected tiling '+str(tiling)+' differs from one necessary to cover the predicate box '+str(tiling2)+' (the latter will be used); predicate has dimensions '+str(boxSize)+', dense pack cell '+str(str(sp.cellSize)+'.'))
+    sp.cellRepeat(tiling2)
+    # make packing aperiodic and centered at predicate's center
     spCenter=.5*sp.cellSize
     sp.cellSize=(0,0,0) # make aperiodic
     # translate current center to predicate center
     sp.translate(predicate.center()-spCenter)
-    if memoizeDir:
-        print('saving to',memo)
-        sp.save(memo)
     return sp.filtered(predicate)
-
-
-
