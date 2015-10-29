@@ -10,6 +10,7 @@
 #include<woo/core/Field.hpp>
 #include<woo/core/DisplayParameters.hpp>
 #include<boost/filesystem/operations.hpp>
+#include<boost/filesystem/convenience.hpp>
 #include<boost/algorithm/string.hpp>
 #include<boost/version.hpp>
 #include<boost/python.hpp>
@@ -79,7 +80,10 @@ void SnapshotEngine::run(){
 		}
 	}
 	const shared_ptr<GLViewer>& glv=OpenGLManager::self->views[0];
+	if(fileBase.empty()) fileBase=Master::instance().tmpFilename()+"/";
 	std::ostringstream fss; fss<<fileBase<<std::setw(5)<<std::setfill('0')<<counter++<<"."<<boost::algorithm::to_lower_copy(format);
+	boost::filesystem::path p(fss.str());
+	boost::filesystem::create_directories(p.parent_path());
 	LOG_DEBUG("GL view → "<<fss.str())
 	glv->setSnapshotFormat(QString(format.c_str()));
 	glv->nextSnapFile=fss.str();
