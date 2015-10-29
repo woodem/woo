@@ -516,11 +516,13 @@ def plotDirections(aabb=(),mask=0,bins=20,numHist=True,noShow=False):
 def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5):
     """Create a video from external image files using `mencoder <http://www.mplayerhq.hu>`__, `avconv <http://libav.org/avconv.html>`__ or `ffmpeg <http://www.ffmpeg.org>`__ (whichever is found on the system). Encodes using the default mencoder codec (mpeg4), two-pass with mencoder and one-pass with avconv, running multi-threaded with number of threads equal to number of OpenMP threads allocated for Woo.
 
+    If *out* ends with ``.gif``, animated GIF is created, using ``convert`` from ImageMagick (very likely not avilable under Windows).
+
     :param frameSpec: wildcard | sequence of filenames. If list or tuple, filenames to be encoded in given order; otherwise wildcard understood by mencoder's mf:// URI option (shell wildcards such as ``/tmp/snap-*.png`` or and printf-style pattern like ``/tmp/snap-%05d.png``), if using mencoder, or understood by ``avconv`` or ``ffmpeg`` if those are being used.
     :param str out: file to save video into
     :param bool renameNotOverwrite: if True, existing same-named video file will have -*number* appended; will be overwritten otherwise.
     :param int fps: Frames per second (``-mf fps=…``)
-    :param int kbps: Bitrate (``-lavcopts vbitrate=…``) in kb/s
+    :param int kbps: Bitrate (``-lavcopts vbitrate=…``) in kb/s (ignored for GIF)
     :param holdLast: Repeat the last frame this many times; if negative, it means seconds and will be converted to frames according to *fps*. This option is not applicable if *frameSpec* is a wildcard (as opposed to a list of images).
 
     .. note:: ``avconv`` and ``ffmpeg`` need symlinks, which are not available under Windows.
@@ -530,11 +532,18 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     menc=distutils.spawn.find_executable('mencoder')
     ffmp=distutils.spawn.find_executable('ffmpeg')
     avco=distutils.spawn.find_executable('avconv')
+    conv=distutils.spawn.find_executable('convert')
     # the first one wins
-    if False and menc: encExec,encType=menc,'mencoder'
-    elif avco: encExec,encType=avco,'avconv'
-    elif ffmp: encExec,encType=ffmp,'avconv'
-    else: raise RuntimeError('No suitable video encoder (mencoder, ffmpeg, avconv) found in PATH.')
+    WIN=(sys.platform=='win32')
+    GIF=out.endswith('.gif')
+    if not GIF:
+        if avco and not WIN: encExec,encType=avco,'avconv'
+        elif ffmp and not WIN: encExec,encType=ffmp,'avconv'
+        elif menc: encExec,encType=menc,'mencoder'
+        else: raise RuntimeError('No suitable video encoder (ffmpeg (non-Windows), avconv (non-Windows), mencoder) found in PATH.')
+    else:
+        if not conv: raise RuntimeError('Convert (from ImageMagick) not found for GIF conversion.')
+        encExec,encType=conv,'GIF'
 
     import os,os.path,subprocess
     if renameNotOverwrite and os.path.exists(out):
@@ -551,8 +560,8 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
         frameSpecAvconv=[frameSpec]
         if encType=='avconv': raise RuntimeError('Encoding via ffmpeg/avconv is only possible when list of files (as opposed to a pattern) is passed.')
 
-    if encType=='avconv':
-        if sys.platform=='win32': raise RuntimeError('Encoding via ffmpeg/avconv is not yet implemented under Windows (symlinks not functional on this platform).')
+    if encType=='avconv' or encType=='GIF':
+        if sys.platform=='win32': raise RuntimeError('Encoding via ffmpeg/avconv and to GIF is not yet implemented under Windows (symlinks not functional on this platform).')
         symDir=woo.master.tmpFilename()
         os.mkdir(symDir)
         ff2=[]
@@ -563,31 +572,31 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
             os.symlink(f,ff2[-1])
         frameSpecAvconv=ff2
 
-    # write input images to file
-    #if encType=='avconv':
-    #    i=woo.master.tmpFilename()+'.txt'
-    #    with open(i,'w') as ii:
-    #        for f in frameSpecAvconv: ii.write("file '%s'\n"%f)
-    #    frameSpecAvconv=[i]
-
-    devNull='nul' if (sys.platform=='win32') else '/dev/null'
-    # mencoder normally creates divx2pass.log in the current dir, which might fail
-    # use temp file instead, explicitly
-    passLogFile=woo.master.tmpFilename()+'.log'
-    # passNo==0 means single pass (avconv)
-    for passNo in ((1,2) if encType=='mencoder' else (0,)):
-        if encType=='mencoder': cmd=[encExec,'mf://%s'%frameSpecMenc,'-mf','fps=%d'%int(fps),'-ovc','lavc','-lavcopts','vbitrate=%d:vpass=%d:threads=%d:%s'%(int(kbps),passNo,woo.master.numThreads,'turbo' if passNo==1 else ''),'-passlogfile',passLogFile,'-o',(devNull if passNo==1 else out)]
-        elif encType=='avconv':
-            #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
-            # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
-            inputs=['-i',symPattern]
-            cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
-        print('Pass %d:'%passNo,' '.join(cmd))
+    if GIF:
+        cmd=[conv,'-delay',str(int(.5+(1./fps)/100.)),'-loop','0']+frameSpecAvconv+[out]
+        print('Animated GIF: ',' '.join(cmd))
         ret=subprocess.call(cmd)
         if ret!=0: raise RuntimeError("Error running %s."%encExec)
+
+    else:
+        devNull='nul' if (sys.platform=='win32') else '/dev/null'
+        # mencoder normally creates divx2pass.log in the current dir, which might fail
+        # use temp file instead, explicitly
+        passLogFile=woo.master.tmpFilename()+'.log'
+        # passNo==0 means single pass (avconv)
+        for passNo in ((1,2) if encType=='mencoder' else (0,)):
+            if encType=='mencoder': cmd=[encExec,'mf://%s'%frameSpecMenc,'-mf','fps=%d'%int(fps),'-ovc','lavc','-lavcopts','vbitrate=%d:vpass=%d:threads=%d:%s'%(int(kbps),passNo,woo.master.numThreads,'turbo' if passNo==1 else ''),'-passlogfile',passLogFile,'-o',(devNull if passNo==1 else out)]
+            elif encType=='avconv':
+                #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
+                # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
+                inputs=['-i',symPattern]
+                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+            print('Pass %d:'%passNo,' '.join(cmd))
+            ret=subprocess.call(cmd)
+            if ret!=0: raise RuntimeError("Error running %s."%encExec)
     
     # clean up symlinks directory
-    if encType=='avconv':
+    if encType=='avconv' or encType=='GIF':
         import shutil
         shutil.rmtree(symDir)
 
