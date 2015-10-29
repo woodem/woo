@@ -30,6 +30,7 @@ void CircularOrbit::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	Real v2t=omega*rho; // XXX: might be actually smaller due to leapfrog?
 	Real ttheta=theta+.5*v2t*scene->dt; // mid-step polar angle
 	vv=node->ori*(Quaternionr(AngleAxisr(ttheta,Vector3r::UnitZ()))*Vector3r(0,v2t,0));
+	if(rotate) n->getData<DemData>().angVel=node->ori*Vector3r(0,0,omega);
 	if(isFirstStepRun(scene)) angle+=omega*scene->dt;
 }
 
@@ -40,6 +41,7 @@ void StableCircularOrbit::velocity(const Scene* scene, const shared_ptr<Node>& n
 	Vector3r rtz1(radius,rtz0[1]+omega*scene->dt,rtz0[2]);    // target pos in local cyl
 	Vector3r pos1(node->loc2glob(CompUtils::cyl2cart(rtz1))); // target pos in global cart
 	n->getData<DemData>().vel=(pos1-pos0)/scene->dt;
+	if(rotate) n->getData<DemData>().angVel=node->ori*Vector3r(0,0,omega);
 	if(isFirstStepRun(scene)) angle+=omega*scene->dt;
 }
 

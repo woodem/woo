@@ -27,9 +27,9 @@ WOO_REGISTER_OBJECT(HarmonicOscillation);
 struct CircularOrbit: public Impose{
 	void velocity(const Scene* scene, const shared_ptr<Node>&n) override;
 	#define woo_dem_CircularOrbit__CLASS_BASE_DOC_ATTRS_CTOR \
-		CircularOrbit,Impose,"Imposes circular orbiting around the local z-axis; the velocity is prescribed using approximated midstep position in an incremental manner. This can lead to unstabilities (such as changing radius) when used over millions of steps, but does not require radius to be given explicitly (see also :obj:`StableCircularOrbit`).", \
+		CircularOrbit,Impose,"Imposes circular orbiting around the local z-axis; the velocity is prescribed using approximated midstep position in an incremental manner. This can lead to unstabilities (such as changing radius) when used over millions of steps, but does not require radius to be given explicitly (see also :obj:`StableCircularOrbit`). :obj:`Angular velocity <DemData.angVel>` is touched only when :obj:`rotate` is set.", \
 		((shared_ptr<Node>,node,make_shared<Node>(),,"Local coordinate system.")) \
-		((bool,rotate,false,,"Impose rotational velocity so that orientation relative to the local z-axis is always the same.\n\n.. warning:: This is not yet implemented.")) \
+		((bool,rotate,false,,"Impose rotational velocity so that orientation relative to the local z-axis is always the same. If false, angular velocity is left as-is.")) \
 		((Real,omega,NaN,,"Orbiting angular velocity.")) \
 		((Real,angle,0,,"Cumulative angle turned, incremented at every step.")) \
 		,/*ctor*/ what=Impose::VELOCITY;
@@ -40,7 +40,7 @@ WOO_REGISTER_OBJECT(CircularOrbit);
 struct StableCircularOrbit: public CircularOrbit {
 	void velocity(const Scene* scene, const shared_ptr<Node>&n) override;
 	#define woo_dem_StableCircularOrbit__CLASS_BASE_DOC_ATTRS \
-		StableCircularOrbit,CircularOrbit,"Impose circular orbiting around local z-axis, enforcing constant radius of orbiting.", \
+		StableCircularOrbit,CircularOrbit,"Impose circular orbiting around local z-axis, enforcing constant radius of orbiting. The note about :obj:`~CircularOrbit.rotate` applies to this imposition.", \
 		((Real,radius,NaN,,"Radius, i.e. enforced distance from the rotation axis."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_StableCircularOrbit__CLASS_BASE_DOC_ATTRS);
 };
