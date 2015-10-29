@@ -110,7 +110,8 @@ features=['vtk','gts','openmp',('qt5' if QT5 else 'qt4'),'opengl']
 if travis: features=[] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
 flavor='' #('' if WIN else 'distutils')
 if travis: flavor+=('-' if flavor else '')+'travis'
-if PY3: flavor+=('-' if flavor else '')+'py3'
+# distribution builds should set not flavor
+if PY3 and not DISTBUILD: flavor+=('-' if flavor else '')+'py3'
 debug=False
 chunkSize=1 # (1 if WIN else 10)
 hotCxx=[] # plugins to be compiled separately despite chunkSize>1
