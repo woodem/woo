@@ -864,8 +864,10 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
         fPlot.write('dataFile=%s'%dataFile); dataFile='dataFile'
     if not extension: extension=term
     i=0
+    # return variable name, everything preceding '=' (if present)
+    def _plotStrip(p): return p.strip().split('=',1)[0]
     for p in plots:
-        pStrip=p.strip().split('=',1)[0]
+        pStrip=_plotStrip(p)
         if plots[p]==None: continue  ## this plot is image plot, which is not applicable to gnuplot
         plots_p=[addPointTypeSpecifier(o) for o in tuplifyYAxis(plots[p])]
         if term in ['wxt','x11']: fPlot.write("set term %s %d persist\n"%(term,i))
@@ -904,8 +906,8 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
         ppp=[]
         def _mkLine(varX,varY,i):
             return " %s using %d:%d title '%s%s(%s)%s' with lines%s"%(dataFile,vars.index(varX)+1,vars.index(varY)+1,'← ' if i==0 else'',xlateLabel(varY,labels),xlateLabel(varX,labels),' →' if i==1 else '',' axes x1y2' if i==1 else '')
-        for pp in plots_y1: ppp.append(_mkLine(pStrip,pp[0],0))
-        for pp in plots_y2: ppp.append(_mkLine(pStrip,pp[0],1))
+        for pp in plots_y1: ppp.append(_mkLine(pStrip,_plotStrip(pp[0]),0))
+        for pp in plots_y2: ppp.append(_mkLine(pStrip,_plotStrip(pp[0]),1))
         fPlot.write("plot "+",".join(ppp)+"\n")
         i+=1
     fPlot.close()
