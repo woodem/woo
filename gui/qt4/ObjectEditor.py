@@ -117,7 +117,7 @@ class AttrEditor():
             except AttributeError: self.setEnabled(False)
         self.isHot(False)
     def multiplierChanged(self,convSpec):
-        raise RuntimeError("This widget has no multiplierChanged method defined.")
+        raise RuntimeError("This widget %s has no multiplierChanged method defined."%self.__class__.__name__)
 
 class AttrEditor_Bool(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter):
