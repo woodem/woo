@@ -145,24 +145,28 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
                 sceneId=S.tags['id']+('' if i==0 else '~%d'%i)
                 if sceneId not in hdf: break
                 i+=1
+            # for older h5py version: encode unicode to str
+            def _encoded(x):
+                if isinstance(x,unicode): return x.encode('utf-8')
+                return x
             # group for our Scene
             G=hdf.create_group(sceneId)
             G.attrs['formatVersion']=dbFormatVersion
             G.attrs['finished']=datetime.datetime.now().replace(microsecond=0).isoformat('_')
-            G.attrs['batchTable']=table
+            G.attrs['batchTable']=_encoded(table)
             G.attrs['batchTableLine']=line
             G.attrs['sceneId']=S.tags['id']
             G.attrs['title']=S.tags['title']
             G.attrs['duration']=S.duration
-            G.attrs['pre']=(S.pre.dumps(format='json') if S.pre else '')
-            G.attrs['tags']=json.dumps(unicodeTags)
-            G.attrs['plots']=json.dumps(S.plot.plots)
+            G.attrs['pre']=_encoded(S.pre.dumps(format='json') if S.pre else '')
+            G.attrs['tags']=_encoded(json.dumps(unicodeTags))
+            G.attrs['plots']=_encoded(json.dumps(S.plot.plots))
             G_misc=G.create_group('misc')
-            for k,v in kw.items(): G_misc.attrs[k]=woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v)
+            for k,v in kw.items(): G_misc.attrs[k]=_encoded(woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v))
             G_series=G.create_group('series')
             for k,v in series.items():
                 # hdf5 is smart enough to create sub-groups automatically if the name contains slashes
-                G_series[k]=v
+                G_series[k]=_encoded(v)
             hdf.close()
     else: raise ValueError('*fmt* must be one of "sqlite", "hdf5", None (autodetect based on suffix)')
 

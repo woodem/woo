@@ -165,7 +165,8 @@ def runServers(xmlrpc=False,tcpPy=False):
         srv=GenericTCPServer(handler=woo.remote.PythonConsoleSocketEmulator,title='TCP python prompt',cookie=True,minPort=9000)
         woo.runtime.cookie=srv.server.cookie
     if xmlrpc:
-        from xmlrpc.server import SimpleXMLRPCServer
+        if future.utils.PY3: from xmlrpc.server import SimpleXMLRPCServer
+        else: from SimpleXMLRPCServer import SimpleXMLRPCServer
         port,maxPort=21000,65535 # minimum port number
         while port<maxPort:
             try:
