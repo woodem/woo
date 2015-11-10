@@ -8,7 +8,7 @@ matrix:
    include:
       - python: "2.7"
         env: WOO_EXEC=woo-travis
-      - python: "3.3"
+      - python: "3.2"
         env: WOO_EXEC=woo-travis-py3
 install:
    # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
