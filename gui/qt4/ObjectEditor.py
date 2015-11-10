@@ -782,6 +782,7 @@ class ObjectEditor(QFrame):
                 w=self.widgets['value']
                 if ix==0: # base unit:
                     w.multiplier=None
+                    # print(self.obj,self.containingClass,self.name)
                     w.multiplierChanged('')
                 else:
                     w.multiplier=self.trait.altUnits[0][ix-1][1]
