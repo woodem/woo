@@ -68,7 +68,8 @@ void Suspicious::run(){
 	#endif
 	#endif
 
-	if(!allOk) throw std::runtime_error("Suspicious conditions, summary above in the terminal.");
+	// first 2 to silence compiler warning
+	if(!parVelOk || !parForceOk || !allOk) throw std::runtime_error("Suspicious conditions, summary above in the terminal.");
 };
 
 

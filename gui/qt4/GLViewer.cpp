@@ -316,7 +316,7 @@ void GLViewer::resetManipulation(){
 }
 
 void GLViewer::startClipPlaneManipulation(int planeNo){
-	assert(planeNo<renderer->clipPlanes.size());
+	assert(planeNo<(int)renderer->clipPlanes.size());
 	resetManipulation();
 	mouseMovesManipulatedFrame(xyPlaneConstraint.get());
 	manipulatedClipPlane=planeNo;
@@ -470,14 +470,14 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	/* function keys */
 	else if(e->key()==Qt::Key_F1 || e->key()==Qt::Key_F2 || e->key()==Qt::Key_F3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_F1) n=1; else if(e->key()==Qt::Key_F2) n=2; else if(e->key()==Qt::Key_F3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=renderer->clipPlanes.size()) return;
+		if(planeId>=(int)renderer->clipPlanes.size()) return;
 		if(planeId!=manipulatedClipPlane) startClipPlaneManipulation(planeId);
 	}
 	/* numbers */
 	else if(e->key()==Qt::Key_0 && (e->modifiers() & Qt::AltModifier)) { boundClipPlanes.clear(); displayMessage("Cleared bound planes group.");}
 	else if(e->key()==Qt::Key_1 || e->key()==Qt::Key_2 || e->key()==Qt::Key_3 /* || ... */ ){
 		int n=0; if(e->key()==Qt::Key_1) n=1; else if(e->key()==Qt::Key_2) n=2; else if(e->key()==Qt::Key_3) n=3; assert(n>0); int planeId=n-1;
-		if(planeId>=renderer->clipPlanes.size()) return; // no such clipping plane
+		if(planeId>=(int)renderer->clipPlanes.size()) return; // no such clipping plane
 		if(e->modifiers() & Qt::AltModifier){
 			if(boundClipPlanes.count(planeId)==0) {boundClipPlanes.insert(planeId); displayMessage("Added plane #"+lexical_cast<string>(planeId+1)+" to the bound group: "+strBoundGroup());}
 			else {boundClipPlanes.erase(planeId); displayMessage("Removed plane #"+lexical_cast<string>(planeId+1)+" from the bound group: "+strBoundGroup());}
@@ -540,7 +540,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		}
 	}
 	else if(e->key()==Qt::Key_R){ // reverse the clipping plane; revolve around scene center if no clipping plane selected
-		if(manipulatedClipPlane>=0 && manipulatedClipPlane<renderer->clipPlanes.size()){
+		if(manipulatedClipPlane>=0 && manipulatedClipPlane<(int)renderer->clipPlanes.size()){
 			/* here, we must update both manipulatedFrame orientation and renderer->clipPlaneOri in the same way */
 			Quaternionr& ori=renderer->clipPlanes[manipulatedClipPlane]->ori;
 			ori=Quaternionr(AngleAxisr(M_PI,Vector3r(0,1,0)))*ori; 
@@ -687,7 +687,7 @@ void GLViewer::draw(bool withNames, bool fast)
 		}
 	#endif
 	if(manipulatedClipPlane>=0){
-		assert(manipulatedClipPlane<renderer->clipPlanes.size());
+		assert(manipulatedClipPlane<(int)renderer->clipPlanes.size());
 #if QGLVIEWER_VERSION>=0x020603
 		qreal v0,v1,v2; manipulatedFrame()->getPosition(v0,v1,v2);
 #else
@@ -698,7 +698,7 @@ void GLViewer::draw(bool withNames, bool fast)
 		const Vector3r& oldPos(renderer->clipPlanes[manipulatedClipPlane]->pos);
 		const Quaternionr& oldOri(renderer->clipPlanes[manipulatedClipPlane]->ori);
 		for(int planeId: boundClipPlanes){
-			if(planeId>=renderer->clipPlanes.size() || !renderer->clipPlanes[planeId]->rep || planeId==manipulatedClipPlane) continue;
+			if(planeId>=(int)renderer->clipPlanes.size() || !renderer->clipPlanes[planeId]->rep || planeId==manipulatedClipPlane) continue;
 			Vector3r& boundPos(renderer->clipPlanes[planeId]->pos); Quaternionr& boundOri(renderer->clipPlanes[planeId]->ori);
 			Quaternionr relOrient=oldOri.conjugate()*boundOri; relOrient.normalize();
 			Vector3r relPos=oldOri.conjugate()*(boundPos-oldPos);
@@ -849,7 +849,7 @@ void GLViewer::postDraw(){
 	// cutting planes (should be moved to Renderer perhaps?)
 	// only painted if one of those is being manipulated
 	if(manipulatedClipPlane>=0){
-		for(int planeId=0; planeId<renderer->clipPlanes.size(); planeId++){
+		for(int planeId=0; planeId<(int)renderer->clipPlanes.size(); planeId++){
 			if(!renderer->clipPlanes[planeId]->rep && planeId!=manipulatedClipPlane) continue;
 			glPushMatrix();
 				const Vector3r& pos=renderer->clipPlanes[planeId]->pos;
@@ -1200,7 +1200,7 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 		} else QGLViewer::wheelEvent(event);
 		return;
 	}
-	assert(manipulatedClipPlane<renderer->clipPlanes.size());
+	assert(manipulatedClipPlane<(int)renderer->clipPlanes.size());
 	float distStep=1e-3*sceneRadius();
 	//const float wheelSensitivityCoef = 8E-4f;
 	//Vec trans(0.0, 0.0, -event->delta()*wheelSensitivity()*wheelSensitivityCoef*(camera->position()-position()).norm());
