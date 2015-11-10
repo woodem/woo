@@ -60,6 +60,17 @@ if 0:
                 out=open(s,'w'); out.write(txt2); out.close()
                 print("%s: %d subtitution%s made, backup in %s~"%(s,xlator.count,'s' if xlator.count>1 else '',s))
 
+def releaseInternalPythonObjects():
+    'Only used internally at Woo shutdown, to work around issues releasing mixed python/c++ shared_ptr. See http://stackoverflow.com/questions/33637423/pygilstate-ensure-after-py-finalize/33637604 for details.'
+    import woo,woo.core,os
+    if 'WOO_DEBUG' in os.environ: msg=lambda x: sys.stderr.write(x)
+    else: msg=lambda x: None
+    msg("Entered woo._releaseInternalPythonObjects, releasing woo.master.scene\n")
+    woo.master.releaseScene() # 
+    msg("woo.master.scene released, releasing attribute traits...\n")
+    for c in woo.core.Object._derivedCxxClasses:
+        for trait in c._attrTraits: trait._resetInternalPythonObjects()
+    msg("traits released.\n")
 
 def setExitHandlers():
     """Set exit handler to avoid gdb run if log4cxx crashes at exit."""
@@ -69,6 +80,10 @@ def setExitHandlers():
         sys.exit=woo.master.exitNoBacktrace
     # this seems to be not needed anymore:
     #sys.excepthook=sys.__excepthook__ # apport on ubuntu overrides this, we don't need it
+
+    import atexit
+    atexit.register(releaseInternalPythonObjects)
+
 
 
 # consistency check

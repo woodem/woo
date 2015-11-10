@@ -3,6 +3,7 @@
 #include<woo/lib/base/Types.hpp>
 #include<woo/lib/base/Math.hpp>
 #include<woo/lib/base/CompUtils.hpp>
+#include<woo/lib/pyutil/gil.hpp>
 #include<boost/python.hpp>
 
 // attribute flags
@@ -32,8 +33,17 @@ namespace woo{
 		map<string,int> _enumName2Num; // filled automatically from _enumNames
 
 		// avoid throwing exceptions when not initialized, just return None
-		AttrTraitBase(): _flags(0)              { _ini=_range=_choice=_buttons=[]()->py::object{ return py::object(); }; }
-		AttrTraitBase(int flags): _flags(flags) { _ini=_range=_choice=_buttons=[]()->py::object{ return py::object(); }; }
+		void _resetInternalPythonObjects() { _ini=_range=_choice=_buttons=[]()->py::object{ return py::object(); }; }
+		AttrTraitBase(): _flags(0)              { _resetInternalPythonObjects(); }
+		AttrTraitBase(int flags): _flags(flags) { _resetInternalPythonObjects(); }
+
+		// manually destruct members containing python objects with GIL to avoid crash at shutdown
+		// e.g. when _ini was holding a make_shared<Plot>(), it would cause crash at shutdown
+		// due to shared_ptr not holding GIL when releasing the object possibly created in python
+		~AttrTraitBase(){ 
+			if(Py_IsInitialized()){ GilLock gil; _resetInternalPythonObjects(); }
+			_resetInternalPythonObjects();
+		}
 
 		std::function<py::object()> _ini;
 		std::function<py::object()> _range;
@@ -169,6 +179,7 @@ namespace woo{
 				.add_property("buttons",&AttrTraitBase::pyGetButtons)
 				.def("__str__",&AttrTraitBase::pyStr)
 				.def("__repr__",&AttrTraitBase::pyStr)
+				.def("_resetInternalPythonObjects",&AttrTraitBase::_resetInternalPythonObjects,"Internal purposes only: release any internally-help python objects of this trait. The trait will be invalid at this point. Should be called at Python shutdown.")
 			;
 		}
 	};

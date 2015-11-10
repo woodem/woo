@@ -148,6 +148,8 @@ class Master: public Singleton<Master>{
 
 		const shared_ptr<Scene>& getScene();
 		void setScene(const shared_ptr<Scene>& s);
+		// only used at shutdown
+		void releaseScene(){ scene.reset(); }
 		//! Return unique temporary filename. May be deleted by the user; if not, will be deleted at shutdown.
 		string tmpFilename();
 		string getTmpFileDir();

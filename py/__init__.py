@@ -318,9 +318,9 @@ if not PY3K:
 
 __all__=['master']+list(allSubmodules)
 
-# avoids backtrace if crash at finalization (log4cxx)
+# IMPORTANT: deal with finalization issues (crashes at shutdown)
 from . import system
-system.setExitHandlers() 
+system.setExitHandlers()
 
 
 # fake miniEigen being in woo itself
@@ -363,3 +363,4 @@ try:
 except ImportError:
     # no wooExtra packages are installed
     pass
+

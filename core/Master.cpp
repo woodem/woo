@@ -128,6 +128,7 @@ void Master::pyRegisterClass(){
 		#endif
 		.def_readonly("confDir",&Master::confDir,"Directory for storing various local configuration files (automatically set at startup)")
 		.add_property("scene",&Master::pyGetScene,&Master::pySetScene)
+		.def("releaseScene",&Master::releaseScene,"Release the scene object; only used internally at Python shutdown.")
 
 		.add_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programming interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
 		.add_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")
