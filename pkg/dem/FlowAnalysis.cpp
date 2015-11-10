@@ -132,7 +132,7 @@ void FlowAnalysis::addCurrentData(){
 		Real radius=p->shape->equivRadius();
 		if(isnan(radius)) continue;
 		if(!enlargedBox.contains(p->shape->nodes[0]->pos)) continue;
-		assert(!(porosity && poroData.size()<=p->id));
+		assert(!(porosity && (int)poroData.size()<=p->id));
 		addOneParticle(radius*2.,p->mask,(porosity?1-poroData[p->id]:NaN),p->shape->nodes[0]);
 	}
 };
