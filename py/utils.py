@@ -516,13 +516,13 @@ def plotDirections(aabb=(),mask=0,bins=20,numHist=True,noShow=False):
 def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5):
     """Create a video from external image files using `mencoder <http://www.mplayerhq.hu>`__, `avconv <http://libav.org/avconv.html>`__ or `ffmpeg <http://www.ffmpeg.org>`__ (whichever is found on the system). Encodes using the default mencoder codec (mpeg4), two-pass with mencoder and one-pass with avconv, running multi-threaded with number of threads equal to number of OpenMP threads allocated for Woo.
 
-    If *out* ends with ``.gif``, animated GIF is created, using ``convert`` from ImageMagick (very likely not avilable under Windows).
+    Some *out* extensions (``.gif``, ``.mng``) will call ImageMagick (``convert``; likely not available under Windows) to create animated image instead of video file.
 
     :param frameSpec: wildcard | sequence of filenames. If list or tuple, filenames to be encoded in given order; otherwise wildcard understood by mencoder's mf:// URI option (shell wildcards such as ``/tmp/snap-*.png`` or and printf-style pattern like ``/tmp/snap-%05d.png``), if using mencoder, or understood by ``avconv`` or ``ffmpeg`` if those are being used.
     :param str out: file to save video into
     :param bool renameNotOverwrite: if True, existing same-named video file will have -*number* appended; will be overwritten otherwise.
     :param int fps: Frames per second (``-mf fps=…``)
-    :param int kbps: Bitrate (``-lavcopts vbitrate=…``) in kb/s (ignored for GIF)
+    :param int kbps: Bitrate (``-lavcopts vbitrate=…``) in kb/s (ignored for animated images)
     :param holdLast: Repeat the last frame this many times; if negative, it means seconds and will be converted to frames according to *fps*. This option is not applicable if *frameSpec* is a wildcard (as opposed to a list of images).
 
     .. note:: ``avconv`` and ``ffmpeg`` need symlinks, which are not available under Windows.
@@ -535,15 +535,15 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     conv=distutils.spawn.find_executable('convert')
     # the first one wins
     WIN=(sys.platform=='win32')
-    GIF=out.endswith('.gif')
-    if not GIF:
+    IMG=out.endswith('.gif') or out.endswith('.mng')
+    if not IMG:
         if avco and not WIN: encExec,encType=avco,'avconv'
         elif ffmp and not WIN: encExec,encType=ffmp,'avconv'
         elif menc: encExec,encType=menc,'mencoder'
         else: raise RuntimeError('No suitable video encoder (ffmpeg (non-Windows), avconv (non-Windows), mencoder) found in PATH.')
     else:
-        if not conv: raise RuntimeError('Convert (from ImageMagick) not found for GIF conversion.')
-        encExec,encType=conv,'GIF'
+        if not conv: raise RuntimeError('Convert (from ImageMagick) not found for animated image conversion.')
+        encExec,encType=conv,'IMG'
 
     import os,os.path,subprocess
     if renameNotOverwrite and os.path.exists(out):
@@ -560,8 +560,8 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
         frameSpecAvconv=[frameSpec]
         if encType=='avconv': raise RuntimeError('Encoding via ffmpeg/avconv is only possible when list of files (as opposed to a pattern) is passed.')
 
-    if encType=='avconv' or encType=='GIF':
-        if sys.platform=='win32': raise RuntimeError('Encoding via ffmpeg/avconv and to GIF is not yet implemented under Windows (symlinks not functional on this platform).')
+    if encType=='avconv' or encType=='IMG':
+        if sys.platform=='win32': raise RuntimeError('Encoding via ffmpeg/avconv and to animated images is not yet implemented under Windows (symlinks not functional on this platform).')
         symDir=woo.master.tmpFilename()
         os.mkdir(symDir)
         ff2=[]
@@ -572,9 +572,9 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
             os.symlink(f,ff2[-1])
         frameSpecAvconv=ff2
 
-    if GIF:
+    if IMG:
         cmd=[conv,'-delay',str(int(.5+(1./fps)/100.)),'-loop','0']+frameSpecAvconv+[out]
-        print('Animated GIF: ',' '.join(cmd))
+        print('Animated image: ',' '.join(cmd))
         ret=subprocess.call(cmd)
         if ret!=0: raise RuntimeError("Error running %s."%encExec)
 
@@ -596,7 +596,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
             if ret!=0: raise RuntimeError("Error running %s."%encExec)
     
     # clean up symlinks directory
-    if encType=='avconv' or encType=='GIF':
+    if encType=='avconv' or encType=='IMG':
         import shutil
         shutil.rmtree(symDir)
 
