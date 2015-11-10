@@ -4,7 +4,7 @@
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
-from builtins import bytes, zip, range, object
+from builtins import bytes, zip, range, object, str
 import past.builtins, future.utils
 
 nan=float('nan')
@@ -378,7 +378,8 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
                 for sName,sVal in flat_group(sim['series']).items():
                     # print sName
                     series[sName]=numpy.array(sVal)
-                seriesData[sim.attrs['title']+'_'+sim.attrs['sceneId']]=series
+                # attributes are bytes, so '_' must be b'_' to avoid TypeError (can't concat bytes to str)
+                seriesData[str(sim.attrs['title'])+str('_')+str(sim.attrs['sceneId'])]=series
                 # same as for sqlite3 below
                 flat=flatten(rowDict)
                 for key,val in flat.items():
@@ -694,19 +695,19 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
      'head1': '1',
      'head3': '1.15',
      'important2': '1.1',
-     u'title': 'important2=1.1,OMP_NUM_THREADS=1.2'},
+     u'title': u'important2=1.1,OMP_NUM_THREADS=1.2'},
  3: {'!OMP_NUM_THREADS': 'c',
      'abcd': 'd',
      'head1': 'a',
      'head3': 'HEAD_3',
      'important2': 'b',
-     u'title': 'important2=b,OMP_NUM_THREADS=c'},
+     u'title': u'important2=b,OMP_NUM_THREADS=c'},
  5: {'!OMP_NUM_THREADS': 'c',
      'abcd': 'g',
      'head1': '1',
      'head3': 'HEAD_3',
      'important2': 'b',
-     u'title': 'important2=b,OMP_NUM_THREADS=c__line=5__'}}
+     u'title': u'important2=b,OMP_NUM_THREADS=c__line=5__'}}
 >>> pprint(TableParamReader(f2).paramDict())
 {2: {u'!OMP_NUM_THREADS': '1.2',
      u'abcd': '1.3',
