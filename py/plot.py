@@ -460,7 +460,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
         plots_p=[addPointTypeSpecifier(o) for o in tuplifyYAxis(plots[p])]
         plots_p_y1,plots_p_y2=[],[]; y1=True
         missing=set() # missing data columns
-        if pStrip not in list(data.keys()): missing.add(pStrip.decode('utf-8','ignore'))
+        if pStrip not in list(data.keys()): missing.add(pStrip if isinstance(pStrip,str) else pStrip.decode('utf-8','ignore'))
         for d in plots_p:
             if d[0]==None:
                 y1=False; continue
