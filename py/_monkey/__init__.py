@@ -7,6 +7,7 @@ This module is imported automatically by Woo at startup and should not be used d
 from __future__ import print_function
 from . import io
 from . import gts
+from . import compat
 import traceback
 
 # out-of-class docstrings for some classes
