@@ -351,3 +351,37 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 #undef _WOO_VERIFY
 #undef _NNAN
 #undef _NNANV
+
+
+
+#ifdef WOO_OPENGL
+
+#include<woo/pkg/gl/Renderer.hpp> // for GlData
+#include<GL/glu.h>
+
+WOO_PLUGIN(gl,(Gl1_ConcretePhys));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_ConcretePhys__CLASS_BASE_DOC_ATTRS);
+
+void Gl1_ConcretePhys::go(const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C, const GLViewInfo& viewInfo){
+	if(doCPhys==CPHYS_ALSO || doCPhys==CPHYS_ONLY) Gl1_CPhys::go(cp,C,viewInfo);
+	if(doCPhys==CPHYS_ONLY) return;
+	if(!dmgRange) return;
+	const auto& ph=cp->cast<ConcretePhys>();
+	if(ph.omega==0) return; // no damage, nothing to plot
+	static GLUquadric* gluQuadric;
+	if(!gluQuadric) gluQuadric=gluNewQuadric(); assert(gluQuadric);
+	Vector3r color=dmgRange->color(ph.omega);
+	if(isnan(color.maxCoeff())) return;
+	const auto& ge=C->geom->cast<L6Geom>();
+	glPushMatrix();
+		glTranslatev((ge.node->pos+ge.node->getData<GlData>().dGlPos).eval());
+		// rotate local x to local z, then rotate to global coords (read from right)
+		Quaternionr q(ge.node->ori*Quaternionr(AngleAxisr(-M_PI/2.,Vector3r::UnitY()))); 
+		glMultMatrixd(Eigen::Affine3d(q).data());
+		Real rMax=sqrt(ge.contA/M_PI);
+		glColor3v(color);
+		gluDisk(gluQuadric,/*inner*/0,/*outer*/rMax*dmgRange->norm(pow(ph.omega,dmgPow)),/*slices*/dmgSlices,/*loops*/1);
+	glPopMatrix();
+}
+
+#endif

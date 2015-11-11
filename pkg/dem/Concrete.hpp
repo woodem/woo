@@ -171,3 +171,28 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 WOO_REGISTER_OBJECT(Law2_L6Geom_ConcretePhys);
 
 
+
+#ifdef WOO_OPENGL
+
+#include<woo/pkg/dem/Gl1_CPhys.hpp>
+
+class GLUquadric;
+
+class Gl1_ConcretePhys: public Gl1_CPhys{	
+	static GLUquadric* gluQuadric; // needed for gluCylinder, initialized by ::go if no initialized yet
+	public:
+		void go(const shared_ptr<CPhys>&,const shared_ptr<Contact>&, const GLViewInfo&) override;
+	enum{CPHYS_NO,CPHYS_ONLY,CPHYS_ALSO};
+	#define woo_dem_Gl1_ConcretePhys__CLASS_BASE_DOC_ATTRS \
+		Gl1_ConcretePhys,Gl1_CPhys,"Renders :obj:`ConcretePhys` objects with discs representing damage. :obj:`Gl1_CPhys` may be requested to do other rendering based on :obj:`doCPhys`.", \
+		((int,doCPhys,CPHYS_NO,AttrTrait<Attr::namedEnum>().namedEnum({{CPHYS_NO,{"no",""}},{CPHYS_ONLY,{"only"}},{CPHYS_ALSO,{"also"}}}),"Call :obj:`Gl1_CPhys` for rendering.")) \
+		((shared_ptr<ScalarRange>,dmgRange,make_shared<ScalarRange>(),,"Range for disk damage coloring.")) \
+		((int,dmgSlices,6,,"Number of slices to draw the damage disc")) \
+		((int,dmgPow,2,,"Raise :obj:`~ConcretePhys.omega` to this power for disk radius scaling; 2 makes the disc area (rather than radius) proportional to omega."))
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_ConcretePhys__CLASS_BASE_DOC_ATTRS);
+	RENDERS(ConcretePhys);
+};
+WOO_REGISTER_OBJECT(Gl1_ConcretePhys);
+#endif
+

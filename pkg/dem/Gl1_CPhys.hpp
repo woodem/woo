@@ -4,12 +4,9 @@
 #include<woo/pkg/dem/Particle.hpp>
 #include<woo/pkg/dem/Gl1_DemField.hpp>
 
-class GLUquadric;
-
 class Gl1_CPhys: public GlCPhysFunctor{	
-		static GLUquadric* gluQuadric; // needed for gluCylinder, initialized by ::go if no initialized yet
 	public:
-		virtual void go(const shared_ptr<CPhys>&,const shared_ptr<Contact>&, const GLViewInfo&) override;
+		void go(const shared_ptr<CPhys>&,const shared_ptr<Contact>&, const GLViewInfo&) override;
 	#define woo_dem_Gl1_CPhys__CLASS_BASE_DOC_ATTRS \
 		Gl1_CPhys,GlCPhysFunctor,"Renders :obj:`CPhys` objects as cylinders of which diameter and color depends on :obj:`CPhys:force` normal (:math:`x`) component.", \
 		((shared_ptr<ScalarRange>,range,make_shared<ScalarRange>(),,"Range for normal force")) \
