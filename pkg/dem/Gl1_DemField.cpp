@@ -437,6 +437,8 @@ void Gl1_DemField::doCPhys(){
 		//assert(C->leakPA()->shape && C->leakPB()->shape);
 		//assert(C->leakPA()->shape->nodes.size()>0); assert(C->leakPB()->shape->nodes.size()>0);
 		if(!geom || !phys) continue;
+		viewInfo->renderer->setNodeGlData(geom->node);
+		if(geom->node->getData<GlData>().isClipped()) continue;
 		Renderer::glScopedName name(*viewInfo,C,geom->node);
 		(*cPhysDispatcher)(phys,C,*viewInfo);
 	}
