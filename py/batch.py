@@ -146,8 +146,9 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
                 if sceneId not in hdf: break
                 i+=1
             # for older h5py version: encode unicode to str
+            # no-op for py3
             def _encoded(x):
-                if isinstance(x,unicode): return x.encode('utf-8')
+                if not future.utils.PY3 and isinstance(x,past.builtins.unicode): return x.encode('utf-8')
                 return x
             # group for our Scene
             G=hdf.create_group(sceneId)
