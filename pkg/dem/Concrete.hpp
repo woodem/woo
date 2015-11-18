@@ -163,8 +163,8 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 		((Real,omegaThreshold,((void)">=1. to deactivate, i.e. never delete any contacts",1.),,"damage after which the contact disappears (<1), since omega reaches 1 only for strain →+∞")) \
 		((Real,epsSoft,((void)"approximates confinement -20MPa precisely, -100MPa a little over, -200 and -400 are OK (secant)",-3e-3),,"Strain at which softening in compression starts (non-negative to deactivate)")) \
 		((Real,relKnSoft,.3,,"Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)")) \
+		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy")) \
 		, /*py*/.def("yieldSigmaTNorm",&Law2_L6Geom_ConcretePhys::yieldSigmaTNorm,(py::arg("sigmaN"),py::arg("omega"),py::arg("coh0"),py::arg("tanPhi")),"Return radius of yield surface for given material and state parameters; uses attributes of the current instance (:obj:`yieldSurfType` etc), change them before calling if you need that.") \
-		/* .def("elasticEnergy",&Law2_L6Geom_ConcretePhys::elasticEnergy,"Compute and return the total elastic energy in all :obj:`ConcretePhys` contacts") */
 			
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY);
 };

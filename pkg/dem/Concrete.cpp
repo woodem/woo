@@ -342,6 +342,11 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 	Fn=sigmaN*contA;
 	Ft=sigmaT*contA;
 
+	if(unlikely(scene->trackEnergy)){
+		Real knDmg=(1-(epsN-epsNPl>0?omega:0))*phys.kn;
+		scene->energy->add(0.5*((knDmg>0?pow(Fn,2)/knDmg:0.)+Ft.squaredNorm()/phys.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
+	}
+
 	// TIMING_DELTAS_CHECKPOINT("GO B");
 	return true;
 }
