@@ -17,8 +17,8 @@ void HalfspaceBuoyancy::run(){
 		// we will treat everything as sphere (even Ellipsoid or Capsule)
 		Real rad=p->shape->equivRadius();
 		if(isnan(rad)) continue; // but we check anyway...
-		// centroid height above liquid level (positive = upwards), relative to surfPt
-    	Real h=(p->shape->nodes[0]->pos-surfPt).dot(gravDir);
+		// centroid above liquid surf (defined by surfPt and gravDir); if h<0 ↔ centroid below liquid surface
+    	Real h=-(p->shape->nodes[0]->pos-surfPt).dot(gravDir);
 		// particle entirely above the liquid level, no force to apply (check as soon as possible)
 		if(h>=rad) continue;
 
