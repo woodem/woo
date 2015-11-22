@@ -30,12 +30,12 @@ class TestPBC(unittest.TestCase):
         S.dem.par[1].vel=self.initVel
         S.engines=[Leapfrog(reset=True)]
         S.cell.nextGradV=Matrix3(0,0,0, 0,0,0, 0,0,-1)
-        S.cell.homoDeform=Cell.HomoVel2
+        S.cell.homoDeform='vel2'
         S.dt=0 # do not change positions with dt=0 in NewtonIntegrator, but still update velocities from velGrad
     def testVelGrad(self):
-        'PBC: velGrad changes hSize but not hSize0, accumulates in trsf (homoDeform=Cell.HomoVel2)'
+        "PBC: velGrad changes hSize but not hSize0, accumulates in trsf (homoDeform='vel2')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoVel2
+        S.cell.homoDeform='vel2'
         S.dt=1e-3
         hSize,trsf=S.cell.hSize,Matrix3.Identity
         hSize0=hSize
@@ -67,10 +67,10 @@ class TestPBC(unittest.TestCase):
         S.cell.setBox(2.55,11,45)
         self.assertTrue(S.cell.hSize==Matrix3(2.55,0,0, 0,11,0, 0,0,45));
     def testHomotheticResizeVel(self):
-        "PBC: homothetic cell deformation adjusts particle velocity (homoDeform==Cell.HomoVel)"
+        "PBC: homothetic cell deformation adjusts particle velocity (homoDeform=='vel')"
         S=woo.master.scene
         S.dt=1e-5
-        S.cell.homoDeform=Cell.HomoVel
+        S.cell.homoDeform='vel'
         s1=S.dem.par[1]
         #print 'init',self.initPos,self.initVel
         #print 'before',s1.pos,s1.vel
@@ -78,35 +78,35 @@ class TestPBC(unittest.TestCase):
         #print 'after',s1.pos,s1.vel
         self.assertAlmostEqual(s1.vel[2],self.initVel[2]+self.initPos[2]*S.cell.gradV[2,2])
     def testHomotheticResizePos(self):
-        "PBC: homothetic cell deformation adjusts particle position (homoDeform==Cell.HomoPos)"
+        "PBC: homothetic cell deformation adjusts particle position (homoDeform=='pos')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoPos
+        S.cell.homoDeform='pos'
         S.one()
         s1=S.dem.par[1]
         self.assertAlmostEqual(s1.vel[2],self.initVel[2])
         self.assertAlmostEqual(s1.pos[2],self.initPos[2]+self.initPos[2]*S.cell.gradV[2,2]*S.dt)
     def testL6GeomIncidentVelocity(self):
-        "PBC: L6Geom incident velocity (homoDeform==Cell.HomoGradV2)"
+        "PBC: L6Geom incident velocity (homoDeform=='gradV2')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoGradV2
+        S.cell.homoDeform='gradV2'
         S.one()
         S.engines=[ForceResetter(),ContactLoop([Cg2_Sphere_Sphere_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl(noBreak=True)]),Leapfrog(reset=True)]
         i=utils.createContacts([0],[1])[0]
         S.dt=1e-10; S.one() # tiny timestep, to not move the normal too much
         self.assertAlmostEqual(self.initVel.norm(),i.geom.vel.norm())
     def testL3GeomIncidentVelocity_homoPos(self):
-        "PBC: L6Geom incident velocity (homoDeform==Cell.HomoPos)"
+        "PBC: L6Geom incident velocity (homoDeform=='pos')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoPos; S.one()
+        S.cell.homoDeform='pos'; S.one()
         S.engines=[ForceResetter(),ContactLoop([Cg2_Sphere_Sphere_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl(noBreak=True)]),Leapfrog(reset=True)]
         i=utils.createContacts([0],[1])[0]
         S.dt=1e-10; S.one()
         self.assertAlmostEqual(self.initVel.norm(),i.geom.vel.norm())
         #self.assertAlmostEqual(self.relDist[1],1-i.geom.penetrationDepth)
     def testKineticEnergy(self):
-        "PBC: Particle.getEk considers only fluctuation velocity, not the velocity gradient (homoDeform==Cell.HomoVel2)"
+        "PBC: Particle.getEk considers only fluctuation velocity, not the velocity gradient (homoDeform=='vel2')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoVel2
+        S.cell.homoDeform='vel2'
         S.one() # updates velocity with homotheticCellResize
         # ½(mv²+ωIω)
         # #0 is still, no need to add it; #1 has zero angular velocity
@@ -114,9 +114,9 @@ class TestPBC(unittest.TestCase):
         Ek=.5*S.dem.par[1].mass*self.initVel.squaredNorm()
         self.assertAlmostEqual(Ek,S.dem.par[1].getEk(trans=True,rot=False,scene=S))
     def testKineticEnergy_homoPos(self):
-        "PBC: utils.kineticEnergy considers only fluctuation velocity, not the velocity gradient (homoDeform==Cell.HomoPos)"
+        "PBC: Particle.Ekt considers only fluctuation velocity, not the velocity gradient (homoDeform=='pos')"
         S=woo.master.scene
-        S.cell.homoDeform=Cell.HomoPos; S.one()
+        S.cell.homoDeform='pos'; S.one()
         self.assertAlmostEqual(.5*S.dem.par[1].mass*self.initVel.squaredNorm(),S.dem.par[1].Ekt)
 
 class TestPBCCollisions(unittest.TestCase):

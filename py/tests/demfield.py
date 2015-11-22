@@ -76,7 +76,7 @@ class TestImpose(unittest.TestCase):
         self.assertTrue(c.vel==Vector3(3,3,3))
         self.assertTrue(c.angVel[0]==1.)
     def testUselessRotationImpose(self):
-        'DEM: selfTest errro when imposing rotation on aspherical particles (would have no effect)'
+        'DEM: selfTest error when imposing rotation on aspherical particles (would have no effect)'
         for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)):
             a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion((1,0,0),1))
             a.impose=i
