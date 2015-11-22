@@ -365,6 +365,19 @@ class TestLoop(unittest.TestCase):
         self.assertAlmostEqual(S.time,1.001,delta=1e-3)
         S.run(time=.5,wait=True) # relative value
         self.assertAlmostEqual(S.time,1.501,delta=1e-3)
+    def testWait(self):
+        'Loop: Scene.wait() returns only after the current step finished'
+        S=woo.core.Scene(dt=1e-3,engines=[PyRunner(1,'import time; S.stop(); time.sleep(.3); S.lab.aa=True')])
+        S.run(wait=True)
+        self.assert_(hasattr(S.lab,'aa'))
+    def testWaitForScenes(self):
+        'Loop: Master.waitForScenes correctly handles reassignment of the master scene'
+        S=woo.master.scene=woo.core.Scene(dt=1e-3,engines=[PyRunner(1,'import time; S.stop(); time.sleep(.3); woo.master.scene=woo.core.Scene(dt=1e-4,engines=[woo.core.PyRunner(1,"S.stop()")])')])
+        S.run()
+        woo.master.waitForScenes()
+        self.assert_(woo.master.scene.dt==1e-4) # check master scene is the second one
+
+
 
 
         

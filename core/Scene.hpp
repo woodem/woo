@@ -153,6 +153,9 @@ struct Scene: public Object{
 		// expand {tagName} in given string
 		string expandTags(const string& s) const;
 
+		// constants for some values of subStep
+		enum {SUBSTEP_INIT=-1,SUBSTEP_PROLOGUE=0};
+
 		#ifdef WOO_OPENGL
 			#define woo_core_Scene__ATTRS__OPENGL \
 				((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states.")) \

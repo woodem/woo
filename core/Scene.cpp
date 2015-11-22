@@ -64,7 +64,7 @@ void Scene::pyOne(){
 void Scene::pyWait(){
 	if(!running()) return;
 	Py_BEGIN_ALLOW_THREADS;
-		while(running()) boost::this_thread::sleep(boost::posix_time::milliseconds(40));
+		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) boost::this_thread::sleep(boost::posix_time::milliseconds(40));
 	Py_END_ALLOW_THREADS;
 	// handle possible exception: reset it and rethrow
 	if(!except) return;
@@ -365,17 +365,17 @@ void Scene::doOneStep(){
 	// substepping or not, update engines from _nextEngines, if defined, at the beginning of step
 	// subStep can be 0, which happens if simulations is saved in the middle of step (without substepping)
 	// this assumes that prologue will not set _nextEngines, which is safe hopefully
-	if(!_nextEngines.empty() && (subStep<0 || (subStep<=0 && !subStepping))){
+	if(!_nextEngines.empty() && (subStep==SUBSTEP_INIT || (subStep<=SUBSTEP_PROLOGUE && !subStepping))){
 		engines=_nextEngines;
 		_nextEngines.clear();
 		postLoad(*this,NULL); // setup labels, check fields etc
 		// hopefully this will not break in some margin cases (subStepping with setting _nextEngines and such)
-		subStep=-1;
+		subStep=SUBSTEP_INIT;
 	}
 	for(const shared_ptr<Field>& f: fields) if(f->scene!=this) f->scene=this;
-	if(likely(!subStepping && subStep<0)){
+	if(likely(!subStepping && subStep==SUBSTEP_INIT)){
 		/* set substep to 0 during the loop, so that engines/nextEngines handler know whether we are inside the loop currently */
-		subStep=0;
+		subStep=SUBSTEP_PROLOGUE;
 		// ** 1. ** prologue
 		selfTest_maybe();
 		if(isPeriodic) cell->integrateAndUpdate(dt);
@@ -394,12 +394,12 @@ void Scene::doOneStep(){
 		if(isPeriodic) cell->setNextGradV();
 		step++;
 		time+=dt;
-		subStep=-1;
+		subStep=SUBSTEP_INIT;
 		if(!isnan(nextDt)){ dt=nextDt; nextDt=NaN; }
 	} else {
 		/* IMPORTANT: take care to copy EXACTLY the same sequence as is in the block above !! */
 		if(TimingInfo::enabled){ TimingInfo::enabled=false; LOG_INFO("Master.timingEnabled disabled, since Master.subStepping is used."); }
-		if(subStep<-1 || subStep>(int)engines.size()){ LOG_ERROR("Invalid value of Scene::subStep ("<<subStep<<"), setting to -1 (prologue will be run)."); subStep=-1; }
+		if(subStep<SUBSTEP_INIT || subStep>(int)engines.size()){ LOG_ERROR("Invalid value of Scene::subStep ("<<subStep<<"), setting to SUBSTEP_INIT=-1 (prologue will be run)."); subStep=SUBSTEP_INIT; }
 		// if subStepping is disabled, it means we have not yet finished last step completely; in that case, do that here by running all remaining substeps at once
 		// if subStepping is enabled, just run the step we need (the loop is traversed only once, with subs==subStep)
 		int maxSubStep=subStep;
@@ -407,13 +407,13 @@ void Scene::doOneStep(){
 		for(int subs=subStep; subs<=maxSubStep; subs++){
 			assert(subs>=-1 && subs<=(int)engines.size());
 			// ** 1. ** prologue
-			if(subs==-1){
+			if(subs==SUBSTEP_INIT){
 				selfTest_maybe();
 				if(isPeriodic) cell->integrateAndUpdate(dt);
 				if(trackEnergy) energy->resetResettables();
 			}
 			// ** 2. ** engines
-			else if(subs>=0 && subs<(int)engines.size()){
+			else if(subs>=SUBSTEP_PROLOGUE && subs<(int)engines.size()){
 				const shared_ptr<Engine>& e(engines[subs]);
 				e->scene=this;
 				if(!e->field && e->needsField()) throw std::runtime_error((getClassName()+" has no field to run on, but requires one.").c_str());
@@ -422,7 +422,7 @@ void Scene::doOneStep(){
 			// ** 3. ** epilogue
 			else if(subs==(int)engines.size()){
 				if(isPeriodic) cell->setNextGradV();
-				step++; time+=dt; /* gives -1 along with the increment afterwards */ subStep=-2;
+				step++; time+=dt; /* gives -1 along with the increment afterwards */ subStep=SUBSTEP_INIT-1;
 				if(!isnan(nextDt)){ dt=nextDt; nextDt=NaN; }
 			}
 			// (?!)

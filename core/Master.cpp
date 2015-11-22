@@ -107,6 +107,21 @@ Master::Master(){
 }
 
 
+/* wait for master scene to finish, but including the possiblity of it being re-assigned */
+void Master::pyWaitForScenes(){
+	while(true){
+		// copy the shared_ptr
+		const shared_ptr<Scene> s(getScene());
+		// wait for that one to finish
+		s->pyWait(); 
+		// if the scene finished and it is still the master scene, we're done
+		if(s.get()==getScene().get()){
+			return;
+		}
+		// otherwise keep waiting for the new master scene
+	}
+}
+
 Master::~Master(){ }
 
 
@@ -129,6 +144,7 @@ void Master::pyRegisterClass(){
 		.def_readonly("confDir",&Master::confDir,"Directory for storing various local configuration files (automatically set at startup)")
 		.add_property("scene",&Master::pyGetScene,&Master::pySetScene)
 		.def("releaseScene",&Master::releaseScene,"Release the scene object; only used internally at Python shutdown.")
+		.def("waitForScenes",&Master::pyWaitForScenes,"Wait for master scene to finish, including the possibility of master scene being replaced by a different scene object. This is different from :obj:`Scene.wait <woo.core.Scene.wait>` which will return when that particular scene object will have stopped. Internally, this method chains calls to :obj:`Scene.wait <woo.core.Scene.wait>` as long as :obj:`woo.master.scene <woo.core.Master.scene>` is re-assigned (thus, every :obj:`~woo.core.Scene` being de-assigned from :obj:`woo.master.scene <woo.core.Master.scene>` must be :obj:`stopped <Scene.stop>`, otherwise the call will never return.)")
 
 		.add_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programming interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
 		.add_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")

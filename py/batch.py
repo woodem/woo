@@ -42,7 +42,8 @@ def wait():
     S=woo.master.scene
     if inBatch():
         if not S.running: S.run()
-        S.wait()
+        woo.master.waitForScenes() # wait for Master (in case scene is re-assigned)
+
 def inBatch():
     'Tell whether we are running inside the batch or separately.'
     import os

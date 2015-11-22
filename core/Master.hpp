@@ -144,7 +144,7 @@ class Master: public Singleton<Master>{
 		shared_ptr<Object> pyGetScene();
 		void pySetScene(const shared_ptr<Object>& s); 
 
-
+		void pyWaitForScenes();
 
 		const shared_ptr<Scene>& getScene();
 		void setScene(const shared_ptr<Scene>& s);
