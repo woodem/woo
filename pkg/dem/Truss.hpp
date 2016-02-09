@@ -10,7 +10,7 @@ struct Rod: public Shape{
 	int numNodes() const override { return 2; }
 	void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
 	#define woo_dem_Rod__CLASS_BASE_DOC_ATTRS_CTOR \
-		Rod,Shape,"Line element without internal forces, wyth circular cross-section and hemi-spherical caps at both ends. Geometrically the same :obj:`Capsule`, but with 2 nodes.", \
+		Rod,Shape,"Line element without internal forces, with circular cross-section and hemi-spherical caps at both ends. Geometrically the same :obj:`Capsule`, but with 2 nodes.", \
 		((Real,radius,NaN,,"Radius of the rod.")) \
 		,/*ctor*/createIndex();
 	

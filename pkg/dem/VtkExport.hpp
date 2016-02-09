@@ -5,6 +5,7 @@
 #include<woo/pkg/dem/Particle.hpp>
 
 struct Capsule; // for triangulateCapsule decl
+struct Rod; // for triangulateRod decl
 
 #pragma GCC diagnostic push
 	// avoid warnings in VTK headers for using sstream
@@ -49,6 +50,8 @@ struct VtkExport: public PeriodicEngine{
 
 
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCapsule(const shared_ptr<Capsule>& capsule, int subdiv);
+	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateRod(const shared_ptr<Rod>& rod, int subdiv);
+	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real& rad, const Real& shaft, int subdiv);
 
 
 	void postLoad(VtkExport&,void*){

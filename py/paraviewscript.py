@@ -100,7 +100,7 @@ def kwFromVtkExport(vtkExport,out=None,launch=False):
     'Extract keywords suitable for :obj:`write` from a given :obj:`~woo.dem.VtkExport` instance.'
     assert isinstance(vtkExport,woo.dem.VtkExport)
     ff=vtkExport.outFiles
-    return dict(sphereFiles=ff['spheres'] if 'spheres' in ff else [],meshFiles=ff['mesh'] if 'mesh' in ff else [],conFiles=ff['con'] if 'con' in ff else [],triFiles=ff['tri'] if 'tri' in ff else [],staticFile=ff['static'][0] if 'static' in ff else [])
+    return dict(sphereFiles=ff['spheres'] if 'spheres' in ff else [],meshFiles=ff['mesh'] if 'mesh' in ff else [],conFiles=ff['con'] if 'con' in ff else [],triFiles=ff['tri'] if 'tri' in ff else [],staticFile=ff['static'][0] if 'static' in ff else '')
 
 def kwFromVtkExportTraces(S,dem,outPrefix=None):
     if not outPrefix: outPrefix=woo.master.tmpFilename()

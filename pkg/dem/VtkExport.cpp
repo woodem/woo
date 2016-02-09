@@ -3,6 +3,7 @@
 #include<woo/pkg/dem/Sphere.hpp>
 #include<woo/pkg/dem/Facet.hpp>
 #include<woo/pkg/dem/InfCylinder.hpp>
+#include<woo/pkg/dem/Truss.hpp>
 #include<woo/pkg/dem/Ellipsoid.hpp>
 #include<woo/pkg/dem/Wall.hpp>
 #include<woo/pkg/dem/Capsule.hpp>
@@ -69,10 +70,21 @@ int VtkExport::triangulateFan(const int& a, const vector<int>::iterator& BBegin,
 
 std::tuple<vector<Vector3r>,vector<Vector3i>>
 VtkExport::triangulateCapsule(const shared_ptr<Capsule>& capsule, int subdiv){
-	vector<Vector3r> vert; vector<Vector3i> tri;
+	return triangulateCapsuleLikeObject(capsule->nodes[0],capsule->radius,capsule->shaft,subdiv);
+}
 
-	const Real& rad(capsule->radius); const Real& shaft(capsule->shaft);
-	const auto& node=capsule->nodes[0];
+std::tuple<vector<Vector3r>,vector<Vector3i>>
+VtkExport::triangulateRod(const shared_ptr<Rod>& rod, int subdiv){
+	// convert to capsule geometry
+	auto n=make_shared<Node>();
+	const Vector3r& A(rod->nodes[0]->pos); const Vector3r& B(rod->nodes[1]->pos);
+	n->pos=.5*(A+B); n->ori=Quaternionr::FromTwoVectors(Vector3r::UnitX(),B-A);
+	return triangulateCapsuleLikeObject(n,rod->radius,(B-A).norm(),subdiv);
+}
+
+std::tuple<vector<Vector3r>,vector<Vector3i>>
+VtkExport::triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real& rad, const Real& shaft, int subdiv){
+	vector<Vector3r> vert; vector<Vector3i> tri;
 	//int capPos=0, capNeg=1;
 	//vert.push_back(node->loc2glob(Vector3r( rad+.5*shaft,0,0)));
 	//vert.push_back(node->loc2glob(Vector3r(-rad-.5*shaft,0,0)));
@@ -275,6 +287,7 @@ void VtkExport::run(){
 		const auto tetra=dynamic_cast<Tetra*>(p->shape.get());
 		const auto tet4=dynamic_cast<Tet4*>(p->shape.get());
 		const auto infCyl=dynamic_cast<InfCylinder*>(p->shape.get());
+		const auto rod=dynamic_cast<Rod*>(p->shape.get());
 		const auto ellipsoid=dynamic_cast<Ellipsoid*>(p->shape.get());
 		const auto capsule=dynamic_cast<Capsule*>(p->shape.get());
 		Real sigNorm=0;
@@ -306,7 +319,7 @@ void VtkExport::run(){
 		int smCellNum=0;
 		int tCellNum=0;
 		// static mesh particle?
-		bool isStatic=((staticMeshBit!=0) && (p->mask&staticMeshBit) && (facet||wall||infCyl));
+		bool isStatic=((staticMeshBit!=0) && (p->mask&staticMeshBit) && (facet||wall||infCyl||rod));
 		if(isStatic && staticMeshDone) continue; // nothing to do
 		
 		// this unifies code for static/nonstatic meshes
@@ -396,6 +409,11 @@ void VtkExport::run(){
 			vector<Vector3r> vert; vector<Vector3i> tri;
 			std::tie(vert,tri)=triangulateCapsule(static_pointer_cast<Capsule>(p->shape),subdiv);
 			tCellNum=addTriangulatedObject(vert,tri,tPos,tCells);
+		}
+		else if(rod){
+			vector<Vector3r> vert; vector<Vector3i> tri;
+			std::tie(vert,tri)=triangulateRod(static_pointer_cast<Rod>(p->shape),subdiv);
+			mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells);
 		}
 		else if(wall){
 			if(isnan(wall->glAB.volume())){
