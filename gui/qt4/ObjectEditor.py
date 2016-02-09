@@ -1098,7 +1098,7 @@ class ObjectEditor(QFrame):
         except TypeError:
             # boost::python won't convert weak_ptr, catch it here
             ini=''
-        toolTip=entry.containingClass.__name__+'.<b><i>'+entry.name+'</i></b><br>'+entry.doc+('<br><small>default: %s</small>'%ini)
+        toolTip=entry.containingClass.__name__+u'.<b><i>'+entry.name+u'</i></b><br>'+_ensureUnicode(entry.doc)+u'<br><small>default: %s</small>'%ini
         if self.labelIsVar: return woo.document.makeObjectHref(entry.obj,entry.name,text=entry.label),toolTip
         if PY3K: return entry.doc,toolTip
         else: return _ensureUnicode(entry.doc),toolTip
