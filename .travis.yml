@@ -8,8 +8,9 @@ matrix:
    include:
       - python: "2.7"
         env: WOO_EXEC=woo-travis
-      - python: "3.2"
-        env: WOO_EXEC=woo-travis-py3
+# disabled for now, since packaged boost::python only links against python 3.2, which is not sufficient
+#      - python: "3.4"
+#        env: WOO_EXEC=woo-travis-py3
 install:
    # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
    - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib
