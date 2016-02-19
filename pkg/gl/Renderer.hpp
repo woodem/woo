@@ -159,6 +159,7 @@ struct Renderer: public Object{
 		((shared_ptr<Object>,selObj,,,"Object which was selected by the user (access only via woo.qt.selObj).")) \
 		((shared_ptr<Node>,selObjNode,,AttrTrait<Attr::readonly>(),"Node associated to the selected object (recenters scene on that object upon selection)")) \
 		((string,selFunc,"import woo.qt\nwoo.qt.onSelection",,"Python expression to be called (by textually appending '(woo.gl.Renderer.selOBj)' or '(None)') at object selection/deselection. If empty, no function will be called. Any imports must be explicitly mentioned in the string.")) \
+		((bool,selFollow,false,,"Keep the scene centered at :obj:`selObjNode`.")) \
 		/* PERFORMANCE */ \
 		((int,maxFps,10,AttrTrait<>().startGroup("Performance"),"Maximum frame rate for the OpenGL display")) \
 		((Real,renderTime,NaN,AttrTrait<>().readonly().timeUnit(),"Time for rendering one frame (smoothed)")) \

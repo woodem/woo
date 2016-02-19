@@ -180,6 +180,8 @@ GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QW
 	setKeyDescription(Qt::Key_C & Qt::AltModifier,"Set scene center to median body position (same as space)");
 	setKeyDescription(Qt::Key_D,"Toggle time display mask");
 	setKeyDescription(Qt::Key_D & Qt::ShiftModifier,"Toggle local date/time display");
+	setKeyDescription(Qt::Key_F,"Toggle Scene center following Scene.gl.renderer.centNode (if defined)");
+	setKeyDescription(Qt::Key_F & Qt::ShiftModifier,"Set S.gl.renderer.centNode to currently selected node (S.gl.renderer.selObjNode) and switch following.");
 	setKeyDescription(Qt::Key_G,"Cycle through visible grid planes");
 	setKeyDescription(Qt::Key_G & Qt::ShiftModifier ,"Toggle grid visibility.");
 	setKeyDescription(Qt::Key_X,"Show the xz [shift: xy] (up-right) plane (clip plane: align normal with +x)");
@@ -494,12 +496,17 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		else useDisplayParameters(n,/*fromHandler*/ true);
 	}
 	/* letters alphabetically */
-	else if(e->key()==Qt::Key_C && (e->modifiers() & Qt::AltModifier)){ displayMessage("Median centering"); centerMedianQuartile(); }
+	else if(e->key()==Qt::Key_C && (e->modifiers() & Qt::AltModifier)){
+		renderer->selFollow=false;
+		displayMessage("Median centering");
+		centerMedianQuartile();
+	}
 	else if(e->key()==Qt::Key_C && /*Ctrl-C is handled by qglviewer*/ !(e->modifiers() & Qt::ControlModifier)){
 		// center around selected body
 		// if(selectedName() >= 0 && (*(Master::instance().getScene()->bodies)).exists(selectedName())) setSceneCenter(manipulatedFrame()->position());
 		// make all bodies visible
 		//else
+		renderer->selFollow=false;
 		centerScene();
 	}
 	#if 0
@@ -510,6 +517,21 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		else {
 			renderer->showTime+=1;
 			if(renderer->showTime>renderer->TIME_ALL) renderer->showTime=renderer->TIME_NONE;
+		}
+	}
+	else if(e->key()==Qt::Key_F && !(e->modifiers() & Qt::AltModifier)){
+		// toggle following central node (if defined)
+		#if 0
+			if(e->modifiers() && Qt::ShiftModifier){
+				renderer->centNode=renderer->selObjNode;
+				renderer->selFollow=false; // switched on in the following
+			}
+		#endif
+		if(!renderer->selObjNode) displayMessage("S.gl.renderer.selObjNode is None.");
+		else{
+			if(!renderer->selFollow) displayMessage("Scene center now follows "+renderer->selObjNode->pyStr()+".");
+			else displayMessage("Scene center is static now.");
+			renderer->selFollow=!renderer->selFollow;
 		}
 	}
 	else if(e->key()==Qt::Key_G) { if(e->modifiers() & Qt::ShiftModifier){ renderer->grid=(renderer->grid>0?0:7); return; } else renderer->grid++; if(renderer->grid>=8) renderer->grid=0; }
@@ -653,12 +675,26 @@ bool GLViewer::setSceneAndRenderer(){
 	return true;
 }
 
+#if 0
+void GLViewer::preDraw(){
+	/* FIXME:not sure if this is to be done here */
+
+	// if(!setSceneAndRenderer()) return; // avoid calling this, just check if renderer exists here
+	if(renderer && renderer->selFollow && renderer->selObjNode){
+		const auto& c(renderer->selObjNode->pos);
+		setSceneCenter(qglviewer::Vec(c[0],c[1],c[2]));
+		//cerr<<"["<<c.transpose()<<"]";
+	}
+	QGLViewer::preDraw();
+}
+#endif
 
 void GLViewer::draw(bool withNames, bool fast)
 {
 	const shared_ptr<Scene>& scene=Master::instance().getScene();
 	if(!scene) return; // nothing to do, really
 	/* scene and renderer setup */
+
 
 	// FIXME: reload detection will not work now anymore, we'd have to get the old renderer instance somehow...
 	#if 0

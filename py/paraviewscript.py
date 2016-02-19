@@ -56,15 +56,16 @@ def findPV():
 
 def launchPV(script):
     'Launch paraview as background process, passing --script=*script* as the only argument. If Paraview executable is not found via :obj:`findPV`, only a warning is printed and Paraview is not launched.'
-    import subprocess
+    import subprocess, os.path
     # will launch it in the background
     pv=findPV()
     if not pv:
         print('Paraview not executed since the executable was not found.')
         return
-    cmd=[pv,'--script='+script]
-    print('Running ',' '.join(cmd))
-    subprocess.Popen(cmd)
+    scriptDir=os.path.dirname(script) or '.'
+    cmd=[pv,'--script='+os.path.basename(script)]
+    print('Running ','cd "'+scriptDir+'"; '+' '.join(cmd))
+    subprocess.Popen(cmd,cwd=scriptDir)
 
 def fromEngines(S,out=None,launch=False,noDataOk=False):
     '''Write paraview script showing data from the current VTK-related engines:

@@ -151,6 +151,8 @@ struct Impose: public Object{
 			_classObj.attr("none")=(int)NONE; \
 			_classObj.attr("velocity")=(int)VELOCITY; \
 			_classObj.attr("force")=(int)FORCE; \
+			_classObj.attr("initVelocity")=(int)INIT_VELOCITY; \
+			_classObj.attr("readForce")=(int)READ_FORCE; \
 			woo::converters_cxxVector_pyList_2way<shared_ptr<Impose>>();
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Impose__CLASS_BASE_DOC_ATTRS_PY);
 };

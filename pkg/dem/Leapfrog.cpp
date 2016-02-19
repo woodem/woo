@@ -14,7 +14,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_ForceResetter__CLASS_BASE_DOC);
 void ForceResetter::run(){
 	const auto& dem=field->cast<DemField>();
 	bool hasGravity(dem.gravity!=Vector3r::Zero());
-	FOREACH(const shared_ptr<Node>& n, field->nodes){
+	for(const shared_ptr<Node>& n: field->nodes){
 		DemData& dyn=n->getData<DemData>();
 		dyn.force=(hasGravity && !dyn.isGravitySkip())?(dem.gravity*dyn.mass).eval():Vector3r::Zero();
 		dyn.torque=Vector3r::Zero();

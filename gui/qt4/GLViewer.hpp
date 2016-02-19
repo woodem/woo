@@ -209,6 +209,7 @@ class GLViewer : public QGLViewer
 		WOO_DECL_LOGGER;
 	protected:
 		virtual void keyPressEvent(QKeyEvent *e) override;
+		// virtual void preDraw() override;
 		virtual void postDraw() override;
 		// overridden in the player that doesn't get time from system clock but from the db
 		virtual string getRealTimeString();
