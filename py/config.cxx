@@ -57,6 +57,9 @@ BOOST_PYTHON_MODULE(config){
 		#ifdef WOO_ALIGN
 			features.append("align");
 		#endif
+		#ifdef WOO_HDF5
+			features.append("hdf5");
+		#endif
 
 	py::scope().attr("features")=features;
 

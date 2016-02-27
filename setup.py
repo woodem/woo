@@ -105,7 +105,7 @@ if not version:
 ##
 ## build options
 ##
-features=['vtk','gts','openmp',('qt5' if QT5 else 'qt4'),'opengl']
+features=['vtk','gts','openmp',('qt5' if QT5 else 'qt4'),'opengl']+(['hdf5'] if not WIN else [])
 # disable even openmp for travis, since gcc 4.7 & 4.8 ICE and clang's version there does not support OpenMP yet
 if travis: features=[] # quite limited for now, see https://github.com/travis-ci/apt-package-whitelist/issues/779 and https://github.com/travis-ci/apt-package-whitelist/issues/526 
 flavor='' #('' if WIN else 'distutils')
@@ -356,6 +356,10 @@ else:
 if 'openmp' in features:
     cxxLibs.append('gomp')
     cxxFlags.append('-fopenmp')
+if 'hdf5' in features:
+    if WIN: raise ValueError('HDF5 not supported under Windows.')
+    cxxLibs.append('hdf5_cpp')
+    cppDirs+=['/usr/include/hdf5/serial']
 if 'opengl' in features:
     if WIN: cxxLibs+=['opengl32','glu32','glut','gle','QGLViewer2']
     # XXX: this will fail in Ubuntu >= 13.10 which calls this lib QGLViewer

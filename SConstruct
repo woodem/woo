@@ -104,7 +104,7 @@ opts.AddVariables(
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
 	EnumVariable('PGO','Whether to "gen"erate or "use" Profile-Guided Optimization','',['','gen','use'],{'no':'','0':'','false':''},1),
-	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','cldem','sparc','noxml','voro','oldabi','never_use_this_one']),
+	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','never_use_this_one']),
 	('jobs','Number of jobs to run at the same time (same as -j, but saved)',2,None,int),
 	#('extraModules', 'Extra directories with their own SConscript files (must be in-tree) (whitespace separated)',None,None,Split),
 	('cxxstd','Name of the c++ standard (or dialect) to compile with. With gcc, use gnu++11 (gcc >=4.7) or gnu++0x (with gcc 4.5, 4.6)','c++11'),
@@ -113,7 +113,7 @@ opts.AddVariables(
 	('chunkSize','Maximum files to compile in one translation unit when building plugins. (unlimited if <= 0, per-file linkage is used if 1)',7,None,int),
 	('version','Woo version (if not specified, guess will be attempted)',None),
 	('realVersion','Revision (usually bzr revision); guessed automatically unless specified',None),
-	('CPPPATH', 'Additional paths for the C preprocessor (colon-separated)','/usr/include/vtk-5.8:/usr/include/eigen3:/usr/include/vtk'),
+	('CPPPATH', 'Additional paths for the C preprocessor (colon-separated)','/usr/include/vtk-5.8:/usr/include/eigen3:/usr/include/vtk:/usr/include/hdf5/serial'),
 	('LIBPATH','Additional paths for the linker (colon-separated)',None),
 	('libstdcxx','Specify libstdc++ location by hand (opened dynamically at startup), usually not needed',None),
 	('QT4DIR','Directory where Qt4 is installed','/usr/share/qt4'),
@@ -560,6 +560,9 @@ if not env.GetOption('clean'):
 		ok=conf.CheckLibWithHeader('CGAL','CGAL/Exact_predicates_inexact_constructions_kernel.h','c++','CGAL::Exact_predicates_inexact_constructions_kernel::Point_3();')
 		env.Append(CXXFLAGS='-frounding-math') # required by cgal, otherwise we get assertion failure at startup
 		if not ok: featureNotOK('cgal')
+	if 'hdf5' in env['features']:
+		ok=conf.CheckLibWithHeader('hdf5_cpp','H5Cpp.h','c++','H5::DataSet();')
+		if not ok: featureNotOK('hdf5','HDF5 requires appropriate CPPPATH, e.g. /usr/include/hdf5/serial ; the corresponding package, e.g. libhdf5-serial-dev, must be installed as well.')
 	#env.Append(LIBS='woo-support')
 
 	env.Append(CPPDEFINES=['WOO_'+f.upper().replace('-','_') for f in env['features']])
