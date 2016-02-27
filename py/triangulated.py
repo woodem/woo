@@ -266,16 +266,43 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(woo.core.Node,'node',None,doc='Node defining local coordinate system for importing (already :obj:`prescaled <preScale>`) mesh; if not given, global coordinate system is assumed.'),
         _PAT(float,'halfThick',0,unit='mm',doc='Half thickness (:obj:`woo.dem.Facet.halfThick`) assigned to all created facets. If zero, don\'t assign :obj:`~woo.dem.Facet.halfThick`.'),
         _PAT(float,'tessMaxBox',0,unit='mm',doc='Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.'),
+        _PAT(bool,'tagged',False,doc='Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)'),
     ]
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Object,**kw)
-    def doImport(self,mat,mask=woo.dem.DemField.defaultBoundaryMask):
+    def doImport(self,mat,mask=woo.dem.DemField.defaultBoundaryMask,**kw):
+        'Do the actual import; ``**kw`` is passed to :obj:`woo.dem.Facet.make`.'
         fmt=None
         if self.file.lower().endswith('.stl'): fmt='stl'
-        else: raise ValueError('Unknown mesh file extension (must be .stl).')
+        elif self.file.lower().endswith('.nas'): fmt='nastran'
+        else: raise ValueError('Unknown mesh file extension (must be .stl, .nas).')
         if fmt=='stl':
+            if tagged: raise ValueError('MeshImport.tagged: not supported (meaningless) with STL format.')
             tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox)
             return tri
+        elif fmt=='nastran':
+            nodeMap={} # mapping of nodes numbers (tags) to Node objects
+            tri=[]
+            with open(self.file,'r') as infile:
+                for lineno,l in enumerate(infile):
+                    l=l[:-1] # chomp newline
+                    if '$' in l: l=l[:l.index('$')] # discard comments
+                    if l.startswith('GRID '):
+                        try:
+                            if l[45]=='-': l=l[:45]+'   '
+                            tag,x,y,z=int(l[8:16]),self.preScale*float(l[24:32]),self.preScale*float(l[32:40]),self.preScale*float(l[40:48])
+                        except:
+                            print('%s:%d: Error reading line'%(self.file,lineno+1))
+                            raise
+                        dta=woo.dem.DemDataTagged(tag=tag) if self.tagged else woo.dem.DemData()
+                        nodeMap[tag]=woo.core.Node(dem=dta,pos=(self.node.loc2glob((x,y,z)) if self.node else (x,y,z)))
+                    elif l.startswith('CTRIA3 '):
+                        a,b,c=int(l[24:32]),int(l[32:40]),int(l[40:48])
+                        tri.append(woo.dem.Facet.make([nodeMap[a],nodeMap[b],nodeMap[c]],mat=mat,halfThick=self.halfThick,**kw))
+                    # lines we know to ignore
+                    elif l.startswith('BEGIN BULK') or l.startswith('PSHELL') or l.startswith('MAT') or l.startswith('ENDDATA') or len(l.strip())==0: continue
+                    else: print('%s:%d: unparsed line skipped: %s'%self.file,lineno+1,l)
+                return tri
         else: raise RuntimeError('Programming error: unhandled value fmt=="%s".'%(str(fmt)))
 
