@@ -998,7 +998,11 @@ def _randomDensePack2_singleCell(generator,iniBoxSize,memoizeDir=None,debug=Fals
 
 
 def randomDensePack2(predicate,generator,settle=.3,approxLoosePoro=.1,maxNum=5000,memoizeDir=None,debug=False,porosity=None):
-    '''Return dense arrangement of particles clipped by predicate. Particle are losely generated in cuboid volume of sufficient dimensions; the cuboid might be made smaller if *maxNum* were significantly exceeded, and tiled into the predicate volume afterwards
+    '''Return dense arrangement of particles clipped by predicate. Particle are losely generated in cuboid volume of sufficient dimensions; the cuboid might be made smaller if *maxNum* were significantly exceeded, and tiled into the predicate volume afterwards.
+
+    The algorithm computes initial (loose) volume from predicate bounding box using *approxLoosePoro*, and fills periodic cell of that size and aspect ratio (or of a part of it, if *maxNum* would be significantly exceeded) with generated particles. Isotropic compression (via :obj:`woo.dem.PeriIsoCompressor`) is subsequently applied with a predefined material (young 10MPa, no friction) down to 100MPa (and stabilization) and then the sample is unloaded to 1MPa and stabilized (those values are currently hard-coded). The resulting packing is tiled (if smaller than predicate), clipped by the predicate and returned as a :obj:`woo.dem.ShapePack` object (geometry only, no material data).
+
+    The packing is not completely overlap-free, thus using options like :obj:`woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.iniEqlb` might be useful, depending on the stiffness used in the simulation.
 
     :param woo.pack.Predicate predicate: volume definition
     :param woo.dem.ParticleGenerator generator: particle definition
