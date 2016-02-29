@@ -18,18 +18,29 @@ WOO_IMPL_LOGGER(VtkExport);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
 
-int VtkExport::addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells){
+int VtkExport::addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells, vector<int>& cellTypes){
 	size_t id0=vtkPts->GetNumberOfPoints();
 	for(const auto& pt: pts) vtkPts->InsertNextPoint(pt.data());
 	for(size_t i=0; i<tri.size(); i++){
 		auto vtkTri=vtkSmartPointer<vtkTriangle>::New();
-		for(int j:{0,1,2}){
-			vtkTri->GetPointIds()->SetId(j,id0+tri[i][j]);
-		}
+		for(int j:{0,1,2}) vtkTri->GetPointIds()->SetId(j,id0+tri[i][j]);
 		cells->InsertNextCell(vtkTri);
+		cellTypes.push_back(VTK_TRIANGLE);
 	}
 	return tri.size();
 };
+
+int VtkExport::addLineObject(const vector<Vector3r>& pts, const vector<Vector2i>& conn, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells, vector<int>& cellTypes){
+	size_t id0=vtkPts->GetNumberOfPoints();
+	for(const auto& pt: pts) vtkPts->InsertNextPoint(pt.data());
+	for(size_t i=0; i<conn.size(); i++){
+		auto vtkConn=vtkSmartPointer<vtkLine>::New();
+		for(int j:{0,1}) vtkConn->GetPointIds()->SetId(j,id0+conn[i][j]);
+		cells->InsertNextCell(vtkConn);
+		cellTypes.push_back(VTK_LINE);
+	}
+	return conn.size();
+}
 
 /* triangulate strip given two equal-length indices of points, return indices of triangles; adds triangulation to an existing *tri* triangulation */
 int VtkExport::triangulateStrip(const vector<int>::iterator& ABegin, const vector<int>::iterator& AEnd, const vector<int>::iterator& BBegin, const vector<int>::iterator& BEnd, bool close, vector<Vector3i>& tri){
@@ -250,6 +261,8 @@ void VtkExport::run(){
 	auto mGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto mPos=vtkSmartPointer<vtkPoints>::New();
 	auto mCells=vtkSmartPointer<vtkCellArray>::New();
+	vector<int> mCellTypes;
+	if(prevCellNum[0]>0) mCellTypes.reserve(prevCellNum[0]); // prealloc
 	mGrid->SetPoints(mPos);
 	_VTK_CELL_ARR(mGrid,mColor,"color",1);
 	_VTK_CELL_ARR(mGrid,mMatState,"matState",1);
@@ -261,6 +274,8 @@ void VtkExport::run(){
 	auto smGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto smPos=vtkSmartPointer<vtkPoints>::New();
 	auto smCells=vtkSmartPointer<vtkCellArray>::New();
+	vector<int> smCellTypes;
+	if(prevCellNum[1]>0) smCellTypes.reserve(prevCellNum[1]);  // prealloc
 	smGrid->SetPoints(smPos);
 	_VTK_CELL_ARR(smGrid,smColor,"color",1);
 	_VTK_CELL_INT_ARR(smGrid,smMatId,"matId",1);
@@ -268,6 +283,8 @@ void VtkExport::run(){
 	auto tGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto tPos=vtkSmartPointer<vtkPoints>::New();
 	auto tCells=vtkSmartPointer<vtkCellArray>::New();
+	vector<int> tCellTypes;
+	if(prevCellNum[2]>0) tCellTypes.reserve(prevCellNum[2]);  // prealloc
 	tGrid->SetPoints(tPos);
 	_VTK_POINT_ARR(tGrid,tEqRad,"eqRadius",1);
 	_VTK_CELL_ARR(tGrid,tColor,"color",1);
@@ -326,16 +343,17 @@ void VtkExport::run(){
 		auto& _mCellNum=(isStatic?smCellNum:mCellNum);
 		auto& _mPos=(isStatic?smPos:mPos);
 		auto& _mCells=(isStatic?smCells:mCells);
+		auto& _mCellTypes=(isStatic?smCellTypes:mCellTypes);
 
 		if(tetra){
 			const Vector3r &A(tetra->nodes[0]->pos), &B(tetra->nodes[1]->pos), &C(tetra->nodes[2]->pos), &D(tetra->nodes[3]->pos);
-			_mCellNum=addTriangulatedObject({A,B,C,D},{Vector3i(0,2,1),Vector3i(0,1,3),Vector3i(0,3,2),Vector3i(1,2,3)},_mPos,_mCells);
+			_mCellNum=addTriangulatedObject({A,B,C,D},{Vector3i(0,2,1),Vector3i(0,1,3),Vector3i(0,3,2),Vector3i(1,2,3)},_mPos,_mCells,_mCellTypes);
 			if(tet4) sigNorm=tet4->getStressTensor().norm();
 		}
 		else if(facet){
 			const Vector3r &A(facet->nodes[0]->pos), &B(facet->nodes[1]->pos), &C(facet->nodes[2]->pos);
 			if(facet->halfThick==0.){
-				_mCellNum=addTriangulatedObject({A,B,C},{Vector3i(0,1,2)},_mPos,_mCells);
+				_mCellNum=addTriangulatedObject({A,B,C},{Vector3i(0,1,2)},_mPos,_mCells,_mCellTypes);
 			} else {
 				int fDiv=max(0,thickFacetDiv>=0?thickFacetDiv:subdiv);
 				const Vector3r dz=facet->getNormal()*facet->halfThick;
@@ -347,7 +365,7 @@ void VtkExport::run(){
 						Vector3i(1,2,4),Vector3i(4,2,5),
 						Vector3i(2,0,5),Vector3i(5,0,3),
 					}));
-					_mCellNum=addTriangulatedObject({A+dz,B+dz,C+dz,A-dz,B-dz,C-dz},pts,_mPos,_mCells);
+					_mCellNum=addTriangulatedObject({A+dz,B+dz,C+dz,A-dz,B-dz,C-dz},pts,_mPos,_mCells,_mCellTypes);
 				} else {
 					// with rounded edges
 					vector<Vector3r> vertices={A+dz,B+dz,C+dz,A-dz,B-dz,C-dz};
@@ -401,19 +419,23 @@ void VtkExport::run(){
 							}
 						}
 					}
-					_mCellNum=addTriangulatedObject(vertices,pts,_mPos,_mCells);
+					_mCellNum=addTriangulatedObject(vertices,pts,_mPos,_mCells,_mCellTypes);
 				}
 			}
 		}
 		else if(capsule){
 			vector<Vector3r> vert; vector<Vector3i> tri;
 			std::tie(vert,tri)=triangulateCapsule(static_pointer_cast<Capsule>(p->shape),subdiv);
-			tCellNum=addTriangulatedObject(vert,tri,tPos,tCells);
+			tCellNum=addTriangulatedObject(vert,tri,tPos,tCells,tCellTypes);
 		}
 		else if(rod){
-			vector<Vector3r> vert; vector<Vector3i> tri;
-			std::tie(vert,tri)=triangulateRod(static_pointer_cast<Rod>(p->shape),subdiv);
-			mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells);
+			if(rodSurf){
+				vector<Vector3r> vert; vector<Vector3i> tri;
+				std::tie(vert,tri)=triangulateRod(static_pointer_cast<Rod>(p->shape),subdiv);
+				mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
+			} else {
+				mCellNum=addLineObject({rod->nodes[0]->pos,rod->nodes[1]->pos},{Vector2i(0,1)},_mPos,_mCells,_mCellTypes);
+			}
 		}
 		else if(wall){
 			if(isnan(wall->glAB.volume())){
@@ -434,7 +456,7 @@ void VtkExport::run(){
 			A[ax0]=B[ax0]=C[ax0]=D[ax0]=0;
 			A[ax1]=B[ax1]=lo[0]; C[ax1]=D[ax1]=hi[0];
 			A[ax2]=C[ax2]=lo[1]; B[ax2]=D[ax2]=hi[1];
-			_mCellNum=addTriangulatedObject({node->loc2glob(A),node->loc2glob(B),node->loc2glob(C),node->loc2glob(D)},{Vector3i(0,1,3),Vector3i(0,3,2)},_mPos,_mCells);
+			_mCellNum=addTriangulatedObject({node->loc2glob(A),node->loc2glob(B),node->loc2glob(C),node->loc2glob(D)},{Vector3i(0,1,3),Vector3i(0,3,2)},_mPos,_mCells,_mCellTypes);
 		}
 		else if(infCyl){
 			if(isnan(infCyl->glAB.squaredNorm())){
@@ -480,7 +502,7 @@ void VtkExport::run(){
 				cA[ax2]=cB[ax2]=c2[1];
 				pts.push_back(cA); pts.push_back(cB);
 			}
-			_mCellNum=addTriangulatedObject(pts,tri,_mPos,_mCells);
+			_mCellNum=addTriangulatedObject(pts,tri,_mPos,_mCells,_mCellTypes);
 		}
 		else if(ellipsoid){
 			const Vector3r& semiAxes(ellipsoid->semiAxes);
@@ -489,7 +511,7 @@ void VtkExport::run(){
 			auto uSphTri(CompUtils::unitSphereTri20(ellLev));
 			vector<Vector3r> pts; pts.reserve(std::get<0>(uSphTri).size());
 			for(const Vector3r& p: std::get<0>(uSphTri)){ pts.push_back(pos+(ori*(p.array()*semiAxes.array()).matrix())); }
-			tCellNum=addTriangulatedObject(pts,std::get<1>(uSphTri),tPos,tCells);
+			tCellNum=addTriangulatedObject(pts,std::get<1>(uSphTri),tPos,tCells,tCellTypes);
 		}
 		else continue; // skip unhandled shape
 		const auto& dyn=p->shape->nodes[0]->getData<DemData>();
@@ -533,9 +555,12 @@ void VtkExport::run(){
 
 	// set cells (must be called onces cells are complete)
 	sGrid->SetCells(VTK_VERTEX,sCells);
-	mGrid->SetCells(VTK_TRIANGLE,mCells);
-	smGrid->SetCells(VTK_TRIANGLE,smCells);
-	tGrid->SetCells(VTK_TRIANGLE,tCells);
+	mGrid->SetCells(mCellTypes.data(),mCells);
+	smGrid->SetCells(smCellTypes.data(),smCells);
+	tGrid->SetCells(tCellTypes.data(),tCells);
+
+	// save preallocation sizes for next time
+	prevCellNum=Vector3i(mCellTypes.size(),smCellTypes.size(),tCellTypes.size());
 
 	vtkSmartPointer<vtkDataCompressor> compressor;
 	if(compress) compressor=vtkSmartPointer<vtkZLibDataCompressor>::New();

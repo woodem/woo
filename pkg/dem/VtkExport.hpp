@@ -42,7 +42,11 @@ struct VtkExport: public PeriodicEngine{
 		WHAT_ALL_EXCEPT_CON=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_TRI,
 	};
 
-	static int addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells);
+	// add many vertices and vtkTriangles between them
+	static int addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells, vector<int>& cellTypes);
+	// add many vertices and vtkLines between them
+	static int addLineObject(const vector<Vector3r>& pts, const vector<Vector2i>& conn, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells, vector<int>& cellTypes);
+
 
 	// TODO: convert to boost::range instead of 2 iterators
 	static int triangulateStrip(const vector<int>::iterator& ABegin, const vector<int>::iterator& AEnd, const vector<int>::iterator& BBegin, const vector<int>::iterator& BEnd, bool close, vector<Vector3i>& tri);
@@ -81,11 +85,13 @@ struct VtkExport: public PeriodicEngine{
 		((int,ellLev,0,AttrTrait<>().range(Vector2i(0,3)),"Tesselation level for exporting ellipsoids (0 = icosahedron, each level subdivides one triangle into three.")) \
 		((int,thickFacetDiv,1,AttrTrait<>(),"Subdivision for :obj:`woo.dem.Facet` objects with non-zero :obj:`woo.dem.Facet.halfThick`; the value of -1 will use :obj:`subdiv`; 0 will render only faces, without edges; 1 will close the edge flat; higher values mean the number of subdivisions.")) \
 		((bool,cylCaps,true,,"Render caps of :obj:`InfCylinder` (at :obj:`InfCylinder.glAB`).")) \
+		((bool,rodSurf,false,,"Export rods (and derived classes) as capsule-shaped triangulated surfaces; without this option, rods are exported as plain connecting lines.")) \
 		((Real,nanValue,0.,,"Use this number instead of NaN in entries, since VTK cannot read NaNs properly")) \
 		((map_string_vector_string,outFiles,,AttrTrait<>().noGui().readonly(),"Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.")) \
 		((vector<Real>,outTimes,,AttrTrait<>().noGui().readonly(),"Times at which files were written.")) \
 		((vector<int>,outSteps,,AttrTrait<>().noGui().readonly(),"Steps at which files were written.")) \
 		((bool,mkDir,false,,"Attempt to create directory for output files, if not present.")) \
+		((Vector3i,prevCellNum,Vector3i::Zero(),AttrTrait<Attr::noSave>().noGui().readonly(),"Previous cell array sized, for pre-allocation.")) \
 		,/*ctor*/ initRun=false; /* do not run at the very first step */ \
 		,/*py*/ \
 			/* this overrides the c++ map above which won't convert to python automatically */ \
