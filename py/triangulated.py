@@ -290,7 +290,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                     if '$' in l: l=l[:l.index('$')] # discard comments
                     if l.startswith('GRID '):
                         try:
-                            if l[45]=='-': l=l[:45]+'   '
+                            # if l[45]=='-': l=l[:45]+'   '
                             tag,x,y,z=int(l[8:16]),self.preScale*float(l[24:32]),self.preScale*float(l[32:40]),self.preScale*float(l[40:48])
                         except:
                             print('%s:%d: Error reading line'%(self.file,lineno+1))
