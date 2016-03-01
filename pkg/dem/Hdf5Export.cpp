@@ -37,10 +37,10 @@ void NodalForcesToHdf5::run(){
 	H5::DataSpace tspace(1,dim); // 1d matrix, Nx1
 	H5::DataSpace aspace(1,dim11); // scalar (1d 1-matrix), for time value
 	// enable chunking & compression
-	hsize_t chunkdim[]={200,6}; // 200 is just a guess of what might have some efficiency for chunked storage
+	hsize_t chunkdim[]={400,6}; // 400 is just a guess of what might have some efficiency for chunked storage
 	H5::DSetCreatPropList plist;
 	plist.setChunk(2,chunkdim);
-	plist.setDeflate(9);
+	plist.setDeflate(min(max(deflate,0),9));
 	// create datasets
 	H5::DataSet fds=grp.createDataSet("forceTorque",/*type to use in the file*/H5::PredType::NATIVE_DOUBLE,fspace,plist);
 	H5::DataSet tds=grp.createDataSet("tags",H5::PredType::NATIVE_INT,tspace);
