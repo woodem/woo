@@ -100,6 +100,7 @@ struct Law2_L6Geom_PelletPhys_Pellet: public LawFunctor{
 		((Real,confSigma,0,,"Confinement stress (acting on :obj:`contact area <L6Geom.contA>`). Negative values will make particles stick together. The strain-stress diagram is shifted vertically with this parameter. The value of confinement can be further scaled with :obj:`confRefRad`.\n\n.. note:: Energy computation might be incorrect with confinement (not yet checked).\n")) \
 		((Real,confRefRad,0.,AttrTrait<>().lenUnit(),"If positive, scale the confining stress (:obj:`confSigma`) using the value of :math:`\\left(\\frac{A}{\\pi r_{\\rm ref}^2}\\right)^{\\beta_c}`; this allows to introduce confinement which varies depending on particle size.")) \
 		((Real,confExp,1.,,"Dimensionless exponent to be used in conjunction with :obj:`confRefRad`.")) \
+		((bool,iniEqlb,false,,"Use the initial distance as equilibrium.")) \
 		((bool,plastSplit,false,,"Track energy dissipated in normal and tangential sliding separately")) \
 		((int,plastIx,-1,AttrTrait<>(),"Index of plastically dissipated energy")) \
 		((int,normPlastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy in the normal sense")) \
@@ -115,7 +116,8 @@ WOO_REGISTER_OBJECT(Law2_L6Geom_PelletPhys_Pellet);
 struct PelletCData: public CData{
 	#define woo_dem_PelletCData__CLASS_BASE_DOC_ATTRS \
 		PelletCData,CData,"Hold state variables for pellet contact.", \
-		((Real,uNPl,0.,,"Plastic displacement on the contact."))
+		((Real,uNPl,0.,,"Plastic displacement on the contact.")) \
+		((Real,uN0,0.,,"Initial distance (defines equilibrium)."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_PelletCData__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(PelletCData);

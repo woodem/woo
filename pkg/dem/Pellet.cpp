@@ -44,35 +44,37 @@ void Law2_L6Geom_PelletPhys_Pellet::tryAddDissipState(int what, Real E, const sh
 
 bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C){
 	const L6Geom& g(cg->cast<L6Geom>()); PelletPhys& ph(cp->cast<PelletPhys>());
-	if(C->isFresh(scene)) C->data=make_shared<PelletCData>();
-	assert(C->data && dynamic_pointer_cast<PelletCData>(C->data));
-	// break contact
-	if(g.uN>0){
-		return false;
-	}
-	Real d0=g.lens.sum();
 	Real& Fn(ph.force[0]); Eigen::Map<Vector2r> Ft(&ph.force[1]);
+	if(C->isFresh(scene)) C->data=make_shared<PelletCData>();
 	Real& uNPl(C->data->cast<PelletCData>().uNPl);
+	Real& uN0(C->data->cast<PelletCData>().uN0);
+	assert(C->data && dynamic_pointer_cast<PelletCData>(C->data));
+	if(iniEqlb && C->isFresh(scene)) uN0=g.uN;
+	Real uN=g.uN-uN0; // normal displacement, taking iniEqlb in account
+	// break contact
+	if(uN>0) return false;
+
+	Real d0=g.lens.sum();
 	if(ph.normPlastCoeff<=0) uNPl=0.;
 	const Vector2r velT(g.vel[1],g.vel[2]);
 
 	ph.torque=Vector3r::Zero();
 	
 	// normal force
-	Fn=ph.kn*(g.uN-uNPl); // trial force
+	Fn=ph.kn*(uN-uNPl); // trial force
 	if(ph.normPlastCoeff>0){ // normal plasticity activated
 		if(Fn>0){
 			if(ph.ka<=0) Fn=0;
-			else{ Fn=min(Fn,adhesionForce(g.uN,uNPl,ph.ka)); assert(Fn>0); }
+			else{ Fn=min(Fn,adhesionForce(uN,uNPl,ph.ka)); assert(Fn>0); }
 		} else {
-			Real Fy=yieldForce(g.uN,d0,ph.kn,ph.normPlastCoeff);
+			Real Fy=yieldForce(uN,d0,ph.kn,ph.normPlastCoeff);
 			// normal plastic slip
 			if(Fn<Fy){
 				Real uNPl0=uNPl; // needed when tracking energy
-				uNPl=g.uN-Fy/ph.kn;
+				uNPl=uN-Fy/ph.kn;
 				if(unlikely(scene->trackEnergy)){
 					// backwards trapezoid integration
-					Real Fy0=Fy+yieldForceDerivative(g.uN,d0,ph.kn,ph.normPlastCoeff)*(uNPl0-uNPl);
+					Real Fy0=Fy+yieldForceDerivative(uN,d0,ph.kn,ph.normPlastCoeff)*(uNPl0-uNPl);
 					Real dissip=.5*abs(Fy0+Fy)*abs(uNPl-uNPl0);
 					scene->energy->add(dissip,plastSplit?"normPlast":"plast",plastSplit?normPlastIx:plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
 					tryAddDissipState(DISSIP_NORM_PLAST,dissip,C);
