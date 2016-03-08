@@ -83,7 +83,7 @@ struct MinMaxSphereGenerator: public ParticleGenerator{
 	Vector2r minMaxDiam() const override { return dRange; }
 	#define woo_dem_MinMaxSphereGenerator_CLASS_BASE_DOC_ATTRS \
 		MinMaxSphereGenerator,ParticleGenerator,"Generate particles with given minimum and maximum radius", \
-		((Vector2r,dRange,Vector2r(NaN,NaN),,"Minimum and maximum radius of generated spheres")) 
+		((Vector2r,dRange,Vector2r(NaN,NaN),,"Minimum and maximum diameters of generated spheres.")) 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_MinMaxSphereGenerator_CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(MinMaxSphereGenerator);
