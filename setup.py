@@ -421,6 +421,19 @@ if 'gts' in features:
     cppDirs+=c['include_dirs']
     libDirs+=c['library_dirs']
 
+## Bug-specific
+if 1:
+    # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
+    import tempfile
+    with tempfile.NamedTemporaryFile(suffix='.cpp',delete=False) as tmp:
+        tmp.write('#include<cmath>\n#include<math.h>\nusing std::isnan;\n')
+        tmp.close()
+        try: subprocess.check_output(['gcc','-std='+cxxStd,'-c',tmp.name])
+        except (subprocess.CalledProcessError,) as e:
+            print('Using -DWOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT (auto-detected)')
+            cppDef+=[('WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT',None)]
+
+
 wooModules=['woo.'+basename(py)[:-3] for py in glob('py/*.py') if basename(py)!='__init__.py']
 
 # compiler-specific flags, if ever needed:
