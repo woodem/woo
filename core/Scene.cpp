@@ -220,16 +220,16 @@ void Scene::initCl(){
 	if(platforms.empty()){ throw std::runtime_error("No OpenCL platforms available."); }
 	if(pNum>=(int)platforms.size()){ LOG_WARN("Only "<<platforms.size()<<" platforms available, taking 0th platform."); pNum=0; }
 	if(pNum<0) pNum=0;
-	platform=make_shared<cl::Platform>(platforms[pNum]);
+	platform=boost::make_shared<cl::Platform>(platforms[pNum]);
 	platform->getDevices(CL_DEVICE_TYPE_ALL,&devices);
 	if(devices.empty()){ throw std::runtime_error("No OpenCL devices available on the platform "+platform->getInfo<CL_PLATFORM_NAME>()+"."); }
 	if(dNum>=(int)devices.size()){ LOG_WARN("Only "<<devices.size()<<" devices available, taking 0th device."); dNum=0; }
 	if(dNum<0) dNum=0;
-	device=make_shared<cl::Device>(devices[dNum]);
+	device=boost::make_shared<cl::Device>(devices[dNum]);
 	// create context only for one device
-	context=make_shared<cl::Context>(vector<cl::Device>({*device}));
+	context=boost::make_shared<cl::Context>(vector<cl::Device>({*device}));
 	LOG_WARN("OpenCL ready: platform \""<<platform->getInfo<CL_PLATFORM_NAME>()<<"\", device \""<<device->getInfo<CL_DEVICE_NAME>()<<"\".");
-	queue=make_shared<cl::CommandQueue>(*context,*device);
+	queue=boost::make_shared<cl::CommandQueue>(*context,*device);
 	clDev=Vector2i(pNum,dNum);
 	_clDev=clDev;
 }
