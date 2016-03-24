@@ -63,6 +63,8 @@ struct VtkExport: public PeriodicEngine{
 	}
 
 	py::dict pyOutFiles() const;
+	py::dict makePvdFiles() const;
+
 
 	typedef map<string,vector<string>> map_string_vector_string;
 
@@ -96,6 +98,7 @@ struct VtkExport: public PeriodicEngine{
 		,/*py*/ \
 			/* this overrides the c++ map above which won't convert to python automatically */ \
 			.add_property("outFiles",&VtkExport::pyOutFiles)  \
+			.def("makePvdFiles",&VtkExport::makePvdFiles,"Write PVD files (one file for each category) and return dictionary mapping category name to the PVD filename; this requires that all active categories were saved at each step. Time points are output in the PVD file.")  \
 			; \
 			/* casting to (int) necessary, since otherwise it is a special enum type which is not registered in python and we get error: "TypeError: No to_python (by-value) converter found for C++ type: VtkExport::$_2" at boot. */ \
 			_classObj.attr("spheres")=(int)VtkExport::WHAT_SPHERES; \

@@ -101,6 +101,8 @@ def kwFromVtkExport(vtkExport,out=None,launch=False):
     'Extract keywords suitable for :obj:`write` from a given :obj:`~woo.dem.VtkExport` instance.'
     assert isinstance(vtkExport,woo.dem.VtkExport)
     ff=vtkExport.outFiles
+    # PVD not yet supported end-to-end :|       
+    # ff=vtkExport.makePvdFiles()
     return dict(sphereFiles=ff['spheres'] if 'spheres' in ff else [],meshFiles=ff['mesh'] if 'mesh' in ff else [],conFiles=ff['con'] if 'con' in ff else [],triFiles=ff['tri'] if 'tri' in ff else [],staticFile=ff['static'][0] if 'static' in ff else '')
 
 def kwFromVtkExportTraces(S,dem,outPrefix=None):
@@ -279,6 +281,12 @@ def readPointCellData(src):
     src.PointArrayStatus=src.GetPointDataInformation().keys()
     src.CellArrayStatus=src.GetCellDataInformation().keys()
 
+def readDataOrPvd(reader,FileName):
+    # PVD not yet supported in readPointCellData (how?), hence disabled
+    if 0 and len(FileName)==1 and FileName[0].endswith('.pvd'):
+        return PVDReader(FileName=FileName[0])
+    else: return reader(FileName=FileName)
+
 if splitFile:
     # input data
     split=XMLImageDataReader(FileName=splitFile)
@@ -375,7 +383,7 @@ if tracesFile:
     rep=Show()
 
 if sphereFiles:
-    spheres=XMLUnstructuredGridReader(FileName=sphereFiles)
+    spheres=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=sphereFiles)
     readPointCellData(spheres)
     RenameSource(sphereFiles[0],spheres)
     # don't show glyphs for more than 5e4 spheres by default to avoid veeery sloooow rendering
@@ -402,7 +410,7 @@ if sphereFiles:
     rep.LookupTable=GetLookupTableForArray('radius',1)
 
 if meshFiles:
-    mesh=XMLUnstructuredGridReader(FileName=meshFiles)
+    mesh=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=meshFiles)
     readPointCellData(mesh)
     RenameSource(meshFiles[0],mesh)
     rep=Show()
@@ -410,21 +418,23 @@ if meshFiles:
 
 
 if staticFile:
-    mesh=XMLUnstructuredGridReader(FileName=[staticFile])
+    mesh=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=[staticFile])
+    # mesh=XMLUnstructuredGridReader(FileName=[staticFile])
     readPointCellData(mesh)
     RenameSource(staticFile,mesh)
     rep=Show()
     rep.Opacity=0.2
 
 if triFiles:
-    tri=XMLUnstructuredGridReader(FileName=triFiles)
+    tri=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=triFiles)
     readPointCellData(tri)
     RenameSource(triFiles[0],tri)
     rep=Show()
     # rep.Opacity=1.0
 
 if conFiles:
-    con=XMLPolyDataReader(FileName=conFiles)
+    con=readDataOrPvd(reader=XMLPolyDataReader,FileName=conFiles)
+    # con=XMLPolyDataReader(FileName=conFiles)
     readPointCellData(con)
     RenameSource(conFiles[0],con)
     # by default, only lines are visible

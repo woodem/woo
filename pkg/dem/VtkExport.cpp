@@ -144,6 +144,36 @@ py::dict VtkExport::pyOutFiles() const {
 	return ret;
 }
 
+py::dict VtkExport::makePvdFiles() const {
+	if(outSteps.empty()) throw std::runtime_error("VtkExport.makePvdFiles: no data have been saved yet.");
+	py::dict ret;
+	for(auto& item: outFiles){
+		string pvdName=out+item.first+"."+to_string(outSteps.front())+"-"+to_string(outSteps.back())+".pvd";
+		std::ofstream pvd;
+		pvd.open(pvdName.c_str());
+		if(!pvd.is_open()) throw std::runtime_error("VtkExport.makePvdFiles: unable to open "+pvdName+" for writing.");
+		pvd<<
+		"<?xml version=\"1.0\"?>\n"
+		"<VTKFile type=\"Collection\" version=\"0.1\">\n"
+		"   <Collection>\n";
+		// item.second is a vector<string>
+		if(item.second.size()!=outTimes.size()) throw std::runtime_error("VtkExport.makePvdFiles: number of time points ("+to_string(outTimes.size())+" is not equal to the number of '"+item.first+"' files ("+to_string(item.second.size())+").");
+		for(size_t i=0; i<outTimes.size(); i++){
+			// for(const string& outName: item.second){
+			// since pvd is in the same directory as output files, relative path is simply basename
+			boost::filesystem::path p(item.second[i]);
+			pvd<<"      <DataSet timestep=\""+to_string(outTimes[i])+"\" group=\"\" part=\"0\" file=\""+p.filename().string()+"\"/>\n";
+		}
+		pvd<<
+		"   </Collection>\n"
+		"</VTKFile>\n";
+		pvd.close();
+		py::list lst; lst.append(pvdName);
+		ret[item.first]=lst;
+	}
+	return ret;
+}
+
 
 void VtkExport::run(){
 	DemField* dem=static_cast<DemField*>(field.get());
