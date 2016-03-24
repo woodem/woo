@@ -423,6 +423,16 @@ def CheckBoost(context):
 	if failed: context.Result('Failures: '+', '.join(failed)); return False
 	context.Result('all ok'); return True
 
+def CheckConflictingMathDecls(context):
+	context.Message('Checking for conflicting isnan in math.h and cmath...')
+	success=context.TryCompile('#include<cmath>\n#include<math.h>\nusing std::isnan;','.cpp')
+	if not success:
+		context.Result('yes, using WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT')
+		return 1
+	else:
+		context.Result('no')
+		return 0
+
 def CheckPythonModules(context):
 	context.Message("Checking for required python modules... ")
 	foreignPython=(sys.executable!=context.env['PYTHON'])
@@ -471,7 +481,7 @@ def CheckLibLinkedTo(context,lib,linkedTo):
 	return True
 
 if not env.GetOption('clean'):
-	conf=env.Configure(custom_tests={'CheckCXX':CheckCXX,'EnsureBoostVersion':EnsureBoostVersion,'CheckBoost':CheckBoost,'CheckPython':CheckPython,'CheckPythonModules':CheckPythonModules,'CheckLibLinkedTo':CheckLibLinkedTo}, # 'CheckQt':CheckQt
+	conf=env.Configure(custom_tests={'CheckCXX':CheckCXX,'EnsureBoostVersion':EnsureBoostVersion,'CheckBoost':CheckBoost,'CheckPython':CheckPython,'CheckPythonModules':CheckPythonModules,'CheckLibLinkedTo':CheckLibLinkedTo,'CheckConflictingMathDecls':CheckConflictingMathDecls}, # 'CheckQt':CheckQt
 		conf_dir='$buildDir/.sconf_temp',log_file='$buildDir/config.log'
 	)
 	ok=True
@@ -496,6 +506,9 @@ if not env.GetOption('clean'):
 		print "\nERROR: Unable to compile with optional feature `%s'.\n\nIf you are sure, remove it from features (scons features=featureOne,featureTwo for example) and build again. Config log is %s."%(featureName,buildDir+'/config.log')
 		if note: print "Note:",note
 		Exit(1)
+	# workarounds
+	if conf.CheckConflictingMathDecls(): env.Append(CPPDEFINES=['WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT'])
+	
 	# check "optional" libs
 	if 'opengl' in env['features']:
 		ok=conf.CheckLibWithHeader('GL','GL/gl.h','c++','glFlush();',autoadd=1)
@@ -566,6 +579,7 @@ if not env.GetOption('clean'):
 	if 'hdf5' in env['features']:
 		ok=conf.CheckLibWithHeader('hdf5_cpp','H5Cpp.h','c++','H5::DataSet();')
 		if not ok: featureNotOK('hdf5','HDF5 requires appropriate CPPPATH, e.g. /usr/include/hdf5/serial ; the corresponding package, e.g. libhdf5-serial-dev, must be installed as well.')
+	
 	#env.Append(LIBS='woo-support')
 
 	env.Append(CPPDEFINES=['WOO_'+f.upper().replace('-','_') for f in env['features']])

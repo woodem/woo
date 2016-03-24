@@ -86,11 +86,11 @@ using std::logic_error;
 using std::max;
 using std::min;
 using std::abs;
-#ifdef __MINGW64__
-	// this would trigger bugs under Linux (math.h is included somewhere behind the scenes?)
-	// see  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
-	using std::isnan;
-	using std::isinf;
+#ifndef WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT
+		// this would trigger bugs under Linux (math.h is included somewhere behind the scenes?)
+		// see  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
+		using std::isnan;
+		using std::isinf;
 #endif
 
 // workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=52015
