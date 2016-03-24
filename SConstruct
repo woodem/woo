@@ -512,9 +512,9 @@ if not env.GetOption('clean'):
 			if not conf.TryAction(env.Action('pyuic4'),'','ui'): featureNotOK('qt4','The pyuic4 program is not operational (package pyqt4-dev-tools)')
 			if conf.CheckLibWithHeader(['qglviewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt4'
 			if conf.CheckLibWithHeader(['QGLViewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='QGLViewer-qt4'
-			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer'
+			elif conf.CheckLibWithHeader(['QGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='QGLViewer'
 			else: featureNotOK('qt4','Building with Qt4 implies the QGLViewer library installed (package libqglviewer-qt4-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
-			if not conf.CheckLibLinkedTo(env['QGLVIEWER_LIB']+'.so','libQtGui.so.4'): featureNotOK('qt4','%s does not link to libQtGui.so.4 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
+			if not conf.CheckLibLinkedTo('lib'+env['QGLVIEWER_LIB']+'.so','libQtGui.so.4'): featureNotOK('qt4','%s does not link to libQtGui.so.4 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
 
 		if 'qt5' in env['features']:
 			env['ENV']['PKG_CONFIG_PATH']='/usr/bin/pkg-config'
@@ -524,11 +524,11 @@ if not env.GetOption('clean'):
 			if not conf.TryAction(env.Action('pyrcc5'),'','qrc'): featureNotOK('qt5','The pyrcc5 program is not operational (package pyqt5-dev-tools)')
 			if not conf.TryAction(env.Action('pyuic5'),'','ui'): featureNotOK('qt5','The pyuic5 program is not operational (package pyqt5-dev-tools)')
 			if conf.CheckLibWithHeader(['qglviewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt5'
-			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer'
+			elif conf.CheckLibWithHeader(['QGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='QGLViewer'
 			# Fedora naming, maybe: https://lists.fedoraproject.org/pipermail/devel/2014-March/196395.html 
 			elif conf.CheckLibWithHeader(['libQGLViewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer-qt5'
 			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-qt5-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
-			if not conf.CheckLibLinkedTo(env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
+			if not conf.CheckLibLinkedTo('lib'+env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)
