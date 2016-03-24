@@ -425,12 +425,14 @@ def CheckBoost(context):
 
 def CheckPythonModules(context):
 	context.Message("Checking for required python modules... ")
+	foreignPython=(sys.executable!=context.env['PYTHON'])
 	mods=[('IPython','ipython'),('numpy','python-numpy'),('matplotlib','python-matplotlib'),('genshi','python-genshi'),('xlwt','python-xlwt'),('xlrd','python-xlrd'),('h5py','python-h5py'),('lockfile','python-lockfile'),('pkg_resources','python-pkg-resources')]
 	if 'qt4' in context.env['features']: mods.append(('PyQt4.QtGui','python-qt4'))
 	if 'qt5' in context.env['features']: mods.append(('PyQt5.QtGui','python-qt5'))
 	if 'qt' in context.env['features'] or 'opengl' in context.env['features']: mods.append(('Xlib','python-xlib'))
 	failed=[]
-	if sys.executable==context.env['PYTHON']:
+	if not foreignPython:
+		# this implies python2
 		for m,pkg in mods:
 			try:
 				exec("import %s"%m)
@@ -509,6 +511,7 @@ if not env.GetOption('clean'):
 			if not conf.TryAction(env.Action('pyrcc4'),'','qrc'): featureNotOK('qt4','The pyrcc4 program is not operational (package pyqt4-dev-tools)')
 			if not conf.TryAction(env.Action('pyuic4'),'','ui'): featureNotOK('qt4','The pyuic4 program is not operational (package pyqt4-dev-tools)')
 			if conf.CheckLibWithHeader(['qglviewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='qglviewer-qt4'
+			if conf.CheckLibWithHeader(['QGLViewer-qt4'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='QGLViewer-qt4'
 			elif conf.CheckLibWithHeader(['libQGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer'
 			else: featureNotOK('qt4','Building with Qt4 implies the QGLViewer library installed (package libqglviewer-qt4-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
 			if not conf.CheckLibLinkedTo(env['QGLVIEWER_LIB']+'.so','libQtGui.so.4'): featureNotOK('qt4','%s does not link to libQtGui.so.4 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
