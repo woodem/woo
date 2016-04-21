@@ -315,13 +315,9 @@ def main(sysArgv=None):
     #from math import *
 
     # avoid warnings from ipython import (http://stackoverflow.com/a/3924047/761090)
+    # the same is in gui/qt4/__init__.py, where IPython is imported earlier than here, if $DISPLAY is present
     import warnings
-    if woo.runtime.ipython_version()<100:
-        warnings.filterwarnings('ignore',category=DeprecationWarning,module='IPython.frontend.terminal.embed')
-        warnings.filterwarnings('ignore',category=DeprecationWarning,module='IPython.utils.io')
-    else:
-        warnings.filterwarnings('ignore',category=DeprecationWarning,module='IPython.terminal.embed')
-        warnings.filterwarnings('ignore',category=UserWarning,module='IPython.frontend')
+    warnings.filterwarnings('ignore',category=DeprecationWarning,module='.*/IPython/.*')
 
     #
     # select gui to use

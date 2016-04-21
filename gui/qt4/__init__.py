@@ -65,6 +65,10 @@ else:
                 except AttributeError: pass
 
     if 1: # initialize QApplication
+        # disable all IPython warnings (sometimes imported for the first time here, not in woo's __init__.py or wooMain)
+        import warnings
+        warnings.filterwarnings('ignore',category=DeprecationWarning,module='.*IPython.*')
+
         if 'qt4' in woo.config.features: from PyQt4 import QtGui
         else: from PyQt5 import QtGui
 
