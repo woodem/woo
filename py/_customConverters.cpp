@@ -149,6 +149,8 @@ WOO_PYTHON_MODULE(_customConverters);
 BOOST_PYTHON_MODULE(_customConverters){
 	py::scope().attr("__name__")="woo._customConverters";
 
+	if(getenv("WOO_DEBUG")) cerr<<"woo._customConverters: module initialization"<<endl;
+
 	#if PY_MAJOR_VERSION < 3
 		custom_stdstring_from_unicode();
 	#endif
