@@ -5,7 +5,7 @@
 #include<woo/pkg/dem/Particle.hpp>
 #include<woo/pkg/dem/Collision.hpp>
 #include<woo/pkg/dem/Contact.hpp>
-
+#include<woo/pkg/dem/ContactHook.hpp>
 
 /* ***************************************** */
 
@@ -112,6 +112,7 @@ class ContactLoop: public Engine {
 			((shared_ptr<CGeomDispatcher>,geoDisp,make_shared<CGeomDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`CGeomDispatcher` object that is used for dispatch.")) \
 			((shared_ptr<CPhysDispatcher>,phyDisp,make_shared<CPhysDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`CPhysDispatcher` object used for dispatch.")) \
 			((shared_ptr<LawDispatcher>,lawDisp,make_shared<LawDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`LawDispatcher` object used for dispatch.")) \
+			((shared_ptr<ContactHook>,hook,,,":obj:`ContactHook` objects, empty by default.")) \
 			((bool,alreadyWarnedNoCollider,false,AttrTrait<>().noGui(),"Keep track of whether the user was already warned about missing collider.")) \
 			((bool,evalStress,false,,"Evaluate stress tensor, in periodic simluations; if energy tracking is enabled, increments *gradV* energy.")) \
 			((bool,applyForces,true,,"Apply forces directly; this avoids IntraForce engine, but will silently skip multinodal particles.")) \

@@ -129,6 +129,8 @@ void ContactLoop::run(){
 
 	CONTACTLOOP_CHECKPOINT("prologue");
 
+	const bool hasHook=!!hook;
+
 	#ifdef WOO_OPENMP
 		#pragma omp parallel for schedule(guided)
 	#endif
@@ -178,11 +180,16 @@ void ContactLoop::run(){
 		if(!C->phys || updatePhys>UPDATE_PHYS_NEVER) phyDisp->operator()(pA->material,pB->material,C);
 		if(!C->phys) throw std::runtime_error("ContactLoop: ##"+to_string(pA->id)+"+"+to_string(pB->id)+": con Contact.phys created from materials "+pA->material->getClassName()+" and "+pB->material->getClassName()+" (a CPhysFunctor must be available for every contacting material combination).");
 
+		if(hasHook && C->isFresh(scene) && hook->isMatch(pA->mask,pB->mask)) hook->hookNew(dem,C);
+
 		CONTACTLOOP_CHECKPOINT("phys");
 
 		// CLaw
 		bool keepContact=lawDisp->operator()(C->geom,C->phys,C);
-		if(!keepContact) dem.contacts->requestRemoval(C);
+		if(!keepContact){
+			if(hasHook && hook->isMatch(pA->mask,pB->mask)) hook->hookDel(dem,C); // call before requestRemove resets contact internals
+			dem.contacts->requestRemoval(C);
+		}
 		CONTACTLOOP_CHECKPOINT("law");
 
 		if(applyForces && C->isReal() && likely(!deterministic)){

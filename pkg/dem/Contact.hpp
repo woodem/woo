@@ -91,7 +91,7 @@ struct Contact: public Object{
 	#endif
 
 	#define woo_dem_Contact__CLASS_BASE_DOC_ATTRS_PY \
-		Contact,Object,ClassTrait().doc("Contact in DEM").section("Contacts","TODO",{"ContactLoop","CGeom","CPhys","CData"}), \
+		Contact,Object,ClassTrait().doc("Contact in DEM").section("Contacts","TODO",{"ContactLoop","ContactHook","CGeom","CPhys","CData"}), \
 		((shared_ptr<CGeom>,geom,,AttrTrait<Attr::readonly>(),"Contact geometry")) \
 		((shared_ptr<CPhys>,phys,,AttrTrait<Attr::readonly>(),"Physical properties of contact")) \
 		((shared_ptr<CData>,data,,AttrTrait<Attr::readonly>(),"Optional data stored by the functor for its own use")) \
