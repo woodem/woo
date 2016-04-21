@@ -424,7 +424,7 @@ def CheckBoost(context):
 	context.Result('all ok'); return True
 
 def CheckConflictingMathDecls(context):
-	context.Message('Checking for conflicting isnan in math.h and cmath...')
+	context.Message('Checking for conflicting isnan in math.h and cmath... ')
 	success=context.TryCompile('#include<cmath>\n#include<math.h>\nusing std::isnan;','.cpp')
 	if not success:
 		context.Result('yes, using WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT')
@@ -437,9 +437,9 @@ def CheckPythonModules(context):
 	context.Message("Checking for required python modules... ")
 	foreignPython=(sys.executable!=context.env['PYTHON'])
 	mods=[('IPython','ipython'),('numpy','python-numpy'),('matplotlib','python-matplotlib'),('genshi','python-genshi'),('xlwt','python-xlwt'),('xlrd','python-xlrd'),('h5py','python-h5py'),('lockfile','python-lockfile'),('pkg_resources','python-pkg-resources')]
-	if 'qt4' in context.env['features']: mods.append(('PyQt4.QtGui','python-qt4'))
-	if 'qt5' in context.env['features']: mods.append(('PyQt5.QtGui','python-qt5'))
-	if 'qt' in context.env['features'] or 'opengl' in context.env['features']: mods.append(('Xlib','python-xlib'))
+	if 'qt4' in context.env['features']: mods+=[('PyQt4.QtGui','python-pyqt4')]
+	if 'qt5' in context.env['features']: mods+=[('PyQt5.QtGui','python-pyqt5'),('PyQt5.QtSvg','python-pyqt5.qtsvg')]
+	if 'qt' in context.env['features'] or 'opengl' in context.env['features']: mods+=[('Xlib','python-xlib')]
 	failed=[]
 	if not foreignPython:
 		# this implies python2
@@ -450,6 +450,7 @@ def CheckPythonModules(context):
 				failed.append(m+' (package %s)'%pkg)
 	else:
 		for m,pkg in mods:
+			pkg=pkg.replace('python-','python3-')
 			import subprocess
 			try:
 				if subprocess.call([context.env['PYTHON'],'-c','import '+m])==0: continue
