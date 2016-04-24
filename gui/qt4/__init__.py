@@ -125,12 +125,12 @@ import woo,woo.system, woo.config
 
 try:
     from woo._qt import *
-    import woo._qt._GLViewer
-    from woo._qt._GLViewer import *
+    import woo._GLViewer
+    from woo._GLViewer import *
     OpenGL=True
     # document those with woo.qt
-    import woo._qt._GLViewer
-    _docInlineModules=(woo._qt,woo._qt._GLViewer)
+    import woo._GLViewer
+    _docInlineModules=(woo._qt,woo._GLViewer)
     # load preferences, if the file exists
 except ImportError:
     OpenGL=False

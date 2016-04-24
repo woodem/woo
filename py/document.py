@@ -30,6 +30,7 @@ else: sphinxPrefix=sphinxOnlineDocPath
 
 
 def fixDocstring(s):
+    if sys.version_info[0]==2 and isinstance(s,str): s=s.decode('utf-8')
     s=s.replace(':ref:',':obj:')
     s=re.sub(r'(?<!\\)\$([^\$]+)(?<!\\)\$',r'\ :math:`\1`\ ',s)
     s=re.sub(r'\\\$',r'$',s)
@@ -90,8 +91,10 @@ def allWooPackages(outDir='/tmp',skip='^(woo|wooExtra(|\..*))$'):
     _ensureInitialized()
     
     modsElsewhere=set()
-    for m in allWooMods: modsElsewhere|=set(m._docInlineModules if hasattr(m,'_docInlineModules') else [])
+    for m in allWooMods: modsElsewhere|=set(tuple(m._docInlineModules) if hasattr(m,'_docInlineModules') else ())
+
     # woo.foo.* modules go insides woo.foo
+    #print(repr(modsElsewhere))
     toplevMods=set([m for m in allWooMods if (m not in modsElsewhere) and len(m.__name__.split('.'))<3])
     rsts=[]
     print('TOPLEVEL MODULES',[m.__name__ for m in toplevMods])
@@ -229,7 +232,7 @@ def classSrcHyperlink(klass):
     def findFirstLine(ff,pattern,regex=True):
         if regex: pat=re.compile(pattern)
         if not os.path.exists(ff): return -1
-        numLines=[i for i,l in enumerate(file(ff).readlines()) if (pat.match(l) if regex else (l==pattern))]
+        numLines=[i for i,l in enumerate(open(ff).readlines()) if (pat.match(l) if regex else (l==pattern))]
         return (numLines[0] if numLines else -1)
 
     import woo.config, inspect, os, hashlib
@@ -245,8 +248,11 @@ def classSrcHyperlink(klass):
             matches+=[relRoot+'/'+f for f in filenames if f==pysrc1]
         if len(matches)>1:
             #print 'WARN: multiple files named %s, using the first one: %s'%(pysrc1,str(matches))
-            md0=hashlib.md5(open(pysrc).read()).hexdigest()
-            matches=[m for m in matches if hashlib.md5(open(woo.config.sourceRoot+'/'+m).read()).hexdigest()==md0]
+            def fileHash(src):
+                if sys.version_info[0]==2: return hashlib.md5(open(src).read()).hexdigest()
+                else: return hashlib.md5(open(src).read().encode('utf-8')).hexdigest()
+            md0=fileHash(pysrc)
+            matches=[m for m in matches if fileHash(woo.config.sourceRoot+'/'+m)==md0]
             if len(matches)==0:
                 print('WARN: no file named %s with matching md5 digest found in source tree?'%pysrc1)
                 return None
@@ -295,7 +301,7 @@ def classSrcHyperlink(klass):
     #    # print 'Trying ',cpp
     #    if os.path.exists(cpp):
     #        # find first line in the cpp file which contains KlassName:: -- that's most likely where the implementation begins
-    #        numLines=[i for i,l in enumerate(file(cpp).readlines()) if klass.__name__+'::' in l]
+    #        numLines=[i for i,l in enumerate(open(cpp).readlines()) if klass.__name__+'::' in l]
     #        if numLines: ret.append(':woosrc:`implementation <%s#L%d>`'%(f2[:-4]+'.cpp',numLines[0]+1))
     #        # return just the cpp file if the implementation is probably not there at all?
     #        # don't do it for now
@@ -371,7 +377,7 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
             if trait.startGroup:
                 kOut.write(u'   .. rubric:: ► %s\n\n'%(trait.startGroup))
             kOut.write('   .. attribute:: %s%s\n\n'%(trait.name,iniStr))
-            for l in fixDocstring(trait.doc.decode('utf-8')).split('\n'): kOut.write('      '+l+'\n')
+            for l in fixDocstring(trait.doc).split('\n'): kOut.write('      '+l+'\n')
             traitInfo=makeTraitInfo(obj,k,trait)
             if traitInfo: kOut.write(u'\n      ['+traitInfo+']\n')
             kOut.write('\n')

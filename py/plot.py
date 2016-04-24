@@ -823,7 +823,7 @@ def savePylab(baseName,timestamp=False,title=None):
     baseNameNoPath=baseName.split('/')[-1]
     saveDataTxt(fileName=baseName+'.data.bz2')
     if len(plots)==0: raise RuntimeError("No plots to save, only data saved.")
-    py=file(baseName+'.py','w')
+    py=open(baseName+'.py','w')
     py.write('#!/usr/bin/env python\n# encoding: utf-8\n# created '+time.asctime()+' ('+time.strftime('%Y%m%d_%H:%M')+')\n#\nimport pylab, numpy\n')
     py.write("data=numpy.genfromtxt('%s.data.bz2',dtype=None,names=True)\n"%baseName)
     subCols=int(round(math.sqrt(len(plots)))); subRows=int(math.ceil(len(plots)*1./subCols))
@@ -855,7 +855,7 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
     baseNameNoPath=baseName.split('/')[-1]
     vars=list(data.keys()); vars.sort()
     P.saveDataTxt(fileName=baseName+'.data.bz2',vars=vars)
-    fPlot=file(baseName+".gnuplot",'w')
+    fPlot=open(baseName+".gnuplot",'w')
     fPlot.write('#!/usr/bin/env gnuplot\n#\n')
     if  timeStamp: fPlot.write('# created '+time.asctime()+' ('+time.strftime('%Y%m%d_%H:%M')+')\n#\n')
     if comment: fPlot.write('# '+comment.replace('\n','\n# ')+'#\n')
