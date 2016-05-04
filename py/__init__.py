@@ -251,7 +251,7 @@ else:
 # import woo.config
 config=sys.modules['woo.config']
 if 'gts' in config.features:
-    if 'gts' in sys.modules: raise RuntimeError("Woo was compiled with woo.gts; do not import external gts module, they clash with each other.")
+    if 'gts' in sys.modules and sys.modules['gts'].__name__!='woo.gts': raise RuntimeError("Woo was compiled with woo.gts, buts gts modules is already imported from elsewhere (%s, module %s)? Since two implementations may clash, this is not allowed."%(sys.modules['gts'].__file__,sys.modules['gts'].__name__))
     from . import gts
     # so that it does not get imported twice
     sys.modules['gts']=gts
