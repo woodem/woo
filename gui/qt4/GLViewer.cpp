@@ -100,7 +100,7 @@ void SnapshotEngine::run(){
 	}
 	snapshots.push_back(fss.str());
 	boost::this_thread::sleep(boost::posix_time::microseconds(msecSleep));
-	if(!plot.empty()){ runPy("import woo.plot; S.plot.addImgData("+plot+"='"+fss.str()+"')"); }
+	if(!plot.empty()){ Engine::runPy("SnapshotEngine","import woo.plot; S.plot.addImgData("+plot+"='"+fss.str()+"')"); }
 }
 
 WOO_IMPL_LOGGER(GLViewer);

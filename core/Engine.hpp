@@ -61,7 +61,12 @@ class Engine: public Object {
 		void postLoad(Engine&,void*);
 		void setDefaultScene();
 
-		void runPy(const string&);
+		// run given command, with some variables are set automatically
+		// TODO: move outside of Engine, it does not depend on it really
+		static void runPy_generic(const string& callerId, const string& command, Scene* scene_=nullptr, Engine* engine_=nullptr, const shared_ptr<Field>& field_=shared_ptr<Field>());
+
+		// convenience function to call runPy_generic using Engine's internal data
+		void runPy(const string& callerId, const string&);
 
 		// get the scene object from the raw pointer
 		py::object py_getScene();
@@ -162,7 +167,7 @@ WOO_REGISTER_OBJECT(PeriodicEngine);
 
 
 struct PyRunner: public PeriodicEngine{
-	virtual void run() override{ Engine::runPy(command); }
+	virtual void run() override{ Engine::runPy("PyRunner",command); }
 	// to give command without saying 'command=...'
 	virtual bool needsField() override { return false; }
 	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;

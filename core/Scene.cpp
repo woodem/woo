@@ -79,13 +79,21 @@ bool Scene::running(){ boost::mutex::scoped_lock l(runMutex); return runningFlag
 // exception and threads don't work well, so any exception caught is
 // stored and handled in the main thread
 void Scene::backgroundLoop(){
+	bool runAtHook=false; // set to true if stopping because of stopAtStep/stopAtTime
 	try{
 		while(true){
 			boost::this_thread::interruption_point();
 			if(subStepping){ LOG_INFO("Scene.run: sub-stepping disabled."); subStepping=false; }
 			doOneStep();
-			if((stopAtStep>0 && step==stopAtStep) || (stopAtTime>0 && time>=stopAtTime && time<stopAtTime+dt)){ boost::mutex::scoped_lock l(runMutex); stopFlag=true; }
-			if(stopFlagSet()){ boost::mutex::scoped_lock l(runMutex); runningFlag=false; return; }
+			// check stopAtStep, stopAtTime
+			if((stopAtStep>0 && step==stopAtStep) || (stopAtTime>0 && time>=stopAtTime && time<stopAtTime+dt)){
+				boost::mutex::scoped_lock l(runMutex); stopFlag=true; runAtHook=true;
+			}
+			// stop if requested
+			if(stopFlagSet()){
+				if(runAtHook && !stopAtHook.empty()){ LOG_INFO("Running Scene.stopAtHook."); Engine::runPy_generic("Scene.stopAtHook",stopAtHook,/*scene*/this); }
+				boost::mutex::scoped_lock l(runMutex); runningFlag=false; return;
+			}
 			if(throttle>0){ boost::this_thread::sleep(boost::posix_time::milliseconds(int(1000*throttle))); }
 		}
 	} catch(std::exception& e){

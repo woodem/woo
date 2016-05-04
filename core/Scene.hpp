@@ -181,6 +181,7 @@ struct Scene: public Object{
 		((Real,time,0,AttrTrait<Attr::readonly>().timeUnit(),"Simulation time (virtual time) [s]")) \
 		((long,stopAtStep,0,,"Iteration after which to stop the simulation.")) \
 		((Real,stopAtTime,NaN,,":obj:`time` around which to stop the simulation.\n\n.. note:: This value is not exact, has the granularity of :math:`\\Dt`: simulation will stopped at the moment when :obj:`stopAtTime` ≤ :obj:`time` < :obj:`dt` + :obj:`stopAtTime`. This condition may have some corner cases due to floating-point comparisons involved.")) \
+		((string,stopAtHook,"",,"Python command given as string executed when :obj:`stopAtTime` or :obj:`stopAtStep` cause the simulation to be stopped.\n\n .. note:: This hook will *not* be run when a running simulation is paused manually, or through S.pause in the script. To trigger this hook from within a :obj:`PyRunner`, do something like ``S.stopAtStep=S.step`` which will activate it when the current step finishes.")) \
 		\
 		((bool,isPeriodic,false,/*exposed as "periodic" in python */AttrTrait<Attr::hidden>(),"Whether periodic boundary conditions are active.")) \
 		((bool,trackEnergy,false,,"Whether energies are being tracked.")) \

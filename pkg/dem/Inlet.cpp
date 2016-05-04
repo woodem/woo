@@ -209,7 +209,7 @@ bool Inlet::everythingDone(){
 		LOG_INFO("mass or number reached, making myself dead.");
 		dead=true;
 		if(zeroRateAtStop) currRate=0.;
-		if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy(doneHook); }
+		if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy("Inlet",doneHook); }
 		return true;
 	}
 	return false;
@@ -294,7 +294,7 @@ void RandomInlet::run(){
 					}
 					case MAXATT_WARN: LOG_WARN("maxAttempts "<<maxAttempts<<" reached before required mass amount was generated; continuing, since maxAttemptsError==False"); break;
 					case MAXATT_SILENT: break;
-					case MAXATT_DONE: Engine::runPy(doneHook); break;
+					case MAXATT_DONE: Engine::runPy("RandomInlet",doneHook); break;
 					default: throw std::invalid_argument("Invalid value of RandomInlet.atMaxAttempts="+to_string(atMaxAttempts)+".");
 				}
 				goto stepDone;

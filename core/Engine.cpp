@@ -70,27 +70,27 @@ void Engine::field_set(const shared_ptr<Field>& f){
 	else{ field=f; userAssignedField=true; }
 }
 
-void Engine::runPy(const string& command){
+void Engine::runPy_generic(const string& callerId, const string& command, Scene* scene_, Engine* engine_, const shared_ptr<Field>& field_){
 	if(command.empty()) return;
-	#if 0
-		pyRunString(command);
-	#else
-		GilLock lock;
-		try{
-			// scripts are run in this namespace (wooMain)
-			py::object global(py::import("wooMain").attr("__dict__"));
-			py::dict local;
-			local["scene"]=py::object(py::ptr(scene));
-			local["S"]=py::object(py::ptr(scene));
-			local["engine"]=py::object(py::ptr(this));
-			local["field"]=py::object(field);
-			local["woo"]=py::import("woo");
-			// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
-			py::exec(command.c_str(),global,local);
-		} catch (py::error_already_set& e){
-			throw std::runtime_error("PyRunner exception in '"+command+"':\n"+parsePythonException_gilLocked());
-		};
-	#endif
+	GilLock lock;
+	try{
+		// scripts are run in this namespace (wooMain)
+		py::object global(py::import("wooMain").attr("__dict__"));
+		py::dict local;
+		local["scene"]=py::object(py::ptr(scene_));
+		local["S"]=py::object(py::ptr(scene_));
+		local["engine"]=py::object(py::ptr(engine_));
+		local["field"]=py::object(field_);
+		local["woo"]=py::import("woo");
+		// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
+		py::exec(command.c_str(),global,local);
+	} catch (py::error_already_set& e){
+		throw std::runtime_error(callerId+": exception in '"+command+"':\n"+parsePythonException_gilLocked());
+	};
+}
+
+void Engine::runPy(const string& callerId, const string& command){
+	runPy_generic(callerId,command,scene,this,field);
 };
 
 

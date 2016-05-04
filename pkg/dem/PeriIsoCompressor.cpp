@@ -105,7 +105,7 @@ void PeriIsoCompressor::run(){
 			// sigmaGoal reached and packing stable
 			if(state==stresses.size()){ // no next stress to go for
 				LOG_INFO("Finished");
-				if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy(doneHook); }
+				if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy("PeriIsoCompressor",doneHook); }
 			} else { LOG_INFO("Loaded to "<<sigmaGoal<<" done, going to "<<stresses[state]<<" now"); }
 		} else {
 			if((step%globalUpdateInt)==0){ LOG_DEBUG("Stress="<<sigma<<", goal="<<sigmaGoal<<", unbalanced="<<currUnbalanced); }
@@ -194,7 +194,7 @@ void WeirdTriaxControl::run(){
 		if(currUnbalanced<maxUnbalanced){
 			if (!doneHook.empty()){
 				LOG_DEBUG ( "Running doneHook: "<<doneHook );
-				Engine::runPy(doneHook);
+				Engine::runPy("WeirdTriaxControl",doneHook);
 			}
 		}
 	}
