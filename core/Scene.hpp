@@ -28,6 +28,7 @@ struct Bound;
 struct Field;
 
 struct Scene: public Object{
+	private:
 		// this is managed by methods of Scene exclusively
 		boost::mutex runMutex;
 		bool runningFlag;
