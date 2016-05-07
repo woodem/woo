@@ -15,7 +15,7 @@
 
 #include<boost/tuple/tuple_comparison.hpp>
 
-WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)/*(ArcShooter)*/(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias)(NonuniformAxisPlacementBias));
+WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)(ArcShooter)(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias)(NonuniformAxisPlacementBias));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ParticleGenerator__CLASS_BASE_DOC_ATTRS_PY);
@@ -32,6 +32,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdAxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_LayeredAxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
 
 
 WOO_IMPL_LOGGER(RandomInlet);
@@ -39,9 +40,6 @@ WOO_IMPL_LOGGER(PsdAxialBias);
 WOO_IMPL_LOGGER(LayeredAxialBias);
 
 
-#if 0
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
-#endif
 
 void AxialBias::postLoad(AxialBias&,void*){
 	if(axis<0 || axis>2) throw std::runtime_error("AxialBias.axis: must be in 0..2 (not "+to_string(axis)+").");
@@ -537,7 +535,6 @@ void ArcInlet::postLoad(ArcInlet&, void* attr){
 };
 
 
-
 Vector3r ArcInlet::randomPosition(const Real& rad, const Real& padDist) {
 	AlignedBox3r b2(cylBox);
 	Vector3r pad(padDist,padDist/cylBox.min()[0],padDist); b2.min()+=pad; b2.max()-=pad;
@@ -563,6 +560,34 @@ bool ArcInlet::validateBox(const AlignedBox3r& b) {
 		Inlet::renderMassAndRate(node->loc2glob(CompUtils::cyl2cart(cylBox.center())));
 	}
 #endif
+
+
+void ArcShooter::postLoad(ArcShooter&, void*){
+	if(!node){ node=make_shared<Node>(); throw std::runtime_error("ArcShooter.node: must not be None (dummy node created)."); }
+}
+
+Vector3r cart2spher(const Vector3r& xyz){
+	Real r=xyz.norm();
+	Real azim=atan2(xyz[1],xyz[0]);
+	Real elev=(r==0.?0.:asin(xyz[2]/r));
+	return Vector3r(r,azim,elev);
+}
+
+Vector3r spher2cart(const Vector3r& rAzimElev){
+	const auto& r(rAzimElev[0]); const auto& azim(rAzimElev[1]); const auto& elev(rAzimElev[2]);
+	return r*Vector3r(cos(elev)*cos(azim),cos(elev)*sin(azim),sin(elev));
+}
+
+void ArcShooter::operator()(const shared_ptr<Node>& n){
+	// local coords where x is radial WRT cylindrical coords defined by *node*
+	Vector3r rPhiZ(CompUtils::cart2cyl(node->ori.conjugate()*(n->pos-node->pos)));
+	Quaternionr qPerp=Quaternionr(AngleAxisr(rPhiZ[1],Vector3r::UnitZ()));
+	// Quaternion qElev=AngleAxisr(atan2(rPhiZ[2],rPhiZ[0]),Vector3r::UnitY);
+	Real vNorm=Mathr::IntervalRandom(vRange[0],vRange[1]);
+	Real azim=Mathr::IntervalRandom(azimRange[0],azimRange[1]);
+	Real elev=Mathr::IntervalRandom(elevRange[0],elevRange[1]);
+	n->getData<DemData>().vel=node->ori*qPerp*spher2cart(Vector3r(/*radius*/vNorm,/*azimuth*/azim,/*elev*/elev));
+}
 
 
 void NonuniformAxisPlacementBias::postLoad(NonuniformAxisPlacementBias&,void* attr){

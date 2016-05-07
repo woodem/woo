@@ -291,7 +291,7 @@ struct ArcInlet: public RandomInlet{
 	#endif
 	#define woo_dem_ArcInlet__CLASS_BASE_DOC_ATTRS \
 		ArcInlet,RandomInlet,"Inlet generating particles in prismatic arc (revolved rectangle) specified using `cylindrical coordinates <http://en.wikipedia.org/wiki/Cylindrical_coordinate_system>`__ (with the ``ISO 31-11`` convention, as mentioned at the Wikipedia page) in a local system.", \
-		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinates system. *Must* be given.")) \
+		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinate system. *Must* be given.")) \
 		((AlignedBox3r,cylBox,,,"Box in cylindrical coordinates, as: (ρ₀,φ₀,z₀),(ρ₁,φ₁,z₁). ρ must be non-negative, (φ₁-φ₀)≤2π.")) \
 		((int,glSlices,32,,"Number of slices for rendering circle (the arc takes the proportionate value"))
 
@@ -299,16 +299,16 @@ struct ArcInlet: public RandomInlet{
 };
 WOO_REGISTER_OBJECT(ArcInlet);
 
-#if 0
 struct ArcShooter: public ParticleShooter{
-	void operator()(const shared_ptr<Node>& node) override {
-	}
-	// void postLoad(ArcShooter&, void*){ dir.normalize(); }
+	void operator()(const shared_ptr<Node>& n) override;
+	void postLoad(ArcShooter&, void*);
 	#define woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS \
-		ArcShooter,ParticleShooter,"Shoot particles in one direction, with velocity magnitude constrained by vRange values", \
-		/*attrs*/
+		ArcShooter,ParticleShooter,"Shoot particles in direction defined by (normally-distributed) angles from tangent and base plane (cylindrical coordinates defined by :obj:`node`) in given point, with magnitude constraind by :obj:`vRange`.", \
+		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinate system. *Must* be given.")) \
+		((Vector2r,elevRange,Vector2r(0,0),AttrTrait<>().angleUnit(),"Range for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`). The actual value is chosen with uniform probability from this range.")) \
+		((Vector2r,azimRange,Vector2r(0,0),AttrTrait<>().angleUnit(),"Range for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.")) \
+		((Vector2r,vRange,Vector2r(NaN,NaN),AttrTrait<>().velUnit(),"Range for velocity magnitude."))
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(ArcShooter);
-#endif
