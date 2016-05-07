@@ -104,8 +104,9 @@ void ForcesToHdf5::run(){
 		grp.close();
 		h5file.close();
 	} catch(H5::Exception& e){
-		e.printErrorStack();
-		throw std::runtime_error("HDF5 exception in "+e.getFuncName()+": "+e.getDetailMsg()+" (details above?).");
+		std::ostringstream oss;
+		e.walkErrorStack(H5E_WALK_DOWNWARD,[](unsigned int n, const H5E_error_t* err, void* oss_)->herr_t{ *((std::ostringstream*)oss_)<<"  #"<<n<<" "<<err->func_name<<": "<<err->desc<<endl; return  (herr_t)0; },/*client_data*/(void*)&oss);
+		throw std::runtime_error("HDF5 exception in "+e.getFuncName()+": "+e.getDetailMsg()+":\n"+oss.str());
 	};
 };
 
