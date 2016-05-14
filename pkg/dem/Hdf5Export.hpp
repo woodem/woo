@@ -20,7 +20,8 @@ struct ForcesToHdf5: public PeriodicEngine{
 		((int,what,HDF_NODAL,AttrTrait<Attr::namedEnum>().namedEnum({{HDF_NODAL,{"node","nodes","nodal"}},{HDF_CONTACT,{"contact","contacts"}}}),"Select whether to export nodal forces (default) or contact forces.")) \
 		((int,contMask,DemField::defaultLoneMask,,"Only export contacts where at least one particle matches this mask. If zero, match all contacts. If this :obj:`Contact.pA` has matching mask, inverts force sense; this has as result that (unless both particles match) the force is exported as it acts on the matching particle.")) \
 		((string,out,"",,"Name of the output file.")) \
-		((int,deflate,9,,"Compression level for HDF5 chunked storage; valid values are 0 to 9 (will be clamped if outside)."))
+		((int,deflate,9,,"Compression level for HDF5 chunked storage; valid values are 0 to 9 (will be clamped if outside).")) \
+		((shared_ptr<Node>,node,,,"Local coordinate system; if defined, contact forces, torques and positions will be fransfored to local coordinates."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(WOO_DEM_ForceToHdf5__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(ForcesToHdf5);

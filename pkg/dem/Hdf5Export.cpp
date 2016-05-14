@@ -38,8 +38,11 @@ void ForcesToHdf5::run(){
 		try{ grp0=h5file.openGroup(rootGrp); }
 		catch(H5::Exception& e){ grp0=h5file.createGroup(rootGrp); }
 		// create subgroup for this step
+		// we allow the group to be already there, for the case two engines
+		// run in one step, but with different settings (nodal/contact force, global/local CS)
 		string grpName("step_"+(boost::format("%|06|")%scene->step).str());
-		grp=grp0.createGroup(grpName);
+		try{ grp=grp0.createGroup(grpName); }
+		catch(H5::Exception& e){ grp=grp0.openGroup(grpName); }
 
 		const hsize_t nCols=6; // force+torque for nodes, force+coordinates for contacts
 		hsize_t dim[]={0,nCols};
@@ -47,6 +50,8 @@ void ForcesToHdf5::run(){
 
 		// contact matching expression (used in the first and second pass, so keep it in one place only)
 		auto contactMatch=[this](const shared_ptr<Contact>& C){ return C->isReal() && (contMask==0 || (C->leakPA()->mask&contMask) || (C->leakPB()->mask&contMask)); };
+		// CS transform expression (for rotating forces&torques to local CS, if node is defined)
+		auto rot2loc=[this](const Vector3r& v)->Vector3r{ return this->node?(this->node->ori.conjugate()*v).eval():v; };
 
 		// two-pass operation: first count relevant nodes or contacts, then fill in the data
 		if(what==HDF_NODAL){ for(const auto& n: field->nodes){ if(n->hasData<DemData>() && n->getData<DemData>().isA<DemDataTagged>()) dim[0]++; } }
@@ -62,9 +67,10 @@ void ForcesToHdf5::run(){
 		H5::DSetCreatPropList plist;
 		plist.setChunk(2,chunkdim);
 		plist.setDeflate(min(max(deflate,0),9));
+
 		if(what==HDF_NODAL){
 			// create datasets
-			H5::DataSet fds=grp.createDataSet("forceTorque",/*type to use in the file*/H5::PredType::NATIVE_DOUBLE,fspace,plist);
+			H5::DataSet fds=grp.createDataSet(node?"forceTorque_localCS":"forceTorque",/*type to use in the file*/H5::PredType::NATIVE_DOUBLE,fspace,plist);
 			H5::DataSet tds=grp.createDataSet("tags",H5::PredType::NATIVE_INT,tspace);
 			// use RowMajor, which is what HDF5 expects when passing data buffer to write (below)
 			Eigen::Matrix<double,Eigen::Dynamic,6,Eigen::RowMajor> ftarr(dim[0],6); 
@@ -73,8 +79,8 @@ void ForcesToHdf5::run(){
 			for(const auto& n: field->nodes){
 				if(!n->hasData<DemData>() || !n->getData<DemData>().isA<DemDataTagged>()) continue;
 				const auto& dyn(n->getData<DemData>().cast<DemDataTagged>());
-				ftarr.row(i).head<3>()=dyn.force;
-				ftarr.row(i).tail<3>()=dyn.torque;
+				ftarr.row(i).head<3>()=rot2loc(dyn.force);
+				ftarr.row(i).tail<3>()=rot2loc(dyn.torque);
 				tarr[i]=dyn.tag;
 				i+=1;
 			}
@@ -82,7 +88,7 @@ void ForcesToHdf5::run(){
 			fds.write(ftarr.data(),/*type of data in memory*/H5::PredType::NATIVE_DOUBLE);
 			tds.write(tarr.data(),H5::PredType::NATIVE_INT);
 		} else {
-			H5::DataSet cfds=grp.createDataSet("coordForce",/*type to use in the file*/H5::PredType::NATIVE_DOUBLE,fspace,plist);
+			H5::DataSet cfds=grp.createDataSet(node?"coordForce_localCS":"coordForce",/*type to use in the file*/H5::PredType::NATIVE_DOUBLE,fspace,plist);
 			Eigen::Matrix<double,Eigen::Dynamic,6,Eigen::RowMajor> cfarr(dim[0],6);
 			int i=0;
 			for(const auto& C: *(field->cast<DemField>().contacts)){
@@ -90,16 +96,22 @@ void ForcesToHdf5::run(){
 				Vector3r fg=C->geom->node->loc2glob(C->phys->force); // convert to global
 				// adjust sense so that it acts in the right direction
 				if(C->leakPA()->mask&contMask) fg*=-1;
-				cfarr.row(i).head<3>()=C->geom->node->pos;
-				cfarr.row(i).tail<3>()=fg;
+				// position is rotated and translated
+				cfarr.row(i).head<3>()=(node?node->glob2loc(C->geom->node->pos):C->geom->node->pos);
+				// force is only rotated
+				cfarr.row(i).tail<3>()=rot2loc(fg);
 				i+=1;
 			}
 			cfds.write(cfarr.data(),H5::PredType::NATIVE_DOUBLE);
 		}
+
 		// write time value as a separate 1x1 dataset
-		H5::DataSpace aspace(1,dim11); // scalar (1d 1-matrix), for time value
-		H5::DataSet timeDs=grp.createDataSet("time",H5::PredType::NATIVE_DOUBLE,aspace);
-		timeDs.write(&scene->time,H5::PredType::NATIVE_DOUBLE);
+		// if that dataset is already there, do nothing
+		try{
+			H5::DataSpace aspace(1,dim11); // scalar (1d 1-matrix), for time value
+			H5::DataSet timeDs=grp.createDataSet("time",H5::PredType::NATIVE_DOUBLE,aspace);
+			timeDs.write(&scene->time,H5::PredType::NATIVE_DOUBLE);
+		}catch(H5::Exception&){ /* nothing to do */ };
 		// close everything
 		grp.close();
 		h5file.close();
