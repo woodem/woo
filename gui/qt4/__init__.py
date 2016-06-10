@@ -350,7 +350,9 @@ class ControllerClass(QWidget,Ui_Controller):
             self.generator=(self.preprocessorObjects[ix]() if ix<len(self.preprocessorObjects) else None)
             self.generatorCombo.setItemText(self.preIndexOther,u'−')
         elif menuAction=='loadFile':
-            f=str(QFileDialog.getOpenFileName(self,'Load preprocessor from','.'))
+            f=QFileDialog.getOpenFileName(self,'Load preprocessor from','.')
+            if isinstance(f,tuple): f=f[0]
+            f=str(f)
             self.generatorCombo.setCurrentIndex(self.preIndexOther)
             if not f:
                 self.generator=None
@@ -394,7 +396,9 @@ class ControllerClass(QWidget,Ui_Controller):
             print('chosen file',str(dialog.selectedFiles()[0]))
             if not f: return # cancelled
         else:
-            f=str(QFileDialog.getSaveFileName(self,'Save preprocessor parameters','.'))
+            f=QFileDialog.getSaveFileName(self,'Save preprocessor parameters','.')
+            if isinstance(f,tuple): f=f[0]
+            f=str(f)
             if not f: return
             self.generator.dump(f,format='json' if f.endswith('.json') else 'expr')
     def generateSlot(self):
@@ -536,12 +540,14 @@ class ControllerClass(QWidget,Ui_Controller):
         
     def loadSlot(self):
         f=QFileDialog.getOpenFileName(self,'Load simulation','')
+        if isinstance(f,tuple): f=f[0]
         f=str(f)
         if not f: return # cancelled
         self.deactivateControls()
         woo.master.scene=Scene.load(f)
     def saveSlot(self):
         f=QFileDialog.getSaveFileName(self,'Save simulation','')
+        if isinstance(f,tuple): f=f[0]
         f=str(f)
         if not f: return # cancelled
         woo.master.scene.save(f)
