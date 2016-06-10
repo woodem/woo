@@ -226,6 +226,7 @@ bool StackedBoxOutlet::isInside(const Vector3r& p, int& loc){
 	if(!box.contains(pp)) return false;
 	// find which stack in the box
 	loc=std::upper_bound(divs.begin(),divs.end(),pp[axis])-divs.begin();
+	loc+=loc0; // add starting index
 	return true;
 }
 
