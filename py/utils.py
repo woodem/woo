@@ -308,7 +308,7 @@ def tetra(vertices,fixed=True,wire=True,color=None,highlight=False,mat=defaultMa
 def tet4(*args,**kw):
     return tetra(__class=woo.fem.Tet4,*args,**kw)
 
-def infCylinder(position,radius,axis,glAB=None,fixed=True,mass=0,color=None,wire=False,mat=defaultMaterial,mask=DemField.defaultMovableMask):
+def infCylinder(position,radius,axis,glAB=None,fixed=True,mass=0,color=None,wire=False,angVel=None,mat=defaultMaterial,mask=DemField.defaultMovableMask):
     """Return a ready-made infinite cylinder particle."""
     p=Particle()
     p.shape=InfCylinder(radius=radius,axis=axis,color=color if color else random.random())
@@ -318,6 +318,7 @@ def infCylinder(position,radius,axis,glAB=None,fixed=True,mass=0,color=None,wire
     _commonBodySetup(p,[node],mat=mat,fixed=fixed)
     p.aspherical=False # only rotates along one axis
     p.mask=mask
+    if angVel is not None: p.angVel=angVel
     return p
 
 
@@ -513,7 +514,7 @@ def plotDirections(aabb=(),mask=0,bins=20,numHist=True,noShow=False):
     else: pylab.show()
 
 
-def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5):
+def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5,open=False):
     """Create a video from external image files using `mencoder <http://www.mplayerhq.hu>`__, `avconv <http://libav.org/avconv.html>`__ or `ffmpeg <http://www.ffmpeg.org>`__ (whichever is found on the system). Encodes using the default mencoder codec (mpeg4), two-pass with mencoder and one-pass with avconv, running multi-threaded with number of threads equal to number of OpenMP threads allocated for Woo.
 
     Some *out* extensions (``.gif``, ``.mng``) will call ImageMagick (``convert``; likely not available under Windows) to create animated image instead of video file.
@@ -524,6 +525,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     :param int fps: Frames per second (``-mf fps=…``)
     :param int kbps: Bitrate (``-lavcopts vbitrate=…``) in kb/s (ignored for animated images)
     :param holdLast: Repeat the last frame this many times; if negative, it means seconds and will be converted to frames according to *fps*. This option is not applicable if *frameSpec* is a wildcard (as opposed to a list of images).
+    :param open: Open the resulting movie file with the default system program for that type of file.
 
     .. note:: ``avconv`` and ``ffmpeg`` need symlinks, which are not available under Windows.
     """
@@ -569,7 +571,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
         symPattern=symDir+'/%05d'+ext
         for i,f in enumerate(frameSpecAvconv):
             ff2.append(symPattern%i)
-            os.symlink(f,ff2[-1])
+            os.symlink(os.path.abspath(f),ff2[-1])
         frameSpecAvconv=ff2
 
     if IMG:
@@ -599,6 +601,10 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     if encType=='avconv' or encType=='IMG':
         import shutil
         shutil.rmtree(symDir)
+
+    if open:
+        import webbrowser
+        webbrowser.open('file://'+os.path.abspath(out))
 
 def _procStatus(name):
     import os
