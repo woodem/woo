@@ -95,8 +95,8 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 			B[ax]=+viewInfo.sceneRadius;
 		} else {
 			GLUtils::setLocalCoords(cyl.nodes[0]->pos,cyl.nodes[0]->ori);
-			A[ax]=cyl.nodes[0]->pos[ax]+cyl.glAB[0];
-			B[ax]=cyl.nodes[0]->pos[ax]+cyl.glAB[1];
+			A[ax]=cyl.glAB[0];
+			B[ax]=cyl.glAB[1];
 		}
 		// fast drawing
 		if(viewInfo.renderer->fastDraw){

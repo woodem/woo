@@ -496,7 +496,8 @@ void VtkExport::run(){
 			int ax0=infCyl->axis,ax1=(infCyl->axis+1)%3,ax2=(infCyl->axis+2)%3;
 			//Vector cA,cB; cA=cB=p->shape->nodes[0]->pos;
 			//cA[ax0]=infCyl->glAB[0]; cB[ax0]=infCyl->glAB[1];
-			Vector2r c2(infCyl->nodes[0]->pos[ax1],infCyl->nodes[0]->pos[ax2]);
+			const Vector3r& p0(infCyl->nodes[0]->pos);
+			Vector2r c2(p0[ax1],p0[ax2]);
 			AngleAxisr aa(infCyl->nodes[0]->ori);
 			Real phi0=(aa.axis()*aa.angle()).dot(Vector3r::Unit(ax0)); // current rotation
 			vector<Vector3r> pts; vector<Vector3i> tri;
@@ -520,14 +521,14 @@ void VtkExport::run(){
 				Real phi=phi0+i*2*M_PI/subdiv;
 				Vector2r c=c2+infCyl->radius*Vector2r(sin(phi),cos(phi));
 				Vector3r A,B;
-				A[ax0]=infCyl->glAB[0]; B[ax0]=infCyl->glAB[1];
+				A[ax0]=p0[ax0]+infCyl->glAB[0]; B[ax0]=p0[ax0]+infCyl->glAB[1];
 				A[ax1]=B[ax1]=c[0];
 				A[ax2]=B[ax2]=c[1];
 				pts.push_back(A); pts.push_back(B);
 			}
 			if(cylCaps){
 				Vector3r cA, cB;
-				cA[ax0]=infCyl->glAB[0]; cB[ax0]=infCyl->glAB[1];
+				cA[ax0]=p0[ax0]+infCyl->glAB[0]; cB[ax0]=p0[ax0]+infCyl->glAB[1];
 				cA[ax1]=cB[ax1]=c2[0];
 				cA[ax2]=cB[ax2]=c2[1];
 				pts.push_back(cA); pts.push_back(cB);

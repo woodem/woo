@@ -15,7 +15,7 @@ struct InfCylinder: public Shape{
 		InfCylinder,Shape,"Object representing infinite plane aligned with the coordinate system (axis-aligned wall).", \
 		((Real,radius,NaN,,"Radius of the cylinder")) \
 		((int,axis,0,,"Axis of the normal; can be 0,1,2 for +x, +y, +z respectively (Node's orientation is disregarded for walls)")) \
-		((Vector2r,glAB,Vector2r(NaN,NaN),,"Endpoints between which the infinite cylinder is drawn; if NaN, taken from scene view to be visible")) \
+		((Vector2r,glAB,Vector2r(NaN,NaN),,"Endpoints between which the infinite cylinder is drawn, in local coordinate system along :obj:`axis`; if NaN, taken from scene view to be visible")) \
 		,/*ctor*/createIndex();
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_InfCylinder__CLASS_BASE_DOC_ATTRS_CTOR);
