@@ -553,16 +553,19 @@ if not env.GetOption('clean'):
 		if not conf.CheckCXXHeader('vtkVersion.h'): featureNotOK('vtk',note='VTK headers not found; add the respective include directory to CPPPATH (usually something like /usr/include/vtk-?.?).')
 		vtk5=conf.CheckLibWithHeader(['vtkCommon'],'vtkInstantiator.h','c++','vtkInstantiator::New();',autoadd=1)
 		if vtk5: env.Append(LIBS=['vtkHybrid','vtkRendering','vtkIO','vtkFiltering'])
+		# vtk6 actually means 6 or 7, but they are the same as far as libs are concerned
 		vtk6=False
-		for minor in (-1,0,1,2,3,4,5):
-			vtk6LibSuffix=('' if minor<0 else '-6.%d'%minor)
-			vtk6=conf.CheckLibWithHeader(['vtkCommonDataModel'+vtk6LibSuffix],'vtkPath.h','c++','vtkPath::New();',autoadd=1)
+		for major in (6,7):
+			for minor in (-1,0,1,2,3,4,5):
+				vtk6LibSuffix=('' if minor<0 else '-%d.%d'%(major,minor))
+				vtk6=conf.CheckLibWithHeader(['vtkCommonDataModel'+vtk6LibSuffix],'vtkPath.h','c++','vtkPath::New();',autoadd=1)
+				if vtk6: break
 			if vtk6: break
 		if vtk6:
 			# if minor==0: featureNotOK('vtk',note='VTK 6.0 is not supported (http://www.paraview.org/Bug/view.php?id=14164), use 6.1 and greater or 5.x.')
 			env.Append(LIBS=['vtkCommonCore'+vtk6LibSuffix,'vtkIOXML'+vtk6LibSuffix]) # plus vtkCommonDataModel above
 		if not (vtk5 or vtk6):
-			featureNotOK('vtk',note="VTK library not found: install packages libvtk5-dev or libvtk6-dev.")
+			featureNotOK('vtk',note="VTK library not found: install packages libvtk5-dev, libvtk6-dev or libvtk7-dev.")
 	if 'gts' in env['features']:
 		env.ParseConfig('pkg-config gts --cflags --libs');
 		ok=conf.CheckLibWithHeader('gts','gts.h','c++','gts_object_class();',autoadd=1)
