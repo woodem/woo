@@ -391,6 +391,7 @@ class LineRef(object):
                         axes=self.line.get_axes()
                         p=axes.patch; xx,yy=p.get_verts()[:,0],p.get_verts()[:,1]; size=max(xx)-min(xx),max(yy)-min(yy)
                         aspect=(size[1]/size[0])*(1./axes.get_data_ratio())
+                        if dx==0: angle=math.pi
                         angle=math.atan(aspect*dy/dx)
                         if dx<0: angle-=math.pi
                         self.scatter.set_transform(matplotlib.transforms.Affine2D().rotate(angle))
