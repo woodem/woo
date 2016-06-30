@@ -366,17 +366,26 @@ woo.core.WooJSONEncoder=WooJSONEncoder
 woo.core.WooJSONDecoder=WooJSONDecoder
 
 # call the arg __e to avoid clash with math.e if there is 'from math import *' in the magic string
-def wooExprEval(__e,__f):
+def wooExprEval(__e,__f,__overrideHashColon={}):
     '''
-    Evaluate expression created with :obj:`SerializerToExpr`. Comments starting with ``#:`` are executed as python code, which is in particular useful for importing necessary modules.
+    Evaluate expression created with :obj:`SerializerToExpr`. Comments starting with ``#:`` are executed as python code before the evaluation happens, which is in particular useful for importing necessary modules.
+
+    :param __e: expression to be evaluated
+    :param __f: filename (if any) where the expression was stored
+    :param __overrideHashColon: dictionary which will change local variables (defined in ``#:`` lines) before the expression itself is evaluated.
     '''
     import woo,math,textwrap
     # exec all lines starting with #: as a piece of code
-    future.utils.exec_(textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')])))
+    __code=textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')]))
+    #print('EXECUTING #: CODE:\n'+__code)
+    future.utils.exec_(__code,locals()) # pass locals() here
+    for __var,__val in __overrideHashColon.items():
+        if __var not in locals(): raise NameError("Local (defined in #:) variable '%s' does not exist, unable to set its value '%s' from __overrideHashColon."%(__var,__val))
+        locals()[__var]=__val
     # return the expression
     return eval(compile(__e,__f,'eval'))
 
-def Object_loads(typ,data,format='auto'):
+def Object_loads(typ,data,format='auto',overrideHashColon={}):
     'Load object from file, with format auto-detection; when *typ* is None, no type-checking is performed.'
     def typeChecked(obj,type):
         if type==None: return obj
@@ -396,9 +405,10 @@ def Object_loads(typ,data,format='auto'):
             try: return typeChecked(WooJSONDecoder().decode(data),typ)
             except (IOError,ValueError,KeyError): pass
     if format=='auto': IOError("Format detection failed on data: "%data)
+    if overrideHashColon and format!='expr': raise ValueError("overrideHashColon only applicable with the 'expr' format (not '%s')."%format)
     ## format detected now
     if format=='expr':
-        return typeChecked(wooExprEval(data,'<string>'),typ)
+        return typeChecked(wooExprEval(data,'<string>',__overrideHashColon=overrideHashColon),typ)
     elif format=='pickle':
         return typeChecked(pickle.loads(data,typ))
     elif format=='json':
@@ -406,7 +416,7 @@ def Object_loads(typ,data,format='auto'):
     assert False # impossible
 
 
-def Object_load(typ,inFile,format='auto'):
+def Object_load(typ,inFile,format='auto',overrideHashColon={}):
     def typeChecked(obj,type):
         if type==None: return obj
         if not isinstance(obj,typ): raise TypeError('Loaded object of type '+obj.__class__.__name__+' is not a '+typ.__name__)
@@ -445,6 +455,7 @@ def Object_load(typ,inFile,format='auto'):
         if not format:    raise RuntimeError('File format detection failed on %s (head: %s, bin: %s)'%(inFile,''.join(["\\x%02x"%(x if py3k else ord(x)) for x in head]),str(head))) # in py3k, bytes contain integers rather than chars
     if format not in validFormats: raise RuntimeError("format='%s'??"%format)
     assert format in validFormats
+    if overrideHashColon and format!='expr': raise ValueError("overrideHashColon only applicable with the 'expr' format (not '%s')"%format)
     if format==None:
         raise IOError('Input file format not detected')
     elif format=='boost::serialization':
@@ -452,7 +463,7 @@ def Object_load(typ,inFile,format='auto'):
         return typeChecked(Object._boostLoad(str(inFile)),typ) # convert unicode to str, if necessary, as the c++ type is std::string
     elif format=='expr':
         buf=codecs.open(inFile,'rb','utf-8').read()
-        return typeChecked(wooExprEval(buf,inFile),typ)
+        return typeChecked(wooExprEval(buf,inFile,__overrideHashColon=overrideHashColon),typ)
     elif format=='pickle':
         return typeChecked(pickle.load(open(inFile,'rb')),typ)
     elif format=='json':

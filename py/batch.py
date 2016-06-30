@@ -623,11 +623,23 @@ def runPreprocessor(pre,preFile=None):
         allTab=TableParamReader(wooOptions.batchTable).paramDict()
         if not wooOptions.batchLine in allTab: raise RuntimeError("Table %s doesn't contain valid line number %d"%(wooOptions.batchTable,wooOptions.batchLine))
         vv=allTab[wooOptions.batchLine]
+        # overriding things set in the #: lines of preprocessor from the table using %varName=...
+        if len([v for v in vv.keys() if v.startswith('%')]):
+            if preFile is None: raise RuntimeError('Unable to re-load preprocessor due to %something columns: preFile was left empty by the caller.')
+            overrideHashColon={}
+            for v in list(vv.keys()): # copy list so that dictionary does not change while iterating over it
+                if not v.startswith('%'): continue
+                val=vv[v]
+                if isinstance(val,(str,past.builtins.str)): val=eval(val,dict(woo=woo,**math.__dict__))
+                overrideHashColon[v[1:]]=val
+                print('Re-assigning #: variable %s=%s'%(str(v[1:]),str(val)))
+                vv.pop(v)
+            pre=woo.core.Object.load(preFile,overrideHashColon=overrideHashColon)
         # set preprocessor parameters first
         for name,val in vv.items():
             if name[0]=='!': continue # pseudo-variables such as !SCRIPT, !THREADS and so on
             if name=='title': continue
-            if val in ('*','-',''): continue
+            if val in ('*','-',''): continue # postponed, computed later
             print('VALUE',val)
             # postpone evaluation of parameters starting with = so that they can use other params
             if isinstance(val,(str,past.builtins.str)) and val.startswith('='): evalParams.append((name,val[1:]))

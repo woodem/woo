@@ -108,10 +108,18 @@ woo.dem.DemField(
 '''
         field=woo.dem.DemField.loads(expr,format='expr')
         import os
-        self.assertTrue(field.gravity[0]==os.getpid())
-        self.assertTrue(field.gravity[1]==2*os.getpid())
-        self.assertTrue(field.gravity[2]==3*os.getpid())
-
+        self.assertEqual(field.gravity[0],os.getpid())
+        self.assertEqual(field.gravity[1],2*os.getpid())
+        self.assertEqual(field.gravity[2],3*os.getpid())
+    def testExprHashColonOverride(self):
+        'IO: overriding values from #: lines before the expression is evaluated'
+        expr='''
+#: a=3
+woo.dem.DemField(gravity=(a,a,a))
+'''
+        field=woo.core.Object.loads(expr,format='expr',overrideHashColon={'a':4})
+        self.assertEqual(field.gravity[0],4) # not 3 as defined in the #: line
+        self.assertRaises(NameError,lambda: woo.core.Object.loads(expr,format='expr',overrideHashColon={'nonexistent':4}))
 
 
 class TestSpecialDumpMethods(unittest.TestCase):
