@@ -322,14 +322,17 @@ struct DemField: public Field{
 		// second bit: boundary particle
 		// third bit: deletable particle
 		// fourth bit: static boundary particle (used in VTK export of non-moving meshes)
-		defaultMovableMask =BOOST_BINARY(0101),
-		defaultBoundaryMask=BOOST_BINARY(0011),
+		defaultMovableBit  =BOOST_BINARY(0001),
+		defaultBoundaryBit =BOOST_BINARY(0010),
+		defaultOutletBit   =BOOST_BINARY(0100),
 		defaultStaticBit   =BOOST_BINARY(1000),
-		defaultStaticMask  =BOOST_BINARY(1011),
 		defaultLoneMask    =BOOST_BINARY(0010),
-		defaultInletMask   =BOOST_BINARY(0101),
-		defaultOutletMask  =BOOST_BINARY(0100),
-		defaultHighestBit  =BOOST_BINARY(1000) // increase so that it matches the highest one used by defaults above
+		defaultMovableMask =BOOST_BINARY(0101), // moving and deletable
+		defaultBoundaryMask=BOOST_BINARY(0011), // moving and lone
+		defaultStaticMask  =BOOST_BINARY(1011), // moving (??) static and lone
+		defaultInletMask   =BOOST_BINARY(0101), // newly created particles: moving and deletable
+		defaultOutletMask  =BOOST_BINARY(0100), // match deletable particles
+		defaultHighestBit  =BOOST_BINARY(1000)  // increase so that it matches the highest one used by defaults above
 	};
 
 	//template<> bool sceneHasField<DemField>() const;
@@ -355,13 +358,16 @@ struct DemField: public Field{
 		.def("splitNode",&DemField::splitNode,(py::arg("node"),py::arg("pars"),py::arg("massMult")=NaN,py::arg("inertiaMult")=NaN),"For particles *pars*, replace their node *node* by a clone (:obj:`~woo.core.Master.deepcopy`) of this node. If *massMult* and *inertiaMult* are given, mass/inertia of both original and cloned node are multiplied by those factors. Returns the original and the new node. Both nodes will be co-incident in space. This function is used to un-share node shared by multiple particles, such as when breaking mesh apart.")  \
 		.def("sceneHasField",&Field_sceneHasField<DemField>).staticmethod("sceneHasField") \
 		.def("sceneGetField",&Field_sceneGetField<DemField>).staticmethod("sceneGetField"); \
+		_classObj.attr("defaultMovableBit")=(int)DemField::defaultMovableBit; \
+		_classObj.attr("defaultBoundaryBit")=(int)DemField::defaultBoundaryBit; \
+		_classObj.attr("defaultOutletBit")=(int)DemField::defaultOutletBit; \
+		_classObj.attr("defaultStaticBit")=(int)DemField::defaultStaticBit; \
 		_classObj.attr("defaultMovableMask")=(int)DemField::defaultMovableMask; \
 		_classObj.attr("defaultBoundaryMask")=(int)DemField::defaultBoundaryMask; \
-		_classObj.attr("defaultStaticBit")=(int)DemField::defaultStaticBit; \
+		_classObj.attr("defaultOutletMask")=(int)DemField::defaultOutletMask; \
 		_classObj.attr("defaultStaticMask")=(int)(DemField::defaultStaticMask); \
 		_classObj.attr("defaultLoneMask")=(int)DemField::defaultLoneMask; \
 		_classObj.attr("defaultInletMask")=(int)DemField::defaultInletMask; \
-		_classObj.attr("defaultOutletMask")=(int)DemField::defaultOutletMask; \
 		_classObj.attr("defaultHighestBit")=(int)DemField::defaultHighestBit;
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_DemField__CLASS_BASE_DOC_ATTRS_CTOR_PY);
