@@ -19,6 +19,9 @@ class WooOptions(object):
         self.ompThreads=0
         self.ompCores=[]
         self.flavor=''
+        if 'WOO_FLAVOR' in os.environ:
+            self.flavor=os.environ['WOO_FLAVOR']
+            sys.stderr.write('Woo: honoring WOO_FLAVOR=%s\n'%os.environ['WOO_FLAVOR'])
         self.debug=False
         self.clDev=None
         self.fakeDisplay=False
