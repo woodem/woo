@@ -19,7 +19,7 @@ mask=0b001
 mask2=0b011
 
 cc=woo.triangulated.cylinder(Vector3(-1,0,3),Vector3(9,0,3),radius=1.5,div=30,axDiv=-1,halfThick=.07,flex=True,fixed=False,wire=False,mat=m0,mask=mask2)
-S.dem.par.add(cc)
+S.dem.par.add(cc,nodes=True)
 
 nn,pp=woo.utils.importNmesh('tube.beam-long.nmesh',mat=m1,mask=mask,trsf=lambda v: v+Vector3(4,-4,-.5),dem=S.dem,surfHalfThick=0.05)
 for n in nn:
