@@ -426,7 +426,7 @@ if 1:
     # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
     import tempfile
     with tempfile.NamedTemporaryFile(suffix='.cpp',delete=False) as tmp:
-        tmp.write('#include<cmath>\n#include<math.h>\nusing std::isnan;\n')
+        tmp.write(b'#include<cmath>\n#include<math.h>\nusing std::isnan;\n')
         tmp.close()
         try: subprocess.check_output(['gcc','-std='+cxxStd,'-c',tmp.name])
         except (subprocess.CalledProcessError,) as e:
