@@ -775,7 +775,11 @@ void GLViewer::postSelection(const QPoint& point)
 	// selection Node can be None
 	if(renderer->selObjNode){
 		Vector3r pos=renderer->selObjNode->pos;
-		if(renderer->scene->isPeriodic) pos=renderer->scene->cell->canonicalizePt(pos);
+		{
+			// convert weak_ptr to shared_ptr, and check before accessing
+			shared_ptr<Scene> scene=renderer->weakScene.lock();
+			if(scene && scene->isPeriodic) pos=scene->cell->canonicalizePt(pos);
+		}
 		setSceneCenter(qglviewer::Vec(pos[0],pos[1],pos[2]));
 		{
 			//cerr<<"Selected object #"<<selection<<" is a "<<renderer->selObj->getClassName()<<endl;

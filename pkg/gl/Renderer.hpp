@@ -58,8 +58,11 @@ struct Renderer: public Object{
 	public:
 		// updated after every call to render, held only while rendering (!!)
 		shared_ptr<Scene> scene;
+		// semi-safe storage of last-rendered scene, used when scene is needed outside of the
+		// rendering itself -- e.g. when doing selection, scene object is needed
+		weak_ptr<Scene> weakScene;
 
-		// GL selection amangement
+		// GL selection mangement
 		// in selection mode, put rendered obejcts one after another into an array
 		// which can be then used to look that object up
 

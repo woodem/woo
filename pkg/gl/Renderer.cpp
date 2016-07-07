@@ -236,8 +236,11 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 	withNames=_withNames; // used in many methods
 	if(withNames) glNamedObjects.clear();
 
-	// acquire shared_ptr to scene
-	{ scene=_scene; }
+	// acquire shared_ptr to scene -- to be released at the end of this function
+	scene=_scene;
+	// acquire the weak_ptr, which will not be released until next assignment, but must check before every access
+	weakScene=scene;
+	
 
 	// smuggle scene and ourselves into GLViewInfo for use with GlRep and field functors
 	viewInfo.scene=scene.get();
@@ -275,8 +278,6 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 
 	// release the shared_ptr; must be GIL-protected since descruction of Python-constructed object without GIL causes crash
 	{ GilLock lock; scene.reset(); }
-
-
 }
 
 void Renderer::setLightHighlighted(int highLev){
