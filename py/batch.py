@@ -634,19 +634,22 @@ def runPreprocessor(pre,preFile=None):
                 overrideHashColon[v[1:]]=val
                 print('Re-assigning #: variable %s=%s'%(str(v[1:]),str(val)))
                 vv.pop(v)
+            # print(vv)
             pre=woo.core.Object.load(preFile,overrideHashColon=overrideHashColon)
         # set preprocessor parameters first
         for name,val in vv.items():
             if name[0]=='!': continue # pseudo-variables such as !SCRIPT, !THREADS and so on
             if name=='title': continue
             if val in ('*','-',''): continue # postponed, computed later
-            print('VALUE',val)
             # postpone evaluation of parameters starting with = so that they can use other params
             if isinstance(val,(str,past.builtins.str)) and val.startswith('='): evalParams.append((name,val[1:]))
             elif isinstance(val,(str,past.builtins.str)) and val.startswith("'="): evalParams.append((name,val[2:]))
-            else: nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
+            else:
+                print('OVERRIDING FROM TABLE:',name,'=',val)
+                nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
     # postponed evaluation of computable params
     for name,val in evalParams:
+        print('OVERRIDING FROM TABLE (delayed):',name,'=',val)
         nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy,self=pre)))
     # check types, if this is a python preprocessor
     if hasattr(pre,'checkAttrTypes'): pre.checkAttrTypes()
