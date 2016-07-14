@@ -23,6 +23,8 @@ struct LabelMapper: public Object{
 
 	template<typename listTuple>
 	bool sequence_check_setitem(const string& label, py::object o);
+	void opaque_sequence_with_woo_objects_error(py::object oo);
+
 
 	py::list pyKeys() const;
 	py::list pyItems() const;

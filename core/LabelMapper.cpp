@@ -132,6 +132,17 @@ bool LabelMapper::sequence_check_setitem(const string& label, py::object o){
 }
 
 
+void LabelMapper::opaque_sequence_with_woo_objects_error(py::object oo){
+	PyObject* o=oo.ptr();
+	if(!PySequence_Check(o)) return; // ok
+	if(PySequence_Size(o)<=0) return; // ok
+	for(int i=0; i<PySequence_Size(o); i++){
+		if(!py::extract<Object>(py::object(py::handle<>(PySequence_GetItem(o,i)))).check()) continue;
+		woo::ValueError("Opaque sequence type contains woo.Object's (you have to pass list/tuple so that saving/loading of shared_ptr works properly).");
+	}
+	return; // probably okay
+}
+
 void LabelMapper::__setitem__(const string& label, py::object o){
 	py::extract<shared_ptr<Object>> exObj(o);
 	ensureUsedModsOk(label);
@@ -141,6 +152,8 @@ void LabelMapper::__setitem__(const string& label, py::object o){
 	if(sequence_check_setitem<py::list>(label,o)) return;
 	// tuple of woo objects
 	if(sequence_check_setitem<py::tuple>(label,o)) return;
+	// some other sequence-like object (e.g. ObjectList) which contains Woo objects (e.g. ObjectList) should be rejected
+	opaque_sequence_with_woo_objects_error(o);
 	// python object
 	__setitem__py(label,o);
 }
