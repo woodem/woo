@@ -681,7 +681,7 @@ def savePlotSequence(P,fileBase,stride=1,imgRatio=(5,7),title=None,titleFrames=2
     if lastFrames>1: ret+=(lastFrames-1)*[ret[-1]]
     return ret
 
-def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=None,logoPos=(20,20)):
+def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=None,logoPos=(20,20),dpi=100,font=None):
     '''Create figure with title and save to file.
 
     :param out: file to save the result to; format is anything supported by matplotlib.
@@ -689,14 +689,13 @@ def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=No
     :param str title: title and subtitle; lines are separated by single newlines (``\n``) and subtitle (if any) is separated from the title by two consecutive newlines (``\n\n``). Oversize lines are scaled to fit the width, line spacing fits all lines.
     :param color fgColor: Font color, any `color format that Matplotlib understands <http://matplotlib.org/api/colors_api.html>`__.
     :param color bgColor: Background color.
-    :param logo: filename or file-like object to be read via `matplotlib.pyploy.imread <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.imread>`__.
+    :param logo: filename or file-like object to be read via `matplotlib.pyplot.imread <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.imread>`__.
     :param logoPos: position where to place the logo.
 
     '''
     import matplotlib, matplotlib.figure, matplotlib.mathtext
     # http://stackoverflow.com/a/13714720/761090
-    dpi=100 # does not matter as font is specified in inches
-    fig=matplotlib.figure.Figure(figsize=(size[0]/dpi,size[1]/dpi),dpi=dpi,facecolor=bgColor)
+    fig=matplotlib.figure.Figure(figsize=(size[0]*1./dpi,size[1]*1./dpi),dpi=dpi,facecolor=bgColor)
     canvas=_HeadlessFigureCanvas(fig)
     #fig.set_facecolor('blue'); fig.patch.set_color('blue'); fig.patch.set_facecolor('blue'); fig.patch.set_alpha(None)
     titSub=title.split('\n\n')
@@ -725,7 +724,7 @@ def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=No
     for i,(l,isTitle) in enumerate(lines):
         writeLine(l,y0-lineYOffset(i),fontSizes[0 if isTitle else 1])
     # http://stackoverflow.com/a/4805178/761090 - savefig default overrides facecolor set previously
-    fig.savefig(out,facecolor=fig.get_facecolor())
+    fig.savefig(out,facecolor=fig.get_facecolor(),dpi=dpi)
     
 
 
