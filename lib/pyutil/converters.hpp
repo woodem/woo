@@ -76,11 +76,51 @@ namespace woo{
 		}
 	};
 
-
 	template<typename T>
 	void converters_cxxVector_pyList_2way(){
 		custom_vector_from_seq<T>(); py::to_python_converter<vector<T>,custom_vector_to_list<T>>();
 	};
+
+
+#if 0
+	template<typename Ta, typename Tb>
+	struct custom_cxxMap_to_dict{
+		static PyObject* convert(const std::map<Ta,Tb>& m){
+			py::dict ret; for(const auto& e: m) ret[py::object(e.first)]=py::object(e.second);
+			return py::incref(ret.ptr());
+		}
+	};
+	template<typename Ta, typename Tb>
+	struct custom_cxxMap_from_dict{
+		custom_cxxMap_from_dict(){ py::converter::registry::push_back(&convertible,&construct,py::type_id<std::map<Ta,Tb>>()); }
+		static void* convertible(PyObject* obj_ptr){
+			if(!PyDict_Check(obj_ptr)) return 0;
+			// check key and value types -- must be convertible
+			PyObject* keys=PyDict_Keys(obj_ptr);
+			for(int i=0; i<PyList_Size(keys); i++) if(!py::extract<Ta>(py::object(py::handle<>(PyList_GetItem(keys,i)))).check()){ py::decref(keys); return 0; }
+			PyObject* values=PyDict_Values(obj_ptr);
+			for(int i=0; i<PyList_Size(values); i++) if(!py::extract<Tb>(py::object(py::handle<>(PyList_GetItem(values,i)))).check()){ py::decref(values); return 0; }
+			py::decref(keys); py::decref(values);
+			return obj_ptr;
+		}
+		static void construct(PyObject* obj_ptr, py::converter::rvalue_from_python_stage1_data* data){
+			void* storage=((py::converter::rvalue_from_python_storage<std::map<Ta,Tb>>*)(data))->storage.bytes;
+			new (storage) std::map<Ta,Tb>();
+			std::map<Ta,Tb>* m=(std::map<Ta,Tb>*)(storage);
+			PyObject* keys=PyDict_Keys(obj_ptr);
+			for(int i=0; i<PyList_Size(keys); i++){
+				PyObject* key=PyList_GetItem(keys,i);
+				m->insert(std::make_pair(py::extract<Ta>(py::object(py::handle<>(key)))(),py::extract<Tb>(py::object(py::handle<>(PyDict_GetItem(obj_ptr,key))))()));
+			}
+			data->convertible=storage;
+		}
+	};
+	template<typename Ta,typename Tb>
+	void converters_cxxMap_pyDict_2way(){
+		custom_cxxMap_from_dict<Ta,Tb>(); py::to_python_converter<std::map<Ta,Tb>,custom_cxxMap_to_dict<Ta,Tb>>();
+	};
+#endif
+
 
 
 #if 0
