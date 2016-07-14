@@ -52,6 +52,8 @@ void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	std::ofstream os;
 	os.open(frameInc);
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+frameInc+"'.");
+	// write time
+	os<<"#declare woo_time="<<std::setprecision(16)<<scene->time<<"; /*current simulation time, in seconds*/\n";
 	for(const auto& p: *dem->particles){
 		// selection the same as in VtkExport
 		if(!p->shape) continue;
