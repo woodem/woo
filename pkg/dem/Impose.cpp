@@ -124,8 +124,19 @@ void InterpolatedMotion::velocity(const Scene* scene, const shared_ptr<Node>& n)
 	nextOri=oriA.slerp(relAB,oriB);
 	DemData& dyn=n->getData<DemData>();
 	dyn.vel=(nextPos-n->pos)/scene->dt;
-	AngleAxisr rot(n->ori.conjugate()*nextOri);
+	// Leapfrog::leapfrogSphericalRotate says q⁺=rq⁰, where r is quaternion
+	// by saying r=q⁺q⁰*, we have q⁺=rq⁰=q⁺q⁰*q⁰≡q⁺
+	// (r is transported as rotation vector, but converted from quaternion here and to quaternion in Leapfrog)
+	AngleAxisr rot(nextOri*n->ori.conjugate());
 	dyn.angVel=rot.axis()*rot.angle()/scene->dt;
+	// very verbose logging
+	#if 0
+		auto qrep=[](Quaternionr& q){ AngleAxisr aa(q); return "("+to_string(aa.axis()[0])+" "+to_string(aa.axis()[1])+" "+to_string(aa.axis()[2])+"|"+to_string(aa.angle())+")"; };
+		cerr<<"InterpolatedMotion:"<<endl<<
+		"  oriA="<<qrep(oriA)<<", oriB="<<qrep(oriB)<<", relAB="<<relAB<<endl<<
+		"  n->ori: curr="<<qrep(n->ori)<<", next="<<qrep(nextOri)<<endl<<
+		"  rot=("<<rot.axis().transpose()<<"|"<<rot.angle()<<"), angVel="<<dyn.angVel.transpose()<<endl;
+	#endif
 };
 
 void ReadForce::readForce(const Scene* scene, const shared_ptr<Node>& n){
