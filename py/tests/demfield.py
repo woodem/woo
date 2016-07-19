@@ -82,3 +82,19 @@ class TestImpose(unittest.TestCase):
             a.impose=i
             S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines())
             self.assertRaises(RuntimeError,lambda : S.selfTest())
+    def testInterpolatedMotion(self):
+        'DEM: InterpolatedMotion computes correct and position rotation'
+        import math
+        a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion.Identity)
+        p1,p2=Vector3(1,1,1),Vector3(0,0,0)
+        q1,q2=Quaternion((.3,.4,.5),3.1415).normalized(),Quaternion((-.5,-.4,1),-.7).normalized()
+        a.impose=InterpolatedMotion(poss=[a.pos,p1,p2],oris=[a.ori,q1,q2],times=[0,.2,.4])
+        a.blocked='xyzXYZ' # must be blocked otherwise we get an error from selfTest
+        S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(),dt=1e-1)
+        S.run(10,True) # run in fg
+        dAngle=(q2.conjugate()*a.ori).toAxisAngle()[1]
+        if dAngle>math.pi: dAngle-=2*math.pi
+        dPos=(a.pos-p2).norm()
+        self.assertAlmostEqual(dAngle,0)
+        self.assertAlmostEqual(dPos,0)
+        
