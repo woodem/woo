@@ -168,7 +168,7 @@ std::tuple<const vector<Vector3r>&,const vector<Vector3i>&> CompUtils::unitSpher
 		unitSphereTri20_faces.resize(level+1);
 	}
 	for(int l=0; l<=level; l++){
-		if(!unitSphereTri20_vertices[level].empty()) continue;
+		if(!unitSphereTri20_vertices[l].empty()) continue;
 		unitSphereTri20_compute(l);
 	}
 	return std::tie(unitSphereTri20_vertices[level],unitSphereTri20_faces[level]);
@@ -201,6 +201,8 @@ void unitSphereTri20_compute(int l){
 	auto& f1(unitSphereTri20_faces[l]);
 	assert(!v0.empty() && !f0.empty());
 	assert(v1.empty() && f1.empty());
+	
+
 	//v1.reserve(v0.size()+3*f0.size());
 	// copy existing vertices
 	v1=v0;
