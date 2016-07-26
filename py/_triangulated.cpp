@@ -301,7 +301,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				if(!boxes[bb[i].id].intersects(boxes[bb[j].id])) continue; // no intersection along all axes
 			#else
 				// old, less elegant
-				if(boxes[bb[i].id].intersection(boxes[bb[j].id]).empty()) continue; 
+				if(boxes[bb[i].id].intersection(boxes[bb[j].id]).isEmpty()) continue; 
 			#endif
 			int0.push_back(std::make_pair(min(bb[i].id,bb[j].id),max(bb[i].id,bb[j].id)));
 			LOG_TRACE("Broad-phase collision "<<int0.back().first<<"+"<<int0.back().second);
