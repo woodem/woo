@@ -45,27 +45,46 @@ int facetsToSTL(const string& out, const shared_ptr<DemField>& dem, const string
 	return num;
 }
 
-void _gts_face_to_stl(GtsTriangle* t,std::ofstream* stlPtr){
-	GtsVertex *v0, *v1, *v2;
-	Vector3r n;
-	gts_triangle_vertices(t,&v0,&v1,&v2);
-	gts_triangle_normal(t,&n[0],&n[1],&n[2]);
-	n.normalize();
-	(*stlPtr)<<"  facet normal "<<n[0]<<" "<<n[1]<<" "<<n[2]<<"\n";
-	(*stlPtr)<<"    outer loop\n";
-	for(GtsVertex* v: {v0,v1,v2}){
-		(*stlPtr)<<"      vertex "<<GTS_POINT(v)->x<<" "<<GTS_POINT(v)->y<<" "<<GTS_POINT(v)->z<<"\n";
+#ifdef WOO_GTS
+	struct _gts_face_to_stl_data{
+		_gts_face_to_stl_data(std::ofstream& _stl, Scene* _scene, bool _clipCell, int& _numTri): stl(_stl),scene(_scene),clipCell(_clipCell),numTri(_numTri){};
+		std::ofstream& stl;
+		const Scene* scene;
+		const bool& clipCell;
+		int& numTri;
+	};
+	void _gts_face_to_stl(GtsTriangle* t,_gts_face_to_stl_data* data){
+		GtsVertex* v[3];
+		Vector3r n;
+		gts_triangle_vertices(t,&v[0],&v[1],&v[2]);
+		if(data->clipCell && data->scene->isPeriodic){
+			for(short ax:{0,1,2}){
+				Vector3r p(GTS_POINT(v[ax])->x,GTS_POINT(v[ax])->y,GTS_POINT(v[ax])->z);
+				if(!data->scene->cell->isCanonical(p)) return;
+			}
+		}
+		gts_triangle_normal(t,&n[0],&n[1],&n[2]);
+		n.normalize();
+		std::ofstream& stl(data->stl);
+		stl<<"  facet normal "<<n[0]<<" "<<n[1]<<" "<<n[2]<<"\n";
+		stl<<"    outer loop\n";
+		for(GtsVertex* _v: v){
+			stl<<"      vertex "<<GTS_POINT(_v)->x<<" "<<GTS_POINT(_v)->y<<" "<<GTS_POINT(_v)->z<<"\n";
+		}
+		stl<<"    endloop\n";
+		stl<<"  endfacet\n";
+		data->numTri+=3;
 	}
-	(*stlPtr)<<"    endloop\n";
-	(*stlPtr)<<"  endfacet\n";
-}
+#endif
 
-
-#define LOG_TRACE LOG_WARN
-#define LOG_DEBUG LOG_WARN
+//#define LOG_TRACE LOG_WARN
+//#define LOG_DEBUG LOG_WARN
 
 int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol, const string& solid, int mask, bool append, bool clipCell, bool merge){
 	if(tol==0 || isnan(tol)) throw std::runtime_error("tol must be non-zero.");
+	#ifndef WOO_GTS
+		if(merge) throw std::runtime_error("woo.triangulated.spheroidsToSTL: merge=True only possible in builds with the 'gts' feature.");
+	#endif
 	// first traversal to find reference radius
 	auto particleOk=[&](const shared_ptr<Particle>&p){ return (mask==0 || (p->mask & mask)) && (p->shape->isA<Sphere>() || p->shape->isA<Ellipsoid>() || p->shape->isA<Capsule>()); };
 	int numTri=0;
@@ -265,17 +284,6 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 			bounds[ax][2*i+1]=Bound(box.max()[ax],/*id*/i,/*isMin*/false);
 		}
 	}
-	#if 0
-		for(size_t n=0; n<ssurf.size(); n++){
-			LOG_TRACE("STL: cluster "<<n<<" output");
-			stl<<"solid "<<solid<<"_"<<n<<"\n";
-			/* output cluster to STL here */
-			// TODO: clipping faces not yet done
-			gts_surface_foreach_face(ssurf[n],(GtsFunc)_gts_face_to_stl,(gpointer)&stl);
-			stl<<"endsolid";
-		};
-		return -1;
-	#endif
 
 	/*
 	broad-phase collision detection between GTS surfaces
@@ -289,22 +297,55 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		// go up to the upper bound, but handle overflow safely (no idea why it would happen here) as well
 		for(size_t j=i+1; j<2*N && bb[j].id!=bb[i].id; j++){
 			if(bb[j].isMin) continue; // this is handled by symmetry
-			if(!boxes[bb[i].id].intersects(boxes[bb[j].id])) continue; // no intersection along all axes
+			#if EIGEN_VERSION_AT_LEAST(3,2,5)
+				if(!boxes[bb[i].id].intersects(boxes[bb[j].id])) continue; // no intersection along all axes
+			#else
+				// old, less elegant
+				if(boxes[bb[i].id].intersection(boxes[bb[j].id]).empty()) continue; 
+			#endif
 			int0.push_back(std::make_pair(min(bb[i].id,bb[j].id),max(bb[i].id,bb[j].id)));
 			LOG_TRACE("Broad-phase collision "<<int0.back().first<<"+"<<int0.back().second);
 		}
 	}
+
 	/*
 	narrow-phase collision detection between GTS surface
+	this must be done via gts_surface_inter_new, since gts_surface_distance always succeeds
 	*/
 	std::list<std::pair<int,int>> int1;
-	GtsRange gr1, gr2;
 	for(const std::pair<int,int> ij: int0){
 		LOG_TRACE("Testing narrow-phase collision "<<ij.first<<"+"<<ij.second);
-		gts_surface_distance(ssurf[ij.first],ssurf[ij.second],/*delta ??*/(gfloat).2,&gr1,&gr2);
-		if(gr1.min>0 && gr2.min>0) continue;
+		#if 0
+			GtsRange gr1, gr2;
+			gts_surface_distance(ssurf[ij.first],ssurf[ij.second],/*delta ??*/(gfloat).2,&gr1,&gr2);
+			if(gr1.min>0 && gr2.min>0) continue;
+			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" (min. distances "<<gr1.min<<", "<<gr2.min);
+		#else
+			GtsSurface *s1(ssurf[ij.first]), *s2(ssurf[ij.second]);
+			GNode* t1=gts_bb_tree_surface(s1);
+			GNode* t2=gts_bb_tree_surface(s2);
+			GtsSurfaceInter* I=gts_surface_inter_new(gts_surface_inter_class(),s1,s2,t1,t2,/*is_open_1*/false,/*is_open_2*/false);
+			GSList* l=gts_surface_intersection(s1,s2,t1,t2); // list of edges describing intersection
+			int n1=g_slist_length(l);
+			// extra check by looking at number of faces of the intersected surface
+			#if 1
+				GtsSurface* s12=gts_surface_new(gts_surface_class(),gts_face_class(),gts_edge_class(),gts_vertex_class());
+				gts_surface_inter_boolean(I,s12,GTS_1_OUT_2);
+				gts_surface_inter_boolean(I,s12,GTS_2_OUT_1);
+				int n2=gts_surface_face_number(s12);
+				gts_object_destroy(GTS_OBJECT(s12));
+			#endif
+			gts_bb_tree_destroy(t1,TRUE);
+			gts_bb_tree_destroy(t2,TRUE);
+			gts_object_destroy(GTS_OBJECT(I));
+			g_slist_free(l);
+			if(n1==0) continue;
+			#if 1
+				if(n2==0){ LOG_ERROR("n1==0 but n2=="<<n2<<" (no narrow-phase collision)"); continue; }
+			#endif
+			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" ("<<n<<" edges describe the intersection)");
+		#endif
 		int1.push_back(ij);
-		LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" (min. distances "<<gr1.min<<", "<<gr2.min);
 	}
 	/*
 	connected components on the graph: graph nodes are 0…(N-1), graph edges are in int1
@@ -333,6 +374,8 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				LOG_TRACE("   Adding "<<i<<" to the cluster");
 				// ssurf[i] now belongs to cluster #n
 				// trees need to be rebuild every time anyway, since the merged surface keeps changing in every cycle
+				//if(gts_surface_face_number(clusterSurf)==0) LOG_ERROR("clusterSurf has 0 faces.");
+				//if(gts_surface_face_number(ssurf[i])==0) LOG_ERROR("Surface #"<<i<<" has 0 faces.");
 				GNode* t1=gts_bb_tree_surface(clusterSurf);
 				GNode* t2=gts_bb_tree_surface(ssurf[i]);
 				GtsSurfaceInter* I=gts_surface_inter_new(gts_surface_inter_class(),clusterSurf,ssurf[i],t1,t2,/*is_open_1*/false,/*is_open_2*/false);
@@ -340,22 +383,36 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				gts_surface_inter_boolean(I,merged,GTS_1_OUT_2);
 				gts_surface_inter_boolean(I,merged,GTS_2_OUT_1);
 				gts_object_destroy(GTS_OBJECT(I));
-				// not from unique_ptr-managed vectors, explicit delete!
-				if(clusterSurf!=ssurf[cluster1st]) gts_object_destroy(GTS_OBJECT(clusterSurf));
-				clusterSurf=merged;
+				gts_bb_tree_destroy(t1,TRUE);
+				gts_bb_tree_destroy(t2,TRUE);
+				if(gts_surface_face_number(merged)==0){
+					LOG_ERROR("Cluster #"<<n<<": 0 faces after fusing #"<<i<<" (why?), adding #"<<i<<" separately!");
+					// this will cause an extra 1-particle cluster to be created
+					clusters[i]=numClusters;
+					numClusters+=1;
+				} else {
+					// not from global vectors (cleanup at the end), explicit delete!
+					if(clusterSurf!=ssurf[cluster1st]) gts_object_destroy(GTS_OBJECT(clusterSurf));
+					clusterSurf=merged;
+				}
 			}
 		}
-		LOG_ERROR("XXX: clean the result, see pygts sources for inspiration.");
-		LOG_TRACE("STL: cluster "<<n<<" output");
+		#if 0
+			LOG_TRACE("  GTS surface cleanups...");
+	 		pygts_vertex_cleanup(clusterSurf,.1*tol); // cleanup 10× smaller than tolerance
+		   pygts_edge_cleanup(clusterSurf);
+	      pygts_face_cleanup(clusterSurf);
+		#endif
+		LOG_TRACE("  STL: cluster "<<n<<" output");
 		stl<<"solid "<<solid<<"_"<<n<<"\n";
 		/* output cluster to STL here */
-		// TODO: clipping faces not yet done
-		gts_surface_foreach_face(clusterSurf,(GtsFunc)_gts_face_to_stl,(gpointer)&stl);
-		numTri+=gts_surface_face_number(clusterSurf);
-		stl<<"endsolid";
+		_gts_face_to_stl_data data(stl,scene,clipCell,numTri);
+		gts_surface_foreach_face(clusterSurf,(GtsFunc)_gts_face_to_stl,(gpointer)&data);
+		stl<<"endsolid\n";
 		if(clusterSurf!=ssurf[cluster1st]) gts_object_destroy(GTS_OBJECT(clusterSurf));
 	}
-	LOG_ERROR("XXX: deallocate all GTS objects !!");
+	// this deallocates also edges and vertices
+	for(size_t i=0; i<ssurf.size(); i++) gts_object_destroy(GTS_OBJECT(ssurf[i]));
 	return numTri;
 #endif /* WOO_GTS */
 }
