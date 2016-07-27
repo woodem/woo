@@ -458,9 +458,11 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
         ipconfig['banner1']=banner+'\n' # called banner1 in >=0.11, not banner as in 0.10
         for k in ipconfig: setattr(InteractiveShellEmbed,k,ipconfig[k])
         ipshell=InteractiveShellEmbed()
-        ipshell.prompt_manager.in_template= 'Woo [\#]: '
-        ipshell.prompt_manager.in2_template='    .\D.: '
-        ipshell.prompt_manager.out_template=' -> [\#]: '
+        if ipython_version<500:
+            ipshell.prompt_manager.in_template= 'Woo [\#]: '
+            ipshell.prompt_manager.in2_template='    .\D.: '
+            ipshell.prompt_manager.out_template=' -> [\#]: '
+        else: print("TODO: Custom prompts not yet supported with IPython >= 5.x.")
         ipshell()
         # similar to the workaround, as for 0.10 (perhaps not needed?)
         ipshell.atexit_operations()
