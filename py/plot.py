@@ -463,19 +463,21 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
         missing=set() # missing data columns
         if pStrip not in list(data.keys()): missing.add(pStrip if isinstance(pStrip,str) else pStrip.decode('utf-8','ignore'))
         for d in plots_p:
-            if d[0]==None:
+            d0=d[0]
+            if d0==None:
                 y1=False; continue
-            if not isinstance(d[0],(past.builtins.str,str)): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
-            if y1: plots_p_y1.append(d)
-            else: plots_p_y2.append(d)
+            if not isinstance(d0,(past.builtins.str,str)): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
+            if '=' in d0: d0=d0.split('=',1)[0]
+            if y1: plots_p_y1.append((d0,d[1]))
+            else: plots_p_y2.append((d0,d[1]))
             try:
                 if (
-                    d[0] not in list(data.keys())
+                    d0 not in list(data.keys())
                     # and not callable(d[0])
-                    and not (isinstance(d[0],str) and (d[0].startswith('**') or d[0].startswith('*'))) # hack for callable as strings
+                    and not (isinstance(d0,str) and (d0.startswith('**') or d0.startswith('*'))) # hack for callable as strings
                     # and not hasattr(d[0],'keys')
                 ):
-                    missing.add(d[0])
+                    missing.add(d0)
             except UnicodeEncodeError:
                 import warnings
                 warnings.error('UnicodeDecodeError when processing data set '+repr(d[0]))
