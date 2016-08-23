@@ -1,6 +1,8 @@
 #pragma once
 #include<woo/core/Engine.hpp>
 #include<woo/pkg/dem/Particle.hpp>
+#include<woo/lib/pyutil/converters.hpp>
+
 
 #ifdef WOO_OPENGL
 	#include<woo/lib/opengl/GLUtils.hpp>
@@ -44,7 +46,9 @@ struct Outlet: public PeriodicEngine{
 		.def("clear",&Outlet::pyClear,"Clear information about saved particles (particle list, if saved, mass and number, rDivR0)") \
 		.def("diamMass",&Outlet::pyDiamMass,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
 		.def("diamMassTime",&Outlet::pyDiamMassTime,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass, time); without *zipped*, return tuple of 3 arrays: diameters, masses, times.") \
-		.def("massOfDiam",&Outlet::pyMassOfDiam,(py::arg("min")=0,py::arg("max")=Inf),"Return mass of particles of which diameters are between *min* and *max*.") 
+		.def("massOfDiam",&Outlet::pyMassOfDiam,(py::arg("min")=0,py::arg("max")=Inf),"Return mass of particles of which diameters are between *min* and *max*."); \
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Outlet>>(); // converter needed for DetectSteadyState
+		
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Outlet__CLASS_BASE_DOC_ATTRS_PY);
 };

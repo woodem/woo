@@ -2,6 +2,8 @@
 #include<woo/pkg/dem/Particle.hpp>
 #include<boost/range/numeric.hpp>
 #include<boost/range/algorithm/fill.hpp>
+#include<woo/lib/pyutil/converters.hpp>
+
 
 
 #ifdef WOO_OPENGL
@@ -23,8 +25,8 @@ struct Inlet: public PeriodicEngine{
 	#ifdef WOO_OPENGL
 		void renderMassAndRate(const Vector3r& pos);
 	#endif
-	#define woo_dem_Inlet__CLASS_BASE_DOC_ATTRS \
-		Inlet,PeriodicEngine,ClassTrait().doc("Inlet generating new particles. This is an abstract base class which in itself does not generate anything, but provides some unified interface to derived classes.").section("Inlets & Outlets","TODO",{"ParticleGenerator","SpatialBias","ParticleShooter","Outlet"}), \
+	#define woo_dem_Inlet__CLASS_BASE_DOC_ATTRS_PY \
+		Inlet,PeriodicEngine,ClassTrait().doc("Inlet generating new particles. This is an abstract base class which in itself does not generate anything, but provides some unified interface to derived classes.").section("Inlets & Outlets","TODO",{"ParticleGenerator","SpatialBias","ParticleShooter","Outlet","DetectSteadyState"}), \
 		((int,mask,((void)":obj:`DemField.defaultInletMask`",DemField::defaultInletMask),,":obj:`~woo.dem.Particle.mask` for new particles.")) \
 		((Real,maxMass,-1,AttrTrait<>().massUnit(),"Mass at which the engine will not produce any particles (inactive if not positive)")) \
 		((long,maxNum,-1,,"Number of generated particles after which no more will be produced (inactive if not positive)")) \
@@ -34,9 +36,11 @@ struct Inlet: public PeriodicEngine{
 		((Real,currRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Current value of mass flow rate")) \
 		((bool,zeroRateAtStop,true,,"When the generator stops (mass/number of particles reached, ...), set :obj:`currRate` to zero immediately")) \
 		((Real,currRateSmooth,1,AttrTrait<>().range(Vector2r(0,1)),"Smoothing factor for currRate ∈〈0,1〉")) \
-		((Real,glColor,0,AttrTrait<>().noGui(),"Color for rendering (nan disables rendering)"))
+		((Real,glColor,0,AttrTrait<>().noGui(),"Color for rendering (nan disables rendering)")) \
+		, /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<Inlet>>(); // converter needed for DetectSteadyState
 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS);
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Inlet);
 
