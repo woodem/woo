@@ -69,12 +69,14 @@ else:
         import warnings
         warnings.filterwarnings('ignore',category=DeprecationWarning,module='.*IPython.*')
 
-        if 'qt4' in woo.config.features: from PyQt4 import QtGui
-        else: from PyQt5 import QtGui
+        if 'qt4' in woo.config.features:
+            from PyQt4 import QtGui
+            from PyQt4.QtGui import QApplication
+        else:
+            from PyQt5 import QtGui
+            from PyQt5.QtWidgets import QApplication
 
-        if woo.runtime.ipython_version()==10:
-            wooQApp=QtGui.QApplication(sys.argv)
-        elif useQtConsole:
+        if useQtConsole:
             from IPython.frontend.qt.console.qtconsoleapp import IPythonQtConsoleApp
             wooQApp=IPythonQtConsoleApp()
             wooQApp.initialize()
@@ -82,8 +84,7 @@ else:
             # create an instance of InteractiveShell before the inputhook is created
             # see http://stackoverflow.com/questions/9872517/how-to-embed-ipython-0-12-so-that-it-inherits-namespace-of-the-caller for details
             # fixes http://gpu.doxos.eu/trac/ticket/40
-            try: from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
-            except ImportError: from IPython.frontend.terminal.embed import InteractiveShellEmbed # IPython<1.0
+            from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
             from IPython.config.configurable import MultipleInstanceError
             try: ipshell=InteractiveShellEmbed.instance()
             except MultipleInstanceError:
@@ -91,8 +92,21 @@ else:
             # keep the qapp object referenced, otherwise 0.11 will die with "QWidget: Must construct QApplication before a QPaintDevice
             # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
 
-            import IPython.lib.inputhook #guisupport
-            wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
+            import IPython
+            # see https://github.com/ipython/ipython/issues/9784 for discussion
+            # the resolution not being very clear yet
+            import woo.runtime
+            if woo.runtime.ipython_version()>=500:
+                wooQApp=QApplication([''])
+                # the rest is done in wooMain, once the ipshell object is instantiated
+                # -- ipshell.enable_gui('qt5')
+                
+            #    import IPython.terminal.pt_inputhooks
+            #    IPython.terminal.pt_inputhooks.get_inputhook_func('gt4' if 'qt4' in woo.config.features else 'qt5')
+            else:
+                # this is deprecated in IPython >= 5.x
+                import IPython.lib.inputhook #guisupport
+                wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
 
             #from IPython.lib.guisupport import start_event_loop_qt4
             #start_event_loop_qt4(wooQApp)

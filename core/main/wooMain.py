@@ -424,10 +424,11 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
     if woo.runtime.opts.exitAfter:
         sys.stdout.write('Woo: normal exit.\n') # fake normal exit (so that batch looks fine if we crash at shutdown)
         sys.exit(0)
+
     # common ipython configuration
-    banner='[[ ^L clears screen, ^U kills line. '+', '.join(['F12 controller']+(['F11 3d view','F10 both'] if 'opengl' in woo.config.features else [])+(['F9 generator'] if qt else [])+['F8 plot'])+'. ]]'
     ipconfig=dict( # ipython options, see e.g. http://www.cv.nrao.edu/~rreid/casa/tips/ipy_user_conf.py
-        prompt_in1='Waa [\#]: ',
+        banner1='[[ ^L clears screen, ^U kills line. '+', '.join(['F12 controller']+(['F11 3d view','F10 both'] if 'opengl' in woo.config.features else [])+(['F9 generator'] if qt else [])+['F8 plot'])+'. ]]\n',
+        prompt_in1='Woo [\#]: ',
         prompt_in2='    .\D.: ',
         prompt_out=" -> [\#]: ",
         separate_in='',separate_out='',separate_out2='',
@@ -440,29 +441,57 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
                 '"\e[A": history-search-backward', '"\e[B": history-search-forward', # incremental history forward/backward
         ]
     )
+            
     # shortcuts don't really work under windows, show controller directly in that case
     if qt and WIN: woo.qt.Controller()
 
-    # show python console
-
     ipython_version=woo.runtime.ipython_version()
+    # show python console
     import woo.ipythonintegration
     woo.ipythonintegration.replaceInputHookIfNeeded()
-    if ipython_version in (10,11): raise RuntimeError('Ipython 0.10, 0.11 are obsolete and not supported anymore.')
     if qtConsole:
         qapp.start()
     else:
-        try: from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
-        except ImportError: from IPython.frontend.terminal.embed import InteractiveShellEmbed # IPython<1.0
+        #XXX: # IPython>=1.0
+        from IPython.terminal.embed import InteractiveShellEmbed 
+        #XXX: # only IPython<1.0
+        #XXX: except ImportError: from IPython.frontend.terminal.embed import InteractiveShellEmbed 
         # use the dict to set attributes
-        ipconfig['banner1']=banner+'\n' # called banner1 in >=0.11, not banner as in 0.10
         for k in ipconfig: setattr(InteractiveShellEmbed,k,ipconfig[k])
         ipshell=InteractiveShellEmbed()
         if ipython_version<500:
             ipshell.prompt_manager.in_template= 'Woo [\#]: '
             ipshell.prompt_manager.in2_template='    .\D.: '
             ipshell.prompt_manager.out_template=' -> [\#]: '
-        else: print("TODO: Custom prompts not yet supported with IPython >= 5.x.")
+        # IPython >= 5.0
+        else:
+            print('WARN: support for IPython >= 5.0 may not complete yet.')
+            # important, equivalent to %gui qt5 magick
+            if qt: ipshell.enable_gui('qt5' if 'qt5' in woo.config.features else 'qt4')
+            # custom prompt
+            # http://stackoverflow.com/a/38277813/761090
+            from IPython.terminal.prompts import Prompts, Token
+            class WooPrompt(Prompts):
+                def in_prompt_tokens(self,cli=None): return [(Token.Prompt,'Woo ['),(Token.PromptNum,str(self.shell.execution_count)),(Token.Prompt,']: '),(Token.Generic,'')]
+                def out_prompt_tokens(self): return [(Token.OutPrompt,'--> ['),(Token.OutPromptNum,str(self.shell.execution_count)),(Token.OutPrompt,']: '),(Token.Generic,'')]
+            registry=ipshell.pt_cli.application.key_bindings_registry
+            # shortcuts setup
+            # tersely documented at http://ipython.readthedocs.io/en/latest/config/details.html#keyboard-shortcuts
+            from prompt_toolkit.keys import Keys
+            import traceback
+            def _catch(c):
+                'Wrap all shortcut calls in this catcher, otherwise the whole program crashes when there is exception in the event callback'
+                try: c()
+                except: traceback.print_exc()
+            # add shortcuts here (we discard the event object which the callback always receives)
+            registry.add_binding(Keys.F8)(lambda e: _catch(lambda: woo.master.scene.plot.plot()))
+            if qt:
+                registry.add_binding(Keys.F9)(lambda e:  _catch(lambda: woo.qt.Generator()))
+                registry.add_binding(Keys.F12)(lambda e: _catch(lambda: woo.qt.Controller()))
+            if 'opengl' in woo.config.features:
+                registry.add_binding(Keys.F10)(lambda e: _catch(lambda: [woo.qt.Controller(),woo.qt.View()]))
+                registry.add_binding(Keys.F11)(lambda e: _catch(lambda: woo.qt.View()))
+            ipshell.prompts=WooPrompt(ipshell)
         ipshell()
         # similar to the workaround, as for 0.10 (perhaps not needed?)
         ipshell.atexit_operations()
