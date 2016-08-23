@@ -126,7 +126,7 @@ class Master: public Singleton<Master>{
 		int numThreads_get();
 		void numThreads_set(int i);
 		
-		void pyExitNoBacktrace(int status=0);
+		void pyExitNoBacktrace(py::object arg0=py::object(0));
 		void pyDisableGdb(){
 			// disable for native Windows builds
 			#ifndef __MINGW64__ 

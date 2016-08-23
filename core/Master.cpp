@@ -434,15 +434,22 @@ void Master::pySetCmap(py::object obj){
 	void termHandlerError(int sig){cerr<<"Woo: error exit."<<endl; raise(SIGTERM);}
 #endif
 
-void Master::pyExitNoBacktrace(int status){
-	#ifndef __MINGW64__
-		if(status==0) signal(SIGSEGV,termHandlerNormal); /* unset the handler that runs gdb and prints backtrace */
-		else signal(SIGSEGV,termHandlerError);
-	#endif
+void Master::pyExitNoBacktrace(py::object arg0){
 	// flush all streams (so that in case we crash at exit, unflushed buffers are not lost)
 	fflush(NULL);
-	// attempt exit
-	exit(status);
+	py::extract<int> status(arg0);
+	if(status.check()){
+		#ifndef __MINGW64__
+			if(status==0) signal(SIGSEGV,termHandlerNormal); /* unset the handler that runs gdb and prints backtrace */
+			else signal(SIGSEGV,termHandlerError);
+		#endif
+		exit(status);
+	}
+	// exiting with some error message
+	else if(PyObject_HasAttrString(arg0.ptr(),"__str__")){
+		cerr<<"Exit message: "<<py::extract<string>(arg0.attr("__str__")())()<<endl;
+	}
+	exit(1);
 }
 
 shared_ptr<woo::Object> Master::pyGetScene(){ return getScene(); }
