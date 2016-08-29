@@ -36,8 +36,8 @@ if 'WOO_QT5' not in os.environ:
     try:
         import PyQt4
         log.info("PyQt4 found.")
-        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT4.')
-        QT5=False
+        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT5.')
+        QT5=True
     except ImportError:
         log.info('PyQt4 not importable:',exc_info=True)
 
@@ -362,25 +362,25 @@ if 'hdf5' in features:
     cppDirs+=['/usr/include/hdf5/serial']
 if 'opengl' in features:
     if WIN: cxxLibs+=['opengl32','glu32','glut','gle','QGLViewer2']
-    # XXX: this will fail in Ubuntu >= 13.10 which calls this lib QGLViewer
     else:
         cxxLibs+=['GL','GLU','glut','gle']
-        # now older Ubuntu calls the library qglviewer-qt4, newer QGLViewer
-        # we check that by asking the compiler what it can find and what not
-        # this assumes gcc can be run
-        try:
-            # this will for sure fail - either the lib is not found (the first error reported), or we get "undefined reference to main" when the lib is there
-            subprocess.check_output(['gcc','-lqglviewer-qt4'],stderr=subprocess.STDOUT)
-        except (subprocess.CalledProcessError,) as e:
-            #print(20*'=','output from gcc -lqglviewer-qt4',20*'=')
-            #print(e.output)
-            #print(60*'=')
-            if ' -lqglviewer-qt4' in e.output.decode('utf-8').split('\n')[0]:
-                log.info('library check: qglviewer-qt4 not found, using QGLViewer instead')
-                cxxLibs+=['QGLViewer']
-            else:
-                log.info('library check: qglviewer-qt4 found')
-                cxxLibs+=['qglviewer-qt4']
+        def tryLib(l):
+            try:
+                # this will for sure fail - either the lib is not found (the first error reported), or we get "undefined reference to main" when the lib is there
+                subprocess.check_output(['gcc','-l'+l],stderr=subprocess.STDOUT)
+            except (subprocess.CalledProcessError,) as e:
+                # print(20*'=','output from gcc -l'+l,20*'=',e.output,60*'=')
+                out=e.output.decode('utf-8')
+                if 'undefined reference' in out:
+                    print('library check: '+l+' found.')
+                    return True
+                elif '-l'+l in out:
+                    print('library check: '+l+' NOT found.')
+                    return False
+                raise RuntimeError('Library check returned output which does not contain neiter "undefined reference" nor "-l'+l+'".')
+        if 'qt4' in features and tryLib('qglviewer-qt4'): cxxLibs+=['qglviewer-qt4']
+        elif 'qt5' in features and tryLib('QGLViewer-qt5'): cxxLibs+=['QGLViewer-qt5']
+        elif tryLib('QGLViewer'): cxxLibs+=['QGLViewer']
     # qt4 without OpenGL is pure python and needs no additional compile options
     if ('qt4' in features or 'qt5' in features):
         cppDef+=[('QT_CORE_LIB',None),('QT_GUI_LIB',None),('QT_OPENGL_LIB',None),('QT_SHARED',None)]

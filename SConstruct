@@ -541,7 +541,7 @@ if not env.GetOption('clean'):
 			elif conf.CheckLibWithHeader(['QGLViewer'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='QGLViewer'
 			# Fedora naming, maybe: https://lists.fedoraproject.org/pipermail/devel/2014-March/196395.html 
 			elif conf.CheckLibWithHeader(['libQGLViewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer-qt5'
-			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-qt5-dev package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
+			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-dev-qt package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
 			if not conf.CheckLibLinkedTo('lib'+env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
