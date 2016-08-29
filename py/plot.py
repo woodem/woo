@@ -35,6 +35,13 @@ else:
     def _bytes(s): return s
 
 
+def _my_get_axes(artist):
+    '''
+    Backwards-compatible getter to avoid warning when getting Artist's axes. It can be replaced by the properties everywhere, once we drop compatibility with matplotlib < 1.5.
+
+    The artist.get_axes() getter was deprecated in MPL 1.5 and replaced by .axes property. Using the getter with later version would result in MatplotlibDeprecationWarning.
+    '''
+    return artist.axes if hasattr(artist,'axes') else artist.get_axes()
 
 
 import matplotlib,os,time,math,itertools,sys
@@ -388,7 +395,9 @@ class LineRef(object):
                         #    dx,dy=[numpy.average(numpy.diff(dta[current-window:current])) for dta in self.xdata,self.ydata]
                         #except IndexError: pass
                         # there must be an easier way to find on-screen derivative angle, ask on the matplotlib mailing list
-                        axes=self.line.get_axes()
+                        # XXX: this can be siplified once we drop support for matplotlib < 1.5
+                        # XXX: and is here to avoid MatplotlibDeprecationWarning for newer versions
+                        axes=_my_get_axes(self.line)
                         p=axes.patch; xx,yy=p.get_verts()[:,0],p.get_verts()[:,1]; size=max(xx)-min(xx),max(yy)-min(yy)
                         aspect=(size[1]/size[0])*(1./axes.get_data_ratio())
                         if dx==0: angle=math.pi
@@ -423,7 +432,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
     if replace:
         if P.currLineRefs:
             logging.info('Closing existing figures')
-            ff=set([l.line.get_axes().get_figure() for l in P.currLineRefs]) # get all current figures
+            ff=set([_my_get_axes(l.line).get_figure() for l in P.currLineRefs]) # get all current figures
             for f in ff: pylab.close(f) # close those
         P.currLineRefs=[]
     figs=[]
@@ -540,7 +549,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                     annotation.annotateFmt=annotateFmt
                 else: annotation=None
                 if replace: P.currLineRefs.append(LineRef(line=line,scatter=scatter,annotation=annotation,line2=line2,xdata=data[pStrip],ydata=data[d[0]]))
-            axes=line.get_axes()
+            axes=_my_get_axes(line)
             labelLoc=(legendLoc[0 if isY1 else 1] if y2Exists>0 else 'best')
             l=axes.legend(loc=labelLoc)
             if l:
@@ -594,7 +603,7 @@ def liveUpdate(P,timestamp):
         for l in P.currLineRefs:
             l.update()
             figs.add(l.line.get_figure())
-            axes.add(l.line.get_axes())
+            axes.add(_my_get_axes(l.line))
             linesData.add(id(l.ydata))
         # find callables in y specifiers, create new lines if necessary
         for ax in axes:
@@ -748,7 +757,7 @@ def Scene_plot_plot(P,noShow=False,subPlots=True):
 
     """
     figs=createPlots(P,subPlots=subPlots,noShow=noShow,replace=(False if noShow else True))
-    # figs=set([l.line.get_axes().get_figure() for l in P.currLineRefs])
+    # figs=set([_my_get_axes(l.line).get_figure() for l in P.currLineRefs])
     if not figs:
         import warnings
         warnings.warn('Nothing to plot.')
@@ -775,10 +784,10 @@ def Scene_plot_plot(P,noShow=False,subPlots=True):
                         def closeFigureCallback(event):
                             ff=event.canvas.figure
                             # remove closed axes from our update list
-                            P.currLineRefs=[l for l in P.currLineRefs if l.line.get_axes().get_figure()!=ff] 
+                            P.currLineRefs=[l for l in P.currLineRefs if _my_get_axes(l.line).get_figure()!=ff] 
                         f.canvas.mpl_connect('close_event',closeFigureCallback)
     # else:
-        # figs=list(set([l.line.get_axes().get_figure() for l in P.currLineRefs]))
+        # figs=list(set([_my_get_axes(l.line).get_figure() for l in P.currLineRefs]))
     return figs
 
 def Scene_plot_saveDataTxt(P,fileName,vars=None):
