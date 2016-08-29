@@ -36,8 +36,8 @@ if 'WOO_QT5' not in os.environ:
     try:
         import PyQt4
         log.info("PyQt4 found.")
-        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT5.')
-        QT5=True
+        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT4.')
+        QT5=False
     except ImportError:
         log.info('PyQt4 not importable:',exc_info=True)
 
