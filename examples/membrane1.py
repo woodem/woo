@@ -6,7 +6,7 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.master.usesApi=10102
+woo.master.usesApi=10103
 
 S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,0))])
 S.gl.demField.nodes=True
@@ -31,7 +31,7 @@ if 0:
     nn[2].dem.blocked=''
 
     S.dem.gravity=(0,0,-10)
-    S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat(young=1e6)))
+    S.dem.par.add(Particle(shape=Membrane(nodes=nn),material=FrictMat(young=1e6)),nodes=True)
     for n in nn: n.dem.addParRef(S.dem.par[-1])
     ff=S.dem.par[0].shape
     ff.setRefConf() #update()
@@ -51,7 +51,7 @@ else:
     xmax,ymax=1,1
     xdiv,ydiv=20,20
     ff=woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface([[(x,y,0) for x in numpy.linspace(0,xmax,num=xdiv)] for y in numpy.linspace(0,ymax,num=ydiv)]),flex=True)
-    S.dem.par.add(ff)
+    S.dem.par.add(ff,nodes=True)
     for n in S.dem.nodes:
         n.dem.inertia=(1.,1.,1.)
         n.dem.blocked=''

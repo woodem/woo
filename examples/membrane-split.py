@@ -8,15 +8,16 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.master.usesApi=10101
+woo.master.usesApi=10103
 
-S.gl=GlSetup(
+S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))],dtSafety=.8)
+
+S.gl=woo.gl.GlSetup(
     woo.gl.Gl1_Membrane(uScale=0,relPhi=0,refConf=False),
     woo.gl.Gl1_DemField(shape=woo.gl.Gl1_DemField.shapeNonSpheres,colorBy=woo.gl.Gl1_DemField.colorDisplacement,vecAxis='norm',colorBy2=woo.gl.Gl1_DemField.colorVel),
 )
-S.gl.Gl1_DemField.colorRange2.mnmx=(0,2.)
+S.gl.demField.colorRange2.mnmx=(0,2.)
 
-S=woo.master.scene=Scene(fields=[DemField(gravity=(0,0,-30))],dtSafety=.8)
 
 import woo.pack, woo.utils, numpy
 
@@ -24,7 +25,7 @@ xmax,ymax=1,1
 xdiv,ydiv=15,15
 mat=FrictMat(young=3e6,tanPhi=.55,ktDivKn=.2,density=3000)
 ff=woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface([[(x,y,0) for x in numpy.linspace(0,xmax,num=xdiv)] for y in numpy.linspace(0,ymax,num=ydiv)]),flex=True,halfThick=.01,mat=mat)
-S.dem.par.add(ff)
+S.dem.par.add(ff,nodes=True)
 
 # a few spheres falling onto the mesh
 sp=woo.pack.SpherePack()

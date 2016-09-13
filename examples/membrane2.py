@@ -9,7 +9,7 @@ import woo.gl
 import math
 from math import pi
 from minieigen import *
-woo.master.usesApi=10102
+woo.master.usesApi=10103
 import woo.log
 #woo.log.setLevel('In2_Membrane_ElastMat',woo.log.TRACE)
 #woo.log.setLevel('DynDt',woo.log.DEBUG)
@@ -36,7 +36,7 @@ if 1:
         mat=woo.utils.defaultMaterial()
         mat.young*=.1
         ff=woo.pack.gtsSurface2Facets(woo.pack.sweptPolylines2gtsSurface([[(x,y,0) for x in numpy.linspace(0,xmax,num=xdiv)] for y in numpy.linspace(0,ymax,num=ydiv)]),flex=True,halfThick=.01,mat=mat)
-        S.dem.par.add(ff)
+        S.dem.par.add(ff,nodes=True)
         S.gl(
             woo.gl.Renderer(dispScale=(10,10,10)),
             woo.gl.Gl1_Membrane(node=False,refConf=False,uScale=0.,relPhi=0.),
@@ -56,7 +56,7 @@ if 1:
             #woo.log.setLevel('In2_Membrane_ElastMat',woo.log.TRACE)
             woo.log.setLevel('Membrane',woo.log.TRACE)
         else: f=woo.utils.facet([(.2,.1,0),(0,.2,0),(0,0,0)],flex=True) 
-        S.dem.par.add(f)
+        S.dem.par.add(f,nodes=True)
     for n in S.dem.nodes:
         n.dem.blocked=''
         if n.pos[0]==0 or (n.pos[1]==0 and scenario=='youtube'): n.dem.blocked='xyzXYZ'
