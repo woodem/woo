@@ -465,7 +465,6 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             ipshell.prompt_manager.out_template=' -> [\#]: '
         # IPython >= 5.0
         else:
-            print('WARN: support for IPython >= 5.0 may not complete yet.')
             # important, equivalent to %gui qt5 magick
             if qt: ipshell.enable_gui('qt5' if 'qt5' in woo.config.features else 'qt4')
             # custom prompt
