@@ -343,7 +343,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 			#if 1
 				if(n2==0){ LOG_ERROR("n1==0 but n2=="<<n2<<" (no narrow-phase collision)"); continue; }
 			#endif
-			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" ("<<n<<" edges describe the intersection)");
+			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" ("<<n1<<" edges describe the intersection)");
 		#endif
 		int1.push_back(ij);
 	}
