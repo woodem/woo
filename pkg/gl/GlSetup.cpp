@@ -36,7 +36,10 @@ void GlSetup::postLoad(GlSetup&,void* attr){
 			}
 		}
 	}
-	if(!ok) objs=makeObjs();
+	if(!ok){
+		objs=makeObjs();
+		// cerr<<"[GlSetup::postLoad] objs assigned"<<endl;
+	}
 	dirty=true;
 }
 
@@ -47,9 +50,18 @@ py::object GlSetup::pyCallStatic(py::tuple args, py::dict kw){
 	return py::object();
 }
 
+void GlSetup::ensureObjs(){
+	if(objs.size()!=objTypeIndices.size()){
+		objs=makeObjs();
+		// cerr<<"[GlSetup::ensureObjs] objs assigned"<<endl;
+	}
+}
 
 void GlSetup::pyCall(const py::tuple& args){
+	// cerr<<"[GlSetup::pyCall]"<<endl;
+	ensureObjs();
 	for(int i=0; i<py::len(args); i++){
+		// objs.resize(objTypeIndices.size());
 		py::extract<shared_ptr<Object>> ex(args[i]);
 		if(!ex.check()) woo::TypeError("Only instances of woo.core.Object can be given as arguments.");
 		const auto o(ex()); const auto oPtr=o.get();
@@ -63,8 +75,10 @@ void GlSetup::pyCall(const py::tuple& args){
 
 
 void GlSetup::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+	// cerr<<"[GlSetup::pyHandleCustomArgs]"<<endl;
 	pyCall(args);
 	args=py::tuple();
+	ensureObjs();
 	// not sure this is really useful
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
@@ -91,13 +105,15 @@ py::list GlSetup::getObjNames() const{
 }
 
 
-shared_ptr<Renderer> GlSetup::getRenderer() const {
+shared_ptr<Renderer> GlSetup::getRenderer() {
+	ensureObjs();
 	if(objs.empty()) throw std::runtime_error("GlSetup::getRenderer: objs.empty()");
 	if(!objs[0]->isA<Renderer>()) throw std::runtime_error("GlSetup::getRenderer: !objs[0]->isA<Renderer>()");
 	return static_pointer_cast<Renderer>(objs[0]);
 }
 
 vector<shared_ptr<Object>> GlSetup::makeObjs() {
+	// cerr<<"[GlSetup::makeObjs]"<<endl;
 	// functors for dispatcher types
 	std::list<shared_ptr<Object>> field,shape,bound,node,cPhys;
 	#define _PROBE_FUNCTOR(functorT,list,className) if(Master::instance().isInheritingFrom_recursive(className,#functorT)){ list.push_back(Master::instance().factorClass(className)); }
