@@ -88,7 +88,7 @@ WOO_REGISTER_OBJECT(Cg2_Wall_Ellipsoid_L6Geom);
 struct Cg2_Facet_Ellipsoid_L6Geom: public Cg2_Any_Any_L6Geom__Base{
 	bool go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C) override;
 	#define woo_dem_Cg2_Facet_Ellipsoid_L6Geom__CLASS_BASE_DOC \
-		Cg2_Facet_Ellipsoid_L6Geom,Cg2_Any_Any_L6Geom__Base,"Compute :obj:`L6Geom` for contact of :obj:`ellipsoid <woo.dem.Ellipsoid>` and :obj:`facet <woo.dem.Facet>` (axis-aligned plane)."
+		Cg2_Facet_Ellipsoid_L6Geom,Cg2_Any_Any_L6Geom__Base,"Compute :obj:`L6Geom` for contact of :obj:`ellipsoid <woo.dem.Ellipsoid>` and :obj:`facet <woo.dem.Facet>`.\n\n.. warning:: This class does not work (the result is correct only for face contact, otherwise bogus) and is by default not returned in :obj:`woo.dem.DemField.minimalEngines`. See `this question <https://ask.woodem.org/index.php/795/collision-between-elliposids-and-a-facets>`__ for a brief discussion."
 	WOO_DECL__CLASS_BASE_DOC(woo_dem_Cg2_Facet_Ellipsoid_L6Geom__CLASS_BASE_DOC);
 	FUNCTOR2D(Facet,Ellipsoid);
 	DEFINE_FUNCTOR_ORDER_2D(Facet,Ellipsoid);
