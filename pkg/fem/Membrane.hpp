@@ -16,6 +16,9 @@ struct Membrane: public Facet{
 	// called from DynDt for updating internal stiffness for given node
 	void addIntraStiffnesses(const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const;
 
+	py::object stressCst(bool global=false) const;
+	Vector6r stressDkt() const;
+
 	REGISTER_CLASS_INDEX(Membrane,Facet);
 	WOO_DECL_LOGGER;
 	#ifdef MEMBRANE_DEBUG_ROT
@@ -36,14 +39,17 @@ struct Membrane: public Facet{
 		((Vector6r,phiXy,Vector6r::Zero(),AttrTrait<>().readonly(),"Nodal rotations, only including in-plane rotations (drilling DOF not yet implemented)")) \
 		((MatrixXr,KKcst,,,"Stiffness matrix of the element (assembled from the reference configuration when needed for the first time)")) \
 		((MatrixXr,KKdkt,,,"Bending stiffness matrix of the element (assembled from the reference configuration when needed for the first time).")) \
-		/* ((MatrixXr,EBcst,,,"Displacement-stress matrix, for computation of stress tensor in post-processing only.")) \
-		((MatrixXr,EBdkt,,,"Displacement-stress matrix, for computation of stress tensor in post-processing only.")) */ \
+		((bool,enableStress,false,,"Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.")) \
+		((MatrixXr,EBcst,,AttrTrait<>().readonly(),"CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).")) \
+		((MatrixXr,DBdkt,,AttrTrait<>().readonly(),"DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. \n\n.. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.")) \
 		woo_dem_Membrane__ATTRS__MEMBRANE_DEBUG_ROT \
 		,/*ctor*/ createIndex(); \
 		,/*py*/ \
 			.def("setRefConf",&Membrane::setRefConf,"Set the current configuration as the reference one.") \
 			.def("update",&Membrane::stepUpdate,(py::arg("dt"),py::arg("rotIncr")=false),"Update current configuration; create reference configuration if it does not exist.") \
-			.def("reset",&Membrane::pyReset,"Reset reference configuration; this forces using the current config as reference when :obj:`update` is called again.")
+			.def("reset",&Membrane::pyReset,"Reset reference configuration; this forces using the current config as reference when :obj:`update` is called again.") \
+			.def("stressCst",&Membrane::stressCst,(py::arg("glob")=false),"Return CST stresses (product of :obj:`EBcst` and :obj:`uXy`), provided that :obj:`EBcst` was computed previously by setting :obj:`enableStress` when building stiffness matrices. The value returned is either :math:`(\\sigma_x,\\sigma_y,\\sigma_{xy})` (local stresses), or Matrix3 representing stress tensor in global coordinates (with *glob=True*).") \
+			.def("stressDkt",&Membrane::stressDkt,"Return Vector6 of DKT stresses (product of :obj:`DBdkt` and :obj:`phiXy`), see :obj:`stressCst` for conditions; additionaly, bending must have been enabled.\n\n.. warning:: This function returns nonsense currently and must be fixed!")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Membrane__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
@@ -57,9 +63,9 @@ struct In2_Membrane_ElastMat: public In2_Facet{
 	#define woo_dem_In2_Membrane_ElastMat__CLASS_BASE_DOC_ATTRS \
 		In2_Membrane_ElastMat,In2_Facet,"Apply contact forces and compute internal response of a :obj:`Membrane`. Forces are distributed according to barycentric coordinates when :obj:`bending` is enabled; otherwise forces are distributed equally (thirds) to all nodes, to avoid contacts punching through the mesh which has no bending resistance. This can be overridden by setting :obj:`applyBary`, in which case forces will be always applied weighted by barycentric coords.\n\n.. note:: If your particles are made of ~:obj:`woo.dem.FrictMat`, use :obj:`In2_Membrane_FrictMat` instead, if you run into ambiguous dipatch errors.", \
 		((bool,contacts,true,,"Apply contact forces to facet's nodes (FIXME: very simply distributed in thirds now)")) \
-		((Real,nu,.25,,"Poisson's ratio used for assembling the $E$ matrix (Young's modulus is taken from :obj:`ElastMat`). Will be moved to the material class at some point.")) \
-		((Real,thickness,NaN,,"Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick`.")) \
-		((Real,bendThickness,NaN,,"Thickness for CST stiffness computation; if NaN, use :obj:`thickness`.")) \
+		((Real,nu,.25,,"Poisson's ratio used for assembling the $E$ matrix (Young's modulus is taken from :obj:`~woo.dem.ElastMat`). Will be moved to the material class at some point.")) \
+		((Real,thickness,NaN,,"Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick <woo.dem.Facet.halfThick>`.")) \
+		((Real,bendThickness,NaN,,"Thickness for DKT stiffness computation; if NaN, use :obj:`thickness`.")) \
 		((bool,bending,false,,"Consider also bending stiffness of elements (DKT)")) \
 		((bool,applyBary,false,,"Distribute force according to barycentric coordinate of the contact point; this is done normally with :obj:`bending` enabled, this forces the same also for particles without bending.")) \
 		((bool,rotIncr,false,,"Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise)."))

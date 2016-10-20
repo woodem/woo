@@ -90,6 +90,10 @@ struct Node: public Object, public Indexable{
 	// 
 	Vector3r loc2glob(const Vector3r& p){ return ori*p+pos; }
 
+	// rotate 2nd rank tensor, such as stress
+	Matrix3r glob2loc_rank2(const Matrix3r& g);
+	Matrix3r loc2glob_rank2(const Matrix3r& l);
+
 	#define woo_core_Node__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Node,Object,ClassTrait().doc("A point in space (defining local coordinate system), referenced by other objects.").section("","",{"NodeData"}), \
 		((Vector3r,pos,Vector3r::Zero(),AttrTrait<>().lenUnit(),"Position in space (cartesian coordinates); origin :math:`O` of the local coordinate system.")) \
@@ -99,7 +103,9 @@ struct Node: public Object, public Indexable{
 		, /* ctor */ createIndex(); \
 		, /* py */ WOO_PY_TOPINDEXABLE(Node) \
 			.def("glob2loc",&Node::glob2loc,(py::arg("p")),"Transform point :math:`p` from global to node-local coordinates as :math:`q^*(p-O)q`, in code ``q.conjugate()*(p-O)``.") \
-			.def("loc2glob",&Node::loc2glob,(py::arg("p")),"Transform point :math:`p_l` from node-local to global coordinates as :math:`q\\cdot p_l\\cdot q^*+O`, in code ``q*p+O``.")
+			.def("loc2glob",&Node::loc2glob,(py::arg("p")),"Transform point :math:`p_l` from node-local to global coordinates as :math:`q\\cdot p_l\\cdot q^*+O`, in code ``q*p+O``.") \
+			.def("glob2loc_rank2",&Node::glob2loc_rank2,(py::arg("g")),"Rotate rank-2 tensor (such as stress) from local to global coordinates, computed as :math:`\\mat{R}^T\\mat{g}\\mat{R}`.") \
+			.def("loc2glob_rank2",&Node::loc2glob_rank2,(py::arg("l")),"Rotate rank-2 tensor (such as stress), represented as 3×3 matrix, from local to global coordinates; computed as :math:`\\mat{R}\\mat{l}\\mat{R}^T`, where :math:`\\mat{R}` is rotation matrix equivalent to rotation by quaternion :obj:`ori`.")
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Node__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Node);

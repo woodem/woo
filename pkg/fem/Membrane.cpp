@@ -102,7 +102,9 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 	KKcst.resize(6,6);
 	KKcst=t*area*B.transpose()*E*B;
 
-	// EBcst=E*B;
+	// compute EB matrix if requested
+	if(enableStress) EBcst=E*B;
+	else EBcst=MatrixXr();
 
 	if(!bending) return;
 
@@ -197,10 +199,11 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 	// KKdkt0 is 9x9, then w_i dofs are condensed away, and KKdkt is only 9x6
 	#ifdef MEMBRANE_CONDENSE_DKT
 		MatrixXr KKdkt0(9,9); KKdkt0.setZero();
-		// MatrixXr EBdkt0(9,6); EBdkt0.setZero();
+		MatrixXr DBdkt0(3,9); DBdkt0.setZero();
 	#else
 		KKdkt.setZero(9,9);
-		// EBdkt.setZero(9,6);
+		if(enableStress) DBdkt.setZero(3,9);
+		else DBdkt=MatrixXr();
 	#endif
 	// gauss integration points and their weights
 	Vector3r xxi(.5,.5,0), eeta(0,.5,.5);
@@ -213,26 +216,56 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 			#else
 				KKdkt
 			#endif
-				+=(2*area*ww[j]*ww[i])*b.transpose()*Db*b;
-			#if 0
+					+=(2*area*ww[j]*ww[i])*b.transpose()*Db*b;
+			if(enableStress){
 				#ifdef MEMBRANE_CONDENSE_DKT
-					EBdkt0
+					DBdkt0
 				#else
-					EBdkt
+					DBdkt
 				#endif
-					+=(2*area*ww[j]*ww[i])*Db*b;
-			#endif
+						+=(2*area*ww[j]*ww[i])*Db*b;	
+			}
 		}
 	}
 	#ifdef MEMBRANE_CONDENSE_DKT
 		// extract columns [_ 1 2 _ 4 5 _ 7 8]
 		KKdkt.setZero(9,6);
 		for(int i:{0,1,2}){
-			KKdkt.col(2*i)=KKdkt0.col(3*i+1);
+			KKdkt.col(2*i)  =KKdkt0.col(3*i+1);
 			KKdkt.col(2*i+1)=KKdkt0.col(3*i+2);
+		}
+		// do the same for the EB matrix if wanted
+		if(enableStress){
+			DBdkt.setZero(3,6);
+			for(int i:{0,1,2}){
+				DBdkt.col(2*i)  =DBdkt0.col(3*i+1);
+				DBdkt.col(2*1+1)=DBdkt0.col(3*i+2);
+			}
 		}
 	#endif
 };
+
+
+py::object Membrane::stressCst(bool glob) const {
+	if(EBcst.size()!=18) throw std::runtime_error("Membrane.stressCst: EBcst matrix not defined (you have to set Membrane.enableStress before stiffness matrices are evaluated).");
+	Vector3r ls=Vector3r(EBcst*uXy);
+	if(!glob) return py::object(ls);
+	return py::object(this->node->loc2glob_rank2(ls.asDiagonal()));
+
+}
+Vector6r Membrane::stressDkt() const {
+	throw std::runtime_error("Membrane.stressDkt: not yet correctly implemented!");
+	#ifdef MEMBRANE_CONDENSE_DKT
+		if(DBdkt.size()!=18) throw std::runtime_error("Membrane.stressDkt: DBdkt matrix not defined (you have to set Membrane.enableStress before stiffness matrices are evaluated and bending must be enabled).");
+		return Vector6r(DBdkt*phiXy);
+	#else
+		if(DBdkt.size()!=27) throw std::runtime_error("Membrane.stressDkt: DBdkt matrix not defined (you have to set Membrane.enableStress before stiffness matrices are evaluated and bending must be enabled).");
+		Vector9r uDkt_;
+		uDkt_<<0,phiXy.segment<2>(0),0,phiXy.segment<2>(2),0,phiXy.segment<2>(4);
+		return Vector6r(DBdkt*uDkt);
+	#endif
+}
+
 
 void Membrane::addIntraStiffnesses(const shared_ptr<Node>& n,Vector3r& ktrans, Vector3r& krot) const {
 	if(!hasRefConf()) return;

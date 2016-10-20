@@ -27,6 +27,17 @@ string Node::pyStr() const {
 	return o.str();
 }
 
+Matrix3r Node::glob2loc_rank2(const Matrix3r& g){
+	Matrix3r R(ori.toRotationMatrix());
+	return R.transpose()*g*R;
+
+}
+Matrix3r Node::loc2glob_rank2(const Matrix3r& l){
+	Matrix3r R(ori.toRotationMatrix());
+	return R*l*R.transpose();
+}
+
+
 void Node::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
 	if(py::len(args)>0){
 		if(py::len(args)>2) throw std::runtime_error("Node: only takes 0, 1 or 2 non-keyword arguments ("+to_string(py::len(args))+" given).");
