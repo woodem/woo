@@ -318,7 +318,7 @@ if not PY3K:
 
 __all__=['master']+list(allSubmodules)
 
-# IMPORTANT: deal with finalization issues (crashes at shutdown)
+### IMPORTANT: deal with finalization issues (crashes at shutdown)
 from . import system
 system.setExitHandlers()
 

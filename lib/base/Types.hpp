@@ -48,11 +48,13 @@ using boost::lexical_cast;
 */
 #include<boost/shared_ptr.hpp>
 #include<boost/make_shared.hpp>
+#include<memory>
 using boost::shared_ptr;
 using boost::static_pointer_cast;
 using boost::dynamic_pointer_cast;
 using boost::make_shared;
 using boost::weak_ptr;
+using std::unique_ptr;
 
 #if 0
 	#include<memory>

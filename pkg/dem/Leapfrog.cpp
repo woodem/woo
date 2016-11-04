@@ -280,7 +280,16 @@ void Leapfrog::leapfrogSphericalRotate(const shared_ptr<Node>& node){
 	if (axis!=Vector3r::Zero()) {//If we have an angular velocity, we make a rotation
 		Real angle=axis.norm(); axis/=angle;
 		Quaternionr q(AngleAxisr(angle*dt,axis));
+		#if 0
+			auto qrep=[](Quaternionr& q){ AngleAxisr aa(q); return "("+to_string(aa.axis()[0])+" "+to_string(aa.axis()[1])+" "+to_string(aa.axis()[2])+"|"+to_string(aa.angle())+")"; };
+			cerr<<"Leapfrog:"<<endl<<
+			"  rot="<<axis.transpose()<<"|"<<angle*dt<<")"<<endl<<
+			"  ori0="<<qrep(node->ori);
+		#endif
 		node->ori=q*node->ori;
+		#if 0
+			cerr<<", ori1="<<qrep(node->ori)<<endl;
+		#endif
 	}
 	node->ori.normalize();
 }

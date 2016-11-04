@@ -14,6 +14,13 @@
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>
 
+#ifndef __MINGW64__
+	#include<unistd.h>
+	#include<termios.h>
+	struct termios termios_attrs;
+	bool termios_saved=false;
+#endif
+
 
 #ifdef WOO_LOG4CXX
 	#include<log4cxx/consoleappender.h>
@@ -52,6 +59,21 @@
 		}
 	}		
 #endif
+
+#ifndef __MING64__
+	void quitHandler(int sig){
+		if(sig!=SIGQUIT and sig!=SIGTERM and sig!=SIGINT) return;
+		cerr<<"woo._cxxInternal: QUIT/TERM/INT handler called."<<endl;
+		if(termios_saved){
+			tcsetattr(STDIN_FILENO,TCSANOW,&termios_attrs);
+			cerr<<"woo._cxxInternal: terminal cleared."<<endl;
+		}
+		// resend the signal
+		signal(sig,SIG_DFL);
+		raise(sig);
+	}
+#endif
+
 
 /* Initialize woo - load config files, register python classes, set signal handlers */
 void wooInitialize(){
@@ -94,6 +116,19 @@ void wooInitialize(){
 			LOG_INFO("Loaded "<<logConf);
 		}
 	#endif
+	
+#if 0
+	#ifndef __MINGW64__ // posix
+		if(getenv("TERM")){
+			tcgetattr(STDIN_FILENO,&termios_attrs);
+			termios_saved=true;
+			signal(SIGQUIT,quitHandler);
+			signal(SIGTERM,quitHandler);
+			signal(SIGINT,quitHandler);
+			cerr<<"woo._cxxInternal: QUIT/TERM/INT handler registered."<<endl;
+		}
+	#endif
+#endif
 
 	// check that the decimal separator is "." (for GTS imports)
 	if(atof("0.5")==0.0){
