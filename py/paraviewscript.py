@@ -74,9 +74,12 @@ def fromEngines(S,out=None,launch=False,noDataOk=False):
     * :obj:`woo.dem.FlowAnalysis` is made to export its internal data at the moment of calling this function;
     * :obj:`woo.dem.Tracer` indicates there are particles traces, which are exported by calling :obj:`woo.utils.vtkExportTraces`.
 
+    :param str out: script name written (if None, temporary file is used). Tags written as ``{tag}`` will be expanded using `S.expandTags <woo.core.Scene.expandTags>`.
+
     '''
     sphereFiles,meshFiles,conFiles=[],[],[]
     if not out: out=woo.master.tmpFilename()+'.py'
+    else: out=S.expandTags(out)
     if not out.endswith('.py'): out=out+'.py'
     outPrefix=out[:-3] # without extension
     kw={}
@@ -193,6 +196,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
     
 
 _paraviewScriptTemplate=r'''#!/usr/bin/env python
+from __future__ import print_statement
 import sys, os.path
 
 # input parameters
@@ -248,7 +252,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
                 ff2=[]
                 for f in ff[vtkSlice]:
                     fn=os.path.basename(f)
-                    print zipName+': adding',fn
+                    print(zipName+': adding',fn)
                     zippedFiles.add(fn)
                     ar.write(f,out0+'/'+fn)
                     ff2.append(fn)
@@ -259,7 +263,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
                 newFiles[ff]=fn
                 if not fn: continue # empty filename for missing data
                 if fn in zippedFiles: continue # skip if already in the archive
-                print zipName+': adding',fn
+                print(zipName+': adding',fn)
                 zippedFiles.add(fn)
                 ar.write(f,out0+'/'+fn)
             # make a copy of this script, adjust filenames in there and add it to the archive as well
@@ -271,7 +275,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
                     else: ll.append(var+"='"+newFiles[var]+"'\n")
                 else: ll.append(l)
             ar.writestr(out0+'/'+os.path.basename(sys.argv[0]),''.join(ll))
-        print 'File '+os.path.abspath(zipName)+' written.'
+        print('File '+os.path.abspath(zipName)+' written.')
         sys.exit(0)
 
 from paraview.simple import *        
