@@ -52,8 +52,8 @@ void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	std::ofstream os;
 	os.open(frameInc);
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+frameInc+"'.");
-	// write time
-	os<<"#declare woo_time="<<std::setprecision(16)<<scene->time<<"; /*current simulation time, in seconds*/\n";
+	// write time, non-static only
+	if(!doStatic) { os<<"#declare woo_time="<<std::setprecision(16)<<scene->time<<"; /*current simulation time, in seconds*/\n"; }
 	for(const auto& p: *dem->particles){
 		// selection the same as in VtkExport
 		if(!p->shape) continue;
@@ -169,7 +169,7 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+masterPov+"'.");
 	os<<
-		"// Written with Woo ver. "<<BOOST_PP_STRINGIZE(WOO_VERSION)<<" rev. "<<BOOST_PP_STRINGIZE(WOO_REVISION)<<".\n"
+		"// Written with Woo ver. TODO rev. TODO.\n"  // "<<WOO_VERSION<<" rev. "<<WOO_REVISION<<".\n"
 		"// Woo will not overwrite this file as long as it exists.\n\n"
 		"// Run something like\n\n"
 		"//    povray +H2000 +W1500 -kff300 "<<masterBase<<"\n\n"
