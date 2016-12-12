@@ -196,7 +196,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
     
 
 _paraviewScriptTemplate=r'''#!/usr/bin/env python
-from __future__ import print_statement
+from __future__ import print_function
 import sys, os.path
 
 # input parameters
