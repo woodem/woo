@@ -270,6 +270,7 @@ void RandomInlet::run(){
 		if(massRate>0 && mass>=stepGoalMass) break;
 
 		shared_ptr<Material> mat;
+		shared_ptr<MatState> matState;
 		Vector3r pos=Vector3r::Zero();
 		Real diam;
 		vector<ParticleGenerator::ParticleAndBox> pee;
@@ -304,15 +305,20 @@ void RandomInlet::run(){
 				if(attempt>0) generator->revokeLast(); // if not at the beginning, revoke the last particle
 
 				// random choice of material with equal probability
-				if(materials.size()==1) mat=materials[0];
-				else{ 
-					size_t i=max(size_t(materials.size()*Mathr::UnitRandom()),materials.size()-1);;
-					mat=materials[i];
-				}
+				size_t matIx=0;
+				assert(materials.size()>1); // was already checked above
+				if(materials.size()>1) matIx=max(size_t(materials.size()*Mathr::UnitRandom()),materials.size()-1);
+				mat=materials[matIx];
+				if(matIx<matStates.size() && matStates[matIx]) matState=static_pointer_cast<MatState>(Master::instance().deepcopy(matStates[matIx]));
+				else matState=shared_ptr<MatState>();
 				// generate a new particle
 				std::tie(diam,pee)=(*generator)(mat,scene->time);
 				assert(!pee.empty());
 				LOG_TRACE("Placing "<<pee.size()<<"-sized particle; first component is a "<<pee[0].par->getClassName()<<", extents from "<<pee[0].extents.min().transpose()<<" to "<<pee[0].extents.max().transpose());
+				// all particles in the clump will share a single matState instance
+				if(matState){
+					for(auto& pe: pee) pe.par->matState=matState;
+				}
 			}
 
 			pos=randomPosition(diam,padDist); // overridden in child classes

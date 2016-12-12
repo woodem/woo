@@ -3,6 +3,7 @@
 #include<woo/pkg/dem/InsertionSortCollider.hpp>
 #include<woo/pkg/dem/ParticleContainer.hpp>
 #include<woo/pkg/dem/Sphere.hpp>
+#include<woo/pkg/dem/Inlet.hpp>
 #include<woo/core/Scene.hpp>
 
 #include<algorithm>
@@ -294,7 +295,15 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 			if(!p->shape->isA<Sphere>())continue;
 			minR=min(p->shape->cast<Sphere>().radius,minR);
 		}
-		verletDist=isinf(minR) ? 0 : abs(verletDist)*minR;
+		for(const shared_ptr<Engine>& e: scene->engines){
+			if(!e->isA<Inlet>()) continue;
+			Real dMin=e->cast<Inlet>().minMaxDiam()[0];
+			if(!isnan(dMin)) minR=min(.5*dMin,minR);
+		}
+		if(isinf(minR)){
+			LOG_WARN("\n  Negative verletDist="<<verletDist<<" was about to be set from minimum particle radius, but not Particle/Inlet with valid radius was found.\n  SETTING InsertionSortCollider.verletDist=0.0\n  THIS CAN SERIOUSLY DEGRADE PERFORMANCE.\n  Set verletDist=0.0 yourself to get rid of this warning.");
+			verletDist=0.0;
+		} else verletDist=abs(verletDist)*minR;
 	}
 
 	bool recomputeBounds=false;
@@ -910,7 +919,9 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 		return true; // do other axes
 	}
 	// compare old and new algorithms
-	int origPeriod; bool origResult; bool origFailed=false;
+	#ifdef PISC_DBG_NEW_PERIOD_ALGO
+		int origPeriod; bool origResult; bool origFailed=false;
+	#endif
 	int newPeriod; bool newResult;
 
 	// original algorithm
@@ -948,18 +959,22 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 			Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
 			LOG_INFO("Particle #"<<(pmn1!=pmx1?id1:id2)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
 			LOG_INFO("Does not matter, try with the new algo now :)");
-			origFailed=true;
+			#ifdef PISC_DBG_NEW_PERIOD_ALGO
+				origFailed=true;
+			#endif
 			// throw runtime_error("InsertionSortCollider: (old algo limitation) Particle larger than half of the cell size encountered.");
 		}
-		origPeriod=(int)(pmn1-pmn2);
-		origResult=(mn1<=mx2 && mx1>=mn2); //) origResult=false;
-		// else origResult=true;
-		#ifdef PISC_DEBUG
-			if(watchIds(id1,id2)){
-				TRVAR4(mn1,mx1,mn2,mx2);
-				TRVAR4(pmn1,pmx1,pmn2,pmx2);
-				TRVAR2(origPeriod,origResult);
-			}
+		#ifdef PISC_DBG_NEW_PERIOD_ALGO
+			origPeriod=(int)(pmn1-pmn2);
+			origResult=(mn1<=mx2 && mx1>=mn2); //) origResult=false;
+			// else origResult=true;
+			#ifdef PISC_DEBUG
+				if(watchIds(id1,id2)){
+					TRVAR4(mn1,mx1,mn2,mx2);
+					TRVAR4(pmn1,pmx1,pmn2,pmx2);
+					TRVAR2(origPeriod,origResult);
+				}
+			#endif
 		#endif
 	}
 
@@ -999,13 +1014,15 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 	//if(!(mn1<=mx2 && mx1 >= mn2)) return false;
 	//return true;
 
-	// compare old and new algos; period difference is only significant if there was overlap found
-	if(periDbgNew && !origFailed && ((origResult && origPeriod!=newPeriod) || origResult!=newResult)){
-		if(origPeriod!=newPeriod) LOG_FATAL("Period mismatch in ##"<<id1<<"+"<<id2<<": old="<<origPeriod<<", new="<<newPeriod);
-		if(origResult!=newResult) LOG_FATAL("Overlap mispatch in ##"<<id1<<"+"<<id2<<": old="<<origResult<<", new="<<newResult);
-		LOG_FATAL("#"<<id1<<": axis "<<axis<<", span "<<min1<<".."<<max1);
-		LOG_FATAL("#"<<id2<<": axis "<<axis<<", span "<<min2<<".."<<max2);
-	}
+	#ifdef PISC_DBG_NEW_PERIOD_ALGO
+		// compare old and new algos; period difference is only significant if there was overlap found
+		if(periDbgNew && !origFailed && ((origResult && origPeriod!=newPeriod) || origResult!=newResult)){
+			if(origPeriod!=newPeriod) LOG_FATAL("Period mismatch in ##"<<id1<<"+"<<id2<<": old="<<origPeriod<<", new="<<newPeriod);
+			if(origResult!=newResult) LOG_FATAL("Overlap mispatch in ##"<<id1<<"+"<<id2<<": old="<<origResult<<", new="<<newResult);
+			LOG_FATAL("#"<<id1<<": axis "<<axis<<", span "<<min1<<".."<<max1);
+			LOG_FATAL("#"<<id2<<": axis "<<axis<<", span "<<min2<<".."<<max2);
+		}
+	#endif
 	period=newPeriod;
 	return newResult;
 }

@@ -19,6 +19,9 @@ struct Inlet: public PeriodicEngine{
 		if(isnan(currRate)||stepPrev<0) currRate=currRateNoSmooth;
 		else currRate=(1-currRateSmooth)*currRate+currRateSmooth*currRateNoSmooth;
 	}
+	// used by collider to query for no-yet-existing particle size limits
+	// InsertionSortCollider queries this for initally setting verletDist
+	virtual Vector2r minMaxDiam() const { return Vector2r(NaN,NaN); }
 	// return true when maximum mass/num of particles (or other termination condition) has been reached
 	// runs doneHook inside and sets dead=True
 	bool everythingDone();
@@ -190,6 +193,7 @@ struct RandomInlet: public Inlet{
 	void run() override;
 	void pyClear(){ if(generator) generator->clear(); num=0; mass=0; stepGoalMass=0; /* do not reset stepPrev! */ }
 	Real critDt() override; 
+	Vector2r minMaxDiam() const override { return generator?generator->minMaxDiam():Vector2r(NaN,NaN); }
 	shared_ptr<Collider> collider;
 	enum{MAXATT_ERROR=0,MAXATT_DEAD,MAXATT_WARN,MAXATT_SILENT,MAXATT_DONE};
 	bool spheresOnly; // set at each step, queried from the generator
@@ -197,6 +201,7 @@ struct RandomInlet: public Inlet{
 		RandomInlet,Inlet,"Inlet generating new particles. This class overrides :obj:`woo.core.Engine.critDt`, which in turn calls :obj:`woo.dem.ParticleGenerator.critDt` with all possible :obj:`materials` one by one.", \
 		((Real,massRate,NaN,AttrTrait<>().massRateUnit(),"Mass flow rate; if non-positive, keep generating and placing new particles  until :obj:`maxAttempts` is exhausted and :obj:`atMaxAttempts` is used to decide what to do next.")) \
 		((vector<shared_ptr<Material>>,materials,,,"Set of materials for new particles, randomly picked from")) \
+		((vector<shared_ptr<MatState>>,matStates,,,"Set of material states; when material is picked from :obj:`materials`, :obj:`MatState` at the same index is assigned to the particle; if it is ``None`` or :obj:`matStates` is shorter than requested index, no material state will be assigned.")) \
 		((shared_ptr<ParticleGenerator>,generator,,,"Particle generator instance")) \
 		((shared_ptr<ParticleShooter>,shooter,,,"Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.")) \
 		((shared_ptr<SpatialBias>,spatialBias,,,"Make random position biased based on the radius of the current particle; if unset, distribute uniformly.")) \
