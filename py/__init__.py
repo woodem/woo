@@ -344,7 +344,14 @@ try:
     extrasLoaded=[]
     for importer, modname, ispkg in pkgutil.iter_modules(wooExtra.__path__):
         try:
-            m=__import__('wooExtra.'+modname,fromlist='wooExtra')
+            try:
+                m=__import__('wooExtra.'+modname,fromlist='wooExtra')
+            except:
+                print(50*'#')
+                import traceback
+                traceback.print_exc()
+                print(50*'#')
+                raise
             extrasLoaded.append(modname)
             if hasattr(sys,'frozen') and not hasattr(m,'__loader__') and len(m.__path__)==1:
                 zip=m.__path__[0].split('/wooExtra/')[0].split('\\wooExtra\\')[0]
