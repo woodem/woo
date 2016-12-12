@@ -2,6 +2,7 @@
 #include<woo/lib/base/CompUtils.hpp>
 #include<woo/lib/base/Volumetric.hpp>
 #include<boost/range/algorithm/count_if.hpp>
+#include<boost/range/algorithm/set_algorithm.hpp>
 
 #ifdef WOO_OPENGL
 	#include<woo/pkg/gl/Renderer.hpp>
@@ -176,6 +177,101 @@ std::tuple<Vector3r,Vector3r> Facet::interpolatePtLinAngVel(const Vector3r& x) c
 }
 
 
+void Facet::computeNeighborAngles(){
+	// for each edge, look for edge-to-edge neighboring particle
+	std::set<const Facet*> nn[3]; // sets of facets attached to my nodes (except myself)
+	for(int vert:{0,1,2}){
+		for(const Particle* p: nodes[vert]->getData<DemData>().parRef){
+			if(!p->shape || !p->shape->isA<Facet>() || p->shape.get()==this) continue;
+			nn[vert].insert(static_cast<Facet*>(p->shape.get()));
+		}
+	}
+	const Facet* f2=NULL;
+	for(int e0:{0,1,2}){
+		int e1=(e0+1)%3;
+		int cnt=0;
+		for(const auto& n: nn[e0]){
+			if(nn[e1].count(n)==0) continue;
+			f2=n;
+			cnt++;
+		}
+		if(cnt!=1){
+			n21lim[e0]=NaN;
+			continue; // none or multiple edge-neighbors: do nothing
+		}
+		// now f2 contains unique neighboring Facet*
+		Vector3r n1=getNormal();
+		// determine whether the edge is sharp, i.e. if the 3rd point of f2 is inner or outer WRT to the edge outer vector
+		// const Vector3r& pA(nodes[e0]->pos); const Vector3r& pB(nodes[e1]->pos);
+		Vector3r pC2;
+		for(int i:{0,1,2}){ if(f2->nodes[i].get()!=nodes[e0].get() && f2->nodes[i].get()!=nodes[e1].get()){ pC2=f2->nodes[i]->pos; break; } }
+		bool invNormals/*compiler happy*/=false;
+		for(int i:{0,1,2}){ if(f2->nodes[i]!=nodes[e0]) continue; invNormals=(f2->nodes[(i+1)%3].get()==nodes[e1].get()); break; }
+		// outer vector of this edge, not normalized
+		//Vector3r o1=(pB-pA).cross(n1);
+		//bool sharp=o1.dot(pC2-pA)<0;
+		// normal of f2, oriented consistently with us
+		Vector3r n2=f2->getNormal()*(invNormals?-1:1);
+		n21lim[e0]=n1.dot(n2);
+	}
+}
+
+
+void Facet::adjustBoundaryContactGeom(const short e0e1[2], const Vector3r& fNormal, const Vector3r outVec[3], const Vector3r& otherCenter, Vector3r& normal, Vector3r& contPt) const {
+	const short& e0(e0e1[0]); const short& e1(e0e1[1]);
+	if(isnan(n21lim[e0])) return;
+	// contact with edge; assert(!isnan(n12lim[e0]))
+	if(e1<0){
+		adjustBoundaryContactGeom_impl(fNormal,this->nodes[e0]->pos,outVec[e0].normalized(),otherCenter,n21lim[e0],normal,contPt);
+		return;
+	}
+	if(isnan(n21lim[e1])) return;
+	// interpolate parameters (n21lim) between adjacent edges' contact
+	Vector3r out0=outVec[e0].normalized(), out1=outVec[e1].normalized();
+	// p0+p1=1-pMin, one is superfluous
+	Real p0=out0.dot(normal), p1=out1.dot(normal), pMin=out0.dot(out1), pMax=1.;
+	Real t01=(p0-pMin)/(pMax-pMin); //(p0-pMin)/(p1+p0);
+	Real t10=(p1-pMin)/(pMax-pMin); //(p0-pMin)/(p1+p0);
+	LOG_TRACE("\n***VERTEX***: edge vectors "<<out0.transpose()<<", "<<out1.transpose()<<"\n    p0="<<p0<<", p1="<<p1<<", pMin="<<pMin<<", pMax="<<pMax<<"\n    t01="<<t01<<", t10="<<t10);
+	adjustBoundaryContactGeom_impl(fNormal,this->nodes[e1]->pos,(t01*outVec[e0].normalized()+(1-t01)*outVec[e1].normalized()),otherCenter,(t01*n21lim[e0]+(1-t01)*n21lim[e1]),normal,contPt);
+}
+
+void Facet::adjustBoundaryContactGeom_impl(const Vector3r& fN, const Vector3r& edgePt, const Vector3r& unitOutVec, const Vector3r& otherCenter, const Real& nnLim, Vector3r& normal, Vector3r& contPt) const {
+	assert(!isnan(nnLim)); // should not be called at all with NaN
+	if(isnan(nnLim)) return; // not neighbour or angle not defined
+	LOG_TRACE("==============================================");
+	Real nn=normal.dot(fN); // project contact normal onto facet normal
+	LOG_TRACE("\n  nnLim="<<nnLim<<", fN="<<fN.transpose()<<"\n  norm="<<normal.transpose()<<", nn="<<nn);
+	// no need to adjust
+	if((nn>=0 && nnLim>0 && nn>=nnLim) || (nn<0 && nnLim<0 && nn<=nnLim)){ LOG_TRACE("\n  No adjustment needed (nn)."); return; }
+	// outer
+	Real noLim=(abs(nnLim)>=1.?1.:sqrt(1.-nnLim*nnLim));
+	if(isnan(noLim)) LOG_ERROR("noLim is NaN, nnLim="<<nnLim<<" !!");
+	LOG_TRACE("\n  noLim="<<noLim);
+	Vector2r nno;
+	// from the other side of the neighboring facet, adjust to our normal
+	if((nnLim>=0 && nn<=-noLim) || (nnLim<=0 && nn>=noLim)){
+		nno=Vector2r(-nnLim,0);
+	} else {
+		// adjust here
+		nno=Vector2r(nnLim,noLim);
+	}
+	LOG_TRACE("\n  Adjusted: nno="<<nno.transpose());
+	normal=nno[0]*fN+nno[1]*unitOutVec;
+	LOG_TRACE("\n  Adjusted: normal="<<normal.transpose());
+	// adjust contact point
+	contPt=otherCenter-normal*((otherCenter-edgePt).dot(normal));
+	LOG_TRACE("\n Adjusted: contPt="<<contPt.transpose());
+}
+
+#if 0
+void Facet::adjustContPtOnEdgeBetweenFacets(const Vector3r& edgePt, const Vector3r& normal, const Vector3r& projectedPt, Vector3r& contPt) const {
+	contPt=projectedPt-normal*((projectedPt-edgePt).dot(normal));
+	LOG_TRACE("\n  ** New contact point "<<contPt.transpose());
+}
+#endif
+
+
 void Bo1_Facet_Aabb::go(const shared_ptr<Shape>& sh){
 	Facet& f=sh->cast<Facet>();
 	if(!f.bound){ f.bound=make_shared<Aabb>(); /* ignore node rotation*/ sh->bound->cast<Aabb>().maxRot=-1;
@@ -264,7 +360,7 @@ bool Cg2_Facet_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<
 	//cerr<<"dist="<<normal.norm()<<endl;
 	if(normal.squaredNorm()>pow(s.radius+f.halfThick,2) && !C->isReal() && !force) { return false; }
 	Real dist=normal.norm();
-	#define CATCH_NAN_FACET_SPHERE
+	//#define CATCH_NAN_FACET_SPHERE
 	#ifdef CATCH_NAN_FACET_SPHERE
 		if(dist==0) LOG_FATAL("dist==0.0 between Facet #"<<C->leakPA()->id<<" @ "<<f.nodes[0]->pos.transpose()<<", "<<f.nodes[1]->pos.transpose()<<", "<<f.nodes[2]->pos.transpose()<<" and Sphere #"<<C->leakPB()->id<<" @ "<<s.nodes[0]->pos.transpose()<<", r="<<s.radius);
 		normal/=dist; // normal is normalized now
@@ -275,6 +371,11 @@ bool Cg2_Facet_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<
 		// use previous normal, or just unitX for new contacts (arbitrary, sorry)
 		else normal=(C->geom?C->geom->node->ori*Vector3r::UnitX():Vector3r::UnitX());
 	#endif
+	constexpr short edgeNums[7][2]={{-1,-1},{0,-1},{1,-1},{0,1},{2,-1},{2,0},{1,2}};
+	if(w>0){
+		const short e0e1[2]={edgeNums[w][0],edgeNums[w][1]};
+		f.adjustBoundaryContactGeom(e0e1,fNormal,outVec,sC,normal,contPt);
+	}
 	if(f.halfThick>0) contPt+=normal*f.halfThick;
 	Real uN=dist-s.radius-f.halfThick;
 	// TODO: not yet tested!!
