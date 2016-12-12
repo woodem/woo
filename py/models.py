@@ -217,7 +217,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
     _classTrait=None
     _PAT=woo.pyderived.PyAttrTrait
     _attrTraits=[
-        _PAT(str,'name','linear',triggerPostLoad=True,choice=['linear','pellet','Hertz','DMT','Schwarz','concrete','ice'],doc='Material model to use.'),
+        _PAT(str,'name','linear',triggerPostLoad=True,choice=['linear','pellet','Hertz','DMT','Schwarz','concrete','ice','luding'],doc='Material model to use.'),
         _PAT(Vector2i,'numMat',Vector2i(1,1),noGui=True,guiReadonly=True,triggerPostLoad=True,doc='Minimum and maximum number of material definitions.'),
         _PAT([str,],'matDesc',[],noGui=True,triggerPostLoad=True,doc='List of strings describing individual materials. Keep the description very short (one word) as it will show up in the UI combo box for materials.'),
         _PAT([woo.dem.Material],'mats',[],doc='Material definitions'),
@@ -284,6 +284,8 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
             return [woo.dem.Cp2_ConcreteMat_ConcretePhys()],[woo.dem.Law2_L6Geom_ConcretePhys()]
         elif self.name=='ice':
             return [woo.dem.Cp2_IceMat_IcePhys()],[woo.dem.Law2_L6Geom_IcePhys()]
+        elif self.name=='luding':
+            return [woo.dem.Cp2_LudingMat_LudingPhys()],[woo.dem.Law2_L6Geom_LudingPhys()]
         else: raise ValueError('Unknown model: '+self.name)
     def getMat(self):
         '''Return default-initialized material for use with this model.'''
@@ -291,7 +293,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
     def getMatClass(self):
         '''Return class object of material for use with this model.'''
         import woo.dem
-        d={'linear':woo.dem.FrictMat,'pellet':woo.dem.PelletMat,'Hertz':woo.dem.FrictMat,'DMT':woo.dem.FrictMat,'Schwarz':woo.dem.FrictMat,'concrete':woo.dem.ConcreteMat,'ice':woo.dem.IceMat}
+        d={'linear':woo.dem.FrictMat,'pellet':woo.dem.PelletMat,'Hertz':woo.dem.FrictMat,'DMT':woo.dem.FrictMat,'Schwarz':woo.dem.FrictMat,'concrete':woo.dem.ConcreteMat,'ice':woo.dem.IceMat,'luding':woo.dem.LudingMat}
         if self.name not in d: raise ValueError('Unknown model: '+self.name)
         return d[self.name]
     def getNonviscDamping(self):
