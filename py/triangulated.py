@@ -257,7 +257,12 @@ def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**
 
 import woo.pyderived
 class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
-    'User interface for importing meshes from external files (STL), so that all import parameters are kept together.'
+    '''User interface for importing meshes from external files , so that all import parameters are kept together. Currently supported formats are:
+
+    * STL: both ascii and binary formats; :obj:`tagged` not supported (meaningless)
+    * nastran: subset, ``GRID`` and ``CTRIA3`` tags are recognized, others ignored; :obj:`tagged` is supported, nodal numbers are preserved.
+    
+    '''
     _classTrait=None
     _PAT=woo.pyderived.PyAttrTrait
     _attrTraits=[
@@ -265,21 +270,34 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(float,'preScale',1.0,doc='Scaling, applied before other transformations.'),
         _PAT(woo.core.Node,'node',None,doc='Node defining local coordinate system for importing (already :obj:`prescaled <preScale>`) mesh; if not given, global coordinate system is assumed.'),
         _PAT(float,'halfThick',0,unit='mm',doc='Half thickness (:obj:`woo.dem.Facet.halfThick`) assigned to all created facets. If zero, don\'t assign :obj:`~woo.dem.Facet.halfThick`.'),
+        _PAT(Vector3,'fakeVel',Vector3.Zero,unit='m/s',doc=':obj:`Fake surface velocity <woo.dem.Facet.fakeVel>` set (as-is) on all imported facets; if ``(0,0,0)`` (default), nothing is set.'),
         _PAT(float,'tessMaxBox',0,unit='mm',doc='Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.'),
         _PAT(bool,'tagged',False,doc='Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)'),
     ]
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Object,**kw)
-    def doImport(self,mat,mask=woo.dem.DemField.defaultBoundaryMask,**kw):
-        'Do the actual import; ``**kw`` is passed to :obj:`woo.dem.Facet.make`.'
+    def doImport(self,mat,mask=woo.dem.DemField.defaultStaticMask,**kw):
+        'Do the actual import. Nastern: ``**kw`` is passed to :obj:`woo.dem.Facet.make`. STL: some values from ``**kw`` used (``color``) and passed to :obj:`woo.utils.importSTL <woo._utils2.importSTL>`.'
         fmt=None
         if self.file.lower().endswith('.stl'): fmt='stl'
         elif self.file.lower().endswith('.nas'): fmt='nastran'
         else: raise ValueError('Unknown mesh file extension (must be .stl, .nas).')
+        if 'thickness' in kw: raise ValueError('Use MeshImport.halfThick attribute to set thickness, instead of passing MeshImport.doImport(thickness=...).')
+
+        # called after import for each format, before returning
+        def applyFakeVel(tri):
+            if self.fakeVel!=Vector3.Zero:
+                for t in tri: t.shape.fakeVel=self.fakeVel
+
         if fmt=='stl':
-            if tagged: raise ValueError('MeshImport.tagged: not supported (meaningless) with STL format.')
-            tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox)
+            if self.tagged: raise ValueError('MeshImport.tagged: not supported (meaningless) with STL format.')
+            kw2={}
+            # extract recognized values from **kw
+            for ex in ['color']:
+                if ex in kw: kw2[ex]=kw[ex]
+            tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox,thickness=2*self.halfThick,**kw)
+            applyFakeVel(tri)
             return tri
         elif fmt=='nastran':
             nodeMap={} # mapping of nodes numbers (tags) to Node objects
@@ -303,6 +321,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                     # lines we know to ignore
                     elif l.startswith('BEGIN BULK') or l.startswith('PSHELL') or l.startswith('MAT') or l.startswith('ENDDATA') or len(l.strip())==0: continue
                     else: print('%s:%d: unparsed line skipped: %s'%self.file,lineno+1,l)
-                return tri
+            applyFakeVel(tri)
+            return tri
         else: raise RuntimeError('Programming error: unhandled value fmt=="%s".'%(str(fmt)))
 
