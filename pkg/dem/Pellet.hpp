@@ -102,7 +102,7 @@ struct Law2_L6Geom_PelletPhys_Pellet: public LawFunctor{
 		((Real,confExp,1.,,"Dimensionless exponent to be used in conjunction with :obj:`confRefRad`.")) \
 		((bool,iniEqlb,false,,"Use the initial distance as equilibrium.")) \
 		((bool,plastSplit,false,,"Track energy dissipated in normal and tangential sliding separately")) \
-		((int,plastIx,-1,AttrTrait<>(),"Index of plastically dissipated energy")) \
+		((int,plastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy")) \
 		((int,normPlastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy in the normal sense")) \
 		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy")) \
 		, /*py*/ \

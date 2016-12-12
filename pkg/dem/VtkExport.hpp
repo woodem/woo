@@ -89,7 +89,7 @@ struct VtkExport: public PeriodicEngine{
 		((bool,cylCaps,true,,"Render caps of :obj:`InfCylinder` (at :obj:`InfCylinder.glAB`).")) \
 		((bool,rodSurf,false,,"Export rods (and derived classes) as capsule-shaped triangulated surfaces; without this option, rods are exported as plain connecting lines.")) \
 		((Real,nanValue,0.,,"Use this number instead of NaN in entries, since VTK cannot read NaNs properly")) \
-		((map_string_vector_string,outFiles,,AttrTrait<>().noGui().readonly(),"Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.")) \
+		((map_string_vector_string,outFiles,,AttrTrait<>().noDump().noGui().readonly(),"Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.")) \
 		((vector<Real>,outTimes,,AttrTrait<>().noGui().readonly(),"Times at which files were written.")) \
 		((vector<int>,outSteps,,AttrTrait<>().noGui().readonly(),"Steps at which files were written.")) \
 		((bool,mkDir,false,,"Attempt to create directory for output files, if not present.")) \
