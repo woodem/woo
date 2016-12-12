@@ -169,7 +169,9 @@ struct MatState: public Object{
 		/*attrs*/ \
 		,/*py*/ \
 		.def("getScalar",&MatState::getScalar,(py::arg("index"),py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
-		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)")
+		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)") ;\
+		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>();
+
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_MatState__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(MatState);
