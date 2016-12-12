@@ -75,6 +75,17 @@ class pyGLViewer{
 			GLV;
 			glv->nextSnapFile=out;
 		}
+		string povRayCam(){
+			GLV;
+			std::ostringstream oss;
+			oss<<std::setprecision(4);
+			const auto cam(glv->camera());
+			auto vec2str=[](const qglviewer::Vec& v)->string{ std::ostringstream o; o<<std::setprecision(4); o<<"<"<<v[0]<<","<<v[1]<<","<<v[2]<<">"; return o.str();};
+			oss<<"/* +W"<<glv->width()<<" +H"<<glv->height()<<" */ \n";
+			oss<<"Set_Camera(/*location*/"<<vec2str(cam->position())<<",/*lookAt*/"<<vec2str(cam->position()+cam->viewDirection())<<",/*angle*/"<<cam->horizontalFieldOfView()*180/M_PI<<") Set_Camera_Sky("<<vec2str(cam->upVector())<<") Set_Camera_Aspect(-image_width,image_height)\n";
+			oss<<"/* camera { location "<<vec2str(cam->position())<<" sky "<<vec2str(cam->upVector())<<" right x*image_width/image_height up "<<vec2str(cam->upVector())<<" look_at "<<vec2str(cam->position()+cam->viewDirection())<<" angle "<<cam->horizontalFieldOfView()*180/M_PI<<") } */\n";
+			return oss.str();
+		}
 		#undef GLV
 		#undef VEC_GET_SET
 		#undef BOOL_GET_SET
@@ -120,6 +131,7 @@ BOOST_PYTHON_MODULE(_GLViewer){
 		.def("saveState",&pyGLViewer::saveDisplayParameters,(py::arg("slot")),"Save display parameters into numbered memory slot. Saves state for both :obj:`GLViewer` and associated :obj:`Renderer`.")
 		.def("loadState",&pyGLViewer::useDisplayParameters,(py::arg("slot")),"Load display parameters from slot saved previously into, identified by its number.")
 		.def("__repr__",&pyGLViewer::pyStr).def("__str__",&pyGLViewer::pyStr)
+		.def("povRayCam",&pyGLViewer::povRayCam,"Return textual definition of camera in POV-Ray which will be the same with the current camera setup in this view.")
 		.def("close",&pyGLViewer::close)
 		.add_property("selection",&pyGLViewer::get_selection,&pyGLViewer::set_selection)
 		.def("snapshot",&pyGLViewer::screenshot,"Save screenshot of this view to *out*. Recognized extensions are .png, .jpg, .jpeg. Execution of snapshot is deferred and will be carried out after the next frame will have been rendered; the call returns immediately.")
