@@ -454,8 +454,8 @@ void Master::pyExitNoBacktrace(py::object arg0){
 
 shared_ptr<woo::Object> Master::pyGetScene(){ return getScene(); }
 void Master::pySetScene(const shared_ptr<Object>& s){
-	if(!s) woo::ValueError("Argument is None");
-	if(!s->isA<Scene>()) woo::TypeError("Argument is not a Scene instance");
+	if(!s) woo::ValueError("woo.master.scene: attempting to assign None.");
+	if(!s->isA<Scene>()) woo::TypeError("woo.master.scene: attempt to assign non-Scene object.");
 	setScene(static_pointer_cast<Scene>(s));
 }
 
