@@ -28,7 +28,8 @@ _proxiedClasses=set()
 
 def releaseInternalPythonObjects():
     'Only used internally at Woo shutdown, to work around issues releasing mixed python/c++ shared_ptr. See http://stackoverflow.com/questions/33637423/pygilstate-ensure-after-py-finalize/33637604 for details.'
-    import woo,woo.core,os
+    try: import woo,woo.core,os
+    except ImportError: return
     if 'WOO_DEBUG' in os.environ: msg=lambda x: sys.stderr.write(x)
     else: msg=lambda x: None
     msg("Entered woo._releaseInternalPythonObjects, releasing woo.master.scene\n")
