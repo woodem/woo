@@ -378,12 +378,14 @@ def wooExprEval(__e,__f,__overrideHashColon={}):
     # exec all lines starting with #: as a piece of code
     __code=textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')]))
     #print('EXECUTING #: CODE:\n'+__code)
-    future.utils.exec_(__code,locals()) # pass locals() here
+    #future.utils.exec_(__code,locals()) # pass locals() here
     for __var,__val in __overrideHashColon.items():
-        if __var not in locals(): raise NameError("Local (defined in #:) variable '%s' does not exist, unable to set its value '%s' from __overrideHashColon."%(__var,__val))
-        locals()[__var]=__val
+       # if __var not in locals(): raise NameError("Local (defined in #:) variable '%s' does not exist, unable to set its value '%s' from __overrideHashColon."%(__var,__val))
+       locals()[__var]=__val
+    # re-evaluate the block with locals from overrideHashColon
+    future.utils.exec_(__code,locals()) # pass locals() here
     # return the expression
-    return eval(compile(__e,__f,'eval'))
+    return eval(compile(__e,__f,'eval'),locals(),globals())
 
 def Object_loads(typ,data,format='auto',overrideHashColon={}):
     'Load object from file, with format auto-detection; when *typ* is None, no type-checking is performed.'
