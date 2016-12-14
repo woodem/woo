@@ -7,9 +7,9 @@
 struct LudingMat: public FrictMat{
 	#define woo_dem_LudingMat__CLASS_BASE_DOC_ATTRS \
 		LudingMat,FrictMat,"Material for :ref:`luding-contact-model`.", \
-		((Real,plastDivKn,.5,AttrTrait<>().startGroup("Normal"),"Ratio of plastic (loading) stiffness to maximum normal (elastic, unloading/reloading) stiffness.")) \
-		((Real,adhDivKn,.2,,"Ratio of adhesive 'stiffness' to elastic (unloading) stiffness.")) \
-		((Real,relPlastDepth,.1,,"Maximum plasticity depth relative to minimum radius of contacting particles.")) \
+		((Real,k1DivKn,.5,AttrTrait<>().startGroup("Normal"),"Ratio of plastic (loading) stiffness to maximum normal (elastic, unloading/reloading) stiffness.")) \
+		((Real,kaDivKn,.2,,"Ratio of adhesive 'stiffness' to elastic (unloading) stiffness.")) \
+		((Real,deltaLimRel,.1,,"Maximum plasticity depth relative to minimum radius of contacting particles.")) \
 		((Real,viscN,0.,,"Normal viscous coefficient.")) \
 		((Real,dynDivStat,.7,AttrTrait<>().startGroup("Tangential"),"Dynamic to static friction ratio (:math:`\\phi_d=\\mu_d/\\mu_s`); applied in tangential, rolling and twisting senses.")) \
 		((Real,viscT,0.,,"Tangential viscosity.")) \
@@ -60,7 +60,7 @@ struct LudingPhys: public FrictPhys{
 		LudingPhys,FrictPhys,"Physical properties for :ref:`luding-contact-model`.", \
 			/* FrictPhys: kn≡k2 (as current elastic stiffness), kt, tanPhi */ \
 			((Real,kn1,NaN,,"Normal plastic (loading) stiffness."))\
-			((Real,knc,NaN,,"Normal adhesive stiffness.")) \
+			((Real,kna,NaN,,"Normal adhesive stiffness.")) \
 			((Real,k2hat,NaN,,"Maximum stiffness.")) \
 			((Real,deltaMax,0.,,"Historically maximum overlap value.")) \
 			((Real,deltaLim,NaN,,"Upper limit for :obj:`deltaMax`.")) \
@@ -95,6 +95,7 @@ WOO_REGISTER_OBJECT(Cp2_LudingMat_LudingPhys);
 struct Law2_L6Geom_LudingPhys: public LawFunctor{
 	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 	FUNCTOR2D(L6Geom,LudingPhys);
+	WOO_DECL_LOGGER;
 	#define woo_dem_Law2_L6Geom_LudingPhys__CLASS_BASE_DOC_ATTRS \
 		Law2_L6Geom_LudingPhys,LawFunctor,"Contact law implementing :ref:`luding-contact-model`.", \
 		((int,viscIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of viscous dissipation.")) \

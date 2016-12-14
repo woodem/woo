@@ -8,8 +8,8 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Law2_L6Geom_LudingPhys__CLASS_BASE_DOC_AT
 
 void Cp2_LudingMat_LudingPhys::go(const shared_ptr<Material>& mat1, const shared_ptr<Material>& mat2, const shared_ptr<Contact>& C){
 	#if 0
-		if(plastDivKn<0 || plastDivKn>1) throw std::invalid_argument("Cp2_FrictMat_LudingPhys.plstDivKn: must be >0 and <=1 (not "+to_string(plastDivKn));
-		if(adhDivKn<0 || adhDivKn>1) throw std::invalid_argument("Cp2_FrictMat_LudingPhys.adhDivKn: must be >0 and <=1 (not "+to_string(adhDivKn));
+		if(k1DivKn<0 || k1DivKn>1) throw std::invalid_argument("Cp2_FrictMat_LudingPhys.plstDivKn: must be >0 and <=1 (not "+to_string(k1DivKn));
+		if(kaDivKn<0 || kaDivKn>1) throw std::invalid_argument("Cp2_FrictMat_LudingPhys.kaDivKn: must be >0 and <=1 (not "+to_string(kaDivKn));
 		if(dynDivStat<0 || dynDivStat>1) throw std::invalid_argument("Cp2_FrictMat_FrictPhys.dynDivStat: must be >0 and <=1 (not "+to_string(dynDivStat));
 	#endif
 
@@ -25,12 +25,12 @@ void Cp2_LudingMat_LudingPhys::go(const shared_ptr<Material>& mat1, const shared
 	ph.k2hat=ph.kn; 
 	const Real& k2hat(ph.k2hat);
 
-	ph.kn1=k2hat*.5*(m1.plastDivKn+m2.plastDivKn);
-	ph.knc=k2hat*.5*(m1.adhDivKn+m2.adhDivKn);
+	ph.kn1=k2hat*.5*(m1.k1DivKn+m2.k1DivKn);
+	ph.kna=k2hat*.5*(m1.kaDivKn+m2.kaDivKn);
 	// take the kn value computed in updateFrictPhys, but from now on ph.kn means current stiffness (k2)
 	ph.deltaMax=max(-g.uN,0.);
 	// eq (7)
-	ph.deltaLim=(k2hat/(k2hat-ph.kn1))*.5*(m1.relPlastDepth+m2.relPlastDepth)*a12;
+	ph.deltaLim=(k2hat/(k2hat-ph.kn1))*.5*(m1.deltaLimRel+m2.deltaLimRel)*a12;
 	// a12: dimensional scaling
 	ph.kr=k2hat*.5*(m1.krDivKn+m2.krDivKn)*a12;
 	ph.kw=k2hat*.5*(m1.kwDivKn+m2.kwDivKn)*a12;
@@ -90,10 +90,12 @@ void Luding_genericSlidingRoutine(const Real& yieldLim, const Real& k, const Rea
 		result=(ft/ftNorm)*fd;
 		xi=(-1/k)*(result+visc*vel);
 		// compute dissipation
-		if(unlikely(trackEnergy)) ph.addWork(LudingPhys::WORK_PLASTIC,(1./2)*(ftNorm+fd)*(1./k)*(ftNorm-fd));
+	   if(unlikely(trackEnergy)) ph.addWork(LudingPhys::WORK_PLASTIC,(1./2)*(ftNorm+fd)*(1./k)*(ftNorm-fd));
 	}
 }
 
+
+WOO_IMPL_LOGGER(Law2_L6Geom_LudingPhys);
 
 bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C){
 	const L6Geom& g(cg->cast<L6Geom>()); LudingPhys& ph(cp->cast<LudingPhys>());
@@ -116,10 +118,13 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 			// compute normal plastic work (non-incremental)
 			// use previous kn2 and deltaMax, those won't be increased in the step the contact is broken
 			const Real& kn2(ph.kn);
-			Real delta0=ph.deltaMax*(ph.kn1-kn2);
-			Real deltaMin=delta0*kn2/(kn2+ph.knc);
-			ph.addWork(LudingPhys::WORK_PLASTIC,/*W_np*/(ph.kn1*ph.deltaMax+ph.knc*deltaMin)*delta0);
+			Real delta0=ph.deltaMax*(ph.kn1/kn2);
+			Real deltaMin=delta0*kn2/(kn2+ph.kna);
+			Real Wnp=/*W_np*/(ph.kn1*ph.deltaMax+ph.kna*deltaMin)*delta0;
+			// ph.addWork(LudingPhys::WORK_PLASTIC,Wnp);
 			ph.commitWork(scene,C->leakPA(),C->leakPB(),viscIx,plastIx);
+			// just in case
+			//ph.work[LudingPhys::WORK_VISCOUS]=ph.work[LudingPhys::WORK_PLASTIC]=0.;
 		}
 		return false;
 	}
@@ -144,12 +149,12 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 	if(k2dd0>=k1*delta){
 		fHys=k1*delta;
 		//ph.normBranch=0;
-	} else if(-ph.knc*delta>=k2dd0){
-		fHys=-ph.knc*delta;
+	} else if(-ph.kna*delta>=k2dd0){
+		fHys=-ph.kna*delta;
 		//ph.normBranch=2;
 	} else{
 		assert(k1*delta>k2dd0);
-		assert(k2dd0>-ph.knc*delta);
+		assert(k2dd0>-ph.kna*delta);
 		fHys=k2dd0;
 		//ph.normBranch=1;
 	}
@@ -163,18 +168,18 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 	// TANGENT
 	Vector2r ft;
 	// coulomb sliding (yield) force
-	Real fts=ph.tanPhi*(fn+ph.knc*delta);
+	Real fts=ph.tanPhi*(fn+ph.kna*delta);
 	Luding_genericSlidingRoutine(fts,ph.kt,ph.viscT,velT,ph.xiT,scene->dt,ph.dynDivStat,ft,scene->trackEnergy,ph);
 
 	// ROLL
 	Vector2r mr;
-	Real mrs=ph.statR*(fn+ph.knc*delta)*a12;
+	Real mrs=ph.statR*(fn+ph.kna*delta)*a12;
 	Luding_genericSlidingRoutine(mrs,ph.kr,ph.viscR,angVelR,ph.xiR,scene->dt,ph.dynDivStat,mr,scene->trackEnergy,ph);
 
 	// TWIST
 	Real mw;
 	Map1r mw_vec(&mw);
-	Real mws=ph.statW*(fn+ph.knc*delta)*a12;
+	Real mws=ph.statW*(fn+ph.kna*delta)*a12;
 	Map1r xiW_vec(&ph.xiW);
 	Luding_genericSlidingRoutine(mws,ph.kw,ph.viscW,Map1r_const(&g.angVel[0]),xiW_vec,scene->dt,ph.dynDivStat,mw_vec,scene->trackEnergy,ph);
 
