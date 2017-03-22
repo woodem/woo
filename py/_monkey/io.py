@@ -134,7 +134,7 @@ class SerializerToHtmlTableGenshi(object):
     def htmlSeq(self,s,insideTable):
         from genshi.builder import tag
         table=tag.table(frame='box',rules='all',width='100%',**self.padding)
-        if hasattr(s[0],'__len__') and not isinstance(s[0],str): # 2d array
+        if hasattr(s[0],'__len__') and not isinstance(s[0],(str,unicode,bytes)): # 2d array
             # disregard insideTable in this case
             for r in range(len(s) if type(s)!=AlignedBox3 else 2): # len(s) is sufficient, but some version of minieigen report erroneously that AlignedBox3 has length of 3
                 tr=tag.tr()
@@ -145,7 +145,7 @@ class SerializerToHtmlTableGenshi(object):
         splitLen=0
         if len(s)>1:
             if isinstance(s[0],int): splitLen=self.splitIntSeq
-            elif isinstance(s[0],str): splitLen=self.splitStrSeq
+            elif isinstance(s[0],(str,unicode)): splitLen=self.splitStrSeq
             elif isinstance(s[0],float): splitLen=self.splitFloatSeq
         # 1d array
         if splitLen==0 or len(s)<splitLen:
@@ -215,7 +215,7 @@ class SerializerToHtmlTableGenshi(object):
                     if not wasList: attr=attr[0]
                     unit=', '.join(unit)
                 # sequence type, or something similar                
-                if hasattr(attr,'__len__') and not isinstance(attr,str):
+                if hasattr(attr,'__len__') and not isinstance(attr,(str,unicode,bytes)):
                     if len(attr)>0:
                         tr.append(tag.td(self.htmlSeq(attr,insideTable=False),align='right'))
                     else:
