@@ -478,6 +478,7 @@ class AttrEditor_FileDir(AttrEditor,QFrame):
         if self.isDir:    f=QFileDialog.getExistingDirectory(self,'Select directory',curr)
         elif self.isExisting: f=QFileDialog.getOpenFileName(self,'Select existing file',curr)
         else: f=QFileDialog.getSaveFileName(self,'Select file name',curr,options=QFileDialog.DontConfirmOverwrite)
+        if isinstance(f,tuple): f=f[0]
         if not f: return # cancelled
         f=str(f)
         if self.rel.isChecked(): f=os.path.relpath(f)
@@ -1074,6 +1075,8 @@ class ObjectEditor(QFrame):
     def saveObject(self,obj):
         assert obj is not None
         f=QFileDialog.getSaveFileName(self,'Save object: use .json, .expr, .pickle, .html ...','.')
+        if isinstance(f,tuple): f=f[0]
+        print('Saving to:',f)
         if not f: return
         woo._monkey.io.Object_dump(obj,str(f),format='auto',fallbackFormat='expr')
     # XXX: deprecated chunk
@@ -1190,6 +1193,7 @@ class ObjectEditor(QFrame):
             assert not isNone
             obj=getattr(entry.obj,entry.name)
             f=QFileDialog.getSaveFileName(self,'Save object: use .json, .expr, .pickle, .html ...','.')
+            if isinstance(f,tuple): f=f[0]
             if not f: return
             woo._monkey.io.Object_dump(obj,str(f),format='auto',fallbackFormat='expr')
         elif action=='load':
