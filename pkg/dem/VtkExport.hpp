@@ -36,10 +36,10 @@ struct VtkExport: public PeriodicEngine{
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 	void run() override;
 
-	enum{WHAT_SPHERES=1,WHAT_MESH=2,WHAT_STATIC=4,WHAT_TRI=8,WHAT_CON=16 /*,WHAT_PELLET=8*/ };
+	enum{WHAT_SPHERES=1,WHAT_MESH=2,WHAT_STATIC=4,WHAT_TRI=8,WHAT_CON=16,WHAT_MATSTATE=32 /*,WHAT_PELLET=8*/ };
 	enum{
-		WHAT_ALL=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_CON|WHAT_TRI,
-		WHAT_ALL_EXCEPT_CON=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_TRI,
+		WHAT_ALL=           WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_TRI|WHAT_MATSTATE|WHAT_CON,
+		WHAT_ALL_EXCEPT_CON=WHAT_SPHERES|WHAT_MESH|WHAT_STATIC|WHAT_TRI|WHAT_MATSTATE,
 	};
 
 	// add many vertices and vtkTriangles between them
@@ -51,6 +51,9 @@ struct VtkExport: public PeriodicEngine{
 	// TODO: convert to boost::range instead of 2 iterators
 	static int triangulateStrip(const vector<int>::iterator& ABegin, const vector<int>::iterator& AEnd, const vector<int>::iterator& BBegin, const vector<int>::iterator& BEnd, bool close, vector<Vector3i>& tri);
 	static int triangulateFan(const int& a, const vector<int>::iterator& BBegin, const vector<int>::iterator& BEnd, bool invert, vector<Vector3i>& tri);
+
+	void exportMatState(const shared_ptr<MatState>& state, vector<vtkSmartPointer<vtkDoubleArray>>& matStates, size_t prevDone, Real divisor);
+
 
 
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCapsule(const shared_ptr<Capsule>& capsule, int subdiv);
@@ -104,6 +107,7 @@ struct VtkExport: public PeriodicEngine{
 			_classObj.attr("spheres")=(int)VtkExport::WHAT_SPHERES; \
 			_classObj.attr("mesh")=(int)VtkExport::WHAT_MESH; \
 			_classObj.attr("static")=(int)VtkExport::WHAT_STATIC; \
+			_classObj.attr("matState")=(int)VtkExport::WHAT_MATSTATE; \
 			_classObj.attr("tri")=(int)VtkExport::WHAT_TRI; \
 			_classObj.attr("con")=(int)VtkExport::WHAT_CON; \
 			_classObj.attr("all")=(int)VtkExport::WHAT_ALL; \

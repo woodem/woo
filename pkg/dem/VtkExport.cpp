@@ -175,15 +175,39 @@ py::dict VtkExport::makePvdFiles() const {
 }
 
 
+template<class vtkArrayType=vtkDoubleArray>
+vtkSmartPointer<vtkArrayType> makeVtkArray_helper(const char* name, size_t numComponents, const vtkSmartPointer<vtkDataSet>& dataset, bool cellData){
+	auto var=vtkSmartPointer<vtkArrayType>::New();
+	var->SetNumberOfComponents(numComponents);
+	var->SetName(name);
+	if(cellData) dataset->GetCellData()->AddArray(var);
+	else dataset->GetPointData()->AddArray(var);
+	return var;
+}
+
+
+void VtkExport::exportMatState(const shared_ptr<MatState>& state, vector<vtkSmartPointer<vtkDoubleArray>>& matStates, size_t prevDone, Real divisor){
+	for(size_t sz=matStates.size(); sz<state->getNumScalars(); sz++){
+		auto arr=vtkSmartPointer<vtkDoubleArray>::New();
+		arr->SetNumberOfComponents(1);
+		arr->SetName(("matState "+state->getScalarName(sz)).c_str());
+		LOG_DEBUG("New array '"<<arr->GetName()<<"'");
+		if(prevDone>0){
+			arr->SetNumberOfTuples(prevDone); arr->FillComponent(0,nanValue);
+			LOG_DEBUG("   Filling "<<prevDone<<" missing values.");
+		}
+		matStates.push_back(arr);
+	}
+	for(size_t i=0; i<matStates.size(); i++){
+		Real scalar=state->getScalar(i,scene->step)/divisor;
+		matStates[i]->InsertNextValue(isnan(scalar)?nanValue:scalar);
+	}
+}
+
+
 void VtkExport::run(){
 	DemField* dem=static_cast<DemField*>(field.get());
 	out=scene->expandTags(out);
-
-	#define _VTK_ARR_HELPER(var,name,numComponents,arrayType) auto var=vtkSmartPointer<arrayType>::New(); var->SetNumberOfComponents(numComponents); var->SetName(name); 
-	#define _VTK_POINT_ARR(grid,var,name,numComponents) _VTK_ARR_HELPER(var,name,numComponents,vtkDoubleArray); grid->GetPointData()->AddArray(var);
-	#define _VTK_POINT_INT_ARR(grid,var,name,numComponents) _VTK_ARR_HELPER(var,name,numComponents,vtkIntArray); grid->GetPointData()->AddArray(var);
-	#define _VTK_CELL_ARR(grid,var,name,numComponents) _VTK_ARR_HELPER(var,name,numComponents,vtkDoubleArray); grid->GetCellData()->AddArray(var);
-	#define _VTK_CELL_INT_ARR(grid,var,name,numComponents) _VTK_ARR_HELPER(var,name,numComponents,vtkIntArray); grid->GetCellData()->AddArray(var);
 
 	// contacts
 	auto cPoly=vtkSmartPointer<vtkPolyData>::New();
@@ -191,8 +215,8 @@ void VtkExport::run(){
 	auto cCells=vtkSmartPointer<vtkCellArray>::New();
 	cPoly->SetPoints(cParPos);
 	cPoly->SetLines(cCells);
-	_VTK_CELL_ARR(cPoly,cFn,"Fn",1);
-	_VTK_CELL_ARR(cPoly,cMagFt,"|Ft|",1);
+	auto cFn=makeVtkArray_helper("Fn",1,cPoly,/*cellData*/true);
+	auto cMagFt=makeVtkArray_helper("|Ft|",1,cPoly,/*cellData*/true);
 
 	if(what&WHAT_CON){
 		// holds information about cell distance between spatial and displayed position of each particle
@@ -215,7 +239,7 @@ void VtkExport::run(){
 			}
 			assert(cParPos->GetNumberOfPoints()==p->id+1);
 		}
-		FOREACH(const auto& C, *dem->contacts){
+		for(const auto& C: *dem->contacts){
 			const Particle *pA=C->leakPA(), *pB=C->leakPB();
 			if(mask && (!(mask&pA->mask) || !(mask&pB->mask))) continue;
 			Particle::id_t ids[2]={pA->id,pB->id};
@@ -273,19 +297,22 @@ void VtkExport::run(){
 	auto sPos=vtkSmartPointer<vtkPoints>::New();
 	auto sCells=vtkSmartPointer<vtkCellArray>::New();
 	sGrid->SetPoints(sPos);
-	_VTK_POINT_ARR(sGrid,sRadii,"radius",1);
-	_VTK_POINT_ARR(sGrid,sMass,"mass",1)
-	_VTK_POINT_INT_ARR(sGrid,sId,"id",1)
-	_VTK_POINT_INT_ARR(sGrid,sMask,"mask",1)
-	// _VTK_POINT_INT_ARR(sGrid,sClumpId,"clumpId",1)
-	_VTK_POINT_ARR(sGrid,sColor,"color",1)
-	_VTK_POINT_ARR(sGrid,sVel,"vel",3)
-	_VTK_POINT_ARR(sGrid,sAngVel,"angVel",3)
-	_VTK_CELL_ARR(sGrid,sSigT,"sigT",3);
-	_VTK_CELL_ARR(sGrid,sSigN,"sigN",3);
-	_VTK_POINT_INT_ARR(sGrid,sMatId,"matId",1)
-	// separate declaration and optional insertion
-	_VTK_ARR_HELPER(savedPos,"pos",3,vtkDoubleArray);
+	auto sRadii=makeVtkArray_helper("radius",1,sGrid,/*cellData*/false);
+	auto sMass=makeVtkArray_helper("mass",1,sGrid,/*cellData*/false);
+	auto sId=makeVtkArray_helper<vtkIntArray>("id",1,sGrid,/*cellData*/false);
+	auto sMask=makeVtkArray_helper<vtkIntArray>("mask",1,sGrid,/*cellData*/false);
+	auto sColor=makeVtkArray_helper("color",1,sGrid,/*cellData*/false);
+	auto sVel=makeVtkArray_helper("vel",3,sGrid,/*cellData*/false);
+	auto sAngVel=makeVtkArray_helper("angVel",3,sGrid,/*cellData*/false);
+	auto sSigT=makeVtkArray_helper("sigT",3,sGrid,/*cellData*/true);
+	auto sSigN=makeVtkArray_helper("sigN",3,sGrid,/*cellData*/true);
+	auto sMatId=makeVtkArray_helper<vtkIntArray>("matId",1,sGrid,/*cellData*/false);
+	vector<vtkSmartPointer<vtkDoubleArray>> sMatStates;
+	// only create here, but don't associate with the dataset yet -- done later
+	auto savedPos=vtkSmartPointer<vtkDoubleArray>::New();
+		savedPos->SetNumberOfComponents(3);
+		savedPos->SetName("pos");
+
 	if(savePos) sGrid->GetPointData()->AddArray(savedPos);
 	// meshes
 	auto mGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
@@ -294,12 +321,14 @@ void VtkExport::run(){
 	vector<int> mCellTypes;
 	if(prevCellNum[0]>0) mCellTypes.reserve(prevCellNum[0]); // prealloc
 	mGrid->SetPoints(mPos);
-	_VTK_CELL_ARR(mGrid,mColor,"color",1);
-	_VTK_CELL_ARR(mGrid,mMatState,"matState",1);
-	_VTK_CELL_INT_ARR(mGrid,mMatId,"matId",1);
-	_VTK_CELL_ARR(mGrid,mVel,"vel",3);
-	_VTK_CELL_ARR(mGrid,mAngVel,"angVel",3);
-	_VTK_CELL_ARR(mGrid,mSigNorm,"|sigma|",1);
+	auto mColor=makeVtkArray_helper("color",1,mGrid,/*cellData*/true);
+	// auto mMatState=makeVtkArray_helper("matState",1,mGrid,/*cellData*/true);
+	vector<vtkSmartPointer<vtkDoubleArray>> mMatStates;
+	auto mMatId=makeVtkArray_helper("matId",1,mGrid,/*cellData*/true);
+	auto mVel=makeVtkArray_helper("vel",3,mGrid,/*cellData*/true);
+	auto mAngVel=makeVtkArray_helper("angVel",3,mGrid,/*cellData*/true);
+	auto mSigNorm=makeVtkArray_helper("|sigma|",1,mGrid,/*cellData*/true);
+
 	// static meshes (exported only once)
 	auto smGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto smPos=vtkSmartPointer<vtkPoints>::New();
@@ -307,8 +336,9 @@ void VtkExport::run(){
 	vector<int> smCellTypes;
 	if(prevCellNum[1]>0) smCellTypes.reserve(prevCellNum[1]);  // prealloc
 	smGrid->SetPoints(smPos);
-	_VTK_CELL_ARR(smGrid,smColor,"color",1);
-	_VTK_CELL_INT_ARR(smGrid,smMatId,"matId",1);
+	auto smMatId=makeVtkArray_helper("matId",1,smGrid,/*cellData*/true);
+	auto smColor=makeVtkArray_helper("color",1,smGrid,/*cellData*/true);
+
 	// triangulated particles
 	auto tGrid=vtkSmartPointer<vtkUnstructuredGrid>::New();
 	auto tPos=vtkSmartPointer<vtkPoints>::New();
@@ -316,12 +346,13 @@ void VtkExport::run(){
 	vector<int> tCellTypes;
 	if(prevCellNum[2]>0) tCellTypes.reserve(prevCellNum[2]);  // prealloc
 	tGrid->SetPoints(tPos);
-	_VTK_POINT_ARR(tGrid,tEqRad,"eqRadius",1);
-	_VTK_CELL_ARR(tGrid,tColor,"color",1);
-	_VTK_CELL_ARR(tGrid,tMatState,"matState",1);
-	_VTK_CELL_INT_ARR(tGrid,tMatId,"matId",1);
-	_VTK_CELL_ARR(tGrid,tVel,"vel",3);
-	_VTK_CELL_ARR(tGrid,tAngVel,"angVel",3);
+	auto tEqRad=makeVtkArray_helper("eqRadius",1,tGrid,/*cellData*/false);
+	auto tColor=makeVtkArray_helper("color",1,tGrid,/*cellData*/true);
+	//auto tMatState=makeVtkArray_helper("matState",1,tGrid,/*cellData*/true);
+	vector<vtkSmartPointer<vtkDoubleArray>> tMatStates;
+	auto tMatId=makeVtkArray_helper("matId",1,tGrid,/*cellData*/true);
+	auto tVel=makeVtkArray_helper("vel",3,tGrid,/*cellData*/true);
+	auto tAngVel=makeVtkArray_helper("angVel",3,tGrid,/*cellData*/true);
 
 	for(const auto& p: *dem->particles){
 		if(!p->shape) continue; // this should not happen really
@@ -348,6 +379,7 @@ void VtkExport::run(){
 			sMass->InsertNextValue(dyn.mass);
 			sId->InsertNextValue(p->id);
 			sMask->InsertNextValue(p->mask);
+			if(what&WHAT_MATSTATE) exportMatState(p->matState,sMatStates,sMask->GetNumberOfTuples()-1,/*divisor*/1.);
 			// sClumpId->InsertNextValue(dyn.isClumped()?sphere->nodes[0]->getData<DemData>().cast<ClumpData>().clumpLinIx:-1);
 			sColor->InsertNextValue(sphere->color);
 			if(savePos) savedPos->InsertNextTupleValue(pos.data());
@@ -555,12 +587,7 @@ void VtkExport::run(){
 			// velocity values are erroneous for multi-nodal particles (facets), don't care now
 			mVel->InsertNextTupleValue(dyn.vel.data());
 			mAngVel->InsertNextTupleValue(dyn.angVel.data());
-			Real scalar=NaN;
-			if(p->matState){
-				scalar=p->matState->getScalar(0,scene->step);
-				if(facet) scalar/=p->shape->cast<Facet>().getArea();
-			}
-			mMatState->InsertNextValue(isnan(scalar)?nanValue:scalar);
+			if(what&WHAT_MATSTATE) exportMatState(p->matState,mMatStates,mAngVel->GetNumberOfTuples()-1,/*divisor*/(facet?p->shape->cast<Facet>().getArea():1));
 			mSigNorm->InsertNextValue(sigNorm);
 		}
 		// static mesh particles (only exported once per simulation)
@@ -578,11 +605,13 @@ void VtkExport::run(){
 			// velocity values are erroneous for multi-nodal particles (facets), don't care now
 			tVel->InsertNextTupleValue(dyn.vel.data());
 			tAngVel->InsertNextTupleValue(dyn.angVel.data());
-			Real scalar=NaN;
-			if(p->matState){ scalar=p->matState->getScalar(0,scene->step);	/* if(facet) scalar/=p->shape->cast<Facet>().getArea(); */ }
-			tMatState->InsertNextValue(isnan(scalar)?nanValue:scalar);
+			if(what&WHAT_MATSTATE) exportMatState(p->matState,tMatStates,tAngVel->GetNumberOfTuples()-1,/*divisor*/(facet?p->shape->cast<Facet>().getArea():1));
 		}
 	}
+
+	for(const auto& ss: sMatStates) sGrid->GetPointData()->AddArray(ss);
+	for(const auto& ms: mMatStates) mGrid->GetCellData()->AddArray(ms);
+	for(const auto& ts: tMatStates) tGrid->GetCellData()->AddArray(ts);
 
 	// set cells (must be called onces cells are complete)
 	sGrid->SetCells(VTK_VERTEX,sCells);
@@ -702,12 +731,6 @@ void VtkExport::run(){
 
 	outTimes.push_back(scene->time);
 	outSteps.push_back(scene->step);
-
-	#undef _VTK_ARR_HELPER
-	#undef _VTK_POINT_ARR
-	#undef _VTK_POINT_INT_ARR
-	#undef _VTK_CELL_ARR
-	#undef _VTK_CELL_INT_ARR
 };
 
 #endif /*WOO_VTK*/
