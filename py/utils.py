@@ -98,7 +98,7 @@ def _commonBodySetup(b,nodes,mat,fixed=False):
         b.updateMassInertia()
     else:
         for n in b.shape.nodes:
-            n.mass=0; n.inertia=Vector3.Zero
+            n.dem.mass=0; n.dem.inertia=Vector3.Zero
     for i,n in enumerate(b.nodes):
         n.dem.addParRef(b) # tell the node that it has that particle
         if fixed==None: pass # do not modify blocked at all
