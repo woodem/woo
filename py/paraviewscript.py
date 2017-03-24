@@ -68,11 +68,12 @@ def launchPV(script):
     subprocess.Popen(cmd,cwd=scriptDir)
 
 def fromEngines(S,out=None,launch=False,noDataOk=False):
-    '''Write paraview script showing data from the current VTK-related engines:
+    '''Write paraview script showing data from the current VTK-related engines and objects:
     
     * :obj:`woo.dem.VtkExport` is queried for files already written, and those are returned;
     * :obj:`woo.dem.FlowAnalysis` is made to export its internal data at the moment of calling this function;
     * :obj:`woo.dem.Tracer` indicates there are particles traces, which are exported by calling :obj:`woo.utils.vtkExportTraces`.
+    * :obj:`S.energy.grid <woo.core.EnergyTrackerGrid>`, if enabled, is exported to indicate spatial distribution of dissipated energy.
 
     :param str out: script name written (if None, temporary file is used). Tags written as ``{tag}`` will be expanded using `S.expandTags <woo.core.Scene.expandTags>`.
 
@@ -87,6 +88,7 @@ def fromEngines(S,out=None,launch=False,noDataOk=False):
         if isinstance(e,woo.dem.VtkExport) and e.nDone>0: kw.update(kwFromVtkExport(e))
         elif isinstance(e,woo.dem.FlowAnalysis) and e.nDone>0: kw.update(kwFromFlowAnalysis(e,outPrefix=outPrefix)) # without the .py
         elif isinstance(e,woo.dem.Tracer): kw.update(kwFromVtkExportTraces(S,e.field,outPrefix=outPrefix))
+    kw.update(kwFromEnergyGrid(S,outPrefix=outPrefix))
      # use static mesh as boundary, if present, otherwise use last mesh file
     if 'static' in kw or 'meshFiles' in kw:
         kw['flowMeshFiles']=[]
@@ -114,6 +116,12 @@ def kwFromVtkExportTraces(S,dem,outPrefix=None):
     tr=woo.utils.vtkExportTraces(S,dem,out)
     if tr: return {'tracesFile':out}
     else: return {}
+
+
+def kwFromEnergyGrid(S,outPrefix=None):
+    if not outPrefix: outPrefix=woo.master.tmpFilename()
+    out=outPrefix+'_energy.vti'
+    if S.energy.grid: return {'energyGridFile':S.energy.gridToVTK(out)}
 
 
 def kwFromFlowAnalysis(flowAnalysis,outPrefix=None,fractions=[],fracA=[],fracB=[]):
@@ -153,7 +161,7 @@ def fromFlowAnalysis(flowAnalysis,out=None,findMesh=True,launch=False):
     if launch: launchPV(out)
 
 
-def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',flowFile='',splitFile='',flowMeshFiles=[],tracesFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
+def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',flowFile='',splitFile='',flowMeshFiles=[],tracesFile='',energyGridFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
     '''Write out script suitable for running with Paraview (with the ``--script`` option). The options to this function are:
 
     :param sphereFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``spheres``);
@@ -185,6 +193,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
         splitFile=fixPath(splitFile),
         flowMeshFiles=[fixPath(f) for f in flowMeshFiles],
         tracesFile=fixPath(tracesFile),
+        energyGridFile=fixPath(energyGridFile),
         flowMeshOpacity=flowMeshOpacity,
         splitStride=splitStride,
         splitClip=splitClip,
@@ -213,6 +222,9 @@ flowStride={flowStride}
 
 # traces
 tracesFile='{tracesFile}'
+
+# energy grid
+energyGridFile='{energyGridFile}'
 
 
 # particles
@@ -257,7 +269,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
                     ar.write(f,out0+'/'+fn)
                     ff2.append(fn)
                 newFiles[fff]=ff2
-            for ff in ('staticFile','splitFile','flowFile','tracesFile'):
+            for ff in ('staticFile','splitFile','flowFile','tracesFile','energyGridFile'):
                 f=eval(ff)
                 fn=os.path.basename(f)
                 newFiles[ff]=fn
@@ -270,7 +282,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
             ll=[]
             for l in open(sys.argv[0]):
                 var=l.split('=',1)[0]
-                if var in ('sphereFiles','meshFiles','conFiles','triFiles','staticFile','splitFile','flowMeshFiles','flowFile','tracesFile'):
+                if var in ('sphereFiles','meshFiles','conFiles','triFiles','staticFile','splitFile','flowMeshFiles','flowFile','tracesFile','energyGridFile'):
                     if type(newFiles[var])==list: ll.append(var+'='+str(newFiles[var])+'\n')
                     else: ll.append(var+"='"+newFiles[var]+"'\n")
                 else: ll.append(l)
@@ -385,6 +397,13 @@ if tracesFile:
     RenameSource(tracesFile,traces)
     traces.CellArrayStatus=traces.GetCellDataInformation().keys()
     rep=Show()
+
+if energyGridFile:
+    energy=XMLImageDataReader(FileName=[energyGridFile])
+    RenameSource(energyGridFile,energy)
+    rep=Show()
+    rep.Representation='Volume'
+
 
 if sphereFiles:
     spheres=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=sphereFiles)
