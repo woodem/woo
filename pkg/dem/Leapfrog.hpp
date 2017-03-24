@@ -29,7 +29,7 @@ struct Leapfrog: public Engine {
 	Vector3r computeAngAccel(const Vector3r& torque, const Vector3r& inertia, const DemData& dyn);
 	// energy tracking
 	void doDampingDissipation(const shared_ptr<Node>&);
-	void doGravityWork(const DemData& dyn, const DemField& dem);
+	void doGravityWork(const DemData& dyn, const DemField& dem, const Vector3r& pos);
 	void doKineticEnergy(const shared_ptr<Node>&, const Vector3r& pprevFluctVel, const Vector3r& pprevFluctAngVel, const Vector3r& linAccel, const Vector3r& angAccel);
 
 	// whether the cell has changed from the previous step

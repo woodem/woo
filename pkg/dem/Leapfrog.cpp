@@ -58,18 +58,18 @@ void Leapfrog::doDampingDissipation(const shared_ptr<Node>& node){
 		dyn.vel.array().abs().matrix().dot(dyn.force.array().abs().matrix())*damping*scene->dt
 		// with aspherical integrator, torque is damped instead of ang acceleration; this is only approximate
 		+ dyn.angVel.array().abs().matrix().dot(dyn.torque.array().abs().matrix())*damping*scene->dt
-		,"nonviscDamp",nonviscDampIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate
+		,"nonviscDamp",nonviscDampIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate,node->pos
 	);
 }
 
 
-void Leapfrog::doGravityWork(const DemData& dyn, const DemField& dem){
+void Leapfrog::doGravityWork(const DemData& dyn, const DemField& dem, const Vector3r& pos){
 	/* evaluated using mid-step values */
 	Real gr=0;
 	if(dyn.isGravitySkip()) return;
 	if(dyn.isBlockedNone()) gr=-dem.gravity.dot(dyn.vel)*dyn.mass*dt;
 	else { for(int ax:{0,1,2}){ if(!(dyn.isBlockedAxisDOF(ax,false))) gr-=dem.gravity[ax]*dyn.vel[ax]*dyn.mass*dt; } }
-	scene->energy->add(gr,"grav",gravWorkIx,EnergyTracker::IsIncrement);
+	scene->energy->add(gr,"grav",gravWorkIx,EnergyTracker::IsIncrement,pos);
 }
 
 void Leapfrog::doKineticEnergy(const shared_ptr<Node>& node, const Vector3r& pprevFluctVel, const Vector3r& pprevFluctAngVel, const Vector3r& linAccel, const Vector3r& angAccel){
@@ -161,7 +161,7 @@ void Leapfrog::run(){
 
 		if(unlikely(reallyTrackEnergy)){
 			if(damp) doDampingDissipation(node);
-			if(hasGravity) doGravityWork(dyn,*dem);
+			if(hasGravity) doGravityWork(dyn,*dem,node->pos);
 		}
 			
 
