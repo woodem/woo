@@ -51,7 +51,7 @@ struct Node: public Object, public Indexable{
 
 	// indexing data items
 	// allows to define non-casting accessors without paying runtime penalty for index lookup
-	enum {ST_DEM=0,ST_GL,ST_MESH,ST_CLDEM,ST_SPARC,/*always keep last*/ST_LAST }; // assign constants to data values
+	enum {NODEDATA_DEM=0,NODEDATA_GL,NODEDATA_MESH,NODEDATA_CLDEM,NODEDATA_SPARC,/*always keep last*/NODEDATA_LAST }; // assign constants to data values
 	//const char dataNames[][]={"dem","foo"}; // not yet used
 	#if 0
 		// allow runtime registration of additional data fields, which can be looked up (slow) by names
@@ -61,8 +61,8 @@ struct Node: public Object, public Indexable{
 	#endif
 
 	// generic access functions
-	bool hasData(size_t ix){ assert(/*ix>=0&&*/ix<ST_LAST); return(/*ix>=0&&*/ix<data.size()&&data[ix]); }
-	void setData(const shared_ptr<NodeData>& nd, size_t ix){ assert(/*ix>=0&&*/ ix<ST_LAST); if(ix>=data.size()) data.resize(ix+1); data[ix]=nd; }
+	bool hasData(size_t ix){ assert(/*ix>=0&&*/ix<NODEDATA_LAST); return(/*ix>=0&&*/ix<data.size()&&data[ix]); }
+	void setData(const shared_ptr<NodeData>& nd, size_t ix){ assert(/*ix>=0&&*/ ix<NODEDATA_LAST); if(ix>=data.size()) data.resize(ix+1); data[ix]=nd; }
 	const shared_ptr<NodeData>& getData(size_t ix){ assert(/*ix>=0&&*/data.size()>ix); return data[ix]; }
 
 	// templates to get data cast to correct type quickly

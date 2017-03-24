@@ -21,7 +21,7 @@ struct GlData: public NodeData{
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlData__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(GlData);
-template<> struct NodeData::Index<GlData>{enum{value=Node::ST_GL};};
+template<> struct NodeData::Index<GlData>{enum{value=Node::NODEDATA_GL};};
 
 
 #endif

@@ -23,7 +23,7 @@ public:
 };
 WOO_REGISTER_OBJECT(CLDemData);
 
-template<> struct NodeData::Index<CLDemData>{enum{value=Node::ST_CLDEM};};
+template<> struct NodeData::Index<CLDemData>{enum{value=Node::NODEDATA_CLDEM};};
 
 // no longer needed
 #if 0

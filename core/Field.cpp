@@ -67,5 +67,3 @@ py::object Field::py_getScene(){
 }
 
 
-// Node::dataIndexMax=Node::ST_LAST;
-

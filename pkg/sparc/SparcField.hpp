@@ -158,7 +158,7 @@ struct SparcData: public NodeData{
 };
 WOO_REGISTER_OBJECT(SparcData);
 
-template<> struct NodeData::Index<SparcData>{enum{value=Node::ST_SPARC};};
+template<> struct NodeData::Index<SparcData>{enum{value=Node::NODEDATA_SPARC};};
 
 struct ExplicitNodeIntegrator: public Engine {
 	bool acceptsField(Field* f){ return dynamic_cast<SparcField*>(f); }

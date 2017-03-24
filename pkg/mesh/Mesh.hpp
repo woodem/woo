@@ -16,5 +16,5 @@ struct MeshData: public NodeData{
 };
 WOO_REGISTER_OBJECT(MeshData);
 
-template<> struct NodeData::Index<MeshData>{enum{value=Node::ST_MESH};};
+template<> struct NodeData::Index<MeshData>{enum{value=Node::NODEDATA_MESH};};
 
