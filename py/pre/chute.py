@@ -33,6 +33,7 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         x2,y2=.5*pre.dim[0],.5*pre.dim[1]
         htBrut=pre.dim[2]+x2+y2
         htNet=pre.dim[2]
+        dp=2*(-x2-y2) # outlet height
         mask=woo.dem.DemField.defaultStaticMask
         
         # chute itself
@@ -54,7 +55,7 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         )
         outlet=woo.dem.BoxOutlet(
             stepPeriod=200,
-            box=((-2*x2,-2*y2,2*(-x2-y2)),(2*x2,2*y2,0)),
+            box=((-2*x2,-2*y2,dp),(2*x2,2*y2,0)),
             inside=True
         )
         S.engines=woo.dem.DemField.minimalEngines(model=pre.model)+[inlet,outlet]
@@ -71,7 +72,7 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         S.plot.plots={'i':('Etot','**S.energy'),' t':('Eerr')}
 
         S.trackEnergy=True
-        S.energy.gridOn(box=AlignedBox3((-x2,-y2,0),(x2,y2,htNet)),cellSize=htNet*1e-2,maxIndex=10)
+        S.energy.gridOn(box=AlignedBox3((-x2,-y2,dp),(x2,y2,htNet)),cellSize=htNet*1e-2,maxIndex=10)
         S.lab.collider.sortAxis=2 # faster for predominantly vertical arrangement
 
         return S
