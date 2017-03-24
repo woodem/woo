@@ -656,19 +656,35 @@ class ControllerClass(QWidget,Ui_Controller):
             subStepInfo="<br><small>sub %d/%d [%s]</small>"%(subStep,len(S.engines),subStepInfo)
         self.subStepCheckbox.setChecked(S.subStepping) # might have been changed async
         throttle='' if S.throttle==0. else '<font color="red">(max %d/s)</font>'%(int(round(1./S.throttle)))
+        eta=-1
         if stopAtStep<=step:
             self.realTimeLabel.setText('%02d:%02d:%02d'%(rt//3600,(rt%3600)//60,rt%60))
             self.stepLabel.setText('#%ld, %.1f/s %s%s'%(step,self.stepPerSec,throttle,subStepInfo))
         else:
             if self.stepPerSec!=0:
-                e=int((stopAtStep-step)/self.stepPerSec)
-                eta='(ETA %02d:%02d:%02d)'%(e//3600,e//60,e%60)
-            else: eta=u'(ETA −)'
-            self.realTimeLabel.setText('%02d:%02d:%02d %s'%(rt//3600,rt//60,rt%60,eta))
+                eta=int((stopAtStep-step)/self.stepPerSec)
+            else: eta=0 # u' (ETA −)'
             self.stepLabel.setText('#%ld / %ld, %.1f/s %s%s'%(S.step,stopAtStep,self.stepPerSec,throttle,subStepInfo))
+        stopAtTime=(S.stopAtTime if (not math.isnan(S.stopAtTime) and S.stopAtTime>S.time) else 0)
+        if stopAtTime: eta=(int((stopAtTime-S.time)/(S.time/rt)) if S.time>0 else 0)
+
+        if eta<0: etaStr=''
+        elif eta==0: etaStr=u' (ETA −)'
+        else: etaStr=' (ETA %02d:%02d:%02d)'%(eta//3600,(eta%3600)//60,eta%60)
+
+        self.realTimeLabel.setText('%02d:%02d:%02d%s'%(rt//3600,(rt%3600)//60,rt%60,etaStr))
         if t!=float('inf') and t!=float('nan'):
-            s=int(t); ms=int(t*1000)%1000; us=int(t*1000000)%1000; ns=int(t*1000000000)%1000
-            self.virtTimeLabel.setText(u'%03ds%03dm%03dμ%03dn'%(s,ms,us,ns))
+            def t2smun(t): return int(t),int(t*1000)%1000,int(t*1000000)%1000,int(t*1000000000)%1000
+            def smun2strippedstr(smun):
+                if sum(smun)==0: return '000s'
+                ret=''
+                for i in range(4):
+                    if not ret and smun[i]==0: continue
+                    if sum(smun[i:])==0: continue
+                    ret+='%03d'%smun[i]+u'smμn'[i]
+                return ret
+            self.virtTimeLabel.setText(u'%03ds%03dm%03dμ%03dn'%t2smun(t)+(u' / '+smun2strippedstr(t2smun(S.stopAtTime)) if stopAtTime else ''))
+            #s=int(t); ms=int(t*1000)%1000; us=int(t*1000000)%1000; ns=int(t*1000000000)%1000
         else: self.virtTimeLabel.setText(u'[ ∞ ] ?!')
         self.dtLabel.setText(str(S.dt))
         if OpenGL: self.show3dButton.setChecked(len(views())>0)
