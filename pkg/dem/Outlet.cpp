@@ -62,7 +62,7 @@ void Outlet::run(){
 	for(const auto& idLoc: delParIdLoc){
 		const auto& id(std::get<0>(idLoc)); const auto& loc(std::get<1>(idLoc));
 		const shared_ptr<Particle>& p((*dem->particles)[id]);
-		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(p->shape->nodes[0],true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(p->shape->nodes[0],true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,p->shape->nodes[0]->pos);
 		const Real& m=p->shape->nodes[0]->getData<DemData>().mass;
 		num++;
 		mass+=m;
@@ -90,7 +90,7 @@ void Outlet::run(){
 	}
 	for(const auto& ix: delClumpIxs){
 		const shared_ptr<Node>& n(dem->nodes[ix]);
-		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(n,true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(n,true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,n->pos);
 		Real m=n->getData<DemData>().mass;
 		num++;
 		mass+=m;
