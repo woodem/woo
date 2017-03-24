@@ -7,7 +7,7 @@
 
 namespace py=boost::python;
 
-class EnergyTrackerGrid: public Object{
+struct EnergyTrackerGrid: public Object{
 	WOO_DECL_LOGGER; 
 	typedef boost::multi_array<Real,5> boost_multi_array_real_5;
 	void add(const Real& val, int& id, const Vector3r& xyz);
