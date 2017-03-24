@@ -306,7 +306,7 @@ void RandomInlet::run(){
 
 				// random choice of material with equal probability
 				size_t matIx=0;
-				assert(materials.size()>1); // was already checked above
+				assert(materials.size()>=1); // was already checked above
 				if(materials.size()>1) matIx=max(size_t(materials.size()*Mathr::UnitRandom()),materials.size()-1);
 				mat=materials[matIx];
 				if(matIx<matStates.size() && matStates[matIx]) matState=static_pointer_cast<MatState>(Master::instance().deepcopy(matStates[matIx]));
