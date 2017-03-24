@@ -45,14 +45,14 @@ void Cp2_LudingMat_LudingPhys::go(const shared_ptr<Material>& mat1, const shared
 }
 
 
-void Law2_L6Geom_LudingPhys::addWork(LudingPhys& ph, int type, const Real& dW) {
+void Law2_L6Geom_LudingPhys::addWork(LudingPhys& ph, int type, const Real& dW, const Vector3r& xyz) {
 	assert(type>=0 && type<LudingPhys::WORK_SIZE);
 	if(ph.work.size()<LudingPhys::WORK_SIZE) ph.work.resize(LudingPhys::WORK_SIZE,0.);
 	ph.work[type]+=dW;
 	if(wImmediate){
 		switch(type){
-			case LudingPhys::WORK_VISCOUS: scene->energy->add(dW,"viscous",viscIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate); break;
-			case LudingPhys::WORK_PLASTIC: scene->energy->add(dW,"plastic",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate); break;
+			case LudingPhys::WORK_VISCOUS: scene->energy->add(dW,"viscous",viscIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate,xyz); break;
+			case LudingPhys::WORK_PLASTIC: scene->energy->add(dW,"plastic",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate,xyz); break;
 		}
 	}
 }
@@ -63,8 +63,8 @@ void Law2_L6Geom_LudingPhys::commitWork(const shared_ptr<Contact>& C) {
 	if(ph.work.size()<LudingPhys::WORK_SIZE) return;
 	// in immediate mode, this was already done in addWork
 	if(!wImmediate){
-		scene->energy->add(ph.work[LudingPhys::WORK_VISCOUS],"viscous",viscIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
-		scene->energy->add(ph.work[LudingPhys::WORK_PLASTIC],"plastic",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
+		scene->energy->add(ph.work[LudingPhys::WORK_VISCOUS],"viscous",viscIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate,C->geom->node->pos);
+		scene->energy->add(ph.work[LudingPhys::WORK_PLASTIC],"plastic",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate,C->geom->node->pos);
 	}
 	const Particle* pA(C->leakPA());
 	const Particle* pB(C->leakPB());
@@ -83,7 +83,7 @@ void Law2_L6Geom_LudingPhys::commitWork(const shared_ptr<Contact>& C) {
 
 // use 3 different types to accomodate combinations of Vector2r, Eigen::Map<Vector2r> etc
 template<typename VecT1, typename VecT2, typename VecT3>
-void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yieldLim, const Real& k, const Real& visc, const VecT1& vel, VecT2& xi, const Real& dynDivStat, VecT3& resultF, LudingPhys& ph){
+void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yieldLim, const Real& k, const Real& visc, const VecT1& vel, VecT2& xi, const Real& dynDivStat, VecT3& resultF, LudingPhys& ph, const Vector3r& xyz){
 	static_assert(std::is_same<typename VecT1::Scalar,Real>::value,"Scalar type must be Real");
 	const Real& dt(law->scene->dt);
 	const bool& trackEnergy(law->scene->trackEnergy);
@@ -98,7 +98,7 @@ void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yield
 		resultF=ft;
 		// viscous dissipation, only without slip
 		if(unlikely(trackEnergy)){
-			law->addWork(ph,LudingPhys::WORK_VISCOUS,visc*vel.squaredNorm()*dt);
+			law->addWork(ph,LudingPhys::WORK_VISCOUS,visc*vel.squaredNorm()*dt,xyz);
 		}
 	} else {
 		// sliding (dynamic) friction norm
@@ -160,7 +160,7 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 			Real delta0=min(ph.deltaLim,ph.deltaMax)*(1-ph.kn1/kn2);
 			Real deltaMin=delta0*kn2/(kn2+ph.kna);
 			Real Wnp=/*W_np*/(ph.kn1*ph.deltaMax+ph.kna*deltaMin)*delta0;
-			addWork(ph,LudingPhys::WORK_PLASTIC,Wnp);
+			addWork(ph,LudingPhys::WORK_PLASTIC,Wnp,g.node->pos);
 			commitWork(C);
 			// just in case
 			//ph.work[LudingPhys::WORK_VISCOUS]=ph.work[LudingPhys::WORK_PLASTIC]=0.;
@@ -201,26 +201,26 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 	// after eq (8); final normal force
 	Real fn=fHys+ph.viscN*(-1.)*velN;
 	// force: viscN*velN; distance: velN*Δt
-	if(unlikely(scene->trackEnergy)) addWork(ph,LudingPhys::WORK_VISCOUS,ph.viscN*velN*velN*scene->dt);
+	if(unlikely(scene->trackEnergy)) addWork(ph,LudingPhys::WORK_VISCOUS,ph.viscN*velN*velN*scene->dt,g.node->pos);
 	// plastic work computed when contact dissolves
 
 	// TANGENT
 	Vector2r ft;
 	// coulomb sliding (yield) force
 	Real fts=ph.tanPhi*(fn+ph.kna*delta);
-	Luding_genericSlidingRoutine(this,fts,ph.kt,ph.viscT,velT,ph.xiT,ph.dynDivStat,ft,ph);
+	Luding_genericSlidingRoutine(this,fts,ph.kt,ph.viscT,velT,ph.xiT,ph.dynDivStat,ft,ph,g.node->pos);
 
 	// ROLL
 	Vector2r mr;
 	Real mrs=ph.statR*(fn+ph.kna*delta)*a12;
-	Luding_genericSlidingRoutine(this,mrs,ph.kr,ph.viscR,angVelR,ph.xiR,ph.dynDivStat,mr,ph);
+	Luding_genericSlidingRoutine(this,mrs,ph.kr,ph.viscR,angVelR,ph.xiR,ph.dynDivStat,mr,ph,g.node->pos);
 
 	// TWIST
 	Real mw;
 	Map1r mw_vec(&mw);
 	Real mws=ph.statW*(fn+ph.kna*delta)*a12;
 	Map1r xiW_vec(&ph.xiW);
-	Luding_genericSlidingRoutine(this,mws,ph.kw,ph.viscW,Map1r_const(&g.angVel[0]),xiW_vec,ph.dynDivStat,mw_vec,ph);
+	Luding_genericSlidingRoutine(this,mws,ph.kw,ph.viscW,Map1r_const(&g.angVel[0]),xiW_vec,ph.dynDivStat,mw_vec,ph,g.node->pos);
 
 	// invert signes for applied forces
 	Fn=-fn;

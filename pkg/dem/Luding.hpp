@@ -96,7 +96,7 @@ WOO_REGISTER_OBJECT(Cp2_LudingMat_LudingPhys);
 
 struct Law2_L6Geom_LudingPhys: public LawFunctor{
 	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
-	void addWork(LudingPhys& ph, int type, const Real& dW);
+	void addWork(LudingPhys& ph, int type, const Real& dW, const Vector3r& xyz);
 	void commitWork(const shared_ptr<Contact>& C);
 
 	FUNCTOR2D(L6Geom,LudingPhys);
