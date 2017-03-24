@@ -16,6 +16,7 @@ struct ConcreteMatState: public MatState {
 			default: return NaN;
 		}
 	}
+	size_t getNumScalars() const override { return 1; }
 	#define woo_dem_ConcreteMatState__CLASS_BASE_DOC_ATTRS \
 		ConcreteMatState,MatState,"State information about body use by the concrete model. None of that is used for computation (at least not now), only for visualization and post-processing.", \
 		/*((Real,epsVolumetric,0,,"Volumetric strain around this body (unused for now)"))*/ \

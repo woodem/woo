@@ -26,6 +26,7 @@ WOO_REGISTER_OBJECT(PelletMat);
 #endif
 
 struct PelletMatState: public MatState{
+	size_t getNumScalars() const override { return 4; }
 	string getScalarName(int index) override {
 		switch(index){
 			case 0: return "normal+shear dissipation";

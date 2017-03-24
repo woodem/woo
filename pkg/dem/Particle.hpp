@@ -162,12 +162,14 @@ WOO_REGISTER_OBJECT(Impose);
 struct MatState: public Object{
 	boost::mutex lock;
 	// returns scalar for rendering purposes 
+	virtual size_t getNumScalars() const { return 0; }
 	virtual Real getScalar(int index, const long& step, const Real& smooth=0){ return NaN; }
 	virtual string getScalarName(int index){ return ""; }
 	#define woo_dem_MatState__CLASS_BASE_DOC_ATTRS_PY \
 		MatState,Object,"Holds data related to material state of each particle.", \
 		/*attrs*/ \
 		,/*py*/ \
+		.def("getNumScalars",&MatState::getNumScalars,"Return number of scalars (index to :obj:`getScalar` and :obj:`getScalarName` should be lower than this number).") \
 		.def("getScalar",&MatState::getScalar,(py::arg("index"),py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
 		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)") ;\
 		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>();
@@ -295,7 +297,7 @@ public:
 };
 WOO_REGISTER_OBJECT(DemData);
 
-template<> struct NodeData::Index<DemData>{enum{value=Node::ST_DEM};};
+template<> struct NodeData::Index<DemData>{enum{value=Node::NODEDATA_DEM};};
 
 struct DemField: public Field{
 	WOO_DECL_LOGGER;

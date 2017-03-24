@@ -25,6 +25,7 @@ struct LudingMat: public FrictMat{
 WOO_REGISTER_OBJECT(LudingMat);
 
 struct LudingMatState: public MatState{
+	size_t getNumScalars() const override { return 3; }
 	string getScalarName(int index) override{
 		switch(index){
 			case 0: return "total";
