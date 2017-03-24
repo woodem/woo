@@ -51,7 +51,7 @@ void Node::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
 		}
 		args=py::tuple(); // clear args
 	}
-	for(const char* name:{"dem","gl","sparc","clDem"}){
+	for(const char* name:{"dem","gl","mesh","sparc","clDem"}){
 		if(!kw.has_key(name)) continue;
 		auto& d=py::extract<shared_ptr<NodeData>>(kw[name])();
 		if(d->getterName()!=string(name)) throw std::runtime_error("Node: mismatch passing "+string(name)+"="+d->pyStr()+": shorthand for this type should be "+d->getterName()+" (not "+string(name)+").");

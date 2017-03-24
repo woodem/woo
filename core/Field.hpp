@@ -51,7 +51,7 @@ struct Node: public Object, public Indexable{
 
 	// indexing data items
 	// allows to define non-casting accessors without paying runtime penalty for index lookup
-	enum {ST_DEM=0,ST_GL,ST_CLDEM,ST_SPARC,ST_ANCF,/*always keep last*/ST_LAST }; // assign constants to data values
+	enum {ST_DEM=0,ST_GL,ST_MESH,ST_CLDEM,ST_SPARC,/*always keep last*/ST_LAST }; // assign constants to data values
 	//const char dataNames[][]={"dem","foo"}; // not yet used
 	#if 0
 		// allow runtime registration of additional data fields, which can be looked up (slow) by names

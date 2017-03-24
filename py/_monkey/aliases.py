@@ -115,6 +115,11 @@ except ImportError:
     core.Scene.hasDem=lambda o: False
 
 try:
+    from woo import mesh
+    core.Node.mesh=property(mesh.MeshData._getDataOnNode,mesh.MeshData._setDataOnNode)
+except ImportError: pass
+
+try:
     from woo import fem
     fem.Membrane.make=staticmethod(woo.utils.membrane)
     fem.Tetra.make=staticmethod(woo.utils.tetra)

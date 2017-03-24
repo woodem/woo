@@ -3,6 +3,17 @@
 #include<boost/filesystem/operations.hpp>
 #include<boost/filesystem/convenience.hpp>
 #include<boost/range/join.hpp>
+#include<boost/range/algorithm/sort.hpp>
+#include<boost/range/algorithm/copy.hpp>
+#include<boost/range/algorithm/set_algorithm.hpp>
+#include<boost/function_output_iterator.hpp>
+
+#include<boost/graph/adjacency_list.hpp>
+#include<boost/graph/connected_components.hpp>
+#include<boost/graph/subgraph.hpp>
+#include<boost/graph/graph_utility.hpp>
+#include<boost/property_map/property_map.hpp>
+
 
 #include<woo/pkg/dem/Sphere.hpp>
 #include<woo/pkg/dem/Facet.hpp>
@@ -12,6 +23,8 @@
 #include<woo/pkg/dem/Wall.hpp>
 #include<woo/pkg/dem/Capsule.hpp>
 
+#include<woo/pkg/mesh/Mesh.hpp>
+
 
 WOO_PLUGIN(dem,(POVRayExport));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_POVRayExport__CLASS_BASE_DOC_ATTRS);
@@ -19,6 +32,7 @@ WOO_IMPL_LOGGER(POVRayExport);
 
 
 std::string vec2pov(const Vector3r& v){ return "<"+to_string(v[0])+","+to_string(v[1])+","+to_string(v[2])+">"; }
+std::string veci2pov(const Vector3i& v){ return "<"+to_string(v[0])+","+to_string(v[1])+","+to_string(v[2])+">"; }
 std::string tq2pov(const Vector3r& t, const Quaternionr& q){
 	Matrix3r m=q.toRotationMatrix();
 	return "matrix <"
@@ -47,6 +61,15 @@ void POVRayExport::run(){
 	frameCounter++;
 }
 
+bool POVRayExport::skipParticle(const shared_ptr<Particle>& p, bool doStatic){
+	if(!p->shape) return true;
+	if(mask && !(mask&p->mask)) return true;
+	if(doStatic!=!!(staticMask & p->mask)) return true; // skip non-static particles with doStatic and vice versa
+	if(!p->shape->getVisible() && skipInvisible) return true;
+	if(!clip.isEmpty() && !clip.contains(p->shape->nodes[0]->pos)) return true;
+	return false;
+}
+
 void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	DemField* dem=static_cast<DemField*>(field.get());
 	std::ofstream os;
@@ -54,13 +77,12 @@ void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+frameInc+"'.");
 	// write time, non-static only
 	if(!doStatic) { os<<"#declare woo_time="<<std::setprecision(16)<<scene->time<<"; /*current simulation time, in seconds*/\n"; }
+	bool facetsAsMesh=(doStatic && connMesh>=CONN_MESH_STATIC_ONLY) || (!doStatic && connMesh>=CONN_MESH_ALWAYS);
+	if(facetsAsMesh) writeFacetsMeshInc(os,doStatic);
 	for(const auto& p: *dem->particles){
 		// selection the same as in VtkExport
-		if(!p->shape) continue;
-		if(mask && !(mask&p->mask)) continue;
-		if(doStatic!=!!(staticMask & p->mask)) continue; // skip non-static particles with doStatic and vice versa
-		if(!p->shape->getVisible() && skipInvisible) continue;
-		if(!clip.isEmpty() && !clip.contains(p->shape->nodes[0]->pos)) continue;
+		if(skipParticle(p,doStatic)) continue;
+		if(facetsAsMesh && p->shape->isA<Facet>()) continue; // done in writeFacetsMeshInc
 		exportParticle(os,p);
 	}
 	os.close();
@@ -229,3 +251,166 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 
 	os.close();
 }
+
+
+/*
+1. traverses all particles and selects only facets
+2. their connectivity is determined, the criterion being that 2 nodes are shared
+3. connectivity graph is analyzed and connected components are found
+4. each connected component is exported as mesh object (component with 1 facet is exported as plain facet)
+*/
+
+void POVRayExport::writeFacetsMeshInc(std::ofstream& os, bool doStatic){
+	DemField* dem=static_cast<DemField*>(field.get());
+	typedef boost::subgraph<boost::adjacency_list<boost::vecS,boost::vecS,boost::undirectedS,boost::property<boost::vertex_index_t,Particle::id_t>,boost::property<boost::edge_index_t,int>>> Graph;
+	// use Particle::id as identifier for graph nodes
+	// however, facets won't have contiguous numbers and ids will have to be filtered again
+	// as non-facets will be reported the same as single (unconnected) facets
+	size_t N=dem->particles->size();
+	Graph graph(N);
+	for(const auto& p: *dem->particles){
+		if(skipParticle(p,doStatic)) continue;
+		if(!p->shape->isA<Facet>()) continue;
+		// this particle is ready for export
+		const auto& f(p->shape->cast<Facet>());
+		std::vector<Node*> fnnn={f.nodes[0].get(),f.nodes[1].get(),f.nodes[2].get()};
+		boost::range::sort(fnnn);
+		// find neighbors sharing 2 nodes
+		for(int vert:{0,1,2}){
+			for(const Particle* p2: f.nodes[vert]->getData<DemData>().parRef){
+				if(!p2->shape || !p2->shape->isA<Facet>() || p2==p.get()) continue;
+				const auto& f2(p2->shape->cast<Facet>());
+				std::vector<Node*> f2nnn={f2.nodes[0].get(),f2.nodes[1].get(),f2.nodes[2].get()};
+				boost::range::sort(f2nnn);
+				short numShared=0;
+				// http://stackoverflow.com/a/38720126/761090
+				boost::range::set_intersection(fnnn,f2nnn,boost::make_function_output_iterator([&](Node*){numShared++;}));
+				// not an edge neighbor
+				if(numShared!=2) continue;
+				boost::add_edge(p->id,p2->id,graph);
+			}
+		}
+	}
+	vector<size_t> clusters(boost::num_vertices(graph));
+	size_t numClusters=boost::connected_components(graph,clusters.data());
+	for(size_t n=0; n<numClusters; n++){
+		std::list<Particle::id_t> pp;
+		for(size_t i=0; i<N; i++){
+			if(clusters[i]!=n) continue;
+			const auto& p((*dem->particles)[n]);
+			if(!p || skipParticle(p,doStatic) || !p->shape->isA<Facet>()) continue;
+			pp.push_back(i);
+		}
+		if(pp.size()==0) continue;
+		// single particle, no mesh; use the normal routine
+		if(pp.size()==1) exportParticle(os,(*dem->particles)[pp.front()]);
+		else{
+			// gather all nodes we need
+			std::set<Node*> nodeset;
+			for(const auto& id: pp){
+				for(int ni:{0,1,2}){
+					const auto& n((*dem->particles)[id]->shape->nodes[ni]);
+					nodeset.insert(n.get());
+				}
+			}
+			// put them into flat array, and define mapping form Node* to index in that array
+			vector<Node*> nodevec; nodevec.reserve(nodeset.size());
+			boost::range::copy(nodeset,std::back_inserter(nodevec));
+			std::map<Node*,int> node2vertMap;
+			for(size_t i=0; i<nodevec.size(); i++) node2vertMap[nodevec[i]]=i;
+			vector<list<int>> nodeIxFaces(nodevec.size());
+
+			vector<Vector2r> vert_uv; vert_uv.reserve(nodevec.size()); // one per vertex (if less, will not be used)
+			for(const auto& n: nodevec){
+				if(n->hasData<MeshData>() && !isnan(n->getData<MeshData>().uvCoord.maxCoeff())) vert_uv.push_back(n->getData<MeshData>().uvCoord);
+			}
+
+			vector<Vector3i> faces; // indices in nodevec, 3 per face
+
+			for(const auto& id: pp){
+				Vector3i face;
+				const auto& f=(*dem->particles)[id]->shape->cast<Facet>();
+				for(int ni:{0,1,2}){
+					face[ni]=node2vertMap.at(f.nodes[ni].get());
+					nodeIxFaces[face[ni]].push_back(faces.size());
+				}
+				faces.push_back(face);
+			}
+
+			// compute vertex normals for all vertices (same ordering)
+			// where vertex normal is not used, extra items will be added on-demand
+			auto faceNormal=[&nodevec](const Vector3i& f)->Vector3r{ Vector3r v[3]={nodevec[f[0]]->pos,nodevec[f[1]]->pos,nodevec[f[2]]->pos}; return (v[1]-v[0]).cross(v[2]-v[1]).normalized(); };
+			auto avgNormal=[&](int vert)->Vector3r{
+				Vector3r ret(Vector3r::Zero());
+				for(const int fIx: nodeIxFaces[vert]){
+					ret+=faceNormal(faces[fIx]);
+				}
+				return ret/nodeIxFaces[vert].size();
+			};
+			vector<Vector3r> normals; normals.reserve(nodevec.size());
+			// mapping from vertex index to normal index; maps to -1 for vertices without normals
+			vector<int> vertexIx2normalIx(nodevec.size(),-1);
+			for(size_t ni=0; ni<nodevec.size(); ni++){
+				const auto& n(nodevec[ni]);
+				if(!n->hasData<MeshData>() || n->getData<MeshData>().vNorm!=MeshData::VNORM_ALL) continue;
+				vertexIx2normalIx[ni]=normals.size();
+				normals.push_back(avgNormal(ni));
+			}
+			// if normals.empty(), then there are no vertex normals defined at all, and the whole vertex normal machinery will be skipped and not exported
+
+			vector<Vector3i> normalIx; 
+			if(normals.size()>0){
+				normalIx.reserve(faces.size());
+				for(const auto& f: faces){
+					bool fnUsed=false;
+					Vector3i nix;
+					for(int vi:{0,1,2}){
+						// if the vertex has normal defined, use it; if not, add face normal to normals and use it
+						if(vertexIx2normalIx[f[vi]]>0) nix[vi]=vertexIx2normalIx[f[vi]];
+						else { nix[vi]=normals.size(); fnUsed=true; }
+					}
+					if(fnUsed) normals.push_back(faceNormal(f));
+					normalIx.push_back(nix);
+				}
+			}
+
+			os<<"mesh2{\n   vertex_vectors { "<<nodevec.size();
+			for(const Node* n: nodevec){ os<<", "<<vec2pov(n->pos); }
+			os<<" }\n";
+
+			if(nodevec.size()==vert_uv.size()){
+				os<<"   uv_vectors { "<<vert_uv.size();
+				for(const auto& uv: vert_uv){ os<<", "<<"<"<<to_string(uv[0])<<","<<to_string(uv[1])<<">";}
+				os<<" }\n";
+			} else {
+				if(!vert_uv.empty()) LOG_WARN("Not exporting uv for mesh with "<<nodevec.size()<<" vertices but only "<<vert_uv.size()<<" with uvCoord defined.");
+			}
+
+			if(!normals.empty()){
+				os<<"   normal_vectors { "<<normals.size();
+				for(const auto& n: normals) os<<", "<<vec2pov(n);
+				os<<" }\n";
+			}
+
+			os<<"   face_indices { "<<faces.size();
+			for(const auto& f: faces){ os<<", "<<veci2pov(f); }
+			os<<" }\n";
+
+			if(!normals.empty()){
+				os<<"   normal_indices { "<<faces.size();
+				for(const auto& nix: normalIx) os<<", "<<veci2pov(nix);
+				os<<" }\n";
+			}
+
+			const auto& pp0((*dem->particles)[pp.front()]);
+			if(nodevec.size()==vert_uv.size()){
+				//os<<"   uv_mapping\n";
+				os<<"   /* uv_mapping can be used in the texture function */\n";
+			}
+			os<<"   "<<makeTexture(pp0,"mesh")<<"\n";
+			os<<"}\n";
+		}
+	}
+}
+
+
