@@ -152,7 +152,7 @@ std::tuple</*stress*/Matrix3r,/*stiffness*/Matrix6r> DemFuncs::stressStiffness(c
 	Matrix3r stress=Matrix3r::Zero();
 	Matrix6r K=Matrix6r::Zero();
 
-	FOREACH(const shared_ptr<Contact>& C, *dem->contacts){
+	for(const shared_ptr<Contact>& C: *dem->contacts){
 		FrictPhys* phys=WOO_CAST<FrictPhys*>(C->phys.get());
 		const Particle *pA=C->leakPA(), *pB=C->leakPB();
 		Vector3r posB=pB->shape->nodes[0]->pos;
@@ -564,23 +564,31 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 	polyData->SetPoints(points);
 	polyData->SetLines(cellArray);
 
-	auto radius=vtkSmartPointer<vtkDoubleArray>::New(); radius->SetNumberOfComponents(1); radius->SetName("radius");
-	polyData->GetCellData()->AddArray(radius);
+	auto radii=vtkSmartPointer<vtkDoubleArray>::New(); radii->SetNumberOfComponents(1); radii->SetName("radius");
+	auto scalars=vtkSmartPointer<vtkDoubleArray>::New(); scalars->SetNumberOfComponents(1);
+	string scalarName;
+	polyData->GetPointData()->AddArray(scalars);
+	polyData->GetCellData()->AddArray(radii); // one radius per entire trace
 
-	for(const auto& n: dem->nodes){
+	auto doOneNode=[&](const shared_ptr<Node>& n){
 		const auto& dyn=n->getData<DemData>();
-		if(moduloOffset[0]>0 && ((dyn.linIx-moduloOffset[1])%moduloOffset[0])!=0) continue;
-		if(dyn.parRef.size()!=1) continue; // skip nodes with more than 1 particle
-		const Particle* p=dyn.parRef.front();
-		if(!n->rep || !n->rep->isA<TraceVisRep>()) continue;
+		if(moduloOffset[0]>0 && ((dyn.linIx-moduloOffset[1])%moduloOffset[0])!=0) return;
+		if(dyn.parRef.size()>1) return; // skip nodes with more than 1 particle
+		if(!n->rep || !n->rep->isA<TraceVisRep>()) return;
 		const auto& trace=n->rep->cast<TraceVisRep>();
-		if(!p || !p->shape) continue;
-		Real r=p->shape->equivRadius();
-		if(isnan(r)) continue; // skip non-spheroids
+		// get first usable name for the scalar
+		if(scalarName.empty() && trace.tracer && trace.tracer->lineColor) scalarName=trace.tracer->lineColor->label;
+		const Particle* p=dyn.parRef.front();
+		Real r=0; // deleted particles will have this
+		// XXX: only for nodes which have not been deleted yet...
+		// XXX: Particle is still stored (DemField::deadParticles),
+		// XXX: but the node (DemField::deadNodes) does not have parRef anymore
+		if(p && p->shape) r=p->shape->equivRadius();
+		if(isnan(r)) return; // skip non-spheroids
 		size_t count=trace.countPointData();
-		if(count<=1) continue;
+		if(count<=1) return;
 		// radius
-		radius->InsertNextValue(r);
+		radii->InsertNextValue(r);
 		// trace points
 		auto polyLine=vtkSmartPointer<vtkPolyLine>::New();
 		polyLine->GetPointIds()->SetNumberOfIds(count);
@@ -589,13 +597,20 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 			Vector3r pt; Real scalar; // scalar discarded
 			trace.getPointData(i,pt,scalar);
 			points->InsertNextPoint(pt.data());
+			scalars->InsertNextValue(scalar);
 			// radius->InsertNextValue(r);
 		}
 		cellArray->InsertNextCell(polyLine);
 	};
 
+	for(const auto& n: dem->nodes){ doOneNode(n); }
+	for(const auto& n: dem->deadNodes){ doOneNode(n); }
+
 	// don't write anything if there are no traces at all
 	if(points->GetNumberOfPoints()==0) return false;
+
+	scalars->SetName(scalarName.c_str()); // hopefully something
+
 
 	auto writer=vtkSmartPointer<vtkXMLPolyDataWriter>::New();
 	bool compress=true; bool ascii=false;
