@@ -17,7 +17,9 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'feedTime',.5,unit='s',doc='Time for which the feed is activated'),
         _PAT(float,'stopTime',2,unit='s',doc='Time when to stop the simulation'),
         _PAT(int,'vtkStep',400,doc='Interval to run VTK export'),
+        _PAT(str,'vtkOut','/tmp/{tid}',doc='Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.'),
         _PAT(float,'dtSafety',.7,doc=':obj:`woo.core.Scene.dtSafety`'),
+        _PAT(str,'saveDone','',doc='File to same simulation at the end; not saved if empty.'),
     ]
 
     def __init__(self,**kw):
@@ -61,13 +63,13 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         S.engines=woo.dem.DemField.minimalEngines(model=pre.model)+[inlet,outlet]
         S.engines+=[woo.core.PyRunner(400,'S.plot.addData(i=S.step,t=S.time,Etot=S.energy.total(),Eerr=(S.energy.relErr() if S.step>200 else float("nan")),**S.energy)')]
         # vtk
-        if pre.vtkStep: S.engines+=[woo.dem.VtkExport(out='vtk/{tid}',stepPeriod=pre.vtkStep)]
+        if pre.vtkStep and pre.vtkOut: S.engines+=[woo.dem.VtkExport(out=pre.vtkOut,stepPeriod=pre.vtkStep)]
 
         S.stopAtTime=pre.stopTime
         S.stopAtHook='S.pre.finalize(S)'
 
         S.dem.saveDead=True
-        S.engines+=[woo.dem.Tracer(stepPeriod=100,realPeriod=0,compress=2,num=400,compSkip=2,minDist=1e-3*htBrut,scalar='matState.getScalar',matStateIx=0,matStateSmooth=0.01)]
+        S.engines+=[woo.dem.Tracer(stepPeriod=100,realPeriod=0,saveTime=True,compress=2,num=400,compSkip=2,minDist=1e-3*htBrut,scalar='matState.getScalar',matStateIx=0,matStateSmooth=0.01)]
 
         S.plot.plots={'i':('Etot','**S.energy'),' t':('Eerr')}
 
@@ -79,10 +81,8 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
     def finalize(self,S):
         import woo.paraviewscript
-        woo.paraviewscript.fromEngines(S,out=woo.master.tmpFileDir+'{tid}',launch=True)
-
-
-
+        woo.paraviewscript.fromEngines(S,out=S.pre.vtkOut,launch=(not woo.batch.inBatch()))
+        if S.pre.saveDone: S.save(S.expandTags(S.pre.saveDone))
 
 
 if __name__ in ('__main__','wooMain'):
