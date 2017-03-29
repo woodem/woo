@@ -416,7 +416,7 @@ void RandomInlet::run(){
 			shared_ptr<Node> clump=ClumpData::makeClump(nn,/*no central node pre-given*/shared_ptr<Node>(),/*intersection*/false);
 			auto& dyn=clump->getData<DemData>();
 			if(shooter) (*shooter)(clump);
-			if(scene->trackEnergy) scene->energy->add(-DemData::getEk_any(clump,true,true,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+			if(scene->trackEnergy) scene->energy->add(-DemData::getEk_any(clump,true,true,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,clump->pos);
 			if(dyn.angVel!=Vector3r::Zero()){
 				throw std::runtime_error("pkg/dem/RandomInlet.cpp: generated particle has non-zero angular velocity; angular momentum should be computed so that rotation integration is correct, but it was not yet implemented.");
 				// TODO: compute initial angular momentum, since we will (very likely) use the aspherical integrator
@@ -443,7 +443,7 @@ void RandomInlet::run(){
 			node0->pos+=pos;
 			auto& dyn=node0->getData<DemData>();
 			if(shooter) (*shooter)(node0);
-			if(scene->trackEnergy) scene->energy->add(-DemData::getEk_any(node0,true,true,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+			if(scene->trackEnergy) scene->energy->add(-DemData::getEk_any(node0,true,true,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,node0->pos);
 			mass+=dyn.mass;
 			stepMass+=dyn.mass;
 			assert(node0->hasData<DemData>());
