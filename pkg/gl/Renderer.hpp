@@ -15,8 +15,7 @@
 #include<woo/pkg/gl/GlData.hpp>
 
 struct GlExtraDrawer: public Object{
-	Scene* scene;
-	virtual void render();
+	virtual void render(const GLViewInfo&);
 	#define woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY \
 		GlExtraDrawer,Object,"Performing arbitrary OpenGL drawing commands; called from :obj:`Renderer` (see :obj:`Renderer.extraDrawers`) once regular rendering routines will have finished.\n\nThis class itself does not render anything, derived classes should override the *render* method.", \
 		((bool,dead,false,,"Deactivate the object (on error/exception).")) \
@@ -24,6 +23,16 @@ struct GlExtraDrawer: public Object{
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(GlExtraDrawer);
+
+struct GlExtra_EnergyTrackerGrid: public GlExtraDrawer{
+	void render(const GLViewInfo&) override;
+	#define woo_gl_GlExtra_EnergyTrackerGrid__CLASS_BASE_DOC_ATTRS \
+		GlExtra_EnergyTrackerGrid,GlExtraDrawer,"Draw :obj:`S.energy.grid <woo.core.Scene.EnergyTrackerGrid>`, if used.", \
+		((Vector3r,color,Vector3r(1,.5,.5),AttrTrait<>().rgbColor(),"Color to render the box."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_gl_GlExtra_EnergyTrackerGrid__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(GlExtra_EnergyTrackerGrid);
+
 
 
 struct Renderer: public Object{

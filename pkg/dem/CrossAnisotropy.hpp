@@ -31,7 +31,7 @@ WOO_REGISTER_OBJECT(Cp2_FrictMat_FrictPhys_CrossAnisotropic);
 class GlExtra_LocalAxes: public GlExtraDrawer{
 	public:
 	//void postLoad(GlExtra_OctreeCubes&,void*);
-	virtual void render();
+	virtual void render(const GlViewInfo&) override;
 	WOO_CLASS_BASE_DOC_ATTRS(GlExtra_LocalAxes,GlExtraDrawer,"Render local coordinate system axes.",
 		((Vector3r,pos,Vector3r::Zero(),,"System position in global coordinates"))
 		((Quaternionr,ori,Quaternionr::Identity(),,"System orientation"))

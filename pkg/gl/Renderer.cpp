@@ -18,10 +18,12 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
-WOO_PLUGIN(gl,(Renderer)(GlExtraDrawer));
+WOO_PLUGIN(gl,(Renderer)(GlExtraDrawer)(GlExtra_EnergyTrackerGrid));
 WOO_IMPL_LOGGER(Renderer);
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_gl_GlExtra_EnergyTrackerGrid__CLASS_BASE_DOC_ATTRS);
+
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_gl_Renderer__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
 
@@ -34,9 +36,17 @@ shared_ptr<GlSetup> Scene::pyGetGl(){ ensureGl(); return gl; }
 void Scene::pySetGl(const shared_ptr<GlSetup>& g){ if(!g) throw std::runtime_error("Scene.gl: must not be None."); gl=g; glDirty=true; }
 
 
+void GlExtraDrawer::render(const GLViewInfo& viewInfo){ throw runtime_error("GlExtraDrawer::render called from class "+getClassName()+". (did you forget to override it in the derived class?)"); }
 
+void GlExtra_EnergyTrackerGrid::render(const GLViewInfo& viewInfo){
+	const Scene* scene(viewInfo.scene);
+	if(!scene->trackEnergy) return;
+	if(!scene->energy->grid) return;
+	const auto& g(scene->energy->grid);
+	if(viewInfo.renderer->fastDraw) GLUtils::AlignedBox(g->box,color);
+	else GLUtils::AlignedBoxWithTicks(g->box,Vector3r::Constant(g->cellSize),Vector3r::Constant(g->cellSize),color);
+}
 
-void GlExtraDrawer::render(){ throw runtime_error("GlExtraDrawer::render called from class "+getClassName()+". (did you forget to override it in the derived class?)"); }
 
 Vector3r Renderer::highlightEmission0;
 Vector3r Renderer::highlightEmission1;
@@ -266,8 +276,7 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 	for(const shared_ptr<GlExtraDrawer>& d: extraDrawers){
 		if(!d || d->dead) continue;
 		glPushMatrix();
-			d->scene=scene.get();
-			d->render();
+			d->render(viewInfo);
 		glPopMatrix();
 	}
 	

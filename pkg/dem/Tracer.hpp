@@ -15,17 +15,19 @@ struct TraceVisRep: public NodeVisRep{
 	#endif
 	void setHidden(bool hidden){ if(!hidden)flags&=~FLAG_HIDDEN; else flags|=FLAG_HIDDEN; }
 	bool isHidden() const { return flags&FLAG_HIDDEN; }
-	void resize(size_t size);
+	void resize(size_t size, bool saveTime);
 	// set pt and scalar for point indexed i
 	// return true if the point is defined, false if not
-	bool getPointData(size_t i, Vector3r& pt, Real& scalar) const ;
+	bool getPointData(size_t i, Vector3r& pt, Real& time, Real& scalar) const ;
 	// returns the number of point data (by traversal); the number returned is like size(), the value minus one is the last valid index where getPointData returns true
 	size_t countPointData() const;
 
 	void consolidate();
 	vector<Vector3r> pyPts_get() const;
+	vector<Real> pyTimes_get() const;
 	vector<Real> pyScalars_get() const;
 	Vector3r pyPt_get(int i) const;
+	Real pyTime_get(int i) const;
 	Real pyScalar_get(int i) const;
 	// convert python-style (possibly negative) indices to c++ and check range
 	int pyIndexConvert(int i, const string& name) const;
@@ -35,16 +37,19 @@ struct TraceVisRep: public NodeVisRep{
 		TraceVisRep,NodeVisRep,"Data with node's position history; created by :obj:`Tracer`.", \
 		((vector<Vector3r>,pts,,AttrTrait<>().noGui().readonly(),"History points")) \
 		((vector<Real>,scalars,,AttrTrait<>().noGui().readonly(),"History scalars")) \
-		((Real,t0,NaN,,"Time the trace was created/reset, for plottling relative time; does not change with compression.")) \
+		((vector<Real>,times,,AttrTrait<>().noGui().readonly(),"History times (only saved with :obj:`Tracer.saveTime`).")) \
+		((Real,t0,NaN,,"Time the trace was created/reset, for plotting relative time; does not change with compression.")) \
 		((shared_ptr<Tracer>,tracer,,AttrTrait<Attr::readonly>(),":obj:`Tracer` which created (and is, presumably, managing) this object; it is necessary for getting rendering parameters, and is updated automatically.")) \
 		((size_t,writeIx,0,,"Index where next data will be written")) \
 		((short,flags,0,,"Flags for this instance")) \
 		,/*py*/ \
 			.def("consolidate",&TraceVisRep::consolidate,"Make :obj:`pts` sequential (normally, the data are stored as circular buffer, with next write position at :obj:`writeIx`, so that they are ordered temporally.") \
 			.add_property("pts",&TraceVisRep::pyPts_get,"History points (read-only from python, as a copy of internal data is returned).") \
+			.add_property("times",&TraceVisRep::pyTimes_get,"History times (read-only from python, as a copy of internal data is returned).") \
 			.add_property("scalars",&TraceVisRep::pyScalars_get,"History scalars (read-only from python, as a copy of internal data is returned).") \
 			.def("scalar",&TraceVisRep::pyScalar_get,"Get one history scalar (to avoid copying arrays), indexed as in python (negative counts backwards).") \
-			.def("pt",&TraceVisRep::pyPt_get,"Get one history point (to avoid copying arrays), indexed as in python (negative counts backwards).")
+			.def("pt",&TraceVisRep::pyPt_get,"Get one history point (to avoid copying arrays), indexed as in python (negative counts backwards).") \
+			.def("time",&TraceVisRep::pyTime_get,"Get one history time (to avoid copying arrays), indexed as in python (negative counts backwards).")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_TraceVisRep__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(TraceVisRep);
@@ -91,6 +96,7 @@ struct Tracer: public PeriodicEngine{
 		((Vector2r,rRange,Vector2r(0,0),,"If non-zero, only show traces of spheres of which radius falls into this range. (not applicable to clumps); traces of non-spheres are not shown in this case.")) \
 		((Vector3r,noneColor,Vector3r(.3,.3,.3),AttrTrait<>().rgbColor(),"Color for traces without scalars, when scalars are saved (e.g. for non-spheres when radius is saved")) \
 		((bool,clumps,true,,"Also make traces for clumps (for the central node, not for clumped nodes")) \
+		((bool,saveTime,false,,"Save time values along with scalars (must be enabled before the trace starts collecting data).")) \
 		((bool,glSmooth,false,,"Render traced lines with GL_LINE_SMOOTH")) \
 		((int,glWidth,1,AttrTrait<>().range(Vector2i(1,10)),"Width of trace lines in pixels")) \
 		, /*py*/ \

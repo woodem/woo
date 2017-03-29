@@ -55,12 +55,16 @@ void TraceVisRep::compress(int ratio){
 }
 void TraceVisRep::addPoint(const Vector3r& p, const Real& scalar){
 	assert(tracer);
+	// with mindist, maybe don't write anything at all
 	if(flags&FLAG_MINDIST){
 		size_t lastIx=(writeIx>0?writeIx-1:pts.size());
 		if((p-pts[lastIx]).norm()<tracer->minDist) return;
 	}
+	// write data
 	pts[writeIx]=p;
 	scalars[writeIx]=scalar;
+	if(!times.empty()) times[writeIx]=tracer->scene->time;
+	// compute next write index
 	if(flags&FLAG_COMPRESS){
 		if(writeIx>=pts.size()-1) compress(tracer->compress);
 		else writeIx+=1;
@@ -69,17 +73,25 @@ void TraceVisRep::addPoint(const Vector3r& p, const Real& scalar){
 	}
 }
 
+
 vector<Vector3r> TraceVisRep::pyPts_get() const{
 	size_t i=0; vector<Vector3r> ret; ret.reserve(countPointData());
-	Vector3r pt; Real scalar;
-	while(getPointData(i++,pt,scalar)) ret.push_back(pt);
+	Vector3r pt; Real scalar; Real time;
+	while(getPointData(i++,pt,time,scalar)) ret.push_back(pt);
 	return ret;
 }
 
 vector<Real> TraceVisRep::pyScalars_get() const{
 	size_t i=0; vector<Real> ret; ret.reserve(countPointData());
-	Vector3r pt; Real scalar;
-	while(getPointData(i++,pt,scalar)) ret.push_back(scalar);
+	Vector3r pt; Real scalar; Real time;
+	while(getPointData(i++,pt,time,scalar)) ret.push_back(scalar);
+	return ret;
+}
+
+vector<Real> TraceVisRep::pyTimes_get() const{
+	size_t i=0; vector<Real> ret; ret.reserve(countPointData());
+	Vector3r pt; Real scalar; Real time;
+	while(getPointData(i++,pt,time,scalar)) ret.push_back(time);
 	return ret;
 }
 
@@ -91,17 +103,24 @@ int TraceVisRep::pyIndexConvert(int i, const string& name) const {
 }
 
 Real TraceVisRep::pyScalar_get(int i) const {
-	Vector3r pt; Real scalar;
-	bool ok=getPointData(pyIndexConvert(i,"scalar"),pt,scalar);
+	Vector3r pt; Real scalar; Real time;
+	bool ok=getPointData(pyIndexConvert(i,"scalar"),pt,time,scalar);
 	if(!ok) throw std::logic_error("TraceVisRep::pyScalar_get: getPointData error for i="+to_string(i)+"?");
 	return scalar;
 }
 
 Vector3r TraceVisRep::pyPt_get(int i) const {
-	Vector3r pt; Real scalar;
-	bool ok=getPointData(pyIndexConvert(i,"point"),pt,scalar);
+	Vector3r pt; Real scalar; Real time;
+	bool ok=getPointData(pyIndexConvert(i,"point"),pt,time,scalar);
 	if(!ok) throw std::logic_error("TraceVisRep::pyPt_get: getPointData error for i="+to_string(i)+"?");
 	return pt;
+}
+
+Real TraceVisRep::pyTime_get(int i) const {
+	Vector3r pt; Real scalar; Real time;
+	bool ok=getPointData(pyIndexConvert(i,"scalar"),pt,time,scalar);
+	if(!ok) throw std::logic_error("TraceVisRep::pyTime_get: getPointData error for i="+to_string(i)+"?");
+	return time;
 }
 
 size_t TraceVisRep::countPointData() const {
@@ -109,7 +128,7 @@ size_t TraceVisRep::countPointData() const {
 	return pts.size();
 }
 
-bool TraceVisRep::getPointData(size_t i, Vector3r& pt, Real& scalar) const {
+bool TraceVisRep::getPointData(size_t i, Vector3r& pt, Real& time, Real& scalar) const {
 	size_t ix;
 	if(flags&FLAG_COMPRESS){
 		ix=i;
@@ -120,6 +139,7 @@ bool TraceVisRep::getPointData(size_t i, Vector3r& pt, Real& scalar) const {
 	}
 	pt=pts[ix];
 	scalar=scalars[ix];
+	time=(times.empty()?NaN:times[ix]);
 	return true;
 }
 
@@ -187,9 +207,11 @@ void TraceVisRep::render(const shared_ptr<Node>& n, const GLViewInfo* glInfo){
 }
 #endif
 
-void TraceVisRep::resize(size_t size){
+void TraceVisRep::resize(size_t size, bool saveTime){
 	pts.resize(size,Vector3r(NaN,NaN,NaN));
 	scalars.resize(size,NaN);
+	if(saveTime) times.resize(size,NaN);
+	else times.clear();
 }
 
 void TraceVisRep::consolidate(){
@@ -223,7 +245,7 @@ void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 			if(setupEmpty){
 				n->rep=make_shared<TraceVisRep>();
 				auto& tr=n->rep->cast<TraceVisRep>();
-				tr.resize(num);
+				tr.resize(num,saveTime);
 				tr.flags=(compress>0?TraceVisRep::FLAG_COMPRESS:0) | (minDist>0?TraceVisRep::FLAG_MINDIST:0);
 				tr.t0=scene->time;
 			} else {
@@ -285,7 +307,7 @@ void Tracer::run(){
 			boost::mutex::scoped_lock lock(dem.nodesMutex);
 			n->rep=make_shared<TraceVisRep>();
 			auto& tr=n->rep->cast<TraceVisRep>();
-			tr.resize(num);
+			tr.resize(num,saveTime);
 			tr.flags=(compress>0?TraceVisRep::FLAG_COMPRESS:0) | (minDist>0?TraceVisRep::FLAG_MINDIST:0);
 			tr.t0=scene->time;
 		}

@@ -594,8 +594,8 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 		polyLine->GetPointIds()->SetNumberOfIds(count);
 		for(size_t i=0; i<count; i++){
 			polyLine->GetPointIds()->SetId(i,points->GetNumberOfPoints());
-			Vector3r pt; Real scalar; // scalar discarded
-			trace.getPointData(i,pt,scalar);
+			Vector3r pt; Real scalar; Real time;
+			trace.getPointData(i,pt,time,scalar);
 			points->InsertNextPoint(pt.data());
 			scalars->InsertNextValue(scalar);
 			// radius->InsertNextValue(r);

@@ -46,7 +46,7 @@ WOO_REGISTER_OBJECT(AnisoPorosityAnalyzer);
 class GlExtra_AnisoPorosityAnalyzer: public GlExtraDrawer{
 	public:
 	WOO_DECL_LOGGER;
-	virtual void render() override;
+	virtual void render(const GLViewInfo&) override;
 	Real idColor(int id){ return (id%idMod)*1./(idMod-1); }
 	WOO_CLASS_BASE_DOC_ATTRS(GlExtra_AnisoPorosityAnalyzer,GlExtraDrawer,"Find an instance of :obj:`LawTester` and show visually its data.",
 		((shared_ptr<AnisoPorosityAnalyzer>,analyzer,,AttrTrait<>(),"Associated :obj:`AnisoPorosityAnalyzer` object."))

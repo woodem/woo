@@ -147,7 +147,8 @@ void AnisoPorosityAnalyzer::run(){
 #ifdef WOO_OPENGL
 #include<woo/lib/opengl/GLUtils.hpp>
 
-void GlExtra_AnisoPorosityAnalyzer::render(){
+void GlExtra_AnisoPorosityAnalyzer::render(const GLViewInfo& viewInfo){
+	const Scene* scene(viewInfo.scene);
 	if(analyzer && analyzer->scene!=scene) analyzer=shared_ptr<AnisoPorosityAnalyzer>();
 	if(!analyzer) return;
 	size_t sz=min(analyzer->rayIds.size(),analyzer->rayPts.size()/2); // assert(analyzer->rayPts.size()==2*sz);

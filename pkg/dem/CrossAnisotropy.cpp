@@ -56,7 +56,7 @@ WOO_PLUGIN(gl,(GlExtra_LocalAxes));
 #ifdef WOO_OPENGL
 #include<woo/lib/opengl/GLUtils.hpp>
 
-void GlExtra_LocalAxes::render(){
+void GlExtra_LocalAxes::render(const GlViewInfo& glInfo){
 	for(int ax=0; ax<3; ax++){
 		Vector3r c(Vector3r::Zero()); c[ax]=1; // color and, at the same time, local axis unit vector
 		//GLUtils::GLDrawArrow(pos,pos+length*(ori*c),c);
