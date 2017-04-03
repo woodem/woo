@@ -83,6 +83,11 @@ from minieigen import *
 matplotlib.rc('axes',grid=True) # put grid in all figures
 import pylab
 
+try:
+    import matplotlib.style
+    matplotlib.style.use('seaborn-darkgrid')
+except: pass
+
 # simulation-specific bits moved to woo.core.Plot
 # so that they are saved and reloaded with Scene automatically
 
