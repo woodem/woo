@@ -20,6 +20,6 @@ S.saveTmp()
 
 try:
     import woo.gl, woo.qt
-    S.gl=woo.gl.GlSetup(woo.gl.Renderer(dispScale=(1,1,1000),scaleOn=True,iniViewDir=(0,1,0)),woo.gl.Gl1_DemField(glyph='force')) # scale vertical displacement
+    S.gl=woo.gl.GlSetup(woo.gl.Renderer(dispScale=(1,1,1000),scaleOn=True,iniViewDir=(0,1,0)),woo.gl.Gl1_DemField(glyph='keep')) # scale vertical displacement
     woo.qt.View()
 except ImportError: pass

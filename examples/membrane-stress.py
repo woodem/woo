@@ -35,7 +35,7 @@ def colorBySigma(S):
     for p in S.dem.par:
         if not isinstance(p.shape,woo.fem.Membrane): continue
         # get stress, converted to global tensor already
-        sig=p.shape.stressCst(glob=True)[0,0] # look at sigma_xx only, for example
+        sig=p.shape.stressCst(glob=True)[0,1] # look at sigma_xx only, for example
         # shorthand for:
         #sig=p.shape.node.loc2glob_rank2(p.shape.stressCst)[0,0]
         p.shape.color=S.lab.sig.norm(sig) # adjusts colorscale and returns value on the 0..1 scale, assign to particle color

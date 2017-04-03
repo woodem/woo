@@ -1066,13 +1066,15 @@ class ObjectEditor(QFrame):
         toggleShowUnits.triggered.connect(lambda: self.toggleShowUnits(None))
         if self.hasSer and self.ser is not None:
             actionSave=menu.addAction(u'⛁ Save')
-            actionSave.triggered.connect(lambda obj=self.ser: self.saveObject(obj))
+            actionSave.triggered.connect(lambda: self.saveObject(self.ser))
+            # actionSave.triggered.connect(lambda obj=self.ser: self.saveObject(obj))
         #if self.path is not None:
         #    actionLoad=menu.addAction(u'↥ Load')
         #    actionLoad.trigger.connect(lambda: self.loadObject)
         menu.popup(self.mapToGlobal(position))
         #print 'menu popped up at ',widget.mapToGlobal(position),' (local',position,')'
     def saveObject(self,obj):
+        # print('saveObject',obj,arg2,arg3,arg4)
         assert obj is not None
         f=QFileDialog.getSaveFileName(self,'Save object: use .json, .expr, .pickle, .html ...','.')
         if isinstance(f,tuple): f=f[0]
@@ -1199,6 +1201,7 @@ class ObjectEditor(QFrame):
         elif action=='load':
             msg='Load a %s'%entry.T.__name__ if isObj else 'Load'
             f=QFileDialog.getOpenFileName(self,msg,'.')
+            if isinstance(f,tuple): f=f[0]
             if not f: return # no file selected
             try:
                 if isObj: obj=entry.T.load(f) # be user friendly if garbage is being loaded
@@ -1568,6 +1571,7 @@ class SeqObjectComboBox(QFrame):
         self.refreshEvent(forceIx=ix)
     def loadSlot(self):
         f=QFileDialog.getOpenFileName(self,msg,'.')
+        if isinstance(f,tuple): f=f[0]
         if not f: return # no file selected
         T=self.getItemType()
         try:

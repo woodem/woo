@@ -58,5 +58,5 @@ S.saveTmp()
 # let's go
 import woo.qt
 woo.qt.View()
-S.run()
-S.plot.plot()
+#S.run()
+#S.plot.plot()
