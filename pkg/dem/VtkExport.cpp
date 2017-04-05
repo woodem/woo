@@ -187,6 +187,7 @@ vtkSmartPointer<vtkArrayType> makeVtkArray_helper(const char* name, size_t numCo
 
 
 void VtkExport::exportMatState(const shared_ptr<MatState>& state, vector<vtkSmartPointer<vtkDoubleArray>>& matStates, size_t prevDone, Real divisor){
+	if(!state) return;
 	for(size_t sz=matStates.size(); sz<state->getNumScalars(); sz++){
 		auto arr=vtkSmartPointer<vtkDoubleArray>::New();
 		arr->SetNumberOfComponents(1);
