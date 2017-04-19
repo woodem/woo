@@ -3,6 +3,7 @@
 from __future__ import print_function
 import future.utils
 from builtins import str
+from past.builtins import unicode
 import past.builtins
 py3k=future.utils.PY3
 # various monkey-patches for wrapped c++ classes

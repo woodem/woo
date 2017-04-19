@@ -38,7 +38,6 @@ class TestShapePack(unittest.TestCase):
         mat=woo.utils.defaultMaterial()
         sp.toDem(S,S.dem,mat=mat)
         self.assertTrue(len(S.dem.nodes)==2)
-        print(S.dem.par[0].pos)
         self.assertTrue(S.dem.par[0].pos==(1,1,1))
         self.assertTrue(S.dem.par[1].shape.radius==.2)
         self.assertTrue(not S.dem.par[0].shape.nodes[0].dem.clumped)
@@ -100,4 +99,13 @@ class TestShapePack(unittest.TestCase):
             ii1,ii2=sorted(r.inertia),sorted(p.inertia/m.density)
             for i1,i2 in zip(ii1,ii2): self.assertAlmostEqualRel(i1,i2,1e-2)
             for ax in (0,1,2): self.assertAlmostEqualRel(r.pos[ax],p.pos[ax],0,1e-2)
-
+    def testLineEndings(self):
+        'ShapePack: handle different line endings (LF, CR+LF, CR) gracefully'
+        data='0 Sphere 0 0 0 .1|1 Sphere .1 .1 .1 .1|1 Sphere .1 .1 .2 .1|2 Sphere .2 .2 .2 .2|'
+        for le,leName in [('\n','LF'),('\r\n','CR+LF'),('\r','CR')]:
+            d2=data.replace('|',le)
+            tmp=woo.master.tmpFilename()
+            f=open(tmp,'w'); f.write(d2); f.close()
+            try: sp=ShapePack(loadFrom=tmp)
+            except: self.fail("Loading text file with line endings %s failed.")
+            self.assertEqual(len(sp.raws),3)

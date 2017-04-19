@@ -1,6 +1,7 @@
 #include<woo/pkg/dem/ShapePack.hpp>
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/lib/base/Volumetric.hpp>
+#include<woo/lib/base/CrossPlatform.hpp>
 
 #include<woo/pkg/dem/Sphere.hpp>
 #include<woo/pkg/dem/Capsule.hpp>
@@ -405,7 +406,7 @@ void ShapePack::loadTxt(const string& in) {
 	string line;
 	size_t lineNo=0;
 	int lastId=-1;
-	while(std::getline(f,line,'\n')){
+	while(woo::safeGetline(f,line)){
 		lineNo++;
 		if(boost::algorithm::starts_with(line,"##USER-DATA:: ")){
 			userData=line.substr(14,string::npos); // strip the line header
@@ -413,6 +414,7 @@ void ShapePack::loadTxt(const string& in) {
 		}
 		boost::tokenizer<boost::char_separator<char>> toks(line,boost::char_separator<char>(" \t"));
 		vector<string> tokens; for(const string& s: toks) tokens.push_back(s);
+		if(tokens.empty()) continue; // empty line
 		if(tokens[0]=="##PERIODIC::"){
 			if(tokens.size()!=4) throw std::invalid_argument(in+":"+to_string(lineNo)+": starts with ##PERIODIC:: but the line is malformed.");
 			cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));

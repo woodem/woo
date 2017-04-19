@@ -2,6 +2,7 @@
 
 
 #include<woo/lib/sphere-pack/SpherePack.hpp>
+#include<woo/lib/base/CrossPlatform.hpp>
 
 #include<boost/random/linear_congruential.hpp>
 #include<boost/random/uniform_real.hpp>
@@ -84,30 +85,39 @@ void SpherePack::fromFile(const string& fname) {
 	string line;
 	size_t lineNo=0;
 	size_t nCols=0;
-	while(std::getline(sphereFile,line,'\n')){
-		lineNo++;
-		if(boost::algorithm::starts_with(line,"##USER-DATA:: ")){
-			userData=line.substr(14,string::npos); // strip the line header
-			continue;
+	try{
+		while(woo::safeGetline(sphereFile,line)){
+			lineNo++;
+			if(boost::algorithm::starts_with(line,"##USER-DATA:: ")){
+				userData=line.substr(14,string::npos); // strip the line header
+				continue;
+			}
+			boost::tokenizer<boost::char_separator<char> > toks(line,boost::char_separator<char>(" \t"));
+			vector<string> tokens; for(const string& s: toks) tokens.push_back(s);
+			if(tokens.empty()) continue;
+			if(tokens[0]=="##PERIODIC::"){
+				if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+lexical_cast<string>(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
+				cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));
+				continue;
+			}
+			// 4 or 5 columns, but all lines must have the same
+			// it is the clump number
+			if(tokens.size()!=4 && tokens.size()!=5) throw std::invalid_argument(fname+":"+to_string(lineNo)+": line has "+to_string(tokens.size())+" columns (must be 4 or 5).");
+			if(nCols==0) nCols=tokens.size(); // set the first time
+			if(nCols!=tokens.size()) throw std::invalid_argument(fname+":"+to_string(lineNo)+": all line must have the same number of columns (previous had "+to_string(nCols)+", this one has "+to_string(tokens.size())+")");
+			for(int i:{0,1,2,3}) cerr<<i<<": "<<tokens[i]<<endl;
+			C=Vector3r(lexical_cast<Real>(tokens[0]),lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]));
+			cerr<<"a"<<endl;
+			r=lexical_cast<Real>(tokens[3]);
+			cerr<<"b"<<endl;
+			pack.push_back(Sph(C,r));
+			// if clumpId was specified, set it now
+			if(tokens.size()==5) pack.rbegin()->clumpId=lexical_cast<int>(tokens[4]);
+			cerr<<"c"<<endl;
 		}
-		boost::tokenizer<boost::char_separator<char> > toks(line,boost::char_separator<char>(" \t"));
-		vector<string> tokens; FOREACH(const string& s, toks) tokens.push_back(s);
-		if(tokens.empty()) continue;
-		if(tokens[0]=="##PERIODIC::"){
-			if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+lexical_cast<string>(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
-			cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));
-			continue;
-		}
-		// 4 or 5 columns, but all lines must have the same
-		// it is the clump number
-		if(tokens.size()!=4 && tokens.size()!=5) throw std::invalid_argument(fname+":"+to_string(lineNo)+": line has "+to_string(tokens.size())+" columns (must be 4 or 5).");
-		if(nCols==0) nCols=tokens.size(); // set the first time
-		if(nCols!=tokens.size()) throw std::invalid_argument(fname+":"+to_string(lineNo)+": all line must have the same number of columns (previous had "+to_string(nCols)+", this one has "+to_string(tokens.size())+")");
-		C=Vector3r(lexical_cast<Real>(tokens[0]),lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]));
-		r=lexical_cast<Real>(tokens[3]);
-		pack.push_back(Sph(C,r));
-		// if clumpId was specified, set it now
-		if(tokens.size()==5) pack.rbegin()->clumpId=lexical_cast<int>(tokens[4]);
+	}
+	catch(boost::bad_lexical_cast &){
+		throw std::runtime_error(fname+":"+to_string(lineNo)+": error parsing number.");
 	}
 }
 

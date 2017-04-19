@@ -8,6 +8,7 @@
 #include<woo/pkg/fem/Membrane.hpp>
 #include<woo/pkg/dem/DynDt.hpp>
 #include<woo/lib/base/CompUtils.hpp>
+#include<woo/lib/base/CrossPlatform.hpp>
 
 #include<cstdint>
 #include<iostream>
@@ -347,7 +348,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 		string lineBuf;
 		long lineNo=-1;
 		int fVertsNum=0;  // number of vertices in this facet (for checking)
-		for(std::getline(in,lineBuf); in; getline(in,lineBuf)){
+		for(woo::safeGetline(in,lineBuf); in; woo::safeGetline(in,lineBuf)){
 			lineNo++;
 			string tok;
 			std::istringstream line(lineBuf);
