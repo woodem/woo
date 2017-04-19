@@ -71,7 +71,7 @@ class TestImpose(unittest.TestCase):
         b=VariableVelocity3d(times=[0,1,2],vels=[(0,0,0),(3,3,3),(3,3,3)])
         c=InfCylinder.make((0,0,0),radius=.2,axis=1)
         c.impose=a+b # impose both
-        S=woo.core.Scene(fields=[DemField(par=[c])],engines=DemField.minimalEngines(),dt=1e-3,stopAtTime=1.2)
+        S=woo.core.Scene(fields=[DemField(par=[c])],engines=DemField.minimalEngines(verletDist=0.),dt=1e-3,stopAtTime=1.2)
         S.run(); S.wait()
         self.assertTrue(c.vel==Vector3(3,3,3))
         self.assertTrue(c.angVel[0]==1.)
@@ -80,7 +80,7 @@ class TestImpose(unittest.TestCase):
         for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)):
             a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion((1,0,0),1))
             a.impose=i
-            S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines())
+            S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(verletDist=0.))
             self.assertRaises(RuntimeError,lambda : S.selfTest())
     def testInterpolatedMotion(self):
         'DEM: InterpolatedMotion computes correct and position rotation'
@@ -90,7 +90,7 @@ class TestImpose(unittest.TestCase):
         q1,q2=Quaternion((.3,.4,.5),3.1415).normalized(),Quaternion((-.5,-.4,1),-.7).normalized()
         a.impose=InterpolatedMotion(poss=[a.pos,p1,p2],oris=[a.ori,q1,q2],times=[0,.2,.4])
         a.blocked='xyzXYZ' # must be blocked otherwise we get an error from selfTest
-        S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(),dt=1e-1)
+        S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(verletDist=0),dt=1e-1)
         S.run(10,True) # run in fg
         dAngle=(q2.conjugate()*a.ori).toAxisAngle()[1]
         if dAngle>math.pi: dAngle-=2*math.pi

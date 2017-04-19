@@ -17,7 +17,7 @@ class TestEllipsoid(unittest.TestCase):
         S=self.S=woo.core.Scene(fields=[woo.dem.DemField()])
         self.mat=FrictMat(density=1e3,young=1e8,ktDivKn=.2,tanPhi=.5)
         S.dtSafety=0.7
-        S.engines=[Leapfrog(reset=True,damping=.4),InsertionSortCollider([Bo1_Ellipsoid_Aabb()]),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl(noBreak=True)])]
+        S.engines=[Leapfrog(reset=True,damping=.4),InsertionSortCollider([Bo1_Ellipsoid_Aabb()],verletDist=0.),ContactLoop([Cg2_Ellipsoid_Ellipsoid_L6Geom()],[Cp2_FrictMat_FrictPhys()],[Law2_L6Geom_FrictPhys_IdealElPl(noBreak=True)])]
         #,DynDt(stepPeriod=1000)]
         #woo.utils.defaultEngines(damping=.0,cp2=Cp2_FrictMat_HertzPhys(gamma=0,en=0,label='cp2',poisson=.2),law=Law2_L6Geom_HertzPhys_DMT(),dynDtPeriod=10)+[
             # -123 is replaced by v0 before actually used

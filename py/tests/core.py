@@ -372,6 +372,7 @@ class TestLoop(unittest.TestCase):
         S.stopAtTime=10e-3
         S.stopAtStep=1000
         S.lab.a=1
+        S.lab._setWritable('a')
         S.stopAtHook='S.lab.a+=1'
         S.run(wait=True) # stopAtTime applies first
         self.assertEqual(S.lab.a,2)
