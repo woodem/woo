@@ -268,9 +268,25 @@ PsdClumpGenerator::operator()(const shared_ptr<Material>&mat,const Real& time){
 
 	// construct the clump based on its defintion
 	const auto& C(*(clumps[cNo]));
-	assert(C.equivRad>0);
-	Real scale=r/C.equivRad;
-	LOG_DEBUG("Clump will be scaled "<<scale<<"× so that its equivRad "<<C.equivRad<<" becomes "<<r);
+	Real scale=NaN;
+	switch (scaleMethod){
+		case SCALE_EQUIVRAD:
+			assert(C.equivRad>0);
+			scale=r/C.equivRad;
+			LOG_DEBUG("Clump will be scaled "<<scale<<"× so that its equivRad "<<C.equivRad<<" becomes "<<r);
+			break;
+		case SCALE_FIRSTSPHERE:
+			if(C.radii.empty()) throw std::runtime_error("PsdClumpGenerator.clumps: Clump #"+to_string(cNo)+" contains zero spheres.");
+			scale=r/C.radii[0];
+			LOG_DEBUG("Clump will be scaled "<<scale<<"× so that its first sphere's radius "<<C.radii[0]<<" becomes "<<r);
+			break;
+		case SCALE_AVGSPHERE:
+			if(C.radii.empty()) throw std::runtime_error("PsdClumpGenerator.clumps: Clump #"+to_string(cNo)+" contains zero spheres.");
+			{ Real avgRad=0; for(Real rr: C.radii) avgRad+=rr; avgRad/=C.radii.size(); scale=r/avgRad; }
+			LOG_DEBUG("Clump will be scaled "<<scale<<"× so that its average sphere's radius "<<C.radii[0]<<" becomes "<<r);
+			break;
+		default: throw std::runtime_error("PsdClumpGenerator.scaleMethod: invalid value ("+to_string(scaleMethod)+")");
+	};
 
 	/* make individual spheres; the clump itself is constructed in RandomInlet (using Clump::makeClump)
 	   that means that we don't know what the exact mass is here :|
