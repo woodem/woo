@@ -13,7 +13,8 @@ matrix:
 #        env: WOO_EXEC=woo-travis-py3
 install:
    # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
-   - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib
+	# ipython>=6.0 does not support python <= 3.2
+   - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython<6.0 colour_runner xlsxwriter prettytable setuptools matplotlib
    # see what's there really
    - dpkg -l 
    # use non-default version of gcc (ubuntu 14.04)
