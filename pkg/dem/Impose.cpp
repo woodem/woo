@@ -185,10 +185,20 @@ void VelocityAndReadForce::readForce(const Scene* scene, const shared_ptr<Node>&
 
 void VariableVelocity3d::postLoad(VariableVelocity3d&,void*){
 	if(times.size()!=vels.size()) throw std::runtime_error("VariableVelocity3d: times and vels must have the same length (not "+to_string(times.size())+", "+to_string(vels.size())+").");
+	if(!angVels.empty() && times.size()!=angVels.size()) throw std::runtime_error("VariableVelocity3d.angVels: if not empty, it length ("+to_string(angVels.size())+" must be equal to the length of times ("+to_string(times.size())+").");
 	for(int i=0; i<(int)times.size()-1; i++){
 		if(times[i]>=times[i+1]) woo::ValueError("VariableVelocity3d.times: must be non-decreasing (times["+to_string(i)+"]="+to_string(times[i])+", times["+to_string(i+1)+"]="+to_string(times[i+1])+").");
 	}
 }
+
+void VariableVelocity3d::selfTest(const shared_ptr<Node>& n, const shared_ptr<DemData>& dyn, const string& prefix) const {
+	if(!angVels.empty()){
+		if(dyn->useAsphericalLeapfrog()){
+			throw std::runtime_error(prefix+": refusing to prescribe rotations since the node is integrated aspherically.");
+		}
+	}
+}
+
 
 void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	if(times.empty()) throw std::runtime_error("VariableVelocity3d: times must not be empty.");
@@ -201,7 +211,7 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 	// wrap if wanted and needed
 	if(wrap && t>times.back()) t=std::fmod(t,times.back());
 	t-=t0; // only subtract at the very end
-	Vector3r vImp=linearInterpolate(t,times,vels,_interpPos);
+	Vector3r vImp=linearInterpolate(t,times,vels,_interpPosVel);
 	/*
 		with diff==true, use the current velocity as basis, otherwise use 0
 		if the imposed component is NaN, then keep current value
@@ -211,6 +221,15 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 	*/
 	for(short ax:{0,1,2}) v[ax]=(diff?v[ax]:0)+(isnan(vImp[ax])?(diff?0:v[ax]):vImp[ax]);
 	dyn.vel=rot?ori*v:v;
+	// angular velocity
+	if(!angVels.empty()){
+		// if(dyn.useAsphericalLeapfrog()) throw std::runtime_error("VariableVelocity3d.angVels: imposing angular velocity on node "+n->pyStr()+" is not supported as it uses aspherical leapfrog integration routine based on angular momentum.");
+		Vector3r av=rot?(ori.conjugate()*dyn.angVel):dyn.angVel;
+		Vector3r avImp=linearInterpolate(t,times,angVels,_interpPosAngVel);
+		// dtto as above
+		for(short ax:{0,1,2}) av[ax]=(diff?av[ax]:0)+(isnan(avImp[ax])?(diff?0:av[ax]):avImp[ax]);
+		dyn.angVel=rot?ori*av:av;
+	}
 }
 
 

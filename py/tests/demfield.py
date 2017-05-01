@@ -77,7 +77,7 @@ class TestImpose(unittest.TestCase):
         self.assertTrue(c.angVel[0]==1.)
     def testUselessRotationImpose(self):
         'DEM: selfTest error when imposing rotation on aspherical particles (would have no effect)'
-        for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)):
+        for i in VariableAlignedRotation(axis=0,timeAngVel=[(0,0)]),InterpolatedMotion(),Local6Dofs(whats=(0,0,0,1,1,1)),VariableVelocity3d(times=[0,1],vels=[(0,0,0),(0,0,0)],angVels=[(0,0,0),(0,0,0)]):
             a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion((1,0,0),1))
             a.impose=i
             S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(verletDist=0.))
@@ -97,4 +97,12 @@ class TestImpose(unittest.TestCase):
         dPos=(a.pos-p2).norm()
         self.assertAlmostEqual(dAngle,0)
         self.assertAlmostEqual(dPos,0)
-        
+    def testVariableVelocity3d_rot(self):
+        'DEM: VariableVelocity3d imposition (angular velocity)'
+        a=Sphere.make((0,0,0),radius=.3)
+        t1,omega1=.2,1
+        a.impose=VariableVelocity3d(times=[0,t1],vels=[(0,0,0),(0,0,0)],angVels=[(0,0,0),(omega1,0,0)])
+        S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(verletDist=0.),stopAtTime=t1,dt=1e-4)
+        S.run(wait=True)
+        self.assertAlmostEqual(S.dem.nodes[0].ori.toAxisAngle()[1],.5*omega1*t1,delta=1e-3)
+

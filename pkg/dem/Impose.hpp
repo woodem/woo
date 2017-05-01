@@ -170,16 +170,18 @@ WOO_REGISTER_OBJECT(VelocityAndReadForce);
 struct VariableVelocity3d: public Impose{
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) override;
 	void postLoad(VariableVelocity3d&,void*);
-	size_t _interpPos; // cookie for interpolation routine, does not need to be saved
+	void selfTest(const shared_ptr<Node>&, const shared_ptr<DemData>&, const string& prefix) const override;
+	size_t _interpPosVel, _interpPosAngVel; // cookie for interpolation routine, does not need to be saved
 	#define woo_dem_VariableVelocity3d__CLASS_BASE_DOC_ATTRS_CTOR \
 		VariableVelocity3d,Impose,"Impose velocity in 3 independent senses, interpolated from piecewise-linear velocity function values, optional periodic in time; NaN values of velocity will impose nothing in that direction.",\
 		((vector<Real>,times,,,"Time values for :obj:`vels`.")) \
 		((vector<Vector3r>,vels,,,"Components of velocity, in local coordinates defined by :obj:`ori`.")) \
+		((vector<Vector3r>,angVels,,,"Components of angular velocity, in local coordinates defined by :obj:`ori`. If empty, angular velocity will not be imposed at all.\n\n.. note:: Only nodes which are using spherical integration can be prescribed angular velocity, since the aspherical integrator in :obj:`woo.dem.Leapfrog` uses :obj:`angular momentum <woo.dem.DemData.angMom>` rather than :obj:`angular velocity <woo.dem.DemData.angVel>` as input. This can be queried with :obj:`Node.dem.useAsphericalLeapfrog <woo.dem.DemData.useAsphericalLeapfrog>`.")) \
 		((Quaternionr,ori,Quaternionr::Identity(),,"Orientation of coordinate axes (by default, impose velocity along global axes)")) \
 		((bool,diff,false,,"Prescribed velocity can be applied as total velocity value (with ``diff==False``) or as difference added to the actual nodal velocity (with ``diff==True``).")) \
 		((bool,wrap,false,,"Wrap time around the last time value (float modulo), if greater.")) \
 		((Real,t0,0.,,"Time offset which is subtracted from t (after wrapping, if :obj:`wrap` is used).")) \
-		,/*ctor*/ what=Impose::VELOCITY; _interpPos=0;
+		,/*ctor*/ what=Impose::VELOCITY; _interpPosVel=_interpPosAngVel=0;
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableVelocity3d__CLASS_BASE_DOC_ATTRS_CTOR);
 };
 WOO_REGISTER_OBJECT(VariableVelocity3d);
