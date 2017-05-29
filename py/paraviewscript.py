@@ -119,9 +119,10 @@ def kwFromVtkExportTraces(S,dem,outPrefix=None):
 
 
 def kwFromEnergyGrid(S,outPrefix=None):
+    if not S.energy.grid: return {}
     if not outPrefix: outPrefix=woo.master.tmpFilename()
     out=outPrefix+'_energy.vti'
-    if S.energy.grid: return {'energyGridFile':S.energy.gridToVTK(out)}
+    return {'energyGridFile':S.energy.gridToVTK(out)}
 
 
 def kwFromFlowAnalysis(flowAnalysis,outPrefix=None,fractions=[],fracA=[],fracB=[]):
