@@ -21,6 +21,8 @@ case $ISSUE in
 		;;
 esac
 
+# update package information
+sudo apt update
 # faster install
 sudo apt install eatmydata
 # install libs & headers
