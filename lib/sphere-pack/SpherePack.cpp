@@ -105,15 +105,11 @@ void SpherePack::fromFile(const string& fname) {
 			if(tokens.size()!=4 && tokens.size()!=5) throw std::invalid_argument(fname+":"+to_string(lineNo)+": line has "+to_string(tokens.size())+" columns (must be 4 or 5).");
 			if(nCols==0) nCols=tokens.size(); // set the first time
 			if(nCols!=tokens.size()) throw std::invalid_argument(fname+":"+to_string(lineNo)+": all line must have the same number of columns (previous had "+to_string(nCols)+", this one has "+to_string(tokens.size())+")");
-			for(int i:{0,1,2,3}) cerr<<i<<": "<<tokens[i]<<endl;
 			C=Vector3r(lexical_cast<Real>(tokens[0]),lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]));
-			cerr<<"a"<<endl;
 			r=lexical_cast<Real>(tokens[3]);
-			cerr<<"b"<<endl;
 			pack.push_back(Sph(C,r));
 			// if clumpId was specified, set it now
 			if(tokens.size()==5) pack.rbegin()->clumpId=lexical_cast<int>(tokens[4]);
-			cerr<<"c"<<endl;
 		}
 	}
 	catch(boost::bad_lexical_cast &){
