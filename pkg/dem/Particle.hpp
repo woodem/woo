@@ -456,7 +456,7 @@ struct Shape: public Object, public Indexable{
 			.add_property("volume",&Shape::volume,"Volume of this shape; returns NaN for multinodal or infinite shapes.") \
 			.def("asRaw",&Shape::pyAsRaw) \
 			.def("setFromRaw",&Shape::setFromRaw) \
-			.def("isInside",&Shape::isInside,(py::arg("pt"),"Fast predicate testing whether *pt* is inside or outside this shape.") \
+			.def("isInside",&Shape::isInside,(py::arg("pt")),"Fast predicate testing whether *pt* is inside or outside this shape.") \
 			.def("lumpMassInertia",&Shape::pyLumpMassInertia) \
 			WOO_PY_TOPINDEXABLE(Shape) \
 			; \
