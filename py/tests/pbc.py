@@ -173,5 +173,35 @@ class TestPBCCollisions(unittest.TestCase):
             self.assertTrue(C.cellDist==-Vector3i(shift2))
 
 
+    def testCrossBoundarySort(self):
+        'PBC: InsertionSortCollider correctly sorts on the boundary (bug #... discovered by Bruno)'
+        rr=1e-6
+        S=woo.core.Scene(dt=1,
+            fields=[woo.dem.DemField(par=[woo.dem.Sphere.make((x+rr,0,0),rr) for x in (0,.5,.8)])],
+            engines=[woo.dem.Leapfrog(reset=True),woo.dem.InsertionSortCollider([woo.dem.Bo1_Sphere_Aabb()],verletDist=0,label='coll',paraPeri=False)]
+        )
+        S.periodic=True
+        S.cell.setBox(1,1,1)
+        S.one()
+        # check initial bound for #1
+        #print(S.lab.coll.dumpBounds()[0])
+        x0,sid,wrap,flags=S.lab.coll.dumpBounds()[0][2]
+        self.assertEqual(x0,.5)
+        self.assertEqual(sid,-1) # signed ID, neg. for lower bound
+        self.assertEqual(wrap,0) 
+        # move by one step
+        s1=S.dem.par[1]
+        s1.vel=(.53,0,0)
+        S.one()
+        # check updated bound for #1
+        #print(S.lab.coll.dumpBounds()[0])
+        x0,sid,wrap,_=S.lab.coll.dumpBounds()[0][2]
+        self.assertAlmostEqual(x0,.03,delta=1e-5) # moved by this amount
+        self.assertEqual(sid,-1)
+        self.assertEqual(wrap,1) # moved by one period already
+        # check bounds are sorted correctly
+        bb=[float(b[0]) for b in S.lab.coll.dumpBounds()[0]]
+        bs=sorted(bb)
+        self.assertEqual(bb,bs)
 
 

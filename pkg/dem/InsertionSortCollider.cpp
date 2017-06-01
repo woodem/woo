@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<vector>
 #include<boost/static_assert.hpp>
+#include<boost/algorithm/string/join.hpp>
 
 #if defined(WOO_OPENMP) && defined(__GNUC__)
 	#include<parallel/algorithm>
@@ -679,18 +680,25 @@ Real InsertionSortCollider::cellWrapRel(const Real x, const Real x0, const Real 
 void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
 	assert(v.size==(long)v.vec.size());
+//	#ifndef WOO_OPENMP
+//		//insertionSortPeri_part(v,doCollide,ax,0,v.size,0);
+//		// insertionSortPeri_orig(v,doCollide,ax);
+//	#else
 	#ifndef WOO_OPENMP
-		insertionSortPeri_part(v,doCollide,ax,0,v.size,0);
-		// insertionSortPeri_orig(v,doCollide,ax);
+		const int chunks=1;
+		const int chunkSize=v.size;
 	#else
 		// one chunk per core; the complicated logic for the non-periodic variant has not brought any improvement
 		int chunks=omp_get_max_threads();
 		int chunkSize=v.size/chunks;
 		if(chunkSize<100 || !paraPeri){
-			if(v.size>0) insertionSortPeri_part(v,doCollide,ax,0,v.size,0);
+			//if(v.size>0) insertionSortPeri_part(v,doCollide,ax,0,v.size,0);
 			// insertionSortPeri_orig(v,doCollide,ax);
-			return;
+			//return;
+			chunks=1;
+			chunkSize=v.size;
 		}
+	#endif
 
 		/*
 			============================================= bound sequence
@@ -713,7 +721,9 @@ void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int 
 		for(pass=0; !isOk; pass++){
 			bool even=((pass%2)==0);
 			const vector<size_t>& s(even?splits0:splits1);
-			#pragma omp parallel for schedule(static)
+			#ifdef WOO_OPENMP
+				#pragma omp parallel for schedule(static)
+			#endif
 			for(int chunk=0; chunk<chunks; chunk++){
 				long start(pass==0?s[chunk]:(even?splits1[chunk]:splits0[chunk+1]));
 				// cerr<<"{pass:"<<pass<<",chunk:"<<chunk<<"/"<<chunks-1<<":"<<s[chunk]<<","<<s[chunk+1]<<","<<start<<"}";
@@ -730,7 +740,6 @@ void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int 
 		}
 		// cerr<<" (("<<pass<<" passes))"<<endl;
 		// cerr<<"Parallel periodic insertion sort done ("<<pass+1<<") passes, "<<chunks<<" chunks; inversions remaining: "<<countInversions().transpose()<<endl;
-	#endif
 }
 void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide, int ax, long iBegin, long iEnd, long iStart){
 	assert(periodic);
@@ -807,7 +816,7 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 	}
 }
 
-
+#if 0
 void InsertionSortCollider::insertionSortPeri_orig(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
 	long &loIdx=v.loIdx; const long &size=v.size;
@@ -848,6 +857,7 @@ void InsertionSortCollider::insertionSortPeri_orig(VecBounds& v, bool doCollide,
 		v[v.norm(j+1)]=vi;
 	}
 }
+#endif
 
 // called by the insertion sort if 2 bodies swapped their bounds
 void InsertionSortCollider::handleBoundInversionPeri(Particle::id_t id1, Particle::id_t id2, bool separating){
@@ -1059,8 +1069,12 @@ py::tuple InsertionSortCollider::dumpBounds(){
 		VecBounds& V=BB[axis];
 		if(periodic){
 			for(long i=0; i<V.size; i++){
-				long ii=V.norm(i); // start from the period boundary
-				bl[axis].append(py::make_tuple(V[ii].coord,(V[ii].flags.isMin?-1:1)*V[ii].id,V[ii].period,string()+(V[ii].flags.hasBB?"":"nobb ")+(V[ii].flags.isInf?"inf":"")));
+				long ii=V.norm(V.loIdx+i); // start from the period boundary
+				vector<string> flg;
+				if(!V[ii].flags.hasBB) flg.push_back("nobb");
+				if(V[ii].flags.isInf) flg.push_back("inf");
+				if(ii==V.loIdx) flg.push_back("||");
+				bl[axis].append(py::make_tuple(V[ii].coord,(V[ii].flags.isMin?-1:1)*V[ii].id,V[ii].period,boost::algorithm::join(flg," ")));
 			}
 		} else {
 			for(long i=0; i<V.size; i++){
