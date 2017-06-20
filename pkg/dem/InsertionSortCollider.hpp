@@ -112,6 +112,7 @@ struct InsertionSortCollider: public Collider {
 		#endif
 	}
 	void makeRemoveContactLater_process();
+	void throwTooManyPasses();
 
 
 
@@ -268,6 +269,7 @@ struct InsertionSortCollider: public Collider {
 		((int,sortChunks,-1,AttrTrait<Attr::readonly>(),"Number of threads that were actually used during the last parallelized insertion sort."))
 		((bool,paraPeri,false,,"(debugging only): enable/disable(default) parallel sort with periodic boundaries."))
 		((bool,periDbgNew,false,,"Compute periodic overlaps and periods twice (with the original and the new algorithm) compare the results and report discrepancies."))
+		((int,maxSortPass,20,,"If partial sort is not done after this many passes, give up. Usually more than 2 passes already means a particle went crazy or the whole simulation is exploding."))
 		,
 		/* ctor */
 			#ifdef ISC_TIMING

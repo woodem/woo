@@ -99,13 +99,17 @@ void InsertionSortCollider::handleBoundInversion(Particle::id_t id1, Particle::i
 	assert(false); // unreachable
 }
 
+void InsertionSortCollider::throwTooManyPasses(){
+	throw std::runtime_error("InsertionSortCollider: sort not done after maxSortPass ("+to_string(maxSortPass)+") partial sort passes. If motion is out-of-control, increasing Scene.dtSafety might help next time.");
+}
+
 void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 	assert(!periodic);
 	assert(v.size==(long)v.vec.size());
+	if(v.size==0) return;
 	#ifndef WOO_OPENMP
 		insertionSort_part(v,doCollide,ax,0,v.size,0);
 	#else
-
 		// will be adapted -- can be the double and so on
 		int chunks_per_core=ompTuneSort[0];
 		int min_per_core=2*ompTuneSort[1]; // ×2: number of particles → number of bounds;
@@ -140,6 +144,7 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 		splits0[chunks]=v.size;
 		bool isOk=false; size_t pass;
 		for(pass=0; !isOk; pass++){
+			if(pass==(size_t)maxSortPass) throwTooManyPasses();
 			bool even=((pass%2)==0);
 			const vector<size_t>& s(even?splits0:splits1);
 			#pragma omp parallel for schedule(static)
@@ -680,6 +685,7 @@ Real InsertionSortCollider::cellWrapRel(const Real x, const Real x0, const Real 
 void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
 	assert(v.size==(long)v.vec.size());
+	if(v.size==0) return;
 //	#ifndef WOO_OPENMP
 //		//insertionSortPeri_part(v,doCollide,ax,0,v.size,0);
 //		// insertionSortPeri_orig(v,doCollide,ax);
@@ -719,6 +725,7 @@ void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int 
 		
 		bool isOk=false; size_t pass;
 		for(pass=0; !isOk; pass++){
+			if(pass==(size_t)maxSortPass) throwTooManyPasses();
 			bool even=((pass%2)==0);
 			const vector<size_t>& s(even?splits0:splits1);
 			#ifdef WOO_OPENMP
@@ -741,8 +748,11 @@ void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int 
 		// cerr<<" (("<<pass<<" passes))"<<endl;
 		// cerr<<"Parallel periodic insertion sort done ("<<pass+1<<") passes, "<<chunks<<" chunks; inversions remaining: "<<countInversions().transpose()<<endl;
 }
+
 void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide, int ax, long iBegin, long iEnd, long iStart){
+	// cerr<<"xyz"[ax]<<": iBegin="<<iBegin<<", iStart="<<iStart<<", iEnd="<<iEnd<<", size="<<v.size<<endl;
 	assert(periodic);
+	assert(v.size>0);
 	assert(iBegin<iEnd);
 	// iBegin must be in the normalized range
 	assert(v.norm(iBegin)==iBegin);
