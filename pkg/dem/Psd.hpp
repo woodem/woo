@@ -22,7 +22,7 @@ struct PsdSphereGenerator: public ParticleGenerator{
 	bool isSpheresOnly() const override { return true; }
 	py::tuple pyInputPsd(bool normalize, bool cumulative, int num) const;
 	Vector2r minMaxDiam() const override;
-	Real padDist() const override{ if(psdPts.empty()) return NaN; return psdPts[0][1]/2.; }
+	Real padDist() const override{ if(psdPts.empty()) return NaN; return psdPts[0][0]/2.; }
 
 	#define woo_dem_PsdSphereGenerator__CLASS_BASE_DOC_ATTRS_PY \
 		PsdSphereGenerator,ParticleGenerator,"Generate spherical particles following a given Particle Size Distribution (PSD)", \
