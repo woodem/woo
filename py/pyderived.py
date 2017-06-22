@@ -87,7 +87,7 @@ class PyAttrTrait(object):
     primitiveTypes={int:'int',past.builtins.str:'string',str:'string',float:'Real',bool:'bool',
         Vector2:'Vector2r',Vector3:'Vector3r',Vector6:'Vector6r',Matrix3:'Matrix3r',Matrix6:'Matrix6r',
         Quaternion:'Quaternionr',Vector2i:'Vector2i',Vector3i:'Vector3i',Vector6i:'Vector6i',
-        MatrixX:'MatrixXr',VectorX:'VectorXr'
+        MatrixX:'MatrixXr',VectorX:'VectorXr',AlignedBox3:'AlignedBox3r',
     }
     def __init__(self,pyType,name,ini,doc,# *,
             unit=None,
