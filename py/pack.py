@@ -537,7 +537,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
         S.cell.setBox(x1,y1,z1)
         #print cloudPorosity,beta,gamma,N100,x1,y1,z1,S.cell.refSize
         #print x1,y1,z1,radius,rRelFuzz
-        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print("DONE"); S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
+        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=1e-2,doneHook='print("DONE"); S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
         num=sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,spheresInCell,True)
         mat=dem.FrictMat(young=30e9,tanPhi=.5,density=1e3,ktDivKn=.2)
         for s in sp: S.dem.par.add(woo.dem.Sphere.make(s[0],s[1],mat=mat))
@@ -593,7 +593,7 @@ def randomPeriPack(radius,initSize,rRelFuzz=0.0,memoizeDb=None):
     sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,-1,True)
     from woo import log
     log.setLevel('PeriIsoCompressor',log.DEBUG)
-    S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.PeriIsoCompressor(charLen=2*radius,stresses=[-100e9,-1e8],maxUnbalanced=1e-2,doneHook='print("done"); S.stop();',globalUpdateInt=20,keepProportions=True),dem.Leapfrog(damping=.8)]
+    S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.PeriIsoCompressor(charLen=2*radius,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=1e-2,doneHook='print("done"); S.stop();',globalUpdateInt=5,keepProportions=True),dem.Leapfrog(damping=.8)]
     mat=dem.FrictMat(young=30e9,tanPhi=.1,ktDivKn=.3,density=1e3)
     for s in sp: S.dem.par.add(utils.sphere(s[0],s[1],mat=mat))
     S.dt=utils.pWaveDt(S)
@@ -696,6 +696,14 @@ def hexaNet( radius, cornerCoord=[0,0,0], xLength=1., yLength=0.5, mos=0.08, a=0
     return [net,lx,ly]
 
 
+#
+# stresses for isotropic compaction (load/unload) in dense packing routines
+# those are changed after stress computation fixes in PeriIsoCompressor
+# and must be re-adjusted to work well with default materials
+#
+# they used to be -100e9,-1e6
+#
+PERI_SIG1,PERI_SIG2=-1e6,-1e4
 
 
 def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNum=-1,dontBlock=False,returnSpherePack=False,memoizeDir=None,clumps=None,gen=None):
@@ -747,16 +755,17 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
             mask=1,
         )
     ]
+    # if dontBlock: return S
     S.one()
     print('Created %d particles, compacting...'%(len(S.dem.par)))
     S.dt=.9*utils.pWaveDt(S,noClumps=True)
     S.dtSafety=.9
     if clumps: warnings.warn('utils.pWaveDt called with noClumps=True (clumps ignored), the result (S.dt=%g) might be significantly off!'%S.dt)
     S.engines=[
-        woo.dem.PeriIsoCompressor(charLen=2*rMax,stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop();',globalUpdateInt=1,keepProportions=True,label='peri'),
+        woo.dem.PeriIsoCompressor(charLen=2*rMax,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=goal,doneHook='print("done"); S.stop();',globalUpdateInt=1,keepProportions=True,label='peri'),
         # plots only useful for debugging - uncomment if needed
         # woo.core.PyRunner(100,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)'),
-        woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)'),
+        woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state],S.lab.peri.sigma,S.lab.peri.currUnbalanced)'),
     ]+utils.defaultEngines(damping=damping,dynDtPeriod=100)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
     if dontBlock: return S
@@ -979,7 +988,7 @@ def _randomDensePack2_singleCell(generator,iniBoxSize,memoizeDir=None,debug=Fals
     S.one()
     print('Created %d particles, compacting...'%len(S.dem.par))
     goal=.15
-    S.engines=[woo.dem.PeriIsoCompressor(charLen=generator.minMaxDiam()[0],stresses=[-1e8,-1e6],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
+    S.engines=[woo.dem.PeriIsoCompressor(charLen=generator.minMaxDiam()[0],stresses=[-1e6,-1e4],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
     S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
     S.lab.collider.paraPeri=True
