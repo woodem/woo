@@ -8,11 +8,8 @@ struct PeriIsoCompressor: public Engine{
 	bool acceptsFiled(Field* f){ return dynamic_cast<DemField*>(f); }
 	DemField* dem;
 
-	void avgStressIsoStiffness(const Vector3r& cellAreas, Vector3r& stress, Real& stiff);
-
-	Real maxDisplPerStep;
 	void run() override;
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(PeriIsoCompressor,Engine,ClassTrait().doc("Compress/decompress cloud of spheres by controlling periodic cell size until it reaches prescribed average stress, then moving to next stress value in given stress series.").section("Stress/strain control","TODO",{"WeirdTriaxControl"}),
+	WOO_CLASS_BASE_DOC_ATTRS_PY(PeriIsoCompressor,Engine,ClassTrait().doc("Compress/decompress cloud of spheres by controlling periodic cell size until it reaches prescribed average stress, then moving to next stress value in given stress series.").section("Stress/strain control","TODO",{"WeirdTriaxControl"}),
 		((vector<Real>,stresses,,,"Stresses that should be reached, one after another"))
 		((Real,charLen,-1.,,"Characteristic length, should be something like mean particle diameter (default -1=invalid value))"))
 		((Real,maxSpan,-1.,AttrTrait<Attr::readonly>(),"Maximum body span in terms of bbox, to prevent periodic cell getting too small."))
@@ -25,7 +22,6 @@ struct PeriIsoCompressor: public Engine{
 		((Real,currUnbalanced,NaN,AttrTrait<Attr::readonly>(),"Current unbalanced force (updated internally)"))
 		((Real,avgStiffness,NaN,AttrTrait<Attr::readonly>(),"Value of average stiffness (updated internally)"))
 		((Vector3r,sigma,Vector3r(NaN,NaN,NaN),AttrTrait<Attr::readonly>(),"Current value of average stress (update internally)"))
-		, /*ctor*/ maxDisplPerStep=-1;
 		, /* py */
 	);
 	WOO_DECL_LOGGER;
