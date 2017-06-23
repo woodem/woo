@@ -54,9 +54,10 @@ if dist in ('Ubuntu','Debian'):
             qtFeature='qt4'
         else: raise RuntimeError('unsupported')
         import glob
-        cpppath='/usr/include/eigen3:/usr/include/hdf5/serial:'+glob.glob('/usr/include/vtk-6*')[0]
     else: raise RuntimeError('unsupported')
     call(['sudo','eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI))
+    # this must be done AFTER pkg installation so that VTK can be found
+    cpppath='/usr/include/eigen3:/usr/include/hdf5/serial:'+glob.glob('/usr/include/vtk-6*')[0]
 
 # install what is not packaged -- distribution-agnostic
 call(['sudo','pip3','install','--upgrade','--system']+pipCore+([] if args.headless else pipUI))
