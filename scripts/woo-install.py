@@ -33,12 +33,12 @@ def call(cmd,failOk=False):
     ret=subprocess.call(cmd)
     if not failOk and ret!=0: raise RuntimeError('Error calling: '+' '.join(cmd))
 
-def gitprep(url,src):
+def gitprep(url,src,depth=-1):
     if os.path.exists(src):
         if not os.path.exists(src+'/.git'): raise RuntimeError('Source directory %s exists, but is not a git repository.'%src)
         call(['git','-C',src,'pull'])
     else:
-        call(['git','clone','--depth','1',url,src])
+        call(['git','clone']+([] if depth<1 else ['--depth',depth]),url,src])
 
 
 if dist in ('Ubuntu','Debian'):
@@ -47,7 +47,7 @@ if dist in ('Ubuntu','Debian'):
     if dist=='Ubuntu':
         if linver=='16.04':
             aptCore='libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev git scons libav-tools libhdf5-serial-dev python3-all-dev python3-setuptools python3-pip python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-minieigen python3-prettytable python3-colorama ipython3 python3-future'.split()
-            if args.ccache: aptCore+='ccache'
+            if args.ccache: aptCore+=['ccache']
             aptUI='libqt4-dev-bin libqt4-dev qt4-dev-tools libgle3-dev libqglviewer-dev-qt4 paraview freeglut3-dev python3-pyqt4 python3-xlib pyqt4-dev-tools'.split()
             pipCore='xlwt-future colour-runner'.split()
             pipUI=[]
@@ -65,7 +65,7 @@ call(['sudo','pip3','install','--upgrade','--system']+pipCore+([] if args.headle
 user=pwd.getpwuid(os.getuid()).pw_name
 call(['sudo','chown','-R',user+':',args.prefix])
     
-gitprep(args.git,args.src)
+gitprep(args.git,args.src,depth=1)
 for key in (args.key if args.key else []):
     gitprep('https://woodem.eu/private/%s/git'%key,args.src+'/wooExtra/'+key)
 
