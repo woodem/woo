@@ -41,6 +41,10 @@ struct DemFuncs{
 	/* return list of quantile values for contact coordinates in node-local z-coordinates, for contacts inside *box* (in local coordinates). The list returned has the same length as *quantiles* */
 	static vector<Real> contactCoordQuantiles(const shared_ptr<DemField>& dem, const vector<Real>& quantiles, const shared_ptr<Node>& node, const AlignedBox3r& box);
 
+
+	static Matrix3i flipCell(const Scene* scene, Matrix3i flip=Matrix3i::Zero());
+
+
 	#if 0
 		static Vector2r radialAxialForce(const Scene* scene, const DemField* dem, int mask, Vector3r axis, bool shear);
 	#endif
@@ -53,7 +57,6 @@ struct DemFuncs{
 		auto zip(const T&... containers) -> boost::iterator_range<boost::zip_iterator<decltype(boost::make_tuple(std::begin(containers)...))>>{ return boost::make_iterator_range(boost::make_zip_iterator(boost::make_tuple(std::begin(containers)...)),boost::make_zip_iterator(boost::make_tuple(std::end(containers)...))); }
 	#endif
 
-	
 	template<class IteratorRange, class DiameterGetter, class WeightGetter> /* iterate over spheres */
 	static vector<Vector2r> psd(const IteratorRange& particleRange,
 		bool cumulative, bool normalize, int num, Vector2r dRange,

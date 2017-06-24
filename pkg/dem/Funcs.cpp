@@ -47,6 +47,39 @@ shared_ptr<DemField> DemFuncs::getDemField(const Scene* scene){
 	return ret;
 }
 
+Matrix3i DemFuncs::flipCell(const Scene* scene, Matrix3i flip){
+	if(!scene->isPeriodic) throw std::runtime_error("flipCell: scene is not periodic.");
+	const auto& hSize(scene->cell->hSize);
+	// compute the best flip if unspecified
+	if(flip==Matrix3i::Zero()){
+		for(int i:{0,1,2}){
+			for(int j:{0,1,2}){
+				if(i!=j) flip(i,j)=-floor(hSize.col(j).dot(hSize.col(i))/hSize.col(i).squaredNorm());
+				else flip(i,j)=0;
+			}
+		}
+		if(flip==Matrix3i::Zero()){ cerr<<"No-op zero flip."<<endl; return flip; }
+	}
+	if(flip.diagonal()!=Vector3i::Zero()) throw std::runtime_error("flipCell: flip matrix must have zeros on diagonal.");
+	cerr<<"Flip matrix (det="<<flip.determinant()<<"):"<<endl<<flip<<endl;
+	// compute inverse (applied to cellDist in all contacts
+	assert(flip.determinant()==1);
+	Matrix3i invFlip=flip.adjoint();
+	cerr<<"Inverted flip matrix:"<<endl<<invFlip<<endl;
+	// adjust contacts
+	for(const auto& C: *(DemFuncs::getDemField(scene)->contacts)) C->cellDist=invFlip*C->cellDist;
+	// invalidate collider cache
+	bool coll=false;
+	for(const auto& e: scene->engines){
+		if(e->isA<Collider>()){ coll=true; e->cast<Collider>().invalidatePersistentData(); }
+	}
+	if(!coll) cerr<<"No collider found after cell flip, garbage ahead?"<<endl;
+	// adjust cell parameters
+	scene->cell->setHSize(scene->cell->hSize+scene->cell->hSize*flip.cast<Real>());
+	// finito
+	return flip;
+}
+
 /* See https://yade-dem.org/doc/yade.utils.html#yade.utils.avgNumInteractions for docs */
 Real DemFuncs::coordNumber(const shared_ptr<DemField>& dem, const shared_ptr<Node>& node, const AlignedBox3r& box, int mask, bool skipFree){
 	long C2=0; // twice the number of contacts (counted for each participating particle)

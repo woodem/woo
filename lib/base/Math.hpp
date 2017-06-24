@@ -108,6 +108,7 @@ typedef VECTOR4_TEMPLATE(Real) Vector4r;
 typedef VECTOR6_TEMPLATE(Real) Vector6r;
 typedef VECTOR6_TEMPLATE(int) Vector6i;
 typedef MATRIX3_TEMPLATE(Real) Matrix3r;
+typedef MATRIX3_TEMPLATE(int) Matrix3i;
 typedef MATRIX6_TEMPLATE(Real) Matrix6r;
 
 typedef Eigen::Matrix<Real,Eigen::Dynamic,Eigen::Dynamic> MatrixXr;
@@ -268,6 +269,7 @@ BOOST_IS_BITWISE_SERIALIZABLE(Vector6r);
 BOOST_IS_BITWISE_SERIALIZABLE(Vector6i);
 BOOST_IS_BITWISE_SERIALIZABLE(Quaternionr);
 BOOST_IS_BITWISE_SERIALIZABLE(Matrix3r);
+BOOST_IS_BITWISE_SERIALIZABLE(Matrix3i);
 BOOST_IS_BITWISE_SERIALIZABLE(Matrix6r);
 BOOST_IS_BITWISE_SERIALIZABLE(MatrixXr);
 BOOST_IS_BITWISE_SERIALIZABLE(VectorXr);
@@ -337,6 +339,11 @@ void serialize(Archive & ar, AlignedBox3r & b, const unsigned int version){
 
 template<class Archive>
 void serialize(Archive & ar, Matrix3r & m, const unsigned int version){
+	ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
+}
+
+template<class Archive>
+void serialize(Archive & ar, Matrix3i & m, const unsigned int version){
 	ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
 }
 
