@@ -703,7 +703,7 @@ def hexaNet( radius, cornerCoord=[0,0,0], xLength=1., yLength=0.5, mos=0.08, a=0
 #
 # they used to be -100e9,-1e6
 #
-PERI_SIG1,PERI_SIG2=-1e6,-1e4
+PERI_SIG1,PERI_SIG2=-1e7,-1e5
 
 
 def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNum=-1,dontBlock=False,returnSpherePack=False,memoizeDir=None,clumps=None,gen=None):
@@ -967,7 +967,7 @@ def _randomDensePack2_singleCell(generator,iniBoxSize,memoizeDir=None,debug=Fals
     if memoizeDir:
         import hashlib
         # increase hash version every time the algorithm is tuned
-        hashbase='hash version 2'+str(iniBoxSize)+generator.dumps(format='expr',width=-1,noMagic=True)
+        hashbase='hash version 3 '+str(iniBoxSize)+generator.dumps(format='expr',width=-1,noMagic=True)
         print(hashbase)
         hash=hashlib.sha1(hashbase.encode('utf-8')).hexdigest()
         memo=memoizeDir+'/'+hash+'.randomdense'
@@ -985,12 +985,13 @@ def _randomDensePack2_singleCell(generator,iniBoxSize,memoizeDir=None,debug=Fals
         woo.dem.InsertionSortCollider([c() for c in woo.system.childClasses(woo.dem.BoundFunctor)]),
         woo.dem.BoxInlet(box=((0,0,0),iniBoxSize),maxMass=-1,maxNum=-1,generator=generator,massRate=0,maxAttempts=5000,materials=[woo.dem.FrictMat(density=1e3,young=1e7,ktDivKn=.5,tanPhi=.1)],shooter=None,mask=1)
     ]
+    # if debug: return S
     S.one()
     print('Created %d particles, compacting...'%len(S.dem.par))
     goal=.15
-    S.engines=[woo.dem.PeriIsoCompressor(charLen=generator.minMaxDiam()[0],stresses=[-1e6,-1e4],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
+    S.engines=[woo.dem.PeriIsoCompressor(charLen=generator.minMaxDiam()[0],stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=goal,doneHook='print("done"); S.stop()',globalUpdateInt=1,keepProportions=True,label='peri'),woo.core.PyRunner(100,'print(S.lab.peri.stresses[S.lab.peri.state], S.lab.peri.sigma, S.lab.peri.currUnbalanced)')]+woo.dem.DemField.minimalEngines(damping=.7)
     S.plot.plots={'i':('unb'),' i':('sig_x','sig_y','sig_z')}
-    S.engines=S.engines+[woo.core.PyRunner(50,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
+    S.engines=S.engines+[woo.core.PyRunner(100,'S.plot.addData(i=S.step,unb=S.lab.peri.currUnbalanced,sig=S.lab.peri.sigma)')]
     S.lab.collider.paraPeri=True
     if debug: return S
     S.run(); S.wait()

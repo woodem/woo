@@ -60,6 +60,7 @@ struct PsdCapsuleGenerator: public PsdSphereGenerator {
 	WOO_DECL_LOGGER;
 	std::tuple<Real,vector<ParticleAndBox>> operator()(const shared_ptr<Material>&m, const Real& time) override;
 	bool isSpheresOnly() const override { return false; }
+	Real critDt(Real density, Real young) override;
 	// clear, critDt: same as for PsdSphereGenerator
 	#define woo_dem_PsdCapsuleGenerator__CLASS_BASE_DOC_ATTRS \
 		PsdCapsuleGenerator,PsdSphereGenerator,"Generate capsules following a given Particle Size Distribution; elongation is chosen randomly using :obj:`shaftRadiusRatio`; orientation is random.", \

@@ -27,7 +27,7 @@ void PeriIsoCompressor::run(){
 			LOG_INFO("No charLen defined, taking avg bbox size of body #0 = "<<charLen);
 		} else { LOG_FATAL("No charLen defined and body #0 does not exist has no bound"); throw; }
 	}
-	Real maxDisplPerStep=1e-1*charLen;// this should be tunable somehow…
+	Real maxDisplPerStep=2e-3*charLen;// this should be tunable somehow…
 	const long& step=scene->step;
 	Vector3r cellSize=scene->cell->getSize(); //unused: Real cellVolume=cellSize[0]*cellSize[1]*cellSize[2];
 	Vector3r cellArea=Vector3r(cellSize[1]*cellSize[2],cellSize[0]*cellSize[2],cellSize[0]*cellSize[1]);
@@ -80,7 +80,7 @@ void PeriIsoCompressor::run(){
 			if((step%globalUpdateInt)==0){ LOG_DEBUG("Stress="<<sigma<<", goal="<<sigmaGoal<<", unbalanced="<<currUnbalanced); }
 		}
 	} else {
-		currUnbalanced=NaN; // if stresses not ok, don't report currUnbalanced as it was not computed.
+		// currUnbalanced=NaN; // if stresses not ok, don't report currUnbalanced as it was not computed.
 	}
 }
 

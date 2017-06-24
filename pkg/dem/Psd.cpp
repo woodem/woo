@@ -119,6 +119,8 @@ Real PsdSphereGenerator::critDt(Real density, Real young) {
 }
 
 
+
+
 Vector2r PsdSphereGenerator::minMaxDiam() const {
 	if(psdPts.empty()) return Vector2r(NaN,NaN);
 	return Vector2r(psdPts[0][0],psdPts.back()[0]);
@@ -363,6 +365,16 @@ PharmaCapsuleGenerator::operator()(const shared_ptr<Material>&mat, const Real& t
 }
 
 
+
+Real PsdCapsuleGenerator::critDt(Real density, Real young){
+	/*
+	Real rMin=minMaxDiam()[0];
+	Real sMax=rMin*shaftRadiusRatio.maxCoeff();
+	Real factor=2*rMin/(2*rMin+sMax);
+	// = 2/(2+shaftRadiusRaio.maxCoeff()) 
+	*/
+	return 2./(2+shaftRadiusRatio.maxCoeff())*PsdSphereGenerator::critDt(density,young);
+}
 
 
 std::tuple<Real,vector<ParticleGenerator::ParticleAndBox>>

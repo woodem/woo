@@ -3,7 +3,7 @@
 
 WOO_PLUGIN(dem,(Capsule)(Bo1_Capsule_Aabb)(Cg2_Sphere_Capsule_L6Geom)(Cg2_Wall_Capsule_L6Geom)(Cg2_Facet_Capsule_L6Geom)(Cg2_InfCylinder_Capsule_L6Geom)(Cg2_Capsule_Capsule_L6Geom));
 
-WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Capsule_Aabb__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Capsule_Capsule_L6Geom__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Capsule_L6Geom__CLASS_BASE_DOC);

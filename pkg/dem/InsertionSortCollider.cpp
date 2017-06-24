@@ -107,6 +107,7 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 	assert(!periodic);
 	assert(v.size==(long)v.vec.size());
 	if(v.size==0) return;
+
 	#ifndef WOO_OPENMP
 		insertionSort_part(v,doCollide,ax,0,v.size,0);
 	#else
@@ -298,8 +299,8 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 		Real minR=Inf;
 		for(const shared_ptr<Particle>& p: *dem->particles){
 			if(!p || !p->shape) continue;
-			if(!p->shape->isA<Sphere>())continue;
-			minR=min(p->shape->cast<Sphere>().radius,minR);
+			Real r=p->shape->equivRadius();
+			if(!isnan(r)) minR=min(r,minR);
 		}
 		for(const shared_ptr<Engine>& e: scene->engines){
 			if(!e->isA<Inlet>()) continue;

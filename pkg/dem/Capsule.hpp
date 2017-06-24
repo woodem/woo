@@ -23,12 +23,14 @@ struct Capsule: public Shape{
 	AlignedBox3r alignedBox() const override;
 	Vector3r endPt(short i) const { return nodes[0]->loc2glob(Vector3r((i==0?-.5:.5)*shaft,0,0)); }
 	void applyScale(Real scale) override;
-	#define woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR \
+	#define woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Capsule,Shape,"Cylinder with half-spherical caps on both sides, Mindowski sum of segment with sphere.", \
 		((Real,radius,NaN,AttrTrait<>().lenUnit(),"Radius of the capsule -- of half-spherical caps and also of the middle part.")) \
 		((Real,shaft,NaN,AttrTrait<>().lenUnit(),"Length of the middle segment")) \
-		,/*ctor*/createIndex(); 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR);
+		,/*ctor*/createIndex(); \
+		,/*py*/ .def("endPt",&Capsule::endPt,(py::arg("i")),"Return one of capsule endpoints. The first (negative on local :math:`x`-axis) is returned with *i=0, otherwise the second one is returned.")
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_CLASS_INDEX(Capsule,Shape);
 };
 WOO_REGISTER_OBJECT(Capsule);
