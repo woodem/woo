@@ -58,12 +58,12 @@ if dist in ('Ubuntu','Debian'):
         else: raise RuntimeError('unsupported')
         import glob
     else: raise RuntimeError('unsupported')
-    call(['sudo','eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
+    call(['eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
     # this must be done AFTER pkg installation so that VTK can be found
     cpppath='/usr/include/eigen3:/usr/include/hdf5/serial:'+glob.glob('/usr/include/vtk-6*')[0]
 
 # install what is not packaged -- distribution-agnostic
-call(['sudo','pip3','install','--upgrade','--system']+pipCore+([] if args.headless else pipUI),sudo=True)
+call(['pip3','install','--upgrade','--system']+pipCore+([] if args.headless else pipUI),sudo=True)
 
 if not root:
     user=pwd.getpwuid(os.getuid()).pw_name
