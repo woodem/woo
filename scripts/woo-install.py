@@ -7,6 +7,7 @@ root=(os.getuid()==0)
 
 dist,linver,codename=platform.linux_distribution()
 if dist=='Ubuntu':
+    # linver='16.04'
     if linver=='16.04': pass
     else: raise RuntimeError('Ubuntu version %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%linver)
 else:
@@ -40,7 +41,7 @@ def gitprep(url,src,depth=-1):
         if not os.path.exists(src+'/.git'): raise RuntimeError('Source directory %s exists, but is not a git repository.'%src)
         call(['git','-C',src,'pull'])
     else:
-        call(['git','clone']+([] if depth<1 else ['--depth',depth])+[url,src])
+        call(['git','clone']+([] if depth<1 else ['--depth',str(depth)])+[url,src])
 
 
 if dist in ('Ubuntu','Debian'):
