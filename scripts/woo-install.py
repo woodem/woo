@@ -24,8 +24,11 @@ parser.add_argument('--prefix',help='Prefix where to install. Its owner will be 
 parser.add_argument('--src',help='Directory where to put woo sources.',default=os.path.expanduser('~/woo'))
 parser.add_argument('--git',help='Upstream git repository.',default='https://github.com/woodem/woo.git')
 parser.add_argument('--build-prefix',help='Prefix for build files',default=os.path.expanduser('~/woo-build'))
+parser.add_argument('--clean',help='Clean build files and caches after running')
 # parser.add_argument('--no-eatmydata',desc='Avoid eatmydata wrapper for faster APT package installation',default=True,action='store_true')
 args=parser.parse_args()
+
+if args.ccache and args.clean: print('WARN: --ccache and --clean do not make much sense together.')
 
 import pwd, os
 
@@ -73,9 +76,18 @@ gitprep(args.git,args.src,depth=1)
 for key in (args.key if args.key else []):
     gitprep('https://woodem.eu/private/%s/git'%key,args.src+'/wooExtra/'+key)
 
-    # compile
+# compile
 if args.ccache: call(['ccache','-M50G','-F10000'])
 features=['gts','openmp','vtk','hdf5']+([] if args.headless else [qtFeature,'opengl'])
 call(['scons','-C',args.src,'flavor=','features='+','.join(features),'jobs=%d'%args.jobs,'buildPrefix='+args.build_prefix,'CPPPATH='+cpppath,'CXX='+('ccache g++' if args.ccache else 'g++'),'brief=1','debug=0','PYTHON='+sys.executable])
 call(['woo','-j%d'%args.jobs,'--test'],failOk=True)
-call(['woo','-RR','-x'])
+
+# testing only, not for system builds
+if not root:
+    call(['woo','-RR','-x'])
+
+if args.clean:
+    import shutil
+    shutils.rmtree(args.build_prefix)
+    if dist in ('Ubuntu','Debian'):
+        shutils.rmtree('/var/cache/apt/archives')
