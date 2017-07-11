@@ -3,6 +3,7 @@ import platform, os, sys, argparse, multiprocessing, os.path
 
 if sys.version_info.major!=3: raise RuntimeError('This script should be run with python 3.x.')
 if platform.system()!='Linux': raise RuntimeError('This script only runs under Linux.')
+root=(os.getuid()==0)
 
 dist,linver,codename=platform.linux_distribution()
 if dist=='Ubuntu':
@@ -11,7 +12,7 @@ if dist=='Ubuntu':
 else:
     raise RuntimeError('Linux distribution %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%dist)
 
-print('Installing Woo on %s %s.'%(dist,linver))
+print('Installing Woo on %s %s%s.'%(dist,linver,' (as root)' if root else ''))
 
 parser=argparse.ArgumentParser(description='Script for automated installation of Woo on Linux, via compilation from latest source.')
 parser.add_argument('-x','--headless',help='Compile headless version of woo (no OpenGL/Qt5).',action='store_true')
@@ -27,8 +28,9 @@ args=parser.parse_args()
 
 import pwd, os
 
-def call(cmd,failOk=False):
+def call(cmd,failOk=False,sudo=False):
     import subprocess
+    if sudo and not root: cmd=['sudo']+cmd
     print(' '.join(cmd))
     ret=subprocess.call(cmd)
     if not failOk and ret!=0: raise RuntimeError('Error calling: '+' '.join(cmd))
@@ -42,8 +44,8 @@ def gitprep(url,src,depth=-1):
 
 
 if dist in ('Ubuntu','Debian'):
-    call(['sudo','apt','update'])
-    call(['sudo','apt','install','--yes','eatmydata'])
+    call(['apt','update'],sudo=True)
+    call(['apt','install','--yes','eatmydata'],sudo=True)
     if dist=='Ubuntu':
         if linver=='16.04':
             aptCore='libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev git scons libav-tools libhdf5-serial-dev python3-all-dev python3-setuptools python3-pip python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-minieigen python3-prettytable python3-colorama ipython3 python3-future'.split()
@@ -55,15 +57,16 @@ if dist in ('Ubuntu','Debian'):
         else: raise RuntimeError('unsupported')
         import glob
     else: raise RuntimeError('unsupported')
-    call(['sudo','eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI))
+    call(['sudo','eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
     # this must be done AFTER pkg installation so that VTK can be found
     cpppath='/usr/include/eigen3:/usr/include/hdf5/serial:'+glob.glob('/usr/include/vtk-6*')[0]
 
 # install what is not packaged -- distribution-agnostic
-call(['sudo','pip3','install','--upgrade','--system']+pipCore+([] if args.headless else pipUI))
+call(['sudo','pip3','install','--upgrade','--system']+pipCore+([] if args.headless else pipUI),sudo=True)
 
-user=pwd.getpwuid(os.getuid()).pw_name
-call(['sudo','chown','-R',user+':',args.prefix])
+if not root:
+    user=pwd.getpwuid(os.getuid()).pw_name
+    call(['chown','-R',user+':',args.prefix],sudo=True)
     
 gitprep(args.git,args.src,depth=1)
 for key in (args.key if args.key else []):
