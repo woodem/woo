@@ -156,12 +156,14 @@ void Scene::fillDefaultTags(){
 	char hostname[256];
 	#ifndef __MINGW64__
 		int ret=gethostname(hostname,255);
-		tags["user"]=getenv("USER")+string("@")+string(ret==0?hostname:"[hostname lookup failed]");
+		char* user=getenv("USER"); // this might be null, such as in Docker container
+		tags["user"]=(user?user:"[unknown user]")+string("@")+string(ret==0?hostname:"[hostname lookup failed]");
 	#else
 		// http://msdn.microsoft.com/en-us/library/ms724295%28v=vs.85%29.aspx
 		DWORD len=255;
 		int ret=GetComputerName(hostname,&len);
-		tags["user"]=getenv("USERNAME")+string("@")+string(ret!=0?hostname:"[hostname lookup failed]");
+		char* user=getenv("USERNAME");
+		tags["user"]=(user?user:"[unknown user]")+string("@")+string(ret!=0?hostname:"[hostname lookup failed]");
 	#endif
 		
 	tags["isoTime"]=boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
