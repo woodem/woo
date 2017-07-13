@@ -1,7 +1,4 @@
 FROM ubuntu:16.04
-RUN apt update && apt install -y wget python3
-# not sure where we actually are...?
-RUN find / -name 'woo-install.py'
-# maybe this is necessary
-WORKDIR ./woo
-RUN python3 scripts/woo-install.py -j2 --headless --clean
+RUN apt-get update && apt-get install -y wget python3
+RUN wget https://github.com/woodem/woo/blob/master/scripts/woo-install.py -O /tmp/woo-install.py
+RUN ["/usr/bin/python3","/tmp/woo-install.py","-j2","--headless","--clean","--clean","--prefix=/usr/local","--src=/tmp/woo-src","--build-dir=/tmp/woo-build"]

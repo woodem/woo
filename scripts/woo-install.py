@@ -24,7 +24,7 @@ parser.add_argument('--prefix',help='Prefix where to install. Its owner will be 
 parser.add_argument('--src',help='Directory where to put woo sources.',default=os.path.expanduser('~/woo'))
 parser.add_argument('--git',help='Upstream git repository.',default='https://github.com/woodem/woo.git')
 parser.add_argument('--build-prefix',help='Prefix for build files',default=os.path.expanduser('~/woo-build'))
-parser.add_argument('--clean',help='Clean build files and caches after running')
+parser.add_argument('--clean',help='Clean build files and caches after running; on Debian/Ubuntu also cleans APT cache. If given twice, all source files are also removed.',action='count')
 # parser.add_argument('--no-eatmydata',desc='Avoid eatmydata wrapper for faster APT package installation',default=True,action='store_true')
 args=parser.parse_args()
 
@@ -86,8 +86,9 @@ call(['woo','-j%d'%args.jobs,'--test'],failOk=True)
 if not root:
     call(['woo','-RR','-x'])
 
-if args.clean:
+if args.clean>0:
     import shutil
     shutils.rmtree(args.build_prefix)
+    if args.clean>1: shutils.rmtree(args.src)
     if dist in ('Ubuntu','Debian'):
         shutils.rmtree('/var/cache/apt/archives')
