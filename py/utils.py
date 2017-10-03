@@ -522,7 +522,7 @@ def tesselatePolyline(l,maxDist):
     return ret
 
 
-def htmlReportHead(S,headline,dialect='xhtml',repBase=''):
+def htmlReportHead(S,headline,dialect='xhtml',repBase='',hideWooExtra=False):
     '''
         Return (X)HTML fragment for simulation report: (X)HTML header, title, Woo logo, configuration and preprocessor parameters. 
 
@@ -568,11 +568,11 @@ def htmlReportHead(S,headline,dialect='xhtml',repBase=''):
             <tr><td>platform</td><td align="right">{platform}</td></tr>
         </table>
         '''.format(headline=headline,title=(S.tags['title'] if S.tags['title'] else '<i>[none]</i>'),id=S.tags['id'],user=(S.tags['user'] if py3k else S.tags['user'].decode('utf-8')),started=time.ctime(time.time()-woo.master.realtime),step=S.step,duration=woo.master.realtime,nCores=woo.master.numThreads,stepsPerSec=S.step/woo.master.realtime,engine='wooDem '+woo.config.version+'/'+woo.config.revision+(' (debug)' if woo.config.debug else ''),compiledWith=','.join(woo.config.features),platform=platform.platform().replace('-',' '),svgLogo=svgLogos[dialect])
-        +'<h2>Input data</h2>'+S.pre.dumps(format='html',fragment=True,showDoc=False)
+        +'<h2>Input data</h2>'+S.pre.dumps(format='html',fragment=True,showDoc=False,hideWooExtra=hideWooExtra)
     )
     return headers[dialect]+html
 
-def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=None,svgEmbed=False,show=False):
+def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=None,svgEmbed=False,show=False,hideWooExtra=False):
     '''
     Generate (X)HTML report for simulation.
 
@@ -590,6 +590,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
     :param dialect: one of "xhtml", "html5", "html4"; if not given (*None*), selected from file suffix (``.html`` for ``html4``, ``.xhtml`` for ``xhtml``). ``html4`` will save figures as PNG (even if something else is specified) so that the resulting file is easily importable into LibreOffice (which does not import HTML with SVG correctly now).
     :param svgEmbed: don't save SVG as separate files, embed them in the report instead. 
     :param show: open the report in browser via the webbrowser module, unless running in batch.
+    :param hideWooExtra: don't show wooExtra.* modules in object names or URLs
     :return: (filename of the report, list of external figures)
 
     '''
@@ -612,7 +613,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
     rep=codecs.open(repName,'w','utf-8','replace')
     print('Writing report to file://'+os.path.abspath(repName))
     repBase=re.sub('\.x?html$','',repName)
-    s=htmlReportHead(S,headline,dialect=dialect,repBase=repBase)
+    s=htmlReportHead(S,headline,dialect=dialect,repBase=repBase,hideWooExtra=hideWooExtra)
     s+=afterHead
 
 
