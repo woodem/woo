@@ -3,13 +3,11 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp>
 
-WOO_PLUGIN(dem,(HertzMat)(HertzPhys)/*(Cp2_FrictMat_HertzPhys)*/(Cp2_HertzMat_HertzPhys)(Law2_L6Geom_HertzPhys_DMT));
+WOO_PLUGIN(dem,(HertzMat)(HertzPhys)(Cp2_HertzMat_HertzPhys)(Law2_L6Geom_HertzPhys_DMT));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HertzMat__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HertzPhys__CLASS_BASE_DOC_ATTRS_CTOR);
-// WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_FrictMat_HertzPhys__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_HertzMat_HertzPhys__CLASS_BASE_DOC_ATTRS);
-
 
 WOO_IMPL_LOGGER(Cp2_HertzMat_HertzPhys);
 
@@ -98,7 +96,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 	// normal elastic and adhesion forces
 	// those are only split in the DMT model, Fna is zero for Schwarz or Hertz
 	Real Fne, Fna=0.;
-	if(ph.alpha==0.){
+	if(ph.alpha==0. || ph.gamma==0.){
 		if(g.uN>0){
 			// TODO: track nonzero energy of broken contact with adhesion
 			// TODO: take residual shear force in account?
@@ -162,7 +160,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		Real Pne=pow(sqrt(pow(a,3)*(K/R))-alpha*sqrt(-Pc),2)+Pc;
 		Fne=-Pne; // inverse convention
 		if(isnan(Pne)){
-			cerr<<"R="<<R<<", K="<<K<<", xi="<<xi<<", alpha="<<alpha<<endl;
+			cerr<<"R="<<R<<", K="<<K<<", xi="<<xi<<", alpha="<<alpha<<", gamma="<<gamma<<endl;
 			cerr<<"delta="<<delta<<", deltaMin="<<deltaMin<<", aMin="<<aMin<<", aLo="<<aLo<<", aHi="<<aHi<<", a="<<a<<", iter="<<iter<<", Pne="<<Pne<<"; \n\n";
 			abort();
 		}

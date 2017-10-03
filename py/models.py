@@ -224,10 +224,8 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT([woo.dem.Material],'mats',[],doc='Material definitions'),
         _PAT(float,'distFactor',1.,doc='Distance factor for sphere-sphere contacts (copied to :obj:`woo.dem.DemField.distFactor`)'),
         # hertzian models
-        _PAT(float,'poisson',.2,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Poisson ratio (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.poisson`)'),
-        # _PAT(float,'surfEnergy',.01,unit=u'J/m²',hideIf='self.name not in ("DMT","Schwarz")',doc='Surface energy for adhesive models (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.gamma`)'),
+        _PAT(float,'poisson',.2,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Poisson ratio (:obj:`woo.dem.Cp2_HertzMat_HertzPhys.poisson`)'),
         _PAT(float,'restitution',1.,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Restitution coefficient for models with viscosity (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.en`).'),
-        # _PAT(float,'alpha',.5,hideIf='self.name not in ("Schwarz",)',doc='Parameter interpolating between DMT and JKR extremes in the Schwarz model. :math:`alpha` was introduced in :cite:`Carpick1999`.'),
         # linear model
         _PAT(float,'damping',.2,hideIf='self.name not in ("linear","ice")',doc='Numerical (non-viscous) damping (:obj:`woo.dem.Leapfrog.damping`).\n\n.. note:: This damping  value is **only** used for ``linear`` and ``ice`` :obj:`mocel`, otherwise the model has its own damping and this value will be ignored (:obj:`woo.dem.Leapfrog.damping` will be zero).'),
         _PAT(bool,'linRoll',False,hideIf='self.name!="linear"',doc='*Linear model*: enable rolling, with parameters set in :obj:`linRollParams`.'),
