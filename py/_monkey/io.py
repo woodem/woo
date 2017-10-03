@@ -65,7 +65,7 @@ else:
 
 htmlHead='<head><meta http-equiv="content-type" content="text/html;charset=UTF-8" /></head><body>\n'
 
-def Object_dumps(obj,format,fragment=False,width=80,noMagic=False,stream=True,showDoc=False):
+def Object_dumps(obj,format,fragment=False,width=80,noMagic=False,stream=True,showDoc=False,hideWooExtra=False):
     if format not in ('html','expr','json','pickle','genshi'): raise IOError("Unsupported string dump format %s"%format)
     if format=='pickle':
         return pickle.dumps(obj)
@@ -74,11 +74,11 @@ def Object_dumps(obj,format,fragment=False,width=80,noMagic=False,stream=True,sh
     elif format=='expr':
         return SerializerToExpr(maxWd=width,noMagic=noMagic)(obj)
     elif format=='html':
-        return ('' if fragment else htmlHead)+str(SerializerToHtmlTable(showDoc=showDoc)(obj))+('' if fragment else '</body>')
+        return ('' if fragment else htmlHead)+str(SerializerToHtmlTable(showDoc=showDoc,hideWooExtra=hideWooExtra)(obj))+('' if fragment else '</body>')
     elif format=='genshi':
-        return SerializerToHtmlTable()(obj,dontRender=True,showDoc=showDoc)
+        return SerializerToHtmlTable()(obj,dontRender=True,showDoc=showDoc,hideWooExtra=hideWooExtra)
 
-def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragment=False,width=80,noMagic=False,showDoc=False):
+def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragment=False,width=80,noMagic=False,showDoc=False,hideWooExtra=False):
     '''Dump an object in specified *format*; *out* can be a str/unicode (filename) or a *file* object. Supported formats are: `auto` (auto-detected from *out* extension; raises exception when *out* is an object), `html`, `expr`.'''
     hasFilename=isinstance(out,(str,past.builtins.str))
     if hasFilename:
@@ -116,7 +116,7 @@ def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragmen
             out.write(WooJSONEncoder().encode(obj))
         elif format=='html':
             if not fragment: out.write(htmlHead)
-            out.write(str(SerializerToHtmlTable(showDoc=showDoc)(obj)))
+            out.write(str(SerializerToHtmlTable(showDoc=showDoc,hideWooExtra=hideWooExtra)(obj)))
             if not fragment: out.write('</body>')
     else: assert False,'Unreachable.'
         
@@ -128,9 +128,10 @@ class SerializerToHtmlTableGenshi(object):
     splitStrSeq=1
     splitIntSeq=5
     splitFloatSeq=5
-    def __init__(self,showDoc=False,maxDepth=8,hideNoGui=False):
+    def __init__(self,showDoc=False,maxDepth=8,hideNoGui=False,hideWooExtra=False):
         self.maxDepth=maxDepth
         self.hideNoGui=hideNoGui
+        self.hideWooExtra=hideWooExtra
         self.showDoc=showDoc
     def htmlSeq(self,s,insideTable):
         from genshi.builder import tag
@@ -168,8 +169,11 @@ class SerializerToHtmlTableGenshi(object):
         kw=self.padding.copy()
         if depth>0: kw.update(width='100%')
         # was [1:] to omit leading woo./wooExtra., but that is not desirable
-        head=tag.b('.'.join(obj.__class__.__module__.split('.')[0:])+'.'+obj.__class__.__name__)
-        head=tag.a(head,href=woo.document.makeObjectUrl(obj),title=_ensureUnicode(obj.__class__.__doc__))
+        objInExtra=obj.__class__.__module__.startswith('wooExtra.')
+        if self.hideWooExtra and objInExtra: head=tag.span(tag.b(obj.__class__.__name__),title=_ensureUnicode(obj.__class__.__doc__))
+        else: 
+            head=tag.b('.'.join(obj.__class__.__module__.split('.')[0:])+'.'+obj.__class__.__name__)
+            head=tag.a(head,href=woo.document.makeObjectUrl(obj),title=_ensureUnicode(obj.__class__.__doc__))
         ret=tag.table(tag.th(head,colspan=3,align='left'),frame='box',rules='all',**kw)
         # get all attribute traits first
         traits=obj._getAllTraits()
@@ -182,7 +186,9 @@ class SerializerToHtmlTableGenshi(object):
             if self.showDoc: tr=tag.tr(tag.td(_ensureUnicode(trait.doc)))
             else:
                 try:
-                    tr=tag.tr(tag.td(tag.a(trait.name,href=woo.document.makeObjectUrl(obj,trait.name),title=_ensureUnicode(trait.doc))))
+                    if self.hideWooExtra and objInExtra: label=tag.span(tag.b(trait.name),title=_ensureUnicode(trait.doc))
+                    else: label=tag.a(trait.name,href=woo.document.makeObjectUrl(obj,trait.name),title=_ensureUnicode(trait.doc))
+                    tr=tag.tr(tag.td(label))
                 except UnicodeEncodeError:
                     print('ERROR: UnicodeEncodeError while formatting the attribute ',obj.__class__.__name__+'.'+trait.name)
                     print('ERROR: the docstring is',trait.doc)
@@ -227,7 +233,9 @@ class SerializerToHtmlTableGenshi(object):
                     tr.append(tag.td(unit,align='right'))
             ret.append(tr)
         if depth>0 or dontRender: return ret
-        return ret.generate().render('xhtml',encoding='ascii')+b'\n'
+        r1=ret.generate().render('xhtml',encoding='ascii')
+        if isinstance(r1,bytes): r1=r1.decode('ascii')
+        return r1+u'\n'
 
 SerializerToHtmlTable=SerializerToHtmlTableGenshi
 
