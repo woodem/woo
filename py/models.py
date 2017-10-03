@@ -211,7 +211,8 @@ class SchwarzModel(HertzModel):
             pylab.legend(loc='best')
         
 
-import woo.pyderived
+import woo.pyderived, woo.dem, woo.core
+
 class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
     'User interface for humanely selecting contact model and all its features, plus functions returning respective :obj:`woo.dem.CPhysFunctor` and :obj:`woo.dem.LawFunctor` objects.'
     _classTrait=None
@@ -239,8 +240,8 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         # deprecations
         ##
         ##
-        _PAT(float,'alpha',0,hidden=True,doc="Detect whether deprecated alpha is used.")
-        _PAT(float,'surfEnergy',0,hidden=True,doc="Detect whether deprecated surfEnergy is used.")
+        _PAT(float,'alpha',0,noGui=True,doc="Detect whether deprecated alpha is used."),
+        _PAT(float,'surfEnergy',0,noGui=True,doc="Detect whether deprecated surfEnergy is used."),
     ]
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
