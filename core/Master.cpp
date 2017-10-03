@@ -148,7 +148,7 @@ void Master::pyRegisterClass(){
 
 		.add_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programming interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
 		.add_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")
-		.def("checkApi",&Master::checkApi,(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
+		.def("checkApi",&Master::checkApi,(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level (log) warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
 		.add_property("usesApi_locations",py::make_getter(&Master::usesApi_locations,py::return_value_policy<py::return_by_value>()))
 
 		.def("reset",&Master::pyReset,"Set empty main scene")
@@ -519,16 +519,19 @@ void Master::usesApi_set(py::object o){
 int Master::usesApi_get() const { return usesApi; }
 
 
-void Master::checkApi(int minApi, const string& msg, bool pyWarn) const{
+bool Master::checkApi(int minApi, const string& msg, bool pyWarn) const{
 	if(usesApi==0){
 		const char* m="Script did not set woo.master.usesApi, all functions with changed APIs will pessimistically warn about possible functionality changes. See https://woodem.org/api.html for details.";
 		if(pyWarn){ PyErr_WarnEx(PyExc_FutureWarning,m,/*stacklevel*/1); }
 		else{ LOG_WARN(m); }
+		return false;
 	}
 	if(usesApi<minApi){
 		string m("\n"+woo::pyCallerInfo()+":\n   possible API incompatibility:\n   "+msg+"\n   (woo.master.api="+to_string(api)+" > woo.master.usesApi="+to_string(usesApi)+"; this call requires at least minApi="+to_string(minApi)+").\n   See https://woodem.org/api.html#api-"+to_string(minApi)+" for details.");
 		if(pyWarn){ PyErr_WarnEx(PyExc_DeprecationWarning,m.c_str(),/*stacklevel*/1); }
 		else{ LOG_WARN(m); }
+		return false;
 	}
+	return true;
 }
 
