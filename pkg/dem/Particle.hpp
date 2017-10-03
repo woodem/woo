@@ -319,6 +319,8 @@ struct DemField: public Field{
 
 	Real critDt() override;
 
+	void setNodesRefPos();
+
 	// for passing particles to the ctor
 	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
 
@@ -361,6 +363,7 @@ struct DemField: public Field{
 		.def("nodesAppend",&DemField::pyNodesAppendList,"Append given list of nodes to :obj:`nodes`, and set :obj:`DemData.linIx` to the correct value automatically.") \
 		.def("nodesAppendFromPar",&DemField::pyNodesAppendFromParticles,"Append nodes of all particles given; nodes may repeat between particles (a set is created first), but nodes already in :obj:`nodes` before calling this method will cause an error.") \
 		.def("splitNode",&DemField::splitNode,(py::arg("node"),py::arg("pars"),py::arg("massMult")=NaN,py::arg("inertiaMult")=NaN),"For particles *pars*, replace their node *node* by a clone (:obj:`~woo.core.Master.deepcopy`) of this node. If *massMult* and *inertiaMult* are given, mass/inertia of both original and cloned node are multiplied by those factors. Returns the original and the new node. Both nodes will be co-incident in space. This function is used to un-share node shared by multiple particles, such as when breaking mesh apart.")  \
+		.def("setNodesRefPos",&DemField::setNodesRefPos,"Set reference position and orientation of all nodes to the current one; does nothing (silently) on builds without OpenGL.") \
 		.def("sceneHasField",&Field_sceneHasField<DemField>).staticmethod("sceneHasField") \
 		.def("sceneGetField",&Field_sceneGetField<DemField>).staticmethod("sceneGetField"); \
 		_classObj.attr("defaultMovableBit")=(int)DemField::defaultMovableBit; \

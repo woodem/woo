@@ -316,11 +316,18 @@ void Particle::setOri(const Quaternionr& p){ checkNodes(false); shape->nodes[0]-
 		if(!shape->nodes[0]->hasData<GlData>()) shape->nodes[0]->setData<GlData>(make_shared<GlData>());
 		shape->nodes[0]->getData<GlData>().refPos=p;
 	}
+	void DemField::setNodesRefPos(){
+		for(const auto& n: nodes){
+			if(!n->hasData<GlData>()) n->setData<GlData>(make_shared<GlData>());
+			n->getData<GlData>().refPos=n->pos;
+		}
+	}
 #else
 	Vector3r Particle::getRefPos() const { return Vector3r(NaN,NaN,NaN); }
 	void Particle::setRefPos(const Vector3r& p){
 		woo::RuntimeError("Particle.refPos only supported with WOO_OPENGL.");
 	}
+	void DemField::setNodesRefPos(){};
 #endif
 
 Vector3r& Particle::getVel() const { checkNodes(); return shape->nodes[0]->getData<DemData>().vel; };
