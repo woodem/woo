@@ -37,12 +37,16 @@ WOO_REGISTER_OBJECT(SphereClumpGeom);
 
 struct ClumpData: public DemData{
 	static shared_ptr<Node> makeClump(const vector<shared_ptr<Node>>& nodes, shared_ptr<Node> centralNode=shared_ptr<Node>(), bool intersecting=false);
+	// make sure the node is a clump node; throws various informative exceptions if not (used internally)
+	static void pyCheckIsClumpNode(const shared_ptr<Node>& node);
 	// sum forces and torques from members; does not touch our data, adds to passed references F, T
 	// only the integrator should modify DemData.{force,torque} directly
 	static py::tuple pyForceTorqueFromMembers(const shared_ptr<Node>& node);
 	static void forceTorqueFromMembers(const shared_ptr<Node>& node, Vector3r& F, Vector3r& T);
 	// update member's positions and velocities
+	static void pyApplyToMembers(const shared_ptr<Node>&);
 	static void applyToMembers(const shared_ptr<Node>&, bool resetForceTorque=false);
+
 	static void resetForceTorque(const shared_ptr<Node>&);
 
 	WOO_DECL_LOGGER;
@@ -52,7 +56,7 @@ struct ClumpData: public DemData{
 		((vector<Vector3r>,relPos,,AttrTrait<Attr::readonly>(),"Relative member's positions")) \
 		((vector<Quaternionr>,relOri,,AttrTrait<Attr::readonly>(),"Relative member's orientations")) \
 		((Real,equivRad,NaN,,"Equivalent radius, for PSD statistics (e.g. in :obj:`BoxOutlet`).")) \
-		,/*py*/ .def("forceTorqueFromMembers",&ClumpData::pyForceTorqueFromMembers,"Return the tuple (F,T), summary force and torque values collected from clump members, as acting on the clump node passed as argument.").staticmethod("forceTorqueFromMembers")
+		,/*py*/ .def("forceTorqueFromMembers",&ClumpData::pyForceTorqueFromMembers,"Return the tuple (F,T), summary force and torque values collected from clump members, as acting on the clump node passed as argument.").staticmethod("forceTorqueFromMembers").def("applyToMembers",&ClumpData::pyApplyToMembers,"Move/rotate member nodes; this is only useful after setting clump's node position/orientation by hand, so that memebrs are updated without running Leapfrog.").staticmethod("applyToMembers")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ClumpData__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(ClumpData);

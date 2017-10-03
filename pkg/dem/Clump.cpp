@@ -260,10 +260,14 @@ shared_ptr<Node> ClumpData::makeClump(const vector<shared_ptr<Node>>& nn, shared
 	return cNode;
 }
 
-py::tuple ClumpData::pyForceTorqueFromMembers(const shared_ptr<Node>& node){
+void ClumpData::pyCheckIsClumpNode(const shared_ptr<Node>& node){
 	if(!node->hasData<DemData>()) throw std::runtime_error(node->pyStr()+": Node.dem==None.");
 	if(!node->getData<DemData>().isA<ClumpData>()) throw std::runtime_error(node->pyStr()+": Node.dem is not a ClumpData instance (the node is not clump's master node).");
 	if(!node->getData<DemData>().isClump()) throw std::runtime_error(node->pyStr()+": Node.isClump is False, even though Node.dem is a ClumpData instance (programming error?).");
+}
+
+py::tuple ClumpData::pyForceTorqueFromMembers(const shared_ptr<Node>& node){
+	pyCheckIsClumpNode(node);
 	Vector3r f(Vector3r::Zero()), t(Vector3r::Zero());
 	ClumpData::forceTorqueFromMembers(node,f,t);
 	return py::make_tuple(f,t);
@@ -279,6 +283,12 @@ void ClumpData::forceTorqueFromMembers(const shared_ptr<Node>& node, Vector3r& F
 		// cerr<<"f="<<F.transpose()<<", t="<<T.transpose()<<endl;
 	}
 }
+
+void ClumpData::pyApplyToMembers(const shared_ptr<Node>& node){
+	pyCheckIsClumpNode(node);
+	applyToMembers(node,/*reset*/false);
+}
+
 
 void ClumpData::applyToMembers(const shared_ptr<Node>& node, bool reset){
 	ClumpData& clump=node->getData<DemData>().cast<ClumpData>();
