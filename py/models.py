@@ -224,9 +224,9 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(float,'distFactor',1.,doc='Distance factor for sphere-sphere contacts (copied to :obj:`woo.dem.DemField.distFactor`)'),
         # hertzian models
         _PAT(float,'poisson',.2,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Poisson ratio (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.poisson`)'),
-        _PAT(float,'surfEnergy',.01,unit=u'J/m²',hideIf='self.name not in ("DMT","Schwarz")',doc='Surface energy for adhesive models (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.gamma`)'),
+        # _PAT(float,'surfEnergy',.01,unit=u'J/m²',hideIf='self.name not in ("DMT","Schwarz")',doc='Surface energy for adhesive models (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.gamma`)'),
         _PAT(float,'restitution',1.,hideIf='self.name not in ("Hertz","DMT","Schwarz")',doc='Restitution coefficient for models with viscosity (:obj:`woo.dem.Cp2_FrictMat_HertzPhys.en`).'),
-        _PAT(float,'alpha',.5,hideIf='self.name not in ("Schwarz",)',doc='Parameter interpolating between DMT and JKR extremes in the Schwarz model. :math:`alpha` was introduced in :cite:`Carpick1999`.'),
+        # _PAT(float,'alpha',.5,hideIf='self.name not in ("Schwarz",)',doc='Parameter interpolating between DMT and JKR extremes in the Schwarz model. :math:`alpha` was introduced in :cite:`Carpick1999`.'),
         # linear model
         _PAT(float,'damping',.2,hideIf='self.name not in ("linear","ice")',doc='Numerical (non-viscous) damping (:obj:`woo.dem.Leapfrog.damping`).\n\n.. note:: This damping  value is **only** used for ``linear`` and ``ice`` :obj:`mocel`, otherwise the model has its own damping and this value will be ignored (:obj:`woo.dem.Leapfrog.damping` will be zero).'),
         _PAT(bool,'linRoll',False,hideIf='self.name!="linear"',doc='*Linear model*: enable rolling, with parameters set in :obj:`linRollParams`.'),
@@ -235,6 +235,12 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(bool,'plastSplit',False,hideIf='self.name not in ("pellet",)',doc='Split plastic dissipation into the normal and tangent component (obj:`woo.dem.Law2_L6Geom_PelletPhys_Pellet.plastSplit`).'),
         _PAT(Vector6,'pelletThin',(0,0,0,0,0,0),hideIf='self.name!="pellet"',doc='*Pellet model:* parameters for plastic thinning (decreasing pellet radius during normal plastic loading); their order is :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRate`, :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRelRMin`, :obj:`~woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinExp`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRefRad`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinMinExp`, :obj:`~woo:woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRateExp`.'),
         _PAT(Vector3,'pelletConf',(0,0,0),hideIf='self.name!="pellet"',doc='*Pellet model:* parameters for history-independent adhesion ("confinement"); the values are :obj:`confSigma <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confSigma>`, :obj:`confRefRad <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confRefRad>` and :obj:`confExp <woo.dem.Law2_L6Geom_PelletPhys_Pellet.confExp>`.'),
+        #
+        # deprecations
+        ##
+        ##
+        _PAT(float,'alpha',0,hidden=True,doc="Detect whether deprecated alpha is used.")
+        _PAT(float,'surfEnergy',0,hidden=True,doc="Detect whether deprecated surfEnergy is used.")
     ]
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
@@ -263,6 +269,11 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         matsTrait.pyType=[self.getMatClass(),] # indicate array of instances of this type
         matsTrait.range=self.numMat
         matsTrait.choice=self.matDesc
+        
+        ## deprecated
+        if self.alpha!=0. or self.surfEnergy!=0:
+            woo.master.checkApi(10104,"Adhesive model interface changed, you have to update your code.")
+            raise ValueError("ContactModelSelector.alpha or ContactModelSelector.surfEnergy are non-zero. Do not use those anymore, see https://woodem.org/api.html#api-10104.")
 
     def getFunctors(self):
         '''Return tuple of ``([CPhysFunctor,...],[LawFunctor,...])`` corresponding to the selected model and parameters.'''
@@ -279,7 +290,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         elif self.name=='DMT':
             return [woo.dem.Cp2_FrictMat_HertzPhys(poisson=self.poisson,alpha=0.,gamma=self.surfEnergy,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
         elif self.name=='Schwarz':
-            return [woo.dem.Cp2_FrictMat_HertzPhys(poisson=self.poisson,alpha=self.alpha,gamma=self.surfEnergy,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
+            return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
         elif self.name=='concrete':
             return [woo.dem.Cp2_ConcreteMat_ConcretePhys()],[woo.dem.Law2_L6Geom_ConcretePhys()]
         elif self.name=='ice':
@@ -293,7 +304,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
     def getMatClass(self):
         '''Return class object of material for use with this model.'''
         import woo.dem
-        d={'linear':woo.dem.FrictMat,'pellet':woo.dem.PelletMat,'Hertz':woo.dem.FrictMat,'DMT':woo.dem.FrictMat,'Schwarz':woo.dem.FrictMat,'concrete':woo.dem.ConcreteMat,'ice':woo.dem.IceMat,'luding':woo.dem.LudingMat}
+        d={'linear':woo.dem.FrictMat,'pellet':woo.dem.PelletMat,'Hertz':woo.dem.FrictMat,'DMT':woo.dem.FrictMat,'Schwarz':woo.dem.HertzMat,'concrete':woo.dem.ConcreteMat,'ice':woo.dem.IceMat,'luding':woo.dem.LudingMat}
         if self.name not in d: raise ValueError('Unknown model: '+self.name)
         return d[self.name]
     def getNonviscDamping(self):

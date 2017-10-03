@@ -3,12 +3,38 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp>
 
-WOO_PLUGIN(dem,(HertzPhys)(Cp2_FrictMat_HertzPhys)(Law2_L6Geom_HertzPhys_DMT));
+WOO_PLUGIN(dem,(HertzMat)(HertzPhys)/*(Cp2_FrictMat_HertzPhys)*/(Cp2_HertzMat_HertzPhys)(Law2_L6Geom_HertzPhys_DMT));
 
-WOO_IMPL_LOGGER(Cp2_FrictMat_HertzPhys);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HertzMat__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_HertzPhys__CLASS_BASE_DOC_ATTRS_CTOR);
+// WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_FrictMat_HertzPhys__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_HertzMat_HertzPhys__CLASS_BASE_DOC_ATTRS);
+
+
+WOO_IMPL_LOGGER(Cp2_HertzMat_HertzPhys);
+
+#if 0
+void Cp2_HertzMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr<Material>& m2, const shared_ptr<Contact>& C){
+	// call parent class' method, then adjust the result
+	Cp2_FrictMat_HertzPhys::go_real(m1,m2,C);
+	auto& mat1=m1->cast<HertzMat>(); auto& mat2=m2->cast<HertzMat>();
+	auto& ph=C->phys->cast<HertzPhys>();
+	ph.gamma=min(mat1.gamma,mat2.gamma);
+	ph.alpha=.5*(mat1.alpha+mat2.alpha);
+}
+
 void Cp2_FrictMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr<Material>& m2, const shared_ptr<Contact>& C){
+	if(!warnedDeprec){
+		warnedDeprec=true;
+		LOG_WARN("This class should not be used anymore and will be removed later. Instead of using FrictMat->Cp2_FrictMat_HertzPhys, declare particles with HertzMat (with appropriate alpha and gamma values) and use Cp2_HertzMat_HertzPhys; the result will be identical.");
+	}
+	go_real(m1,m2,C);
+}
+#endif
+
+void Cp2_HertzMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr<Material>& m2, const shared_ptr<Contact>& C){
 	if(!C->phys) C->phys=make_shared<HertzPhys>();
-	auto& mat1=m1->cast<FrictMat>(); auto& mat2=m2->cast<FrictMat>();
+	auto& mat1=m1->cast<HertzMat>(); auto& mat2=m2->cast<HertzMat>();
 	auto& ph=C->phys->cast<HertzPhys>();
 	const auto& l6g=C->geom->cast<L6Geom>();
 	const Real& r1=l6g.lens[0]; const Real& r2=l6g.lens[1];
@@ -20,9 +46,11 @@ void Cp2_FrictMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr
 	ph.K=(4/3.)*1./( (1-nu1*nu1)/E1 + (1-nu2*nu2)/E2 ); // (4/3.)*E
 	ph.R=1./(1./r1+1./r2);
 	Real kn0=ph.K*sqrt(ph.R);
-	ph.gamma=gamma;
+
+	// surface energy
+	ph.gamma=min(mat1.surfEnergy,mat2.surfEnergy);
 	// COS alpha
-	ph.alpha=alpha;
+	ph.alpha=.5*(mat1.alpha+mat2.alpha);
 
 	// shear behavior
 	Real G1=E1/(2*(1+nu1)); Real G2=E2/(2*(1+nu2));
