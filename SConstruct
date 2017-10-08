@@ -95,7 +95,11 @@ def colonSplit(x): return x.split(':')
 
 # needed for good default for QT5DIR
 # https://wiki.debian.org/Python/MultiArch
-multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
+try:
+	multiarchTriplet=getattr(sys,'implementation',sys)._multiarch
+except AttributeError:
+	#print('WARN: sys._multiarch not defined, you have to set QT5DIR manually')
+	multiarchTriplet="READ_HERE____python-does-not-define-sys._multiarch;you-have-to-set-QT5DIR-manually;see-https://ask.woodem.org/index.php/894/compile-woo-on-arch-linux"
 
 opts.AddVariables(
 	('LIBDIR','Install directory for python modules (the default is empty, and obtained via "import site; site.getsitepackages()[0]" using PYTHON interpreter; in virtual environments, where getsitepackages it not defined, it MUST be specified; in that case, also specify EXECDIR and use the virtual python interpreter to run SCons)',None),
