@@ -110,9 +110,10 @@ try:
     dem.Facet.make=staticmethod(woo.utils.facet)
     dem.Rod.make=staticmethod(woo.utils.rod)
     dem.Truss.make=staticmethod(woo.utils.truss)
-
 except ImportError:
+    print('WARN: Woo could not import woo.dem...? (non-fatal but very suspicious)')
     core.Scene.hasDem=lambda o: False
+
 
 try:
     from woo import mesh
