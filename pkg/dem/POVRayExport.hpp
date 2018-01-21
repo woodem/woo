@@ -10,8 +10,8 @@ struct POVRayExport: public PeriodicEngine{
 	void exportParticle(std::ofstream& os, const shared_ptr<Particle>& p);
 	string makeTexture(const shared_ptr<Particle>& p, const string& tex="");
 
-	
-	void writeParticleInc(const string& frameInc, bool doStatic);
+	// for static particles, write whether something was written at all
+	bool writeParticleInc(const string& frameInc, bool doStatic);
 	bool skipParticle(const shared_ptr<Particle>& p, bool doStatic);
 	void writeFacetsMeshInc(std::ofstream& os, bool doStatic);
 	void writeMasterPov(const string& masterPov);

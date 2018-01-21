@@ -70,8 +70,20 @@ bool POVRayExport::skipParticle(const shared_ptr<Particle>& p, bool doStatic){
 	return false;
 }
 
-void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
+bool POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	DemField* dem=static_cast<DemField*>(field.get());
+	#if 0
+		if(doStatic){
+			bool todo=false;
+			for(const auto& p: *dem->particles){
+				if(skipParticle(p,doStatic)) continue;
+				if(facetsAsMesh && p->shape->isA<Facet>()) continue;
+				todo=true;
+				break;
+			}
+			if(!todo) return false;
+		}
+	#endif
 	std::ofstream os;
 	os.open(frameInc);
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+frameInc+"'.");
@@ -86,6 +98,7 @@ void POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 		exportParticle(os,p);
 	}
 	os.close();
+	return true;
 }
 
 string POVRayExport::makeTexture(const shared_ptr<Particle>& p, const string& tex){
