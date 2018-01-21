@@ -251,10 +251,24 @@ void RandomInlet::run(){
 		spheres.pack.reserve(dem->particles->size()*1.2); // something extra for generated particles
 		// HACK!!!
 		bool isBox=dynamic_cast<BoxInlet*>(this);
+		if(isBox && scene->isPeriodic && !scene->cell->hasShear()){
+			spheres.cellSize=scene->cell->getSize0();
+		}
 		AlignedBox3r box;
 		if(isBox){ box=this->cast<BoxInlet>().box; }
 		for(const auto& p: *dem->particles){
-			if(p->shape->isA<Sphere>() && (!isBox || box.contains(p->shape->nodes[0]->pos))) spheres.pack.push_back(SpherePack::Sph(p->shape->nodes[0]->pos,p->shape->cast<Sphere>().radius));
+			if(!p->shape->isA<Sphere>()) continue;
+			Vector3r pos(p->shape->nodes[0]->pos);
+			if(scene->isPeriodic) pos=scene->cell->canonicalizePt(pos);
+			const auto& radius(p->shape->cast<Sphere>().radius);
+			// AlignedBox::squaredExteriorDistance returns 0 for points inside the box
+			if(isBox && box.squaredExteriorDistance(pos)>pow(radius,2)) continue;
+			spheres.pack.push_back(SpherePack::Sph(pos,radius));
+		}
+		if(isBox && scene->isPeriodic && !scene->cell->hasShear()){
+			// cerr<<"Size w/o shadows: "<<spheres.pack.size()<<endl;
+			spheres.addShadows();
+			// cerr<<"Size  w/ shadows: "<<spheres.pack.size()<<endl;
 		}
 	}
 
@@ -379,6 +393,21 @@ void RandomInlet::run(){
 					Vector3r subPos=pe.par->shape->nodes[0]->pos;
 					Real r=pe.par->shape->cast<Sphere>().radius;
 					spheres.pack.push_back(SpherePack::Sph((pos+subPos),r,/*clumpId*/(pee.size()==1?-1:num)));
+					// add shadow particles for periodic conditions
+					// FIXME: this should be only done if the shadow particle is relevant for the inlet box??
+					if(scene->isPeriodic){
+						size_t iLast=spheres.pack.size()-1;
+						Vector3r p0(scene->cell->canonicalizePt(pos+subPos));
+						const Vector3r& cellSize(spheres.cellSize);
+						AlignedBox3r box(Vector3r::Zero(),cellSize);
+						for(int xx:{-1,0,1}) for(int yy:{-1,0,1}) for (int zz:{-1,0,1}){
+							if(xx==0 && yy==0 && zz==0) continue;
+							Vector3r p=p0+cellSize.cwiseProduct(Vector3r(xx,yy,zz));
+							if(box.squaredExteriorDistance(p)<r){
+								spheres.pack.push_back(SpherePack::Sph(p,r,/*clumpId*/(pee.size()==1?-1:num),/*shadowOf*/iLast));
+							}
+						}
+					}
 				}
 			}
 			break;

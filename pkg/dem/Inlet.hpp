@@ -230,7 +230,8 @@ WOO_REGISTER_OBJECT(RandomInlet);
 repsect periodic boundaries when this is defined; this makes configurable side of BoxInlet transparent, i.e.
 new particles can cross the boundary; note however that this is not properly supported in RandomInlet, where periodicity is not take in account when detecting overlap with particles generated within the same step
 */
-	// #define BOX_FACTORY_PERI
+// #define BOX_FACTORY_PERI
+
 struct BoxInlet: public RandomInlet{
 	Vector3r randomPosition(const Real& rad, const Real& padDist) override;
 	#ifdef BOX_FACTORY_PERI

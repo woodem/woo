@@ -805,7 +805,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
 
 
 
-def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None):
+def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dtSafety=.9,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None):
     '''Create dense packing periodic in the +x direction, suitable for use with ConveyorInlet.
 :param useEnergy: use :obj:`woo.utils.unbalancedEnergy` instead of :obj:`woo.utils.unbalancedForce` as stop criterion.
 :param goal: target unbalanced force/energy; if unbalanced energy is used, this value is **multiplied by .2**.
@@ -879,6 +879,9 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # add limiting surface
     p=sweptPolylines2gtsSurface([utils.tesselatePolyline([Vector3(x,yz[0],yz[1]) for yz in boundary2d],maxDist=min(cellSize[0]/4.,cellSize[1]/4.,cellSize[2]/4.)) for x in numpy.linspace(0,cellSize[0],num=4)])
     S.dem.par.add(gtsSurface2Facets(p,mask=0b011),nodes=False) # nodes not needed
+    if 0: ## XXX
+        S.dem.par.add(woo.dem.Wall.make(0,axis=0,mat=mat,fixed=True))
+        print('makeBandFeedPack: WARN: Adding artificial wall to avoid periodic-inlet issues (under investigation)')
     S.dem.loneMask=0b010
 
 
@@ -922,7 +925,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         woo.core.PyRunner(200,'import woo\nif '+unbalancedFunc+'(S)<'+str(goal)+' and S.lab.factory.dead: S.stop()'),
     ]
     # S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
-    S.dtSafety=.9
+    S.dtSafety=dtSafety
     print('Inlet box is',S.lab.factory.box)
     if dontBlock: return S
     else: S.run()
