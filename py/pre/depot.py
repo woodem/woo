@@ -69,27 +69,40 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                 self.gen=woo.dem.PsdSphereGenerator(psdPts=[(6.3e-3,0),(12.5e-3,.41111),(20e-3,1)],discrete=False)
                 self.bias=woo.dem.LayeredAxialBias(axis=2,fuzz=0,layerSpec=[VectorX([12.5e-3,1,0,.177777,.58888,1]),VectorX([0,12.5e-3,.177777,.58888])])
                 self.relSettle=.37
+            elif self.preCooked=='Lhasa 1':
+                self.gen=woo.dem.PsdSphereGenerator(psdPts=[(8e-3,0),(16e-3,1.)],discrete=False)
+                self.htDiam=(44e-3,140e-3)
+                self.model.mats[0].density=3.8e3
+                self.model.mats[0].young=1e4
+                self.bias=None
+                self.mass=.5
+                self.relSettle=.4
+
             else: raise RuntimeError('Unknown precooked configuration "%s"'%self.preCooked)
             self.preCooked=''
         self.ht0=self.htDiam[0]/self.relSettle
         # if I=='estSettle': 
     _attrTraits=[
-        _PAT(str,'preCooked','',noDump=True,noGui=False,startGroup='General',choice=['','Brisbane 1','Brisbane 2'],triggerPostLoad=True,doc='Apply pre-cooked configuration (i.e. change other parameters); this option is not saved.'),
+        _PAT(str,'preCooked','',noDump=True,noGui=False,startGroup='General',choice=['','Brisbane 1','Brisbane 2','Lhasa 1'],triggerPostLoad=True,doc='Apply pre-cooked configuration (i.e. change other parameters); this option is not saved.'),
         _PAT(Vector2,'htDiam',(.45,.1),unit='m',doc='Height and diameter of the resulting cylinder; the initial cylinder has the height of :obj:`ht0`, and particles are, after stabilization, clipped to :obj:`htDiam`, the resulting height.'),
         _PAT(float,'relSettle',.3,triggerPostLoad=True,doc='Estimated relative height after deposition (e.g. 0.4 means that the sample will settle around 0.4 times the original height). This value has to be guessed, as there is no exact relation to predict the amount of settling; 0.3 is a good initial guess, but it may depend on the PSD.'),
+        _PAT(float,'mass',-1,doc='Mass generated (will be precise up to a single particle weight; when negative, generate as much as fits into the volume (see :obj:`ht0`)'),
         _PAT(float,'ht0',.9,guiReadonly=True,noDump=True,doc='Initial height (for loose sample), computed automatically from :obj:`relSettle` and :obj:`htDiam`.'),
         _PAT(woo.dem.ParticleGenerator,'gen',woo.dem.PsdSphereGenerator(psdPts=defaultPsd,discrete=False),'Object for particle generation'),
         _PAT(woo.dem.SpatialBias,'bias',woo.dem.PsdAxialBias(psdPts=defaultPsd,axis=2,fuzz=.1,discrete=True),doc='Uneven distribution of particles in space, depending on their radius. Use axis=2 for altering the distribution along the cylinder axis.'),
         _PAT(woo.models.ContactModelSelector,'model',woo.models.ContactModelSelector(name='linear',damping=.4,numMat=(1,1),matDesc=['everything'],mats=[woo.dem.FrictMat(density=2e3,young=2e5,tanPhi=0)]),doc='Contact model and materials.'),
         _PAT(int,'cylDiv',40,'Fineness of cylinder division'),
         _PAT(float,'unbE',0.0001,':obj:`Unbalanced energy <woo._utils2.unbalancedEnergy>` as criterion to consider the particles settled.'),
+        _PAT(woo.triangulated.MeshImport,'holderMesh',None,doc='Import holder from STL file rather than triangulating one. The :obj:`htDiam` is still used to determine where to generate particles.'),
         # STL output
-        _PAT(str,'stlOut','',startGroup='STL output',filename=True,doc='Output file with triangulated particles (not the boundary); if empty, nothing will be exported at the end.'),
+        _PAT(str,'stlOut','',startGroup='Triangulation output',filename=True,doc='Output file with triangulated particles (not the boundary); if empty, nothing will be exported at the end.'),
         _PAT(float,'stlTol',.2e-3,unit='m',doc='Tolerance for STL export (maximum distance between ideal shape and triangulation; passed to :obj:`_triangulated.spheroidsToStl`)'),
         _PAT(bool,'stlUnion',False,doc='Compute union of surfaces before exporting to STL (removing surface parts which are inside overlapping volumes). This also causes clusters to be exported as separate solids (will be configurable in the future).'),
         _PAT(bool,'stlCyl',True,doc='Export also cylinder surface (top, bottom and lateral surface are separate solids within the STL file.'),
+        _PAT(str,'scadOut','',filename=True,doc='Output OpenSCAD script with union of all particles.'),
         _PAT(Vector2,'extraHt',(.5,.5),unit='m',doc='Extra height to be added to bottom and top of the resulting packing, when the new STL-exported cylinder is created.'),
         _PAT(float,'cylAxDiv',-1.,'Fineness of division of the STL cylinder; see :obj:`woo.triangulated.cylinder` ``axDiv``. The defaults create nearly-square triangulation'),
+        _PAT(float,'dtSafety',.7,'Timestep safety coefficient.'),
     ]
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
@@ -101,11 +114,11 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         S=woo.core.Scene(
             pre=self.deepcopy(),
             trackEnergy=True, # for unbalanced energy tracking
-            dtSafety=.9,
+            dtSafety=pre.dtSafety,
             fields=[
                 DemField(
                     gravity=(0,0,-10),
-                    par=woo.triangulated.cylinder(Vector3(0,0,0),Vector3(0,0,pre.ht0),radius=pre.htDiam[1]/2.,div=pre.cylDiv,capA=True,capB=False,wallCaps=True,mat=mat)
+                    par=woo.triangulated.cylinder(Vector3(0,0,0),Vector3(0,0,pre.ht0),radius=pre.htDiam[1]/2.,div=pre.cylDiv,capA=True,capB=False,wallCaps=True,mat=mat) if not pre.holderMesh else pre.holderMesh.doImport(mat=mat)
                 )
             ],
             engines=DemField.minimalEngines(model=pre.model)+[
@@ -115,7 +128,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                     radius=pre.htDiam[1]/2.,
                     generator=pre.gen,
                     spatialBias=pre.bias,
-                    maxMass=-1,maxNum=-1,massRate=0,maxAttempts=2000,materials=pre.model.mats,glColor=float('nan'),
+                    maxMass=pre.mass,maxNum=-1,massRate=0,maxAttempts=2000,materials=pre.model.mats,glColor=float('nan'),
                     nDo=1 # place all particles at once, then let settle it all down
                 ),
                 woo.core.PyRunner(100,'import woo.pre.depot; S.pre.checkProgress(S)'),
@@ -155,4 +168,20 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                 n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[1],solid="bottom")
                 n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[2],solid="top")
             print('Exported %d facets to %s'%(n,S.pre.stlOut))
+
+        if not S.pre.scadOut: print('Not running OpenSCAD export (scadOut empty)')
+        else:
+            n=0
+            with open(S.pre.scadOut,'w') as scad:
+                import time
+                scad.write('// Generated from %s%s on %s\n'%(self.__class__.__module__,self.__class__.__name__,time.asctime()))
+                scad.write('$fn=15; /* set arc triangulation precision here */\nunion(){\n')
+                for p in S.dem.par:
+                    if isinstance(p.shape,woo.dem.Sphere):
+                        n+=1
+                        scad.write('    translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                scad.write('}\n');
+            print('Exported %d spheres to %s'%(n,S.pre.scadOut))
+
+
 
