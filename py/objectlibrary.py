@@ -29,10 +29,10 @@ def refresh():
                     obj=woo._monkey.io.Object_load(None,ff)
                     objs[tuple(libPath.split('/'))]=obj
                 except:
-                    logging.warn('Loading library object from %s failed (skipped):\n\n'%ff)
+                    logging.warning('Loading library object from %s failed (skipped):\n\n'%ff)
                     import traceback
                     traceback.print_exc()
-                    print(logging.warn('--------------------------------------------------------'))
+                    print(logging.warning('--------------------------------------------------------'))
     global libObjs
     libObjs=objs
 
