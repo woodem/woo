@@ -100,6 +100,8 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(bool,'stlUnion',False,doc='Compute union of surfaces before exporting to STL (removing surface parts which are inside overlapping volumes). This also causes clusters to be exported as separate solids (will be configurable in the future).'),
         _PAT(bool,'stlCyl',True,doc='Export also cylinder surface (top, bottom and lateral surface are separate solids within the STL file.'),
         _PAT(str,'scadOut','',filename=True,doc='Output OpenSCAD script with union of all particles.'),
+        _PAT(str,'sheetOut','',filename=True,doc='Output particle coordinates and radii as spreadsheet, in any format supported by pyexcel (XLS, XLSX, CSV, ODS, ...).'),
+        _PAT(bool,'scadCon',True,doc='Export cylinders along contacts (for easier meshing of close parts).'),
         _PAT(Vector2,'extraHt',(.5,.5),unit='m',doc='Extra height to be added to bottom and top of the resulting packing, when the new STL-exported cylinder is created.'),
         _PAT(float,'cylAxDiv',-1.,'Fineness of division of the STL cylinder; see :obj:`woo.triangulated.cylinder` ``axDiv``. The defaults create nearly-square triangulation'),
         _PAT(float,'dtSafety',.7,'Timestep safety coefficient.'),
@@ -118,7 +120,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
             fields=[
                 DemField(
                     gravity=(0,0,-10),
-                    par=woo.triangulated.cylinder(Vector3(0,0,0),Vector3(0,0,pre.ht0),radius=pre.htDiam[1]/2.,div=pre.cylDiv,capA=True,capB=False,wallCaps=True,mat=mat) if not pre.holderMesh else pre.holderMesh.doImport(mat=mat)
+                    par=woo.triangulated.cylinder(Vector3(0,0,0),Vector3(0,0,pre.ht0),radius=pre.htDiam[1]/2.,div=pre.cylDiv,capA=True,capB=False,wallCaps=True,mat=mat,mask=woo.dem.DemField.defaultBoundaryMask) if not pre.holderMesh else pre.holderMesh.doImport(mat=mat,mask=woo.dem.DemField.defaultBoundaryMask)
                 )
             ],
             engines=DemField.minimalEngines(model=pre.model)+[
@@ -171,17 +173,36 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
 
         if not S.pre.scadOut: print('Not running OpenSCAD export (scadOut empty)')
         else:
-            n=0
+            np,nc=0,0
             with open(S.pre.scadOut,'w') as scad:
                 import time
                 scad.write('// Generated from %s%s on %s\n'%(self.__class__.__module__,self.__class__.__name__,time.asctime()))
-                scad.write('$fn=15; /* set arc triangulation precision here */\nunion(){\n')
+                scad.write('$fn=15; /* set arc triangulation precision here */\n')
+                if S.pre.scadCon:
+                    scad.write('fnCyl=8; /* set contact triangulation precision here */\n')
+                    scad.write('crr=.2; /* cylinder radius relative to minimum radius of both contacting particles */\n')
+                scad.write('\nunion(){\n');
                 for p in S.dem.par:
-                    if isinstance(p.shape,woo.dem.Sphere):
-                        n+=1
-                        scad.write('    translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                    if p.mask==woo.dem.DemField.defaultInletMask:
+                        np+=1
+                        scad.write('    %%translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                if S.pre.scadCon:
+                    scad.write('    // contacts represented as cylinders\n    {\n')
+                    for c in S.dem.con:
+                        if not (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
+                        # print(c.pA.mask,c.pB.mask,c.pA.shape,c.pB.shape)
+                        nc+=1
+                        (axis,angle),p=c.geom.node.ori.toAxisAngle(),c.geom.node.loc2glob([-c.geom.lens[0],0,0])
+                        scad.write('        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],min(c.pA.shape.equivRadius,c.pB.shape.equivRadius),sum(c.geom.lens),c.pA.id,c.pB.id))
+                    scad.write('    }; /* end contacts */\n')
                 scad.write('}\n');
-            print('Exported %d spheres to %s'%(n,S.pre.scadOut))
+            print('Exported %d particles and %d contacts to %s'%(np,nc,S.pre.scadOut))
+        if not S.pre.sheetOut: print('Not running spreadsheet export (sheetOut empty)')
+        else:
+            data=[['x','y','z','r']]+[[p.pos[0],p.pos[1],p.pos[2],p.shape.equivRadius] for p in S.dem.par if p.mask==woo.dem.DemField.defaultInletMask]
+            import pyexcel
+            pyexcel.save_as(array=data,dest_file_name=S.pre.sheetOut,name_columns_by_row=0)
+            print('Exported %d particles to %s'%(len(data)-1,S.pre.sheetOut))
 
 
 

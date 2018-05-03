@@ -74,6 +74,7 @@ struct PharmaCapsuleGenerator: public ParticleGenerator{
 	bool isSpheresOnly() const override { return false; }
 	Real critDt(Real density, Real young) override;
 	Real padDist() const override { return extDiam.minCoeff()/2.; }
+	Vector2r minMaxDiam() const override { return Vector2r(extDiam.minCoeff(),extDiam.maxCoeff()); }
 	#define woo_dem_PharmaCapsuleGenerator__CLASS_BASE_DOC_ATTRS \
 		PharmaCapsuleGenerator,ParticleGenerator,"Generate pharmaceutical capsules of fixed size; they consist of body and cap. two caps of differing diameter and are thus represented as two interpenetrated (clumped) capsules. The default value corresponds to `Human Cap Size 1 <http://www.torpac.com/Reference/sizecharts/Human%20Caps%20Size%20Chart.pdf>`__ from `Torpac <http://www.torpac.com>`.\n\n .. youtube:: kRQt0jxKDG0\n", \
 		((Real,len,19.4e-3,,"Total (locked) length of the capsule.")) \
