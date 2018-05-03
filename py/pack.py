@@ -879,8 +879,8 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # add limiting surface
     p=sweptPolylines2gtsSurface([utils.tesselatePolyline([Vector3(x,yz[0],yz[1]) for yz in boundary2d],maxDist=min(cellSize[0]/4.,cellSize[1]/4.,cellSize[2]/4.)) for x in numpy.linspace(0,cellSize[0],num=4)])
     S.dem.par.add(gtsSurface2Facets(p,mask=0b011),nodes=False) # nodes not needed
-    if 0: ## XXX
-        S.dem.par.add(woo.dem.Wall.make(0,axis=0,mat=mat,fixed=True))
+    if 1: ## XXX
+        S.lab.wallId=S.dem.par.add(woo.dem.Wall.make(0,axis=0,mat=mat,fixed=True))
         print('makeBandFeedPack: WARN: Adding artificial wall to avoid periodic-inlet issues (under investigation)')
     S.dem.loneMask=0b010
 
@@ -916,6 +916,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
             shooter=woo.dem.AlignedMinMaxShooter(dir=(0,0,-1),vRange=(0,0)),
             mask=1,
             label='factory',
+            doneHook='S.dem.par.remove(S.lab.wallId)',
             #periSpanMask=1, # x is periodic
         ),
         #PyRunner(200,'plot.addData(uf=utils.unbalancedForce(),i=O.scene.step)'),
