@@ -10,6 +10,8 @@
 WOO_PLUGIN(dem,(ConveyorInlet));
 WOO_IMPL_LOGGER(ConveyorInlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ConveyorInlet__CLASS_BASE_DOC_ATTRS_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS);
+
 
 Real ConveyorInlet::critDt(){
 	if(!material->isA<ElastMat>()){
@@ -220,6 +222,17 @@ void ConveyorInlet::setAttachedParticlesColor(const shared_ptr<Node>& n, Real c)
 	}
 }
 
+void ConveyorInlet::setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<ConveyorMatState>& ms){
+	auto& dyn=n->getData<DemData>();
+	if(!dyn.isClump()){ if(!dyn.parRef.empty()) (*dyn.parRef.begin())->matState=ms; }
+	else {
+		for(const auto& nn: dyn.cast<ClumpData>().nodes){
+			auto& ddyn=nn->getData<DemData>();
+			if(!ddyn.parRef.empty()) (*ddyn.parRef.begin())->matState=ms;
+		}
+	}
+}
+
 
 void ConveyorInlet::run(){
 	DemField* dem=static_cast<DemField*>(field.get());
@@ -233,6 +246,8 @@ void ConveyorInlet::run(){
 		barrierLayer=maxRad*abs(barrierLayer);
 		LOG_INFO("Setting barrierLayer="<<barrierLayer);
 	}
+	// correction of lengths from stream beginning
+	//Real feedRefCorr=(feedRefNode?-(node->ori.conjugate()*(node->pos-feedRefNode->pos)).x():0.0);
 	auto I=barrier.begin();
 	while(I!=barrier.end()){
 		const auto& n=*I;
@@ -244,17 +259,48 @@ void ConveyorInlet::run(){
 		}
 	}
 
+	Real packVelCorrected=packVel;
+	Real dVNodeRefNode=0, dXNodeRefNode=0;
+	if(feedRefNode){
+		Vector3r vRef=feedRefNode->hasData<DemData>()?feedRefNode->getData<DemData>().vel:Vector3r::Zero();
+		Vector3r vNode=node->getData<DemData>().vel;
+		dVNodeRefNode=(node->ori.conjugate()*(vNode-vRef)).x();
+		packVelCorrected-=dVNodeRefNode;
+		if(packVelCorrected<0) LOG_WARN("Packing velocity was corrected from "<<packVel<<" to "<<packVelCorrected<<" as per feedRefNode, but the value is negative. Expect trouble (overlapping particles and explosions).");
+		// compare this to assumed resulting distance from integration and add to xCorrection
+		dXNodeRefNode=(node->ori.conjugate()*(node->pos-feedRefNode->pos)).x();
+		// difference between assumption and real distance
+		if(!isnan(nextFeedRefNodeDist)){
+			Real dCorr=-(dXNodeRefNode-nextFeedRefNodeDist);
+			// xCorrection+=dCorr;
+			xCorrection+=dCorr;
+			cerr<<"xCorrection: distance was supposed to be "<<nextFeedRefNodeDist<<", is "<<dXNodeRefNode<<", correction is "<<xCorrection<<" (diff by "<<dCorr<<")"<<endl;
+		}
+	}
+	
 	Real lenToDo;
 	if(stepPrev<0){ // first time run
 		if(startLen<=0) ValueError("ConveyorInlet.startLen must be positive or NaN (not "+to_string(startLen)+")");
 		if(!isnan(startLen)) lenToDo=startLen;
-		else lenToDo=(stepPeriod>0?stepPeriod*scene->dt*packVel:scene->dt*packVel);
+		else lenToDo=(stepPeriod>0?stepPeriod*scene->dt*packVelCorrected:scene->dt*packVelCorrected);
 	} else {
-		if(!isnan(virtPrev)) lenToDo=(scene->time-virtPrev)*packVel; // time elapsed since last run
-		else lenToDo=scene->dt*packVel*(stepPeriod>0?stepPeriod:1);
+		Real dtt;
+		if(!isnan(virtPrev)) dtt=scene->time-virtPrev; // time elapsed since last run
+		else dtt=(stepPeriod>0?stepPeriod:1)*scene->dt; // estimate
+		lenToDo=dtt*packVelCorrected;
+		if(feedRefNode){
+			nextFeedRefNodeDist=dXNodeRefNode+dtt*dVNodeRefNode;
+			// cerr<<"Expected node distance next time: "<<nextFeedRefNodeDist<<" (current dist "<<dXNodeRefNode<<", velocity "<<dVNodeRefNode<<", time span "<<dtt<<endl;
+		}
+		//if(!isnan(virtPrev)) lenToDo=(scene->time-virtPrev)*packVelCorrected; // time elapsed since last run
+		//else lenToDo=scene->dt*packVelCorrected*(stepPeriod>0?stepPeriod:1); // this should not happen?
 	}
+	/* detect how much is the difference between assumed feedRefNode-node distance (last time, by integration) and the real distance now and use that to correct lenToDo *and* to offset generated particles by that much. This will slightly affect current mass rate but should even out in the long run.
+	*/
+
+
 	Real stepMass=0;
-	LOG_DEBUG("lenToDo="<<lenToDo<<", time="<<scene->time<<", virtPrev="<<virtPrev<<", packVel="<<packVel);
+	LOG_DEBUG("lenToDo="<<lenToDo<<", time="<<scene->time<<", virtPrev="<<virtPrev<<", packVel="<<packVel<<" (packVelCorrected="<<packVelCorrected);
 	Real lenDone=0;
 	while(true){
 		// done forever
@@ -287,7 +333,7 @@ void ConveyorInlet::run(){
 			}
 		}
 	
-		Real realSphereX=(vel/packVel)*(lenToDo-lenDone); // scale x-position by dilution (>1)
+		Real realSphereX=xCorrection+(vel/packVel)*(lenToDo-lenDone); // scale x-position by dilution (>1)
 		Vector3r newPos=node->pos+node->ori*Vector3r(realSphereX,centers[nextIx][1],centers[nextIx][2]);
 
 		vector<shared_ptr<Node>> nn;
@@ -334,6 +380,13 @@ void ConveyorInlet::run(){
 				setAttachedParticlesColor(n,isnan(color)?Mathr::UnitRandom():color);
 			}
 
+			if(conveyorMatState){
+				auto ms=make_shared<ConveyorMatState>();
+				ms->stepAdded=scene->step;
+				ms->xCorrection=xCorrection;
+				setAttachedParticlesMatState(n,ms);
+			}
+
 			// set velocity;
 			dyn.vel=node->ori*(Vector3r::UnitX()*vel);
 			if(scene->trackEnergy){
@@ -361,10 +414,10 @@ void ConveyorInlet::run(){
 		nextIx-=1; 
 	};
 
-	setCurrRate(stepMass/(/*time*/lenToDo/packVel));
+	setCurrRate(stepMass/(/*time*/lenToDo/packVelCorrected));
 
 	dem->contacts->dirty=true; // re-initialize the collider
-	#if 1
+	#if 0
 		for(const auto& e: scene->engines){
 			if(dynamic_pointer_cast<InsertionSortCollider>(e)){ e->cast<InsertionSortCollider>().forceInitSort=true; break; }
 		}

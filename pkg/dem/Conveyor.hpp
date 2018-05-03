@@ -3,6 +3,31 @@
 #include<woo/pkg/dem/Clump.hpp>
 
 
+struct ConveyorMatState: public MatState{
+	size_t getNumScalars() const override { return 1; }
+	string getScalarName(int index) override {
+		switch(index){
+			case 0: return "step added";
+			case 1: return "x correction";
+			default: return "";
+		}
+	}
+	Real getScalar(int index, const long& step, const Real& smooth=0) override {
+		switch(index){
+			case 0: return stepAdded;
+			case 1: return xCorrection;
+			default: return NaN;	
+		}
+	}
+	#define woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS \
+		ConveyorMatState,MatState,"Hold dissipated energy data for this particles, to evaluate wear.", \
+		((long,stepAdded,-1,,"Step at which this particle was created by the inlet.")) \
+		((Real,xCorrection,0,,"X correction for the particle."))
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(ConveyorMatState);
+
 struct ConveyorInlet: public Inlet{
 	WOO_DECL_LOGGER;
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
@@ -13,6 +38,8 @@ struct ConveyorInlet: public Inlet{
 	Real critDt() override; 
 	void nodeLeavesBarrier(const shared_ptr<Node>& p);
 	void setAttachedParticlesColor(const shared_ptr<Node>& n, Real c);
+	void setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<ConveyorMatState>& ms);
+
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override{
 			if(isnan(glColor)) return;
@@ -54,11 +81,15 @@ struct ConveyorInlet: public Inlet{
 		((Real,movingBedZ,NaN,,"If given, particles with z coordinate lower than this value will move indefinitely with the conveyor (contact velocity, blocked DOFs), technically not added to the barrier at all.")) \
 		((Real,movingBedColor,.5,,"Color for particles selected with :obj:`movingBedZ` (NaN for random).")) \
 		((bool,save,true,,"Save generated particles so that PSD can be generated afterwards")) \
+		((bool,conveyorMatState,false,,"Endow new particles with :obj:`ConveyorMatState` (for tracking when a particular particle was created and similar.")) \
 		\
 		((int,nextIx,-1,AttrTrait<>().readonly().startGroup("Bookkeeping"),"Index of last-generated particles in the packing")) \
 		((Real,lastX,0,AttrTrait<>().readonly(),"X-coordinate of last-generated particles in the packing")) \
 		((list<shared_ptr<Node>>,barrier,,AttrTrait<>().readonly().noGui(),"Nodes which make up the barrier and will be unblocked once they leave barrierLayer.")) \
 		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<>(),"Position and orientation of the factory; local x-axis is the feed direction.")) \
+		((shared_ptr<Node>,feedRefNode,,AttrTrait<>(),"Reference point for the feed stream, if not set (default) :obj:`node` is the reference point. Only the position of this node, projected onto :math:`x`-axis of :obj:`node` is relevant.")) \
+		((Real,nextFeedRefNodeDist,NaN,AttrTrait<>().readonly().noGui(),"Compute correction of x-placement resulting from differences in time-integration of :obj:`node` and :obj:`feedRefNode` (every step via :obj:`~woo.dem.Leapfrog`) vs. :obj:`packVel` (when this engine runs), for non-uniform relative motion of nodes.")) \
+		((Real,xCorrection,0,AttrTrait<>().readonly().noGui(),"Cumulative correction of the x coordinate, see :obj:`nextFeedRefNodeDist`.")) \
 		((Real,avgRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Average feed rate (computed from :obj:`Material density <Material.density>`, packing and  and :obj:`vel`")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
 		((vector<Vector3r>,genDiamMassTime,,AttrTrait<Attr::readonly>().noGui(),"List of generated diameters, masses and times (for making granulometry)")) \
