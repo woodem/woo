@@ -33,6 +33,7 @@ class PsdRender(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         // light_source{<25,-12,12> color rgb .44}
         light_source{<-.5,-.5,10> color White area_light <1,0,0>,<0,1,0>, 5, 5 adaptive 1 jitter }
         ''',doc='Default light specifications for POV-Ray'),
+        _PAT(bool,'saveShapePack',True,'Create a .shapepack file with particle geometries.'),
 
     ]
     def __init__(self,**kw):
@@ -73,6 +74,10 @@ def finalize(S):
     out2=S.expandTags(S.pre.out)
     # do not export walls at all
     pov=POVRayExport(mask=woo.dem.DemField.defaultOutletBit,masks=[woo.dem.DemField.defaultOutletBit],textures=['particles'],out=out2)
+    if S.pre.saveShapePack:
+        sp=woo.dem.ShapePack()
+        sp.fromDem(S,S.dem,mask=woo.dem.DemField.defaultOutletBit)
+        sp.saveTxt(out2+'.shapepack')
     bedZ=max([p.pos[2] for p in S.dem.par])
     camAngle=math.degrees(2*math.atan(.5*min(S.pre.size)/S.pre.camPos[2]))
     out2base=os.path.basename(out2).encode()
