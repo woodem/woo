@@ -107,7 +107,7 @@ string EnergyTracker::gridToVTK(const string& out) {
 	if(!grid) throw std::runtime_error("EnergyTracker: grid is not defined (use EnergyTracker.gridOn first).");
 	vector<string> nn;
 	for(const auto& si: names){
-		assert(flags.size()>si.second);
+		assert((int)flags.size()>si.second);
 		if(flags[si.second]&IsResettable) continue; // don't accumulate indices which only have total values
 		if((int)nn.size()<=si.second) nn.resize(si.second+1);
 		nn[si.second]=si.first;

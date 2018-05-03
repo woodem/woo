@@ -666,6 +666,7 @@ if clang:
 if intel:
 	env.Append(CXXFLAGS=['-Wno-deprecated'])
 if gcc:
+	env.Append(CXXFLAGS=['-Wno-nonnull-compare'])
 	ver=os.popen('LC_ALL=C '+env['CXX']+' --version').readlines()[0].split()[-1]
 	if ver.startswith('4.6'):
 		print 'Using gcc 4.6, adding -pedantic to avoid ICE at string initializer_list (http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50478)'

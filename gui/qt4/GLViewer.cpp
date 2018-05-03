@@ -577,7 +577,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		int axisIdx=(e->key()==Qt::Key_X?0:(e->key()==Qt::Key_Y?1:2));
 		if(manipulatedClipPlane<0){
 			qglviewer::Vec up(0,0,0), vDir(0,0,0);
-			bool alt=(e->modifiers() && Qt::ShiftModifier);
+			bool alt=(e->modifiers() & Qt::ShiftModifier);
 			up[axisIdx]=1; vDir[(axisIdx+(alt?2:1))%3]=alt?1:-1;
 			camera()->setViewDirection(vDir);
 			camera()->setUpVector(up);
