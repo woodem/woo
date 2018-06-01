@@ -37,7 +37,7 @@ WOO_PYTHON_MODULE(comp);
 BOOST_PYTHON_MODULE(comp){
 	WOO_SET_DOCSTRING_OPTS;
 	py::scope().attr("__doc__")="Expose interal utility c++ functions for computing volume, centroids, inertia, coordinate transforms; mostly used for testing.";
-	py::def("tetraVolume",&woo::Volumetric::tetraVolume,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Volume of tetrahedron, computed as :math:`\\frac{1}{6}((A-B)\\cdot(B-D)))\\cross(C-D)`.");
+	py::def("tetraVolume",&woo::Volumetric::tetraVolume,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Volume of tetrahedron, computed as :math:`\\frac{1}{6}((A-B)\\cdot(B-D)))\\times(C-D)`.");
 	// py::def("tetraInertia",&woo::Volumetric::tetraInertia,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Inertia tensor of tetrahedron given its vertex coordinates; the algorithm is described in :cite:`Tonon2005`.");
 	py::def("tetraInertia",tetraInertia_cov,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("fixSign")=true),"Tetrahedron inertia from covariance. If *fixSign* is true, the tensor is multiplied by -1 if the (0,0) entry is negative (this is caued by non-canonical vertex ordering).");
 	py::def("tetraInertia_grid",tetraInertia_grid,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("div")=100),"Tetrahedron inertia from grid sampling (*div* gives subdivision along the shortest aabb side).");
