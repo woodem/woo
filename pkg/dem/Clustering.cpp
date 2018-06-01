@@ -215,7 +215,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 
 void ClusterAnalysis::run(){
 	dem=static_cast<DemField*>(field.get());
-	if(lastLabels.size()<=maxConn) lastLabels.resize(maxConn+1,-1);
+	if((int)lastLabels.size()<=maxConn) lastLabels.resize(maxConn+1,-1);
 
 	vector<Particle::id_t> pSeq;
 	// pSeq.reserve(dem->particles->size()); // will be most likely (much) smaller
