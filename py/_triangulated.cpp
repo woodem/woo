@@ -430,6 +430,12 @@ py::list porosity(shared_ptr<DemField>& dem, const AlignedBox3r& box){
 	return ret;
 }
 
+py::dict surfParticleIdNormals(shared_ptr<DemField>& dem, const AlignedBox3r& box, Real r){
+	std::map<Particle::id_t,std::vector<Vector3r>> surf=DemFuncs::surfParticleIdNormals(dem,box,r);
+	py::dict ret;
+	for(const auto& sn: surf) ret[sn.first]=sn.second;
+	return ret;
+}
 
 WOO_PYTHON_MODULE(_triangulated);
 BOOST_PYTHON_MODULE(_triangulated){
@@ -442,5 +448,7 @@ BOOST_PYTHON_MODULE(_triangulated){
 	py::def("facetsToSTL",facetsToSTL,(py::arg("stl"),py::arg("dem"),py::arg("solid"),py::arg("mask")=0,py::arg("append")=false),"Export :obj:`facets <woo.dem.Facet>` to STL file. Periodic boundaries are not handled in any special way.");
 
 	py::def("porosity",porosity,(py::arg("dem"),py::arg("box")),"Return list of `(id,position,porosity)`, where porosity is computed as 1-Vs/Vv, where Vs is particle volume (sphere, capsule, ellipsoid only) and Vv is cell volume using radical Voronoi tesselation around particles. Highly experimental and subject to further changes.");
+
+	py::def("surfParticleIdNormals",surfParticleIdNormals,(py::arg("dem"),py::arg("box"),py::arg("r")),"Return map of ID->[normal,normal,...] of normals of cell faces belonging to particle #ID which have no neighbors. [EXPERIMENTAL].");
 
 };
