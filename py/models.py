@@ -285,9 +285,9 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
             law=woo.dem.Law2_L6Geom_PelletPhys_Pellet(plastSplit=self.plastSplit,confSigma=self.pelletConf[0],confExp=self.pelletConf[2],thinRate=self.pelletThin[0],confRefRad=self.pelletConf[1],thinRelRMin=self.pelletThin[1],thinExp=self.pelletThin[2],thinRefRad=self.pelletThin[3],thinMinExp=self.pelletThin[4],thinRateExp=self.pelletThin[5])
             return [woo.dem.Cp2_PelletMat_PelletPhys()],[law]
         elif self.name=='Hertz':
-            return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,alpha=0.,gamma=0.,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
+            return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
         elif self.name=='DMT':
-            return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,alpha=0.,gamma=self.surfEnergy,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
+            return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
         elif self.name=='Schwarz':
             return [woo.dem.Cp2_HertzMat_HertzPhys(poisson=self.poisson,en=self.restitution)],[woo.dem.Law2_L6Geom_HertzPhys_DMT()]
         elif self.name=='concrete':
