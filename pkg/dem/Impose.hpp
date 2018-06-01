@@ -168,6 +168,7 @@ struct VelocityAndReadForce: public Impose{
 WOO_REGISTER_OBJECT(VelocityAndReadForce);
 
 struct VariableVelocity3d: public Impose{
+    WOO_DECL_LOGGER;
 	void velocity(const Scene* scene, const shared_ptr<Node>& n) override;
 	void postLoad(VariableVelocity3d&,void*);
 	void selfTest(const shared_ptr<Node>&, const shared_ptr<DemData>&, const string& prefix) const override;
@@ -178,9 +179,10 @@ struct VariableVelocity3d: public Impose{
 		((vector<Vector3r>,vels,,,"Components of velocity, in local coordinates defined by :obj:`ori`.")) \
 		((vector<Vector3r>,angVels,,,"Components of angular velocity, in local coordinates defined by :obj:`ori`. If empty, angular velocity will not be imposed at all.\n\n.. note:: Only nodes which are using spherical integration can be prescribed angular velocity, since the aspherical integrator in :obj:`woo.dem.Leapfrog` uses :obj:`angular momentum <woo.dem.DemData.angMom>` rather than :obj:`angular velocity <woo.dem.DemData.angVel>` as input. This can be queried with :obj:`Node.dem.useAsphericalLeapfrog <woo.dem.DemData.useAsphericalLeapfrog>`.")) \
 		((Quaternionr,ori,Quaternionr::Identity(),,"Orientation of coordinate axes (by default, impose velocity along global axes)")) \
+        ((vector<string>,hooks,,,"Python hooks to be run when time points are reached (max Δt later than :obj:`times` items). Must be same length than :obj:`times`, or shorter; use empty string for not doing anything at that time point.")) \
 		((bool,diff,false,,"Prescribed velocity can be applied as total velocity value (with ``diff==False``) or as difference added to the actual nodal velocity (with ``diff==True``).")) \
 		((bool,wrap,false,,"Wrap time around the last time value (float modulo), if greater.")) \
-		((Real,t0,0.,,"Time offset which is subtracted from t (after wrapping, if :obj:`wrap` is used).")) \
+		((Real,t0,0.,,"Time offset which is subtracted from t (before wrapping, if :obj:`wrap` is used).")) \
 		,/*ctor*/ what=Impose::VELOCITY; _interpPosVel=_interpPosAngVel=0;
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_VariableVelocity3d__CLASS_BASE_DOC_ATTRS_CTOR);
 };

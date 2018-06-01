@@ -189,6 +189,7 @@ void VariableVelocity3d::postLoad(VariableVelocity3d&,void*){
 	for(int i=0; i<(int)times.size()-1; i++){
 		if(times[i]>=times[i+1]) woo::ValueError("VariableVelocity3d.times: must be non-decreasing (times["+to_string(i)+"]="+to_string(times[i])+", times["+to_string(i+1)+"]="+to_string(times[i+1])+").");
 	}
+	if(wrap && !times.empty() && times[0]!=0) woo::ValueError("VariableVelocity3d.times: when wrap is True, the first time value must be zero (not "+to_string(times[0])+").");
 }
 
 void VariableVelocity3d::selfTest(const shared_ptr<Node>& n, const shared_ptr<DemData>& dyn, const string& prefix) const {
@@ -200,17 +201,20 @@ void VariableVelocity3d::selfTest(const shared_ptr<Node>& n, const shared_ptr<De
 }
 
 
+WOO_IMPL_LOGGER(VariableVelocity3d);
+
 void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n){
 	if(times.empty()) throw std::runtime_error("VariableVelocity3d: times must not be empty.");
 	bool rot=(ori!=Quaternionr::Identity());
 	DemData& dyn(n->getData<DemData>());
 	// current velocity
 	Vector3r v=rot?(ori.conjugate()*dyn.vel):dyn.vel;
-	// current time (+dt/2 because of leapfrog)
-	Real t=scene->time+.5*scene->dt;
+	// current time (+dt/2 because of leapfrog), minus phase
+	Real t=scene->time+.5*scene->dt-t0;
 	// wrap if wanted and needed
-	if(wrap && t>times.back()) t=std::fmod(t,times.back());
-	t-=t0; // only subtract at the very end
+	if(wrap && (t<0 || t>times.back())) t=CompUtils::wrapNum(t,times.back());
+	// _interpPosVel could be accessed for both read/write by several threads potentially disturbing the lookup process
+	// use local copy and write it back
 	Vector3r vImp=linearInterpolate(t,times,vels,_interpPosVel);
 	/*
 		with diff==true, use the current velocity as basis, otherwise use 0
@@ -229,6 +233,48 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 		// dtto as above
 		for(short ax:{0,1,2}) av[ax]=(diff?av[ax]:0)+(isnan(avImp[ax])?(diff?0:av[ax]):avImp[ax]);
 		dyn.angVel=rot?ori*av:av;
+	}
+	if(hooks.empty()) return;
+	Real prevTimeOrig;
+	if(isFirstStepRun(scene,&prevTimeOrig)){
+		// transform prevTime back to normalized time (fitting *times* points)
+		Real prevTimeNormalized=prevTimeOrig+.5*scene->dt-t0;
+		int cycle=0;
+		if(wrap && prevTimeNormalized>times.back()){
+			prevTimeNormalized=CompUtils::wrapNum(prevTimeNormalized,times.back(),cycle);
+		}
+		// find hook point which we just passed
+		int hookNo=-1;
+		if(wrap & (prevTimeNormalized>t+2*scene->dt)){ // we just wrapped around
+			hookNo=0;
+		} else {
+			for(size_t i=0; i<times.size(); i++){
+				if(prevTimeNormalized<times[i] && times[i]<=t){ // take away the part for leapfrog correction above
+					hookNo=i;
+					break;
+				}
+			}
+		}
+		if(hookNo>=0 && !hooks[hookNo].empty()){
+			GilLock lock;
+			try{
+					py::object global(py::import("wooMain").attr("__dict__"));
+					py::dict local;
+					local["scene"]=local["S"]=py::object(py::ptr(scene));
+					local["woo"]=py::import("woo");
+					local["node"]=py::object(n);
+					local["self"]=py::object(this->shared_from_this());
+					local["timeIndex"]=hookNo;
+					local["cycle"]=cycle;
+					local["prevTime"]=prevTimeOrig;
+					py::exec(hooks[hookNo].c_str(),global,local);
+			} catch (py::error_already_set& e){
+					LOG_ERROR("Python error from "<<this->pyStr()<<".hook["<<hookNo<<"]: "<<hooks[hookNo]);
+					LOG_ERROR("Node "<<n->pyStr()<<", time "<<scene->time<<". Error follows.");
+					LOG_ERROR(parsePythonException_gilLocked());
+					//\n"<<parsePythonException_gilLocked());
+			}
+		}
 	}
 }
 
