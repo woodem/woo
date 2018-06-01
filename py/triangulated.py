@@ -134,6 +134,7 @@ def ribbedMill(A,B,radius,majNum,majHt,majTipAngle,minNum=0,minHt=0,minTipAngle=
 
 def quadrilateral(A,B,C,D,size=0,div=Vector2i(0,0),**kw):
     'Return triangulated `quadrilateral <http://en.wikipedia.org/wiki/Quadrilateral>`__ (or a `skew quadrilateral <http://en.wikipedia.org/wiki/Skew_polygon>`__), when points are not co-planar), where division size is at most *size* (absolute length) or *div* (number of subdivisions in the AB--CD and AC--BD directions).'
+    A,B,C,D=Vector3(A),Vector3(B),Vector3(C),Vector3(D)
     if sum(div)>0:
         if min(div)<1: raise ValueError('Both components of div must be positive')
         if size>0: raise ValueError('only one of *div* or *size* may be given (not both)')
