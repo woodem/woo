@@ -457,7 +457,7 @@ def CheckPythonModules(context):
 			pkg=pkg.replace('python-','python3-')
 			import subprocess
 			try:
-				if subprocess.call([context.env['PYTHON'],'-c','import '+m])==0: continue
+				if subprocess.call([context.env['PYTHON'],'-W','ignore','-c','import '+m])==0: continue
 				failed.append(m+' (package %s)'%pkg)
 			except:
 				failed.append(m+' (exception when running import?; package %s)'%pkg)
