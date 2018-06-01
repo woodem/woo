@@ -10,7 +10,7 @@ struct ClusterMatState: public MatState {
 		if(index%2==0) return ("conn-"+to_string(index/2)).c_str();
 		return ("conn-"+to_string(index/2)+"%8").c_str();
 	}
-	Real getScalar(int index, const long& step, const Real& smooth=0) override {
+	Real getScalar(int index, const Real& time, const long& step, const Real& smooth=0) override {
 		if(index<0 || index>=2*(int)labels.size()) return NaN;
 		if(index%2==0) return labels[index/2];
 		return labels[index/2]%8;

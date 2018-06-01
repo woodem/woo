@@ -36,7 +36,7 @@ struct PelletMatState: public MatState{
 			default: return "";
 		}
 	}
-	Real getScalar(int index, const long& step, const Real& smooth=0) override {
+	Real getScalar(int index, const Real& time, const long& step, const Real& smooth=0) override {
 		switch(index){
 			case 0: return normPlast+shearPlast;
 			// invalid value if not yet updated in this step

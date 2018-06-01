@@ -129,12 +129,14 @@ struct Impose: public Object{
 	virtual void velocity(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::velocity."); }
 	virtual void force(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::force."); }
 	virtual void readForce(const Scene*, const shared_ptr<Node>&){ throw std::runtime_error("Calling abstract Impose::readForce."); }
-	bool isFirstStepRun(const Scene* scene){
+	bool isFirstStepRun(const Scene* scene, Real* _timeLast=nullptr){
 		// this does not need to be locked (hopefully)
 		if(stepLast==scene->step) return false;
 		boost::mutex::scoped_lock l(lock);
 		if(stepLast==scene->step) return false; // test again under the lock, in case it changed meanwhile
 		stepLast=scene->step;
+        if(_timeLast) *_timeLast=timeLast;
+        timeLast=scene->time;
 		return true;
 	}
 	boost::mutex lock;
@@ -147,6 +149,7 @@ struct Impose: public Object{
 		Impose,Object,"Impose arbitrary changes in Node and DemData, at certain hook points during motion integration. Velocity is imposed after motion integration (and again after computing acceleration from forces, to make sure forces don't alter what is prescribed), force is imposed when forces from the previous step are being reset (thus additional force may be applied on the node as usual); readForce is a special imposition before resetting force, which is meant to look at summary force applied onto node(s)." , \
 		((int,what,NONE,AttrTrait<>().bits({"vel","force","iniVel","readForce"}),"What values are to be imposed; this is set by the derived engine automatically depending on what is to be prescribed.")) \
 		((long,stepLast,-1,AttrTrait<>().readonly(),"Step in which this imposition was last used; updated atomically by callers from c++ by calling isFirstStepRun.")) \
+        ((Real,timeLast,NaN,AttrTrait<>().readonly(),"Time in which this imposition was last used; updated automatically bu callers from c++ via ``isFirstStepRun``, just like :obj:`stepLast`.")) \
 		,/*py*/ .def("__add__",&Impose::pyAdd,"Return combined imposition, a new instance of :obj:`CombinedImpose`.") ; \
 			_classObj.attr("none")=(int)NONE; \
 			_classObj.attr("velocity")=(int)VELOCITY; \
@@ -163,14 +166,14 @@ struct MatState: public Object{
 	boost::mutex lock;
 	// returns scalar for rendering purposes 
 	virtual size_t getNumScalars() const { return 0; }
-	virtual Real getScalar(int index, const long& step, const Real& smooth=0){ return NaN; }
+	virtual Real getScalar(int index, const Real& time, const long& step, const Real& smooth=0){ return NaN; }
 	virtual string getScalarName(int index){ return ""; }
 	#define woo_dem_MatState__CLASS_BASE_DOC_ATTRS_PY \
 		MatState,Object,"Holds data related to material state of each particle.", \
 		/*attrs*/ \
 		,/*py*/ \
 		.def("getNumScalars",&MatState::getNumScalars,"Return number of scalars (index to :obj:`getScalar` and :obj:`getScalarName` should be lower than this number).") \
-		.def("getScalar",&MatState::getScalar,(py::arg("index"),py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
+		.def("getScalar",&MatState::getScalar,(py::arg("index"),py::arg("time")=0,py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
 		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)") ;\
 		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>();
 

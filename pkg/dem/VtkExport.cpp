@@ -200,7 +200,7 @@ void VtkExport::exportMatState(const shared_ptr<MatState>& state, vector<vtkSmar
 		matStates.push_back(arr);
 	}
 	for(size_t i=0; i<matStates.size(); i++){
-		Real scalar=state->getScalar(i,scene->step)/divisor;
+		Real scalar=state->getScalar(i,scene->time,scene->step)/divisor;
 		matStates[i]->InsertNextValue(isnan(scalar)?nanValue:scalar);
 	}
 }

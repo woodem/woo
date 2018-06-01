@@ -350,7 +350,7 @@ void Tracer::run(){
 			case SCALAR_MATSTATE:{
 				if(hasP && dyn.parRef.front()->matState){
 					const auto& mState=dyn.parRef.front()->matState;
-					sc=mState->getScalar(matStateIx,scene->step,matStateSmooth);
+					sc=mState->getScalar(matStateIx,scene->time,scene->step,matStateSmooth);
 					if(!matStateNameSet){
 						matStateNameSet=true;
 						lineColor->label=mState->getScalarName(matStateIx);

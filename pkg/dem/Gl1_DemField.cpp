@@ -234,7 +234,7 @@ void Gl1_DemField::doShape(){
 			case COLOR_MAT_ID: parColor=CR->color(p->material->id); break;
 			case COLOR_MATSTATE:{
 				if(CR->label.empty() && p->matState) CR->label=p->matState->getScalarName(matStateIx);
-				Real sc=(p->matState?p->matState->getScalar(matStateIx,scene->step,matStateSmooth):NaN);
+				Real sc=(p->matState?p->matState->getScalar(matStateIx,scene->time,scene->step,matStateSmooth):NaN);
 				parColor=isnan(sc)?solidColor:CR->color(sc);
 				break;
 			}
