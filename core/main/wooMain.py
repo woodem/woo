@@ -621,16 +621,24 @@ finished: %s
             self.updatePlots() # checks for last update time
             if info:
                 runningTime=time.time()-self.started
+                stopAtStep,stopAtTime,step,_time=info['stopAtStep'],info['stopAtTime'],info['step'],info['time']
                 ret+='<td>'
-                if info['stopAtStep']>0:
-                    ret+='<nobr>%2.2f%% done</nobr><br/><nobr>step %d/%d</nobr>'%(info['step']*100./info['stopAtStep'],info['step'],info['stopAtStep'])
-                    finishTime=str(time.ctime(time.time()+int(round(info['stopAtStep']/(info['step']/runningTime)))))
-                    ret+='<br/><font size="1"><nobr>%s finishes</nobr></font><br/>'%finishTime
-                else: ret+='<nobr>step %d</nobr>'%(info['step'])
-                if runningTime!=0: ret+='<br/><nobr>avg %g/sec</nobr>'%(info['step']/runningTime)
+                if stopAtStep>0:
+                    ret+='<nobr>%2.2f%% done</nobr><br/><nobr>step %d/%d</nobr>'%(step*100./stopAtStep,step,stopAtStep)
+                    finishTime=str(time.ctime(self.started+int(round(runningTime*(stopAtStep/step)))))
+                    ret+='<br/><font size="1"><nobr>ETA %s</nobr></font><br/>'%finishTime
+
+                else: ret+='<nobr>step %d</nobr>'%step
+                if runningTime!=0: ret+='<br/><nobr>avg %g/sec</nobr>'%(step/runningTime)
+                ret+='<br/><nobr>&Delta;t %g s</nobr>'%info['dt']
                 ret+='<br/><nobr>%d particles</nobr><br/><nobr>%d contacts</nobr>'%(info['numBodies'],info['numIntrs'])
-                ret+='<br/><nobr>time %g s</nobr>'%info['time']
+                if stopAtTime>0:
+                    ret+='<br/><nobr>%2.2f%% done</nobr><br/><nobr>time %g/%g s</nobr>'%(_time*100./stopAtTime,_time,stopAtTime)
+                    finishTime=str(time.ctime(self.started+int(round(runningTime*(stopAtTime/_time)))))
+                    ret+='<br/><font size="1"><nobr>ETA %s</nobr></font><br/>'%finishTime
+                else: ret+='<br/><nobr>time %g s</nobr>'%_time
                 if info['title']: ret+='<br/>title <i>%s</i>'%info['title']
+                if info['PID']: ret+='<br/>PID %d</br>'%info['PID']
                 ret+='</td>'
             else:
                 ret+='<td> (no info) </td>'
