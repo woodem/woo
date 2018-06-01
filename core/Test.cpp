@@ -64,8 +64,8 @@ py::object WooTestClass::arr3d_py_get(){
 	return l0;
 }
 
-void WooTestClass::arr3d_set(const Vector3i& shape, const VectorXr& data){
-	if(data.rows()!=shape.prod()) throw std::runtime_error("Data must have exactly "+to_string(shape[0])+"x"+to_string(shape[1])+"x"+to_string(shape[2])+"="+to_string(shape.prod())+" items (not "+to_string(data.rows())+").");
+void WooTestClass::arr3d_set(const Vector3i& shape, const vector<Real>& data){
+	if(data.size()!=shape.prod()) throw std::runtime_error("Data must have exactly "+to_string(shape[0])+"x"+to_string(shape[1])+"x"+to_string(shape[2])+"="+to_string(shape.prod())+" items (not "+to_string(data.size())+").");
 	arr3d.resize(boost::extents[shape[0]][shape[1]][shape[2]]);
 	for(int i=0; i<shape[0]; i++) for(int j=0; j<shape[1]; j++) for(int k=0; k<shape[2]; k++) arr3d[i][j][k]=data[i*shape[0]*shape[1]+j*shape[1]+k];
 }

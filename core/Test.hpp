@@ -16,7 +16,7 @@ namespace woo{
 		void postLoad(WooTestClass&, void* addr);
 		typedef boost::multi_array<Real,3> boost_multi_array_real_3;
 		py::object arr3d_py_get();
-		void arr3d_set(const Vector3i& shape, const VectorXr& data);
+		void arr3d_set(const Vector3i& shape, const vector<Real>& data);
 		#define woo_core_WooTestClass__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 			WooTestClass,Object,"This class serves to test various functionalities; it also includes all possible units, which thus get registered in woo", \
 			/* enumerate all units here: */ \
