@@ -47,12 +47,16 @@ void FlowAnalysis::setupGrid(){
 }
 
 
-void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const Real& solidRatio, const shared_ptr<Node>& node){
-	const auto& dyn(node->getData<DemData>());
+void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3r& parPosLocal, const Real& diameter, const Real& solidRatio){
+	const auto& mask(par->mask);
+	const auto& parNode0(par->shape->nodes[0]);
+	const auto& dyn(parNode0->getData<DemData>());
+	// const Vector3r parPosLocal=(node?node->glob2loc(parNode0->pos):parNode0->pos);
+
 	Real V(pow(cellSize,3));
 	// all things saved are actually densities over the volume of a single cell
 	Vector3r momentum_V(dyn.vel*dyn.mass/V);
-	Real Ek_V(dyn.getEk_any(node,/*trans*/true,/*rot*/true,scene)/V);
+	Real Ek_V(dyn.getEk_any(parNode0,/*trans*/true,/*rot*/true,scene)/V);
 
 	size_t fraction=0; // default is the only fraction, which is always present
 	// by diameter
@@ -75,15 +79,25 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const R
 		if(!found){ LOG_WARN("Particle not matching any mask, ignoring; set FlowAnalysis.mask to filter those out upfront."); return; }
 	}
 	// loop over neighboring grid points, add relevant data with weights.
-	Vector3i ijk=xyz2ijk(node->pos);
+	Vector3i ijk=xyz2ijk(parPosLocal);
 	// it does not matter here if ijk are inside the grid;
 	// the enlargedBox test in addCurrentData already pruned cases too far away.
 	// The rest is checked in the loop below with validIjkRange;
 	// that ensure that even points just touching the grid from outside are accounted for correctly.
-	Vector3r n=(node->pos-ijk2xyz(ijk))/cellSize; // normalized coordinate in the cube (0..1)x(0..1)x(0..1)
+	Vector3r n=(parPosLocal-ijk2xyz(ijk))/cellSize; // normalized coordinate in the cube (0..1)x(0..1)x(0..1)
 	if(n.minCoeff()<0 || n.maxCoeff()>1){
-		LOG_ERROR("n="<<n.transpose()<<", ijk="<<ijk.transpose()<<", pos="<<node->pos.transpose()<<", ijk2xyz="<<ijk2xyz(ijk));
+		LOG_ERROR("n="<<n.transpose()<<", ijk="<<ijk.transpose()<<", pos="<<parPosLocal.transpose()<<", ijk2xyz="<<ijk2xyz(ijk));
 	}
+	// matState
+	Real msScalar=NaN;
+	if(matStateScalar>=0 && par->matState){
+		msScalar=par->matState->getScalar(matStateScalar,scene->time,scene->step);
+		if(matStateName.empty()){
+			matStateName=par->matState->getScalarName(matStateScalar);
+			if(matStateName.empty()) LOG_WARN("#"<<par->id<<": matState scalar no. "<<matStateScalar<<" has empty name?");
+		}
+	}
+
 	// trilinear interpolation
 	const Real& x(n[0]); const Real& y(n[1]); const Real& z(n[2]);
 	Real X(1-x), Y(1-y), Z(1-z);
@@ -117,7 +131,9 @@ void FlowAnalysis::addOneParticle(const Real& diameter, const int& mask, const R
 		pt[PT_SUM_WEIGHT]+=w*1.;
 		pt[PT_SUM_DIAM]+=w*diameter; // the average is computed later, dividing by PT_SUM_WEIGHT
 		if(!isnan(solidRatio)) pt[PT_SUM_SOLID_RATIO]+=w*solidRatio;
+		if(!isnan(msScalar)) pt[PT_SUM_MATSTATE_SCALAR]+=w*msScalar;
 		assert(!isnan(pt[PT_FLOW_X]) && !isnan(pt[PT_FLOW_Y]) && !isnan(pt[PT_FLOW_Z]) && !isnan(pt[PT_EK]) && !isnan(pt[PT_SUM_WEIGHT]));
+		// if(matStateIndex>=0) pt[PT_MATSTATE_SCALAR+=w*
 	}
 };
 
@@ -131,9 +147,10 @@ void FlowAnalysis::addCurrentData(){
 		//if(!p->shape->isA<Sphere>()) continue;
 		Real radius=p->shape->equivRadius();
 		if(isnan(radius)) continue;
-		if(!enlargedBox.contains(p->shape->nodes[0]->pos)) continue;
+		Vector3r parPosLocal=node?node->glob2loc(p->shape->nodes[0]->pos):p->shape->nodes[0]->pos;
+		if(!enlargedBox.contains(parPosLocal)) continue;
 		assert(!(porosity && (int)poroData.size()<=p->id));
-		addOneParticle(radius*2.,p->mask,(porosity?1-poroData[p->id]:NaN),p->shape->nodes[0]);
+		addOneParticle(p,parPosLocal,radius*2.,(porosity?1-poroData[p->id]:NaN));
 	}
 };
 
@@ -180,6 +197,7 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 	auto diam=vtkMakeArray(grid,"avg. diameter",1);
 	auto solid=vtkMakeArray(grid,"avg. solid ratio",1);
 	auto vel=vtkMakeArray(grid,"avg. velocity",3);
+	auto msScalar=vtkMakeArray(grid,matStateName,1);
 	// no fractions given, export all of them together
 	if(fractions.empty()){ for(size_t i=0; i<(size_t)nFractions; i++) fractions.push_back(i); }
 
@@ -207,6 +225,7 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 					/* quantities AVERAGED over fractions (summed here and divided by summary weight in the next loop) */
 					*(diam ->GetPointer(dataId))+=ptData[PT_SUM_DIAM];
 					*(solid->GetPointer(dataId))+=ptData[PT_SUM_SOLID_RATIO];
+					*(msScalar->GetPointer(dataId))+=ptData[PT_SUM_MATSTATE_SCALAR];
 					Vector3r v;
 					vel->GetTupleValue(dataId,v.data());
 					vel->SetTupleValue(dataId,(v+Vector3r(ptData[PT_VEL_X],ptData[PT_VEL_Y],ptData[PT_VEL_Z])).eval().data());
@@ -232,10 +251,12 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 				if(wAll!=0){
 					*(diam ->GetPointer(dataId))/=wAll;
 					*(solid->GetPointer(dataId))/=wAll;
+					*(msScalar->GetPointer(dataId))/=wAll;
 					Vector3r v; vel->GetTupleValue(dataId,v.data()); vel->SetTupleValue(dataId,(v/wAll).eval().data());
 				} else {
 					*(diam ->GetPointer(dataId))=NaN;
 					*(solid->GetPointer(dataId))=0;
+					*(msScalar->GetPointer(dataId))=NaN;
 					vel->SetTupleValue(dataId,Vector3r::Zero().eval().data());
 				}
 
@@ -248,15 +269,18 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 vtkSmartPointer<vtkUniformGrid> FlowAnalysis::vtkMakeGrid(){
 	auto grid=vtkSmartPointer<vtkUniformGrid>::New();
 	Vector3r cellSize3=Vector3r::Constant(cellSize);
+	Vector3r origin;
 	// if data are in cells, we need extra items along each axes, and shift the origin by half-cell down
 	if(cellData) {
 		grid->SetDimensions((boxCells+Vector3i::Ones()).eval().data());
-		Vector3r origin=(box.min()-.5*cellSize3);
-		grid->SetOrigin(origin.data());
+		origin=(box.min()-.5*cellSize3);
 	} else {
 		grid->SetDimensions(boxCells.data());
-		grid->SetOrigin(box.min().data());
+		origin=box.min();
 	}
+	// honor node position, ignore orientation
+	if(node) origin+=node->pos;
+	grid->SetOrigin(origin.data());
 	grid->SetSpacing(cellSize,cellSize,cellSize);
 	return grid;
 }
@@ -359,8 +383,11 @@ string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>&
 #include<woo/lib/opengl/GLUtils.hpp>
 #include<woo/pkg/gl/Renderer.hpp>
 	void FlowAnalysis::render(const GLViewInfo& glInfo){
-		if(glInfo.renderer->fastDraw) GLUtils::AlignedBox(box,color);
-		else GLUtils::AlignedBoxWithTicks(box,Vector3r::Constant(cellSize),Vector3r::Constant(cellSize),color);
+		glPushMatrix();
+			if(node) GLUtils::setLocalCoords(node->pos,node->ori);
+			if(glInfo.renderer->fastDraw) GLUtils::AlignedBox(box,color);
+			else GLUtils::AlignedBoxWithTicks(box,Vector3r::Constant(cellSize),Vector3r::Constant(cellSize),color);
+		glPopMatrix();
 	}
 #endif /* WOO_OPENGL */
 
