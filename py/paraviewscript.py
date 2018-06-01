@@ -23,7 +23,7 @@ def findPV():
         #
         # we don't care about 32 bit, do just 64bit
         import winreg as winreg
-        path='SOFTWARE\Wow6432Node\Kitware Inc.'
+        path=r'SOFTWARE\Wow6432Node\Kitware Inc.'
         paraviews=[]
         for reg in (winreg.HKEY_CURRENT_USER,winreg.HKEY_LOCAL_MACHINE):
             aReg=winreg.ConnectRegistry(None,reg)
@@ -67,7 +67,7 @@ def launchPV(script):
     print('Running ','cd "'+scriptDir+'"; '+' '.join(cmd))
     subprocess.Popen(cmd,cwd=scriptDir)
 
-def fromEngines(S,out=None,launch=False,noDataOk=False):
+def fromEngines(S,out=None,launch=False,noDataOk=False,**extraKw):
     '''Write paraview script showing data from the current VTK-related engines and objects:
     
     * :obj:`woo.dem.VtkExport` is queried for files already written, and those are returned;
@@ -84,6 +84,7 @@ def fromEngines(S,out=None,launch=False,noDataOk=False):
     if not out.endswith('.py'): out=out+'.py'
     outPrefix=out[:-3] # without extension
     kw={}
+    kw.update(extraKw)
     for e in S.engines:
         if isinstance(e,woo.dem.VtkExport) and e.nDone>0: kw.update(kwFromVtkExport(e))
         elif isinstance(e,woo.dem.FlowAnalysis) and e.nDone>0: kw.update(kwFromFlowAnalysis(e,outPrefix=outPrefix)) # without the .py
@@ -162,7 +163,7 @@ def fromFlowAnalysis(flowAnalysis,out=None,findMesh=True,launch=False):
     if launch: launchPV(out)
 
 
-def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',flowFile='',splitFile='',flowMeshFiles=[],tracesFile='',energyGridFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
+def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',flowFile='',splitFile='',flowMeshFiles=[],heightMapImageFiles=[],tracesFile='',energyGridFile='',flowMeshOpacity=.2,splitStride=2,splitClip=False,flowStride=2):
     '''Write out script suitable for running with Paraview (with the ``--script`` option). The options to this function are:
 
     :param sphereFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``spheres``);
@@ -173,6 +174,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
     :param flowFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportFractions` (usually all fractions together);
     :param splitFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportVectorOps`;
     :param flowMeshFiles: mesh files to be used for showing boundaries for split analysis;
+    :param heightMapImageFiles: image files which will be warped by scalar;
     :param tracesFile: file written by :obj:`woo.utils.vtkExportTraces`, for per-particle traces;
     :param flowMeshOpacity: opacity of the mesh for flow analysis;
     :param splitStride: spatial stride for segregation analysis; use 2 and more for very dense data meshes which are difficult to see through;
@@ -193,6 +195,7 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
         flowFile=fixPath(flowFile),
         splitFile=fixPath(splitFile),
         flowMeshFiles=[fixPath(f) for f in flowMeshFiles],
+        heightMapImageFiles=[fixPath(f) for f in heightMapImageFiles],
         tracesFile=fixPath(tracesFile),
         energyGridFile=fixPath(energyGridFile),
         flowMeshOpacity=flowMeshOpacity,
@@ -217,12 +220,16 @@ splitStride={splitStride} # with dense meshes, subsample to use only each nth po
 flowMeshFiles={flowMeshFiles}
 flowMeshOpacity={flowMeshOpacity}
 
+# height maps
+heightMapImageFiles={heightMapImageFiles}
+
 # global flow analysis
 flowFile='{flowFile}'
 flowStride={flowStride}
 
 # traces
 tracesFile='{tracesFile}'
+
 
 # energy grid
 energyGridFile='{energyGridFile}'
@@ -260,7 +267,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
         import zipfile
         with zipfile.ZipFile(zipName,'w',allowZip64=True) as ar:
             zippedFiles=set()
-            for fff in ('sphereFiles','meshFiles','conFiles','triFiles','flowMeshFiles'):
+            for fff in ('sphereFiles','meshFiles','conFiles','triFiles','flowMeshFiles','heightMapImageFiles'):
                 ff=eval(fff) # get the sequence
                 ff2=[]
                 for f in ff[vtkSlice]:
@@ -283,7 +290,7 @@ if hasattr(sys,'argv') and len(sys.argv)>1:
             ll=[]
             for l in open(sys.argv[0]):
                 var=l.split('=',1)[0]
-                if var in ('sphereFiles','meshFiles','conFiles','triFiles','staticFile','splitFile','flowMeshFiles','flowFile','tracesFile','energyGridFile'):
+                if var in ('sphereFiles','meshFiles','conFiles','triFiles','heightMapImageFiles','staticFile','splitFile','flowMeshFiles','flowFile','tracesFile','energyGridFile'):
                     if type(newFiles[var])==list: ll.append(var+'='+str(newFiles[var])+'\n')
                     else: ll.append(var+"='"+newFiles[var]+"'\n")
                 else: ll.append(l)
@@ -320,7 +327,7 @@ if splitFile:
     _ex=_last=ExtractSubset(VOI=_ext,SampleRateI=splitStride,SampleRateJ=splitStride,SampleRateK=splitStride)
     _cl=_last=Clip(ClipType='Box')
     _cl.ClipType.Bounds=_bounds
-    _cl.InsideOut=1
+    _cl.Invert=1
     rep=Show()
     rep.Representation='Outline'
     rep.Visibility=1
@@ -386,7 +393,7 @@ if flowMeshFiles:
         try:
             _cl=Clip(ClipType='Box')
             _cl.ClipType.Bounds=flowBounds
-            _cl.InsideOut=1
+            _cl.Invert=1
             _cl.Scalars = ['CELLS', 'color']
         except NameError: pass # flowBounds not defined, as flow/split were not exported
         rep=Show()
@@ -440,6 +447,11 @@ if meshFiles:
     rep=Show()
     rep.Opacity=0.2
 
+for hm in heightMapImageFiles:
+    img=XMLImageDataReader(FileName=[hm])
+    RenameSource(hm,img)
+    warp=WarpByScalar(Input=img)
+    rep=Show()
 
 if staticFile:
     mesh=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=[staticFile])
