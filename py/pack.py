@@ -852,7 +852,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         print('Porosity: %g %%'%(100*(1-(mass/vol)/mat.density)))
 
     if memoizeDir and not dontBlock:
-        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr',width=-1,noMagic=True)+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr',width=-1,noMagic=True) if gen else '')+'ver5'
+        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr',width=-1,noMagic=True)+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr',width=-1,noMagic=True) if gen else '')+'ver7b'
         import hashlib
         paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.bandfeed'
@@ -885,8 +885,10 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     S.dem.loneMask=0b010
 
 
-    massToDo=porosity*mat.density*dim[0]*dim[1]*dim[2]
-    print('Will generate %g mass'%massToDo)
+    #massToDoApprox=porosity*mat.density*dim[0]*dim[1]*dim[2]
+    massToDoApprox=(1-porosity)*mat.density*dim[0]*dim[1]*dim[2]
+    S.lab.massMin=1.*massToDoApprox # avoid mistaken finish
+    print('Will need approx %g mass (require %g)'%(massToDoApprox,S.lab.massMin))
 
     ## FIXME: decrease friction angle to help stabilization
     mat0,mat=mat,mat.deepcopy()
@@ -904,30 +906,53 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         goal*=.2
     else:
         unbalancedFunc='woo.utils.unbalancedForce'
+    S.lab.goalHt=dim[2]
+    S.lab.goalUnb=goal
+    import textwrap
     S.engines=utils.defaultEngines(damping=damping,dynDtPeriod=100)+[
         woo.dem.BoxInlet(
             box=((.01*cellSize[0],factoryLeft,factoryBottom),(cellSize[0],factoryRight,cellSize[2])),
             stepPeriod=200,
-            maxMass=massToDo,
+            maxMass=-1, # massToDo,
             massRate=0,
             maxAttempts=20,
             generator=generator,
             materials=[mat],
             shooter=woo.dem.AlignedMinMaxShooter(dir=(0,0,-1),vRange=(0,0)),
             mask=1,
-            label='factory',
+            label='inlet',
             doneHook='S.dem.par.remove(S.lab.wallId)',
             #periSpanMask=1, # x is periodic
         ),
         #PyRunner(200,'plot.addData(uf=utils.unbalancedForce(),i=O.scene.step)'),
         # woo.core.PyRunner(300,'import woo\nprint "%g/%g mass, %d particles, unbalanced '+('energy' if useEnergy else 'force')+'%g/'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),'+unabalncedFunc+'(S))'),
-        woo.core.PyRunner(300,'import woo\nprint("%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S)))'),
-        woo.core.PyRunner(300,'import woo\nif S.lab.factory.mass>=S.lab.factory.maxMass: S.engines[0].damping=1.5*%g'%damping),
-        woo.core.PyRunner(200,'import woo\nif '+unbalancedFunc+'(S)<'+str(goal)+' and S.lab.factory.dead: S.stop()'),
+        woo.core.PyRunner(300,textwrap.dedent("""
+        import woo, woo.utils, math
+        inlet=S.lab.inlet
+        if not inlet.dead:
+            q95=woo.utils.contactCoordQuantiles(S.dem,[.95])[0]
+            unbe=unbf=float('nan')
+        else:
+            relq=float('nan')
+            unbe,unbf=woo.utils.unbalancedEnergy(S),woo.utils.unbalancedForce(S)
+        print('rel 95%% ht: %s / %g, mass %g, %d particles, unbalanced F: %g E: %g / %g'%('OK' if inlet.dead else str(q95),S.lab.goalHt,inlet.mass,len(S.dem.par),unbf,unbf,S.lab.goalUnb))
+        if not inlet.dead and q95>=S.lab.goalHt and inlet.mass>S.lab.massMin:
+            S.lab.leapfrog.damping=min(.9,S.lab.leapfrog.damping*1.5)
+            inlet.dead=True
+            S.dem.par.remove(S.lab.wallId)
+            print("Particles reach high enough, stopping inlet; waiting for unbalanced E to go below %g."%S.lab.goalUnb)
+        if inlet.dead and unbe<S.lab.goalUnb:
+            print("Unbalanced E dropped, finished.")
+            S.stop()
+        """))
+        # woo.core.PyRunner(300,'import woo\nprint("%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S)))'),
+        # woo.core.PyRunner(300,'import woo.utils; relq=woo.utils.contactCoordQuantiles(S.dem,[.95])[0]/S.lab.goalHt; print("Rel. coord 95% quantile:",relq);\nif relq>1:\n    S.lab.factory.dead=True; S.dem.par.remove(S.lab.wallId);'),
+        # woo.core.PyRunner(300,'import woo\nif S.lab.factory.dead: S.lab.leapfrog.damping=1.5*%g'%damping),
+        # woo.core.PyRunner(200,'import woo\nif '+unbalancedFunc+'(S)<'+str(goal)+' and S.lab.factory.dead: S.stop()'),
     ]
     # S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
     S.dtSafety=dtSafety
-    print('Inlet box is',S.lab.factory.box)
+    print('Inlet box is',S.lab.inlet.box)
     if dontBlock: return S
     else: S.run()
     S.wait()
@@ -936,8 +961,8 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     else: sp=SpherePack()
     sp.fromDem(S,S.dem)
     sp.canonicalize()
-    # remove what is above the requested height
-    sp=sp.filtered(woo.pack.inAxisRange(axis=2,range=(0,dim[2])),recenter=False)
+    # remove what is above the requested height; starts from 0, but a bit less, use -dim[2] for dimensionality consistency
+    sp=sp.filtered(woo.pack.inAxisRange(axis=2,range=(-dim[2],dim[2])),recenter=False)
     printBulkParams(sp)
     if nRepeatCells:
         print('nRepeatCells',nRepeatCells)
