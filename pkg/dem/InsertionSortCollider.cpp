@@ -634,7 +634,7 @@ void InsertionSortCollider::run(){
 						if(!V[j].flags.isMin) continue;
 						/* abuse the same function here; since it does spatial overlap check first (with separating==false), it is OK to use it */
 						handleBoundInversion(iid,jid,/*separting*/false);
-						assert(j<2*nPar-1);
+						assert(j<=2*nPar-1); // XXX: should this really be j<2*nPar-1?? 
 					}
 				}
 			} else { // periodic case: see comments above
