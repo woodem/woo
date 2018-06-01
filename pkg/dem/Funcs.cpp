@@ -674,14 +674,14 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 // with a prescribed shape, in this case a dodecahedron
 class _wall_initial_shape : public voro::wall {
 	public:
-		_wall_initial_shape() {
-			const double Phi=0.5*(1+sqrt(5.0));
+		_wall_initial_shape(Real r=1) {
+			const double Phi=r*0.5*(1+sqrt(5.0));
 			// Create a dodecahedron
-			v.init(-2,2,-2,2,-2,2);
-			v.plane(0,Phi,1);v.plane(0,-Phi,1);v.plane(0,Phi,-1);
-			v.plane(0,-Phi,-1);v.plane(1,0,Phi);v.plane(-1,0,Phi);
-			v.plane(1,0,-Phi);v.plane(-1,0,-Phi);v.plane(Phi,1,0);
-			v.plane(-Phi,1,0);v.plane(Phi,-1,0);v.plane(-Phi,-1,0);
+			v.init(-2*r,2*r,-2*r,2*r,-2*r,2*r);
+			v.plane(0,Phi,r);v.plane(0,-Phi,r);v.plane(0,Phi,-r);
+			v.plane(0,-Phi,-r);v.plane(r,0,Phi);v.plane(-r,0,Phi);
+			v.plane(r,0,-Phi);v.plane(-r,0,-Phi);v.plane(Phi,r,0);
+			v.plane(-Phi,r,0);v.plane(Phi,-r,0);v.plane(-Phi,-r,0);
 		};
 		bool point_inside(double x,double y,double z) {return true;}
 		bool cut_cell(voro::voronoicell &c,double x,double y,double z) {
@@ -699,9 +699,26 @@ class _wall_initial_shape : public voro::wall {
 };
 
 
+voro::container_poly _makeVoroContainerPolyFromParticlesInBox(const shared_ptr<DemField>& dem, const AlignedBox3r& box, _wall_initial_shape& wis, int idOff=0){
+	voro::container_poly con(box.min()[0],box.max()[0],box.min()[1],box.max()[1],box.min()[2],box.max()[2],5,5,5,false,false,false,8);
+	// _wall_initial_shape wis(r);
+	con.add_wall(wis);
+	vector<Particle::id_t> ret;
+	for(const auto& p: *dem->particles){
+		if(!p->shape) continue;
+		const auto& sh(p->shape);
+		Real rad=p->shape->equivRadius();
+		if(isnan(rad)) continue; // discards also multinodal shapes
+		const auto& pos(sh->nodes[0]->pos);
+		if(!box.contains(pos)) continue;
+		con.put(p->id+idOff,pos[0],pos[1],pos[2],rad);
+	}
+	return con;
+}
+
 vector<Real> DemFuncs::boxPorosity(const shared_ptr<DemField>& dem, const AlignedBox3r& box){
 	voro::container_poly con(box.min()[0],box.max()[0],box.min()[1],box.max()[1],box.min()[2],box.max()[2],5,5,5,false,false,false,8);
-	_wall_initial_shape wis;
+	_wall_initial_shape wis; // XXX: radius of cell
 	con.add_wall(wis);
 	vector<Real> ret(dem->particles->size(),NaN); // return array, same ordering as particles; filled with NaN
 	for(const auto& p: *dem->particles){
@@ -725,3 +742,38 @@ vector<Real> DemFuncs::boxPorosity(const shared_ptr<DemField>& dem, const Aligne
 	return ret;
 }
 
+std::map<Particle::id_t,std::vector<Vector3r>> DemFuncs::surfParticleIdNormals(const shared_ptr<DemField>& dem, const AlignedBox3r& box, const Real& r){
+	_wall_initial_shape wis(r);
+	voro::container_poly con=_makeVoroContainerPolyFromParticlesInBox(dem,box,wis,/*idOff*/1);
+	//con.draw_particles_pov("/tmp/surfParticleIds_p.pov");
+	//con.draw_cells_pov("/tmp/surfParticleIds_v.pov");
+	std::map<Particle::id_t,std::vector<Vector3r>> ret;
+	voro::c_loop_all cla(con);
+	voro::voronoicell_neighbor c;
+	if(cla.start()) do if(con.compute_cell(c,cla)){
+		int id; double x,y,z,r;
+		cla.pos(id,x,y,z,r);
+		std::vector<int> neighbors;
+		c.neighbors(neighbors);
+		int zeros=0;
+		for(const auto& n: neighbors) if(n==0) zeros++;
+		if(zeros==0) continue;
+		std::vector<double> normals;
+		c.normals(normals);
+		std::vector<Vector3r> nn;
+		nn.reserve(zeros);
+		assert(normals.size()/3==neighbors.size());
+		for(size_t i=0; i<neighbors.size(); i++){
+			if(neighbors[i]==0) nn.push_back(Vector3r(normals[3*i],normals[3*i+1],normals[3*i+2]));
+		}
+		ret[id-1]=nn;
+		#if 0
+			cerr<<"#"<<id<<" neighbors ["<<neighbors.size()<<"]: ";
+			for(const auto& n: neighbors) cerr<<n<<",";
+			cerr<<"   normals["<<normals.size()/3<<"]: ";
+			for(size_t i=0; i<normals.size()/3; i+=1) cerr<<normals[3*i]<<","<<normals[3*i+1]<<","<<normals[3*i+2]<<"; ";
+			cerr<<"\n";
+		#endif
+	} while(cla.inc());
+	return ret;
+}

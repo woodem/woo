@@ -141,6 +141,9 @@ struct DemFuncs{
 	/* return porosity of particles, compued as void volume fraction after radical Voronoi tesselation */
 	static vector<Real> boxPorosity(const shared_ptr<DemField>&, const AlignedBox3r& box);
 
+	static std::map<Particle::id_t,std::vector<Vector3r>> surfParticleIdNormals(const shared_ptr<DemField>& dem, const AlignedBox3r& box, const Real& r);
+
+
 };
 
 
