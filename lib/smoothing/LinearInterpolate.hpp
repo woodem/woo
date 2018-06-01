@@ -10,10 +10,11 @@
    it only returns two endpoints and scalar value (timeT) in range (0,1) for interpolation between those two.
 */
 template<typename T, typename timeT>
-std::tuple<T,T,timeT> linearInterpolateRel(const Real t, const std::vector<timeT>& tt, const std::vector<T>& values, size_t& pos){
+std::tuple<T,T,timeT> linearInterpolateRel(const Real t, const std::vector<timeT>& tt, const std::vector<T>& values, size_t& _pos){
+	size_t pos=_pos; // use local copy for safe reentrant access, then write back
 	assert(tt.size()==values.size());
-	if(t<=tt[0]){ pos=0; return std::make_tuple(values[0],values[values.size()>1?1:0],0.);}
-	if(t>=*tt.rbegin()){ pos=tt.size()-2; return std::make_tuple(values.size()>1?values[pos]:values.back(),values.back(),1.);}
+	if(t<=tt[0]){ _pos=0; return std::make_tuple(values[0],values[values.size()>1?1:0],0.);}
+	if(t>=*tt.rbegin()){ _pos=tt.size()-2; return std::make_tuple(values.size()>1?values[pos]:values.back(),values.back(),1.);}
 	pos=std::min(pos,tt.size()-2);
 	while((tt[pos]>t) || (tt[pos+1]<t)){
 		assert(tt[pos]<tt[pos+1]);
@@ -21,6 +22,7 @@ std::tuple<T,T,timeT> linearInterpolateRel(const Real t, const std::vector<timeT
 		else pos++;
 	}
 	const Real &t0=tt[pos], &t1=tt[pos+1];
+	_pos=pos;
 	return std::make_tuple(values[pos],values[pos+1],(t-t0)/(t1-t0));
 }
 
