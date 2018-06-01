@@ -7,10 +7,10 @@
 // hack; check if that is really needed
 #include<woo/pkg/dem/InsertionSortCollider.hpp>
 
-WOO_PLUGIN(dem,(ConveyorInlet));
+WOO_PLUGIN(dem,(ConveyorInlet)(InletMatState));
 WOO_IMPL_LOGGER(ConveyorInlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ConveyorInlet__CLASS_BASE_DOC_ATTRS_PY);
-WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_InletMatState__CLASS_BASE_DOC_ATTRS);
 
 
 Real ConveyorInlet::critDt(){
@@ -179,6 +179,7 @@ void ConveyorInlet::sortPacking(const Real& zTrimVol){
 void ConveyorInlet::nodeLeavesBarrier(const shared_ptr<Node>& n){
 	auto& dyn=n->getData<DemData>();
 	dyn.setBlockedNone();
+	if(dyn.impose) dyn.impose.reset();
 	Real c=isnan(color)?Mathr::UnitRandom():color;
 	setAttachedParticlesColor(n,c);
 	// assign velocity with randomized lateral components
@@ -222,7 +223,7 @@ void ConveyorInlet::setAttachedParticlesColor(const shared_ptr<Node>& n, Real c)
 	}
 }
 
-void ConveyorInlet::setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<ConveyorMatState>& ms){
+void ConveyorInlet::setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<InletMatState>& ms){
 	auto& dyn=n->getData<DemData>();
 	if(!dyn.isClump()){ if(!dyn.parRef.empty()) (*dyn.parRef.begin())->matState=ms; }
 	else {
@@ -246,12 +247,33 @@ void ConveyorInlet::run(){
 		barrierLayer=maxRad*abs(barrierLayer);
 		LOG_INFO("Setting barrierLayer="<<barrierLayer);
 	}
-	// correction of lengths from stream beginning
-	//Real feedRefCorr=(feedRefNode?-(node->ori.conjugate()*(node->pos-feedRefNode->pos)).x():0.0);
+
+	Real timeSpan;
+	if(stepPrev<0 || isnan(virtPrev)){
+		if(startLen<=0) ValueError("ConveyorInlet.startLen must be positive or NaN (not "+to_string(startLen)+")");
+		if(!isnan(startLen)){
+			timeSpan=startLen/packVel;
+			cerr<<"startLen="<<startLen<<", initial timeSpan="<<timeSpan<<endl;
+		}
+		else timeSpan=(stepPeriod>0?stepPeriod*scene->dt:scene->dt);
+	} else {
+		timeSpan=scene->time-virtPrev;
+	}
+
+	// in stretched (spatial) coorinates
+	Real stepX0=xDebt+timeSpan*vel; // packVel;
+	Real stepX1=0;
+	if(streamBeginNode) stepX1=(node->ori.conjugate()*(streamBeginNode->pos-node->pos)).x();
+	//cerr<<"stepX1="<<stepX1<<endl;
+	xDebt=stepX1; // consumed in the next step
+	// in internal packing coordinates
+	Real lenToDo=(stepX0-stepX1)*(packVel/vel);
+
+	// remove now-excess particles from the barrier
 	auto I=barrier.begin();
 	while(I!=barrier.end()){
 		const auto& n=*I;
-		if((node->ori.conjugate()*(n->pos-node->pos))[0]>barrierLayer){
+		if((node->ori.conjugate()*(n->pos-node->pos))[0]>barrierLayer+stepX1){
 			nodeLeavesBarrier(n);
 			I=barrier.erase(I); // erase and advance
 		} else {
@@ -259,48 +281,9 @@ void ConveyorInlet::run(){
 		}
 	}
 
-	Real packVelCorrected=packVel;
-	Real dVNodeRefNode=0, dXNodeRefNode=0;
-	if(feedRefNode){
-		Vector3r vRef=feedRefNode->hasData<DemData>()?feedRefNode->getData<DemData>().vel:Vector3r::Zero();
-		Vector3r vNode=node->getData<DemData>().vel;
-		dVNodeRefNode=(node->ori.conjugate()*(vNode-vRef)).x();
-		packVelCorrected-=dVNodeRefNode;
-		if(packVelCorrected<0) LOG_WARN("Packing velocity was corrected from "<<packVel<<" to "<<packVelCorrected<<" as per feedRefNode, but the value is negative. Expect trouble (overlapping particles and explosions).");
-		// compare this to assumed resulting distance from integration and add to xCorrection
-		dXNodeRefNode=(node->ori.conjugate()*(node->pos-feedRefNode->pos)).x();
-		// difference between assumption and real distance
-		if(!isnan(nextFeedRefNodeDist)){
-			Real dCorr=-(dXNodeRefNode-nextFeedRefNodeDist);
-			// xCorrection+=dCorr;
-			xCorrection+=dCorr;
-			cerr<<"xCorrection: distance was supposed to be "<<nextFeedRefNodeDist<<", is "<<dXNodeRefNode<<", correction is "<<xCorrection<<" (diff by "<<dCorr<<")"<<endl;
-		}
-	}
-	
-	Real lenToDo;
-	if(stepPrev<0){ // first time run
-		if(startLen<=0) ValueError("ConveyorInlet.startLen must be positive or NaN (not "+to_string(startLen)+")");
-		if(!isnan(startLen)) lenToDo=startLen;
-		else lenToDo=(stepPeriod>0?stepPeriod*scene->dt*packVelCorrected:scene->dt*packVelCorrected);
-	} else {
-		Real dtt;
-		if(!isnan(virtPrev)) dtt=scene->time-virtPrev; // time elapsed since last run
-		else dtt=(stepPeriod>0?stepPeriod:1)*scene->dt; // estimate
-		lenToDo=dtt*packVelCorrected;
-		if(feedRefNode){
-			nextFeedRefNodeDist=dXNodeRefNode+dtt*dVNodeRefNode;
-			// cerr<<"Expected node distance next time: "<<nextFeedRefNodeDist<<" (current dist "<<dXNodeRefNode<<", velocity "<<dVNodeRefNode<<", time span "<<dtt<<endl;
-		}
-		//if(!isnan(virtPrev)) lenToDo=(scene->time-virtPrev)*packVelCorrected; // time elapsed since last run
-		//else lenToDo=scene->dt*packVelCorrected*(stepPeriod>0?stepPeriod:1); // this should not happen?
-	}
-	/* detect how much is the difference between assumed feedRefNode-node distance (last time, by integration) and the real distance now and use that to correct lenToDo *and* to offset generated particles by that much. This will slightly affect current mass rate but should even out in the long run.
-	*/
-
-
 	Real stepMass=0;
-	LOG_DEBUG("lenToDo="<<lenToDo<<", time="<<scene->time<<", virtPrev="<<virtPrev<<", packVel="<<packVel<<" (packVelCorrected="<<packVelCorrected);
+	int stepNum=0;
+	// LOG_DEBUG("lenToDo="<<lenToDo<<", time="<<scene->time<<", virtPrev="<<virtPrev<<", packVel="<<packVel<<" (packVelCorrected="<<packVelCorrected);
 	Real lenDone=0;
 	while(true){
 		// done forever
@@ -333,7 +316,11 @@ void ConveyorInlet::run(){
 			}
 		}
 	
-		Real realSphereX=xCorrection+(vel/packVel)*(lenToDo-lenDone); // scale x-position by dilution (>1)
+		// Real realSphereX=xCorrection+(vel/packVel)*(lenToDo-lenDone); // scale x-position by dilution (>1)
+
+		// Real realSphereX=stepX1+(lenToDo-lenDone)*(vel/packVel);
+		Real realSphereX=stepX0-lenDone*(vel/packVel);
+		// Real realSphereX=stepX0-(vel/packVel)*(lenToDo-lenDone)
 		Vector3r newPos=node->pos+node->ori*Vector3r(realSphereX,centers[nextIx][1],centers[nextIx][2]);
 
 		vector<shared_ptr<Node>> nn;
@@ -369,28 +356,34 @@ void ConveyorInlet::run(){
 		Real nnMass=0.;
 		for(const auto& n: nn){
 			auto& dyn=n->getData<DemData>();
-			if(realSphereX<barrierLayer){
+			bool isBarrier=realSphereX<barrierLayer+stepX1;
+			if(isBarrier){
 				Real z=node->glob2loc(n->pos)[2];
 				bool isBed=(!isnan(movingBedZ) && z<movingBedZ);
 				const auto& color=(isBed?movingBedColor:barrierColor);
 				setAttachedParticlesColor(n,isnan(color)?Mathr::UnitRandom():color);
-				if(!isBed) barrier.push_back(n);
+				if(!isBed){
+					barrier.push_back(n);
+					if(barrierImpose) dyn.impose=barrierImpose;
+				}
 				dyn.setBlockedAll();
 			} else {
 				setAttachedParticlesColor(n,isnan(color)?Mathr::UnitRandom():color);
 			}
 
-			if(conveyorMatState){
-				auto ms=make_shared<ConveyorMatState>();
-				ms->stepAdded=scene->step;
-				ms->xCorrection=xCorrection;
+			if(matState){
+				auto ms=make_shared<InletMatState>();
+				ms->timeNew=scene->time;
+				// ms->xCorrection=xCorrection;
 				setAttachedParticlesMatState(n,ms);
 			}
 
 			// set velocity;
-			dyn.vel=node->ori*(Vector3r::UnitX()*vel);
-			if(scene->trackEnergy){
-				scene->energy->add(-DemData::getEk_any(n,true,/*rotation zero, don't even compute it*/false,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+			if(!isBarrier || !barrierImpose){
+				dyn.vel=(node->hasData<DemData>()?node->getData<DemData>().vel:Vector3r::Zero())+node->ori*(Vector3r::UnitX()*vel);
+				if(scene->trackEnergy){
+					scene->energy->add(-DemData::getEk_any(n,true,/*rotation zero, don't even compute it*/false,scene),"kinInlet",kinEnergyIx,EnergyTracker::ZeroDontCreate);
+				}
 			}
 
 			#ifdef WOO_OPENGL
@@ -408,20 +401,21 @@ void ConveyorInlet::run(){
 		if(save) genDiamMassTime.push_back(Vector3r(2*radii[nextIx],nnMass,scene->time));
 
 		num+=1;
+		stepNum+=1;
 	
 		// decrease; can go negative, handled at the beginning of the loop
 		// this same code is repeated above if clipping short-circuits the loop, keep in sync!
 		nextIx-=1; 
 	};
 
-	setCurrRate(stepMass/(/*time*/lenToDo/packVelCorrected));
+	setCurrRate(stepMass/(/*time*/lenToDo/packVel));
 
 	dem->contacts->dirty=true; // re-initialize the collider
-	#if 0
+	if(stepNum>=initSortLimit){
 		for(const auto& e: scene->engines){
 			if(dynamic_pointer_cast<InsertionSortCollider>(e)){ e->cast<InsertionSortCollider>().forceInitSort=true; break; }
 		}
-	#endif
+	}
 }
 
 py::object ConveyorInlet::pyDiamMass(bool zipped) const {

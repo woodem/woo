@@ -3,30 +3,29 @@
 #include<woo/pkg/dem/Clump.hpp>
 
 
-struct ConveyorMatState: public MatState{
+struct InletMatState: public MatState{
 	size_t getNumScalars() const override { return 1; }
 	string getScalarName(int index) override {
 		switch(index){
-			case 0: return "step added";
-			case 1: return "x correction";
+			case 0: return "time new";
+			case 1: return "age";
 			default: return "";
 		}
 	}
-	Real getScalar(int index, const long& step, const Real& smooth=0) override {
+	Real getScalar(int index, const Real& time, const long& step, const Real& smooth=0) override {
 		switch(index){
-			case 0: return stepAdded;
-			case 1: return xCorrection;
+			case 0: return timeNew;
+			case 1: return time-timeNew;
 			default: return NaN;	
 		}
 	}
-	#define woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS \
-		ConveyorMatState,MatState,"Hold dissipated energy data for this particles, to evaluate wear.", \
-		((long,stepAdded,-1,,"Step at which this particle was created by the inlet.")) \
-		((Real,xCorrection,0,,"X correction for the particle."))
+	#define woo_dem_InletMatState__CLASS_BASE_DOC_ATTRS \
+		InletMatState,MatState,"Hold dissipated energy data for this particles, to evaluate wear.", \
+		((Real,timeNew,-1,,"Step at which this particle was created by the inlet."))
 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ConveyorMatState__CLASS_BASE_DOC_ATTRS);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_InletMatState__CLASS_BASE_DOC_ATTRS);
 };
-WOO_REGISTER_OBJECT(ConveyorMatState);
+WOO_REGISTER_OBJECT(InletMatState);
 
 struct ConveyorInlet: public Inlet{
 	WOO_DECL_LOGGER;
@@ -38,7 +37,7 @@ struct ConveyorInlet: public Inlet{
 	Real critDt() override; 
 	void nodeLeavesBarrier(const shared_ptr<Node>& p);
 	void setAttachedParticlesColor(const shared_ptr<Node>& n, Real c);
-	void setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<ConveyorMatState>& ms);
+	void setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<InletMatState>& ms);
 
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override{
@@ -81,15 +80,18 @@ struct ConveyorInlet: public Inlet{
 		((Real,movingBedZ,NaN,,"If given, particles with z coordinate lower than this value will move indefinitely with the conveyor (contact velocity, blocked DOFs), technically not added to the barrier at all.")) \
 		((Real,movingBedColor,.5,,"Color for particles selected with :obj:`movingBedZ` (NaN for random).")) \
 		((bool,save,true,,"Save generated particles so that PSD can be generated afterwards")) \
-		((bool,conveyorMatState,false,,"Endow new particles with :obj:`ConveyorMatState` (for tracking when a particular particle was created and similar.")) \
+		((bool,matState,false,,"Endow new particles with :obj:`InletMatState` (for tracking when a particular particle was created and similar.")) \
 		\
 		((int,nextIx,-1,AttrTrait<>().readonly().startGroup("Bookkeeping"),"Index of last-generated particles in the packing")) \
 		((Real,lastX,0,AttrTrait<>().readonly(),"X-coordinate of last-generated particles in the packing")) \
 		((list<shared_ptr<Node>>,barrier,,AttrTrait<>().readonly().noGui(),"Nodes which make up the barrier and will be unblocked once they leave barrierLayer.")) \
 		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<>(),"Position and orientation of the factory; local x-axis is the feed direction.")) \
-		((shared_ptr<Node>,feedRefNode,,AttrTrait<>(),"Reference point for the feed stream, if not set (default) :obj:`node` is the reference point. Only the position of this node, projected onto :math:`x`-axis of :obj:`node` is relevant.")) \
-		((Real,nextFeedRefNodeDist,NaN,AttrTrait<>().readonly().noGui(),"Compute correction of x-placement resulting from differences in time-integration of :obj:`node` and :obj:`feedRefNode` (every step via :obj:`~woo.dem.Leapfrog`) vs. :obj:`packVel` (when this engine runs), for non-uniform relative motion of nodes.")) \
-		((Real,xCorrection,0,AttrTrait<>().readonly().noGui(),"Cumulative correction of the x coordinate, see :obj:`nextFeedRefNodeDist`.")) \
+		/* movable beginning */ \
+		((shared_ptr<Node>,streamBeginNode,,AttrTrait<>(),"Node at which the particle stream will start, which can be moving during the simulation without disrupting stream continuity. It is the position of this node, projected onto :math:`x`-axis of :obj:`node`, which is relevant.")) \
+		((shared_ptr<Impose>,barrierImpose,,AttrTrait<>(),"Imposition which is used for barrier nodes, as long as they are in the barrier.")) \
+		((Real,xDebt,0,AttrTrait<>().readonly().noGui(),"Length of packing which was not covered in the last step due to :obj:`streamBeginNode` offset.")) \
+		/* end movable beginning */ \
+		((int,initSortLimit,200,,"Limit of number of particles generated in a single step above which :obj:`woo.dem.InsertionSortCollider.forceInitSort` will be set (only useful if :obj:`InsertionSortCollider` is actually used).")) \
 		((Real,avgRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Average feed rate (computed from :obj:`Material density <Material.density>`, packing and  and :obj:`vel`")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
 		((vector<Vector3r>,genDiamMassTime,,AttrTrait<Attr::readonly>().noGui(),"List of generated diameters, masses and times (for making granulometry)")) \
