@@ -120,10 +120,10 @@ def makeConveyor(S,endPt,planeOri,wd0,wd1,trough,slope,fullLen,model,generator,f
 #
 # build simulation from here
 #
-S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))],engines=woo.dem.DemField.minimalEngines(model=model))
 # contact model and materials to use
 #model=woo.models.ContactModelSelector(name='pellet',mats=[woo.dem.PelletMat(young=1e7,density=2000)])
 model=woo.models.ContactModelSelector(name='Schwarz',restitution=.8,mats=[woo.dem.FrictMat(young=1e7,density=2000)])
+S=woo.master.scene=woo.core.Scene(fields=[woo.dem.DemField(gravity=(0,0,-10))],engines=woo.dem.DemField.minimalEngines(model=model))
 # particles to be put on the conveyor
 generator=woo.dem.PsdCapsuleGenerator(psdPts=[Vector2(0.01,.0),Vector2(.02,.2),Vector2(.03,1.)],shaftRadiusRatio=(1.,2.))
 
