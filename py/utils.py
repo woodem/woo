@@ -68,7 +68,7 @@ def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCo
         if len(cp2)==1: cp2[0].label='cp2'
         damping=model.getNonviscDamping()
         if model.distFactor!=1.0:
-            woo.master.checkApi(10103,"woo.models.ContactModelSelector.distFactor has non-default value. The new API does not set this value in engines returned from DemField.minimalEngines anymore, it *must* be set as DemField.distFactor by the called.")
+            woo.master.checkApi(10103,"woo.models.ContactModelSelector.distFactor has non-default value. The new API does not set this value in engines returned from DemField.minimalEngines anymore, it *must* be set as DemField.distFactor by the caller.")
     else:
         cp2=[cp2 if cp2 else Cp2_FrictMat_FrictPhys()]
         law=[law if law else Law2_L6Geom_FrictPhys_IdealElPl(noSlip=noSlip,noBreak=noBreak,label='contactLaw')]
