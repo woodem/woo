@@ -35,18 +35,19 @@ woo.batch.readParamsFromTable(S,noTableOk=True,
 
 mat=ConcreteMat(young=S.lab.table.young,tanPhi=S.lab.table.tanPhi,ktDivKn=S.lab.table.ktDivKn,density=4800,sigmaT=S.lab.table.sigmaT,relDuctility=S.lab.table.relDuctility,epsCrackOnset=S.lab.table.epsCrackOnset,isoPrestress=S.lab.table.isoPrestress)
 
-# sps=woo.pack.SpherePack()
 S.lab.minRad=.17*S.lab.table.specimenLength
-sp=woo.pack.randomDensePack(
-    woo.pack.inHyperboloid((0,0,-.5*S.lab.table.specimenLength),(0,0,.5*S.lab.table.specimenLength),.25*S.lab.table.specimenLength,S.lab.minRad),
-    spheresInCell=2000,
-    radius=S.lab.table.sphereRadius,
-    memoizeDb='/tmp/triaxPackCache.sqlite'
+S.dem.distFactor=S.lab.table.distFactor
+
+sp=woo.pack.randomDensePack2(
+    predicate=woo.pack.inHyperboloid((0,0,-.5*S.lab.table.specimenLength),(0,0,.5*S.lab.table.specimenLength),.25*S.lab.table.specimenLength,S.lab.minRad),
+    generator=woo.dem.MinMaxSphereGenerator(dRange=(2*S.lab.table.sphereRadius,2*S.lab.table.sphereRadius)),
+    memoizeDir='/tmp/',
+    # debug=True
 )
 sp.cellSize=(0,0,0) # make aperiodic
 
-sp.toSimulation(S,mat=mat)
-S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],distFactor=S.lab.table.distFactor,damping=S.lab.table.damping),lawKw=dict(yieldSurfType='log+lin'))+[PyRunner(10,'addPlotData(S)')]
+sp.toDem(S,S.dem,mat=mat)
+S.engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='concrete',mats=[mat],damping=S.lab.table.damping),lawKw=dict(yieldSurfType='log+lin'))+[PyRunner(10,'addPlotData(S)')]
 
 # take boundary nodes an prescribe velocity to those
 lc=.5*S.lab.table.specimenLength-3*S.lab.table.sphereRadius
@@ -80,8 +81,7 @@ def addPlotData(S):
 # create initial contacts
 S.one()
 # reset distFactor
-for f in S.lab.collider.boundDispatcher.functors+S.lab.contactLoop.geoDisp.functors:
-    if hasattr(f,'distFactor'): f.distFactor=1.
+S.dem.distFactor=1.
 # this is the initial state
 S.gl.renderer.dispScale=(1000,1000,1000)
 S.gl.demField.colorBy='ref. displacement'
