@@ -170,7 +170,7 @@ void RawShapeClump::recompute(int _div, bool failOk/* =false */, bool fastOnly/*
 			if(failOk){ makeInvalid(); return; }
 			throw std::runtime_error("SphereClumpGeom.recompute: minimum equivalent radius must be positive (not "+to_string(rMin)+")");
 		}
-		Real dx=rMin/_div; Real dv=pow(dx,3);
+		Real dx=rMin/_div; Real dv=pow3(dx);
 		long nCellsApprox=(aabb.sizes()/dx).prod();
 		 // don't compute anything, it would take too long
 		if(fastOnly && nCellsApprox>1e5){ makeInvalid(); return; }
@@ -183,7 +183,7 @@ void RawShapeClump::recompute(int _div, bool failOk/* =false */, bool fastOnly/*
 						if(sh->isInside(x)){
 							volume+=dv;
 							Sg+=dv*x;
-							Ig+=dv*(x.dot(x)*Matrix3r::Identity()-x*x.transpose())+/*along princial axes of dv; perhaps negligible?*/Matrix3r(Vector3r::Constant(dv*pow(dx,2)/6.).asDiagonal());
+							Ig+=dv*(x.dot(x)*Matrix3r::Identity()-x*x.transpose())+/*along princial axes of dv; perhaps negligible?*/Matrix3r(Vector3r::Constant(dv*pow2(dx)/6.).asDiagonal());
 							break;
 						}
 					}
@@ -244,8 +244,8 @@ std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> RawShapeClump:
 	ClumpData::applyToMembers(cn);
 	cd->setClump(); assert(cd->isClump());
 	// scale = length scale (but not density scale)
-	cd->mass=mat->density*volume*pow(scale,3);
-	cd->inertia=mat->density*inertia*pow(scale,5);
+	cd->mass=mat->density*volume*pow3(scale);
+	cd->inertia=mat->density*inertia*pow5(scale);
 	cd->equivRad=equivRad;
 
 	if(!isnan(clumpPos.maxCoeff())){

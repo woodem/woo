@@ -24,7 +24,7 @@ void Cp2_FrictMat_FrictPhys_CrossAnisotropic::go(const shared_ptr<Material>& b1,
 
 	#if 0
 		// this is fucked up, since we rely on data passed from the Cg2 functors
-		Real A=M_PI*pow(g.getMinRefLen(),2); // contact "area"
+		Real A=M_PI*pow2(g.getMinRefLen()); // contact "area"
 		Real l=g.lens[0]+g.lens[1]; // contact length
 	#else
 		const Particle *pA=C->leakPA(), *pB=C->leakPB();
@@ -33,7 +33,7 @@ void Cp2_FrictMat_FrictPhys_CrossAnisotropic::go(const shared_ptr<Material>& b1,
 			throw std::runtime_error("Cp2_FrictMat_FrictPhys_CrossAnisotropic: can be only used on spherical particles!");
 		}
 		Real r1=pA->shape->cast<Sphere>().radius, r2=pB->shape->cast<Sphere>().radius;
-		Real A=M_PI*pow(min(r1,r2),2);
+		Real A=M_PI*pow2(min(r1,r2));
 		Real l=C->dPos(scene).norm(); // handles periodicity gracefully
 	#endif
 
@@ -43,7 +43,7 @@ void Cp2_FrictMat_FrictPhys_CrossAnisotropic::go(const shared_ptr<Material>& b1,
 	//OLD: Real sinTheta=/*aniso z-axis in global coords*/((rot.conjugate()*Vector3r::UnitX()).cross(/*normal in global coords*/g.node->ori.conjugate()*Vector3r::UnitX())).norm();
 
 	// cerr<<"x-aniso normal "<<Vector3r(rot.conjugate()*Vector3r::UnitZ())<<", contact axis "<<Vector3r(g.node->ori.conjugate()*Vector3r::UnitX())<<", angle "<<asin(sinTheta)*180/M_PI<<" (sin="<<sinTheta<<")"<<endl;
-	Real weight=pow(sinTheta,2);
+	Real weight=pow2(sinTheta);
 	ph.kn=(A/l)*(weight*E1+(1-weight)*E2);
 	ph.kt=(A/l)*(weight*G1+(1-weight)*G2);
 	ph.tanPhi=min(b1->cast<FrictMat>().tanPhi,b2->cast<FrictMat>().tanPhi);

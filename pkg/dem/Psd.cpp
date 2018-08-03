@@ -336,7 +336,7 @@ PharmaCapsuleGenerator::operator()(const shared_ptr<Material>&mat, const Real& t
 	Real re=extDiam.maxCoeff()/2.;
 	Real ri=extDiam.minCoeff()/2.;
 
-	Real cutOver=re*sqrt(1-pow(ri/re,2));
+	Real cutOver=re*sqrt(1-pow2(ri/re));
 	Real corr=cutCorr*cutOver;
 
 	Real shafts[2]={len-capLen-ri,capLen-re-corr};

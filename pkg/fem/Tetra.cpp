@@ -295,7 +295,7 @@ Vector3r Tetra::getGlCentroid() const{
 void Gl1_Tetra::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){   
 	Tetra& t=sh->cast<Tetra>();
 
-	if(viewInfo.renderer->fastDraw && (t.getCentroid()-sh->nodes[0]->pos).squaredNorm()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
+	if(viewInfo.renderer->fastDraw && (t.getCentroid()-sh->nodes[0]->pos).squaredNorm()<pow2(fastDrawLim*viewInfo.sceneRadius)) return;
 	Vector3r shifts[4]={shift,shift,shift,shift};
 	if(scene->isPeriodic){
 		assert(t.nodes[0]->hasData<GlData>() && t.nodes[1]->hasData<GlData>() && t.nodes[2]->hasData<GlData>() && t.nodes[3]->hasData<GlData>());

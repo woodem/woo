@@ -158,7 +158,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 	else if(num>0 && psdSizes.size()==0) {
 		mode=RDIST_NUM;
 		// the term (1+rRelFuzz²) comes from the mean volume for uniform distribution : Vmean = 4/3*pi*Rmean*(1+rRelFuzz²) 
-		rMean=pow(volume*(1-porosity)/(M_PI*(4/3.)*(1+rRelFuzz*rRelFuzz)*num),1/3.);}
+		rMean=cbrt(volume*(1-porosity)/(M_PI*(4/3.)*(1+rRelFuzz*rRelFuzz)*num));}
 	if(psdSizes.size()>0){
 		err=(mode>=0); mode=RDIST_PSD;
 		if(psdSizes.size()!=psdCumm.size()) throw std::invalid_argument(("SpherePack.makeCloud: psdSizes and psdCumm must have same dimensions ("+lexical_cast<string>(psdSizes.size())+"!="+lexical_cast<string>(psdCumm.size())).c_str());
@@ -180,7 +180,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 			if (num>0) {
 				//if target number will not fit in (1-poro)*volume, scale down particles size
 				if (psdCumm2[psdSizes.size()-1]<num){
-					appliedPsdScaling=pow(psdCumm2[psdSizes.size()-1]/num,1./3.);
+					appliedPsdScaling=cbrt(psdCumm2[psdSizes.size()-1]/num);
 					for(size_t i=0; i<psdSizes.size(); i++) psdRadii[i]*=appliedPsdScaling;}
 			}
 			//Normalize psdCumm2 so it's between 0 and 1
@@ -220,7 +220,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 			else { 	for(int axis=0; axis<3; axis++) c[axis]=rnd();//coordinates in [0,1]
 				c=mn+hSize*c;}//coordinates in reference frame (inside the base cell)
 			size_t packSize=pack.size(); bool overlap=false;
-			if(!periodic) for(size_t j=0;j<packSize;j++) {if(pow(pack[j].r+r,2)>=(pack[j].c-c).squaredNorm()) {overlap=true; break;}}
+			if(!periodic) for(size_t j=0;j<packSize;j++) {if(pow2(pack[j].r+r)>=(pack[j].c-c).squaredNorm()) {overlap=true; break;}}
 			else {
 				for(size_t j=0; j<packSize; j++){
 					Vector3r dr=Vector3r::Zero();
@@ -233,7 +233,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 							else dr[axis] = c1c2[axis] - Mathr::Sign(c1c2[axis]);}
 						dr=hSize*dr;//now in cartesian coordinates
 					}
-					if(pow(pack[j].r+r,2)>= dr.squaredNorm()){ overlap=true; break; }
+					if(pow2(pack[j].r+r)>= dr.squaredNorm()){ overlap=true; break; }
 				}
 			}
 			if(!overlap) { pack.push_back(Sph(c,r)); break; }
@@ -262,7 +262,7 @@ void SpherePack::cellFill(Vector3r vol){
 
 Real SpherePack::sphereVol() const {
 	Real ret=0; 
-	for(const Sph& s: pack) ret+=pow(s.r,3);
+	for(const Sph& s: pack) ret+=pow3(s.r);
 	return ret*(4/3.)*M_PI;
 }
 
@@ -302,7 +302,7 @@ py::tuple SpherePack::psd(int bins, bool mass) const {
 	Real minD=std::numeric_limits<Real>::infinity(); Real maxD=-minD;
 	// volume, but divided by π*4/3
 	Real vol=0; long N=pack.size();
-	FOREACH(const Sph& s, pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow(s.r,3); }
+	FOREACH(const Sph& s, pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow3(s.r); }
 	if(minD==maxD){ minD-=.5; maxD+=.5; } // emulates what numpy.histogram does
 	// create bins and bin edges
 	vector<Real> hist(bins,0); vector<Real> cumm(bins+1,0); /* cummulative values compute from hist at the end */
@@ -310,7 +310,7 @@ py::tuple SpherePack::psd(int bins, bool mass) const {
 	// weight each grain by its "volume" relative to overall "volume"
 	FOREACH(const Sph& s, pack){
 		int bin=int(bins*(2*s.r-minD)/(maxD-minD)); bin=min(bin,bins-1); // to make sure
-		if (mass) hist[bin]+=pow(s.r,3)/vol; else hist[bin]+=1./N;
+		if (mass) hist[bin]+=pow3(s.r)/vol; else hist[bin]+=1./N;
 	}
 	for(int i=0; i<bins; i++) cumm[i+1]=min(1.,cumm[i]+hist[i]); // cumm[i+1] is OK, cumm.size()==bins+1
 	return py::make_tuple(edges,cumm);
@@ -433,7 +433,7 @@ Real SpherePack::maxRelOverlap(){
 			// sphere in a clump, and within the same clump
 			if(s1.clumpId>=0 && s1.clumpId==s2.clumpId) continue;
 			// too far from each other
-			if(sqDist>pow(s1.r+s2.r,2)) continue;
+			if(sqDist>pow2(s1.r+s2.r)) continue;
 			// compute relative overlap
 			Real dist=sqrt(sqDist);
 			ret=max(ret,(s1.r+s2.r-dist)/dist);

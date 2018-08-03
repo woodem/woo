@@ -113,7 +113,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 	Ft+=scene->dt*ph.kt*velT;
 	Real maxFt=abs(Fn)*ph.tanPhi; assert(maxFt>=0);
 	// shear plastic slip
-	if(Ft.squaredNorm()>pow(maxFt,2)){
+	if(Ft.squaredNorm()>pow2(maxFt)){
 		Real FtNorm=Ft.norm();
 		Real ratio=maxFt/FtNorm;
 		if(unlikely(scene->trackEnergy)){
@@ -125,7 +125,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 	}
 	assert(!isnan(Fn)); assert(!isnan(Ft[0]) && !isnan(Ft[1]));
 	// elastic potential energy
-	if(unlikely(scene->trackEnergy)) scene->energy->add(0.5*(pow(Fn,2)/ph.kn+Ft.squaredNorm()/ph.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
+	if(unlikely(scene->trackEnergy)) scene->energy->add(0.5*(pow2(Fn)/ph.kn+Ft.squaredNorm()/ph.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
 	return true;
 }
 
@@ -152,7 +152,7 @@ void PelletAgglomerator::run(){
 			// angVel is local already
 			Real dMass=c->geom->cast<L6Geom>().angVel.tail<2>().norm()*scene->dt*massIncPerRad;
 			sumDMass+=dMass;
-			Real newVol=(4/3.)*M_PI*pow(*radius,3)+dMass/other->material->density;
+			Real newVol=(4/3.)*M_PI*pow3(*radius)+dMass/other->material->density;
 			*radius=cbrt(3*newVol/(4*M_PI));
 			other->shape->updateMassInertia(other->material->density);
 			if(!other->matState) other->matState=make_shared<PelletMatState>();

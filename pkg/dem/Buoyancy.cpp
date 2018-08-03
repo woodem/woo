@@ -36,34 +36,34 @@ void HalfspaceBuoyancy::run(){
 		
 		if(dp<2*rad){
 			if(dp<rad){ // less than half submerged
-				Real vD=(M_PI*pow(dp,2)*((3*rad)-dp))/3;
+				Real vD=(M_PI*pow2(dp)*((3*rad)-dp))/3;
 				F+=-liqRho*vD*dem.gravity;	
 				if(drag){
 					// XXX: unused??
 					// Real alpha1=acos((waterHeight-h)/rad);
-					// Real area=2*M_PI*pow(rad,2)*(M_PI-alpha1)/M_PI+rad*sin(alpha1)*(waterHeight-h);
+					// Real area=2*M_PI*pow2(rad)*(M_PI-alpha1)/M_PI+rad*sin(alpha1)*(waterHeight-h);
 					// XXX: these should depend somehow on submerged volume or area??
 					F+=-(3/4.)*liqRho*(dragCoef/2*rad)*vel*vel.norm(); // XXX: should this be dragCoef/(2*rad)?? [also note (3/4)==0 in c(++) whereas (3/4.)=(3./4.)=(3./4)=0.75, I fixed that]
-					T+=-dragCoef*(liqRho/2)*angVel*angVel.norm()*pow(rad,5);
+					T+=-dragCoef*(liqRho/2)*angVel*angVel.norm()*pow5(rad);
 				}
 			} else { // more than half submerged
-				Real vD=(M_PI*pow(dp,2)*((3*rad)-dp))/3;
+				Real vD=(M_PI*pow2(dp)*((3*rad)-dp))/3;
 				F+=-liqRho*vD*dem.gravity;
 				if(drag){
 					// XXX: unused??
 					// Real alpha1=acos((h-waterHeight)/rad);
-					// Real area=2*M_PI*pow(rad,2)*alpha1/M_PI-rad*sin(alpha1)*(h-waterHeight);
+					// Real area=2*M_PI*pow2(rad)*alpha1/M_PI-rad*sin(alpha1)*(h-waterHeight);
 					// XXX: these should depend somehow on submerged volume or area??
 					F+=-(3/4.)*liqRho*(dragCoef/2*rad)*vel*vel.norm(); // XXX: should this be dragCoef/(2*rad)?? [also note (3/4)==0 in c(++) whereas (3/4.)=(3./4.)=(3./4)=0.75, I fixed that]
-					T+=-dragCoef*(liqRho/2.)*angVel*angVel.norm()*pow(rad,5);
+					T+=-dragCoef*(liqRho/2.)*angVel*angVel.norm()*pow5(rad);
 				}
 			}
 		} else { // fully submerged
 			F+=-liqRho*p->shape->volume()*dem.gravity;
 			if(drag){
-				// Real area=M_PI*pow(rad,2); // XXX: unused?
+				// Real area=M_PI*pow2(rad); // XXX: unused?
 				F+=-(3/4.)*liqRho*(dragCoef/2*rad)*vel*vel.norm();
-				T+=-dragCoef*(liqRho/2)*angVel*angVel.norm()*pow(rad,5);
+				T+=-dragCoef*(liqRho/2)*angVel*angVel.norm()*pow5(rad);
 			}	
 		}
 	}

@@ -32,10 +32,10 @@ void Cp2_IceMat_IcePhys::go(const shared_ptr<Material>& m1, const shared_ptr<Mat
 
 Real Law2_L6Geom_IcePhys::elastE(const IcePhys& p){
 	return .5*(
-		+(p.kn!=0?(pow(p.force[0],2)/p.kn):0.)
-		+(p.kt!=0?(pow(p.force[1],2)+pow(p.force[2],2))/p.kt:0.)
-		+(p.kWR[0]!=0?pow(p.torque[0],2)/p.kWR[0]:0.)
-		+(p.kWR[1]!=0?(pow(p.torque[1],2)+pow(p.torque[2],2))/p.kWR[1]:0.)
+		+(p.kn!=0?(pow2(p.force[0])/p.kn):0.)
+		+(p.kt!=0?(pow2(p.force[1])+pow2(p.force[2]))/p.kt:0.)
+		+(p.kWR[0]!=0?pow2(p.torque[0])/p.kWR[0]:0.)
+		+(p.kWR[1]!=0?(pow2(p.torque[1])+pow2(p.torque[2]))/p.kWR[1]:0.)
 	);
 }
 
@@ -69,9 +69,9 @@ bool Law2_L6Geom_IcePhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys
 	
 	// breakage conditions: if any breakable bond breaks, all other bonds break, too
 	if((ph.isBrkBondX(0) && Fn>ph.brkNT[0]) ||
-		(ph.isBrkBondX(1) && Ft.squaredNorm()>pow(ph.brkNT[1],2)) ||
+		(ph.isBrkBondX(1) && Ft.squaredNorm()>pow2(ph.brkNT[1])) ||
 		(ph.isBrkBondX(2) && abs(Tw)>ph.brkWR[0]) ||
-		(ph.isBrkBondX(3) && Tr.squaredNorm()>pow(ph.brkWR[1],2))
+		(ph.isBrkBondX(3) && Tr.squaredNorm()>pow2(ph.brkWR[1]))
 	) ph.setAllBroken();
 
 	// delete the contact if unbonded and in tension
@@ -88,9 +88,9 @@ bool Law2_L6Geom_IcePhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys
 	// compute yield values
 	Real Fty=negFn*ph.tanPhi, Twy=sqrtApi*negFn*ph.tanPhi, Try=sqrtApi*negFn*ph.mu;
 	// plastic slip for unbonded senses
-	if(!ph.isBondX(1) && Ft.squaredNorm()>pow(Fty,2)) slipXd(Ft,Ft.norm(),Fty,ph.kt,scene,"plast",plastIx);
+	if(!ph.isBondX(1) && Ft.squaredNorm()>pow2(Fty)) slipXd(Ft,Ft.norm(),Fty,ph.kt,scene,"plast",plastIx);
 	if(!ph.isBondX(2) && Tw>Twy) slipXd(Tw,abs(Tw),Twy,ph.kWR[0],scene,"plast",plastIx);
-	if(!ph.isBondX(3) && Tr.squaredNorm()>pow(Try,2)) slipXd(Tr,Tr.norm(),Try,ph.kWR[1],scene,"plast",plastIx);
+	if(!ph.isBondX(3) && Tr.squaredNorm()>pow2(Try)) slipXd(Tr,Tr.norm(),Try,ph.kWR[1],scene,"plast",plastIx);
 
 	// contact still existing
 	return true;

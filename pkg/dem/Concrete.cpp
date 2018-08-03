@@ -236,7 +236,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 				Real minRad = (geom->refR1 <= 0? geom->refR2 : (geom->refR2 <=0? geom->refR1 : min(geom->refR1,geom->refR2)));
 				Vector3r shift2 = scene->isPeriodic? Vector3r(scene->cell->hSize*I->cellDist.cast<Real>()) : Vector3r::Zero();
 				phys->refLength = (pos2 - pos1 + shift2).norm();
-				phys->crossSection = Mathr::PI*pow(minRad,2);
+				phys->crossSection = Mathr::PI*pow2(minRad);
 				phys->refPD = geom->refR1 + geom->refR2 - phys->refLength;
 			} else if (b1index == facetIndex || b2index == facetIndex || b1index == wallIndex || b2index == wallIndex) { // one body is facet or wall
 				shared_ptr<Body> sphere, plane;
@@ -244,7 +244,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 				else { plane = b2; sphere = b1; }
 				Real rad = ( (Sphere*) sphere->shape.get() )->radius;
 				phys->refLength = rad;
-				phys->crossSection = Mathr::PI*pow(rad,2);
+				phys->crossSection = Mathr::PI*pow2(rad);
 				phys->refPD = 0.;
 			}
 
@@ -344,7 +344,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 
 	if(unlikely(scene->trackEnergy)){
 		Real knDmg=(1-(epsN-epsNPl>0?omega:0))*phys.kn;
-		scene->energy->add(0.5*((knDmg>0?pow(Fn,2)/knDmg:0.)+Ft.squaredNorm()/phys.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
+		scene->energy->add(0.5*((knDmg>0?pow2(Fn)/knDmg:0.)+Ft.squaredNorm()/phys.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
 	}
 
 	// TIMING_DELTAS_CHECKPOINT("GO B");
@@ -369,14 +369,19 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_ConcretePhys__CLASS_BASE_DOC_ATTRS);
 
 void Gl1_ConcretePhys::go(const shared_ptr<CPhys>& cp, const shared_ptr<Contact>& C, const GLViewInfo& viewInfo){
 	if(doCPhys==CPHYS_ALSO || doCPhys==CPHYS_ONLY) Gl1_CPhys::go(cp,C,viewInfo);
+	//cerr<<"A"<<endl;
 	if(doCPhys==CPHYS_ONLY) return;
+	//cerr<<"B"<<endl;
 	if(!dmgRange) return;
 	const auto& ph=cp->cast<ConcretePhys>();
+	//cerr<<"C"<<endl;
 	if(ph.omega==0) return; // no damage, nothing to plot
 	static GLUquadric* gluQuadric;
 	if(!gluQuadric) gluQuadric=gluNewQuadric(); assert(gluQuadric);
 	Vector3r color=dmgRange->color(ph.omega);
+	//cerr<<"D"<<endl;
 	if(isnan(color.maxCoeff())) return;
+	//cerr<<"E"<<endl;
 	const auto& ge=C->geom->cast<L6Geom>();
 	glPushMatrix();
 		glTranslatev((ge.node->pos+ge.node->getData<GlData>().dGlPos).eval());

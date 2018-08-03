@@ -121,7 +121,7 @@ void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yield
 				// only consider the plastic part of dissipation; the viscous sliding is fictious
 				//VecT f0=k*xiPrev;
 				//if(f0.squaredNorm()>yieldLim*yieldLim){
-				//	ph.addWork(LudingPhys::WORK_PLASTIC,(1./2)*(1./k)*(f0.squaredNorm()-pow(fd,2)));
+				//	ph.addWork(LudingPhys::WORK_PLASTIC,(1./2)*(1./k)*(f0.squaredNorm()-pow2(fd)));
 				//	}
 				//VecT f0=k*xiPrev, f1=k*xi;
 				//ph.addWork(LudingPhys::WORK_PLASTIC,(1./2)*k*(f0+f1).norm()*(f0-f1).norm());

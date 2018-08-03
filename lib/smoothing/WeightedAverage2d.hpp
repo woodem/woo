@@ -57,7 +57,7 @@ struct GridContainer{
 			if(mid[0]!=cxy[0]) xy.x()+=(mid[0]<cxy[0]?1:-1)*.5*cellSizes[0]; else xy.x()=0;
 			if(mid[1]!=cxy[1]) xy.x()+=(mid[1]<cxy[1]?1:-1)*.5*cellSizes[1]; else xy.y()=0;
 			// are we inside the ellipse? pass the filter, then
-			if((pow(xy[0],2)/pow(radii[0],2)+pow(xy[1],2)/pow(radii[1],2))<=1) ret.push_back(mid);
+			if((pow2(xy[0])/pow2(radii[0])+pow2(xy[1])/pow2(radii[1]))<=1) ret.push_back(mid);
 		}
 		return ret;
 	}
@@ -124,7 +124,7 @@ struct SGDA_Scalar2d: public WeightedAverage<Scalar2d,Real> {
 		
 		// FIXME: algorithm not correct, as it takes 1d quantile, while we would need PDF for symmetric 2d gaussian!
 		Real clippedQuantile=boost::math::cdf(distrib,-stDev*relThreshold);
-		Real area=M_PI*pow(relThreshold*stDev,2); // area of the support
+		Real area=M_PI*pow2(relThreshold*stDev); // area of the support
 		weightedSupportArea=(1-2*clippedQuantile)*area;
 		
 	}
@@ -132,8 +132,8 @@ struct SGDA_Scalar2d: public WeightedAverage<Scalar2d,Real> {
 	virtual ~SGDA_Scalar2d(){}
 	virtual Real getWeight(const Vector2r& meanPt, const Scalar2d& e){	
 		Vector2r pos=getPosition(e);
-		Real rSq=(meanPt-pos).squaredNorm(); //pow(meanPt[0]-pos[0],2)+pow(meanPt[1]-pos[1],2);
-		if(rSq>pow(relThreshold*stDev,2)) return 0.; // discard points further than relThreshold*stDev, by default 3*stDev
+		Real rSq=(meanPt-pos).squaredNorm(); //pow2(meanPt[0]-pos[0])+pow2(meanPt[1]-pos[1]);
+		if(rSq>pow2(relThreshold*stDev)) return 0.; // discard points further than relThreshold*stDev, by default 3*stDev
 		//return (1./(stDev*sqrt(2*M_PI)))*exp(-rSq/(2*stDev*stDev));
 		return boost::math::pdf(distrib,sqrt(rSq));
 	}

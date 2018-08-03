@@ -62,7 +62,7 @@ void Cg2_Any_Any_L6Geom__Base::handleSpheresLikeContact(const shared_ptr<Contact
 		// this is a hack around that
 		if(g.lens[0]<0) g.lens[0]=g.lens[1];
 		if(g.lens[1]<0) g.lens[1]=g.lens[0];
-		g.contA=M_PI*pow((r1>0&&r2>0)?min(r1,r2):(r1>0?r1:r2),2);
+		g.contA=M_PI*pow2((r1>0&&r2>0)?min(r1,r2):(r1>0?r1:r2));
 		g.node->pos=contPt;
 		g.node->ori=Quaternionr(g.trsf);
 		//cerr<<"##"<<C->leakPA()->id<<"+"<<C->leakPB()->id<<": init trsf=\n"<<g.trsf<<endl<<"locX="<<locX<<", locY="<<locY<<", locZ="<<locZ<<"; normal="<<normal<<endl;

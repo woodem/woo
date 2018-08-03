@@ -16,7 +16,7 @@ void woo::Sphere::selfTest(const shared_ptr<Particle>& p){
 	Shape::selfTest(p);
 }
 
-Real woo::Sphere::volume() const { return (4/3.)*M_PI*pow(radius,3); }
+Real woo::Sphere::volume() const { return (4/3.)*M_PI*pow3(radius); }
 void woo::Sphere::applyScale(Real scale) { radius*=scale; }
 
 AlignedBox3r woo::Sphere::alignedBox() const {
@@ -27,9 +27,9 @@ void woo::Sphere::lumpMassInertia(const shared_ptr<Node>& n, Real density, Real&
 	if(n.get()!=nodes[0].get()) return;
 	checkNodesHaveDemData();
 	rotateOk=true;
-	Real m=(4/3.)*M_PI*pow(radius,3)*density;
+	Real m=(4/3.)*M_PI*pow3(radius)*density;
 	mass+=m;
-	I.diagonal()+=Vector3r::Ones()*(2./5.)*m*pow(radius,2);
+	I.diagonal()+=Vector3r::Ones()*(2./5.)*m*pow2(radius);
 };
 
 void woo::Sphere::setFromRaw(const Vector3r& _center, const Real& _radius, vector<shared_ptr<Node>>& nn, const vector<Real>& raw) {
@@ -46,7 +46,7 @@ void woo::Sphere::asRaw(Vector3r& _center, Real& _radius, vector<shared_ptr<Node
 
 bool woo::Sphere::isInside(const Vector3r& pt) const {
 	assert(numNodesOk());
-	return (pt-nodes[0]->pos).squaredNorm()<=pow(radius,2);
+	return (pt-nodes[0]->pos).squaredNorm()<=pow2(radius);
 }
 
 void Bo1_Sphere_Aabb::go(const shared_ptr<Shape>& sh){
@@ -85,7 +85,7 @@ void Bo1_Sphere_Aabb::goGeneric(const shared_ptr<Shape>& sh, Vector3r halfSize){
 
 void Cg2_Sphere_Sphere_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){
 	const Real& distFactor(field->cast<DemField>().distFactor);
-	C->minDist00Sq=pow(abs(distFactor*(s1->cast<Sphere>().radius+s2->cast<Sphere>().radius)),2);
+	C->minDist00Sq=pow2(abs(distFactor*(s1->cast<Sphere>().radius+s2->cast<Sphere>().radius)));
 }
 
 
@@ -100,7 +100,7 @@ bool Cg2_Sphere_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<
 
 
 	Vector3r relPos=s2->nodes[0]->pos+shift2-s1->nodes[0]->pos;
-	Real unDistSq=relPos.squaredNorm()-pow(abs(distFactor)*(r1+r2),2);
+	Real unDistSq=relPos.squaredNorm()-pow2(abs(distFactor)*(r1+r2));
 	if (unDistSq>0 && !C->isReal() && !force) return false;
 
 	// contact exists, go ahead

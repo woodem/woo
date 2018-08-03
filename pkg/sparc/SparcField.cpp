@@ -128,13 +128,13 @@ Real ExplicitNodeIntegrator::pointWeight(Real distSq, Real relLocPtDensity) cons
 	assert(relLocPtDensity>0);
 	switch(weightFunc){
 		case WEIGHT_DIST: {
-			Real w=(rPow%2==0?pow(distSq,rPow/2):pow(sqrt(distSq),rPow));
+			Real w=(rPow%2==0?pown(distSq,rPow/2):pow(sqrt(distSq),rPow));
 			assert(!(rPow==0 && w!=1.)); // rPow==0 → weight==1.
 			return w;
 		}
 		case WEIGHT_GAUSS: {
 			//Real w=pow(sqrt(distSq),-1); // make all points the same weight first
-			Real hSq=pow(relLocPtDensity*rSearch,2);
+			Real hSq=pow2(relLocPtDensity*rSearch);
 			//assert(distSq<=hSq); // taken care of by neighbor search algorithm already
 			if(distSq>hSq) LOG_WARN("distSq="<<distSq<<">hSq="<<hSq<<" ?: returning 0");
 			return exp(-gaussAlpha*(distSq/hSq));
@@ -163,7 +163,7 @@ void ExplicitNodeIntegrator::updateLocalInterp(const shared_ptr<Node>& n) const 
 	for(int i=0; i<sz; i++){
 		if(!dta.neighbors[i]) throw std::runtime_error("Nid "+to_string(dta.nid)+", neighbor #"+to_string(i)+" is None?!");
 		Vector3r dX=VectorXr(dta.neighbors[i]->pos+(useNext?Vector3r(scene->dt*dta.neighbors[i]->getData<SparcData>().v):Vector3r::Zero())-midPos);
-		weightSq[i]=pow(pointWeight(dX.squaredNorm(),dta.relLocPtDensity),2);
+		weightSq[i]=pow2(pointWeight(dX.squaredNorm(),dta.relLocPtDensity));
 		relPos.row(i)=dX;
 		for(int d=dim; d<3; d++){
 			if(dX[d]!=0) throw std::runtime_error(to_string(d)+"-component of internodal dist ("+to_string(dta.nid)+"-"+to_string(dta.neighbors[i]->getData<SparcData>().nid)+") is nonzero ("+to_string(dX[d])+", but the basis does not span this component.");

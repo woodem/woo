@@ -88,8 +88,8 @@ void SphereClumpGeom::recompute(int _div, bool failOk, bool fastOnly){
 	if(centers.size()==1){
 		pos=centers[0];
 		ori=Quaternionr::Identity();
-		volume=(4/3.)*M_PI*pow(radii[0],3);
-		inertia=Vector3r::Constant((2/5.)*volume*pow(radii[0],2));
+		volume=(4/3.)*M_PI*pow3(radii[0]);
+		inertia=Vector3r::Constant((2/5.)*volume*pow2(radii[0]));
 		equivRad=radii[0];
 		return;
 	}
@@ -100,10 +100,10 @@ void SphereClumpGeom::recompute(int _div, bool failOk, bool fastOnly){
 		// non-intersecting: Steiner's theorem
 		for(size_t i=0; i<centers.size(); i++){
 			const Real& r(radii[i]); const Vector3r& x(centers[i]);
-			Real v=(4/3.)*M_PI*pow(r,3);
+			Real v=(4/3.)*M_PI*pow3(r);
 			volume+=v;
 			Sg+=v*x;
-			Ig+=woo::Volumetric::inertiaTensorTranslate(Vector3r::Constant((2/5.)*v*pow(r,2)).asDiagonal(),v,-1.*x);
+			Ig+=woo::Volumetric::inertiaTensorTranslate(Vector3r::Constant((2/5.)*v*pow2(r)).asDiagonal(),v,-1.*x);
 		}
 	} else {
 		// intersecting: grid sampling
@@ -117,7 +117,7 @@ void SphereClumpGeom::recompute(int _div, bool failOk, bool fastOnly){
 			if(failOk){ makeInvalid(); return; }
 			throw std::runtime_error("SphereClumpGeom.recompute: minimum radius must be positive (not "+to_string(rMin)+")");
 		}
-		Real dx=rMin/_div; Real dv=pow(dx,3);
+		Real dx=rMin/_div; Real dv=pow3(dx);
 		long nCellsApprox=(aabb.sizes()/dx).prod();
 		 // don't compute anything, it would take too long
 		if(fastOnly && nCellsApprox>1e5){ makeInvalid(); return; }
@@ -127,10 +127,10 @@ void SphereClumpGeom::recompute(int _div, bool failOk, bool fastOnly){
 			for(x.y()=aabb.min().y()+dx/2.; x.y()<aabb.max().y(); x.y()+=dx){
 				for(x.z()=aabb.min().z()+dx/2.; x.z()<aabb.max().z(); x.z()+=dx){
 					for(size_t i=0; i<centers.size(); i++){
-						if((x-centers[i]).squaredNorm()<pow(radii[i],2)){
+						if((x-centers[i]).squaredNorm()<pow2(radii[i])){
 							volume+=dv;
 							Sg+=dv*x;
-							Ig+=dv*(x.dot(x)*Matrix3r::Identity()-x*x.transpose())+/*along princial axes of dv; perhaps negligible?*/Matrix3r(Vector3r::Constant(dv*pow(dx,2)/6.).asDiagonal());
+							Ig+=dv*(x.dot(x)*Matrix3r::Identity()-x*x.transpose())+/*along princial axes of dv; perhaps negligible?*/Matrix3r(Vector3r::Constant(dv*pow2(dx)/6.).asDiagonal());
 							break;
 						}
 					}
@@ -175,8 +175,8 @@ std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> SphereClumpGeo
 	assert(!isnan(volume));
 	cd->setClump(); assert(cd->isClump());
 	// scale = length scale (but not density scale)
-	cd->mass=mat->density*volume*pow(scale,3);
-	cd->inertia=mat->density*inertia*pow(scale,5);
+	cd->mass=mat->density*volume*pow3(scale);
+	cd->inertia=mat->density*inertia*pow5(scale);
 	cd->equivRad=equivRad;
 	return std::make_tuple(vector<shared_ptr<Node>>({n}),par);
 }

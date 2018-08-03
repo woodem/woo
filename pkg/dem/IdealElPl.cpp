@@ -36,7 +36,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 			//Real z=abs(prevFn)/(abs(Fn)+abs(prevFn));
 			//Fn=.5*(z*Fn+(1-z)*ph.force[0]); Ft=.5*(z*prevFt+(1-z)*Ft);
 			// Real Fn=ph.force[0]; Vector2r Ft(ph.force[1],ph.force[2]);
-			scene->energy->add(.5*(pow(Fn,2)/ph.kn+Ft.squaredNorm()/ph.kt),"broken",brokenIx,EnergyTracker::IsIncrement);
+			scene->energy->add(.5*(pow2(Fn)/ph.kn+Ft.squaredNorm()/ph.kt),"broken",brokenIx,EnergyTracker::IsIncrement);
 		}
 		return false;
 	}
@@ -83,7 +83,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 		}
 	}
 	if(unlikely(scene->trackEnergy)){
-		Real elast=0.5*(pow(ph.force[0],2)/ph.kn+(ph.kt!=0.?Ft.squaredNorm()/ph.kt:0.));
+		Real elast=0.5*(pow2(ph.force[0])/ph.kn+(ph.kt!=0.?Ft.squaredNorm()/ph.kt:0.));
 		if(isnan(elast)){
 			LOG_WARN("elast==NaN: Fn="<<ph.force[0]<<", kn="<<ph.kn<<", Ft=("<<Ft[0]<<","<<Ft[1]<<"), kt="<<ph.kt);
 			elast=0.; // this should not happen...?!
@@ -136,10 +136,10 @@ bool Law2_L6Geom_FrictPhys_LinEl6::go(const shared_ptr<CGeom>& cg, const shared_
 	phys.force[0]=phys.kn*geom.uN;
 	if(scene->trackEnergy){
 		// this handles zero stiffnesses correctly
-		Real E=.5*pow(phys.force[0],2)/phys.kn; // normal stiffness always non-zero
-		if(kntt[1]!=0.) E+=.5*(pow(phys.force[1],2)+pow(phys.force[2],2))/kntt[1];
-		if(ktbb[0]!=0.) E+=.5*pow(phys.torque[0],2)/ktbb[0];
-		if(ktbb[1]!=0.) E+=.5*(pow(phys.torque[1],2)+pow(phys.torque[2],2))/ktbb[1];
+		Real E=.5*pow2(phys.force[0])/phys.kn; // normal stiffness always non-zero
+		if(kntt[1]!=0.) E+=.5*(pow2(phys.force[1])+pow2(phys.force[2]))/kntt[1];
+		if(ktbb[0]!=0.) E+=.5*pow2(phys.torque[0])/ktbb[0];
+		if(ktbb[1]!=0.) E+=.5*(pow2(phys.torque[1])+pow2(phys.torque[2]))/ktbb[1];
 		scene->energy->add(E,"elast",elastPotIx,EnergyTracker::IsResettable);
 		/* both formulations give the same result with relative precision within 1e-14 (values 1e3, difference 1e-11) */
 		// absolute, as .5*F^2/k (per-component)

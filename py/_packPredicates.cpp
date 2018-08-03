@@ -205,9 +205,9 @@ public:
 		// see http://www.gamedev.net/community/forums/topic.asp?topic_id=338522&forum_id=20&gforum_id=0 for the algorithm
 		const Vector3r& A(c1); const Vector3r& B(c2); 
 		Vector3r k(
-			sqrt((pow(A[1]-B[1],2)+pow(A[2]-B[2],2)))/ht,
-			sqrt((pow(A[0]-B[0],2)+pow(A[2]-B[2],2)))/ht,
-			sqrt((pow(A[0]-B[0],2)+pow(A[1]-B[1],2)))/ht);
+			sqrt((pow2(A[1]-B[1])+pow2(A[2]-B[2])))/ht,
+			sqrt((pow2(A[0]-B[0])+pow2(A[2]-B[2])))/ht,
+			sqrt((pow2(A[0]-B[0])+pow2(A[1]-B[1])))/ht);
 		Vector3r mn=A.array().min(B.array()).matrix(), mx=A.array().max(B.array()).matrix();
 		return AlignedBox3r((mn-radius*k).eval(),(mx+radius*k).eval());
 	}
@@ -272,7 +272,7 @@ public:
 	inHyperboloid(const Vector3r& _c1, const Vector3r& _c2, Real _R, Real _r){
 		c1=_c1; c2=_c2; R=_R; a=_r;
 		c12=c2-c1; ht=c12.norm();
-		Real uMax=sqrt(pow(R/a,2)-1); c=ht/(2*uMax);
+		Real uMax=sqrt(pow2(R/a)-1); c=ht/(2*uMax);
 	}
 	// WARN: this is not accurate, since padding is taken as perpendicular to the axis, not the the surface
 	bool operator()(const Vector3r& pt, Real pad=0.) const override {
@@ -297,7 +297,7 @@ public:
 	inEllipsoid(const Vector3r& _c, const Vector3r& _abc) {c=_c; abc=_abc;}
 	bool operator()(const Vector3r& pt, Real pad=0.) const override {
 		//Define the ellipsoid X-coordinate of given Y and Z
-		Real x = sqrt((1-pow((pt[1]-c[1]),2)/((abc[1]-pad)*(abc[1]-pad))-pow((pt[2]-c[2]),2)/((abc[2]-pad)*(abc[2]-pad)))*((abc[0]-pad)*(abc[0]-pad)))+c[0]; 
+		Real x = sqrt((1-pow2((pt[1]-c[1]))/((abc[1]-pad)*(abc[1]-pad))-pow2((pt[2]-c[2]))/((abc[2]-pad)*(abc[2]-pad)))*((abc[0]-pad)*(abc[0]-pad)))+c[0]; 
 		Vector3r edgeEllipsoid(x,pt[1],pt[2]); // create a vector of these 3 coordinates
 		//check whether given coordinates lie inside ellipsoid or not
 		if ((pt-c).norm()<=(edgeEllipsoid-c).norm()) return true;
@@ -350,8 +350,8 @@ public:
 		if(distUp     >=pad) return true;
 		if(distDown   >=pad) return true;
 		if(distInPlane<0) return false;
-		if(distUp  >0) return sqrt(pow(distInPlane,2)+pow(distUp,2))>=pad;
-		if(distDown>0) return sqrt(pow(distInPlane,2)+pow(distUp,2))>=pad;
+		if(distUp  >0) return sqrt(pow2(distInPlane)+pow2(distUp))>=pad;
+		if(distDown>0) return sqrt(pow2(distInPlane)+pow2(distUp))>=pad;
 		// between both notch planes, closer to the edge than pad (distInPlane<pad)
 		return false;
 	}

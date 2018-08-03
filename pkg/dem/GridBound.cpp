@@ -52,7 +52,7 @@ void Grid1_Sphere::go(const shared_ptr<Shape>& sh, const Particle::id_t& id, con
 	// includes shrinkage (if applicable) and distFactor
 	Real radius=max(s.radius-coll->shrink,0.)+(distFactor>1?(distFactor-1):0.)*s.radius;
 	// this is the new branch
-	bool velSweep=(verletSteps>0 && (dyn.vel*verletSteps*scene->dt).squaredNorm()>pow(verletDist,2));
+	bool velSweep=(verletSteps>0 && (dyn.vel*verletSteps*scene->dt).squaredNorm()>pow2(verletDist));
 	if(velSweep){
 		AlignedBox3r nodeBox, bbox;
 		for(const Vector3r& p:{pos,(pos+dyn.vel*scene->dt*verletSteps).eval()}){
@@ -66,8 +66,8 @@ void Grid1_Sphere::go(const shared_ptr<Shape>& sh, const Particle::id_t& id, con
 		for(Vector3i ijk=ijk0; ijk[0]<=ijk1[0]; ijk[0]++){
 			for(ijk[1]=ijk0[1]; ijk[1]<=ijk1[1]; ijk[1]++){
 				for(ijk[2]=ijk0[2]; ijk[2]<=ijk1[2]; ijk[2]++){
-					//if((grid->xyzNearXyz(pos,ijk)-pos).squaredNorm()>pow(radEff,2)) continue; 
-					if(grid->boxCellDistSq(nodeBox,ijk)>pow(radius,2)) continue; // cell not touched by the sphere
+					//if((grid->xyzNearXyz(pos,ijk)-pos).squaredNorm()>pow2(radEff)) continue; 
+					if(grid->boxCellDistSq(nodeBox,ijk)>pow2(radius)) continue; // cell not touched by the sphere
 					// add sphere to the cell
 					grid->protected_append(ijk,id);
 					#ifdef WOO_GRID_BOUND_DEBUG
@@ -87,7 +87,7 @@ void Grid1_Sphere::go(const shared_ptr<Shape>& sh, const Particle::id_t& id, con
 		for(Vector3i ijk=ijk0; ijk[0]<=ijk1[0]; ijk[0]++){
 			for(ijk[1]=ijk0[1]; ijk[1]<=ijk1[1]; ijk[1]++){
 				for(ijk[2]=ijk0[2]; ijk[2]<=ijk1[2]; ijk[2]++){
-					if((grid->xyzNearXyz(pos,ijk)-pos).squaredNorm()>pow(radiusVerletDist,2)) continue; 
+					if((grid->xyzNearXyz(pos,ijk)-pos).squaredNorm()>pow2(radiusVerletDist)) continue; 
 					// add sphere to the cell
 					grid->protected_append(ijk,id);
 					#ifdef WOO_GRID_BOUND_DEBUG
@@ -161,7 +161,7 @@ void Grid1_InfCylinder::go(const shared_ptr<Shape>& sh, const Particle::id_t& id
 			for(int c2=max(ijkLo[ax2],0); c2<min(ijkHi[ax2],sizes[ax2]-1); c2++){
 				ijk[ax]=c0; ijk[ax1]=c1; ijk[ax2]=c2;
 				Vector3r dr=grid->xyzNearXyz(pos,ijk)-pos; // pos[ax] won't influence the result
-				if(Vector2r(dr[ax1],dr[ax2]).squaredNorm()>pow(c.radius+verletDist,2)) continue; // cell not touched by the cylinder
+				if(Vector2r(dr[ax1],dr[ax2]).squaredNorm()>pow2(c.radius+verletDist)) continue; // cell not touched by the cylinder
 				grid->protected_append(ijk,id);
 				#ifdef WOO_GRID_BOUND_DEBUG
 					gb.cells.push_back(ijk);

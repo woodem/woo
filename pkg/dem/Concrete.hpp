@@ -135,7 +135,7 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 		Real ret=NaN;
 		switch(yieldSurfType){
 			case YIELD_MOHRCOULOMB: ret=coh0*(1-omega)-sigmaN*tanPhi; break;
-			case YIELD_PARABOLIC: ret=sqrt(pow(coh0,2)-2*coh0*tanPhi*sigmaN)-coh0*omega; break;
+			case YIELD_PARABOLIC: ret=sqrt(pow2(coh0)-2*coh0*tanPhi*sigmaN)-coh0*omega; break;
 			case YIELD_LOG:
 				ret=( (sigmaN/(coh0*yieldLogSpeed))>=1 ? 0 : coh0*((1-omega)+(tanPhi*yieldLogSpeed)*log(-sigmaN/(coh0*yieldLogSpeed)+1)));
 				break;
@@ -146,7 +146,7 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 			case YIELD_ELLIPTIC:
 			case YIELD_ELLIPTIC_LOG:
 				if(yieldSurfType==YIELD_ELLIPTIC && sigmaN>0){ ret=coh0*(1-omega)-sigmaN*tanPhi; break; }
-				ret=(pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2)))>=1 ? 0 : sqrt((-coh0*((1-omega)*tanPhi)*yieldEllipseShift+pow(coh0,2))*(1-pow(sigmaN-yieldEllipseShift,2)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow(yieldEllipseShift,2))))-omega*coh0; break;
+				ret=(pow2(sigmaN-yieldEllipseShift)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow2(yieldEllipseShift)))>=1 ? 0 : sqrt((-coh0*((1-omega)*tanPhi)*yieldEllipseShift+pow2(coh0))*(1-pow2(sigmaN-yieldEllipseShift)/(-yieldEllipseShift*coh0/((1-omega)*tanPhi)+pow2(yieldEllipseShift))))-omega*coh0; break;
 			default: throw std::logic_error("Law2_L6Geom_ConcretePhys::yieldSigmaTNorm: invalid value of yieldSurfType="+to_string(yieldSurfType));
 		}
 		assert(!isnan(ret));

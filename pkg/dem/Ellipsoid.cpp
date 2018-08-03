@@ -35,7 +35,7 @@ void woo::Ellipsoid::applyScale(Real scale) { semiAxes*=scale; }
 
 bool woo::Ellipsoid::isInside(const Vector3r& pt) const {
 	Vector3r l=nodes[0]->glob2loc(pt);
-	return pow(l[0]/semiAxes[0],2)+pow(l[1]/semiAxes[1],2)+pow(l[2]/semiAxes[2],2)<=1;
+	return pow2(l[0]/semiAxes[0])+pow2(l[1]/semiAxes[1])+pow2(l[2]/semiAxes[2])<=1;
 }
 
 void woo::Ellipsoid::lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk){
@@ -43,7 +43,7 @@ void woo::Ellipsoid::lumpMassInertia(const shared_ptr<Node>&, Real density, Real
 	checkNodesHaveDemData();
 	Real m=(4/3.)*M_PI*semiAxes.prod()*density;
 	mass+=m;
-	I.diagonal()+=(1/5.)*m*Vector3r(pow(semiAxes[1],2)+pow(semiAxes[2],2),pow(semiAxes[2],2)+pow(semiAxes[0],2),pow(semiAxes[0],2)+pow(semiAxes[1],2));
+	I.diagonal()+=(1/5.)*m*Vector3r(pow2(semiAxes[1])+pow2(semiAxes[2]),pow2(semiAxes[2])+pow2(semiAxes[0]),pow2(semiAxes[0])+pow2(semiAxes[1]));
 }
 
 
@@ -257,12 +257,12 @@ bool Cg2_Wall_Ellipsoid_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr
 }
 
 
-void Cg2_Sphere_Ellipsoid_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){ C->minDist00Sq=pow(s1->cast<Sphere>().radius+s2->cast<Ellipsoid>().semiAxes.maxCoeff(),2); }
+void Cg2_Sphere_Ellipsoid_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){ C->minDist00Sq=pow2(s1->cast<Sphere>().radius+s2->cast<Ellipsoid>().semiAxes.maxCoeff()); }
 bool Cg2_Sphere_Ellipsoid_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){ return Cg2_Ellipsoid_Ellipsoid_L6Geom::go_Ellipsoid_or_Sphere(s1,s1->cast<Sphere>().radius*Vector3r::Ones(),s2,s2->cast<Ellipsoid>().semiAxes,shift2,force,C); }
 
 
 
-void Cg2_Ellipsoid_Ellipsoid_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){ C->minDist00Sq=pow(s1->cast<Ellipsoid>().semiAxes.maxCoeff()+s2->cast<Ellipsoid>().semiAxes.maxCoeff(),2); }
+void Cg2_Ellipsoid_Ellipsoid_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){ C->minDist00Sq=pow2(s1->cast<Ellipsoid>().semiAxes.maxCoeff()+s2->cast<Ellipsoid>().semiAxes.maxCoeff()); }
 
 bool Cg2_Ellipsoid_Ellipsoid_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){ return go_Ellipsoid_or_Sphere(s1,s1->cast<Ellipsoid>().semiAxes,s2,s2->cast<Ellipsoid>().semiAxes,shift2,force,C); }
 
@@ -279,8 +279,8 @@ bool Cg2_Ellipsoid_Ellipsoid_L6Geom::go_Ellipsoid_or_Sphere(const shared_ptr<Sha
 	Vector3r R(rb-ra); // (2.1)
 	Matrix3r A(Matrix3r::Zero()), B(Matrix3r::Zero());
 	for(int k:{0,1,2}){
-		A+=u[k]*u[k].transpose()/pow(a[k],2); // (2.2a)
-		B+=v[k]*v[k].transpose()/pow(b[k],2); // (2.2b)
+		A+=u[k]*u[k].transpose()/pow2(a[k]); // (2.2a)
+		B+=v[k]*v[k].transpose()/pow2(b[k]); // (2.2b)
 	}
 	Matrix3r Ainv=A.inverse(), Binv=B.inverse(); // (2.3a), (2.3b)
 
@@ -298,7 +298,7 @@ bool Cg2_Ellipsoid_Ellipsoid_L6Geom::go_Ellipsoid_or_Sphere(const shared_ptr<Sha
 			Matrix3r GinvR=G.inverse()*R; // (2.9): GinvR≡X (GX=R)
 			return boost::math::make_tuple(
 				l*(a-l)*R.transpose()*GinvR,
-				GinvR.transpose()*(pow(1-l,2)*Ainv-pow(l,2)*Binv)*GinvR
+				GinvR.transpose()*(pow2(1-l)*Ainv-pow2(l)*Binv)*GinvR
 			);
 		}
 	#endif

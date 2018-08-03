@@ -82,7 +82,7 @@ void In2_Truss_ElastMat::go(const shared_ptr<Shape>& shape, const shared_ptr<Mat
 	Real natStrain=log(1+(len-t.l0)/t.l0);
 	// Fn=E*ε*A
 	t.axialStress=t.preStress+natStrain*mat->cast<ElastMat>().young;
-	Real Fn=t.axialStress*M_PI*pow(t.radius,2);
+	Real Fn=t.axialStress*M_PI*pow2(t.radius);
 	Fa+=Fn*AB/len;
 	Fb-=Fn*AB/len;
 	// cerr<<"AB="<<AB<<", len="<<len<<", natStrain="<<natStrain<<", l0="<<t.l0<<", E="<<mat->cast<ElastMat>().young<<", Fn="<<Fn<<endl;
@@ -97,7 +97,7 @@ void In2_Truss_ElastMat::addIntraStiffnesses(const shared_ptr<Particle>& p, cons
 	const auto& t(p->shape->cast<Truss>());
 	Vector3r dx=t.nodes[1]->pos-t.nodes[0]->pos;
 	Real L=dx.norm();
-	Real A=M_PI*pow(t.radius,2);
+	Real A=M_PI*pow2(t.radius);
 	Vector3r cc=dx/L; // direction cosines
 	if(!p->material || !p->material->isA<ElastMat>()) return;
 	const Real& E=p->material->cast<ElastMat>().young;
@@ -117,7 +117,7 @@ bool Cg2_Rod_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Sha
 
 	Vector3r cylAxisPt=CompUtils::closestSegmentPt(s.nodes[0]->pos+shift2,t.nodes[0]->pos,t.nodes[1]->pos,&normAxisPos);
 	Vector3r relPos=s.nodes[0]->pos-cylAxisPt;
-	Real unDistSq=relPos.squaredNorm()-pow(s.radius+t.radius,2); // no distFactor here
+	Real unDistSq=relPos.squaredNorm()-pow2(s.radius+t.radius); // no distFactor here
 
 	// TODO: find closest point of sharp-cut ends, remove this error
 	// if(!(t.caps|Rod::CAP_A) || !(t.caps|Rod::CAP_B)) throw std::runtime_error("Cg2_Sphere_Rod_L6Geom: only handles capped trusses for now.");

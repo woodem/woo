@@ -67,9 +67,9 @@ WOO_REGISTER_OBJECT(Cp2_HertzMat_HertzPhys);
 struct Law2_L6Geom_HertzPhys_DMT: public LawFunctor{
 	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;
 	// fast func for computing x^(i/2)
-	static Real pow_i_2(const Real& x, const short& i) { return pow(sqrt(x),i);}
+	static Real pow_i_2(const Real& x, const short& i) { return pown(sqrt(x),i);}
 	// faster (?) func for computing x^(i/3)
-	static Real pow_i_3(const Real& x, const short& i) { return pow(cbrt(x),i);}
+	static Real pow_i_3(const Real& x, const short& i) { return pown(cbrt(x),i);}
 	// fast computation of x^(1/4)
 	static Real pow_1_4(const Real& x) { return sqrt(sqrt(x)); }
 	// normal elastic energy; see Popov2010, pg 60, eq (5.25)

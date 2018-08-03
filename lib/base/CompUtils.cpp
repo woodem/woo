@@ -83,9 +83,9 @@ int CompUtils::lineSphereIntersection(const Vector3r& A, const Vector3r& u, cons
 	// http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 	// ray goes through origin, therefore we move sphere relative to A
 	Vector3r Cr=C-A;
-	Real disc=(pow(u.dot(Cr),2)-Cr.dot(Cr)+pow(r,2));
+	Real disc=(pow2(u.dot(Cr))-Cr.dot(Cr)+pow2(r));
 	if(disc<0) return 0; // no intersection
-	if(4*disc<pow(relTol*r,2)){ t0=u.dot(Cr); return 1; }
+	if(4*disc<pow2(relTol*r)){ t0=u.dot(Cr); return 1; }
 	disc=sqrt(disc);
 	t0=u.dot(Cr)-disc; t1=u.dot(Cr)+disc;
 	return 2;
@@ -138,7 +138,7 @@ Vector3r CompUtils::cylCoordBox_sample_cylindrical(const AlignedBox3r& box, cons
 	Vector3r rand=isnan(unitRand.maxCoeff())?Vector3r(Mathr::UnitRandom(),Mathr::UnitRandom(),Mathr::UnitRandom()):unitRand;
 	// explanation at http://www.anderswallin.net/2009/05/uniform-random-points-in-a-circle-using-polar-coordinates/
 	const Real& r0(box.min()[0]); const Real& r1(box.max()[0]);
-	Real r=sqrt(pow(r0,2)+rand.x()*(pow(r1,2)-pow(r0,2)));
+	Real r=sqrt(pow2(r0)+rand.x()*(pow2(r1)-pow2(r0)));
 	Real theta=box.min().y()+rand.y()*box.sizes().y();
 	Real z=box.min().z()+rand.z()*box.sizes().z();
 	return Vector3r(r,theta,z);

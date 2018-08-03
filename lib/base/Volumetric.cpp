@@ -128,7 +128,7 @@ Matrix3r woo::Volumetric::tetraInertia_grid(const Vector3r v[4], int div){
 	Real D0=M0.determinant();
 	// Matrix3r I(Matrix3r::Zero());
 	Matrix3r C(Matrix3r::Zero());
-	Real dV=pow(dd,3);
+	Real dV=pow3(dd);
 	// std::ofstream dbg("/tmp/tetra.txt");
 	for(xyz.x()=b.min().x()+dd/2.; xyz.x()<b.max().x(); xyz.x()+=dd){
 		for(xyz.y()=b.min().y()+dd/2.; xyz.y()<b.max().y(); xyz.y()+=dd){

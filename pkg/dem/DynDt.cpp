@@ -30,7 +30,7 @@ void DynDt::nodalStiffAdd(const shared_ptr<Node>& n, Vector3r& ktrans, Vector3r&
 			Vector3r n2=n.array().pow(2).matrix();
 			ktrans+=n2*(ph.kn-ph.kt)+Vector3r::Constant(ph.kt);
 			// rotational stiffness only due to translation
-			krot+=pow(g.lens[ix],2)*ph.kt*Vector3r(n2[1]+n2[2],n2[2]+n2[0],n2[0]+n2[1]);
+			krot+=pow2(g.lens[ix])*ph.kt*Vector3r(n2[1]+n2[2],n2[2]+n2[0],n2[0]+n2[1]);
 		}
 		if(p->shape->nodes.size()>1 && intraForce){ intraForce->addIntraStiffness(shared_ptr<Particle>(p,woo::Object::null_deleter()),n,ktrans,krot); }
 	}
@@ -97,8 +97,8 @@ void DynDt::run(){
 		return;
 	}
 	int nSteps=scene->step-stepPrev;
-	Real maxNewDt=scene->dt*pow(1.+maxRelInc,nSteps);
-	LOG_DEBUG("dt="<<scene->dt<<", crDt="<<crDt<<" ("<<crDt*scene->dtSafety<<" with dtSafety="<<scene->dtSafety<<"), maxNewDt="<<maxNewDt<<" with exponent "<<1.+maxRelInc<<"^"<<nSteps<<"="<<pow(1.+maxRelInc,nSteps));
+	Real maxNewDt=scene->dt*pown(1.+maxRelInc,nSteps);
+	LOG_DEBUG("dt="<<scene->dt<<", crDt="<<crDt<<" ("<<crDt*scene->dtSafety<<" with dtSafety="<<scene->dtSafety<<"), maxNewDt="<<maxNewDt<<" with exponent "<<1.+maxRelInc<<"^"<<nSteps<<"="<<pown(1.+maxRelInc,nSteps));
 	Real nextDt=min(crDt*scene->dtSafety,maxNewDt);
 	if(!dryRun){
 		// don't bother with diagnostics if there is no change

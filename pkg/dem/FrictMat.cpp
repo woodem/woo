@@ -32,7 +32,7 @@ void Cp2_FrictMat_FrictPhys::updateFrictPhys(FrictMat& mat1, FrictMat& mat2, Fri
 			l1=std::abs(C->leakPB()->shape->cast<Sphere>().radius);
 			if(!dynamic_pointer_cast<Sphere>(C->leakPA()->shape)) l0=l1; // wall-sphere contact, for instance
 			else l0=std::abs(C->leakPA()->shape->cast<Sphere>().radius);
-			A=M_PI*pow(min(l0,l1),2);
+			A=M_PI*pow2(min(l0,l1));
 		}
 	#endif
 	//ph.kn=1/(1/(mat1.young*2*std::abs(l0))+1/(mat2.young*2*l1));

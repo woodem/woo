@@ -47,7 +47,7 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 	const Vector3r& cylPos=cyl.nodes[0]->pos; Vector3r sphPos=sphere.nodes[0]->pos+shift2;
 	Vector3r relPos=sphPos-cylPos;
 	relPos[ax]=0.;
-	if(!C->isReal() && relPos.squaredNorm()>pow(cylRad+sphRad,2) && !force){ return false; }
+	if(!C->isReal() && relPos.squaredNorm()>pow2(cylRad+sphRad) && !force){ return false; }
 	Real dist=relPos.norm();
 	#define CATCH_NAN_FACET_INFCYLINDER
 	#ifdef CATCH_NAN_FACET_INFCYLINDER

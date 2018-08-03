@@ -860,7 +860,7 @@ void GLViewer::postDraw(){
 				for(int xy=0;xy<2;xy++)extremalDxDy[xy]=(axis>0 ? min(extremalDxDy[xy],(int)screenDxDy[axis][xy]) : screenDxDy[axis][xy]);
 				maxSqLen=max(maxSqLen,1.*screenDxDy[axis].squaredNorm());
 			}
-		} while(maxSqLen>pow(renderer->oriAxesPx,2));
+		} while(maxSqLen>pow2(renderer->oriAxesPx));
 
 		//LOG_DEBUG("Screen offsets for axes: "<<" x("<<screenDxDy[0][0]<<","<<screenDxDy[0][1]<<") y("<<screenDxDy[1][0]<<","<<screenDxDy[1][1]<<") z("<<screenDxDy[2][0]<<","<<screenDxDy[2][1]<<")");
 		int margin=10; // screen pixels

@@ -358,7 +358,7 @@ bool Cg2_Facet_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<
 	Vector3r normal=sC-contPt; // normal is now the contact normal (not yet normalized)
 	//cerr<<"sC="<<sC.transpose()<<", contPt="<<contPt.transpose()<<endl;
 	//cerr<<"dist="<<normal.norm()<<endl;
-	if(normal.squaredNorm()>pow(s.radius+f.halfThick,2) && !C->isReal() && !force) { return false; }
+	if(normal.squaredNorm()>pow2(s.radius+f.halfThick) && !C->isReal() && !force) { return false; }
 	Real dist=normal.norm();
 	//#define CATCH_NAN_FACET_SPHERE
 	#ifdef CATCH_NAN_FACET_SPHERE
@@ -397,7 +397,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 	const Vector3r pp[2][3]={{A.nodes[0]->pos,A.nodes[1]->pos,A.nodes[2]->pos},{B.nodes[0]->pos+shift2,B.nodes[1]->pos+shift2,B.nodes[2]->pos+shift2}};
 	// Vector3r nn[]={A.getNormal(),B.getNormal()};
 	const Real triD=A.halfThick+B.halfThick;
-	const Real triD2=pow(triD,2);
+	const Real triD2=pow2(triD);
 	Vector3r oo[2][3]; // outer normals
 	Vector3r ee[2][3]; // edge unit vectors
 	Vector3r em[2][3]; // edge midpoints
@@ -526,7 +526,7 @@ bool Cg2_Facet_InfCylinder_L6Geom::go(const shared_ptr<Shape>& sh1, const shared
 	Vector2r vv2[3];
 	for(short v:{0,1,2}) vv2[v]=Vector2r(f.nodes[v]->pos[ax1],f.nodes[v]->pos[ax2]);
 	const Real dTouch=cyl.radius+f.halfThick;
-	const Real dTouch2=pow(dTouch,2);
+	const Real dTouch2=pow2(dTouch);
 	Vector3r pp[3];
 	Vector3r dd2;
 	for(short i:{0,1,2}){
@@ -668,7 +668,7 @@ void Gl1_Facet::go(const shared_ptr<Shape>& sh, const Vector3r& shift, bool wire
 	Facet& f=sh->cast<Facet>();
 
 	// don't draw very small facets when doing fastDraw
-	if(viewInfo.renderer->fastDraw && f.getPerimeterSq()<pow(fastDrawLim*viewInfo.sceneRadius,2)) return;
+	if(viewInfo.renderer->fastDraw && f.getPerimeterSq()<pow2(fastDrawLim*viewInfo.sceneRadius)) return;
 	Vector3r shifts[3]={shift,shift,shift};
 	if(scene->isPeriodic && f.nodes[0]->hasData<GlData>() && f.nodes[1]->hasData<GlData>() && f.nodes[2]->hasData<GlData>()){
 		GlData* g[3]={&(f.nodes[0]->getData<GlData>()),&(f.nodes[1]->getData<GlData>()),&(f.nodes[2]->getData<GlData>())};

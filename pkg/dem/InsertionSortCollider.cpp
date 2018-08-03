@@ -350,7 +350,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 					break;
 				}
 				// linearize here, but don't subtract verletDist
-				moveDueToRot2=pow(.5*(aabb.max-aabb.min).maxCoeff()*maxRot,2);
+				moveDueToRot2=pow2(.5*(aabb.max-aabb.min).maxCoeff()*maxRot);
 			}
 			// check movement
 			Real d2=0; 
@@ -408,7 +408,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 			aabb.nodeLastPos[i]=p->shape->nodes[i]->pos;
 			aabb.nodeLastOri[i]=p->shape->nodes[i]->ori;
 		}
-		aabb.maxD2=pow(verletDist,2);
+		aabb.maxD2=pow2(verletDist);
 		if(isnan(aabb.maxRot)) throw std::runtime_error("S.dem.par["+to_string(p->id)+"]: bound functor did not set maxRot -- should be set to either to a negative value (to ignore it) or to non-negative value (maxRot will be set from verletDist in that case); this is an implementation error.");
 		#if 0
 			// proportionally to relVel, shift bbox margin in the direction of velocity

@@ -66,7 +66,7 @@ void Cp2_HertzMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr
 		// if both have no mass, then mbar is irrelevant as their motion won't be influenced by force
 		Real mbar=(m1<=0 && m2>0)?m2:((m1>0 && m2<=0)?m1:(m1*m2)/(m1+m2));
 		// For eqs, see Antypov2012, (10) and (17)
-		Real viscAlpha=-sqrt(5)*log(en)/(sqrt(pow(log(en),2)+pow(M_PI,2)));
+		Real viscAlpha=-sqrt(5)*log(en)/(sqrt(pow2(log(en))+pow2(M_PI)));
 		ph.alpha_sqrtMK=max(0.,viscAlpha*sqrt(mbar*kn0)); // negative is nonsense, then no damping at all
 	} else {
 		// no damping at all
@@ -121,9 +121,9 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 
 		const Real& gamma(ph.gamma); const Real& R(ph.R); const Real& alpha(ph.alpha); const Real& K(ph.K);
 		Real delta=-g.uN; // inverse convention
-		Real Pc=-6*M_PI*R*gamma/(pow(alpha,2)+3);
-		Real xi=sqrt(((2*M_PI*gamma)/(3*K))*(1-3/(pow(alpha,2)+3)));
-		Real deltaMin=-3*cbrt(R*pow(xi,4)); // -3R(-1/3)*ξ^(-4/3)
+		Real Pc=-6*M_PI*R*gamma/(pow2(alpha)+3);
+		Real xi=sqrt(((2*M_PI*gamma)/(3*K))*(1-3/(pow2(alpha)+3)));
+		Real deltaMin=-3*cbrt(R*pow4(xi)); // -3R(-1/3)*ξ^(-4/3)
 		// broken contact
 		if(delta<deltaMin){
 			// TODO: track energy
@@ -140,9 +140,9 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		auto delta_diff_ddiff=[&](const Real& a){
 			Real aInvSqrt=1/sqrt(a);
 			return boost::math::make_tuple(
-				pow(a,2)/R-4*xi*sqrt(a)-delta, // subtract delta as we need f(x)=0
+				pow2(a)/R-4*xi*sqrt(a)-delta, // subtract delta as we need f(x)=0
 				2*a/R-2*xi*aInvSqrt,
-				2/R+xi*pow(aInvSqrt,3)
+				2/R+xi*pow3(aInvSqrt)
 			);
 		};
 		// use a0 (defined as  δ(a0)=0) as intial guess for new contacts, since they are likely close to the equilibrium condition
@@ -157,7 +157,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		#endif
 
 		ph.contRad=a;
-		Real Pne=pow(sqrt(pow(a,3)*(K/R))-alpha*sqrt(-Pc),2)+Pc;
+		Real Pne=pow2(sqrt(pow3(a)*(K/R))-alpha*sqrt(-Pc))+Pc;
 		Fne=-Pne; // inverse convention
 		if(isnan(Pne)){
 			cerr<<"R="<<R<<", K="<<K<<", xi="<<xi<<", alpha="<<alpha<<", gamma="<<gamma<<endl;
@@ -184,7 +184,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 	Ft+=dt*ph.kt*velT;
 	// sliding: take adhesion in account
 	Real maxFt=std::abs(min(0.,Fn)*ph.tanPhi);
-	if(Ft.squaredNorm()>pow(maxFt,2)){
+	if(Ft.squaredNorm()>pow2(maxFt)){
 		// sliding
 		Real FtNorm=Ft.norm();
 		Real ratio=maxFt/FtNorm;

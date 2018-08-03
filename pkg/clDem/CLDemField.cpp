@@ -123,11 +123,11 @@ void CLDemRun::compareParticleNodeDyn(const string& pId, const clDem::Particle& 
 	Real oriErr=(cAa.axis()*cAa.angle()-yAa.axis()*yAa.angle()).norm();
 	Real velErr=(v2v(cp.vel)-dyn.vel).norm()/(mU/sU);
 	Real angVelErr=(v2v(cp.angVel)-dyn.angVel).norm()/(1/sU);
-	Real angMomErr=(v2v(cp.angMom)-dyn.angMom).norm()/(1/(kgU*pow(mU,2)/sU)); // unit: Nms=kgm²/s
-	Real forceErr=(v2v(cp.force)-dyn.force).norm()/(kgU*mU/pow(sU,2));
-	Real torqueErr=(v2v(cp.torque)-dyn.torque).norm()/(kgU*pow(mU,2)/pow(sU,2));
+	Real angMomErr=(v2v(cp.angMom)-dyn.angMom).norm()/(1/(kgU*pow2(mU)/sU)); // unit: Nms=kgm²/s
+	Real forceErr=(v2v(cp.force)-dyn.force).norm()/(kgU*mU/pow2(sU));
+	Real torqueErr=(v2v(cp.torque)-dyn.torque).norm()/(kgU*pow2(mU)/pow2(sU));
 	Real massErr=(cp.mass-dyn.mass)/kgU;
-	Real inertiaErr=(v2v(cp.inertia)-dyn.inertia).norm()/(kgU*pow(mU,2));
+	Real inertiaErr=(v2v(cp.inertia)-dyn.inertia).norm()/(kgU*pow2(mU));
 
 	_CHK_ERR(pId,velErr,cp.vel,dyn.vel);
 	_CHK_ERR(pId,angVelErr,cp.angVel,dyn.angVel);
@@ -254,7 +254,7 @@ void CLDemRun::doCompare(){
 	// in case we got no good units, use stupid values here
 	if(isnan(kgU)) kgU=1.;
 	if(isnan(mU)) mU=1.;
-	Real NU=kgU*mU/pow(sU,2); // force unit
+	Real NU=kgU*mU/pow2(sU); // force unit
 	
 
 	#if 0

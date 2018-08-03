@@ -108,7 +108,7 @@ Real DemFuncs::porosity(const shared_ptr<DemField>& dem, const shared_ptr<Node>&
 		if(!p->shape->isA<Sphere>()) continue;
 		const Vector3r& pos=p->shape->nodes[0]->pos;
 		if(!box.contains(node?node->glob2loc(pos):pos)) continue;
-		Vs+=(4/3.)*M_PI*pow(p->shape->cast<Sphere>().radius,3);
+		Vs+=(4/3.)*M_PI*pow3(p->shape->cast<Sphere>().radius);
 	}
 	return Vs/V;
 }
@@ -516,7 +516,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 				//QQ };
 			#else
 				for(size_t i=0; i<nodes.size(); i++){
-					if((pos-nodes[i]->pos).squaredNorm()<pow(threshold,2)){
+					if((pos-nodes[i]->pos).squaredNorm()<pow2(threshold)){
 						vIx[v]=i;
 						break;
 					}

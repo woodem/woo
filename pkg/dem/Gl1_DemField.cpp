@@ -210,7 +210,7 @@ void Gl1_DemField::doShape(){
 			switch(vecAxis){
 				case 0: case 1: case 2: return v[vecAxis];
 				case AXIS_YZ: return v.tail<2>().norm();
-				case AXIS_ZX: return sqrt(pow(v[2],2)+pow(v[1],2));
+				case AXIS_ZX: return sqrt(pow2(v[2])+pow2(v[1]));
 				case AXIS_XY: return v.head<2>().norm();
 				default: return v.norm();
 			}

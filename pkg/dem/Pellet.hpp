@@ -40,7 +40,7 @@ struct PelletMatState: public MatState{
 		switch(index){
 			case 0: return normPlast+shearPlast;
 			// invalid value if not yet updated in this step
-			case 1: return (step<0||smooth<=0)?agglomRate:pow(smooth,step-stepAgglomUpdated)*agglomRate;
+			case 1: return (step<0||smooth<=0)?agglomRate:pown(smooth,step-stepAgglomUpdated)*agglomRate;
 			case 2: return cumAgglomMass;
 			case 3: return cumAgglomAngle;
 			default: return NaN;	
@@ -88,7 +88,7 @@ struct Law2_L6Geom_PelletPhys_Pellet: public LawFunctor{
 	WOO_DECL_LOGGER;
 	static Real yieldForce (Real uN, Real d0, Real kn, Real alpha){ return (-kn*d0/alpha)*log(alpha*(-uN/d0)+1); }
 	static Real yieldForceDerivative(Real uN, Real d0, Real kn, Real alpha){ return kn/(alpha*(-uN/d0)+1); }
-	static Real adhesionForce       (Real uN, Real uNPl, Real ka){ return -ka*uNPl-4*(-ka/uNPl)*pow(uN-.5*uNPl,2); }
+	static Real adhesionForce       (Real uN, Real uNPl, Real ka){ return -ka*uNPl-4*(-ka/uNPl)*pow2(uN-.5*uNPl); }
 
 	#define woo_dem_Law2_L6Geom_PelletPhys_Pellet__CLASS_BASE_DOC_ATTRS_PY \
 		Law2_L6Geom_PelletPhys_Pellet,LawFunctor,"Contact law with friction and plasticity in compression, designed for  pellet behavior. See :ref:`pellet-contact-model` for details.", \

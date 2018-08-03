@@ -46,7 +46,7 @@ Real ConveyorInlet::critDt(){
 Real ConveyorInlet::packVol() const {
 	Real ret=0;
 	if(!clumps.empty()){ for(const auto& c: clumps){ assert(c); ret+=c->volume; }}
-	else{ for(const Real& r: radii) ret+=(4/3.)*M_PI*pow(r,3); }
+	else{ for(const Real& r: radii) ret+=(4/3.)*M_PI*pow3(r); }
 	return ret;
 }
 
@@ -165,7 +165,7 @@ void ConveyorInlet::sortPacking(const Real& zTrimVol){
 		if(doClumps) clumps[i]=ccrrcc[i].clump;
 		// z-trimming
 		if(zTrimVol>0){
-			currVol+=(doClumps?clumps[i]->volume:(4/3.)*M_PI*pow(radii[i],3));
+			currVol+=(doClumps?clumps[i]->volume:(4/3.)*M_PI*pow3(radii[i]));
 			if(currVol>zTrimVol){
 				zTrimHt=centers[i][2]+radii[i];
 				LOG_INFO("Z-sorted packing reached volume "<<currVol<<">="<<zTrimVol<<" at sphere/clump "<<i<<"/"<<N<<", zTrimHt="<<zTrimHt<<", discarding remaining spheres/clumps.");

@@ -86,7 +86,7 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 	// plane stress stiffness matrix
 	Matrix3r E;
 	E<<1,nu,0, nu,1,0,0,0,(1-nu)/2;
-	E*=young/(1-pow(nu,2));
+	E*=young/(1-pow2(nu));
 
 	// strain-displacement matrix (CCT element)
 	Real area=this->getArea();
@@ -117,11 +117,11 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 	// (using the same notation)
 	Real x23=(x2-x3), x31(x3-x1), x12(x1-x2);
 	Real y23=(y2-y3), y31(y3-y1), y12(y1-y2);
-	Real l23_2=(pow(x23,2)+pow(y23,2)), l31_2=(pow(x31,2)+pow(y31,2)), l12_2=(pow(x12,2)+pow(y12,2));
+	Real l23_2=(pow2(x23)+pow2(y23)), l31_2=(pow2(x31)+pow2(y31)), l12_2=(pow2(x12)+pow2(y12));
 	Real P4=-6*x23/l23_2, P5=-6*x31/l31_2, P6=-6*x12/l12_2;
 	Real t4=-6*y23/l23_2, t5=-6*y31/l31_2, t6=-6*y12/l12_2;
 	Real q4=3*x23*y23/l23_2, q5=3*x31*y31/l31_2, q6=3*x12*y12/l12_2;
-	Real r4=3*pow(y23,2)/l23_2, r5=3*pow(y31,2)/l31_2, r6=3*pow(y12,2)/l12_2;
+	Real r4=3*pow2(y23)/l23_2, r5=3*pow2(y31)/l31_2, r6=3*pow2(y12)/l12_2;
 
 	// even though w1, w2, w3 are always zero due to our definition of triangle plane,
 	// we need to get the corresponding nodal force, therefore cannot condense those DOFs away.
@@ -192,7 +192,7 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 	// bending elasticity matrix (the same as (t^3/12)*E, E being the plane stress matrix above)
 	Matrix3r Db;
 	Db<<1,nu,0, nu,1,0, 0,0,(1-nu)/2;
-	Db*=young*pow(dktT,3)/(12*(1-pow(nu,2)));
+	Db*=young*pow3(dktT)/(12*(1-pow2(nu)));
 
 
 	// assemble the matrix here

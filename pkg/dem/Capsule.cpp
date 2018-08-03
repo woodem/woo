@@ -23,7 +23,7 @@ void Capsule::selfTest(const shared_ptr<Particle>& p){
 }
 
 Real Capsule::volume() const {
-	return (4/3.)*M_PI*pow(radius,3)+M_PI*pow(radius,2)*shaft;
+	return (4/3.)*M_PI*pow3(radius)+M_PI*pow2(radius)*shaft;
 }
 
 Real Capsule::equivRadius() const {
@@ -33,9 +33,9 @@ Real Capsule::equivRadius() const {
 bool Capsule::isInside(const Vector3r& pt) const{
 	Vector3r l(nodes[0]->glob2loc(pt));
 	// cylinder test
-	if(abs(l[0])<shaft/2.) return pow(l[1],2)+pow(l[2],2)<pow(radius,2);
+	if(abs(l[0])<shaft/2.) return pow2(l[1])+pow2(l[2])<pow2(radius);
 	// cap test (distance to endpoint)
-	return (Vector3r(l[0]<0?-shaft/2.:shaft/2.,0,0)-l).squaredNorm()<pow(radius,2);
+	return (Vector3r(l[0]<0?-shaft/2.:shaft/2.,0,0)-l).squaredNorm()<pow2(radius);
 }
 
 void Capsule::applyScale(Real scale){ radius*=scale; shaft*=scale; }
@@ -45,12 +45,12 @@ void Capsule::lumpMassInertia(const shared_ptr<Node>& n, Real density, Real& mas
 	if(n.get()!=nodes[0].get()) return; // not our node
 	rotateOk=false; // node may not be rotated without geometry change
 	checkNodesHaveDemData();
-	Real r2(pow(radius,2)), r3(pow(radius,3));
+	Real r2(pow2(radius)), r3(pow3(radius));
 	Real mCaps=(4/3.)*M_PI*r3*density;
 	Real mShaft=M_PI*r2*shaft*density;
 	Real distCap=.5*shaft+(3/8.)*radius; // distance between centroid and the cap's centroid
 	Real Ix=2*mCaps*r2/5.+.5*mShaft*r2;
-	Real Iy=(83/320.)*mCaps*r2+mCaps*pow(distCap,2)+(1/12.)*mShaft*(3*r2+pow(shaft,2));
+	Real Iy=(83/320.)*mCaps*r2+mCaps*pow2(distCap)+(1/12.)*mShaft*(3*r2+pow2(shaft));
 	I.diagonal()+=Vector3r(Ix,Iy,Iy);
 	mass+=mCaps+mShaft;
 
@@ -181,7 +181,7 @@ bool Cg2_InfCylinder_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const share
 	Real t=CompUtils::clamped(capHalf2.dot(cylPos2-capPos2)/capHalf2.squaredNorm(),-1,1);
 	Vector2r cyl2seg2=(capPos2+t*capHalf2)-cylPos2; // relative position from cylinder to segment in 2d
 	Real distSq=cyl2seg2.squaredNorm();
-	if(!C->isReal() && distSq>pow(cyl.radius+cap.radius,2) && !force) return false;
+	if(!C->isReal() && distSq>pow2(cyl.radius+cap.radius) && !force) return false;
 	Vector3r normal=Vector3r::Zero(); normal[ax1]=cyl2seg2[0]; normal[ax2]=cyl2seg2[1]; normal.normalize();
 	Real uN=sqrt(distSq)-(cyl.radius+cap.radius);
 	Vector3r contPt=cylPos; contPt[ax]=(capPos+t*capHalf)[ax]; contPt+=(cyl.radius+.5*uN)*normal;
@@ -191,7 +191,7 @@ bool Cg2_InfCylinder_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const share
 
 void Cg2_Sphere_Capsule_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){
 	const auto& s(s1->cast<Sphere>()); const auto& c(s2->cast<Capsule>());
-	C->minDist00Sq=pow(s.radius+c.radius+.5*c.shaft,2);
+	C->minDist00Sq=pow2(s.radius+c.radius+.5*c.shaft);
 }
 
 
@@ -205,7 +205,7 @@ bool Cg2_Sphere_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr
 	Vector3r AB[2]={capPos-capOri*Vector3r(cap.shaft/2.,0,0),capPos+capOri*Vector3r(cap.shaft/2.,0,0)};
 	Vector3r pt=CompUtils::closestSegmentPt(spherePos,AB[0],AB[1]);
 	Real distSq=(pt-spherePos).squaredNorm();
-	if(!C->isReal() && distSq>pow(rSum,2) && !force) return false;
+	if(!C->isReal() && distSq>pow2(rSum) && !force) return false;
 	Real dist=sqrt(distSq);
 	Vector3r normal=(pt-spherePos)/dist;
 	Real uN=dist-rSum;
@@ -217,7 +217,7 @@ bool Cg2_Sphere_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr
 
 void Cg2_Capsule_Capsule_L6Geom::setMinDist00Sq(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const shared_ptr<Contact>& C){
 	const auto& c1(s1->cast<Capsule>()); const auto& c2(s2->cast<Capsule>());
-	C->minDist00Sq=pow(c1.radius+.5*c1.shaft+c2.radius+.5*c2.shaft,2);
+	C->minDist00Sq=pow2(c1.radius+.5*c1.shaft+c2.radius+.5*c2.shaft);
 }
 
 bool Cg2_Capsule_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){
@@ -230,7 +230,7 @@ bool Cg2_Capsule_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_pt
 	Vector2r uv;
 	bool parallel;
 	Real distSq=CompUtils::distSq_SegmentSegment(pos1,dir1,.5*c1.shaft,pos2,dir2,.5*c2.shaft,uv,parallel);
-	if(!C->isReal() && distSq>pow(rSum,2) && !force) return false;
+	if(!C->isReal() && distSq>pow2(rSum) && !force) return false;
 
 
 	/* now check all endpoints against the other's segment, to detect if the capsules cross, or if they touch in the elongated direction, in which case we have to interpolate between ends just like in the wall contact (here, things are more complicated, as there are two capsules).
@@ -257,7 +257,7 @@ bool Cg2_Capsule_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_pt
 		for(int e:{0,1}){
 			eClose[a][e]=CompUtils::closestSegmentPt(ends[a][e],ends[b][0],ends[b][1]);
 			eDistSq[a][e]=(eClose[a][e]-ends[a][e]).squaredNorm();
-			if(eDistSq[a][e]<pow(rSum,2)){ bitsOver|=1<<(2*a+e); nOver++; }
+			if(eDistSq[a][e]<pow2(rSum)){ bitsOver|=1<<(2*a+e); nOver++; }
 		}
 	}
 	Real r1r=c1.radius/rSum, r2r=c2.radius/rSum;
@@ -348,7 +348,7 @@ bool Cg2_Facet_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<
 	Array2r rp; // relative positions on the segment
 	Vector3r ccp[2]={CompUtils::closestSegmentPt(ffp[0],AB[0],AB[1],&rp[0]),CompUtils::closestSegmentPt(ffp[1],AB[0],AB[1],&rp[1])};
 	Array2r fcd2((ccp[0]-ffp[0]).squaredNorm(),(ccp[1]-ffp[1]).squaredNorm());
-	if(mayFail && fcd2.minCoeff()>pow(touchDist,2)){
+	if(mayFail && fcd2.minCoeff()>pow2(touchDist)){
 		#if 0
 			cerr<<"===================================================="<<endl;
 			cerr<<"  Too far from the triangle: "<<fcd2.transpose()<<endl;

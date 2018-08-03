@@ -59,7 +59,7 @@ void Cg2_Shape_Shape_L6Geom__Potential::setMinDist00Sq(const shared_ptr<Shape>& 
 		if(!(r>0)){ C->minDist00Sq=-1; return; }
 		sum+=r;
 	}
-	C->minDist00Sq=pow(sum,2);
+	C->minDist00Sq=pow2(sum);
 }
 
 void Cg2_Shape_Shape_L6Geom__Potential::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){

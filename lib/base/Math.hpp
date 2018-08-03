@@ -180,6 +180,24 @@ typedef Math<Real> Mathr;
 template <typename T> int sgn(T val){ return (val>T(0))-(val<T(0)); }
 
 
+template<typename T> T pow2(T x){ return x*x; }
+template<typename T> T pow3(T x){ return x*x*x; }
+template<typename T> T pow4(T x){ return pow2(x*x); }
+template<typename T> T pow5(T x){ return pow4(x)*x; }
+// https://stackoverflow.com/a/13771544/761090
+// Computes x^n, where n is a natural number.
+template<typename T>
+T pown(T x, unsigned n){
+	//double y = 1;
+	// n = 2*d + r. x^n = (x^2)^d * x^r.
+	unsigned d = n >> 1;
+	unsigned r = n & 1;
+	T x_2_d = d == 0? 1 : pown(x*x, d);
+	T x_r = r == 0? 1 : x;
+	return x_2_d*x_r;
+}
+
+
 /* this was removed in eigen3, see http://forum.kde.org/viewtopic.php?f=74&t=90914 */
 template<typename MatrixT>
 void Matrix_computeUnitaryPositive(const MatrixT& in, MatrixT* unitary, MatrixT* positive){

@@ -53,7 +53,7 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 	const auto& dyn(parNode0->getData<DemData>());
 	// const Vector3r parPosLocal=(node?node->glob2loc(parNode0->pos):parNode0->pos);
 
-	Real V(pow(cellSize,3));
+	Real V(pow3(cellSize));
 	// all things saved are actually densities over the volume of a single cell
 	Vector3r momentum_V(dyn.vel*dyn.mass/V);
 	Real Ek_V(dyn.getEk_any(parNode0,/*trans*/true,/*rot*/true,scene)/V);
@@ -317,7 +317,7 @@ Real FlowAnalysis::avgFlowNorm(const vector<size_t> &fractions){
 	long double ret=0.;
 	for(int i=0; i<boxCells[0]; i++){ for(int j=0; j<boxCells[1]; j++){ for(int k=0; k<boxCells[2]; k++){
 		for(size_t frac: fractions){
-			ret+=sqrt(pow(data[frac][i][j][k][PT_FLOW_X],2)+pow(data[frac][i][j][k][PT_FLOW_Y],2)+pow(data[frac][i][j][k][PT_FLOW_Z],2));
+			ret+=sqrt(pow2(data[frac][i][j][k][PT_FLOW_X])+pow2(data[frac][i][j][k][PT_FLOW_Y])+pow2(data[frac][i][j][k][PT_FLOW_Z]));
 		}
 	}}}
 	return ret/boxCells.prod();

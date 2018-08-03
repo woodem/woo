@@ -22,7 +22,7 @@ bool Cg2_Sphere_Sphere_G3Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<
 	const Real& dt=scene->dt;
 
 	Vector3r normal=(pos2+shift2)-pos1;
-	if(!C->isReal() && !force && (pow(r1+r2,2)-normal.squaredNorm()<0)){
+	if(!C->isReal() && !force && (pow2(r1+r2)-normal.squaredNorm()<0)){
 		// cerr<<"relPos="<<normal.transpose()<<", dist="<<normal.norm()<<", r1="<<r1<<", r2="<<r2<<endl;
 		return false;
 	}
@@ -164,7 +164,7 @@ bool Law2_G3Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 	_WATCH_MSG("\trotated previous Fs="<<dta.shearForce.transpose());
 	dta.shearForce-=phys.kt*geom.dShear;
 	_WATCH_MSG("\t; incremented by "<<(phys.kt*geom.dShear).transpose()<<" to "<<dta.shearForce.transpose()<<endl);
-	Real maxFs=max(0.,normalForce.squaredNorm()*std::pow(phys.tanPhi,2));
+	Real maxFs=max(0.,normalForce.squaredNorm()*pow2(phys.tanPhi));
 	_WATCH_MSG("\tFn="<<normalForce.norm()<<", trial Fs="<<dta.shearForce.transpose()<<", max Fs="<<sqrt(maxFs)<<endl);
 	if(dta.shearForce.squaredNorm()>maxFs && !noSlip){
 		Real ratio=sqrt(maxFs)/dta.shearForce.norm();

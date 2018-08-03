@@ -262,7 +262,7 @@ void RandomInlet::run(){
 			if(scene->isPeriodic) pos=scene->cell->canonicalizePt(pos);
 			const auto& radius(p->shape->cast<Sphere>().radius);
 			// AlignedBox::squaredExteriorDistance returns 0 for points inside the box
-			if(isBox && box.squaredExteriorDistance(pos)>pow(radius,2)) continue;
+			if(isBox && box.squaredExteriorDistance(pos)>pow2(radius)) continue;
 			spheres.pack.push_back(SpherePack::Sph(pos,radius));
 		}
 		if(isBox && scene->isPeriodic && !scene->cell->hasShear()){
@@ -352,7 +352,7 @@ void RandomInlet::run(){
 					for(const auto& s: spheres.pack){
 						// check dist && don't collide with another sphere from this clump
 						// (abuses the *num* counter for clumpId)
-						if((s.c-(pos+subPos)).squaredNorm()<pow(s.r+r,2)){
+						if((s.c-(pos+subPos)).squaredNorm()<pow2(s.r+r)){
 							LOG_TRACE("Collision with a particle in SpherePack (a particle generated in this step).");
 							goto tryAgain;
 						}
@@ -368,7 +368,7 @@ void RandomInlet::run(){
 							if(id>(Particle::id_t)dem->particles->size() || !(*dem->particles)[id]) continue;
 							const shared_ptr<Shape>& sh2((*dem->particles)[id]->shape);
 							// no spheres, or they are too close
-							if(!peSphere || !sh2->isA<woo::Sphere>() || 1.1*(pos-sh2->nodes[0]->pos).squaredNorm()<pow(peSphere->radius+sh2->cast<Sphere>().radius,2)) goto tryAgain;
+							if(!peSphere || !sh2->isA<woo::Sphere>() || 1.1*(pos-sh2->nodes[0]->pos).squaredNorm()<pow2(peSphere->radius+sh2->cast<Sphere>().radius)) goto tryAgain;
 						}
 					}
 
@@ -378,7 +378,7 @@ void RandomInlet::run(){
 						if(overlap){
 							const auto& genSh(generated[i]->shape);
 							// for spheres, try to compute whether they really touch
-							if(!peSphere || !genSh->isA<Sphere>() || (pos-genSh->nodes[0]->pos).squaredNorm()<pow(peSphere->radius+genSh->cast<Sphere>().radius,2)){
+							if(!peSphere || !genSh->isA<Sphere>() || (pos-genSh->nodes[0]->pos).squaredNorm()<pow2(peSphere->radius+genSh->cast<Sphere>().radius)){
 								LOG_TRACE("Collision with "<<i<<"-th particle generated in this step.");
 								goto tryAgain;
 							}
@@ -558,7 +558,7 @@ bool CylinderInlet::validateBox(const AlignedBox3r& b) {
 	for(AlignedBox3r::CornerType c:{AlignedBox3r::BottomLeft,AlignedBox3r::BottomRight,AlignedBox3r::TopLeft,AlignedBox3r::TopRight,AlignedBox3r::BottomLeftCeil,AlignedBox3r::BottomRightCeil,AlignedBox3r::TopLeftCeil,AlignedBox3r::TopRightCeil}){
 		Vector3r p=node->glob2loc(b.corner(c));
 		if(p[0]<0. || p[0]>height) return false;
-		if(Vector2r(p[1],p[2]).squaredNorm()>pow(radius,2)) return false;
+		if(Vector2r(p[1],p[2]).squaredNorm()>pow2(radius)) return false;
 	}
 	return true;
 }
