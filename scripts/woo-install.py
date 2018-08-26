@@ -9,6 +9,7 @@ dist,linver,codename=platform.linux_distribution()
 if dist=='Ubuntu':
     # linver='16.04'
     if linver=='16.04': pass
+    elif linver=='18.04': pass
     else: raise RuntimeError('Ubuntu version %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%linver)
 else:
     raise RuntimeError('Linux distribution %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%dist)
@@ -53,12 +54,17 @@ if dist in ('Ubuntu','Debian'):
     if dist=='Ubuntu':
         if linver=='16.04':
             aptCore='libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev git scons libav-tools libhdf5-serial-dev python3-all-dev python3-setuptools python3-pip python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-minieigen python3-prettytable python3-colorama ipython3 python3-future'.split()
-            if args.ccache: aptCore+=['ccache']
             aptUI='libqt4-dev-bin libqt4-dev qt4-dev-tools libgle3-dev libqglviewer-dev-qt4 paraview freeglut3-dev python3-pyqt4 python3-xlib pyqt4-dev-tools'.split()
             pipCore='xlwt-future colour-runner'.split()
             pipUI=[]
             qtFeature='qt4'
+        elif linver=='18.04':
+            aptCore='python-all python-all-dev python3-setuptools python3-all python3-all-dev python3-pyqt5 python3-future python3-distutils python3-minieigen debhelper libboost-all-dev qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev libvtk6-dev libgts-dev libeigen3-dev freeglut3-dev libhdf5-serial-dev python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-pyqt5 python3-pyqt5.qtsvg python3-xlib python3-genshi python3-psutil python3-minieigen python3-pil python3-h5py python3-lockfile python3-future ipython3 mencoder ffmpeg python3-prettytable'.split()
+            pipCore='xlwt-future colour-runner'.split()
+            pipUI=[]
+            qtFeature='qt5'
         else: raise RuntimeError('unsupported')
+        if args.ccache: aptCore+=['ccache']
         import glob
     else: raise RuntimeError('unsupported')
     call(['eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
@@ -90,5 +96,4 @@ if args.clean>0:
     import shutil
     shutils.rmtree(args.build_prefix)
     if args.clean>1: shutils.rmtree(args.src)
-    if dist in ('Ubuntu','Debian'):
-        shutils.rmtree('/var/cache/apt/archives')
+    if dist in ('Ubuntu','Debian'): call(['apt','clean'],sudo=True) 
