@@ -48,6 +48,10 @@ else:
                 # usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
                 # let's just pretend any exception means the display would not work
                 woo.runtime.hasDisplay=False
+                # warning with WSL
+                import platform
+                if 'Microsoft' in platform.release() and platform.system()=='Linux' and os.environ['DISPLAY'].startswith(':'):
+                    print("WARNING: connection to $DISPLAY failed; since you are running under Microsoft Windows in WSL (probably), you need to export $DISPLAY with localhost: prefix. Currently, $DISPLAY is '%s', should be therefore 'localhost%s'."%(os.environ['DISPLAY'],os.environ['DISPLAY']))
                 raise ImportError("Connecting to $DISPLAY failed, unable to activate the woo.qt4 interface.")
                 
     # not necessary for qt5
