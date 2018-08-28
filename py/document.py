@@ -360,8 +360,11 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
         kOut.write('.. autoclass:: %s\n'%k.__name__)
         #kOut.write('   :members: %s\n'%(','.join([m for m in dir(k) if (not m.startswith('_') and m not in set(trait.name for trait in k._attrTraits))])))
         kOut.write('   :members:\n')
-        # exclude __init__ which would be shown by special-memebrs, but is really useless for Object (always the same)
-        ex=['__init__']+[t.name for t in k._attrTraits]
+        # those will be documented explicitly
+        ex=[t.name for t in k._attrTraits]
+        # exclude __init__ which would be shown by special-members, but is really useless for Object (always the same)
+        # if issubclass(k,woo.core.Object):
+        ex.append('__init__')
         if ex: kOut.write('   :exclude-members: %s\n'%(', '.join(ex)))
         kOut.write('   :special-members:\n')
 
@@ -439,8 +442,10 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
         if k!=woo.core.Object:
             bb=[k]
             while True:
+                # if len(bb[-1].__bases)==0: break
                 bb+=[bb[-1].__bases__[0]]
                 if bb[-1]==woo.core.Object: break
+                if bb[-1]==object: break ## in one case this breaks...!??
             kOut.write(u'\n'+u' → '.join([u':obj:`~%s.%s`'%(b.__module__,b.__name__) for b in reversed(bb)])+'\n\n')
         # print derived classes
         if klassesUnder and woo.system.childClasses(k):
@@ -516,7 +521,7 @@ def makeClassAttrDocUrl(klass,attr=None):
     dotAttr=(('.'+attr) if attr else '')
     if klass.__module__.startswith('wooExtra.'):
         KEY=sys.modules['.'.join(klass.__module__.split('.')[:2])].KEY
-        return 'http://www.woodem.eu/private/{KEY}/doc/index.html#{module}.{klass}{dotAttr}'.format(KEY=KEY,module=klass.__module__,klass=klass.__name__,dotAttr=dotAttr)
+        return 'https://www.woodem.eu/private/{KEY}/doc/index.html#{module}.{klass}{dotAttr}'.format(KEY=KEY,module=klass.__module__,klass=klass.__name__,dotAttr=dotAttr)
     return '{sphinxPrefix}/{sphinxHtml}.html#{module}.{klass}{dotAttr}'.format(sphinxPrefix=sphinxPrefix,sphinxHtml=makeSphinxHtml(klass),module=klass.__module__,klass=klass.__name__,dotAttr=dotAttr)
 
 def makeObjectUrl(obj,attr=None):
