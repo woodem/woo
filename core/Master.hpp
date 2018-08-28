@@ -14,7 +14,6 @@
 #include<boost/preprocessor/stringize.hpp>
 
 #include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/Singleton.hpp>
 #include<woo/lib/base/Types.hpp>
 #include<woo/lib/base/Logging.hpp>
 #include<woo/lib/pyutil/except.hpp>
@@ -30,14 +29,17 @@
 # define FOREACH BOOST_FOREACH
 #endif
 
+
 struct Scene;
-//namespace woo { class Object; };
 using namespace woo;
 
 namespace py=boost::python;
 
-class Master: public Singleton<Master>{
-	map<string,set<string>> classBases;
+class Master{
+	public: static Master& instance();
+
+	private: map<string,set<string>> classBases;
+
 	public:
 
 	// pointer to factory function
@@ -166,8 +168,6 @@ class Master: public Singleton<Master>{
 
 	Master();
 	~Master();
-
-	FRIEND_SINGLETON(Master);
 
 	#define _DEPREC_ERR(a) void err_##a(){ woo::AttributeError("O." #a " does not exist in tr2 anymore, use O.scene." #a); }
 		_DEPREC_ERR(dt);

@@ -57,6 +57,12 @@ void crtWin32EnvCheck(const char* name){
 }
 #endif
 
+// easy singleton: https://stackoverflow.com/a/11711991/761090
+Master& Master::instance(){
+	static Master _instance;
+	return _instance;
+}
+
 
 Master::Master(){
 	LOG_DEBUG_EARLY("Constructing woo::Master.");
