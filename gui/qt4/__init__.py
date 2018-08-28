@@ -9,7 +9,7 @@ useQtConsole=False # does not work yet
 wooQApp=None
 
 import wooMain
-import sys
+import sys, os
 PY3K=future.utils.PY3
 
 if wooMain.options.fakeDisplay:
@@ -19,6 +19,7 @@ if wooMain.options.fakeDisplay:
 else:
     # signal import error witout display
     if 1:
+
         import woo.runtime, wooMain
         if wooMain.options.forceNoGui:
             woo.runtime.hasDisplay=False
@@ -32,6 +33,9 @@ else:
             # assume display is always available at Windows
             woo.runtime.hasDisplay=True
         else:
+            try: DISPLAY=os.environ['DISPLAY']
+            except KeyError: raise ImportError("$DISPLAY is not defined.")
+            if DISPLAY=='': raise ImportError("$DISPLAY is empty.")
             try:
                 import Xlib.display
             except ImportError:
@@ -42,7 +46,12 @@ else:
             # we test the connection with bare xlib first, which merely raises DisplayError
             try:
                 # contrary to display.Display, _BaseDisplay does not check for extensions and that avoids spurious message "Xlib.protocol.request.QueryExtension" (bug?)
-                Xlib.display._BaseDisplay();
+                import platform
+                # for WSL, UNIX-domain socket will not work, thus hostname must be prepended to force IP connection
+                # https://github.com/python-xlib/python-xlib/issues/99
+                # this is not necessary for Qt below (it has that logic built-in already), only for testing the display via Xlib
+                if 'Microsoft' in platform.release(): Xlib.display._BaseDisplay(('localhost:' if DISPLAY.startswith(':') else '')+DISPLAY)
+                else: Xlib.display._BaseDisplay() # just use $DISPLAY
                 woo.runtime.hasDisplay=True
             except:
                 # usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
