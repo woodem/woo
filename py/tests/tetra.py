@@ -13,6 +13,7 @@ from woo.dem import *
 
 class TestTet4(unittest.TestCase):
     'Test :obj:`woo.fem.Tet4`.'
+    @unittest.skipIf(False,"Crashes currently perhaps due to boost::python, skip for now.")
     def testStiffnessMatrix(self):
         'Tet4: stiffness matrix'
         # check values against:

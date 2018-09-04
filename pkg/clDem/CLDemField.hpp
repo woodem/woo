@@ -48,12 +48,12 @@ struct CLDemField: public Field{
 		.staticmethod("clDemToWoo")
 		.def("wooToClDem",&CLDemField::wooToClDem,(py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1),"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
 		.staticmethod("wooToClDem")
-		.def("getSimulation",&CLDemField::getSimulation).staticmethod("getSimulation")
-		.def("sceneHasField",&Field_sceneHasField<CLDemField>).staticmethod("sceneHasField")
-		.def("sceneGetField",&Field_sceneGetField<CLDemField>).staticmethod("sceneGetField")
+		.def_static("getSimulation",&CLDemField::getSimulation).staticmethod("getSimulation")
+		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>).staticmethod("sceneHasField")
+		.def_static("sceneGetField",&Field_sceneGetField<CLDemField>).staticmethod("sceneGetField")
 	);
 	REGISTER_CLASS_INDEX(CLDemField,Field);
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw);
+	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw);
 	// get coordinates from particles, not from nodes
 	bool renderingBbox(Vector3r&, Vector3r&); 
 };

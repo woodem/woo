@@ -135,14 +135,21 @@ class TestSpecialDumpMethods(unittest.TestCase):
 class TestArraySerialization(unittest.TestCase):
     def testMatrixX(self):
         'IO: serialization of arrays'
+        import sys
+        sys.stderr.write('A\n')
         t0=woo.core.WooTestClass()
+        sys.stderr.write('B\n')
         t0.matX=MatrixX([[0,1,2],[3,4,5]])
+        sys.stderr.write('C\n')
         out=woo.master.tmpFilename()
         t0.save(out)
+        sys.stderr.write('D\n')
         t1=woo.core.Object.load(out)
+        sys.stderr.write('E\n')
         self.assertTrue(t1.matX.rows()==2)
         self.assertTrue(t1.matX.cols()==3)
         self.assertTrue(t1.matX.sum()==15)
+        sys.stderr.write('F\n')
     def testBoostMultiArray(self):
         'IO: serialization of boost::multi_array'
         t0=woo.core.WooTestClass()

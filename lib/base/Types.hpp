@@ -42,18 +42,31 @@ using boost::lexical_cast;
 // enables beautiful constructs like: for(int x: {0,1,2})...
 #include<initializer_list>
 
-/* Avoid using std::shared_ptr, because boost::serialization does not support it.
-   For boost::python, declaring get_pointer template would be enough.
-	See http://stackoverflow.com/questions/6568952/c0x-stdshared-ptr-vs-boostshared-ptr
-*/
-#include<boost/shared_ptr.hpp>
-#include<boost/make_shared.hpp>
 #include<memory>
-using boost::shared_ptr;
-using boost::static_pointer_cast;
-using boost::dynamic_pointer_cast;
-using boost::make_shared;
-using boost::weak_ptr;
+
+#ifndef WOO_PYBIND11
+	/* Avoid using std::shared_ptr, because boost::serialization does not support it.
+	   For boost::python, declaring get_pointer template would be enough.
+		See http://stackoverflow.com/questions/6568952/c0x-stdshared-ptr-vs-boostshared-ptr
+	*/
+	#include<boost/shared_ptr.hpp>
+	#include<boost/make_shared.hpp>
+	#include<boost/enable_shared_from_this.hpp>
+	using boost::shared_ptr;
+	using boost::enable_shared_from_this;
+	using boost::static_pointer_cast;
+	using boost::dynamic_pointer_cast;
+	using boost::make_shared;
+	using boost::weak_ptr;
+#else
+	using std::shared_ptr;
+	using std::enable_shared_from_this;
+	using std::static_pointer_cast;
+	using std::dynamic_pointer_cast;
+	using std::make_shared;
+	using std::weak_ptr;
+#endif
+
 using std::unique_ptr;
 
 #if 0
@@ -112,8 +125,16 @@ using std::abs;
 #endif
 
 // includes python headers, which also define PY_MAJOR_VERSION
-#include<boost/python.hpp>
-namespace py=boost::python;
+#ifndef WOO_PYBIND11
+	#include<boost/python.hpp>
+	#include<woo/lib/pyutil/compat.hpp>
+	namespace py=boost::python;
+#else
+	#include<pybind11/pybind11.h>
+	#include<pybind11/eval.h>
+	#include<woo/lib/pyutil/compat.hpp>
+	namespace py=pybind11;
+#endif
 
 // py 2x: iterator.next, py3k: iterator.__next__
 #if PY_MAJOR_VERSION >= 3

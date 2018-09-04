@@ -63,7 +63,7 @@ bool CLDemField::renderingBbox(Vector3r& mn, Vector3r& mx){
 	return true;
 }
 
-void CLDemField::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void CLDemField::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(py::len(args)>1) woo::TypeError("CLDemField takes at most 1 non-keyword arguments ("+lexical_cast<string>(py::len(args))+" given)");
 	if(py::len(args)==0) return;
 	py::extract<shared_ptr<clDem::Simulation>> ex(args[0]);

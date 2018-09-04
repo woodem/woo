@@ -25,7 +25,7 @@ struct Cell: public Object{
 	const Vector3r& getSize() const { return _size; }
 	void setSize(const Vector3r& s){for (int k=0;k<3;k++) hSize.col(k)*=s[k]/hSize.col(k).norm(); refHSize=hSize;  postLoad(*this,NULL);}
 	//! Return copy of the current size (used only by the python wrapper)
-	Vector3r getSize_copy() const { return _size; }
+	const Vector3r getSize_copy() { return _size; }
 	//! return vector of consines of skew angle in yz, xz, xy planes between respective transformed base vectors
 	const Vector3r& getCos() const {return _cos;}
 	//! transformation matrix applying pure shear&rotation (scaling removed)
@@ -155,12 +155,12 @@ struct Cell: public Object{
 	/*ctor*/ _invTrsf=Matrix3r::Identity(); integrateAndUpdate(0),\
 	/*py*/\
 		/* override some attributes above*/ \
-		.add_property("hSize",py::make_function(&Cell::getHSize,py::return_value_policy<py::return_by_value>()),&Cell::setHSize,"Base cell vectors (columns of the matrix), updated at every step from :obj:`gradV` (:obj:`trsf` accumulates applied :obj:`gradV` transformations). Setting *hSize* during a simulation is not supported by most contact laws, it is only meant to be used at iteration 0 before any interactions have been created.")\
+		.add_property("hSize",WOO_PY_GETTER_COPY(&Cell::getHSize),&Cell::setHSize,"Base cell vectors (columns of the matrix), updated at every step from :obj:`gradV` (:obj:`trsf` accumulates applied :obj:`gradV` transformations). Setting *hSize* during a simulation is not supported by most contact laws, it is only meant to be used at iteration 0 before any interactions have been created.")\
 		.add_property("size",&Cell::getSize_copy,&Cell::setSize,"Current size of the cell, i.e. lengths of the 3 cell lateral vectors contained in :obj:`Cell.hSize` columns. Updated automatically at every step. Assigning a value will change the lengths of base vectors (see :obj:`Cell.hSize`), keeping their orientations unchanged.")\
 		/* useful properties*/ \
-		.add_property("trsf",py::make_function(&Cell::getTrsf,py::return_value_policy<py::return_by_value>()),&Cell::setTrsf,"Current transformation matrix of the cell, obtained from time integration of :obj:`Cell.gradV`.")\
-		.def_readonly("size",&Cell::getSize_copy,"Current size of the cell, i.e. lengths of the 3 cell lateral vectors contained in :obj:`Cell.hSize` columns. Updated automatically at every step.")\
-		.add_property("volume",&Cell::getVolume,"Current volume of the cell.")\
+		.add_property("trsf",WOO_PY_GETTER_COPY(&Cell::getTrsf),&Cell::setTrsf,"Current transformation matrix of the cell, obtained from time integration of :obj:`Cell.gradV`.")\
+		/*??? duplicate? .def_readonly("size",&Cell::getSize_copy,"Current size of the cell, i.e. lengths of the 3 cell lateral vectors contained in :obj:`Cell.hSize` columns. Updated automatically at every step.")*/\
+		.add_property_readonly("volume",&Cell::getVolume,"Current volume of the cell.")\
 		/* functions */ \
 		.def("setBox",&Cell::setBox,"Set :obj:`Cell` shape to be rectangular, with dimensions along axes specified by given argument. Shorthand for assigning diagonal matrix with respective entries to :obj:`hSize`.")\
 		.def("setBox",&Cell::setBox3,"Set :obj:`Cell` shape to be rectangular, with dimensions along $x$, $y$, $z$ specified by arguments. Shorthand for assigning diagonal matrix with the respective entries to :obj:`hSize`.")\
@@ -174,8 +174,8 @@ struct Cell: public Object{
 		.def("wrapPt",&Cell::wrapPt_py,"Wrap point inside the reference cell, assuming the cell has no skew+rot.")\
 		.def_readonly("shearTrsf",&Cell::_shearTrsf,"Current skew+rot transformation (no resize)")\
 		.def_readonly("unshearTrsf",&Cell::_unshearTrsf,"Inverse of the current skew+rot transformation (no resize)")\
-		.add_property("hSize0",&Cell::getHSize0,"Value of untransformed hSize, with respect to current :obj:`trsf` (computed as :obj:`trsf` ⁻¹ × :obj:`hSize`).")\
-		.add_property("size0",&Cell::getSize0,"norms of columns of `hSize0` (edge lengths of the untransformed configuration)") ;\
+		.add_property_readonly("hSize0",&Cell::getHSize0,"Value of untransformed hSize, with respect to current :obj:`trsf` (computed as :obj:`trsf` ⁻¹ × :obj:`hSize`).")\
+		.add_property_readonly("size0",&Cell::getSize0,"norms of columns of `hSize0` (edge lengths of the untransformed configuration)") ;\
 			_classObj.attr("HomoNone")=(int)Cell::HOMO_NONE; \
 			_classObj.attr("HomoPos")=(int)Cell::HOMO_POS; \
 			_classObj.attr("HomoVel")=(int)Cell::HOMO_VEL; \

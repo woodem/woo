@@ -1,10 +1,18 @@
 #pragma once 
 
-#include<boost/python.hpp>
-#include<boost/python/class.hpp>
 #include<vector>
 #include<list>
 
+
+#ifdef WOO_PYBIND11
+	#include<pybind11/stl.h>
+	namespace woo{
+		template<typename T> void converters_cxxVector_pyList_2way(){ };
+	};
+#else
+
+#include<boost/python.hpp>
+#include<boost/python/class.hpp>
 namespace py=boost::python;
 
 namespace woo{
@@ -81,6 +89,10 @@ namespace woo{
 		custom_vector_from_seq<T>(); py::to_python_converter<vector<T>,custom_vector_to_list<T>>();
 	};
 
+}
+
+#endif
+
 
 #if 0
 	template<typename Ta, typename Tb>
@@ -133,8 +145,6 @@ namespace woo{
 #endif
 
 
-
-};
 
 
 #if 0

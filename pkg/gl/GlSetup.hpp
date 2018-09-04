@@ -54,7 +54,7 @@ struct GlSetup: public Object{
 	py::list getObjNames() const;
 	
 	void postLoad(GlSetup&,void*);
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
+	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
 	// proxy for raw_function, extracts instance from args[0]
 	// return value and kw only to satisfy interface
 	// http://stackoverflow.com/questions/27488096/boost-python-raw-function-method

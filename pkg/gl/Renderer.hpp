@@ -54,7 +54,7 @@ struct Renderer: public Object{
 		void drawPeriodicCell();
 		
 		// check API -- and nothing else
-		void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
+		void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
 
 	private:
 		void resetSpecularEmission();

@@ -182,7 +182,7 @@ shared_ptr<Particle> Shape::make(const shared_ptr<Shape>& shape, const shared_pt
 
 
 
-void DemData::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void DemData::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(!kw.has_key("blocked")) return;
 	py::extract<string> strEx(kw["blocked"]);
 	if(!strEx.check()) return;
@@ -352,7 +352,7 @@ Real Particle::getEk_any(bool trans, bool rot, shared_ptr<Scene> scene) const {
 
 
 	
-void DemField::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
+void DemField::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(d.has_key("par")){
 		py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
 		if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");

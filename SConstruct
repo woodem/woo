@@ -108,7 +108,7 @@ opts.AddVariables(
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
 	EnumVariable('PGO','Whether to "gen"erate or "use" Profile-Guided Optimization','',['','gen','use'],{'no':'','0':'','false':''},1),
-	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','never_use_this_one']),
+	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','pybind11','never_use_this_one']),
 	('jobs','Number of jobs to run at the same time (same as -j, but saved)',2,None,int),
 	#('extraModules', 'Extra directories with their own SConscript files (must be in-tree) (whitespace separated)',None,None,Split),
 	('cxxstd','Name of the c++ standard (or dialect) to compile with. With gcc, use gnu++11 (gcc >=4.7) or gnu++0x (with gcc 4.5, 4.6)','c++11'),
@@ -407,8 +407,9 @@ def CheckBoost(context):
 		('boost_regex','boost/regex.hpp','boost::regex("");',True),
 		('boost_chrono','boost/chrono/chrono.hpp','boost::chrono::system_clock::now();',True),
 		('boost_serialization','boost/archive/archive_exception.hpp','try{} catch (const boost::archive::archive_exception& e) {};',True),
-		('boost_python-py%s'%env['PYVER'],'boost/python.hpp','boost::python::scope();',True),
-	]
+	]+(
+		[] if 'pybind11' in context.env['features'] else [('boost_python-py%s'%env['PYVER'],'boost/python.hpp','boost::python::scope();',True),]
+	)
 	failed=[]
 	def checkLib_maybeMT(lib,header,func):
 		for LIB in (lib,lib+'-mt'):
@@ -503,6 +504,7 @@ if not env.GetOption('clean'):
 	env['haveForeach']=conf.CheckCXXHeader('boost/foreach.hpp','<>')
 	if not env['haveForeach']: print "(OK, local version will be used instead)"
 	ok&=conf.CheckCXXHeader('Eigen/Core')
+	if 'pybind11' in env['features']: ok&=conf.CheckCXXHeader('pybind11/pybind11.h')
 
 	if not ok:
 		print "\nOne of the essential libraries above was not found, unable to continue.\n\nCheck `%s' for possible causes, note that there are options that you may need to customize:\n\n"%(buildDir+'/config.log')+opts.GenerateHelpText(env)

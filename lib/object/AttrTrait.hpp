@@ -4,7 +4,6 @@
 #include<woo/lib/base/Math.hpp>
 #include<woo/lib/base/CompUtils.hpp>
 #include<woo/lib/pyutil/gil.hpp>
-#include<boost/python.hpp>
 
 // attribute flags
 namespace woo{
@@ -17,7 +16,7 @@ namespace woo{
 	// store data here, for uniform access from python
 	// derived classes only hide compile-time options
 	// and contain named-param accessors, to retain the template type when chained
-	struct AttrTraitBase /*:boost::noncopyable*/{
+	struct __attribute__((visibility("hidden"))) AttrTraitBase /*:boost::noncopyable*/{
 		// keep in sync with py/wrapper/wooWrapper.cpp !
 		enum class Flags { ATTR_FLAGS_VALUES };
 		// do not access those directly; public for convenience when accessed from python
@@ -73,16 +72,16 @@ namespace woo{
 		py::object pyGetIni()const{ return _ini(); }
 		py::object pyGetRange()const{ return _range(); }
 		py::object pyGetChoice()const{ return _choice(); }
-		py::object pyGetBits()const{ return py::object(_bits); }
 		py::object pyGetButtons(){ return _buttons(); }
-		py::object pyUnit(){ return py::object(_unit); }
+		py::object pyGetBits()const{ return py::cast(_bits); }
+		py::object pyUnit() const { return py::cast(_unit); }
+		// define alternative units: name and factor, by which the base unit is multiplied to obtain this one
+		py::object pyAltUnits() const { return py::cast(_altUnits); }
 		py::object pyPrefUnit(){
 			// return base unit if preferred not specified
 			for(size_t i=0; i<_prefUnit.size(); i++) if(_prefUnit[i].first.empty()) _prefUnit[i]=pair<string,Real>(_unit[i],1.);
-			return py::object(_prefUnit);
+			return py::cast(_prefUnit);
 		}
-		// define alternative units: name and factor, by which the base unit is multiplied to obtain this one
-		py::object pyAltUnits(){ return py::object(_altUnits); }
 
 		string pyStr(){ return "<AttrTrait '"+_name+"', flags="+to_string(_flags)+" @ '"+lexical_cast<string>(this)+">"; }
 
@@ -140,43 +139,47 @@ namespace woo{
 			return I->second[0];
 		}
 
-		static void pyRegisterClass(){
-			py::class_<AttrTraitBase,boost::noncopyable>("AttrTrait",py::no_init) // this is intentional; no need for templates in python
-				.add_property("noSave",&AttrTraitBase::isNoSave)
-				.add_property("readonly",&AttrTraitBase::isReadonly)
-				.add_property("triggerPostLoad",&AttrTraitBase::isTriggerPostLoad)
-				.add_property("hidden",&AttrTraitBase::isHidden)
-				.add_property("noGuiResize",&AttrTraitBase::isNoGuiResize)
-				.add_property("noGui",&AttrTraitBase::isNoGui)
-				.add_property("pyByRef",&AttrTraitBase::isPyByRef)
-				.add_property("static",&AttrTraitBase::isStatic)
-				.add_property("multiUnit",&AttrTraitBase::isMultiUnit)
-				.add_property("noDump",&AttrTraitBase::isNoDump)
-				.add_property("activeLabel",&AttrTraitBase::isActiveLabel)
-				.add_property("rgbColor",&AttrTraitBase::isRgbColor)
-				.add_property("filename",&AttrTraitBase::isFilename)
-				.add_property("existingFilename",&AttrTraitBase::isExistingFilename)
-				.add_property("dirname",&AttrTraitBase::isDirname)
-				.add_property("namedEnum",&AttrTraitBase::isNamedEnum)
-				.add_property("colormap",&AttrTraitBase::isColormap)
-				.add_property("deprecated",&AttrTraitBase::isDeprecated)
-				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,(py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")=""),"Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
+		static void pyRegisterClass(py::module_ mod){
+				#ifndef WOO_PYBIND11
+					py::class_<AttrTraitBase,boost::noncopyable>("AttrTrait",py::no_init) // this is intentional; no need for templates in python
+				#else
+					py::class_<AttrTraitBase>(mod,"AttrTrait")
+				#endif
+				.def_property_readonly("noSave",&AttrTraitBase::isNoSave)
+				.def_property_readonly("readonly",&AttrTraitBase::isReadonly)
+				.def_property_readonly("triggerPostLoad",&AttrTraitBase::isTriggerPostLoad)
+				.def_property_readonly("hidden",&AttrTraitBase::isHidden)
+				.def_property_readonly("noGuiResize",&AttrTraitBase::isNoGuiResize)
+				.def_property_readonly("noGui",&AttrTraitBase::isNoGui)
+				.def_property_readonly("pyByRef",&AttrTraitBase::isPyByRef)
+				.def_property_readonly("static",&AttrTraitBase::isStatic)
+				.def_property_readonly("multiUnit",&AttrTraitBase::isMultiUnit)
+				.def_property_readonly("noDump",&AttrTraitBase::isNoDump)
+				.def_property_readonly("activeLabel",&AttrTraitBase::isActiveLabel)
+				.def_property_readonly("rgbColor",&AttrTraitBase::isRgbColor)
+				.def_property_readonly("filename",&AttrTraitBase::isFilename)
+				.def_property_readonly("existingFilename",&AttrTraitBase::isExistingFilename)
+				.def_property_readonly("dirname",&AttrTraitBase::isDirname)
+				.def_property_readonly("namedEnum",&AttrTraitBase::isNamedEnum)
+				.def_property_readonly("colormap",&AttrTraitBase::isColormap)
+				.def_property_readonly("deprecated",&AttrTraitBase::isDeprecated)
+				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,WOO_PY_ARGS(py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")=""),"Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
 				.def_readonly("_flags",&AttrTraitBase::_flags)
 				// non-flag attributes
 				.def_readonly("doc",&AttrTraitBase::_doc)
 				.def_readonly("cxxType",&AttrTraitBase::_cxxType)
 				.def_readonly("name",&AttrTraitBase::_name)
 				.def_readonly("className",&AttrTraitBase::_className)
-				.def_readonly("unit",&AttrTraitBase::pyUnit)
-				.def_readonly("prefUnit",&AttrTraitBase::pyPrefUnit)
-				.add_property("altUnits",&AttrTraitBase::pyAltUnits)
+				.def_property_readonly("unit",&AttrTraitBase::pyUnit)
+				.def_property_readonly("prefUnit",&AttrTraitBase::pyPrefUnit)
+				.def_property_readonly("altUnits",&AttrTraitBase::pyAltUnits)
 				.def_readonly("startGroup",&AttrTraitBase::_startGroup)
-				.add_property("hideIf",&AttrTraitBase::_hideIf)
-				.add_property("ini",&AttrTraitBase::pyGetIni)
-				.add_property("range",&AttrTraitBase::pyGetRange)
-				.add_property("choice",&AttrTraitBase::pyGetChoice)
-				.add_property("bits",&AttrTraitBase::pyGetBits)
-				.add_property("buttons",&AttrTraitBase::pyGetButtons)
+				.def_property_readonly("hideIf",&AttrTraitBase::_hideIf)
+				.def_property_readonly("ini",&AttrTraitBase::pyGetIni)
+				.def_property_readonly("range",&AttrTraitBase::pyGetRange)
+				.def_property_readonly("choice",&AttrTraitBase::pyGetChoice)
+				.def_property_readonly("bits",&AttrTraitBase::pyGetBits)
+				.def_property_readonly("buttons",&AttrTraitBase::pyGetButtons)
 				.def("__str__",&AttrTraitBase::pyStr)
 				.def("__repr__",&AttrTraitBase::pyStr)
 				.def("_resetInternalPythonObjects",&AttrTraitBase::_resetInternalPythonObjects,"Internal purposes only: release any internally-help python objects of this trait. The trait will be invalid at this point. Should be called at Python shutdown.")
@@ -184,7 +187,7 @@ namespace woo{
 		}
 	};
 	template<int _compileFlags=0>
-	struct AttrTrait: public AttrTraitBase {
+	struct __attribute__((visibility("hidden"))) AttrTrait: public AttrTraitBase {
 		enum { compileFlags=_compileFlags };
 		AttrTrait(): AttrTraitBase(_compileFlags) { };
 		AttrTrait(int f){ _flags=f; } // for compatibility
@@ -262,17 +265,24 @@ namespace woo{
 		AttrTrait& startGroup(const string& s){ _startGroup=s; return *this; }
 		AttrTrait& hideIf(const string& h){ _hideIf=h; return *this; }
 
-		template<typename T> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::object(t); }); return *this; }
+		#ifndef WOO_PYBIND11
+			template<typename T> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::cast(t); }); return *this; }
+		#else
+			// https://stackoverflow.com/a/17201138/761090
+			template<typename T,typename std::enable_if<std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return t; }); return *this; }
+			template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::cast(t); }); return *this; }
+		#endif
 		AttrTrait& ini(){ _ini=std::function<py::object()>([]()->py::object{ return py::object(); }); return *this; }
 
-		AttrTrait& range(const Vector2i& t){ _range=std::function<py::object()>([=]()->py::object{ return py::object(t);} ); return *this; }
-		AttrTrait& range(const Vector2r& t){ _range=std::function<py::object()>([=]()->py::object{ return py::object(t);} ); return *this; }
+		template<typename Scalar>
+		AttrTrait& range(const Eigen::Matrix<Scalar,2,1>& t){ _range=std::function<py::object()>([=]()->py::object{ return py::cast(t);} ); return *this; }
+		// AttrTrait& range(const Vector2r& t){ _range=std::function<py::object()>([=]()->py::object{ return py::cast(t);} ); return *this; }
 
 		// choice from integer values
-		AttrTrait& choice(const vector<int>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::object(t);} ); return *this; }
+		AttrTrait& choice(const vector<int>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::cast(t);} ); return *this; }
 		// choice from integer values, represented by descriptions
-		AttrTrait& choice(const vector<pair<int,string>>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::object(t);} ); return *this; }
-		AttrTrait& choice(const vector<string>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::object(t);} ); return *this; }
+		AttrTrait& choice(const vector<pair<int,string>>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::cast(t);} ); return *this; }
+		AttrTrait& choice(const vector<string>& t){ _choice=std::function<py::object()>([=]()->py::object{ return py::cast(t);} ); return *this; }
 		// bitmask where each bit is represented by a string (given from the left)
 		AttrTrait& bits(const vector<string>& t, bool rw=false){ _bits=t; _bitsRw=rw; return *this; }
 
@@ -295,7 +305,7 @@ namespace woo{
 			map<int,vector<string>> pairs; if(includeDefault) pairs.insert({-1,{"default",""}}); for(size_t i=0; i<CompUtils::colormaps.size(); i++) pairs.insert({i,{CompUtils::colormaps[i].name}}); return namedEnum(pairs);
 		}
 
-		AttrTrait& buttons(const vector<string>& b, bool showBefore=true){ _buttons=std::function<py::object()>([=]()->py::object{ return py::make_tuple(py::object(b),showBefore);}); return *this; }
+		AttrTrait& buttons(const vector<string>& b, bool showBefore=true){ _buttons=std::function<py::object()>([=]()->py::object{ return py::make_tuple(py::cast(b),showBefore);}); return *this; }
 
 		// shorthands for common units
 		// each new unit MUST be added as an attribute to core/Test.hpp
@@ -346,14 +356,23 @@ namespace woo{
 		ClassTrait& doc(const string __doc){ _doc=__doc; return *this; }
 		ClassTrait& name(const string& __name){ _name=__name; return *this; }
 		ClassTrait& section(const string& _title, const string& _intro, const vector<string>& _docOther){ title=_title; intro=_intro; docOther=_docOther; return *this; }
-		static void pyRegisterClass(){
-			py::class_<ClassTrait,shared_ptr<ClassTrait>>("ClassTrait",py::no_init)
+		static void pyRegisterClass(py::module_ mod){
+			#ifdef WOO_PYBIND11
+				py::class_<ClassTrait,shared_ptr<ClassTrait>>(mod,"ClassTrait")
+			#else
+				py::class_<ClassTrait,shared_ptr<ClassTrait>>("ClassTrait",py::no_init)
+			#endif
+
 				.def_readonly("title",&ClassTrait::title)
 				.def_readonly("intro",&ClassTrait::intro)
 				.def_readonly("file",&ClassTrait::_file)
 				.def_readonly("line",&ClassTrait::_line)
 				// custom converters are needed for vector<string>
-				.add_property("docOther",py::make_getter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())/*,py::make_setter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())*/)
+				#ifdef WOO_PYBIND11
+					.add_property_readonly("docOther",[](const shared_ptr<ClassTrait>& c){return c->docOther; })
+				#else
+					.add_property("docOther",py::make_getter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())/*,py::make_setter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())*/)
+				#endif
 				.def_readonly("doc",&ClassTrait::_doc)
 				.def_readonly("name",&ClassTrait::_name)
 				.def("__str__",&ClassTrait::pyStr)

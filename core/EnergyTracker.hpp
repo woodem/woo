@@ -5,7 +5,7 @@
 #include<woo/lib/pyutil/except.hpp>
 
 
-namespace py=boost::python;
+// namespace py=boost::python;
 
 struct EnergyTrackerGrid: public Object{
 	WOO_DECL_LOGGER; 
@@ -21,7 +21,7 @@ struct EnergyTrackerGrid: public Object{
 		((Real,cellSize,NaN,AttrTrait<Attr::readonly>(),"Size of one cell in the box (in all directions); will be satisfied exactly, at the expense of slightly growing :obj:`box`. Do not change.")) \
 		((Vector3i,boxCells,Vector3i::Zero(),AttrTrait<Attr::readonly>(),"Number of cells in the box (computed automatically).")) \
 		((boost_multi_array_real_5,data,boost_multi_array_real_5(boost::extents[0][0][0][0][0]),AttrTrait<Attr::hidden>(),"Grid data -- 5d since each 3d point contains multiple energies, and there are multiple threads writing concurrently.")) \
-		,/*py*/ .def("vtkExport",&EnergyTrackerGrid::vtkExport,(py::arg("out"),py::arg("names")),"Export data into VTK grid file *out*, using *names* to name the arrays exported.")
+		,/*py*/ .def("vtkExport",&EnergyTrackerGrid::vtkExport,WOO_PY_ARGS(py::arg("out"),py::arg("names")),"Export data into VTK grid file *out*, using *names* to name the arrays exported.")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_EnergyTrackerGrid__CLASS_BASE_DOC_ATTRS_PY);
 };
@@ -82,6 +82,12 @@ class EnergyTracker: public Object{
 	void gridOff();
 	string gridToVTK(const string& out);
 
+	#ifdef WOO_PYBIND11
+		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>(mod,"EnergyTracker_iterator").def("__iter__",&EnergyTracker::pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next); 
+	#else
+		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>("EnergyTracker_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next); 
+	#endif
+
 	#define woo_core_EnergyTracker__CLASS_BASE_DOC_ATTRS_PY \
 		EnergyTracker,Object,"Storage for tracing energies. Only to be used if O.traceEnergy is True.", \
 		((OpenMPArrayAccumulator<Real>,energies,,,"Energy values, in linear array")) \
@@ -94,20 +100,20 @@ class EnergyTracker: public Object{
 			.def("__setitem__",&EnergyTracker::setItem_py,"Set energy value for given name (will create a non-resettable item, if it does not exist yet).") \
 			.def("__contains__",&EnergyTracker::contains_py,"Query whether given key exists; used by ``'key' in EnergyTracker``") \
 			.def("__iter__",&EnergyTracker::pyIter,"Return iterator over keys, to support python iteration protocol.") \
-			.def("add",&EnergyTracker::add_py,(py::arg("dE"),py::arg("name"),py::arg("reset")=false),"Accumulate energy, used from python (likely inefficient)") \
+			.def("add",&EnergyTracker::add_py,WOO_PY_ARGS(py::arg("dE"),py::arg("name"),py::arg("reset")=false),"Accumulate energy, used from python (likely inefficient)") \
 			.def("clear",&EnergyTracker::clear,"Clear all stored values.") \
 			.def("keys",&EnergyTracker::keys_py,"Return defined energies.") \
 			.def("items",&EnergyTracker::items_py,"Return contents as list of (name,value) tuples.") \
 			.def("total",&EnergyTracker::total,"Return sum of all energies.") \
 			.def("relErr",&EnergyTracker::relErr,"Total energy divided by sum of absolute values.") \
-			.add_property("names",&EnergyTracker::names_py) /* return name->id map as python dict */ \
-			.add_property("_perThreadData",&EnergyTracker::perThreadData,"Contents as dictionary, where each value is tuple of individual threads' values (for debugging)") \
-			.def("gridOn",&EnergyTracker::gridOn,(py::arg("box"),py::arg("cellSize"),py::arg("maxIndex")=-1),"Initialize :obj:`grid` object, which will record spacial location of energy events.") \
+			.add_property_readonly("names",&EnergyTracker::names_py) /* return name->id map as python dict */ \
+			.add_property_readonly("_perThreadData",&EnergyTracker::perThreadData,"Contents as dictionary, where each value is tuple of individual threads' values (for debugging)") \
+			.def("gridOn",&EnergyTracker::gridOn,WOO_PY_ARGS(py::arg("box"),py::arg("cellSize"),py::arg("maxIndex")=-1),"Initialize :obj:`grid` object, which will record spacial location of energy events.") \
 			.def("gridOff",&EnergyTracker::gridOff,"Disable :obj:`grid` so that energy location is not recorded anymore. The :obj:`grid` object is discarded, including any data it might have contained.") \
-			.def("gridToVTK",&EnergyTracker::gridToVTK,(py::arg("out")),"Write grid data to VTK file *out* (``.vti`` will be appended); returns output file name.") \
+			.def("gridToVTK",&EnergyTracker::gridToVTK,WOO_PY_ARGS(py::arg("out")),"Write grid data to VTK file *out* (``.vti`` will be appended); returns output file name.") \
 			; /* define nested class */ \
 			/*py::scope foo(_classObj);*/ \
-			py::class_<EnergyTracker::pyIterator>("EnergyTracker_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next); 
+			_WOO_EnergyTracker_Iterator_expose
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_EnergyTracker__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(EnergyTracker);

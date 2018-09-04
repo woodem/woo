@@ -7,8 +7,13 @@ namespace woo {
 	static bool pyCallerInfo(string& file, string& func, int& line){
 		GilLock l; // auto-desctructed at the end of scope
 		PyFrameObject* frame=PyEval_GetFrame(); if(!frame || !frame->f_code) return false;
-		file=py::extract<string>(frame->f_code->co_filename);
-		func=py::extract<string>(frame->f_code->co_name);
+		#ifdef WOO_PYBIND11
+			file=py::cast<string>(frame->f_code->co_filename);
+			func=py::cast<string>(frame->f_code->co_name);
+		#else
+			file=py::extract<string>(frame->f_code->co_filename);
+			func=py::extract<string>(frame->f_code->co_name);
+		#endif
 		line=PyFrame_GetLineNumber(frame);
 		return true;
 	}

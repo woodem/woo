@@ -7,13 +7,13 @@
 #include"OpenGLManager.hpp"
 
 #include<woo/lib/opengl/OpenGLWrapper.hpp>
+#include<woo/lib/base/Types.hpp>
 #include<woo/core/Field.hpp>
 #include<woo/core/DisplayParameters.hpp>
 #include<boost/filesystem/operations.hpp>
 #include<boost/filesystem/convenience.hpp>
 #include<boost/algorithm/string.hpp>
 #include<boost/version.hpp>
-#include<boost/python.hpp>
 #include<boost/make_shared.hpp>
 #include<sstream>
 #include<iomanip>
@@ -50,7 +50,7 @@ WOO_PLUGIN(_qt,(SnapshotEngine));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL_LOGGER(SnapshotEngine);
 
-void SnapshotEngine::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
+void SnapshotEngine::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==0) return;
 	if(py::len(t)!=2) throw std::invalid_argument(("SnapshotEngine takes exactly 2 unnamed arguments iterPeriod,fileBase ("+lexical_cast<string>(py::len(t))+" given)").c_str());
 	py::extract<int> ii(t[0]);
@@ -784,7 +784,7 @@ void GLViewer::postSelection(const QPoint& point)
 		{
 			//cerr<<"Selected object #"<<selection<<" is a "<<renderer->selObj->getClassName()<<endl;
 			GilLock lock;
-			cerr<<"Selected "<<py::extract<string>(py::str(py::object(renderer->selObj)))()<<endl;
+			cerr<<"Selected "<<py::extract<string>(py::str(py::cast(renderer->selObj)))()<<endl;
 		}
 		cerr<<"\tat "<<renderer->selObjNode->pos.transpose()<<endl;
 		if(prevSelNode){

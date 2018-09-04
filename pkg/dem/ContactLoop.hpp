@@ -91,7 +91,7 @@ class ContactLoop: public Engine {
 	void applyForceUninodal(const shared_ptr<Contact>& C, const Particle* p);
 
 	public:
-		virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
+		virtual void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
 		virtual void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
 		virtual void run() override;
 	#ifdef CONTACTLOOP_TIMING

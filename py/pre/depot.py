@@ -177,15 +177,16 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
             with open(S.pre.scadOut,'w') as scad:
                 import time
                 scad.write('// Generated from %s%s on %s\n'%(self.__class__.__module__,self.__class__.__name__,time.asctime()))
-                scad.write('$fn=15; /* set arc triangulation precision here */\n')
+                scad.write('$fn=15; // set arc triangulation precision here\n')
                 if S.pre.scadCon:
-                    scad.write('fnCyl=8; /* set contact triangulation precision here */\n')
-                    scad.write('crr=.2; /* cylinder radius relative to minimum radius of both contacting particles */\n')
-                scad.write('\nunion(){\n');
+                    scad.write('fnCyl=8; // set contact triangulation precision here\n')
+                    scad.write('crr=.2; // cylinder radius relative to minimum radius of both contacting particles\n')
+                scad.write('\nunion(){\n    %group(){ // pellets; remove the % to make non-transparent & exported in STL\n');
                 for p in S.dem.par:
                     if p.mask==woo.dem.DemField.defaultInletMask:
                         np+=1
-                        scad.write('    %%translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                        scad.write('        translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                scad.write('    }; // end pellets')
                 if S.pre.scadCon:
                     scad.write('    // contacts represented as cylinders\n    {\n')
                     for c in S.dem.con:
@@ -194,7 +195,7 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                         nc+=1
                         (axis,angle),p=c.geom.node.ori.toAxisAngle(),c.geom.node.loc2glob([-c.geom.lens[0],0,0])
                         scad.write('        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],min(c.pA.shape.equivRadius,c.pB.shape.equivRadius),sum(c.geom.lens),c.pA.id,c.pB.id))
-                    scad.write('    }; /* end contacts */\n')
+                    scad.write('    }; // end contacts/\n')
                 scad.write('}\n');
             print('Exported %d particles and %d contacts to %s'%(np,nc,S.pre.scadOut))
         if not S.pre.sheetOut: print('Not running spreadsheet export (sheetOut empty)')

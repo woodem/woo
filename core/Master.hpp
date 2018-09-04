@@ -7,11 +7,19 @@
 #include<time.h>
 #include<boost/thread/thread.hpp>
 #include<iostream>
-#include<boost/python.hpp>
 #include<boost/foreach.hpp>
 #include<boost/smart_ptr/scoped_ptr.hpp>
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>
+
+#ifndef WOO_PYBIND11
+	#include<boost/python.hpp>
+	namespace py=boost::python;
+#else
+	#include<pybind11/pybind11.h>
+	namespace py=pybind11;
+#endif
+
 
 #include<woo/lib/base/Math.hpp>
 #include<woo/lib/base/Types.hpp>
@@ -33,7 +41,6 @@
 struct Scene;
 using namespace woo;
 
-namespace py=boost::python;
 
 class Master{
 	public: static Master& instance();
@@ -110,7 +117,7 @@ class Master{
 		/* temporary storage */
 		shared_ptr<woo::Object> deepcopy(shared_ptr<woo::Object> obj);
 		// static, first arg ist Mater instance (http://stackoverflow.com/questions/27488096/boost-python-raw-function-method)
-		static py::object pyDeepcopy(py::tuple args, py::dict kw);
+		static py::object pyDeepcopy(py::args_ args, py::kwargs kw);
 		shared_ptr<woo::Object> loadTmp(const string& name);
 		void saveTmp(shared_ptr<woo::Object> s, const string& name, bool quiet=false);
 		void rmTmp(const string& name);
@@ -128,7 +135,13 @@ class Master{
 		int numThreads_get();
 		void numThreads_set(int i);
 		
-		void pyExitNoBacktrace(py::object arg0=py::object(0));
+		void pyExitNoBacktrace(py::object arg0=
+			#ifdef WOO_PYBIND11
+				py::cast(0)
+			#else
+				py::object(0)
+			#endif
+		);
 		void pyDisableGdb(){
 			// disable for native Windows builds
 			#ifndef __MINGW64__ 
@@ -183,7 +196,7 @@ class Master{
 	void pyReset();
 	py::list pyPlugins();
 
-	static void pyRegisterClass();
+	static void pyRegisterClass(py::module_&);
 };
 
 

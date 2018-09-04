@@ -12,7 +12,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_LawTester__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL_LOGGER(LawTesterStage);
 WOO_IMPL_LOGGER(LawTester);
 
-void LawTesterStage::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// go through the dict, find just values we need
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){

@@ -217,7 +217,7 @@ void Renderer::setLighting(){
 
 
 
-void Renderer::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void Renderer::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(py::len(kw)>0){
 		string keys; py::list k(kw.keys());
 		for(int i=0; i<py::len(k); i++) keys+=(i>0?", ":"")+py::extract<string>(k[i])();

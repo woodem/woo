@@ -94,6 +94,23 @@ struct Scene: public Object{
 			py::list values();
 			bool has_key(const std::string& key);
 			void update(const pyTagsProxy& b);
+			static void pyRegisterClass(py::module_& mod){
+				#ifdef WOO_PYBIND11
+					py::class_<Scene::pyTagsProxy>(mod,"TagsProxy")
+				#else
+					py::class_<Scene::pyTagsProxy>("TagsProxy",py::init<pyTagsProxy>())
+				#endif
+						.def("__getitem__",&pyTagsProxy::getItem)
+						.def("__setitem__",&pyTagsProxy::setItem)
+						.def("__delitem__",&pyTagsProxy::delItem)
+						.def("has_key",&pyTagsProxy::has_key)
+						.def("__contains__",&pyTagsProxy::has_key)
+						.def("keys",&pyTagsProxy::keys)
+						.def("update",&pyTagsProxy::update)
+						.def("items",&pyTagsProxy::items)
+						.def("values",&pyTagsProxy::values)
+					;
+			}
 		};
 		pyTagsProxy pyGetTags(){ return pyTagsProxy(this); }
 		shared_ptr<Cell> pyGetCell(){ return (isPeriodic?cell:shared_ptr<Cell>()); }
@@ -141,8 +158,15 @@ struct Scene: public Object{
 			{}
 			void __enter__();
 			void __exit__(py::object exc_type, py::object exc_value, py::object traceback);
-			static void pyRegisterClass(){
-				py::class_<PausedContextManager,boost::noncopyable>("PausedContextManager",py::no_init).def("__enter__",&PausedContextManager::__enter__).def("__exit__",&PausedContextManager::__exit__);
+			static void pyRegisterClass(py::module_& mod){
+				#ifdef WOO_PYBIND11
+					py::class_<PausedContextManager>(mod,"PausedContextManager")				
+				#else
+					py::class_<PausedContextManager,boost::noncopyable>("PausedContextManager",py::no_init)
+				#endif
+						.def("__enter__",&PausedContextManager::__enter__)
+						.def("__exit__",&PausedContextManager::__exit__)
+					;
 			}
 		};
 		PausedContextManager* pyPaused(bool allowBg=false){ return new PausedContextManager(static_pointer_cast<Scene>(shared_from_this()),allowBg); }
@@ -162,7 +186,7 @@ struct Scene: public Object{
 				((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states.")) \
 				((shared_ptr<GlSetup>,gl,/* no default since the type is incomplete here ... really?! */,AttrTrait<Attr::hidden>(),"Settings related to rendering; default instance is created on-the-fly when requested from Python.")) \
 				((bool,glDirty,true,AttrTrait<Attr::readonly>(),"Flag to re-initalize functors, colorscales and restore QGLViewer before rendering."))
-			#define woo_core_Scene__PY__OPENGL .add_property("renderer",&Scene::pyEnsureAndGetRenderer) /* for retrieving from Python */ .add_property("gl",&Scene::pyGetGl,&Scene::pySetGl)
+			#define woo_core_Scene__PY__OPENGL .add_property_readonly("renderer",&Scene::pyEnsureAndGetRenderer) /* for retrieving from Python */ .add_property("gl",&Scene::pyGetGl,&Scene::pySetGl)
 		#else
 			#define woo_core_Scene__ATTRS__OPENGL
 			#define woo_core_Scene__PY__OPENGL
@@ -225,29 +249,28 @@ struct Scene: public Object{
 		, /* dtor */ pyStop();  \
 		, /* py */ \
 		woo_core_Scene__PY__OPENGL \
-		.add_property("tags",&Scene::pyGetTags,"Arbitrary key=value associations (tags like mp3 tags: author, date, version, description etc.") \
-		.add_property("duration",&Scene::pyGetDuration,"Number of (wall clock) seconds this instance is alive (including time before being loaded from file") \
-		.add_property("cell",&Scene::pyGetCell,"Periodic space configuration (is None for aperiodic scene); set :obj:`periodic` to enable/disable periodicity") \
+		.add_property_readonly("tags",&Scene::pyGetTags,"Arbitrary key=value associations (tags like mp3 tags: author, date, version, description etc.") \
+		.add_property_readonly("duration",&Scene::pyGetDuration,"Number of (wall clock) seconds this instance is alive (including time before being loaded from file") \
+		.add_property_readonly("cell",&Scene::pyGetCell,"Periodic space configuration (is None for aperiodic scene); set :obj:`periodic` to enable/disable periodicity") \
 		.def_readwrite("periodic",&Scene::isPeriodic,"Set whether the scene is periodic or not") \
 		.add_property("engines",&Scene::pyEnginesGet,&Scene::pyEnginesSet,"Engine sequence in the simulation") \
-		.add_property("_currEngines",py::make_getter(&Scene::engines,py::return_value_policy<py::return_by_value>()),"Current engines, debugging only") \
-		.add_property("_nextEngines",py::make_getter(&Scene::_nextEngines,py::return_value_policy<py::return_by_value>()),"Next engines, debugging only") \
+		.add_property_readonly("_currEngines",WOO_PY_EXPOSE_COPY(Scene,&Scene::engines),"Current engines, debugging only") \
+		.add_property_readonly("_nextEngines",WOO_PY_EXPOSE_COPY(Scene,&Scene::_nextEngines),"Next engines, debugging only") \
 		.def("getRange",&Scene::getRange,"Retrieve a *ScalarRange* object by its label") \
 		/* WOO_OPENCL */ .def("ensureCl",&Scene::ensureCl,"[for debugging] Initialize the OpenCL subsystem (this is done by engines using OpenCL, but trying to do so in advance might catch errors earlier)") \
-		.def("saveTmp",&Scene::saveTmp,(py::arg("slot")="",py::arg("quiet")=false),"Save into a temporary slot inside Master (loadable with O.loadTmp)") \
+		.def("saveTmp",&Scene::saveTmp,WOO_PY_ARGS(py::arg("slot")="",py::arg("quiet")=false),"Save into a temporary slot inside Master (loadable with O.loadTmp)") \
 		\
-		.def("run",&Scene::pyRun,(py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN)) \
+		.def("run",&Scene::pyRun,WOO_PY_ARGS(py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN)) \
 		.def("stop",&Scene::pyStop) \
 		.def("one",&Scene::pyOne) \
 		.def("wait",&Scene::pyWait) \
-		.add_property("running",&Scene::running) \
-		.def("paused",&Scene::pyPaused,(py::arg("allowBg")=false),py::return_value_policy<py::manage_new_object>(),"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
+		.add_property_readonly("running",&Scene::running) \
+		.def("paused",&Scene::pyPaused,WOO_PY_ARGS(py::arg("allowBg")=false),WOO_PY_RETURN__TAKE_OWNERSHIP,"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
 		.def("selfTest",&Scene::pySelfTest,"Run self-tests (they are usually run automatically with, see :obj:`selfTestEvery`).") \
 		.def("expandTags",&Scene::expandTags,"Expand :obj:`tags` written as ``{tagName}``, returns the expanded string.") \
-		; /* define nested class */ \
-		py::scope foo(_classObj); \
-		py::class_<Scene::pyTagsProxy>("TagsProxy",py::init<pyTagsProxy>()).def("__getitem__",&pyTagsProxy::getItem).def("__setitem__",&pyTagsProxy::setItem).def("__delitem__",&pyTagsProxy::delItem).def("has_key",&pyTagsProxy::has_key).def("__contains__",&pyTagsProxy::has_key).def("keys",&pyTagsProxy::keys).def("update",&pyTagsProxy::update).def("items",&pyTagsProxy::items).def("values",&pyTagsProxy::values); \
-		Scene::PausedContextManager::pyRegisterClass();
+		; /* define nested classes */ \
+		Scene::pyTagsProxy::pyRegisterClass(mod); \
+		Scene::PausedContextManager::pyRegisterClass(mod);
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY(woo_core_Scene__CLASS_BASE_DOC_ATTRS_INI_CTOR_DTOR_PY);
 	WOO_DECL_LOGGER;

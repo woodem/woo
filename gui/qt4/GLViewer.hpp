@@ -28,7 +28,7 @@
 struct SnapshotEngine: public PeriodicEngine{
 	virtual void run() override;
 	virtual bool needsField() override { return false; }
-	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
+	virtual void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
 	#define woo_gl_SnapshotEngine__CLASS_BASE_DOC_ATTRS \
 		SnapshotEngine,PeriodicEngine,"Periodically save snapshots of GLView(s) as .png files. Files are named :obj:`fileBase` + :obj:`counter` + ``.png`` (counter is left-padded by 0s, i.e. snap00004.png).", \
 		((string,fileBase,"",,"Basename for snapshots")) \

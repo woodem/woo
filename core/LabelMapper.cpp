@@ -137,7 +137,11 @@ void LabelMapper::opaque_sequence_with_woo_objects_error(py::object oo){
 	if(!PySequence_Check(o)) return; // ok
 	if(PySequence_Size(o)<=0) return; // ok
 	for(int i=0; i<PySequence_Size(o); i++){
-		if(!py::extract<Object>(py::object(py::handle<>(PySequence_GetItem(o,i)))).check()) continue;
+		#if WOO_PYBIND11
+			if(!py::isinstance<Object>(py::handle(PySequence_GetItem(o,i)))) continue;
+		#else
+			if(!py::extract<Object>(py::object(py::handle<>(PySequence_GetItem(o,i)))).check()) continue;
+		#endif
 		woo::ValueError("Opaque sequence type contains woo.Object's (you have to pass list/tuple so that saving/loading of shared_ptr works properly).");
 	}
 	return; // probably okay
@@ -296,15 +300,19 @@ py::object LabelMapper::__getitem__(const string& label){
 	if(boost::regex_match(label,match,boost::regex("^(.*)\\[([0-9]+)\\]$"))){
 		string l0=match[1];
 		long index=lexical_cast<long>(match[2]);
-		return this->__getitem__(l0)[index];
+		#ifdef WOO_PYBIND11
+			return this->__getitem__(l0).attr("__getitem__")(py::cast(index));
+		#else
+			return this->__getitem__(l0)[index];
+		#endif
 	}
 	int where=whereIs(label);
 	switch(where){
 		case NOWHERE: woo::AttributeError("No such label: '"+label+"'"); break;
 		case IN_MOD: woo::ValueError("Label '"+label+"' is a pseudo-module and cannot be obtained directly.");
-		case IN_WOO: return py::object(wooMap[label]); break;
+		case IN_WOO: return py::cast(wooMap[label.c_str()]); break;
 		case IN_PY: return pyMap[label]; break;
-		case IN_WOO_SEQ: return py::object(wooSeqMap[label]); break; // should convert to list automatically
+		case IN_WOO_SEQ: return py::cast(wooSeqMap[label.c_str()]); break; // should convert to list automatically
 	};
 	abort(); // unreachable
 }

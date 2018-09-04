@@ -11,7 +11,7 @@
 #include<boost/algorithm/string.hpp>
 #include<boost/thread/mutex.hpp>
 #include<boost/version.hpp>
-#include<boost/python.hpp>
+
 
 
 #include<woo/lib/object/ObjectIO.hpp>
@@ -131,17 +131,27 @@ void Master::pyWaitForScenes(){
 Master::~Master(){ }
 
 
-void Master::pyRegisterClass(){
-	py::class_<Master,boost::noncopyable>("Master",py::no_init)
-		.add_property("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
+void Master::pyRegisterClass(py::module_& mod){
+	#ifdef WOO_PYBIND11
+		py::class_<Master>(mod,"Master")
+	#else
+		py::class_<Master,boost::noncopyable>("Master",py::no_init)
+	#endif
+		.add_property_readonly("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
 		// tmp storage
 		.def("loadTmpAny",&Master::loadTmp,(py::arg("name")=""),"Load any object from named temporary store.")
-		.def("deepcopy",py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``.")
-		.def("saveTmpAny",&Master::saveTmp,(py::arg("obj"),py::arg("name")="",py::arg("quiet")=false),"Save any object to named temporary store; *quiet* will supress warning if the name is already used.")
+		.def("deepcopy",
+			#ifdef WOO_PYBIND11
+				&Master::pyDeepcopy,
+			#else
+				py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),
+			#endif
+				"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``.")
+		.def("saveTmpAny",&Master::saveTmp,WOO_PY_ARGS(py::arg("obj"),py::arg("name")="",py::arg("quiet")=false),"Save any object to named temporary store; *quiet* will supress warning if the name is already used.")
 		.def("lsTmp",&Master::pyLsTmp,"Return list of all memory-saved simulations.")
 		.def("rmTmp",&Master::rmTmp,py::arg("name"),"Remove memory-saved simulation.")
-		.def("tmpToFile",&Master::pyTmpToFile,(py::arg("mark"),py::arg("fileName")),"Save XML of :obj:`saveTmp`'d simulation into *fileName*.")
-		.def("tmpToString",&Master::pyTmpToString,(py::arg("mark")=""),"Return XML of :obj:`saveTmp <Master.saveTmp>`'d simulation as string.")
+		.def("tmpToFile",&Master::pyTmpToFile,WOO_PY_ARGS(py::arg("mark"),py::arg("fileName")),"Save XML of :obj:`saveTmp`'d simulation into *fileName*.")
+		.def("tmpToString",&Master::pyTmpToString,WOO_PY_ARGS(py::arg("mark")=""),"Return XML of :obj:`saveTmp <Master.saveTmp>`'d simulation as string.")
 
 		.def("plugins",&Master::pyPlugins,"Return list of all plugins registered in the class factory.")
 		#ifdef WOO_OPENCL
@@ -154,22 +164,22 @@ void Master::pyRegisterClass(){
 
 		.add_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programming interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
 		.add_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")
-		.def("checkApi",&Master::checkApi,(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level (log) warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
-		.add_property("usesApi_locations",py::make_getter(&Master::usesApi_locations,py::return_value_policy<py::return_by_value>()))
+		.def("checkApi",&Master::checkApi,WOO_PY_ARGS(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level (log) warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
+		.add_property_readonly("usesApi_locations",WOO_PY_EXPOSE_COPY(Master,&Master::usesApi_locations))
 
 		.def("reset",&Master::pyReset,"Set empty main scene")
 
-		.add_property("cmaps",&Master::pyLsCmap,"List available colormaps (by name)")
+		.add_property_readonly("cmaps",&Master::pyLsCmap,"List available colormaps (by name)")
 		.add_property("cmap",&Master::pyGetCmap,&Master::pySetCmap,"Current colormap as (index,name) tuple; set by index or by name alone.")
 
 		// throw on deprecated attributes
-		.add_property("dt",&Master::err_dt)
-		.add_property("engines",&Master::err_engines)
-		.add_property("cell",&Master::err_cell)
-		.add_property("periodic",&Master::err_periodic)
-		.add_property("trackEnergy",&Master::err_trackEnergy)
-		.add_property("energy",&Master::err_energy)
-		.add_property("tags",&Master::err_tags)
+		.add_property_readonly("dt",&Master::err_dt)
+		.add_property_readonly("engines",&Master::err_engines)
+		.add_property_readonly("cell",&Master::err_cell)
+		.add_property_readonly("periodic",&Master::err_periodic)
+		.add_property_readonly("trackEnergy",&Master::err_trackEnergy)
+		.add_property_readonly("energy",&Master::err_energy)
+		.add_property_readonly("tags",&Master::err_tags)
 
 		.def("childClassesNonrecursive",&Master::pyListChildClassesNonrecursive,"Return list of all classes deriving from given class, as registered in the class factory")
 		.def("isChildClassOf",&Master::pyIsChildClassOf,"Tells whether the first class derives from the second one (both given as strings).")
@@ -177,14 +187,18 @@ void Master::pyRegisterClass(){
 		.add_property("timingEnabled",&Master::timingEnabled_get,&Master::timingEnabled_set,"Globally enable/disable timing services (see documentation of the :obj:`timing module <woo.timing>`).")
 		// setting numThreads by hand crashes OpenMP, is that a bug?
 		// in any case, we disable it here just to make sure
-		.add_property("numThreads",&Master::numThreads_get /*,&Master::numThreads_set*/,"Maximum number of threads openMP can use.")
-		.add_property("compiledPyModules",&Master::pyCompiledPyModules) // we might not use to-python converters, since _customConverters have not yet been imported
+		.add_property_readonly("numThreads",&Master::numThreads_get /*,&Master::numThreads_set*/,"Maximum number of threads openMP can use.")
+		.add_property_readonly("compiledPyModules",&Master::pyCompiledPyModules) // we might not use to-python converters, since _customConverters have not yet been imported
 
-		.def("exitNoBacktrace",&Master::pyExitNoBacktrace,(py::arg("status")=0),"Disable SEGV handler and exit, optionally with given status number.")
+		.def("exitNoBacktrace",&Master::pyExitNoBacktrace,WOO_PY_ARGS(py::arg("status")=0),"Disable SEGV handler and exit, optionally with given status number.")
 		.def("disableGdb",&Master::pyDisableGdb,"Revert SEGV and ABRT handlers to system defaults.")
 		.def("tmpFilename",&Master::tmpFilename,"Return unique name of file in temporary directory which will be deleted when woo exits.")
-		.add_property("tmpFileDir",&Master::getTmpFileDir,"Directory for temporary files; created automatically at startup.")
-		.add_static_property("instance",py::make_function(&Master::instance,py::return_value_policy<py::reference_existing_object>()))
+		.add_property_readonly("tmpFileDir",&Master::getTmpFileDir,"Directory for temporary files; created automatically at startup.")
+		#ifdef WOO_PYBIND11
+			.def_property_readonly_static("instance",&Master::instance,py::return_value_policy::reference)
+		#else
+			.add_static_property("instance",py::make_function(&Master::instance,py::return_value_policy<py::reference_existing_object>()))
+		#endif
 	;
 }
 
@@ -221,12 +235,12 @@ bool Master::isInheritingFrom_recursive(const string& className, const string& b
 	return false;
 }
 
-py::object Master::pyDeepcopy(py::tuple args, py::dict kw){
+py::object Master::pyDeepcopy(py::args_ args, py::kwargs kw){
 	if(py::len(args)>2) woo::RuntimeError("Master.deepcopy takes no extra unnamed arguments (besides the implicit Master instance, and the Object).");
 	py::extract<shared_ptr<Master>> m(args[0]);
 	shared_ptr<Object> copy=m()->deepcopy(py::extract<shared_ptr<Object>>(args[1])());
 	copy->pyUpdateAttrs(kw);
-	return py::object(copy);
+	return py::cast(copy);
 }
 
 shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
@@ -278,27 +292,40 @@ void Master::pyRegisterAllClasses(){
 
 	LOG_DEBUG("called with "<<modulePluginClasses.size()<<" module+class pairs.");
 	std::map<std::string,py::object> pyModules;
-	py::object wooScope=boost::python::import("woo");
+	// py::object wooScope=py::import("woo");
 
 	auto synthesizePyModule=[&](const string& modName){
-		py::object m(py::handle<>(PyModule_New(("woo."+modName).c_str())));
+		#ifdef WOO_PYBIND11
+			py::module m=py::reinterpret_borrow<py::module>(PyModule_New(("woo."+modName).c_str()));
+		#else
+			py::object m(py::handle<>(PyModule_New(("woo."+modName).c_str())));
+		#endif
 		m.attr("__file__")="<synthetic>";
-		wooScope.attr(modName.c_str())=m;
+		#ifdef WOO_PYBIND11
+			py::module::import("woo").attr(modName.c_str())=m;
+		#else
+			py::import("woo").attr(modName.c_str())=m;
+		#endif
 		pyModules[modName.c_str()]=m;
 		// http://stackoverflow.com/questions/11063243/synethsized-submodule-from-a-import-b-ok-vs-import-a-b-error/11063494
 		py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))()[("woo."+modName).c_str()]=m;
 		LOG_DEBUG_EARLY("Synthesized new module woo."<<modName);
+		// return m;
 	};
 
 	// this module is synthesized for core.Master; other synthetic modules are created on-demand in the loop below
 	synthesizePyModule("core");
-	py::scope core(py::import("woo.core"));
+	#ifdef WOO_PYBIND11
+		py::module_ core=py::module::import("woo.core");
+	#else
+		py::scope core(py::import("woo.core"));
+	#endif
 
-	this->pyRegisterClass();
-	woo::ClassTrait::pyRegisterClass();
-	woo::AttrTraitBase::pyRegisterClass();
-	woo::TimingDeltas::pyRegisterClass();
-	Object().pyRegisterClass(); // virtual method, therefore cannot be static
+	this->pyRegisterClass(core);
+	woo::ClassTrait::pyRegisterClass(core);
+	woo::AttrTraitBase::pyRegisterClass(core);
+	woo::TimingDeltas::pyRegisterClass(core);
+	Object().pyRegisterClass(core); // virtual method, therefore cannot be static
 
 	// http://boost.2283326.n4.nabble.com/C-sig-How-to-create-package-structure-in-single-extension-module-td2697292.html
 
@@ -355,8 +382,8 @@ void Master::pyRegisterAllClasses(){
 			const std::string& klass=s->getClassName();
 			try{
 				LOG_DEBUG_EARLY_FRAGMENT("{{"<<klass<<"}}");
-				py::scope _scope(pyModules[module]);
-				s->pyRegisterClass();
+				py::module_ mod(pyModules[module]);
+				s->pyRegisterClass(mod);
 				auto prev=I++;
 				pythonables.erase(prev);
 			} catch (...){

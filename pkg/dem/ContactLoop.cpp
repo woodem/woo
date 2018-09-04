@@ -49,7 +49,7 @@ void CPhysDispatcher::explicitAction(Scene* _scene, shared_ptr<Material>& mA, sh
 };
 
 
-void ContactLoop::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
+void ContactLoop::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==0) return; // nothing to do
 	if(py::len(t)!=3) throw invalid_argument("Exactly 3 lists of functors must be given");
 	// parse custom arguments (3 lists) and do in-place modification of args

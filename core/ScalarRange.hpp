@@ -54,7 +54,7 @@ struct ScalarRange: public Object{
 		((std::string,label,,,"Short name of this range.")) \
 		((int,cmap,-1,AttrTrait<Attr::namedEnum>().colormapChoice(),"Colormap to be used.")) \
 		, /* py */ \
-			.def("norm",&ScalarRange::norm,(py::arg("val"),py::arg("clamp")=true),"Return value of the argument normalized to 0..1 range; the value is not clamped to 0..1 however: if autoAdjust is false, it can fall outside.") \
+			.def("norm",&ScalarRange::norm,WOO_PY_ARGS(py::arg("val"),py::arg("clamp")=true),"Return value of the argument normalized to 0..1 range; the value is not clamped to 0..1 however: if autoAdjust is false, it can fall outside.") \
 			.def("reset",&ScalarRange::reset); \
 			woo::converters_cxxVector_pyList_2way<shared_ptr<ScalarRange>>();
 

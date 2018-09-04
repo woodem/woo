@@ -1,15 +1,20 @@
 #include<woo/lib/pyutil/except.hpp>
 #include<woo/lib/pyutil/gil.hpp>
-#include<boost/python.hpp>
-namespace py=boost::python;
+#ifndef WOO_PYBIND11
+	#include<boost/python.hpp>
+	namespace py=boost::python;
+#else
+	#include<pybind11/pybind11.h>
+	namespace py=pybind11;
+#endif
 
 namespace woo{
 	void StopIteration(){ PyErr_SetNone(PyExc_StopIteration); boost::python::throw_error_already_set(); }
 
 	// void ArithmeticError(const std::string& what){ PyErr_SetString(PyExc_ArithmeticError,what.c_str()); boost::python::throw_error_already_set(); }
-	#define _DEFINE_YADE_PY_ERROR(x,y,AnyError) void AnyError(const std::string& what){ PyErr_SetString(BOOST_PP_CAT(PyExc_,AnyError),what.c_str()); boost::python::throw_error_already_set(); } void AnyError(const boost::format& f){ AnyError(f.str()); }
-	BOOST_PP_SEQ_FOR_EACH(_DEFINE_YADE_PY_ERROR,~,WOO_PYUTIL_ERRORS)
-	#undef _DEFINE_YADE_PY_ERROR
+	#define _DEFINE_WOO_PY_ERROR(x,y,AnyError) void AnyError(const std::string& what){ PyErr_SetString(BOOST_PP_CAT(PyExc_,AnyError),what.c_str()); boost::python::throw_error_already_set(); } void AnyError(const boost::format& f){ AnyError(f.str()); }
+	BOOST_PP_SEQ_FOR_EACH(_DEFINE_WOO_PY_ERROR,~,WOO_PYUTIL_ERRORS)
+	#undef _DEFINE_WOO_PY_ERROR
 	
 	// http://thejosephturner.com/blog/2011/06/15/embedding-python-in-c-applications-with-boostpython-part-2/
 	std::string parsePythonException(){

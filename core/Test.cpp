@@ -27,7 +27,7 @@ void WooTestClass::postLoad(WooTestClass&, void* addr){
 py::list WooTestClass::aaccuGetRaw(){
 	vector<vector<Real>> ddta=aaccu.getPerThreadData();
 	py::list ret;
-	for(auto dta: ddta) ret.append(py::list(dta));
+	for(auto dta: ddta) ret.append(py::list(py::cast(dta)));
 	return ret;
 }
 

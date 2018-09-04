@@ -1,5 +1,6 @@
 #include<woo/lib/pyutil/pickle.hpp>
 #include<woo/lib/pyutil/gil.hpp>
+#include<woo/lib/pyutil/compat.hpp>
 
 namespace woo{
 	py::object Pickler::cPickle_dumps;
@@ -10,10 +11,14 @@ namespace woo{
 		if(initialized) return;
 		GilLock pyLock;
 		//cerr<<"[Pickler::ensureInitialized:gil]";
-		#if PY_MAJOR_VERSION >= 3
-			py::object cPickle=py::import("pickle");
+		#ifndef WOO_PYBIND11
+			#if PY_MAJOR_VERSION >= 3
+				py::object cPickle=py::import("pickle");
+			#else
+				py::object cPickle=py::import("cPickle");
+			#endif
 		#else
-			py::object cPickle=py::import("cPickle");
+			py::object cPickle=py::module::import("cPickle");
 		#endif
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");
@@ -23,7 +28,7 @@ namespace woo{
 	std::string Pickler::dumps(py::object o){
 		ensureInitialized();
 		GilLock pyLock;
-		#if PY_MAJOR_VERSION >= 3
+		#if (PY_MAJOR_VERSION >= 3) || defined(WOO_PYBIND11)
 			// destructed at the end of the scope, when std::string copied the content already
 			py::object s(cPickle_dumps(o,-1)); 
 			PyObject* b=s.ptr();
@@ -40,10 +45,14 @@ namespace woo{
 		ensureInitialized();
 		GilLock pyLock;
 		//cerr<<"[loads:gil]";
-		#if PY_MAJOR_VERSION >= 3
-			return cPickle_loads(py::handle<>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
+		#ifndef WOO_PYBIND11
+			#if PY_MAJOR_VERSION >= 3
+				return cPickle_loads(py::handle<>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
+			#else
+				return cPickle_loads(s);
+			#endif
 		#else
-			return cPickle_loads(s);
+			return cPickle_loads(py::reinterpret_borrow<py::object>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
 		#endif
 	}
 }

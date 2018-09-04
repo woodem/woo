@@ -7,7 +7,7 @@
 
 struct LawTesterStage: public Object{
 	WOO_DECL_LOGGER;
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
+	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
 	bool pyBroken() const { return hadC && !hasC; }
 	bool pyRebound() const { return bounces>=2 || pyBroken(); }
 	Real pyCTime() const { return time-timeC0; }

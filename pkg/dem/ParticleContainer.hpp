@@ -35,7 +35,6 @@
 	#endif
 #endif
 
-namespace py=boost::python;
 
 struct Particle;
 struct DemField;

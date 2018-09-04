@@ -2,7 +2,11 @@
 #pragma once
 
 #include<cmath> // workaround for http://boost.2283326.n4.nabble.com/Boost-Python-Compile-Error-s-GCC-via-MinGW-w64-tp3165793p3166760.html
-#include<boost/python.hpp>
+#ifndef WOO_PYBIND11
+	#include<boost/python.hpp>
+#else
+	#include<pybind11/pybind11.h>
+#endif
 #include<boost/chrono/chrono.hpp>
 #include<boost/thread/mutex.hpp>
 
@@ -64,7 +68,7 @@ struct TimingDeltas{
 		void reset();
 		py::list pyData();
 		
-	static void pyRegisterClass();
+	static void pyRegisterClass(py::module_& );
 
 };
 

@@ -19,7 +19,7 @@ py::list Object::getDerivedCxxClasses(){ py::list ret; for(py::object c: derived
 
 py::dict Object_pyDict_pickleable(const Object& o) { return o.pyDict(/*all*/false); }
 
-void Object::pyRegisterClass() {
+void Object::pyRegisterClass(py::module_& mod) {
 	checkPyClassRegistersItself("Object");
 	py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
 	classObj

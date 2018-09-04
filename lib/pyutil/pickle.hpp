@@ -24,13 +24,24 @@ namespace boost{ namespace serialization{
 		ar & BOOST_SERIALIZATION_NVP(pickled);
 		if(Archive::is_loading::value) obj=woo::Pickler::loads(pickled);
 	};
-	#define SERIALIZE_PY_TYPE(PY_TYPE) \
-		template<class Archive> void serialize(Archive & ar, PY_TYPE& obj, const unsigned int version){ \
-			std::string pickled; \
-			if(!Archive::is_loading::value) pickled=woo::Pickler::dumps(py::object(obj)); \
-			ar & BOOST_SERIALIZATION_NVP(pickled); \
-			if(Archive::is_loading::value) obj=py::extract<PY_TYPE>(woo::Pickler::loads(pickled)); \
-		};
+	#ifndef WOO_PYBIND11
+		#define SERIALIZE_PY_TYPE(PY_TYPE) \
+			template<class Archive> void serialize(Archive & ar, PY_TYPE& obj, const unsigned int version){ \
+				std::string pickled; \
+				if(!Archive::is_loading::value) pickled=woo::Pickler::dumps(py::object(obj)); \
+				ar & BOOST_SERIALIZATION_NVP(pickled); \
+				if(Archive::is_loading::value) obj=py::extract<PY_TYPE>(woo::Pickler::loads(pickled)); \
+			};
+	#else
+		#define SERIALIZE_PY_TYPE(PY_TYPE) \
+			template<class Archive> void serialize(Archive & ar, PY_TYPE& obj, const unsigned int version){ \
+				std::string pickled; \
+				if(!Archive::is_loading::value) pickled=woo::Pickler::dumps(py::object(obj)); \
+				ar & BOOST_SERIALIZATION_NVP(pickled); \
+				if(Archive::is_loading::value) obj=py::cast<PY_TYPE>(woo::Pickler::loads(pickled)); \
+			};
+
+	#endif
 	SERIALIZE_PY_TYPE(py::dict);
 	SERIALIZE_PY_TYPE(py::tuple);
 	SERIALIZE_PY_TYPE(py::list);

@@ -4,7 +4,7 @@
 #include<woo/core/Master.hpp>
 #include<woo/lib/pyutil/converters.hpp>
 
-namespace py=boost::python;
+// namespace py=boost::python;
 
 #include<boost/thread/thread.hpp>
 
@@ -23,7 +23,7 @@ struct NodeData: public Object{
 
 	#define woo_core_NodeData__CLASS_BASE_DOC_ATTRS_PY \
 		NodeData,Object,"Data associated with some node.",/*attrs*/ \
-		,/*py*/ .add_property("getterName",&NodeData::getterName); \
+		,/*py*/ .add_property_readonly("getterName",&NodeData::getterName); \
 			woo::converters_cxxVector_pyList_2way<shared_ptr<NodeData>>();
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_NodeData__CLASS_BASE_DOC_ATTRS_PY);
@@ -83,7 +83,7 @@ struct Node: public Object, public Indexable{
 	static void pySetData(const shared_ptr<Node>& n, const shared_ptr<NodeDataSubclass>& d){ n->setData<NodeDataSubclass>(d); }
 	string pyStr() const override;
 
-	void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
+	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
 
 	// transform point p from global to local coordinates
 	Vector3r glob2loc(const Vector3r& p){ return ori.conjugate()*(p-pos); }
@@ -102,10 +102,10 @@ struct Node: public Object, public Indexable{
 		((shared_ptr<NodeVisRep>,rep,,,"What should be shown at this node when rendered via OpenGL; this data are also used in e.g. particle tracking, hence enable even in OpenGL-less builds as well.")) /* defined above, nonempty in OpenGL-enabled builds only */ \
 		, /* ctor */ createIndex(); \
 		, /* py */ WOO_PY_TOPINDEXABLE(Node) \
-			.def("glob2loc",&Node::glob2loc,(py::arg("p")),"Transform point :math:`p` from global to node-local coordinates as :math:`q^*(p-O)q`, in code ``q.conjugate()*(p-O)``.") \
-			.def("loc2glob",&Node::loc2glob,(py::arg("p")),"Transform point :math:`p_l` from node-local to global coordinates as :math:`q\\cdot p_l\\cdot q^*+O`, in code ``q*p+O``.") \
-			.def("glob2loc_rank2",&Node::glob2loc_rank2,(py::arg("g")),"Rotate rank-2 tensor (such as stress) from local to global coordinates, computed as :math:`\\mat{R}^T\\mat{g}\\mat{R}`.") \
-			.def("loc2glob_rank2",&Node::loc2glob_rank2,(py::arg("l")),"Rotate rank-2 tensor (such as stress), represented as 3×3 matrix, from local to global coordinates; computed as :math:`\\mat{R}\\mat{l}\\mat{R}^T`, where :math:`\\mat{R}` is rotation matrix equivalent to rotation by quaternion :obj:`ori`.")
+			.def("glob2loc",&Node::glob2loc,WOO_PY_ARGS(py::arg("p")),"Transform point :math:`p` from global to node-local coordinates as :math:`q^*(p-O)q`, in code ``q.conjugate()*(p-O)``.") \
+			.def("loc2glob",&Node::loc2glob,WOO_PY_ARGS(py::arg("p")),"Transform point :math:`p_l` from node-local to global coordinates as :math:`q\\cdot p_l\\cdot q^*+O`, in code ``q*p+O``.") \
+			.def("glob2loc_rank2",&Node::glob2loc_rank2,WOO_PY_ARGS(py::arg("g")),"Rotate rank-2 tensor (such as stress) from local to global coordinates, computed as :math:`\\mat{R}^T\\mat{g}\\mat{R}`.") \
+			.def("loc2glob_rank2",&Node::loc2glob_rank2,WOO_PY_ARGS(py::arg("l")),"Rotate rank-2 tensor (such as stress), represented as 3×3 matrix, from local to global coordinates; computed as :math:`\\mat{R}\\mat{l}\\mat{R}^T`, where :math:`\\mat{R}` is rotation matrix equivalent to rotation by quaternion :obj:`ori`.")
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Node__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Node);
@@ -125,7 +125,7 @@ struct Field: public Object, public Indexable{
 		/* ((vector<shared_ptr<CellData> >,cells,,,"")) */ \
 		, /* ctor */ scene=NULL; createIndex(); \
 		, /* py */ \
-			.add_property("scene",&Field::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
+			.add_property_readonly("scene",&Field::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
 			.def("critDt",&Field::critDt,"Return critical (maximum numerically stable) timestep for this field. By default returns infinity (no critical timestep) but derived fields may override this function.") \
 			WOO_PY_TOPINDEXABLE(Field) \
 			; \

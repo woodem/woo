@@ -4,7 +4,7 @@ WOO_PLUGIN(dem,(GridCollider));
 WOO_IMPL_LOGGER(GridCollider);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_GridCollider__CLASS_BASE_DOC_ATTRS);
 
-void GridCollider::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
+void GridCollider::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==0) return; // nothing to do
 	if(py::len(t)!=1) throw invalid_argument("GridCollider optionally takes exactly one list of GridBoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)");
 	if(!boundDispatcher) boundDispatcher=make_shared<GridBoundDispatcher>();

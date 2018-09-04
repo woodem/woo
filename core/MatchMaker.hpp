@@ -3,7 +3,7 @@
 #include<woo/lib/object/Object.hpp>
 #include<string>
 
-namespace py = boost::python;
+// namespace py = boost::python;
 
 /* Future optimizations, in postLoad:
 
@@ -39,8 +39,8 @@ class MatchMaker: public Object {
 			((std::string,algo,"avg",AttrTrait<Attr::triggerPostLoad>(),"Alogorithm used to compute value when no match for ids is found. Possible values are\n\n* 'avg' (arithmetic average)\n* 'min' (minimum value)\n* 'max' (maximum value)\n* 'harmAvg' (harmonic average)\n\nThe following algo algorithms do *not* require meaningful input values in order to work:\n\n* 'val' (return value specified by :obj:`val`)\n* 'zero' (always return 0.)\n\n")) \
 			((Real,val,NaN,,"Constant value returned if there is no match and :obj:`algo` is ``val``")) \
 			, /*ctor*/ fbPtr=&MatchMaker::fbAvg; fbNeedsValues=true; /* keep in sync with the algo value for algo */ \
-			, /*py*/ .def("__call__",&MatchMaker::operator(),(py::arg("id1"),py::arg("id2"),py::arg("val1")=NaN,py::arg("val2")=NaN),"Ask the instance for scalar value for given pair *id1*,*id2* (the order is irrelevant). Optionally, *val1*, *val2* can be given so that if there is no :obj:`match <matches>`, return value can be computed using given :obj:`algo`. If there is no match and *val1*, *val2* are not given, an exception is raised.") \
-			.def("computeFallback",&MatchMaker::computeFallback,(py::arg("val1"),py::arg("val2")),"Compute algo value for *val1* and *val2*, using algorithm specified by :obj:`algo`.")
+			, /*py*/ .def("__call__",&MatchMaker::operator(),WOO_PY_ARGS(py::arg("id1"),py::arg("id2"),py::arg("val1")=NaN,py::arg("val2")=NaN),"Ask the instance for scalar value for given pair *id1*,*id2* (the order is irrelevant). Optionally, *val1*, *val2* can be given so that if there is no :obj:`match <matches>`, return value can be computed using given :obj:`algo`. If there is no match and *val1*, *val2* are not given, an exception is raised.") \
+			.def("computeFallback",&MatchMaker::computeFallback,WOO_PY_ARGS(py::arg("val1"),py::arg("val2")),"Compute algo value for *val1* and *val2*, using algorithm specified by :obj:`algo`.")
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_MatchMaker__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(MatchMaker);

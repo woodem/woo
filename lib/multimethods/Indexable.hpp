@@ -11,12 +11,14 @@
 #pragma once
 
 #include<boost/scoped_ptr.hpp>
-#include<cmath> // workaround for http://boost.2283326.n4.nabble.com/Boost-Python-Compile-Error-s-GCC-via-MinGW-w64-tp3165793p3166760.html
-#include<boost/python.hpp>
+#include<woo/lib/base/Types.hpp>
+#ifndef WOO_PYBIND11
+	#include<cmath> // workaround for http://boost.2283326.n4.nabble.com/Boost-Python-Compile-Error-s-GCC-via-MinGW-w64-tp3165793p3166760.html
+	#include<boost/python.hpp>
+#endif
 #include<stdexcept>
 #include<string>
 
-namespace py=boost::python;
 
 /*! \brief Abstract interface for all Indexable class.
 	An indexable class is a class that will be managed by a MultiMethodManager.
@@ -80,6 +82,6 @@ class Indexable{
 	virtual void incrementMaxCurrentlyUsedClassIndex() override { assert(dynamic_cast<SomeClass*>(this)); int& max = getMaxCurrentlyUsedIndexStatic(); max++; }
 
 // macro that should be passed in the 4th argument of WOO_CLASS_BASE_ATTR_PY in the top-level indexable
-#define WOO_PY_TOPINDEXABLE(className) .add_property("dispIndex",&Indexable_getClassIndex<className>,"Return class index of this instance.").def("dispHierarchy",&Indexable_getClassIndices<className>,(boost::python::arg("names")=true),"Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.")
+#define WOO_PY_TOPINDEXABLE(className) .add_property_readonly("dispIndex",&Indexable_getClassIndex<className>,"Return class index of this instance.").def("dispHierarchy",&Indexable_getClassIndices<className>,WOO_PY_ARGS(py::arg("names")=true),"Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.")
 
 

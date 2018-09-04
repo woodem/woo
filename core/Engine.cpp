@@ -62,7 +62,7 @@ shared_ptr<Field> Engine::field_get(){ return field; }
 
 py::object Engine::py_getScene(){
 	if(!scene) return py::object();
-	else return py::object(static_pointer_cast<Scene>(scene->shared_from_this()));
+	else return py::cast(static_pointer_cast<Scene>(scene->shared_from_this()));
 }
 
 void Engine::field_set(const shared_ptr<Field>& f){
@@ -77,10 +77,10 @@ void Engine::runPy_generic(const string& callerId, const string& command, Scene*
 		// scripts are run in this namespace (wooMain)
 		py::object global(py::import("wooMain").attr("__dict__"));
 		py::dict local;
-		local["scene"]=py::object(py::ptr(scene_));
-		local["S"]=py::object(py::ptr(scene_));
-		local["engine"]=py::object(py::ptr(engine_));
-		local["field"]=py::object(field_);
+		local["scene"]=py::cast(py::ptr(scene_));
+		local["S"]=py::cast(py::ptr(scene_));
+		local["engine"]=py::cast(py::ptr(engine_));
+		local["field"]=py::cast(field_);
 		local["woo"]=py::import("woo");
 		// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
 		py::exec(command.c_str(),global,local);
@@ -122,7 +122,7 @@ void ParallelEngine::run(){
 	}
 }
 
-void ParallelEngine::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void ParallelEngine::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(py::len(args)==0) return;
 	if(py::len(args)>1) woo::TypeError("ParallelEngine takes 0 or 1 non-keyword arguments ("+to_string(py::len(args))+" given)");
 	py::extract<py::list> listEx(args[0]);
@@ -146,8 +146,8 @@ void ParallelEngine::pySlavesSet(const py::list& slaves2){
 py::list ParallelEngine::pySlavesGet(){
 	py::list ret;
 	for(vector<shared_ptr<Engine>>& grp: slaves){
-		if(grp.size()==1) ret.append(py::object(grp[0]));
-		else ret.append(py::object(grp));
+		if(grp.size()==1) ret.append(py::cast(grp[0]));
+		else ret.append(py::cast(grp));
 	}
 	return ret;
 }
@@ -194,9 +194,9 @@ bool PeriodicEngine::isActivated(){
 	return false;
 }
 
-void PyRunner::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
+void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	bool cmdDone(false),stepDone(false);
-	for(int i=0; i<py::len(t); i++){
+	for(int i=0; i<(int)py::len(t); i++){
 		py::extract<string> exStr(t[i]);
 		py::extract<int> exInt(t[i]);
 		if(exStr.check()){

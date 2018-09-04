@@ -75,13 +75,13 @@ bool EnergyTracker::contains_py(const std::string& name){
 py::dict EnergyTracker::perThreadData() const {
 	py::dict ret;
 	std::vector<std::vector<Real> > dta=energies.getPerThreadData();
-	for(pairStringInt p: names) ret[p.first]=dta[p.second];
+	for(pairStringInt p: names) ret[p.first.c_str()]=dta[p.second];
 	return ret;
 }
 py::dict EnergyTracker::names_py() const{
 	py::dict ret;
 	for(const pairStringInt& si: names){
-		ret[si.first]=si.second;
+		ret[si.first.c_str()]=si.second;
 	}
 	return ret;
 }

@@ -74,7 +74,7 @@ void GlSetup::pyCall(const py::tuple& args){
 }
 
 
-void GlSetup::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void GlSetup::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// cerr<<"[GlSetup::pyHandleCustomArgs]"<<endl;
 	pyCall(args);
 	args=py::tuple();

@@ -43,7 +43,7 @@ struct GridCollider: public Collider{
 	void prepareGridCurr();
 	void fillGridCurr();
 
-	void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
+	void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
 	void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
 
 	// forces reinitialization

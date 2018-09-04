@@ -14,7 +14,11 @@ static string prettyVersion(bool lead=true){
 }
 
 WOO_PYTHON_MODULE(config)
-BOOST_PYTHON_MODULE(config){
+#ifdef WOO_PYBIND11
+	PYBIND11_MODULE(config,mod){
+#else
+	BOOST_PYTHON_MODULE(config){
+#endif
 	py::list features;
 		#ifdef WOO_LOG4CXX
 			features.append("log4cxx");
@@ -60,29 +64,41 @@ BOOST_PYTHON_MODULE(config){
 		#ifdef WOO_HDF5
 			features.append("hdf5");
 		#endif
+		#ifdef WOO_PYBIND11
+			features.append("pybind11");
+		#endif
 
-	py::scope().attr("features")=features;
+	#ifndef WOO_PYBIND11
+		auto mod=py::scope();
+	#endif
 
-	py::scope().attr("debug")=
+	mod.attr("features")=features;
+
+	mod.attr("debug")=
 	#ifdef WOO_DEBUG
 		true;
 	#else
 		false;
 	#endif
 
-	py::scope().attr("prefix")=BOOST_PP_STRINGIZE(WOO_PREFIX);
-	py::scope().attr("suffix")=BOOST_PP_STRINGIZE(WOO_SUFFIX);
+	mod.attr("prefix")=BOOST_PP_STRINGIZE(WOO_PREFIX);
+	mod.attr("suffix")=BOOST_PP_STRINGIZE(WOO_SUFFIX);
 
-	py::scope().attr("revision")=BOOST_PP_STRINGIZE(WOO_REVISION);
-	py::scope().attr("version")=BOOST_PP_STRINGIZE(WOO_VERSION);
-	py::def("prettyVersion",&prettyVersion,(py::arg("lead")=true));
-
-	py::scope().attr("sourceRoot")=BOOST_PP_STRINGIZE(WOO_SOURCE_ROOT);
-	py::scope().attr("buildRoot")=BOOST_PP_STRINGIZE(WOO_BUILD_ROOT);
-	py::scope().attr("flavor")=BOOST_PP_STRINGIZE(WOO_FLAVOR);
-	#ifdef WOO_SCONS_PATH
-		py::scope().attr("sconsPath")=BOOST_PP_STRINGIZE(WOO_SCONS_PATH);
+	mod.attr("revision")=BOOST_PP_STRINGIZE(WOO_REVISION);
+	mod.attr("version")=BOOST_PP_STRINGIZE(WOO_VERSION);
+	#ifdef WOO_PYBIND11
+		mod.
+	#else
+	py::
 	#endif
-	py::scope().attr("buildDate")=__DATE__;
+		def("prettyVersion",&prettyVersion,(py::arg("lead")=true));
+
+	mod.attr("sourceRoot")=BOOST_PP_STRINGIZE(WOO_SOURCE_ROOT);
+	mod.attr("buildRoot")=BOOST_PP_STRINGIZE(WOO_BUILD_ROOT);
+	mod.attr("flavor")=BOOST_PP_STRINGIZE(WOO_FLAVOR);
+	#ifdef WOO_SCONS_PATH
+		mod.attr("sconsPath")=BOOST_PP_STRINGIZE(WOO_SCONS_PATH);
+	#endif
+	mod.attr("buildDate")=__DATE__;
 
 };

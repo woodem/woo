@@ -38,7 +38,7 @@ Matrix3r Node::loc2glob_rank2(const Matrix3r& l){
 }
 
 
-void Node::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
+void Node::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(py::len(args)>0){
 		if(py::len(args)>2) throw std::runtime_error("Node: only takes 0, 1 or 2 non-keyword arguments ("+to_string(py::len(args))+" given).");
 		py::extract<Vector3r> posEx(args[0]);
@@ -52,18 +52,22 @@ void Node::pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw){
 		args=py::tuple(); // clear args
 	}
 	for(const char* name:{"dem","gl","mesh","sparc","clDem"}){
-		if(!kw.has_key(name)) continue;
-		auto& d=py::extract<shared_ptr<NodeData>>(kw[name])();
+		if(!WOO_PY_DICT_CONTAINS(kw,name)) continue;
+		auto d=py::extract<shared_ptr<NodeData>>(kw[name])();
 		if(d->getterName()!=string(name)) throw std::runtime_error("Node: mismatch passing "+string(name)+"="+d->pyStr()+": shorthand for this type should be "+d->getterName()+" (not "+string(name)+").");
 		d->setDataOnNode(*this);
-		py::api::delitem(kw,name);
+		#ifdef WOO_PYBIND11
+			kw.attr("pop")(name);
+		#else
+			py::api::delitem(kw,name);
+		#endif
 	}
 }
 
 
 py::object Field::py_getScene(){
 	if(!scene) return py::object();
-	else return py::object(static_pointer_cast<Scene>(scene->shared_from_this()));
+	else return py::cast(static_pointer_cast<Scene>(scene->shared_from_this()));
 }
 
 

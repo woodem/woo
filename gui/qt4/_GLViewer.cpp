@@ -3,8 +3,6 @@
 // use local includes, since MOC does the same
 #include"GLViewer.hpp"
 #include"OpenGLManager.hpp"
-
-#include<boost/python.hpp>
 #include<woo/pkg/gl/Renderer.hpp>
 #include<woo/lib/pyutil/doc_opts.hpp>
 
@@ -19,7 +17,6 @@ using boost::algorithm::iends_with;
 static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.qt4");
 #endif
 
-namespace py=boost::python;
 
 
 //#define POST_SYNTH_EVENT(EVT,checker) void evt##EVT(){QApplication::postEvent(OpenGLManager::self,new QCustomEvent(YadeQtMainWindow::EVENT_##EVT)); bool wait=true; if(wait){while(!(bool)(OpenGLManager::self->checker)) usleep(50000);} }
@@ -103,17 +100,32 @@ py::list getAllViews(){ py::list ret; for(const shared_ptr<GLViewer>& v: OpenGLM
 void centerViews(void){ OpenGLManager::self->centerAllViews(); }
 
 WOO_PYTHON_MODULE(_GLViewer);
-BOOST_PYTHON_MODULE(_GLViewer){
-	WOO_SET_DOCSTRING_OPTS;
+#ifdef WOO_PYBIND11
+	PYBIND11_MODULE(_GLViewer,mod){
+#else
+	BOOST_PYTHON_MODULE(_GLViewer){
+		py::object mod=py::scope();
+#endif
 	
+	WOO_SET_DOCSTRING_OPTS;
 	OpenGLManager* glm=new OpenGLManager(); // keep this singleton object forever
 	glm->emitStartTimer();
 
-	py::def("View",createView,"Create a new 3d view.");
-	py::def("center",centerViews,"Center all views.");
-	py::def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
+	#ifdef WOO_PYBIND11
+		mod.def("View",createView,"Create a new 3d view.");
+		mod.def("center",centerViews,"Center all views.");
+		mod.def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
+	#else
+		py::def("View",createView,"Create a new 3d view.");
+		py::def("center",centerViews,"Center all views.");
+		py::def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
+	#endif
 	
-	py::class_<pyGLViewer>("GLViewer",py::no_init)
+	#ifdef WOO_PYBIND11
+		py::class_<pyGLViewer>(mod,"GLViewer")
+	#else
+		py::class_<pyGLViewer>("GLViewer",py::no_init)
+	#endif
 		.add_property("upVector",&pyGLViewer::get_upVector,&pyGLViewer::set_upVector,"Vector that will be shown oriented up on the screen.")
 		.add_property("lookAt",&pyGLViewer::get_lookAt,&pyGLViewer::set_lookAt,"Point at which camera is directed.")
 		.add_property("viewDir",&pyGLViewer::get_viewDir,&pyGLViewer::set_viewDir,"Camera orientation (as vector).")
@@ -124,12 +136,12 @@ BOOST_PYTHON_MODULE(_GLViewer){
 		.add_property("ortho",&pyGLViewer::get_orthographic,&pyGLViewer::set_orthographic,"Whether orthographic projection is used; if false, use perspective projection.")
 		.add_static_property("rotCursorFreeze",&pyGLViewer::get_rotCursorFreeze,&pyGLViewer::set_rotCursorFreeze)
 		.add_property("screenSize",&pyGLViewer::get_screenSize,&pyGLViewer::set_screenSize,"Size of the viewer's window, in scree pixels")
-		.def("fitAABB",&pyGLViewer::fitAABB,(py::arg("mn"),py::arg("mx")),"Adjust scene bounds so that Axis-aligned bounding box given by its lower and upper corners *mn*, *mx* fits in.")
-		.def("fitSphere",&pyGLViewer::fitSphere,(py::arg("center"),py::arg("radius")),"Adjust scene bounds so that sphere given by *center* and *radius* fits in.")
+		.def("fitAABB",&pyGLViewer::fitAABB,WOO_PY_ARGS(py::arg("mn"),py::arg("mx")),"Adjust scene bounds so that Axis-aligned bounding box given by its lower and upper corners *mn*, *mx* fits in.")
+		.def("fitSphere",&pyGLViewer::fitSphere,WOO_PY_ARGS(py::arg("center"),py::arg("radius")),"Adjust scene bounds so that sphere given by *center* and *radius* fits in.")
 		.def("showEntireScene",&pyGLViewer::showEntireScene)
-		.def("center",&pyGLViewer::center,(py::arg("median")=true),"Center view. View is centered either so that all bodies fit inside (``median=False``), or so that 75\\% of bodies fit inside (``median=True``).")
-		.def("saveState",&pyGLViewer::saveDisplayParameters,(py::arg("slot")),"Save display parameters into numbered memory slot. Saves state for both :obj:`GLViewer` and associated :obj:`Renderer`.")
-		.def("loadState",&pyGLViewer::useDisplayParameters,(py::arg("slot")),"Load display parameters from slot saved previously into, identified by its number.")
+		.def("center",&pyGLViewer::center,WOO_PY_ARGS(py::arg("median")=true),"Center view. View is centered either so that all bodies fit inside (``median=False``), or so that 75\\% of bodies fit inside (``median=True``).")
+		.def("saveState",&pyGLViewer::saveDisplayParameters,WOO_PY_ARGS(py::arg("slot")),"Save display parameters into numbered memory slot. Saves state for both :obj:`GLViewer` and associated :obj:`Renderer`.")
+		.def("loadState",&pyGLViewer::useDisplayParameters,WOO_PY_ARGS(py::arg("slot")),"Load display parameters from slot saved previously into, identified by its number.")
 		.def("__repr__",&pyGLViewer::pyStr).def("__str__",&pyGLViewer::pyStr)
 		.def("povRayCam",&pyGLViewer::povRayCam,"Return textual definition of camera in POV-Ray which will be the same with the current camera setup in this view.")
 		.def("close",&pyGLViewer::close)

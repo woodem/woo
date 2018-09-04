@@ -23,7 +23,7 @@ struct Scene;
 struct Field;
 struct ScalarRange;
 
-namespace py=boost::python;
+// namespace py=boost::python;
 
 class Engine: public Object {
 	public:
@@ -101,10 +101,10 @@ class Engine: public Object {
 		.add_property("execTime",&Engine::timingInfo_nsec_get,&Engine::timingInfo_nsec_set,"Cummulative time this Engine took to run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
 		.add_property("execCount",&Engine::timingInfo_nExec_get,&Engine::timingInfo_nExec_set,"Cummulative count this engine was run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
 		.def_readonly("timingDeltas",&Engine::timingDeltas,"Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and :obj:`Master.timingEnabled`\\ ==\\ ``True``.") \
-		.def("__call__",&Engine::explicitRun,(py::arg("scene"),py::arg("field")=shared_ptr<Field>()),"Run the engine just once, using *scene*. If *field* is not given as the engine requires it, it will be obtained from *scene* automatically (with the same rules as for engines which don't have an explicit field: if one field is found, it is used, no or more compatible fields raise an exception.)") \
+		.def("__call__",&Engine::explicitRun,WOO_PY_ARGS(py::arg("scene"),py::arg("field")=shared_ptr<Field>()),"Run the engine just once, using *scene*. If *field* is not given as the engine requires it, it will be obtained from *scene* automatically (with the same rules as for engines which don't have an explicit field: if one field is found, it is used, no or more compatible fields raise an exception.)") \
 		.def("acceptsField",&Engine::acceptsField) \
 		.add_property("field",&Engine::field_get,&Engine::field_set,"Field to run this engine on; if unassigned, or set to *None*, automatic field selection is triggered.") \
-		.add_property("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
+		.add_property_readonly("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
 		.def("critDt",&Engine::critDt,"Return critical (maximum numerically stable) timestep for this engine. By default returns infinity (no critical timestep) but derived engines may override this function.") \
 		; \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<Engine>>();
@@ -121,7 +121,7 @@ class ParallelEngine: public Engine {
 		bool needsField() override { return false; }
 		void setField() override;
 		void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
-		void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw) override;
+		void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
 
 	// py access
 		py::list pySlavesGet();
@@ -170,7 +170,7 @@ struct PyRunner: public PeriodicEngine{
 	virtual void run() override{ Engine::runPy("PyRunner",command); }
 	// to give command without saying 'command=...'
 	virtual bool needsField() override { return false; }
-	virtual void pyHandleCustomCtorArgs(py::tuple& t, py::dict& d) override;
+	virtual void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
 	#define woo_core_PyRunner__CLASS_BASE_DOC_ATTRS \
 		PyRunner,PeriodicEngine, \
 		"Execute a python command periodically, with defined (and adjustable) periodicity. See :obj:`PeriodicEngine` documentation for details.\n\n.. admonition:: Special constructor\n\n   *command* can be given as first unnamed string argument (``PyRunner('foo()')``), stepPeriod as unnamed integer argument (``PyRunner('foo()',100)`` or ``PyRunner(100,'foo()')``).", \
