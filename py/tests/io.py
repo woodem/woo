@@ -133,6 +133,7 @@ class TestSpecialDumpMethods(unittest.TestCase):
         self.assertTrue(woo.master.scene.lastSave==self.out)
 
 class TestArraySerialization(unittest.TestCase):
+    @unittest.skipIf(True,'Temporarily disabled due to crashes Eigen/boost::python.')
     def testMatrixX(self):
         'IO: serialization of arrays'
         import sys
