@@ -59,7 +59,8 @@ if dist in ('Ubuntu','Debian'):
             pipUI=[]
             qtFeature='qt4'
         elif linver=='18.04':
-            aptCore='python-all python-all-dev python3-setuptools python3-all python3-all-dev python3-pyqt5 python3-future python3-distutils python3-minieigen debhelper libboost-all-dev qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev libvtk6-dev libgts-dev libeigen3-dev freeglut3-dev libhdf5-serial-dev python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-pyqt5 python3-pyqt5.qtsvg python3-xlib python3-genshi python3-psutil python3-minieigen python3-pil python3-h5py python3-lockfile python3-future ipython3 mencoder ffmpeg python3-prettytable'.split()
+            aptCore='python-all python-all-dev python3-setuptools python3-all python3-all-dev python3-future python3-distutils python3-minieigen debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-minieigen python3-pil python3-h5py python3-lockfile python3-future ipython3 mencoder ffmpeg python3-prettytable'.split()
+            aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='xlwt-future colour-runner'.split()
             pipUI=[]
             qtFeature='qt5'
