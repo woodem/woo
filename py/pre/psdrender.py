@@ -26,6 +26,7 @@ class PsdRender(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'dtSafety',.7,doc='Safety factor for timestep.'),
         _PAT(float,'maxUnbalanced',.5,doc='Unbalanced force/energy to wait for before declared settled.'),
         _PAT(woo.models.ContactModelSelector,'model',woo.models.ContactModelSelector(name='linear',damping=.5,numMat=(1,1),matDesc=['particles'],mats=[woo.dem.FrictMat(density=2e3,young=5e6,tanPhi=0.)]),doc='Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.'),
+        _PAT(bool,'povEnable',True,doc='Enable POV-Ray export.'),
         _PAT(Vector3,'camPos',(0,0,.5),doc='Camera position; x, y components determine offset from bed normal; z is height above the highest particle center.'),
         _PAT(str,'out','/tmp/{tid}',doc='Prefix for outputs (:obj:`woo.core.Scene.tags` are expanded).'),
         _PAT(int,'imgDim',2000,doc='Larger image dimension when the scene is rendered; the scene can be re-rendered by calling POV-Ray by hand anytime with arbitrary resolution.'),
@@ -70,7 +71,7 @@ def checkSettled(S):
 def finalize(S):
     import math, subprocess, os.path
     S.stop()
-    print('Finished!!!')
+    print('Finished.')
     out2=S.expandTags(S.pre.out)
     # do not export walls at all
     pov=POVRayExport(mask=woo.dem.DemField.defaultOutletBit,masks=[woo.dem.DemField.defaultOutletBit],textures=['particles'],out=out2)
@@ -78,11 +79,12 @@ def finalize(S):
         sp=woo.dem.ShapePack()
         sp.fromDem(S,S.dem,mask=woo.dem.DemField.defaultOutletBit)
         sp.saveTxt(out2+'.shapepack')
-    bedZ=max([p.pos[2] for p in S.dem.par])
-    camAngle=math.degrees(2*math.atan(.5*min(S.pre.size)/S.pre.camPos[2]))
-    out2base=os.path.basename(out2).encode()
-    pov(S)
-    pmaster=b'''
+    if S.pre.povEnable:
+        bedZ=max([p.pos[2] for p in S.dem.par])
+        camAngle=math.degrees(2*math.atan(.5*min(S.pre.size)/S.pre.camPos[2]))
+        out2base=os.path.basename(out2).encode()
+        pov(S)
+        pmaster=b'''
 #version 3.7;
 #include"colors.inc"
 #include"metals.inc"
@@ -126,15 +128,15 @@ background{rgb .2}
 #include concat(concat("%s_frame_",str(frame_number,-5,0)),".inc")
 
 '''%(out2base,out2base)
-    outMaster=out2+'_master.pov'
-    print('Writing out to '+outMaster)
-    with open(outMaster,'wb') as m: m.write(pmaster)
-    ratio=S.pre.size[0]/S.pre.size[1]
-    if ratio>1: px=(S.pre.imgDim,int(S.pre.imgDim/ratio))
-    else: px=(int(S.pre.imgDim*ratio),S.pre.imgDim)
-    cmd=['povray','+W%d'%px[0],'+H%d'%px[1],'+A','-kff0',outMaster]
-    print('Running: cd '+os.path.dirname(out2)+'; povray '.join(cmd))
-    subprocess.call(cmd,cwd=os.path.dirname(out2))
+        outMaster=out2+'_master.pov'
+        print('Writing out to '+outMaster)
+        with open(outMaster,'wb') as m: m.write(pmaster)
+        ratio=S.pre.size[0]/S.pre.size[1]
+        if ratio>1: px=(S.pre.imgDim,int(S.pre.imgDim/ratio))
+        else: px=(int(S.pre.imgDim*ratio),S.pre.imgDim)
+        cmd=['povray','+W%d'%px[0],'+H%d'%px[1],'+A','-kff0',outMaster]
+        print('Running: cd '+os.path.dirname(out2)+'; povray '.join(cmd))
+        subprocess.call(cmd,cwd=os.path.dirname(out2))
     
 
 

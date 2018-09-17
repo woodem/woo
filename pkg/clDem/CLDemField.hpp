@@ -18,7 +18,7 @@ public:
 	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemData,NodeData,"Dynamic state of node.",
 		((long,clIx,,,"Index of object belonging to this node within clDem arrays (particle/contact)"))
 		, /* ctor */
-		, /* py */ .def("_getDataOnNode",&Node::pyGetData<CLDemData>).staticmethod("_getDataOnNode").def("_setDataOnNode",&Node::pySetData<CLDemData>).staticmethod("_setDataOnNode");
+		, /* py */ .def_static("_getDataOnNode",&Node::pyGetData<CLDemData>) WOO_PY_STATICMETHOD("_getDataOnNode").def_static("_setDataOnNode",&Node::pySetData<CLDemData>) WOO_PY_STATICMETHOD("_setDataOnNode");
 	);
 };
 WOO_REGISTER_OBJECT(CLDemData);
@@ -44,13 +44,13 @@ struct CLDemField: public Field{
 			((shared_ptr<clDem::Simulation>,sim,,,"The OpenCL simulation in question."))
 		, /* ctor */ createIndex();
 		, /* py */ // .def_readwrite("sim",&CLDemField::sim,"Simulation field to operate on")
-		.def("clDemToWoo",&CLDemField::clDemToWoo,(py::arg("clDemSim"),py::arg("stepPeriod")=1,py::arg("relTol")=-1),"Create woo simulation which mimics the one in *clDemSim* as close as possible. If stepPeriod>=1, prepare enginess for running and comparing them in parallel. *stepPeriod* determines how many steps of the CL simulation to launch at once. If *relTol* is greater than 0., comparison between clDem and Woo will be done at every step, with the tolerance specified.")
-		.staticmethod("clDemToWoo")
-		.def("wooToClDem",&CLDemField::wooToClDem,(py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1),"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
-		.staticmethod("wooToClDem")
-		.def_static("getSimulation",&CLDemField::getSimulation).staticmethod("getSimulation")
-		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>).staticmethod("sceneHasField")
-		.def_static("sceneGetField",&Field_sceneGetField<CLDemField>).staticmethod("sceneGetField")
+		.def_static("clDemToWoo",&CLDemField::clDemToWoo,(py::arg("clDemSim"),py::arg("stepPeriod")=1,py::arg("relTol")=-1),"Create woo simulation which mimics the one in *clDemSim* as close as possible. If stepPeriod>=1, prepare enginess for running and comparing them in parallel. *stepPeriod* determines how many steps of the CL simulation to launch at once. If *relTol* is greater than 0., comparison between clDem and Woo will be done at every step, with the tolerance specified.")
+		 WOO_PY_STATICMETHOD("clDemToWoo")
+		.def_static("wooToClDem",&CLDemField::wooToClDem,(py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1),"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
+		 WOO_PY_STATICMETHOD("wooToClDem")
+		.def_static("getSimulation",&CLDemField::getSimulation) WOO_PY_STATICMETHOD("getSimulation")
+		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>) WOO_PY_STATICMETHOD("sceneHasField")
+		.def_static("sceneGetField",&Field_sceneGetField<CLDemField>) WOO_PY_STATICMETHOD("sceneGetField")
 	);
 	REGISTER_CLASS_INDEX(CLDemField,Field);
 	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw);

@@ -19,10 +19,6 @@
 #include<boost/python.hpp>
 #include<boost/python/class.hpp>
 #include<boost/python/module.hpp>
-#include<boost/foreach.hpp>
-#ifndef FOREACH
-	#define FOREACH BOOST_FOREACH
-#endif
 
 #include<vector>
 #include<string>

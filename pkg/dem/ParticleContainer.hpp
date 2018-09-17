@@ -4,11 +4,6 @@
 #include<woo/lib/object/Object.hpp>
 #include<woo/core/Field.hpp>
 
-#include<boost/foreach.hpp>
-#ifndef FOREACH
-#  define FOREACH BOOST_FOREACH
-#endif
-
 #include<boost/iterator/filter_iterator.hpp>
 
 #ifdef WOO_SUBDOMAINS

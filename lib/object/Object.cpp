@@ -34,7 +34,7 @@ void Object::pyRegisterClass(py::module_& mod) {
 			.add_property("__getstate_manages_dict__",&Object::getClassName,"just define the attr, return some bogus data")
 		#endif
 		.def("save",&Object::boostSave,py::arg("filename"))
-		.def("_boostLoad",&Object::boostLoad,py::arg("filename")).staticmethod("_boostLoad")
+		.def_static("_boostLoad",&Object::boostLoad,py::arg("filename"))  WOO_PY_STATICMETHOD("_boostLoad")
 		//.def_readonly("_derivedCxxClasses",&Object::derivedCxxClasses)
 		.add_static_property("_derivedCxxClasses",&Object::getDerivedCxxClasses)
 		.add_property("_cxxAddr",&Object::pyCxxAddr)

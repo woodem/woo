@@ -1,9 +1,7 @@
 #pragma once
 
-#include<boost/foreach.hpp>
-#ifndef FOREACH
-	#define FOREACH BOOST_FOREACH
-#endif
+// replace deprecated BOOST_FOREACH by range-for
+#define FOREACH(a,b) for(a:b)
 
 #ifdef WOO_DEBUG
 	#define WOO_CAST dynamic_cast
@@ -148,30 +146,4 @@ typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 
-#if 0
-// equivalent to std::string, but exposed to Python3 as bytes rather than (encoded) string
-namespace woo{
-	typedef std::basic_string<char> bytes;
-};
-#endif
 
-
-// allow using lambda funcs in in add_property
-// http://stackoverflow.com/a/25281985/761090
-// does not work yet :|
-#if 0
-namespace boost {
-  namespace python {
-    namespace detail {
-
-      template <class T, class... Args>
-      inline boost::mpl::vector<T, Args...> 
-        get_signature(std::function<T(Args...)>, void* = 0)
-      {
-        return boost::mpl::vector<T, Args...>();
-      }
-
-    }
-  }
-}
-#endif

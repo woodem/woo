@@ -380,7 +380,8 @@ class DynLibDispatcher
 					if((maxDp1>=0 && dp1>maxDp1) || (maxDp2>=0 && dp2>maxDp2)) continue;
 					_DISP_TRACE(" Trying indices with depths "<<dp1<<" and "<<dp2<<", dist="<<dist);
 					int ix1=dp1>0?base1->getBaseClassIndex(dp1):index1, ix2=dp2>0?base2->getBaseClassIndex(dp2):index2;
-					if(ix1<0) maxDp1=dp1; if(ix2<0) maxDp2=dp2;
+					if(ix1<0) maxDp1=dp1;
+					if(ix2<0) maxDp2=dp2;
 					if(ix1<0 || ix2<0) continue; // hierarchy height exceeded in either dimension
 					distTooBig=false;
 					if(callBacks[ix1][ix2]){

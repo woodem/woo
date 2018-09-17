@@ -13,7 +13,6 @@
 #include<woo/lib/pyutil/converters.hpp>
 #include<woo/lib/pyutil/gil.hpp>
 
-
 #include<boost/foreach.hpp>
 #ifndef FOREACH
 #define FOREACH BOOST_FOREACH

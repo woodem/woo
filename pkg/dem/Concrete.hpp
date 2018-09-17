@@ -101,12 +101,12 @@ struct ConcretePhys: public FrictPhys {
 		((Real,relResidualStrength,1,AttrTrait<Attr::noSave|Attr::readonly>(),"Relative residual strength")) \
 		,/*ctor*/ createIndex(); \
 		,/*py*/  \
-		.def_readonly("cummBetaIter",&ConcretePhys::cummBetaIter,"Cummulative number of iterations inside ConcreteMat::solveBeta (for debugging).") \
-		.def_readonly("cummBetaCount",&ConcretePhys::cummBetaCount,"Cummulative number of calls of ConcreteMat::solveBeta (for debugging).") \
-		.def_static("funcG",&ConcretePhys::funcG,(py::arg("kappaD"),py::arg("epsCrackOnset"),py::arg("epsFracture"),py::arg("neverDamage")=false,py::arg("damLaw")=1),"Damage evolution law, evaluating the $\\omega$ parameter. $\\kappa_D$ is historically maximum strain, *epsCrackOnset* ($\\varepsilon_0$) = :obj:`epsCrackOnset`, *epsFracture* = :obj:`epsFracture`; if *neverDamage* is ``True``, the value returned will always be 0 (no damage).") \
-		.staticmethod("funcG") \
-		.def_static("funcGInv",&ConcretePhys::funcGInv,(py::arg("omega"),py::arg("epsCrackOnset"),py::arg("epsFracture"),py::arg("neverDamage")=false,py::arg("damLaw")=1),"Inversion of damage evolution law, evaluating the $\\kappa_D$ parameter. $\\omega$ is damage, for other parameters see funcG function") \
-		.staticmethod("funcGInv") \
+		.def_readonly_static("cummBetaIter",&ConcretePhys::cummBetaIter,"Cummulative number of iterations inside ConcreteMat::solveBeta (for debugging).") \
+		.def_readonly_static("cummBetaCount",&ConcretePhys::cummBetaCount,"Cummulative number of calls of ConcreteMat::solveBeta (for debugging).") \
+		.def_static("funcG",&ConcretePhys::funcG,WOO_PY_ARGS(py::arg("kappaD"),py::arg("epsCrackOnset"),py::arg("epsFracture"),py::arg("neverDamage")=false,py::arg("damLaw")=1),"Damage evolution law, evaluating the $\\omega$ parameter. $\\kappa_D$ is historically maximum strain, *epsCrackOnset* ($\\varepsilon_0$) = :obj:`epsCrackOnset`, *epsFracture* = :obj:`epsFracture`; if *neverDamage* is ``True``, the value returned will always be 0 (no damage).") \
+		 WOO_PY_STATICMETHOD("funcG") \
+		.def_static("funcGInv",&ConcretePhys::funcGInv,WOO_PY_ARGS(py::arg("omega"),py::arg("epsCrackOnset"),py::arg("epsFracture"),py::arg("neverDamage")=false,py::arg("damLaw")=1),"Inversion of damage evolution law, evaluating the $\\kappa_D$ parameter. $\\omega$ is damage, for other parameters see funcG function") \
+		 WOO_PY_STATICMETHOD("funcGInv") \
 		.def("setDamage",&ConcretePhys::setDamage,"TODO") \
 		.def("setRelResidualStrength",&ConcretePhys::setRelResidualStrength,"TODO")
 	
@@ -165,7 +165,7 @@ struct Law2_L6Geom_ConcretePhys: public LawFunctor{
 		((Real,epsSoft,((void)"approximates confinement -20MPa precisely, -100MPa a little over, -200 and -400 are OK (secant)",-3e-3),,"Strain at which softening in compression starts (non-negative to deactivate)")) \
 		((Real,relKnSoft,.3,,"Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)")) \
 		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy")) \
-		, /*py*/.def("yieldSigmaTNorm",&Law2_L6Geom_ConcretePhys::yieldSigmaTNorm,(py::arg("sigmaN"),py::arg("omega"),py::arg("coh0"),py::arg("tanPhi")),"Return radius of yield surface for given material and state parameters; uses attributes of the current instance (:obj:`yieldSurfType` etc), change them before calling if you need that.") \
+		, /*py*/.def("yieldSigmaTNorm",&Law2_L6Geom_ConcretePhys::yieldSigmaTNorm,WOO_PY_ARGS(py::arg("sigmaN"),py::arg("omega"),py::arg("coh0"),py::arg("tanPhi")),"Return radius of yield surface for given material and state parameters; uses attributes of the current instance (:obj:`yieldSurfType` etc), change them before calling if you need that.") \
 			
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Law2_L6Geom_ConcretePhys__CLASS_BASE_DOC_ATTRS_PY);
 };

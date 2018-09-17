@@ -40,7 +40,8 @@
 	#define def_property add_property
 	#define def_property_static add_static_property
 	#define add_property_readonly add_property
-	#define def_static def
+	#define def_readonly_static def_readonly // boost::python does not distcriminate those
+	#define def_static def // must be complemented by WOO_PY_STATICMETHOD("...") just after the def
 	#define WOO_PY_GETTER_COPY(func) py::make_function(func,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_EXPOSE_COPY(classT,attr) py::make_getter(attr,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_DICT_CONTAINS(dict,key) dict.has_key(key)

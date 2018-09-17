@@ -6,7 +6,6 @@
 #include<woo/lib/pyutil/gil.hpp>
 
 #include<woo/lib/base/Math.hpp>
-#include<boost/foreach.hpp>
 #include<boost/date_time/posix_time/posix_time.hpp>
 #include<boost/algorithm/string.hpp>
 

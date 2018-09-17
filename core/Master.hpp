@@ -7,7 +7,6 @@
 #include<time.h>
 #include<boost/thread/thread.hpp>
 #include<iostream>
-#include<boost/foreach.hpp>
 #include<boost/smart_ptr/scoped_ptr.hpp>
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>

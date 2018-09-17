@@ -174,7 +174,9 @@ namespace woo{
 				.def_property_readonly("prefUnit",&AttrTraitBase::pyPrefUnit)
 				.def_property_readonly("altUnits",&AttrTraitBase::pyAltUnits)
 				.def_readonly("startGroup",&AttrTraitBase::_startGroup)
-				.def_property_readonly("hideIf",&AttrTraitBase::_hideIf)
+				#ifndef WOO_PYBIND11
+					.def_property_readonly("hideIf",&AttrTraitBase::_hideIf)
+				#endif
 				.def_property_readonly("ini",&AttrTraitBase::pyGetIni)
 				.def_property_readonly("range",&AttrTraitBase::pyGetRange)
 				.def_property_readonly("choice",&AttrTraitBase::pyGetChoice)
