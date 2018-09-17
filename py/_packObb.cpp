@@ -72,10 +72,18 @@ py::tuple bestFitOBB_py(const py::tuple& _pts){
 }
 
 WOO_PYTHON_MODULE(_packObb);
-BOOST_PYTHON_MODULE(_packObb){
-	WOO_SET_DOCSTRING_OPTS;
-	py::scope().attr("__name__")="woo._packObb";
-	py::scope().attr("__doc__")="Computation of oriented bounding box for cloud of points.";
-	py::def("cloudBestFitOBB",bestFitOBB_py,"Return (Vector3 center, Vector3 halfSize, Quaternion orientation) of\nbest-fit oriented bounding-box for given tuple of points\n(uses brute-force velome minimization, do not use for very large clouds).");
-};
-
+#ifdef WOO_PYBIND11
+	PYBIND11_MODULE(_packObb,mod){
+		WOO_SET_DOCSTRING_OPTS;
+		mod.attr("__name__")="woo._packObb";
+		mod.doc()="Computation of oriented bounding box for cloud of points.";
+		mod.def("cloudBestFitOBB",bestFitOBB_py,"Return (Vector3 center, Vector3 halfSize, Quaternion orientation) of\nbest-fit oriented bounding-box for given tuple of points\n(uses brute-force velome minimization, do not use for very large clouds).");
+	};
+#else
+	BOOST_PYTHON_MODULE(_packObb){
+		WOO_SET_DOCSTRING_OPTS;
+		py::scope().attr("__name__")="woo._packObb";
+		py::scope().attr("__doc__")="Computation of oriented bounding box for cloud of points.";
+		py::def("cloudBestFitOBB",bestFitOBB_py,"Return (Vector3 center, Vector3 halfSize, Quaternion orientation) of\nbest-fit oriented bounding-box for given tuple of points\n(uses brute-force velome minimization, do not use for very large clouds).");
+	};
+#endif

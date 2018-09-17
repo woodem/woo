@@ -28,7 +28,7 @@ struct Capsule: public Shape{
 		((Real,radius,NaN,AttrTrait<>().lenUnit(),"Radius of the capsule -- of half-spherical caps and also of the middle part.")) \
 		((Real,shaft,NaN,AttrTrait<>().lenUnit(),"Length of the middle segment")) \
 		,/*ctor*/createIndex(); \
-		,/*py*/ .def("endPt",&Capsule::endPt,(py::arg("i")),"Return one of capsule endpoints. The first (negative on local :math:`x`-axis) is returned with *i=0, otherwise the second one is returned.")
+		,/*py*/ .def("endPt",&Capsule::endPt,WOO_PY_ARGS(py::arg("i")),"Return one of capsule endpoints. The first (negative on local :math:`x`-axis) is returned with *i=0, otherwise the second one is returned.")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Capsule__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_CLASS_INDEX(Capsule,Shape);

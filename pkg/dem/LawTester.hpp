@@ -26,10 +26,10 @@ struct LawTesterStage: public Object{
 		((Real,timeC0,NaN,,"Time of creating of the last contact (NaN if there has never been one).")) \
 		((int,bounces,0,,"Number of sign changes of the normal relative velocity in this stage")) \
 		/* ; to teest for a complete rebound, use ``until='stage.bounces>1 or stage.broken'``.") */ \
-		,/*py*/.add_property("broken",&LawTesterStage::pyBroken,"Test whether an existing contact broke in this stage; this is useful for saying ``until='stage.broken'`` (equivalent to ``stage.hadC and not stage.hasC``). This is different from ``until='not C'``, since this condition will be satisfied before any contact exists at all.") \
-		.add_property("rebound",&LawTesterStage::pyRebound,"Test for rebound; rebound is considered complete when sign of relative normal velocity changed more than once (adhesive contacts may never separate once they are created -- this catches a single period of the oscillation) or if contact :obj:`breaks <broken>`. Equivalent to ``stage.bounces>=2 or stage.broken``.") \
+		,/*py*/.def_property_readonly("broken",&LawTesterStage::pyBroken,"Test whether an existing contact broke in this stage; this is useful for saying ``until='stage.broken'`` (equivalent to ``stage.hadC and not stage.hasC``). This is different from ``until='not C'``, since this condition will be satisfied before any contact exists at all.") \
+		.def_property_readonly("rebound",&LawTesterStage::pyRebound,"Test for rebound; rebound is considered complete when sign of relative normal velocity changed more than once (adhesive contacts may never separate once they are created -- this catches a single period of the oscillation) or if contact :obj:`breaks <broken>`. Equivalent to ``stage.bounces>=2 or stage.broken``.") \
 		.def("reset",&LawTesterStage::reset,"Reset this stage to its initial stage such that it can be used again as if new. This is called automatically from :obj:`LawTester.restart`.") \
-		.add_property("cTime",&LawTesterStage::pyCTime,"Time since creation of the last contact (NaN if there has never been one). Useful for testing collision time after the condition ``until='stage.rebound'`` has been satisfied. Equivalent to ``stage.time-stage.timeC0``.") \
+		.def_property_readonly("cTime",&LawTesterStage::pyCTime,"Time since creation of the last contact (NaN if there has never been one). Useful for testing collision time after the condition ``until='stage.rebound'`` has been satisfied. Equivalent to ``stage.time-stage.timeC0``.") \
 		; \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<LawTesterStage>>();
 
@@ -44,7 +44,7 @@ struct LawTester: public Engine{
 	void restart();
 	py::dict pyFuv() const {
 		py::dict ret;
-		#define _RET_ADD(WHAT) ret[#WHAT]=py::object(WHAT);
+		#define _RET_ADD(WHAT) ret[#WHAT]=py::cast(WHAT);
 			_RET_ADD(f);     _RET_ADD(u);     _RET_ADD(v); _RET_ADD(k);
 			_RET_ADD(smooF); _RET_ADD(smooU); _RET_ADD(smooV);
 			_RET_ADD(fErrRel);  _RET_ADD(uErrRel);  _RET_ADD(vErrRel);

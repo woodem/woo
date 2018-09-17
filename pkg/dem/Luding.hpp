@@ -55,8 +55,8 @@ WOO_REGISTER_OBJECT(LudingMatState);
 
 struct LudingPhys: public FrictPhys{
 	enum{WORK_PLASTIC=0,WORK_VISCOUS=1,WORK_SIZE=2};
-	Real Wplast()const{ return work.size()==WORK_SIZE?work[WORK_PLASTIC]:NaN; }
-	Real Wvisc()const{ return work.size()==WORK_SIZE?work[WORK_VISCOUS]:NaN; }
+	Real Wplast() { return work.size()==WORK_SIZE?work[WORK_PLASTIC]:NaN; }
+	Real Wvisc() { return work.size()==WORK_SIZE?work[WORK_VISCOUS]:NaN; }
 	#define woo_dem_LudingPhys__CLASS_BASE_DOC_ATTRS_PY \
 		LudingPhys,FrictPhys,"Physical properties for :ref:`luding-contact-model`.", \
 			/* FrictPhys: kn≡k2 (as current elastic stiffness), kt, tanPhi */ \
@@ -78,7 +78,7 @@ struct LudingPhys: public FrictPhys{
 			((Vector2r,xiR,Vector2r::Zero(),,"Tangent elastic rotation.")) \
 			((Real,xiW,0.,,"Twist elastic rotation.")) \
 			((vector<Real>,work,,,"Per-contact dissipation (unallocated when energy tracking is not enabled).")) \
-			,/*py*/ .def_readonly("Wplast",&LudingPhys::Wplast).def_readonly("Wvisc",&LudingPhys::Wvisc)
+			,/*py*/ .def_property_readonly("Wplast",&LudingPhys::Wplast).def_property_readonly("Wvisc",&LudingPhys::Wvisc)
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_LudingPhys__CLASS_BASE_DOC_ATTRS_PY);
 };

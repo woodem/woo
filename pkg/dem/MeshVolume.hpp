@@ -26,7 +26,7 @@ struct MeshVolume: public PeriodicEngine{
 		((Real,vol,NaN,,"Volume as computed when last run"))
 		((Real,thickVol,NaN,,"Volume of the inner side of the mesh: the mesh is defined by :obj:`facets' <Facet>` midplanes, but some facets may have non-zero :obj:`Facet.halfThick`. This number is the sum of (initial!) facet area times :obj:`Facet.halfThick`. To get the volume with this part subtracted, use :obj:`netVol`."))
 		, /*ctor*/
-		,/*py*/ .add_property("netVol",&MeshVolume::pyNetVol,"Net volume: :obj:`volume` minus :obj:`thickVol`.")
+		,/*py*/ .add_property_readonly("netVol",&MeshVolume::pyNetVol,"Net volume: :obj:`volume` minus :obj:`thickVol`.")
 	);
 };
 WOO_REGISTER_OBJECT(MeshVolume);

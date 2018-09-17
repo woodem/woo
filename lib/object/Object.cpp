@@ -1,5 +1,6 @@
 #include<woo/lib/object/Object.hpp>
 
+
 #if 0
 static void Object_setAttr(py::object self, py::str name, py::object value){
 #if 0
@@ -21,23 +22,27 @@ py::dict Object_pyDict_pickleable(const Object& o) { return o.pyDict(/*all*/fals
 
 void Object::pyRegisterClass(py::module_& mod) {
 	checkPyClassRegistersItself("Object");
-	py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
+	#ifdef WOO_PYBIND11
+		py::class_<Object,shared_ptr<Object>> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
+	#else
+		py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
+	#endif
 	classObj
 		.def("__str__",&Object::pyStr).def("__repr__",&Object::pyStr)
-		.def("dict",&Object::pyDict,(py::arg("all")=true),"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
-		//.def("_attrTraits",&Object::pyAttrTraits,(py::arg("parents")=true),"Return list of attribute traits.")
+		.def("dict",&Object::pyDict,WOO_PY_ARGS(py::arg("all")=true),"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
+		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
 		.def("updateAttrs",&Object::pyUpdateAttrs,"Update object attributes from given dictionary")
 		#if 1
 			/* boost::python pickling support, as per http://www.boost.org/doc/libs/1_42_0/libs/python/doc/v2/pickle.html */ 
 			.def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object::pyUpdateAttrs)
-			.add_property("__safe_for_unpickling__",&Object::getClassName,"just define the attr, return some bogus data")
-			.add_property("__getstate_manages_dict__",&Object::getClassName,"just define the attr, return some bogus data")
+			.add_property_readonly("__safe_for_unpickling__",&Object::getClassName,"just define the attr, return some bogus data")
+			.add_property_readonly("__getstate_manages_dict__",&Object::getClassName,"just define the attr, return some bogus data")
 		#endif
 		.def("save",&Object::boostSave,py::arg("filename"))
 		.def_static("_boostLoad",&Object::boostLoad,py::arg("filename"))  WOO_PY_STATICMETHOD("_boostLoad")
 		//.def_readonly("_derivedCxxClasses",&Object::derivedCxxClasses)
-		.add_static_property("_derivedCxxClasses",&Object::getDerivedCxxClasses)
-		.add_property("_cxxAddr",&Object::pyCxxAddr)
+		.def_property_readonly_static("_derivedCxxClasses",&Object::getDerivedCxxClasses)
+		.def_property_readonly("_cxxAddr",&Object::pyCxxAddr)
 		// setting attributes with protection of creating class instance mistakenly
 		#if 0
 			.def("__setattr__",&Object_setAttr)
@@ -62,12 +67,18 @@ void Object::checkPyClassRegistersItself(const std::string& thisClassName) const
 }
 
 void Object::pyUpdateAttrs(const py::dict& d){	
+	#ifdef WOO_PYBIND11
+	for(auto kv: d){
+		pySetAttr(py::cast<string>(kv.first),py::object(kv.second));
+	}
+	#else
 	py::list l=d.items(); size_t ll=py::len(l); if(ll==0) return;
 	for(size_t i=0; i<ll; i++){
 		py::tuple t=py::extract<py::tuple>(l[i]);
 		string key=py::extract<string>(t[0]);
 		pySetAttr(key,t[1]);
 	}
+	#endif
 	callPostLoad(NULL);
 }
 

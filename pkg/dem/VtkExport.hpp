@@ -100,7 +100,7 @@ struct VtkExport: public PeriodicEngine{
 		,/*ctor*/ initRun=false; /* do not run at the very first step */ \
 		,/*py*/ \
 			/* this overrides the c++ map above which won't convert to python automatically */ \
-			.add_property("outFiles",&VtkExport::pyOutFiles)  \
+			.add_property_readonly("outFiles",&VtkExport::pyOutFiles)  \
 			.def("makePvdFiles",&VtkExport::makePvdFiles,"Write PVD files (one file for each category) and return dictionary mapping category name to the PVD filename; this requires that all active categories were saved at each step. Time points are output in the PVD file.")  \
 			; \
 			/* casting to (int) necessary, since otherwise it is a special enum type which is not registered in python and we get error: "TypeError: No to_python (by-value) converter found for C++ type: VtkExport::$_2" at boot. */ \

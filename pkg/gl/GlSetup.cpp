@@ -46,7 +46,11 @@ void GlSetup::postLoad(GlSetup&,void* attr){
 
 py::object GlSetup::pyCallStatic(py::tuple args, py::dict kw){
 	if(py::len(kw)>0) woo::RuntimeError("Keyword arguments not accepted.");
-	py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
+	#ifdef WOO_PYBIND11
+		py::extract<GlSetup&>(args[0])().pyCall(args.attr("__getitem__")(py::slice(1,-1,1)));
+	#else
+		py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
+	#endif
 	return py::object();
 }
 
@@ -57,7 +61,7 @@ void GlSetup::ensureObjs(){
 	}
 }
 
-void GlSetup::pyCall(const py::tuple& args){
+void GlSetup::pyCall(const py::args_& args){
 	// cerr<<"[GlSetup::pyCall]"<<endl;
 	ensureObjs();
 	for(int i=0; i<py::len(args); i++){
@@ -80,17 +84,28 @@ void GlSetup::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	args=py::tuple();
 	ensureObjs();
 	// not sure this is really useful
+	#ifdef WOO_PYBIND11
+	for(auto item: kw){
+		string key=py::cast<string>(item.first);
+	#else
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
 		py::tuple item=py::extract<py::tuple>(kwl[i]);
 		string key=py::extract<string>(item[0]);
+	#endif
 		auto I=std::find(objAccessorNames.begin(),objAccessorNames.end(),key);
 		// we don't consume unknown keys, Object's business to use them or error out
 		if(I==objAccessorNames.end()) continue; 
 		size_t index=I-objAccessorNames.begin();
-		py::extract<shared_ptr<Object>> ex(item[1]);
-		if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
-		const auto o(ex()); const auto oPtr=o.get();
+		#ifdef WOO_PYBIND11
+			if(!py::isinstance<shared_ptr<Object>>(item.second)) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
+			auto o=py::cast<shared_ptr<Object>>(item.second);
+		#else
+			py::extract<shared_ptr<Object>> ex(item[1]);
+			if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
+			const auto o(ex());
+		#endif
+		const auto oPtr=o.get();
 		if(!o) woo::TypeError(key+" must not be None.");
 		if(std::type_index(typeid(*oPtr))!=objTypeIndices[index]) woo::TypeError(key+" must be a "+objTypeNames[index]+" (not "+o->getClassName()+").");
 		objs[index]=o;

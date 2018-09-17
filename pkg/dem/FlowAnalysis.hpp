@@ -73,9 +73,9 @@ struct FlowAnalysis: public PeriodicEngine{
 		((Real,timeSpan,0.,,"Total time that the analysis has been running.")) \
 		((Vector3r,color,Vector3r(1,1,0),AttrTrait<>().rgbColor(),"Color for rendering the domain")) \
 		, /*py*/ \
-			.def("vtkExport",&FlowAnalysis::vtkExport,(py::arg("out")),"Export all fractions separately, and also an overall flow (sum). *out* specifies prefix for all export filenames, the rest is created to describe the fraction or ``all`` for the sum. Exported file names are returned, the sum being at the very end. Internally calls :obj:`vtkExportFractions` for all fractions.") \
-			.def("vtkExportFractions",&FlowAnalysis::vtkExportFractions,(py::arg("out"),py::arg("fractions")),"Export one single fraction to file named *out*. The extension ``.vti`` is added automatically. *fractions* specifies existing fraction numbers to export. If *fractions* are an empty list (``[]``), all fractions are exported at once.") \
-			.def("vtkExportVectorOps",&FlowAnalysis::vtkExportVectorOps,(py::arg("out"),py::arg("fracA"),py::arg("fracB")),"Export operations on two fraction sets: cross-product, weighted differences and such, for segregation analysis. Appends ``.opt.vti`` to the output filename in *out*.") \
+			.def("vtkExport",&FlowAnalysis::vtkExport,WOO_PY_ARGS(py::arg("out")),"Export all fractions separately, and also an overall flow (sum). *out* specifies prefix for all export filenames, the rest is created to describe the fraction or ``all`` for the sum. Exported file names are returned, the sum being at the very end. Internally calls :obj:`vtkExportFractions` for all fractions.") \
+			.def("vtkExportFractions",&FlowAnalysis::vtkExportFractions,WOO_PY_ARGS(py::arg("out"),py::arg("fractions")),"Export one single fraction to file named *out*. The extension ``.vti`` is added automatically. *fractions* specifies existing fraction numbers to export. If *fractions* are an empty list (``[]``), all fractions are exported at once.") \
+			.def("vtkExportVectorOps",&FlowAnalysis::vtkExportVectorOps,WOO_PY_ARGS(py::arg("out"),py::arg("fracA"),py::arg("fracB")),"Export operations on two fraction sets: cross-product, weighted differences and such, for segregation analysis. Appends ``.opt.vti`` to the output filename in *out*.") \
 			.def("reset",&FlowAnalysis::reset,"Reset all data so that next analysis will be run from virgin state.")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_FlowAnalysis__CLASS_BASE_DOC_ATTRS_PY);

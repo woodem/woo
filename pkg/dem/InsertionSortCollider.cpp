@@ -919,7 +919,7 @@ py::object InsertionSortCollider::pySpatialOverlap(const shared_ptr<Scene>& S, P
 		bool over=spatialOverlapPeri(id1,id2,scene,periods);
 		return py::make_tuple(over,periods);
 	} else {
-		return py::object(spatialOverlap(id1,id2));
+		return py::cast(spatialOverlap(id1,id2));
 	}
 }
 

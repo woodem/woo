@@ -44,9 +44,9 @@ struct TraceVisRep: public NodeVisRep{
 		((short,flags,0,,"Flags for this instance")) \
 		,/*py*/ \
 			.def("consolidate",&TraceVisRep::consolidate,"Make :obj:`pts` sequential (normally, the data are stored as circular buffer, with next write position at :obj:`writeIx`, so that they are ordered temporally.") \
-			.add_property("pts",&TraceVisRep::pyPts_get,"History points (read-only from python, as a copy of internal data is returned).") \
-			.add_property("times",&TraceVisRep::pyTimes_get,"History times (read-only from python, as a copy of internal data is returned).") \
-			.add_property("scalars",&TraceVisRep::pyScalars_get,"History scalars (read-only from python, as a copy of internal data is returned).") \
+			.add_property_readonly("pts",&TraceVisRep::pyPts_get,"History points (read-only from python, as a copy of internal data is returned).") \
+			.add_property_readonly("times",&TraceVisRep::pyTimes_get,"History times (read-only from python, as a copy of internal data is returned).") \
+			.add_property_readonly("scalars",&TraceVisRep::pyScalars_get,"History scalars (read-only from python, as a copy of internal data is returned).") \
 			.def("scalar",&TraceVisRep::pyScalar_get,"Get one history scalar (to avoid copying arrays), indexed as in python (negative counts backwards).") \
 			.def("pt",&TraceVisRep::pyPt_get,"Get one history point (to avoid copying arrays), indexed as in python (negative counts backwards).") \
 			.def("time",&TraceVisRep::pyTime_get,"Get one history time (to avoid copying arrays), indexed as in python (negative counts backwards).")
@@ -100,7 +100,7 @@ struct Tracer: public PeriodicEngine{
 		((bool,glSmooth,false,,"Render traced lines with GL_LINE_SMOOTH")) \
 		((int,glWidth,1,AttrTrait<>().range(Vector2i(1,10)),"Width of trace lines in pixels")) \
 		, /*py*/ \
-			.def("resetNodesRep",&Tracer::resetNodesRep,(py::arg("setupEmpty")=false,py::arg("includeDead")=true),"Reset :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.nodes`. With *setupEmpty*, create new instances of :obj:`TraceVisRep`. With *includeDead*, :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.deadNodes` is also cleared (new are not created, even with *setupEmpty*).") \
+			.def("resetNodesRep",&Tracer::resetNodesRep,WOO_PY_ARGS(py::arg("setupEmpty")=false,py::arg("includeDead")=true),"Reset :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.nodes`. With *setupEmpty*, create new instances of :obj:`TraceVisRep`. With *includeDead*, :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.deadNodes` is also cleared (new are not created, even with *setupEmpty*).") \
 			; \
 			_classObj.attr("scalarNone")=(int)Tracer::SCALAR_NONE; \
 			_classObj.attr("scalarTime")=(int)Tracer::SCALAR_TIME; \

@@ -293,7 +293,7 @@ struct InsertionSortCollider: public Collider {
 		.def_readonly("maxima",&InsertionSortCollider::minima,"Array of maximum bbox coords; every 3 contiguous values are x, y, z for one particle")
 		.def("dumpBounds",&InsertionSortCollider::dumpBounds,"Return representation of the internal sort data. The format is ``([...],[...],[...])`` for 3 axes, where each ``...`` is a list of entries (bounds). The entry is a tuple with the fllowing items:\n\n* coordinate (float)\n* body id (int), but negated for negative bounds\n* period numer (int), if the collider is in the periodic regime.")
 		.def("dbgInfo",&InsertionSortCollider::dbgInfo,"Return python distionary with information on some internal structures (debugging only)")
-		.def("spatialOverlap",&InsertionSortCollider::pySpatialOverlap,(py::arg("scene"),py::arg("id1"),py::arg("id2")),"Debug access to the spatial overlap function.")
+		.def("spatialOverlap",&InsertionSortCollider::pySpatialOverlap,WOO_PY_ARGS(py::arg("scene"),py::arg("id1"),py::arg("id2")),"Debug access to the spatial overlap function.")
 		#ifdef PISC_DEBUG
 			.def_readwrite("watch1",&InsertionSortCollider::watch1,"debugging only: watched body Id.")
 			.def_readwrite("watch2",&InsertionSortCollider::watch2,"debugging only: watched body Id.")

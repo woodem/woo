@@ -17,6 +17,11 @@ WOO_PLUGIN(dem,(VtkExport));
 WOO_IMPL_LOGGER(VtkExport);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
+#if VTK_MAJOR_VERSION>=8
+	/* undef'd below */
+	#define InsertNextTupleValue InsertNextTuple
+#endif
+
 
 int VtkExport::addTriangulatedObject(const vector<Vector3r>& pts, const vector<Vector3i>& tri, const vtkSmartPointer<vtkPoints>& vtkPts, const vtkSmartPointer<vtkCellArray>& cells, vector<int>& cellTypes){
 	size_t id0=vtkPts->GetNumberOfPoints();
@@ -139,7 +144,7 @@ VtkExport::triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real
 py::dict VtkExport::pyOutFiles() const {
 	py::dict ret;
 	for(auto& item: outFiles){
-		ret[item.first]=py::object(item.second);
+		ret[py::cast(item.first)]=py::cast(item.second);
 	}
 	return ret;
 }
@@ -169,7 +174,7 @@ py::dict VtkExport::makePvdFiles() const {
 		"</VTKFile>\n";
 		pvd.close();
 		py::list lst; lst.append(pvdName);
-		ret[item.first]=lst;
+		ret[py::cast(item.first)]=lst;
 	}
 	return ret;
 }
@@ -733,5 +738,10 @@ void VtkExport::run(){
 	outTimes.push_back(scene->time);
 	outSteps.push_back(scene->step);
 };
+
+#if VTK_MAJOR_VERSION>=8
+	#undef InsertNextTupleValue
+#endif
+
 
 #endif /*WOO_VTK*/

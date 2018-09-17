@@ -97,7 +97,7 @@ struct Law2_L6Geom_HertzPhys_DMT: public LawFunctor{
 		, /* ctor */ nCallsIters.resize(2);
 		, /*py*/
 			#ifdef WOO_SCHWARZ_COUNTERS
-				.add_property("avgIter",&Law2_L6Geom_HertzPhys_DMT::pyAvgIter,"Override the variable so that it shows up in the UI, being always up-to-date.")
+				.add_property_readonly("avgIter",&Law2_L6Geom_HertzPhys_DMT::pyAvgIter,"Override the variable so that it shows up in the UI, being always up-to-date.")
 				.def("resetCounters",&Law2_L6Geom_HertzPhys_DMT::pyResetCounters,"Reset *nCallsIters* and thus *avgIter*.")
 			#endif
 	);

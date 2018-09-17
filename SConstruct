@@ -501,8 +501,6 @@ if not env.GetOption('clean'):
 	ok&=conf.CheckPythonModules()
 	ok&=conf.EnsureBoostVersion(14800)
 	ok&=conf.CheckBoost()
-	env['haveForeach']=conf.CheckCXXHeader('boost/foreach.hpp','<>')
-	if not env['haveForeach']: print "(OK, local version will be used instead)"
 	ok&=conf.CheckCXXHeader('Eigen/Core')
 	if 'pybind11' in env['features']: ok&=conf.CheckCXXHeader('pybind11/pybind11.h')
 

@@ -1,6 +1,8 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 
 
+#ifndef WOO_PYBIND11
+
 // this is not currently used, but can be enabled if needed
 // probably breaks compilation for older (like <=1.35 or so)
 // boost::python
@@ -34,6 +36,8 @@
 #include<woo/core/Scene.hpp>
 #include<woo/core/MatchMaker.hpp>
 #include<woo/pkg/dem/Particle.hpp> // for exposing ParticleList
+
+
 
 
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
@@ -232,4 +236,4 @@ BOOST_PYTHON_MODULE(_customConverters){
 
 
 
-
+#endif /* WOO_PYBIND11 */

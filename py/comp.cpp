@@ -34,19 +34,27 @@ vector<Real> uniformResamplePiecewiseLinear(const vector<Real>& xx, const vector
 }
 
 WOO_PYTHON_MODULE(comp);
+#ifdef WOO_PYBIND11
+PYBIND11_MODULE(comp,mod){
+	#define _PY_MOD mod.
+	WOO_SET_DOCSTRING_OPTS;
+	mod.doc()="Expose interal utility c++ functions for computing volume, centroids, inertia, coordinate transforms; mostly used for testing.";
+#else
 BOOST_PYTHON_MODULE(comp){
+	#define _PY_MOD py::
 	WOO_SET_DOCSTRING_OPTS;
 	py::scope().attr("__doc__")="Expose interal utility c++ functions for computing volume, centroids, inertia, coordinate transforms; mostly used for testing.";
-	py::def("tetraVolume",&woo::Volumetric::tetraVolume,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Volume of tetrahedron, computed as :math:`\\frac{1}{6}((A-B)\\cdot(B-D)))\\times(C-D)`.");
-	// py::def("tetraInertia",&woo::Volumetric::tetraInertia,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Inertia tensor of tetrahedron given its vertex coordinates; the algorithm is described in :cite:`Tonon2005`.");
-	py::def("tetraInertia",tetraInertia_cov,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("fixSign")=true),"Tetrahedron inertia from covariance. If *fixSign* is true, the tensor is multiplied by -1 if the (0,0) entry is negative (this is caued by non-canonical vertex ordering).");
-	py::def("tetraInertia_grid",tetraInertia_grid,(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("div")=100),"Tetrahedron inertia from grid sampling (*div* gives subdivision along the shortest aabb side).");
+#endif
+	_PY_MOD def("tetraVolume",&woo::Volumetric::tetraVolume,WOO_PY_ARGS(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Volume of tetrahedron, computed as :math:`\\frac{1}{6}((A-B)\\cdot(B-D)))\\times(C-D)`.");
+	// _PY_MOD def("tetraInertia",&woo::Volumetric::tetraInertia,WOO_PY_ARGS(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Inertia tensor of tetrahedron given its vertex coordinates; the algorithm is described in :cite:`Tonon2005`.");
+	_PY_MOD def("tetraInertia",tetraInertia_cov,WOO_PY_ARGS(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("fixSign")=true),"Tetrahedron inertia from covariance. If *fixSign* is true, the tensor is multiplied by -1 if the (0,0) entry is negative (this is caued by non-canonical vertex ordering).");
+	_PY_MOD def("tetraInertia_grid",tetraInertia_grid,WOO_PY_ARGS(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("div")=100),"Tetrahedron inertia from grid sampling (*div* gives subdivision along the shortest aabb side).");
 
-	py::def("triangleArea",&woo::Volumetric::triangleArea);
-	py::def("triangleInertia",&woo::Volumetric::triangleInertia);
-	py::def("inertiaTensorTranslate",&woo::Volumetric::inertiaTensorTranslate,(py::arg("I"),py::arg("V"),py::arg("off")),"Tensor of inertia of solid translated by *off* with previous inertia :math:`I`, volume :math:`V`; if :math:`V` is positive, the translation is away from the centroid, if negative, towards the centroid. The computation implements `Parallel axes theorem <https://en.wikipedia.org/wiki/Parallel_axis_theorem>`__.");
-	py::def("computePrincipalAxes",computePrincipalAxes,(py::arg("V"),py::arg("Sg"),py::arg("Ig")),"Return (*pos*, *ori*, *inertia*) of new coordinate system (relative to the current one), whose axes are principal, i.e. second-order momentum is diagonal (the diagonal is returned in *inertia*, which is sorted to be non-decreasing). The arguments are volume (mass) *V*, first-order momentum *Sg* and second-order momentum *Ig*. If *Sg* is ``(0,0,0)``, the reference point will not change, only rotation will occur.");
-	py::def("cart2cyl",&CompUtils::cart2cyl,(py::arg("xyz")),"Convert cartesian coordinates to cylindrical; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
-	py::def("cyl2cart",&CompUtils::cyl2cart,(py::arg("rThetaZ")),"Convert cylindrical coordinates to cartesian; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
-	py::def("uniformResamplePiecewiseLinear",uniformResamplePiecewiseLinear,(py::arg("xx"),py::arg("yy"),py::arg("xRange"),py::arg("div")),"Resample piecewise-linear function (given by points *xx* and *yy*, where *xx* is non-decreasing) using a uniform grid with endpoints *xRange* and *div* points (*div*-1 pieces), returning linearly interpolated value of *yy* in *div*+1 points.");
+	_PY_MOD def("triangleArea",&woo::Volumetric::triangleArea);
+	_PY_MOD def("triangleInertia",&woo::Volumetric::triangleInertia);
+	_PY_MOD def("inertiaTensorTranslate",&woo::Volumetric::inertiaTensorTranslate,WOO_PY_ARGS(py::arg("I"),py::arg("V"),py::arg("off")),"Tensor of inertia of solid translated by *off* with previous inertia :math:`I`, volume :math:`V`; if :math:`V` is positive, the translation is away from the centroid, if negative, towards the centroid. The computation implements `Parallel axes theorem <https://en.wikipedia.org/wiki/Parallel_axis_theorem>`__.");
+	_PY_MOD def("computePrincipalAxes",computePrincipalAxes,WOO_PY_ARGS(py::arg("V"),py::arg("Sg"),py::arg("Ig")),"Return (*pos*, *ori*, *inertia*) of new coordinate system (relative to the current one), whose axes are principal, i.e. second-order momentum is diagonal (the diagonal is returned in *inertia*, which is sorted to be non-decreasing). The arguments are volume (mass) *V*, first-order momentum *Sg* and second-order momentum *Ig*. If *Sg* is ``(0,0,0)``, the reference point will not change, only rotation will occur.");
+	_PY_MOD def("cart2cyl",&CompUtils::cart2cyl,WOO_PY_ARGS(py::arg("xyz")),"Convert cartesian coordinates to cylindrical; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
+	_PY_MOD def("cyl2cart",&CompUtils::cyl2cart,WOO_PY_ARGS(py::arg("rThetaZ")),"Convert cylindrical coordinates to cartesian; cylindrical coordinates are specified as :math:`(r,\\theta,z)`, the reference plane is the :math:`xy`-plane (see `at Wikipedia <http://en.wikipedia.org/wiki/Cylindrical_coordinates>`__).");
+	_PY_MOD def("uniformResamplePiecewiseLinear",uniformResamplePiecewiseLinear,WOO_PY_ARGS(py::arg("xx"),py::arg("yy"),py::arg("xRange"),py::arg("div")),"Resample piecewise-linear function (given by points *xx* and *yy*, where *xx* is non-decreasing) using a uniform grid with endpoints *xRange* and *div* points (*div*-1 pieces), returning linearly interpolated value of *yy* in *div*+1 points.");
 };

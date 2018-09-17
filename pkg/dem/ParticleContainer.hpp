@@ -173,29 +173,36 @@ struct ParticleContainer: public Object{
 			#error WOO_SUBDOMAINS: subdomains support is broken and should not be used
 		#endif
 
+	#ifdef WOO_PYBIND11
+		#define woo_dem_ParticleContainer__iterator_PY py::class_<ParticleContainer::pyIterator>(_classObj,"ParticleContainer_iterator").def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+	#else
+		#define woo_dem_ParticleContainer__iterator_PY \
+		py::scope foo(_classObj); /*this does not seem to work?? */ py::class_<ParticleContainer::pyIterator>("ParticleContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+	#endif
+
+
 		#define woo_dem_ParticleContainer__CLASS_BASE_DOC_ATTRS_PY\
 			ParticleContainer,Object,"Storage for DEM particles", \
 			((ContainerT/* = std::vector<shared_ptr<Particle> > */,parts,,AttrTrait<Attr::hidden>(),"Actual particle storage")) \
 			((list<id_t>,freeIds,,AttrTrait<Attr::hidden>(),"Free particle id's")) \
 			,/*py*/ \
-			.def("add",&ParticleContainer::pyAppend,(py::arg("par"),py::arg("nodes")=-1),"Add single particle, and maybe also add its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`. *nodes* can be 1/True (always), 0/False (never) or -1 (maybe -- based on heuristics). The heuristics is defined in :obj:`woo.dem.DemData.guessMoving`.") /* wrapper checks if the id is not already assigned */ \
-			.def("add",&ParticleContainer::pyAppendList,(py::args("pars"),py::arg("nodes")=-1),"Add list of particles, and optionally also adding its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`; see :obj:`add` for explanation of *nodes*.") \
-			.def("addClumped",&ParticleContainer::pyAppendClumped,(py::arg("par"),py::arg("centralNode")=shared_ptr<Node>(),py::arg("nodes")=false),"Add particles as rigid aggregate. Add resulting clump node (which is *not* a particle) to Scene.dem.nodes, subject to integration. *centralNode* must be provided if particles have zero mass (in that case, clump position cannot be computed), all DOFs will be blocked automatically in that case; centralNode.dem will be set with a new instance of :obj:`ClumpData` and the old value, if any, discarded. Clump node is added automatically to :obj:`DemField.nodes <woo.core.Field.nodes>`.\n\n.. note:: Clumped nodes are *not* added to :obj:`DemField.nodes <woo.core.Field.nodes>` by default; this can be changed by ``nodes=True``, but it is to be done only in cases, such as when :obj:`woo.dem.NodalForcesToHdf5` should use those nodes. Nodes will still be skipped for motion integration, which is done on the clump node itself.") \
-			.def("remove",&ParticleContainer::pyRemove,(py::arg("id")),"Remove single particle given its :obj:`~woo.dem.Particle.id`.")  \
-			.def("remove",&ParticleContainer::pyRemoveList,(py::arg("ids")),"Remove multiple particles, given their :obj:`ids <woo.dem.Particle.id>` as sequence.")  \
-			.def("exists",&ParticleContainer::exists,(py::arg("id")),"Tell whether particle with this :obj:`~woo.dem.Particle.id` exists in the container.") \
+			.def("add",&ParticleContainer::pyAppend,WOO_PY_ARGS(py::arg("par"),py::arg("nodes")=-1),"Add single particle, and maybe also add its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`. *nodes* can be 1/True (always), 0/False (never) or -1 (maybe -- based on heuristics). The heuristics is defined in :obj:`woo.dem.DemData.guessMoving`.") /* wrapper checks if the id is not already assigned */ \
+			.def("add",&ParticleContainer::pyAppendList,WOO_PY_ARGS(py::arg("pars"),py::arg("nodes")=-1),"Add list of particles, and optionally also adding its nodes to :obj:`DemField.nodes <woo.core.Field.nodes>`; see :obj:`add` for explanation of *nodes*.") \
+			.def("addClumped",&ParticleContainer::pyAppendClumped,WOO_PY_ARGS(py::arg("par"),py::arg("centralNode")=shared_ptr<Node>(),py::arg("nodes")=false),"Add particles as rigid aggregate. Add resulting clump node (which is *not* a particle) to Scene.dem.nodes, subject to integration. *centralNode* must be provided if particles have zero mass (in that case, clump position cannot be computed), all DOFs will be blocked automatically in that case; centralNode.dem will be set with a new instance of :obj:`ClumpData` and the old value, if any, discarded. Clump node is added automatically to :obj:`DemField.nodes <woo.core.Field.nodes>`.\n\n.. note:: Clumped nodes are *not* added to :obj:`DemField.nodes <woo.core.Field.nodes>` by default; this can be changed by ``nodes=True``, but it is to be done only in cases, such as when :obj:`woo.dem.NodalForcesToHdf5` should use those nodes. Nodes will still be skipped for motion integration, which is done on the clump node itself.") \
+			.def("remove",&ParticleContainer::pyRemove,WOO_PY_ARGS(py::arg("id")),"Remove single particle given its :obj:`~woo.dem.Particle.id`.")  \
+			.def("remove",&ParticleContainer::pyRemoveList,WOO_PY_ARGS(py::arg("ids")),"Remove multiple particles, given their :obj:`ids <woo.dem.Particle.id>` as sequence.")  \
+			.def("exists",&ParticleContainer::exists,WOO_PY_ARGS(py::arg("id")),"Tell whether particle with this :obj:`~woo.dem.Particle.id` exists in the container.") \
 			.def("__getitem__",&ParticleContainer::pyGetItem) \
 			.def("__len__",&ParticleContainer::size) \
 			.def("clear",&ParticleContainer::clear,"Brute-force removal of all particles; bypasses any consistency checks (like node-particle refcounting), **do not use**.") \
 			.def("__iter__",&ParticleContainer::pyIter) \
 			.def("_freeIds",&ParticleContainer::pyFreeIds) \
 			/* remasking */ \
-			.def("remask",&ParticleContainer::pyRemask,(py::arg("ids"),py::arg("mask"),py::arg("visible"),py::arg("removeContacts"),py::arg("removeOverlapping")),"Change particle mask and visibility; optionally remove contacts, which would no longer exist due to mask change; or remove particles, which would newly overlap with the particle. See also :obj:`disappear` and :obj:`reappear`.") \
-			.def("disappear",&ParticleContainer::pyDisappear,(py::arg("ids"),py::arg("mask")),"Remask particle (so that it does not have contacts with other particles), remove contacts, which would no longer exist and make it invisible. Shorthand for calling ``remask(ids,mask,visible=False,removeContacts=True)``") \
-			.def("reappear",&ParticleContainer::pyReappear,(py::arg("ids"),py::arg("mask"),py::arg("removeOverlapping")=false),"Remask particle, remove particles, which would overlap with newly-appeared particle (if ``removeOverlapping`` is ``True``), make it visible again. Shorthand for ``remask(ids,mask,visible=True,removeContacts=False)``") \
+			.def("remask",&ParticleContainer::pyRemask,WOO_PY_ARGS(py::arg("ids"),py::arg("mask"),py::arg("visible"),py::arg("removeContacts"),py::arg("removeOverlapping")),"Change particle mask and visibility; optionally remove contacts, which would no longer exist due to mask change; or remove particles, which would newly overlap with the particle. See also :obj:`disappear` and :obj:`reappear`.") \
+			.def("disappear",&ParticleContainer::pyDisappear,WOO_PY_ARGS(py::arg("ids"),py::arg("mask")),"Remask particle (so that it does not have contacts with other particles), remove contacts, which would no longer exist and make it invisible. Shorthand for calling ``remask(ids,mask,visible=False,removeContacts=True)``") \
+			.def("reappear",&ParticleContainer::pyReappear,WOO_PY_ARGS(py::arg("ids"),py::arg("mask"),py::arg("removeOverlapping")=false),"Remask particle, remove particles, which would overlap with newly-appeared particle (if ``removeOverlapping`` is ``True``), make it visible again. Shorthand for ``remask(ids,mask,visible=True,removeContacts=False)``") \
 			/* define nested iterator class here; ugly: abuses _classObj from the macro definition (implementation detail) */ \
-			; py::scope foo(_classObj); /*this does not seem to work?? */ \
-			py::class_<ParticleContainer::pyIterator>("ParticleContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+			; woo_dem_ParticleContainer__iterator_PY
 
 
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ParticleContainer__CLASS_BASE_DOC_ATTRS_PY);

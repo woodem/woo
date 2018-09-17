@@ -433,22 +433,31 @@ py::list porosity(shared_ptr<DemField>& dem, const AlignedBox3r& box){
 py::dict surfParticleIdNormals(shared_ptr<DemField>& dem, const AlignedBox3r& box, Real r){
 	std::map<Particle::id_t,std::vector<Vector3r>> surf=DemFuncs::surfParticleIdNormals(dem,box,r);
 	py::dict ret;
-	for(const auto& sn: surf) ret[sn.first]=sn.second;
+	for(const auto& sn: surf) ret[py::cast(sn.first)]=sn.second;
 	return ret;
 }
 
 WOO_PYTHON_MODULE(_triangulated);
+#ifdef WOO_PYBIND11
+PYBIND11_MODULE(_triangulated,mod){
+	WOO_SET_DOCSTRING_OPTS;
+	mod.attr("__name__")="woo._triangulated";
+	#define _PY_MOD mod.
+#else
 BOOST_PYTHON_MODULE(_triangulated){
 	WOO_SET_DOCSTRING_OPTS;
-
 	py::scope().attr("__name__")="woo._triangulated";
+	#define _PY_MOD py::
+#endif
 
-	py::def("spheroidsToSTL",spheroidsToSTL,(py::arg("stl"),py::arg("dem"),py::arg("tol"),py::arg("solid")="woo_export",py::arg("mask")=0,py::arg("append")=false,py::arg("cellClip")=false,py::arg("merge")=false),"Export spheroids (:obj:`spheres <woo.dem.Sphere>`, :obj:`capsules <woo.dem.Capsule>`, :obj:`ellipsoids <woo.dem.Ellipsoid>`) to STL file. *tol* is the maximum distance between triangulation and smooth surface; if negative, it is relative to the smallest equivalent radius of particles for export. *mask* (if non-zero) only selects particles with matching :obj:`woo.dem.Particle.mask`. The exported STL ist ASCII.\n\nSpheres and ellipsoids are exported as tesselated icosahedra, with tesselation level determined from *tol*. The maximum error is :math:`e=r\\left(1-\\cos \\frac{2\\pi}{5}\\frac{1}{2}\\frac{1}{n}\\right)` for given tesselation level :math:`n` (1 for icosahedron, each level quadruples the number of triangles), with :math:`r` being the sphere's :obj:`radius <woo.dem.Sphere.radius>` (or ellipsoid's smallest :obj:`semiAxis <woo.dem.Ellipsoid.semiAxes>`); it follows that :math:`n=\\frac{\\pi}{5\\arccos\\left(1-\\frac{e}{r}\\right)}`, where :math:`n` will be rounded up.\n\nCapsules are triangulated in polar coordinates (slices, stacks). The error for regular :math:`n`-gon is :math:`e=r\\left(1-\\cos\\frac{2\\pi}{2n}\\right)` and it follows that :math:`n=\\frac{\\pi}{\\arccos\\left(1-\\frac{e}{r}\\right)}`; the minimum is restricted to be 4, to avoid degenerate shapes.\n\nThe number of facets written to the STL file is returned.\n\nWith periodic boundaries, *clipCell* will cause all triangles entirely outside of the periodic cell to be discarded.\n\n*solid* specified name of ``solid`` inside the STL file; this is useful in conjunction with *append* (which writes at the end of the file) when writing multi-part STL suitable e.g. for `snappyHexMesh <http://www.openfoam.org/docs/user/snappyHexMesh.php>`__.\n\n*merge* will attempt to remove any inner surfaces so that only the external surface is output. Note that this might take considerable time for many particles.");
+	_PY_MOD def("spheroidsToSTL",spheroidsToSTL,WOO_PY_ARGS(py::arg("stl"),py::arg("dem"),py::arg("tol"),py::arg("solid")="woo_export",py::arg("mask")=0,py::arg("append")=false,py::arg("cellClip")=false,py::arg("merge")=false),"Export spheroids (:obj:`spheres <woo.dem.Sphere>`, :obj:`capsules <woo.dem.Capsule>`, :obj:`ellipsoids <woo.dem.Ellipsoid>`) to STL file. *tol* is the maximum distance between triangulation and smooth surface; if negative, it is relative to the smallest equivalent radius of particles for export. *mask* (if non-zero) only selects particles with matching :obj:`woo.dem.Particle.mask`. The exported STL ist ASCII.\n\nSpheres and ellipsoids are exported as tesselated icosahedra, with tesselation level determined from *tol*. The maximum error is :math:`e=r\\left(1-\\cos \\frac{2\\pi}{5}\\frac{1}{2}\\frac{1}{n}\\right)` for given tesselation level :math:`n` (1 for icosahedron, each level quadruples the number of triangles), with :math:`r` being the sphere's :obj:`radius <woo.dem.Sphere.radius>` (or ellipsoid's smallest :obj:`semiAxis <woo.dem.Ellipsoid.semiAxes>`); it follows that :math:`n=\\frac{\\pi}{5\\arccos\\left(1-\\frac{e}{r}\\right)}`, where :math:`n` will be rounded up.\n\nCapsules are triangulated in polar coordinates (slices, stacks). The error for regular :math:`n`-gon is :math:`e=r\\left(1-\\cos\\frac{2\\pi}{2n}\\right)` and it follows that :math:`n=\\frac{\\pi}{\\arccos\\left(1-\\frac{e}{r}\\right)}`; the minimum is restricted to be 4, to avoid degenerate shapes.\n\nThe number of facets written to the STL file is returned.\n\nWith periodic boundaries, *clipCell* will cause all triangles entirely outside of the periodic cell to be discarded.\n\n*solid* specified name of ``solid`` inside the STL file; this is useful in conjunction with *append* (which writes at the end of the file) when writing multi-part STL suitable e.g. for `snappyHexMesh <http://www.openfoam.org/docs/user/snappyHexMesh.php>`__.\n\n*merge* will attempt to remove any inner surfaces so that only the external surface is output. Note that this might take considerable time for many particles.");
 
-	py::def("facetsToSTL",facetsToSTL,(py::arg("stl"),py::arg("dem"),py::arg("solid"),py::arg("mask")=0,py::arg("append")=false),"Export :obj:`facets <woo.dem.Facet>` to STL file. Periodic boundaries are not handled in any special way.");
+	_PY_MOD def("facetsToSTL",facetsToSTL,WOO_PY_ARGS(py::arg("stl"),py::arg("dem"),py::arg("solid"),py::arg("mask")=0,py::arg("append")=false),"Export :obj:`facets <woo.dem.Facet>` to STL file. Periodic boundaries are not handled in any special way.");
 
-	py::def("porosity",porosity,(py::arg("dem"),py::arg("box")),"Return list of `(id,position,porosity)`, where porosity is computed as 1-Vs/Vv, where Vs is particle volume (sphere, capsule, ellipsoid only) and Vv is cell volume using radical Voronoi tesselation around particles. Highly experimental and subject to further changes.");
+	_PY_MOD def("porosity",porosity,WOO_PY_ARGS(py::arg("dem"),py::arg("box")),"Return list of `(id,position,porosity)`, where porosity is computed as 1-Vs/Vv, where Vs is particle volume (sphere, capsule, ellipsoid only) and Vv is cell volume using radical Voronoi tesselation around particles. Highly experimental and subject to further changes.");
 
-	py::def("surfParticleIdNormals",surfParticleIdNormals,(py::arg("dem"),py::arg("box"),py::arg("r")),"Return map of ID->[normal,normal,...] of normals of cell faces belonging to particle #ID which have no neighbors. [EXPERIMENTAL].");
+	_PY_MOD def("surfParticleIdNormals",surfParticleIdNormals,WOO_PY_ARGS(py::arg("dem"),py::arg("box"),py::arg("r")),"Return map of ID->[normal,normal,...] of normals of cell faces belonging to particle #ID which have no neighbors. [EXPERIMENTAL].");
+
+#undef _PY_MOD
 
 };

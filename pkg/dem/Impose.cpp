@@ -260,10 +260,11 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 			try{
 					py::object global(py::import("wooMain").attr("__dict__"));
 					py::dict local;
-					local["scene"]=local["S"]=py::object(py::ptr(scene));
+					local["scene"]=py::cast(py::ptr(scene));
+					local["S"]=py::cast(py::ptr(scene));
 					local["woo"]=py::import("woo");
-					local["node"]=py::object(n);
-					local["self"]=py::object(this->shared_from_this());
+					local["node"]=py::cast(n);
+					local["self"]=py::cast(this->shared_from_this());
 					local["timeIndex"]=hookNo;
 					local["cycle"]=cycle;
 					local["prevTime"]=prevTimeOrig;

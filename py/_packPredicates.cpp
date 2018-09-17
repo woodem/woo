@@ -6,7 +6,6 @@
 #include<woo/lib/sphere-pack/SpherePack.hpp>
 #include<woo/core/Master.hpp>
 
-namespace py=boost::python;
 #ifdef WOO_LOG4CXX
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.pack.predicates");
 #endif
@@ -37,10 +36,23 @@ See scripts/test/gts-operators.py for an example.
 NOTE: you still have to call base class ctor in your class' ctor derived in python, e.g.
 super(inGtsSurface,self).__init__() so that virtual methods work as expected.
 */
+
+#ifdef WOO_PYBIND11
+struct PredicateWrap: public Predicate{
+	using Predicate::Predicate;
+	bool operator()(const Vector3r& pt, Real pad=0.) const override {
+		PYBIND11_OVERLOAD_PURE_NAME(/*return type*/bool,/*parent class*/Predicate,/*python name*/"__call__",/*c++ function*/operator(),/*args*/pt,pad);
+	}
+	AlignedBox3r aabb() const override {
+		PYBIND11_OVERLOAD_PURE(/*return type*/AlignedBox3r,/*parent class*/Predicate,/*function*/aabb);
+	}
+};
+#else
 struct PredicateWrap: Predicate, py::wrapper<Predicate>{
 	bool operator()(const Vector3r& pt, Real pad=0.) const override { return this->get_override("__call__")(pt,pad);}
 	AlignedBox3r aabb() const override { return this->get_override("aabb")(); }
 };
+#endif
 
 /*********************************************************************************
 ****************** Boolean operations on predicates ******************************
@@ -460,12 +472,54 @@ public:
 #endif
 
 WOO_PYTHON_MODULE(_packPredicates);
+
+#ifdef WOO_PYBIND11
+PYBIND11_MODULE(_packPredicated,mod){
+	WOO_SET_DOCSTRING_OPTS;
+	mod.doc()="Spatial predicates for volumes (defined analytically or by triangulation).";
+	// base predicate class
+	py::class_<Predicate,/*holder*/shared_ptr<Predicate>,/*tramponline*/PredicateWrap>(mod,"Predicate")
+		.def(py::init<>()) // docs says this needs to be added as well: https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python
+		.def("__call__",&Predicate::operator(),WOO_PY_ARGS(py::arg("pt"),py::arg("pad")=0.))
+		.def("aabb",&Predicate::aabb)
+		.def("dim",&Predicate::dim)
+		.def("center",&Predicate::center)
+		.def("__or__",makeUnion).def("__and__",makeIntersection).def("__sub__",makeDifference).def("__xor__",makeSymmetricDifference);
+	// boolean operations
+	py::class_<PredicateBoolean,Predicate,shared_ptr<PredicateBoolean>>(mod,"PredicateBoolean","Boolean operation on 2 predicates (abstract class)")
+		.def_property_readonly("A",&PredicateBoolean::getA).def_property_readonly("B",&PredicateBoolean::getB);
+	py::class_<PredicateUnion,PredicateBoolean,shared_ptr<PredicateUnion>>(mod,"PredicateUnion","Union (non-exclusive disjunction) of 2 predicates. A point has to be inside any of the two predicates to be inside. Can be constructed using the ``|`` operator on predicates: ``pred1 | pred2``.").def(py::init<shared_ptr<Predicate>,shared_ptr<Predicate>>(),py::arg("pred1"),py::arg("pred2"));
+	#warning !!! not all predicate classes converted to pybind11 yet (below) !!!
+#if 0
+	py::class_<PredicateIntersection,shared_ptr<PredicateIntersection>,py::bases<PredicateBoolean>>("PredicateIntersection","Intersection (conjunction) of 2 predicates. A point has to be inside both predicates. Can be constructed using the ``&`` operator on predicates: ``pred1 & pred2``.",py::init<shared_ptr<Predicate>,shared_ptr<Predicate>>());
+	py::class_<PredicateDifference,shared_ptr<PredicateDifference>,py::bases<PredicateBoolean> >("PredicateDifference","Difference (conjunction with negative predicate) of 2 predicates. A point has to be inside the first and outside the second predicate. Can be constructed using the ``-`` operator on predicates: ``pred1 - pred2``.",py::init<shared_ptr<Predicate>,shared_ptr<Predicate>>());
+	py::class_<PredicateSymmetricDifference,shared_ptr<PredicateSymmetricDifference>,py::bases<PredicateBoolean> >("PredicateSymmetricDifference","SymmetricDifference (exclusive disjunction) of 2 predicates. A point has to be in exactly one predicate of the two. Can be constructed using the ``^`` operator on predicates: ``pred1 ^ pred2``.",py::init<shared_ptr<Predicate>,shared_ptr<Predicate>>());
+	// primitive predicates
+	py::class_<inSphere,shared_ptr<inSphere>,py::bases<Predicate>>("inSphere","Sphere predicate.",py::init<const Vector3r&,Real>(py::args("center","radius"),"Ctor taking center (as a 3-tuple) and radius"));
+	py::class_<inAlignedBox,shared_ptr<inAlignedBox>,py::bases<Predicate>>("inAlignedBox","Axis-aligned box predicate",py::init<const Vector3r&,const Vector3r&>(py::args("minAABB","maxAABB"),"Ctor taking minumum and maximum points of the box (as 3-tuples).")).def(py::init<const AlignedBox3r&>(py::arg("box")));
+	py::class_<inOrientedBox,shared_ptr<inOrientedBox>,py::bases<Predicate>>("inOrientedBox","Arbitrarily oriented box specified as local coordinates (pos,ori) and aligned box in those local coordinates.",py::init<const Vector3r&,const Quaternionr&, const AlignedBox3r&>(py::args("pos","ori","box"),"Ctor taking position and orientation of the local system, and aligned box in local coordinates."));
+	py::class_<inCylSector,shared_ptr<inCylSector>,py::bases<Predicate>>("inCylSector","Sector of an arbitrarily oriented cylinder in 3d, limiting cylindrical coordinates :math:`\\rho`, :math:`\\theta`, :math:`z`; all coordinate limits are optional.",py::init<const Vector3r&, const Quaternionr&, py::optional<const Vector2r&, const Vector2r&, const Vector2r&>>(py::args("pos","ori","rrho","ttheta","zz"),"Ctor taking position and orientation of the local system, and aligned box in local coordinates."));
+	py::class_<inAlignedHalfspace,shared_ptr<inAlignedHalfspace>,py::bases<Predicate>>("inAlignedHalfspace","Half-space given by coordinate at some axis.",py::init<int, const Real&, py::optional<bool>>(py::args("axis","coord","lower"),"Ctor taking axis (0,1,2 for :math:`x`, :math:`y`, :math:`z` respectively), the coordinate along that axis, and whether the *lower* half (or the upper half, if *lower* is false) is considered."));
+	py::class_<inAxisRange,shared_ptr<inAxisRange>,py::bases<Predicate>>("inAxisRange","Range of coordinate along some axis, effectively defining two axis-aligned enclosing planes.",py::init<int, const Vector2r&>(py::args("axis","range"),"Ctor taking axis (0,1,2 for :math:`x`, :math:`y`, :math:`z` respectively), and coordinate range along that axis."));
+	py::class_<inParallelepiped,shared_ptr<inParallelepiped>,py::bases<Predicate>>("inParallelepiped","Parallelepiped predicate",py::init<const Vector3r&,const Vector3r&, const Vector3r&, const Vector3r&>(py::args("o","a","b","c"),"Ctor taking four points: ``o`` (for origin) and then ``a``, ``b``, ``c`` which define endpoints of 3 respective edges from ``o``."));
+	py::class_<inCylinder,shared_ptr<inCylinder>,py::bases<Predicate>>("inCylinder","Cylinder predicate",py::init<const Vector3r&,const Vector3r&,Real>(py::args("centerBottom","centerTop","radius"),"Ctor taking centers of the lateral walls (as 3-tuples) and radius.")).def("__str__",&inCylinder::__str__);
+	py::class_<inHyperboloid,shared_ptr<inHyperboloid>,py::bases<Predicate> >("inHyperboloid","Hyperboloid predicate",py::init<const Vector3r&,const Vector3r&,Real,Real>(py::args("centerBottom","centerTop","radius","skirt"),"Ctor taking centers of the lateral walls (as 3-tuples), radius at bases and skirt (middle radius)."));
+	py::class_<inEllipsoid,shared_ptr<inEllipsoid>,py::bases<Predicate> >("inEllipsoid","Ellipsoid predicate",py::init<const Vector3r&,const Vector3r&>(py::args("centerPoint","abc"),"Ctor taking center of the ellipsoid (3-tuple) and its 3 radii (3-tuple)."));
+	py::class_<notInNotch,shared_ptr<notInNotch>,py::bases<Predicate> >("notInNotch","Outside of infinite, rectangle-shaped notch predicate",py::init<const Vector3r&,const Vector3r&,const Vector3r&,Real>(py::args("centerPoint","edge","normal","aperture"),"Ctor taking point in the symmetry plane, vector pointing along the edge, plane normal and aperture size.\nThe side inside the notch is edge×normal.\nNormal is made perpendicular to the edge.\nAll vectors are normalized at construction time.")); 
+	#ifdef WOO_GTS
+		py::class_<inGtsSurface,shared_ptr<inGtsSurface>,py::bases<Predicate> >("inGtsSurface","GTS surface predicate",py::init<py::object,py::optional<bool> >(py::args("surface","noPad"),"Ctor taking a gts.Surface() instance, which must not be modified during instance lifetime.\nThe optional noPad can disable padding (if set to True), which speeds up calls several times.\nNote: padding checks inclusion of 6 points along +- cardinal directions in the pad distance from given point, which is not exact."))
+			.add_property("surf",&inGtsSurface::surface,"The associated gts.Surface object.");
+	#endif
+#endif
+	mod.def("SpherePack_filtered",SpherePack_filtered,WOO_PY_ARGS(py::arg("sp"),py::arg("predicate"),py::arg("recenter")=true),"Return new :obj:`SpherePack` object, without any spheres which don't match *predicate*. Clumps are handled gracefully, i.e. if any of clump's spheres does not satisfy the predicate, the whole clump is taken away. If *recenter* is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.");
+};
+#else
 BOOST_PYTHON_MODULE(_packPredicates){
 	py::scope().attr("__doc__")="Spatial predicates for volumes (defined analytically or by triangulation).";
 	WOO_SET_DOCSTRING_OPTS;
 	// base predicate class
 	py::class_<PredicateWrap,shared_ptr<PredicateWrap>,/* necessary, as methods are pure virtual*/ boost::noncopyable>("Predicate")
-		.def("__call__",py::pure_virtual(&Predicate::operator()),(py::arg("pt"),py::arg("pad")=0.))
+		.def("__call__",py::pure_virtual(&Predicate::operator()),WOO_PY_ARGS(py::arg("pt"),py::arg("pad")=0.))
 		.def("aabb",py::pure_virtual(&Predicate::aabb))
 		.def("dim",&Predicate::dim)
 		.def("center",&Predicate::center)
@@ -493,5 +547,6 @@ BOOST_PYTHON_MODULE(_packPredicates){
 		py::class_<inGtsSurface,shared_ptr<inGtsSurface>,py::bases<Predicate> >("inGtsSurface","GTS surface predicate",py::init<py::object,py::optional<bool> >(py::args("surface","noPad"),"Ctor taking a gts.Surface() instance, which must not be modified during instance lifetime.\nThe optional noPad can disable padding (if set to True), which speeds up calls several times.\nNote: padding checks inclusion of 6 points along +- cardinal directions in the pad distance from given point, which is not exact."))
 			.add_property("surf",&inGtsSurface::surface,"The associated gts.Surface object.");
 	#endif
-	py::def("SpherePack_filtered",SpherePack_filtered,(py::arg("sp"),py::arg("predicate"),py::arg("recenter")=true),"Return new :obj:`SpherePack` object, without any spheres which don't match *predicate*. Clumps are handled gracefully, i.e. if any of clump's spheres does not satisfy the predicate, the whole clump is taken away. If *recenter* is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.");
+	py::def("SpherePack_filtered",SpherePack_filtered,WOO_PY_ARGS(py::arg("sp"),py::arg("predicate"),py::arg("recenter")=true),"Return new :obj:`SpherePack` object, without any spheres which don't match *predicate*. Clumps are handled gracefully, i.e. if any of clump's spheres does not satisfy the predicate, the whole clump is taken away. If *recenter* is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.");
 }
+#endif /* WOO_PYBIND11 */

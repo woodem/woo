@@ -109,6 +109,12 @@ struct ContactContainer: public Object{
 	#else
 		#define woo_dem_ContactContainer__threadsPending__OPENMP ((std::vector<PendingContact>,pending,,AttrTrait<Attr::hidden>(),"Contact which might be deleted by the collider in the next step."))
 	#endif
+
+	#ifdef WOO_PYBIND11
+		#define woo_dem_ContactContainer__iterator_PY py::class_<ContactContainer::pyIterator>(_classObj,"ContactContainer_iterator").def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+	#else
+		#define woo_dem_ContactContainer__iterator_PY py::scope foo(_classObj); py::class_<ContactContainer::pyIterator>("ContactContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+	#endif
 	
 	#define woo_dem_ContactContainer__CLASS_BASE_DOC_ATTRS_PY \
 		ContactContainer,Object,"Linear view on all contacts in the DEM field", \
@@ -121,7 +127,7 @@ struct ContactContainer: public Object{
 		.def("__len__",&ContactContainer::size) \
 		.def("__getitem__",&ContactContainer::pyByIds) \
 		.def("__getitem__",&ContactContainer::pyNth) \
-		.def("remove",&ContactContainer::requestRemoval,(py::arg("contact"),py::arg("force")=false)) \
+		.def("remove",&ContactContainer::requestRemoval,WOO_PY_ARGS(py::arg("contact"),py::arg("force")=false)) \
 		.def("removeNonReal",&ContactContainer::removeNonReal) \
 		.def("countReal",&ContactContainer::countReal) \
 		.def("realRatio",&ContactContainer::realRatio) \
@@ -130,8 +136,7 @@ struct ContactContainer: public Object{
 		/* .def("__contains__",&ContactContainer::pyContains,"Equivalent to :obj:`existsReal`, but taking tuple as argument.") */ \
 		.def("__iter__",&ContactContainer::pyIter) \
 		/* define nested iterator class here; ugly, same as in ParticleContainer */ \
-		; py::scope foo(_classObj); \
-		py::class_<ContactContainer::pyIterator>("ContactContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+		; woo_dem_ContactContainer__iterator_PY
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ContactContainer__CLASS_BASE_DOC_ATTRS_PY);
 

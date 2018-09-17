@@ -249,13 +249,13 @@ void Membrane::ensureStiffnessMatrices(const Real& young, const Real& nu, const 
 py::object Membrane::stressCst(bool glob) const {
 	if(EBcst.size()!=18) throw std::runtime_error("Membrane.stressCst: EBcst matrix not defined (you have to set Membrane.enableStress before stiffness matrices are evaluated).");
 	Vector3r ls=Vector3r(EBcst*uXy);
-	if(!glob) return py::object(ls);
+	if(!glob) return py::cast(ls);
 	// initialize as 3x3 matrix
 	Matrix3r lsFull; lsFull<<
 		ls[0],ls[2],0,
 		ls[2],ls[1],0,
 		0    ,    0,0;
-	return py::object(this->node->loc2glob_rank2(lsFull));
+	return py::cast(this->node->loc2glob_rank2(lsFull));
 
 }
 Vector6r Membrane::stressDkt() const {

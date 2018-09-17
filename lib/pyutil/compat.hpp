@@ -34,11 +34,15 @@
 		// bp::scope → py::module
 		typedef args args_;
 		typedef module module_;
+		namespace api{
+			void delitem(::pybind11::dict& d,const char* key){ d.attr("pop")(key); }
+		}
 	}
 #else
 	#define def_property_readonly add_property
 	#define def_property add_property
 	#define def_property_static add_static_property
+	#define def_property_readonly_static add_static_property
 	#define add_property_readonly add_property
 	#define def_readonly_static def_readonly // boost::python does not distcriminate those
 	#define def_static def // must be complemented by WOO_PY_STATICMETHOD("...") just after the def

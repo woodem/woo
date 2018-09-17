@@ -139,7 +139,7 @@ void Master::pyRegisterClass(py::module_& mod){
 	#endif
 		.add_property_readonly("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
 		// tmp storage
-		.def("loadTmpAny",&Master::loadTmp,(py::arg("name")=""),"Load any object from named temporary store.")
+		.def("loadTmpAny",&Master::loadTmp,WOO_PY_ARGS(py::arg("name")=""),"Load any object from named temporary store.")
 		.def("deepcopy",
 			#ifdef WOO_PYBIND11
 				&Master::pyDeepcopy,

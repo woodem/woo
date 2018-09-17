@@ -42,11 +42,11 @@ struct Outlet: public PeriodicEngine{
 		((Real,currRateSmooth,1,AttrTrait<>().range(Vector2r(0,1)),"Smoothing factor for currRate ∈〈0,1〉")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
 		,/*py*/ \
-		.def("psd",&Outlet::pyPsd,(py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=true,py::arg("num")=80,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("zip")=false,py::arg("emptyOk")=false,py::arg("locs")=py::list()),"Return particle size distribution of deleted particles (only useful with *save*), spaced between *dRange* (a 2-tuple of minimum and maximum radius); )") \
+		.def("psd",&Outlet::pyPsd,WOO_PY_ARGS(py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=true,py::arg("num")=80,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("zip")=false,py::arg("emptyOk")=false,py::arg("locs")=py::list()),"Return particle size distribution of deleted particles (only useful with *save*), spaced between *dRange* (a 2-tuple of minimum and maximum radius); )") \
 		.def("clear",&Outlet::pyClear,"Clear information about saved particles (particle list, if saved, mass and number, rDivR0)") \
-		.def("diamMass",&Outlet::pyDiamMass,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
-		.def("diamMassTime",&Outlet::pyDiamMassTime,(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass, time); without *zipped*, return tuple of 3 arrays: diameters, masses, times.") \
-		.def("massOfDiam",&Outlet::pyMassOfDiam,(py::arg("min")=0,py::arg("max")=Inf),"Return mass of particles of which diameters are between *min* and *max*."); \
+		.def("diamMass",&Outlet::pyDiamMass,WOO_PY_ARGS(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
+		.def("diamMassTime",&Outlet::pyDiamMassTime,WOO_PY_ARGS(py::arg("zipped")=false),"With *zipped*, return list of (diameter, mass, time); without *zipped*, return tuple of 3 arrays: diameters, masses, times.") \
+		.def("massOfDiam",&Outlet::pyMassOfDiam,WOO_PY_ARGS(py::arg("min")=0,py::arg("max")=Inf),"Return mass of particles of which diameters are between *min* and *max*."); \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<Outlet>>(); // converter needed for DetectSteadyState
 		
 

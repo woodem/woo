@@ -59,16 +59,26 @@ struct GlSetup: public Object{
 	// return value and kw only to satisfy interface
 	// http://stackoverflow.com/questions/27488096/boost-python-raw-function-method
 	static py::object pyCallStatic(py::tuple args, py::dict kw);
-	void pyCall(const py::tuple& args);
+	void pyCall(const py::args_& args);
 
 	WOO_DECL_LOGGER;
 
-	#define woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY \
-		GlSetup,Object,"Proxy object for accessing all GL-related settings uniformly from the scene.", \
-		((vector<shared_ptr<Object>>,objs,,AttrTrait<Attr::readonly>().noGui(),"List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.")) \
-		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui().noDump(),"Set after modifying functors, so that they can be regenerated.")) \
-		((string,qglviewerState,"",AttrTrait<Attr::readonly>().noGui(),"XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).")) \
-		,/*py*/ .add_property("objNames",&GlSetup::getObjNames).def("__call__",py::raw_function(&GlSetup::pyCallStatic,/*the instance*/1),"Replace all current functors by those passed as arguments."); \
+	#ifdef WOO_PYBIND11
+		#define woo_gl_GlSetup__extras_PY .def("__call__",&GlSetup::pyCallStatic,"Replace all current functors by those passed as arguments."); \
+			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
+			for(size_t i=0; i<oo.size(); i++){ \
+				const auto& o=oo[i]; const auto oPtr=o.get(); \
+				string accessor=accessorName(o?o->getClassName():""); \
+				objTypeIndices.push_back(o?std::type_index(typeid(*oPtr)):std::type_index(typeid(void))); \
+				objTypeNames.push_back(o?o->getClassName():"None"); \
+				objAccessorNames.push_back(accessor); \
+				/*separator*/if(!o) continue; \
+				_classObj.add_property(accessor.c_str(),\
+					[i](shared_ptr<GlSetup> g){g->checkIndex(i); return g->objs[i];},[i](shared_ptr<GlSetup> g, shared_ptr<Object> val){ g->checkIndex(i); if(!val) woo::ValueError("Must not be None."); const auto valPtr=val.get(); if(std::type_index(typeid(*valPtr))!=objTypeIndices[i]) woo::TypeError(objTypeNames[i]+" instance required (not "+val->getClassName()+")."); g->objs[i]=val; } \
+				); \
+			}
+	#else
+		#define woo_gl_GlSetup__extras_PY .def("__call__",py::raw_function(&GlSetup::pyCallStatic,/*the instance*/1),"Replace all current functors by those passed as arguments."); \
 			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
 			for(size_t i=0; i<oo.size(); i++){ \
 				const auto& o=oo[i]; const auto oPtr=o.get(); \
@@ -83,6 +93,15 @@ struct GlSetup: public Object{
 					py::detail::make_function_aux([i](shared_ptr<GlSetup> g, shared_ptr<Object> val){ g->checkIndex(i); if(!val) woo::ValueError("Must not be None."); const auto valPtr=val.get(); if(std::type_index(typeid(*valPtr))!=objTypeIndices[i]) woo::TypeError(objTypeNames[i]+" instance required (not "+val->getClassName()+")."); g->objs[i]=val; },py::default_call_policies(),boost::mpl::vector<void,shared_ptr<GlSetup>,shared_ptr<Object>>()) \
 				); \
 			}
+	#endif
+
+	#define woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY \
+		GlSetup,Object,"Proxy object for accessing all GL-related settings uniformly from the scene.", \
+		((vector<shared_ptr<Object>>,objs,,AttrTrait<Attr::readonly>().noGui(),"List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.")) \
+		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui().noDump(),"Set after modifying functors, so that they can be regenerated.")) \
+		((string,qglviewerState,"",AttrTrait<Attr::readonly>().noGui(),"XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).")) \
+		,/*py*/ .add_property_readonly("objNames",&GlSetup::getObjNames) woo_gl_GlSetup__extras_PY ; \
+	
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY);
 

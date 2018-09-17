@@ -14,17 +14,24 @@ WOO_IMPL_LOGGER(LawTester);
 
 void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// go through the dict, find just values we need
+	#ifdef WOO_PYBIND11
+	for(auto kwitem: kw){
+		string key=py::cast<string>(kwitem.first);
+		if(key!="whats") continue;
+		auto value=kwitem.second;
+		if(!py::isinstance<string>(value)) continue;
+		string whatStr=py::cast<string>(value);
+	#else
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
 		py::tuple item=py::extract<py::tuple>(kwl[i]);
 		string key=py::extract<string>(item[0]);
 		if(key!="whats") continue;
-		//
 		py::object value=item[1];
 		py::extract<string> isStr(value);
 		if(!isStr.check()) continue;
-		//
 		string whatStr=isStr();
+	#endif
 		if(whatStr.size()!=6) woo::ValueError("LawTesterStage.whats, if given as string, must have length 6, not "+to_string(whatStr.size())+".");
 		for(int i=0;i<6;i++){
 			char w=whatStr[i];
@@ -38,7 +45,11 @@ void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 			}
 		}
 		// remove from the original dict
-		kw[key].del();		
+		#ifdef WOO_PYBIND11
+			kw.attr("pop")(kwitem.first);
+		#else
+			kw[key].del();		
+		#endif
 	}
 };
 
@@ -235,14 +246,15 @@ void LawTester::run(){
 		py::object main=py::import("__main__");
 		py::object globals=main.attr("__dict__");
 		py::dict locals;
-		locals["C"]=C?py::object(C):py::object();
-		locals["pA"]=py::object(pA);
-		locals["pB"]=py::object(pB);
-		locals["stage"]=py::object(stg);
-		locals["scene"]=locals["S"]=py::object(scene->shared_from_this());
+		locals["C"]=C?py::cast(C):py::object();
+		locals["pA"]=py::cast(pA);
+		locals["pB"]=py::cast(pB);
+		locals["stage"]=py::cast(stg);
+		locals["scene"]=py::cast(scene->shared_from_this());
+		locals["S"]=py::cast(scene->shared_from_this());
 		// this will give a nice error message when energy is not used
-		locals["E"]=scene->trackEnergy?py::object(scene->energy):py::object();
-		locals["tester"]=py::object(this->shared_from_this());
+		locals["E"]=scene->trackEnergy?py::cast(scene->energy):py::object();
+		locals["tester"]=py::cast(this->shared_from_this());
 
 		errCmd=&stg->until;
 		py::object result=py::eval(stg->until.c_str(),globals,locals);

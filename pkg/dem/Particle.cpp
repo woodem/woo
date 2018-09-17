@@ -30,8 +30,8 @@ WOO_IMPL_LOGGER(DemData);
 WOO_IMPL_LOGGER(Particle);
 WOO_IMPL_LOGGER(Shape);
 
-py::dict Particle::pyAllContacts()const{ py::dict ret; for(const auto& i: contacts) ret[i.first]=i.second; return ret; }
-py::dict Particle::pyContacts()const{	py::dict ret; for(const auto& i: contacts){ if(i.second->isReal()) ret[i.first]=i.second; } return ret;}
+py::dict Particle::pyAllContacts()const{ py::dict ret; for(const auto& i: contacts) ret[py::cast(i.first)]=i.second; return ret; }
+py::dict Particle::pyContacts()const{	py::dict ret; for(const auto& i: contacts){ if(i.second->isReal()) ret[py::cast(i.first)]=i.second; } return ret;}
 py::list Particle::pyCon()const{ py::list ret; for(const auto& i: contacts){ if(i.second->isReal()) ret.append(i.first); } return ret;}
 py::list Particle::pyTacts()const{	py::list ret; for(const auto& i: contacts){ if(i.second->isReal()) ret.append(i.second); } return ret;}
 
@@ -183,7 +183,14 @@ shared_ptr<Particle> Shape::make(const shared_ptr<Shape>& shape, const shared_pt
 
 
 void DemData::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
-	if(!kw.has_key("blocked")) return;
+	#if 0
+		if(!kw.contains("blocked")) return;
+		if(!py::isinstance<string>(kw["blocked"])) return;
+		auto s=py::cast<string>(kw["blocked"]);
+		blocked_vec_set(s);
+		kw.attr("pop")("blocked");
+	#endif
+	if(!WOO_PY_DICT_CONTAINS(kw,"blocked")) return;
 	py::extract<string> strEx(kw["blocked"]);
 	if(!strEx.check()) return;
 	blocked_vec_set(strEx());
@@ -353,21 +360,21 @@ Real Particle::getEk_any(bool trans, bool rot, shared_ptr<Scene> scene) const {
 
 	
 void DemField::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
-	if(d.has_key("par")){
-		py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
-		if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");
-		int parNodes=-1; // default, decide by particle properties
-		if(d.has_key("parNodes")){
-			py::extract<int> en(d["parNodes"]);
-			if(en.check()){ 
-				parNodes=en();
-				py::api::delitem(d,"parNodes");
+		if(WOO_PY_DICT_CONTAINS(d,"par")){
+			py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
+			if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");
+			int parNodes=-1; // default, decide by particle properties
+			if(WOO_PY_DICT_CONTAINS(d,"parNodes")){
+				py::extract<int> en(d["parNodes"]);
+				if(en.check()){ 
+					parNodes=en();
+					py::api::delitem(d,"parNodes");
+				}
+				else woo::TypeError("DemField(parNodes=...) must be an integer (-1, 0, 1; or True, False).");
 			}
-			else woo::TypeError("DemField(parNodes=...) must be an integer (-1, 0, 1; or True, False).");
+			for(const auto& p: ex()) particles->pyAppend(p,parNodes);
+			py::api::delitem(d,"par");
 		}
-		for(const auto& p: ex()) particles->pyAppend(p,parNodes);
-		py::api::delitem(d,"par");
-	}
 }
 
 AlignedBox3r DemField::renderingBbox() const{
