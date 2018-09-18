@@ -69,7 +69,7 @@ void Object::checkPyClassRegistersItself(const std::string& thisClassName) const
 void Object::pyUpdateAttrs(const py::dict& d){	
 	#ifdef WOO_PYBIND11
 	for(auto kv: d){
-		pySetAttr(py::cast<string>(kv.first),py::object(kv.second));
+		pySetAttr(py::cast<string>(kv.first),py::object(py::reinterpret_borrow<py::object>(kv.second)));
 	}
 	#else
 	py::list l=d.items(); size_t ll=py::len(l); if(ll==0) return;

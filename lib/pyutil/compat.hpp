@@ -30,12 +30,12 @@
 		template<typename T>
 		T* ptr(T* p){ return p; }
 		// bp::import → py::module::import
-		module import(const char *name){ return module::import(name); }
+		inline module import(const char *name){ return module::import(name); }
 		// bp::scope → py::module
 		typedef args args_;
 		typedef module module_;
 		namespace api{
-			void delitem(::pybind11::dict& d,const char* key){ d.attr("pop")(key); }
+			inline void delitem(::pybind11::dict& d, const char* key){ d.attr("pop")(key); }
 		}
 	}
 #else
@@ -45,14 +45,14 @@
 	#define def_property_readonly_static add_static_property
 	#define add_property_readonly add_property
 	#define def_readonly_static def_readonly // boost::python does not distcriminate those
-	#define def_static def // must be complemented by WOO_PY_STATICMETHOD("...") just after the def
+	#define def_static(name,...) def(name,__VA_ARGS__).staticmethod(name)
 	#define WOO_PY_GETTER_COPY(func) py::make_function(func,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_EXPOSE_COPY(classT,attr) py::make_getter(attr,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_DICT_CONTAINS(dict,key) dict.has_key(key)
 	// boost::python wants args to be grouped in parens
 	#define WOO_PY_ARGS(...) (__VA_ARGS__)
 
-	#define WOO_PY_STATICMETHOD(name) .staticmethod(name)
+	#define WOO_PY_STATICMETHOD(name)
 
 	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy<py::manage_new_object>()
 	namespace boost { namespace python {

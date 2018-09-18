@@ -9,10 +9,9 @@
 #endif
 
 namespace woo{
-	void StopIteration(){ PyErr_SetNone(PyExc_StopIteration); boost::python::throw_error_already_set(); }
-
+	void StopIteration(){ PyErr_SetNone(PyExc_StopIteration); throw py::error_already_set(); }
+	#define _DEFINE_WOO_PY_ERROR(x,y,AnyError) void AnyError(const std::string& what){ PyErr_SetString(BOOST_PP_CAT(PyExc_,AnyError),what.c_str()); throw py::error_already_set(); } void AnyError(const boost::format& f){ AnyError(f.str()); }
 	// void ArithmeticError(const std::string& what){ PyErr_SetString(PyExc_ArithmeticError,what.c_str()); boost::python::throw_error_already_set(); }
-	#define _DEFINE_WOO_PY_ERROR(x,y,AnyError) void AnyError(const std::string& what){ PyErr_SetString(BOOST_PP_CAT(PyExc_,AnyError),what.c_str()); boost::python::throw_error_already_set(); } void AnyError(const boost::format& f){ AnyError(f.str()); }
 	BOOST_PP_SEQ_FOR_EACH(_DEFINE_WOO_PY_ERROR,~,WOO_PYUTIL_ERRORS)
 	#undef _DEFINE_WOO_PY_ERROR
 	
@@ -22,6 +21,10 @@ namespace woo{
 		return parsePythonException_gilLocked();
 	}
 	std::string parsePythonException_gilLocked(){
+	#ifdef WOO_PYBIND11
+		#warning !!! this code has not been converted to pybind11 yet !!!
+		return std::string(__FILE__ ": NOT YET IMPLEMENTED with pybind11.");
+	#else
 		PyObject *type_ptr = NULL, *value_ptr = NULL, *traceback_ptr = NULL;
 		PyErr_Fetch(&type_ptr, &value_ptr, &traceback_ptr);
 		std::string ret("Unfetchable Python error");
@@ -56,6 +59,7 @@ namespace woo{
 				ret += std::string(": Unparseable Python traceback");
 		}
 		return ret;
+	#endif
 	}
 
 };

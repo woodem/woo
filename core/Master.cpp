@@ -386,6 +386,14 @@ void Master::pyRegisterAllClasses(){
 				s->pyRegisterClass(mod);
 				auto prev=I++;
 				pythonables.erase(prev);
+			} catch (const std::exception& e){
+				LOG_DEBUG_EARLY("["<<klass<<"]");
+				if(getenv("WOO_DEBUG")){
+					PyErr_Print();
+					std::cerr<<e.what()<<std::endl;
+				}
+				else PyErr_Clear();
+				I++;
 			} catch (...){
 				LOG_DEBUG_EARLY("["<<klass<<"]");
 				if(getenv("WOO_DEBUG")) PyErr_Print();
