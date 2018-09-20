@@ -25,7 +25,7 @@ struct SphereClumpGeom: public ShapeClump {
 		((vector<Vector3r>,centers,,AttrTrait<Attr::triggerPostLoad>(),"Centers of constituent spheres, in clump-local coordinates.")) \
 		((vector<Real>,radii,,AttrTrait<Attr::triggerPostLoad>(),"Radii of constituent spheres")) \
 		, /* py */ \
-		.def_static("fromSpherePack",&SphereClumpGeom::fromSpherePack,WOO_PY_ARGS(py::arg("pack"),py::arg("div")=5),"Return [ :obj:`SphereClumpGeom` ] which contain all clumps and spheres from given :obj:`SpherePack`.") WOO_PY_STATICMETHOD("fromSpherePack") \
+		.def_static("fromSpherePack",&SphereClumpGeom::fromSpherePack,WOO_PY_ARGS(py::arg("pack"),py::arg("div")=5),"Return [ :obj:`SphereClumpGeom` ] which contain all clumps and spheres from given :obj:`SpherePack`.") \
 		; woo::converters_cxxVector_pyList_2way<shared_ptr<SphereClumpGeom>>();
 
 
@@ -56,7 +56,7 @@ struct ClumpData: public DemData{
 		((vector<Vector3r>,relPos,,AttrTrait<Attr::readonly>(),"Relative member's positions")) \
 		((vector<Quaternionr>,relOri,,AttrTrait<Attr::readonly>(),"Relative member's orientations")) \
 		((Real,equivRad,NaN,,"Equivalent radius, for PSD statistics (e.g. in :obj:`BoxOutlet`).")) \
-		,/*py*/ .def_static("forceTorqueFromMembers",&ClumpData::pyForceTorqueFromMembers,"Return the tuple (F,T), summary force and torque values collected from clump members, as acting on the clump node passed as argument.") WOO_PY_STATICMETHOD("forceTorqueFromMembers").def_static("applyToMembers",&ClumpData::pyApplyToMembers,"Move/rotate member nodes; this is only useful after setting clump's node position/orientation by hand, so that memebrs are updated without running Leapfrog.") WOO_PY_STATICMETHOD("applyToMembers")
+		,/*py*/ .def_static("forceTorqueFromMembers",&ClumpData::pyForceTorqueFromMembers,"Return the tuple (F,T), summary force and torque values collected from clump members, as acting on the clump node passed as argument.").def_static("applyToMembers",&ClumpData::pyApplyToMembers,"Move/rotate member nodes; this is only useful after setting clump's node position/orientation by hand, so that memebrs are updated without running Leapfrog.")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ClumpData__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(ClumpData);

@@ -13,7 +13,7 @@
 	#define WOO_PY_GETTER_COPY(func) py::cpp_function(func,py::return_value_policy::copy)
 	#define WOO_PY_EXPOSE_COPY(classT,attr) [](const classT& o){return o.*(attr);},py::return_value_policy::copy
 	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy::take_ownership
-	#define WOO_PY_STATICMETHOD(name)
+
 	#include<pybind11/pybind11.h>
 	namespace pybind11{
 		// emulate boost::python::extract
@@ -51,8 +51,6 @@
 	#define WOO_PY_DICT_CONTAINS(dict,key) dict.has_key(key)
 	// boost::python wants args to be grouped in parens
 	#define WOO_PY_ARGS(...) (__VA_ARGS__)
-
-	#define WOO_PY_STATICMETHOD(name)
 
 	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy<py::manage_new_object>()
 	namespace boost { namespace python {

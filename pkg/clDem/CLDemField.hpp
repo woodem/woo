@@ -18,7 +18,7 @@ public:
 	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemData,NodeData,"Dynamic state of node.",
 		((long,clIx,,,"Index of object belonging to this node within clDem arrays (particle/contact)"))
 		, /* ctor */
-		, /* py */ .def_static("_getDataOnNode",&Node::pyGetData<CLDemData>) WOO_PY_STATICMETHOD("_getDataOnNode").def_static("_setDataOnNode",&Node::pySetData<CLDemData>) WOO_PY_STATICMETHOD("_setDataOnNode");
+		, /* py */ .def_static("_getDataOnNode",&Node::pyGetData<CLDemData>).def_static("_setDataOnNode",&Node::pySetData<CLDemData>);
 	);
 };
 WOO_REGISTER_OBJECT(CLDemData);
@@ -45,12 +45,12 @@ struct CLDemField: public Field{
 		, /* ctor */ createIndex();
 		, /* py */ // .def_readwrite("sim",&CLDemField::sim,"Simulation field to operate on")
 		.def_static("clDemToWoo",&CLDemField::clDemToWoo,WOO_PY_ARGS(py::arg("clDemSim"),py::arg("stepPeriod")=1,py::arg("relTol")=-1),"Create woo simulation which mimics the one in *clDemSim* as close as possible. If stepPeriod>=1, prepare enginess for running and comparing them in parallel. *stepPeriod* determines how many steps of the CL simulation to launch at once. If *relTol* is greater than 0., comparison between clDem and Woo will be done at every step, with the tolerance specified.")
-		 WOO_PY_STATICMETHOD("clDemToWoo")
+		
 		.def_static("wooToClDem",&CLDemField::wooToClDem,WOO_PY_ARGS(py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1),"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
-		 WOO_PY_STATICMETHOD("wooToClDem")
-		.def_static("getSimulation",&CLDemField::getSimulation) WOO_PY_STATICMETHOD("getSimulation")
-		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>) WOO_PY_STATICMETHOD("sceneHasField")
-		.def_static("sceneGetField",&Field_sceneGetField<CLDemField>) WOO_PY_STATICMETHOD("sceneGetField")
+		
+		.def_static("getSimulation",&CLDemField::getSimulation)
+		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>)
+		.def_static("sceneGetField",&Field_sceneGetField<CLDemField>)
 	);
 	REGISTER_CLASS_INDEX(CLDemField,Field);
 	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw);

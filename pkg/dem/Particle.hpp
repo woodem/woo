@@ -133,7 +133,7 @@ struct Particle: public Object{
 		.add_property_readonly("Ekt",&Particle::getEk_trans,"Translational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}m|\\vec{v}|^2` -- uninodal particles only (raises exception otherwise). Space deformation is not considered here, see :obj:`getEk`.") \
 		.add_property_readonly("Ekr",&Particle::getEk_rot,"Rotational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}\\vec{\\omega}^T\\mat{T}^T\\mat{I}\\mat{T}\\omega` (where :math:`\\mat{T}` is :obj:`p.shape.nodes[0].ori <woo.core.Node.ori>` as rotation matrix, :math:`\\mat{I}` is :obj:`p.shape.nodes[0].dem.inertia <DemData.inertia>` as diagonal matrix  -- uninodal particles only (raises exception otherwise).  Space deformation is not considered here, see :obj:`getEk`.") \
 		.def("getEk",&Particle::getEk_any,WOO_PY_ARGS(py::arg("trans")=true,py::arg("rot")=true,py::arg("scene")=shared_ptr<Scene>()),"Compute kinetic energy (translational and/or rotational); when *scene* is given, only fluctuation linear/angular velocity will be considered if periodic boundary conditions are active.") \
-		.def_static("make",&Particle::make,WOO_PY_ARGS(py::arg("shape"),py::arg("mat"),py::arg("fixed")=false),"Return Particle instance created from given shape and material; nodes with DemData are automatically added to the shape, mass and inertia is recomuted.") WOO_PY_STATICMETHOD("make") \
+		.def_static("make",&Particle::make,WOO_PY_ARGS(py::arg("shape"),py::arg("mat"),py::arg("fixed")=false),"Return Particle instance created from given shape and material; nodes with DemData are automatically added to the shape, mass and inertia is recomuted.") \
 		; \
 		/* vector<Particle> is now exposed in py/_customConverters as ParticleList to avoid copying */ \
 		/* woo::converters_cxxVector_pyList_2way<shared_ptr<Particle>>();*/
@@ -313,9 +313,9 @@ public:
 		.add_property_readonly("parRef",&DemData::pyParRef_get).def("addParRef",&DemData::addParRef) \
 		.add_property_readonly("isAspherical",&DemData::isAspherical,"Return ``True`` when inertia components are not equal.") \
 		.add_property_readonly("useAsphericalLeapfrog",&DemData::useAsphericalLeapfrog,"Say whether the node will use aspherical :obj:`leapfrog <woo.dem.Leapfrog>` integration routine. The criterion is that the node :obj:`is aspherical <isAspherical>` **and** does not have all rotations :obj:`blocked`.") \
-		.def_static("setOriMassInertia",&DemData::setOriMassInertia,"Lump mass and inertia from all attached particles and attempt to rotate the node so that its axes are principal axes of inertia, if allowed by particles shape (without chaning the geometry).") WOO_PY_STATICMETHOD("setOriMassInertia") \
+		.def_static("setOriMassInertia",&DemData::setOriMassInertia,"Lump mass and inertia from all attached particles and attempt to rotate the node so that its axes are principal axes of inertia, if allowed by particles shape (without chaning the geometry).") \
 		.def("guessMoving",&DemData::guessMoving,"Tell whether the node is likely to be moving or not. Returns true if any of the following is true:\n\n* nonzero :obj:`mass` **and** not all DoFs are :obj:`blocked <flags>` (this will be false for nodes with mass, but which are completely blocked),\n* nonzero :obj:`velocity <vel>`,\n* nonzero :obj:`angular velocity <angVel>`,\n* anything is :obj:`imposed <impose>`.\n\nThis function is used as heuristics by :obj:`S.dem.par.add <woo.dem.ParticleContainer.add>` when called with ``nodes=-1`` (default), to decide whether the particle's nodes should be added to S.dem.nodes.") \
-		.def_static("_getDataOnNode",&Node::pyGetData<DemData>) WOO_PY_STATICMETHOD("_getDataOnNode").def_static("_setDataOnNode",&Node::pySetData<DemData>) WOO_PY_STATICMETHOD("_setDataOnNode")
+		.def_static("_getDataOnNode",&Node::pyGetData<DemData>).def_static("_setDataOnNode",&Node::pySetData<DemData>)
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_DemData__CLASS_BASE_DOC_ATTRS_PY);
 };
@@ -387,8 +387,8 @@ struct DemField: public Field{
 		.def("nodesAppendFromPar",&DemField::pyNodesAppendFromParticles,"Append nodes of all particles given; nodes may repeat between particles (a set is created first), but nodes already in :obj:`nodes` before calling this method will cause an error.") \
 		.def("splitNode",&DemField::splitNode,WOO_PY_ARGS(py::arg("node"),py::arg("pars"),py::arg("massMult")=NaN,py::arg("inertiaMult")=NaN),"For particles *pars*, replace their node *node* by a clone (:obj:`~woo.core.Master.deepcopy`) of this node. If *massMult* and *inertiaMult* are given, mass/inertia of both original and cloned node are multiplied by those factors. Returns the original and the new node. Both nodes will be co-incident in space. This function is used to un-share node shared by multiple particles, such as when breaking mesh apart.")  \
 		.def("setNodesRefPos",&DemField::setNodesRefPos,"Set reference position and orientation of all nodes to the current one; does nothing (silently) on builds without OpenGL.") \
-		.def_static("sceneHasField",&Field_sceneHasField<DemField>) WOO_PY_STATICMETHOD("sceneHasField") \
-		.def_static("sceneGetField",&Field_sceneGetField<DemField>) WOO_PY_STATICMETHOD("sceneGetField"); \
+		.def_static("sceneHasField",&Field_sceneHasField<DemField>) \
+		.def_static("sceneGetField",&Field_sceneGetField<DemField>); \
 		_classObj.attr("defaultMovableBit")=(int)DemField::defaultMovableBit; \
 		_classObj.attr("defaultBoundaryBit")=(int)DemField::defaultBoundaryBit; \
 		_classObj.attr("defaultOutletBit")=(int)DemField::defaultOutletBit; \

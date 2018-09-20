@@ -70,8 +70,8 @@ struct SparcField: public Field{
 		,/*py*/
 			.def("nodesAround",&SparcField::nodesAround,WOO_PY_ARGS(py::arg("pt"),py::arg("radius")=-1,py::arg("count")=-1,py::arg("ptNode")=shared_ptr<Node>()),"Return array of nodes close to given point *pt*")
 			.def("updateLocator",&SparcField::updateLocator</*useNext*/false>,"Update the locator, should be done manually before the first step perhaps.")
-			.def_static("sceneHasField",&Field_sceneHasField<SparcField>) WOO_PY_STATICMETHOD("sceneHasField")
-			.def_static("sceneGetField",&Field_sceneGetField<SparcField>) WOO_PY_STATICMETHOD("sceneGetField")
+			.def_static("sceneHasField",&Field_sceneHasField<SparcField>)
+			.def_static("sceneGetField",&Field_sceneGetField<SparcField>)
 
 	);
 };
@@ -150,7 +150,7 @@ struct SparcData: public NodeData{
 		// ((int,locatorId,-1,AttrTrait<Attr::hidden>(),"Position in the point locator array"))
 		, /* ctor */
 		, /*py*/
-		.def_static("_getDataOnNode",&Node::pyGetData<SparcData>) WOO_PY_STATICMETHOD("_getDataOnNode").def_static("_setDataOnNode",&Node::pySetData<SparcData>) WOO_PY_STATICMETHOD("_setDataOnNode")
+		.def_static("_getDataOnNode",&Node::pyGetData<SparcData>).def_static("_setDataOnNode",&Node::pySetData<SparcData>)
 		.add_property("D",&SparcData::getD).add_property("W",&SparcData::getW).add_property("rot",&SparcData::getRotVec)
 		.def("gFixedV",&SparcData::getGFixedV).def("gFixedT",&SparcData::getGFixedT)
 		;

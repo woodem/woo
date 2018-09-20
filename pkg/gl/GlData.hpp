@@ -17,7 +17,7 @@ struct GlData: public NodeData{
 		((Quaternionr,dGlOri,Quaternionr(NaN,NaN,NaN,NaN),,"Difference from real spatial orientation when rendered.")) \
 		((Vector3i,dCellDist,Vector3i::Zero(),,"How much is canonicalized point from the real one.")) \
 		, /* py */ \
-		.def_static("_getDataOnNode",&Node::pyGetData<GlData>) WOO_PY_STATICMETHOD("_getDataOnNode").def_static("_setDataOnNode",&Node::pySetData<GlData>) WOO_PY_STATICMETHOD("_setDataOnNode")
+		.def_static("_getDataOnNode",&Node::pyGetData<GlData>).def_static("_setDataOnNode",&Node::pySetData<GlData>)
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlData__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(GlData);

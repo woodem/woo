@@ -107,9 +107,9 @@ struct Law2_L6Geom_PelletPhys_Pellet: public LawFunctor{
 		((int,normPlastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy in the normal sense")) \
 		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy")) \
 		, /*py*/ \
-			.def_static("yieldForce",&Law2_L6Geom_PelletPhys_Pellet::yieldForce,WOO_PY_ARGS(py::arg("uN"),py::arg("d0"),py::arg("kn"),py::arg("alpha")),"Return yield force for :obj:`alpha` and given parameters.") WOO_PY_STATICMETHOD("yieldForce") \
-			.def_static("yieldForceDerivative",&Law2_L6Geom_PelletPhys_Pellet::yieldForceDerivative,WOO_PY_ARGS(py::arg("uN"),py::arg("d0"),py::arg("kn"),py::arg("alpha")),"Return yield force derivative for given parameters.") WOO_PY_STATICMETHOD("yieldForceDerivative") \
-			.def_static("adhesionForce",&Law2_L6Geom_PelletPhys_Pellet::adhesionForce,WOO_PY_ARGS(py::arg("uN"),py::arg("uNPl"),py::arg("ka")),"Adhesion force function $h$ evaluated with given parameters") WOO_PY_STATICMETHOD("adhesionForce")
+			.def_static("yieldForce",&Law2_L6Geom_PelletPhys_Pellet::yieldForce,WOO_PY_ARGS(py::arg("uN"),py::arg("d0"),py::arg("kn"),py::arg("alpha")),"Return yield force for :obj:`alpha` and given parameters.") \
+			.def_static("yieldForceDerivative",&Law2_L6Geom_PelletPhys_Pellet::yieldForceDerivative,WOO_PY_ARGS(py::arg("uN"),py::arg("d0"),py::arg("kn"),py::arg("alpha")),"Return yield force derivative for given parameters.") \
+			.def_static("adhesionForce",&Law2_L6Geom_PelletPhys_Pellet::adhesionForce,WOO_PY_ARGS(py::arg("uN"),py::arg("uNPl"),py::arg("ka")),"Adhesion force function $h$ evaluated with given parameters")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Law2_L6Geom_PelletPhys_Pellet__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Law2_L6Geom_PelletPhys_Pellet);
