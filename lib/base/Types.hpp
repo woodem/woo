@@ -131,6 +131,7 @@ using std::abs;
 	#include<pybind11/pybind11.h>
 	#include<pybind11/eval.h>
 	#include<pybind11/operators.h>
+	#include<pybind11/eigen.h>
 	#include<woo/lib/pyutil/compat.hpp>
 	namespace py=pybind11;
 #endif

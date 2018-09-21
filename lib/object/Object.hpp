@@ -413,34 +413,38 @@ template<> struct _SerializeMaybe<false>{
 		WOO_SET_DOCSTRING_OPTS; \
 		auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
 		py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
-		_classObj.def(py::init<>()); \
-		_classObj.def(py::init([](py::args_& a,py::kwargs& kw){ return Object_ctor_kwAttrs<thisClass>(a,kw); })); \
-		_classObj.attr("_classTrait")=traitPtr; \
-		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
-		(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
-		(void) _classObj extras ; \
-		py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
-		Object::derivedCxxClasses.push_back(py::object(_classObj));
+		return [traitPtr,_classObj,mod]() mutable { \
+			_classObj.def(py::init<>()); \
+			_classObj.def(py::init([](py::args_& a,py::kwargs& kw){ return Object_ctor_kwAttrs<thisClass>(a,kw); })); \
+			_classObj.attr("_classTrait")=traitPtr; \
+			BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
+			(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
+			(void) _classObj extras ; \
+			py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
+			Object::derivedCxxClasses.push_back(py::object(_classObj)); \
+		}
 #else
 	#define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
 		checkPyClassRegistersItself(#thisClass); \
 		WOO_SET_DOCSTRING_OPTS; \
 		auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
 		py::class_<thisClass,shared_ptr<thisClass>,py::bases<baseClass>,boost::noncopyable> _classObj(#thisClass,traitPtr->getDoc().c_str(),/*call raw ctor even for parameterless construction*/py::no_init); \
-		_classObj.def("__init__",py::raw_constructor(Object_ctor_kwAttrs<thisClass>)); \
-		_classObj.attr("_classTrait")=traitPtr; \
-		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
-		(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
-		(void) _classObj extras ; \
-		py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
-		Object::derivedCxxClasses.push_back(py::object(_classObj));
+		return [traitPtr,_classObj,mod]() mutable { \
+			_classObj.def("__init__",py::raw_constructor(Object_ctor_kwAttrs<thisClass>)); \
+			_classObj.attr("_classTrait")=traitPtr; \
+			BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
+			(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
+			(void) _classObj extras ; \
+			py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
+			Object::derivedCxxClasses.push_back(py::object(_classObj)); \
+		};
 #endif
 
 #define _WOO_CLASS_BASE_DOC_ATTRS_DEPREC_PY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
 	_REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec) \
 	REGISTER_CLASS_AND_BASE(thisClass,baseClass) \
 	/* accessors for deprecated attributes, with warnings */ BOOST_PP_SEQ_FOR_EACH(_ACCESS_DEPREC,thisClass,deprec) \
-	/* python class registration */ void pyRegisterClass(py::module_& mod) override { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras); } \
+	/* python class registration */ std::function<void()> pyRegisterClass(py::module_& mod) override { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras); } \
 	void must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(); // virtual ensures v-table for all classes 
 
 // attribute declaration
@@ -469,6 +473,7 @@ template<> struct _SerializeMaybe<false>{
 
 
 #ifdef WOO_STATIC_ATTRIBUTES
+	#error WOO_STATIC_ATTRIBUTES (static attributes) no longer supported
 	/* _DEF_READWRITE_CUSTOM(thisClass,attr,doc) */ /* duplicate static and non-static attributes do not work (they apparently trigger to-python converter being added; for now, make then non-static, that's it. */
 	#define _STATATTR_PY(x,thisClass,z) _DEF_READWRITE_CUSTOM_STATIC(thisClass,z)
 	#define _STATATTR_DECL_AND_TRAIT(x,thisClass,z) \
@@ -596,7 +601,7 @@ template<> struct _SerializeMaybe<false>{
 	/*3. boost::serialization declarations */ _WOO_BOOST_SERIALIZE_DECL(thisClass,baseClass,/*TODO:stat*/attrs) \
 	/*4. set attributes from kw ctor */ protected: void pySetAttr(const std::string& key, const py::object& value) override; \
 	/*5. for pickling*/ py::dict pyDict(bool all=true) const override; \
-	/*6. python class registration*/ void pyRegisterClass(py::module_& mod) override; \
+	/*6. python class registration*/ std::function<void()> pyRegisterClass(py::module_& mod) override; \
 	/*7. ensures v-table; will be removed later*/ void must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(); \
 	/*8.*/ void must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(); \
 	public: /* make the rest public by default again */
@@ -616,7 +621,7 @@ template<> struct _SerializeMaybe<false>{
 	/*3.*/ _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,/*TODO:stat*/attrs) \
 	/*4.*/ void thisClass::pySetAttr(const std::string& key, const py::object& value){ BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR,thisClass,/*TODO:stat*/attrs); BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC,thisClass,deprec); baseClass::pySetAttr(key,value); } \
 	/*5.*/ py::dict thisClass::pyDict(bool all) const { py::dict ret; BOOST_PP_SEQ_FOR_EACH(_PYDICT_ATTR,~,/*TODO:stat*/attrs); _WOO_PYDICT_UPDATE(baseClass::pyDict(all),ret); return ret; } \
-	/*6.*/ void thisClass::pyRegisterClass(py::module_& mod) { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,makeClassTrait(classTraitSpec),/*TODO:stat*/attrs,deprec,pyExtras); } \
+	/*6.*/ std::function<void()> thisClass::pyRegisterClass(py::module_& mod) { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,makeClassTrait(classTraitSpec),/*TODO:stat*/attrs,deprec,pyExtras); } \
 	/*7. -- handled by WOO_PLUGIN */ \
 	/*8.*/ void thisClass::must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(){};
 
@@ -672,7 +677,7 @@ struct Object: public boost::noncopyable, public enable_shared_from_this<Object>
 		// that means that the class doesn't register itself properly
 		virtual void checkPyClassRegistersItself(const std::string& thisClassName) const;
 		// perform class registration; overridden in all classes
-		virtual void pyRegisterClass(py::module_& mod);
+		virtual std::function<void()> pyRegisterClass(py::module_& mod);
 		// perform any manipulation of arbitrary constructor arguments coming from python, manipulating them in-place;
 		// the remainder is passed to the Object_ctor_kwAttrs of the respective class (note: args must be empty)
 		virtual void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){ return; }

@@ -325,7 +325,8 @@ void Master::pyRegisterAllClasses(){
 	woo::ClassTrait::pyRegisterClass(core);
 	woo::AttrTraitBase::pyRegisterClass(core);
 	woo::TimingDeltas::pyRegisterClass(core);
-	Object().pyRegisterClass(core); // virtual method, therefore cannot be static
+	std::list<std::pair<std::string,std::function<void()>>> defPyAttrsFuncs;
+	defPyAttrsFuncs.push_back({"Object",Object().pyRegisterClass(core)}); // virtual method, therefore cannot be static
 
 	// http://boost.2283326.n4.nabble.com/C-sig-How-to-create-package-structure-in-single-extension-module-td2697292.html
 
@@ -383,7 +384,7 @@ void Master::pyRegisterAllClasses(){
 			try{
 				LOG_DEBUG_EARLY_FRAGMENT("{{"<<klass<<"}}");
 				py::module_ mod(pyModules[module]);
-				s->pyRegisterClass(mod);
+				defPyAttrsFuncs.push_back({klass,s->pyRegisterClass(mod)});
 				auto prev=I++;
 				pythonables.erase(prev);
 			} catch (const std::exception& e){
@@ -401,6 +402,10 @@ void Master::pyRegisterAllClasses(){
 				I++;
 			}
 		}
+	}
+	for(auto klass_func: defPyAttrsFuncs){
+		LOG_DEBUG_EARLY("Defining class attributes for: "<<std::get<0>(klass_func));
+		std::get<1>(klass_func)();
 	}
 }
 

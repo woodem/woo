@@ -30,7 +30,7 @@ struct Outlet: public PeriodicEngine{
 		((bool,save,false,,"Save particle data which are deleted in the :obj:`diamMassTime` list")) \
 		((bool,recoverRadius,false,,"Recover radius of Spheres by computing it back from particle's mass and its material density (used when radius is changed due to radius thinning (in Law2_L6Geom_PelletPhys_Pellet.thinningFactor). When radius is recovered, the :math:`r/r_0` ratio is added to :obj:`rDivR0` for further processing.")) \
 		((vector<Real>,rDivR0,,AttrTrait<>().noGui().readonly(),"List of the :math:`r/r_0` ratio of deleted particles, when :obj:`recoverRadius` is true.")) \
-		((vector<Vector3r>,diamMassTime,,AttrTrait<>().noGui().noDump().readonly(),"Radii and masses of deleted particles; not accessible from python (shadowed by the :obj:`diamMassTime` method).")) \
+		((vector<Vector3r>,diamMassTime,,/*must be hidden since pybind11 will not let us re-define it with function of the same name below */AttrTrait<Attr::hidden>(),"Radii and masses of deleted particles; not accessible from python (shadowed by the :obj:`diamMassTime` method).")) \
 		((vector<int>,locs,,AttrTrait<>().noGui().readonly(),"Integer location specified for particles; -1 by default, derived classes can use this for any purposes (usually more precise location within the outlet volume).")) \
 		((int,num,0,AttrTrait<Attr::readonly>(),"Number of deleted particles")) \
 		((bool,savePar,false,,"Save particles as objects in :obj:`par`")) \

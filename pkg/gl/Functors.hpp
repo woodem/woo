@@ -3,7 +3,7 @@
 #pragma once
 
 #ifdef WOO_OPENGL
-
+#include<woo/lib/base/Types.hpp>
 #include<woo/lib/multimethods/FunctorWrapper.hpp>
 #include<woo/core/Dispatcher.hpp>
 #include<woo/lib/pyutil/converters.hpp>

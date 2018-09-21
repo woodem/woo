@@ -20,14 +20,15 @@ py::list Object::getDerivedCxxClasses(){ py::list ret; for(py::object c: derived
 
 py::dict Object_pyDict_pickleable(const Object& o) { return o.pyDict(/*all*/false); }
 
-void Object::pyRegisterClass(py::module_& mod) {
+std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 	checkPyClassRegistersItself("Object");
 	#ifdef WOO_PYBIND11
 		py::class_<Object,shared_ptr<Object>> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
 	#else
 		py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
 	#endif
-	classObj
+	return [classObj]() mutable {
+		classObj
 		.def("__str__",&Object::pyStr).def("__repr__",&Object::pyStr)
 		.def("dict",&Object::pyDict,WOO_PY_ARGS(py::arg("all")=true),"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
 		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
@@ -59,6 +60,7 @@ void Object::pyRegisterClass(py::module_& mod) {
 	shared_ptr<ClassTrait> traitPtr=make_shared<ClassTrait>();
 	traitPtr->name("Object").doc(py::extract<string>(classObj.attr("__doc__"))()).file(__FILE__).line(__LINE__);
 	classObj.attr("_classTrait")=traitPtr;
+	};
 	//classObj.attr("_derivedCxxClasses")=Object::derivedCxxClasses;
 }
 
