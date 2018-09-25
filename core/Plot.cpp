@@ -15,7 +15,7 @@ void Plot::_resetPyObjects(){
 	if(Py_IsInitialized()){ gil=unique_ptr<GilLock>(new GilLock); }
 	data=imgData=plots=labels=xylabels=py::dict();
 	legendLoc=py::tuple();
-	currLineRefs=py::object();
+	currLineRefs=py::none();
 }
 
 

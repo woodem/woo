@@ -10,14 +10,15 @@ py3k=future.utils.PY3
 import woo.core
 import woo.system
 import woo.document
+import woo.config
 #import woo.dem
 from minieigen import * # for recognizing the types
 
 if py3k: from io import StringIO
 else: import StringIO # cStringIO does not handle unicode, so stick with the slower one
-
 from woo.core import Object
 import woo._customConverters # to make sure they are loaded already
+
 
 import codecs
 import pickle
@@ -310,7 +311,7 @@ class WooJSONEncoder(json.JSONEncoder):
             if hasattr(obj,'__len__'): return list(obj)
             else: raise TypeError("Unhandled type for JSON: "+obj.__class__.__module__+'.'+obj.__class__.__name__)
         # minieigen objects
-        elif obj.__class__.__module__=='minieigen':
+        elif obj.__class__.__module__ in ('minieigen','_minieigen11'):
             if isinstance(obj,minieigen.Quaternion): return obj.toAxisAngle()
             else: return tuple(obj[i] for i in range(len(obj)))
         # numpy arrays

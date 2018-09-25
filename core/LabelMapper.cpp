@@ -138,7 +138,7 @@ void LabelMapper::opaque_sequence_with_woo_objects_error(py::object oo){
 	if(PySequence_Size(o)<=0) return; // ok
 	for(int i=0; i<PySequence_Size(o); i++){
 		#if WOO_PYBIND11
-			if(!py::isinstance<Object>(py::handle(PySequence_GetItem(o,i)))) continue;
+			if(!py::extract<shared_ptr<Object>>(py::cast<py::object>(py::handle(PySequence_GetItem(o,i)))).check()) continue;
 		#else
 			if(!py::extract<Object>(py::object(py::handle<>(PySequence_GetItem(o,i)))).check()) continue;
 		#endif
@@ -247,7 +247,7 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 	int where=whereIs(label);
 	if(where==IN_MOD) woo::NameError("Label '"+label+"' is a pseudo-module (cannot be overwritten).");
 	bool writable(writables.count(label));
-	assert(!py::extract<woo::Object>(o).check());
+	assert(!py::extract<shared_ptr<woo::Object>>(o).check());
 	if(type==LABEL_PLAIN){
 		switch(where){
 			case IN_WOO:
@@ -288,7 +288,7 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 		assert(py::extract<py::list>(pyMap[lab0]).check());
 		py::list lst=py::extract<py::list>(pyMap[lab0])();
 		// extend the list so that it is long enough
-		while(py::len(lst)<index+1) lst.append(py::object());
+		while(py::len(lst)<index+1) lst.append(py::none());
 		if(!py::object(lst[index]).is_none() && !writable) LOG_WARN("Label '"<<lab0<<"["<<index<<"]' overwrites old item "<<pyAsStr(lst[index])<<" with "<<pyAsStr(o));
 		lst[index]=o;
 	}

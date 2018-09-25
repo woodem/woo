@@ -474,7 +474,7 @@ public:
 WOO_PYTHON_MODULE(_packPredicates);
 
 #ifdef WOO_PYBIND11
-PYBIND11_MODULE(_packPredicated,mod){
+PYBIND11_MODULE(_packPredicates,mod){
 	WOO_SET_DOCSTRING_OPTS;
 	mod.doc()="Spatial predicates for volumes (defined analytically or by triangulation).";
 	// base predicate class

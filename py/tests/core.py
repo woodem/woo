@@ -99,7 +99,8 @@ class TestObjectInstantiation(unittest.TestCase):
     def testWrongFunctorType(self):
         "Core: dispatcher and functor type mismatch is detected"
         # dispatchers accept only correct functors
-        self.assertRaises(TypeError,lambda: LawDispatcher([Bo1_Sphere_Aabb()]))
+        # pybind11: RuntimeError
+        self.assertRaises((TypeError,RuntimeError),lambda: LawDispatcher([Bo1_Sphere_Aabb()]))
     def testInvalidAttr(self):
         'Core: invalid attribute access raises AttributeError'
         # accessing invalid attributes raises AttributeError
@@ -279,7 +280,8 @@ class TestObjectInstantiation(unittest.TestCase):
         'Core: assign node data using shorthands in the ctor'
         n=woo.core.Node(pos=(1,2,3),dem=woo.dem.DemData(mass=100))
         self.assertTrue(n.dem.mass==100)
-        self.assertRaises(TypeError,lambda: woo.core.Node(dem=1))
+        # pybind11: RuntimeError
+        self.assertRaises((TypeError,RuntimeError),lambda: woo.core.Node(dem=1))
         if 'gl' in woo.config.features:
             # type mismatch
             self.assertRaises(RuntimeError,lambda: woo.core.Node(dem=woo.gl.GlData()))

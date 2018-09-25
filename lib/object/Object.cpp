@@ -29,11 +29,30 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 	#endif
 	return [classObj]() mutable {
 		classObj
+		#ifdef WOO_PYBIND11
+			.def(py::init<>())
+			// this one is declared in all derived classes; needed here??
+			//.def(py::init([](py::args_& a,py::kwargs& kw){ return Object_ctor_kwAttrs<thisClass>(a,kw); }))
+		#endif
 		.def("__str__",&Object::pyStr).def("__repr__",&Object::pyStr)
 		.def("dict",&Object::pyDict,WOO_PY_ARGS(py::arg("all")=true),"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
 		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
 		.def("updateAttrs",&Object::pyUpdateAttrs,"Update object attributes from given dictionary")
-		#if 1
+		#ifdef WOO_PYBIND11
+			#warning pybind11: pickling not yet properly tested
+			.def(py::pickle([](const shared_ptr<Object>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<Object>))
+			//.def("__getstate__",Object_pyDict_pickleable)
+			//.def("__setstate__",Object__setstate__<Object>)
+			//.def(py::pickle(
+			//	Object_pyDict_pickleable,
+			//	&Object::pyUpdateAttrs
+			//))
+			//.def("__getstate__",Object_pyDict_pickleable,"Dump state to dictionary")
+			//.def("__setstate__",&Object::pyUpdateAttrs,"Restore state from dictionary passed")
+			// .def("__setstate__",[](py::dict d){ self->pyUpdateAttrs(d); })
+			//.add_property_readonly("__safe_for_unpickling__",[](py::object){ return true; },"just define the attr, return some bogus data")
+			// .add_property_readonly("__getstate_manages_dict__",[](py::object){ return true; },"just define the attr, return some bogus data")
+		#else
 			/* boost::python pickling support, as per http://www.boost.org/doc/libs/1_42_0/libs/python/doc/v2/pickle.html */ 
 			.def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object::pyUpdateAttrs)
 			.add_property_readonly("__safe_for_unpickling__",&Object::getClassName,"just define the attr, return some bogus data")
@@ -42,7 +61,11 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		.def("save",&Object::boostSave,py::arg("filename"))
 		.def_static("_boostLoad",&Object::boostLoad,py::arg("filename")) 
 		//.def_readonly("_derivedCxxClasses",&Object::derivedCxxClasses)
-		.def_property_readonly_static("_derivedCxxClasses",&Object::getDerivedCxxClasses)
+		#ifdef WOO_PYBIND11
+			.def_property_readonly_static("_derivedCxxClasses",[](py::object){ return Object::getDerivedCxxClasses(); })
+		#else
+			.def_property_readonly_static("_derivedCxxClasses",&Object::getDerivedCxxClasses)
+		#endif
 		.def_property_readonly("_cxxAddr",&Object::pyCxxAddr)
 		// setting attributes with protection of creating class instance mistakenly
 		#if 0
@@ -68,7 +91,7 @@ void Object::checkPyClassRegistersItself(const std::string& thisClassName) const
 	if(getClassName()!=thisClassName) throw std::logic_error(("Class "+getClassName()+" does not register with WOO_CLASS_BASE_DOC_ATTR*, would not be accessible from python.").c_str());
 }
 
-void Object::pyUpdateAttrs(const py::dict& d){	
+void Object::pyUpdateAttrs(const py::dict& d){
 	#ifdef WOO_PYBIND11
 	for(auto kv: d){
 		pySetAttr(py::cast<string>(kv.first),py::object(py::reinterpret_borrow<py::object>(kv.second)));

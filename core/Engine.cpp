@@ -61,7 +61,7 @@ void Engine::postLoad(Engine&, void* addr){
 shared_ptr<Field> Engine::field_get(){ return field; }
 
 py::object Engine::py_getScene(){
-	if(!scene) return py::object();
+	if(!scene) return py::none();
 	else return py::cast(static_pointer_cast<Scene>(scene->shared_from_this()));
 }
 

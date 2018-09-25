@@ -183,13 +183,6 @@ shared_ptr<Particle> Shape::make(const shared_ptr<Shape>& shape, const shared_pt
 
 
 void DemData::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
-	#if 0
-		if(!kw.contains("blocked")) return;
-		if(!py::isinstance<string>(kw["blocked"])) return;
-		auto s=py::cast<string>(kw["blocked"]);
-		blocked_vec_set(s);
-		kw.attr("pop")("blocked");
-	#endif
 	if(!WOO_PY_DICT_CONTAINS(kw,"blocked")) return;
 	py::extract<string> strEx(kw["blocked"]);
 	if(!strEx.check()) return;

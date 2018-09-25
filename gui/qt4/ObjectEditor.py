@@ -942,7 +942,7 @@ class ObjectEditor(QFrame):
             if not t and len(val)==1: t=(val[0].__class__,) # 1-tuple is list of the contained type
             #if not t: raise RuntimeError('Unable to guess type of '+str(obj)+'.'+attr)
         elif val.__class__ in _attributeGuessedTypeMap: t=_attributeGuessedTypeMap[val.__class__]
-        elif not isinstance(val,woo.core.Object) and val!=None: t=val.__class__
+        elif not isinstance(val,woo.core.Object) and val is not None: t=val.__class__
         else: # for Woo objects, determine base class if manipulation is allowed; if not, use current instance type (it can't be changed anyway) or Object (it the value is None)
             if self.objManip: t=woo.document.guessInstanceTypeFromCxxType(obj.__class__,trait)
             elif val!=None: t=val.__class__
@@ -1431,7 +1431,8 @@ class SeqObjectComboBox(QFrame):
     def __init__(self,parent,getter,setter,T,trait,path=None,shrink=False,nesting=0):
         QFrame.__init__(self,parent)
         self.getter,self.setter,T,self.trait,self.path,self.shrink=getter,setter,T,trait,path,shrink
-        if not hasattr(self.trait,'pyType'): self.trait.pyType=(T,) # this is for compat with C++ (?)
+        #if not hasattr(self.trait,'pyType'): self.trait.pyType=(T,) # this is for compat with C++ (?)
+        if self.trait.pyType is None: self.trait.pyType=(T,)
         self.hot=None # API compat with ObjectEditor
         ll=len(self.getter())
         if ll>self.maxShowLen:

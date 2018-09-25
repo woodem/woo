@@ -6,9 +6,9 @@ Functions for accessing woo's internals; only used internally.
 """
 from __future__ import print_function
 import sys
+from woo import config
 from woo._customConverters import *
 from woo import runtime
-from woo import config
 import woo.core
 
 def childClasses(base,recurse=True,includeBase=False):

@@ -220,67 +220,6 @@ template<> struct _def_woo_attr__namedEnum<true>{
 
 #define _DEF_READWRITE_CUSTOM(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE(thisClass,attr)::compileFlags & woo::Attr::namedEnum)); _def_woo_attr__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
 
-/* static attributes -- not needed anymore */
-#ifdef WOO_STATIC_ATTRIBUTES
-
-	// for static postLoad, use static if via templates
-	// so that the function does not have to be declared everywhere
-	template<bool noSave> struct _setter_postLoadStaticMaybe{};
-	template<> struct _setter_postLoadStaticMaybe<true >{ template<class C, typename T, T* A> static void setter(const T& val){ *A=val; C::postLoadStatic((void*)&(*A)); } };
-	template<> struct _setter_postLoadStaticMaybe<false>{ template<class C, typename T, T* A> static void setter(const T& val){ *A=val; } };
-
-	// static if only for calling postLoad (not for setting an attribute)
-	template<bool noSave> struct _postLoadStaticMaybe{};
-	template<> struct _postLoadStaticMaybe<true >{ template<class C, typename T, T* A> static void call(){ C::postLoadStatic((void*)&(*A)); } };
-	template<> struct _postLoadStaticMaybe<false>{ template<class C, typename T, T* A> static void call(){ } };
-
-	// template for static attributes
-	template<bool namedEnum> struct  _def_woo_attr_static__namedEnum{};
-
-	/* instantiation for attribute which IS NOT not a named enumeration */
-	template<> struct _def_woo_attr_static__namedEnum<false>{
-		template<typename classObjT, typename traitT, traitT& (*traitGetter)(), typename classT, typename attrT, attrT *A>
-		void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName){
-			bool _ro=trait.isReadonly(), _ref(!_ro && (woo::py_wrap_ref<attrT>::value || trait.isPyByRef()));
-			constexpr bool _post=!!(traitT::compileFlags & woo::Attr::triggerPostLoad);
-			if(_ref){
-				if(_ro) _classObj.add_static_property(attrName,py::make_getter(A));
-				else    _classObj.add_static_property(attrName,py::make_getter(A),/*setter*/_setter_postLoadStaticMaybe<_post>::template setter<classT,attrT,A>);
-			} else {
-				if(_ro) _classObj.add_static_property(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()));
-				else _classObj.add_static_property(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()),/*setter*/_setter_postLoadStaticMaybe<_post>::template setter<classT,attrT,A>);
-			}
-		}
-	};
-	// helper template for static named enumerations
-	// we can't keep the trait somewhere (needs explicit instantiation for storage)
-	// so we keep traitGetter pointer around and get the trait reference every time needed
-	// the trick with lambdas (and make_function_aux) as above does not work for static attributes
-	// so we do it differently here (reason unknown, template hell)
-	template<typename classT, typename traitT, traitT& (*traitGetter)(), typename attrT, attrT *A>
-	struct _namedEnum_accessors{
-		// these functions are passed as function pointers to add_static_property
-		static string getter(){ return traitGetter().namedEnum_num2name(*A); }
-		static void setter(py::object val){
-			constexpr bool _post=!!(traitT::compileFlags & woo::Attr::triggerPostLoad);
-			*A=traitGetter().namedEnum_name2num(val);
-			_postLoadStaticMaybe<_post>::template call<classT,attrT,A>();
-		}
-	};
-
-	template<> struct _def_woo_attr_static__namedEnum<true>{
-		template<typename classObjT, typename traitT, traitT& (*traitGetter)(), typename classT, typename attrT, attrT *A>
-		void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName){
-			bool _ro=trait.isReadonly();
-			typedef _namedEnum_accessors<classT,traitT,traitGetter,attrT,A> access;
-			if (_ro) _classObj.add_static_property(attrName,access::getter);
-			else _classObj.add_static_property(attrName,access::getter,access::setter);
-		}
-	};
-
-
-	#define _DEF_READWRITE_CUSTOM_STATIC(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE(thisClass,attr)::compileFlags & woo::Attr::namedEnum)); _def_woo_attr_static__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),&_ATTR_TRAIT_GET(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
-#endif /* WOO_STATIC_ATTRIBUTES */
 
 
 // print warning about deprecated attribute; thisClass is type name, not string
@@ -331,9 +270,6 @@ template<> struct _setAttrMaybe</*hidden*/false,/*namedEnum*/true>{
 	#define _PYDICT_ATTR(x,y,z) if(!(_ATTR_TRAIT(klass,z).isHidden()) && (all || !(_ATTR_TRAIT(klass,z).isNoSave())) && (all || !(_ATTR_TRAIT(klass,z).isNoDump()))){ /*if(_ATTR_TRAIT(klass,z) & woo::Attr::pyByRef) ret[_ATTR_NAM_STR(z)]=py::object(boost::ref(_ATTR_NAM(z))); else */  ret[_ATTR_NAM_STR(z)]=py::object(_ATTR_NAM(z)); }
 #endif
 
-#ifdef WOO_STATIC_ATTRIBUTES
-	#define _PYATTR_TRAIT_STATIC(x,klass,z) traitList.append(py::ptr(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)()))); // static_() already set in trait definition
-#endif
 
 // static switch for noSave attributes via templates
 template<bool noSave> struct _SerializeMaybe{};
@@ -415,7 +351,9 @@ template<> struct _SerializeMaybe<false>{
 		py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
 		return [traitPtr,_classObj,mod]() mutable { \
 			_classObj.def(py::init<>()); \
-			_classObj.def(py::init([](py::args_& a,py::kwargs& kw){ return Object_ctor_kwAttrs<thisClass>(a,kw); })); \
+			_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);})); \
+			_classObj.def(py::pickle([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>)); \
+			/*_classObj.def("__setstate__",Object__setstate__<thisClass>);*/ \
 			_classObj.attr("_classTrait")=traitPtr; \
 			BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
 			(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
@@ -454,13 +392,6 @@ template<> struct _SerializeMaybe<false>{
 	typedef std::remove_reference<decltype(_ATTR_TRAIT(thisClass,z))>::type _ATTR_TRAIT_TYPE(thisClass,z); \
 	static _ATTR_TRAIT_TYPE(thisClass,z)& _ATTR_TRAIT_GET(thisClass,z)(){ static _ATTR_TRAIT_TYPE(thisClass,z) _tmp=_ATTR_TRAIT(thisClass,z); return _tmp; }
 
-#ifdef WOO_STATIC_ATTRIBUTES
-	#define _WOO_STATATTR_DECL(x,thisClass,z) static _ATTR_TYP(z) _ATTR_NAM(z);
-	#define _WOO_STATTRAIT_DEF(x,thisClass,z) \
-		typedef std::remove_reference<decltype(_ATTR_TRAIT(thisClass,z))>::type _ATTR_TRAIT_TYPE(thisClass,z); \
-		static _ATTR_TRAIT_TYPE(thisClass,z)& _ATTR_TRAIT_GET(thisClass,z)(){ static _ATTR_TRAIT_TYPE(thisClass,z) _tmp=_ATTR_TRAIT(thisClass,z).static_(); return _tmp; }
-#endif
-
 // return "type name;", define trait type and getter
 #define _ATTR_DECL_AND_TRAIT(x,thisClass,z) _WOO_ATTR_DECL(x,thisClass,z) _WOO_TRAIT_DEF(x,thisClass,z)
 
@@ -470,29 +401,6 @@ template<> struct _SerializeMaybe<false>{
 #define _ATTR_NAME_ADD_DUMMY_FIELDS(x,y,z) ((/*type*/,z,/*default*/,/*flags*/,/*doc*/))
 #define _ATTR_MAKE_INIT_TUPLE(x,y,z) (( _ATTR_NAM(z),_ATTR_INI(z) ))
 
-
-
-#ifdef WOO_STATIC_ATTRIBUTES
-	#error WOO_STATIC_ATTRIBUTES (static attributes) no longer supported
-	/* _DEF_READWRITE_CUSTOM(thisClass,attr,doc) */ /* duplicate static and non-static attributes do not work (they apparently trigger to-python converter being added; for now, make then non-static, that's it. */
-	#define _STATATTR_PY(x,thisClass,z) _DEF_READWRITE_CUSTOM_STATIC(thisClass,z)
-	#define _STATATTR_DECL_AND_TRAIT(x,thisClass,z) \
-		static _ATTR_TYP(z) _ATTR_NAM(z); \
-		typedef std::remove_reference<decltype(_ATTR_TRAIT(thisClass,z))>::type _ATTR_TRAIT_TYPE(thisClass,z); \
-		static _ATTR_TRAIT_TYPE(thisClass,z)& _ATTR_TRAIT_GET(thisClass,z)(){ static _ATTR_TRAIT_TYPE(thisClass,z) _tmp=_ATTR_TRAIT(thisClass,z).static_(); return _tmp; }
-	#define _STATATTR_INITIALIZE(x,thisClass,z) thisClass::_ATTR_NAM(z)=_ATTR_TYP(z)(_ATTR_INI(z)); /*cerr<<BOOST_PP_STRINGIZE(thisClass)<<":"<< BOOST_PP_STRINGIZE(_ATTR_NAM(z)) "=" BOOST_PP_STRINGIZE(_ATTR_TYP(z)) "(" BOOST_PP_STRINGIZE(_ATTR_INI(z)) ")"<<endl;*/
-
-	#define _STATCLASS_PY_REGISTER_CLASS(thisClass,baseClass,classTrait,attrs,pyExtra)\
-		void pyRegisterClass() override { checkPyClassRegistersItself(#thisClass); initSetStaticAttributesValue(); WOO_SET_DOCSTRING_OPTS; \
-			auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
-			py::class_<thisClass,shared_ptr<thisClass>,py::bases<baseClass>,boost::noncopyable> _classObj(#thisClass,traitPtr->getDoc().c_str(),/*call raw ctor even for parameterless construction*/py::no_init); _classObj.def("__init__",py::raw_constructor(Object_ctor_kwAttrs<thisClass>)); \
-			_classObj.attr("_classTrait")=traitPtr; \
-			BOOST_PP_SEQ_FOR_EACH(_STATATTR_PY,thisClass,attrs); \
-			(void) _classObj pyExtra ;\
-			py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT_STATIC,thisClass,attrs); _classObj.attr("_attrTraits")=traitList; \
-			Object::derivedCxxClasses.push_back(py::object(_classObj)); \
-		}
-#endif /* WOO_STATIC_ATTRIBUTES */
 
 /********************** USER MACROS START HERE ********************/
 
@@ -515,25 +423,6 @@ template<> struct _SerializeMaybe<false>{
 	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrs),:,) BOOST_PP_SEQ_FOR_EACH_I(_ATTR_MAKE_INITIALIZER,BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrs)), inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE,~,attrs)) { ctor ; } /* ctor, with initialization of defaults */ \
 	virtual ~thisClass(){ dtor ; }; /* virtual dtor, since classes are polymorphic*/ \
 	_WOO_CLASS_BASE_DOC_ATTRS_DEPREC_PY(thisClass,baseClass,makeClassTrait(classTraitSpec),attrs,deprec,extras)
-
-
-#ifdef WOO_STATIC_ATTRIBUTES
-	/** static attrs **/
-	// for static classes (Gl1 functors, for instance)
-	#define WOO_CLASS_BASE_DOC_STATICATTRS_CTOR_PY(thisClass,baseClass,classTraitSpec,attrs,statCtor,pyExtra)\
-		public: BOOST_PP_SEQ_FOR_EACH(_STATATTR_DECL_AND_TRAIT,thisClass,attrs) /* attribute declarations */ \
-		/* no ctor */ \
-		REGISTER_CLASS_AND_BASE(thisClass,baseClass); \
-		_REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,) \
-		/* called only at class registration, to set initial values; storage still has to be alocated in the cpp file! */ \
-		void initSetStaticAttributesValue(void){ BOOST_PP_SEQ_FOR_EACH(_STATATTR_INITIALIZE,thisClass,attrs); statCtor; } \
-		_STATCLASS_PY_REGISTER_CLASS(thisClass,baseClass,makeClassTrait(classTraitSpec),attrs,pyExtra) \
-		void must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(); 
-	#define WOO_CLASS_BASE_DOC_STATICATTRS_PY(thisClass,baseClass,classTraitSpec,attrs,pyExtra)\
-		WOO_CLASS_BASE_DOC_STATICATTRS_CTOR_PY(thisClass,baseClass,classTraitSpec,attrs,,pyExtra)
-	#define WOO_CLASS_BASE_DOC_STATICATTRS(thisClass,baseClass,classTraitSpec,attrs) \
-		WOO_CLASS_BASE_DOC_STATICATTRS_PY(thisClass,baseClass,classTraitSpec,attrs,)
-#endif /* WOO_STATIC_ATTRIBUTES */
 
 
 
@@ -635,7 +524,7 @@ template<> struct _SerializeMaybe<false>{
 
 
 /* this used to be in lib/factory/Factorable.hpp */
-#define REGISTER_CLASS_AND_BASE(cn,bcn) public: virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
+#define REGISTER_CLASS_AND_BASE(cn,bcn) public: EIGEN_MAKE_ALIGNED_OPERATOR_NEW ; virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
 
 // this is used only in Object declaration itself below
 #define WOO_TOPLEVEL_OBJECT_REGISTER_CLASS_BASE(cn,bcn) public: virtual string getClassName() const {return #cn;}; virtual vector<string> getBaseCLassNames() const {return #bcn; }
@@ -703,5 +592,15 @@ shared_ptr<T> Object_ctor_kwAttrs(py::args_& t, py::kwargs& d){
 	instance->callPostLoad(NULL); 
 	return instance;
 }
+
+#ifdef WOO_PYBIND11
+template<typename T>
+shared_ptr<T> Object__setstate__(py::dict state){
+	shared_ptr<T> instance=make_shared<T>();
+	instance->pyUpdateAttrs(state);
+	instance->callPostLoad(NULL);
+	return instance;
+}
+#endif
 
 }; /* namespace woo */

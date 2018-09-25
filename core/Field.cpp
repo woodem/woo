@@ -66,7 +66,7 @@ void Node::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 
 
 py::object Field::py_getScene(){
-	if(!scene) return py::object();
+	if(!scene) return py::none();
 	else return py::cast(static_pointer_cast<Scene>(scene->shared_from_this()));
 }
 

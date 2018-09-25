@@ -195,7 +195,7 @@ void Master::pyRegisterClass(py::module_& mod){
 		.def("tmpFilename",&Master::tmpFilename,"Return unique name of file in temporary directory which will be deleted when woo exits.")
 		.add_property_readonly("tmpFileDir",&Master::getTmpFileDir,"Directory for temporary files; created automatically at startup.")
 		#ifdef WOO_PYBIND11
-			.def_property_readonly_static("instance",&Master::instance,py::return_value_policy::reference)
+			.def_property_readonly_static("instance",[](py::object){ return &Master::instance(); },py::return_value_policy::reference)
 		#else
 			.add_static_property("instance",py::make_function(&Master::instance,py::return_value_policy<py::reference_existing_object>()))
 		#endif
@@ -503,12 +503,6 @@ void Master::pySetScene(const shared_ptr<Object>& s){
 	if(!s) woo::ValueError("woo.master.scene: attempting to assign None.");
 	if(!s->isA<Scene>()) woo::TypeError("woo.master.scene: attempt to assign non-Scene object.");
 	setScene(static_pointer_cast<Scene>(s));
-}
-
-
-py::object Master::pyGetInstance(){
-	//return py::object(py::ref(Master::getInstance()));
-	return py::object();
 }
 
 void Master::pyReset(){

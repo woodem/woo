@@ -84,7 +84,7 @@ struct ConveyorInlet: public Inlet{
 		\
 		((int,nextIx,-1,AttrTrait<>().readonly().startGroup("Bookkeeping"),"Index of last-generated particles in the packing")) \
 		((Real,lastX,0,AttrTrait<>().readonly(),"X-coordinate of last-generated particles in the packing")) \
-		((list<shared_ptr<Node>>,barrier,,AttrTrait<>().readonly().noGui(),"Nodes which make up the barrier and will be unblocked once they leave barrierLayer.")) \
+		((list<shared_ptr<Node>>,barrier,,/*exposed via pyBarrier, hide here*/AttrTrait<Attr::hidden>(),"Nodes which make up the barrier and will be unblocked once they leave barrierLayer.")) \
 		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<>(),"Position and orientation of the factory; local x-axis is the feed direction.")) \
 		/* movable beginning */ \
 		((shared_ptr<Node>,streamBeginNode,,AttrTrait<>(),"Node at which the particle stream will start, which can be moving during the simulation without disrupting stream continuity. It is the position of this node, projected onto :math:`x`-axis of :obj:`node`, which is relevant.")) \

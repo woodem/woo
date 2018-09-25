@@ -105,7 +105,7 @@ def sphereClumpPrincipalAxes(cc,rr):
     Ic_orientG=Ig-V*(pos.dot(pos)*Matrix3.Identity-pos.outer(pos))
     eigval,eigvec=numpy.linalg.eigh(numpy.matrix(Ic_orientG))
     ori=Quaternion(Matrix3(*eigvec.tolist()))
-    inertia=Vector3(eigval)
+    inertia=Vector3(tuple(eigval))
     return V,pos,ori,inertia
 
 

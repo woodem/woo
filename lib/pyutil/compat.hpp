@@ -1,6 +1,7 @@
 #pragma once
 // compatibility funcs for boost::python ad pybind11
 #ifdef WOO_PYBIND11
+	#include<functional>
 	#define add_property_readonly def_property_readonly
 	#define add_property def_property
 	#define add_static_property def_property_static
@@ -14,6 +15,9 @@
 	#define WOO_PY_EXPOSE_COPY(classT,attr) [](const classT& o){return o.*(attr);},py::return_value_policy::copy
 	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy::take_ownership
 
+	// forward decl
+	namespace woo { class Object; }; 
+
 	#include<pybind11/pybind11.h>
 	namespace pybind11{
 		// emulate boost::python::extract
@@ -21,11 +25,13 @@
 		struct __attribute__((visibility("hidden"))) extract{
 			const object& obj;
 			extract(const object& obj_): obj(obj_){}
-			bool check(){ return isinstance<T>(obj); }
+			/* this is colosally ugly, but unfortunately py::isinstance only checks real instance type, not convertibility */
+			// bool check(){ return isinstance<T>(obj); }
+			bool check(){ try{ cast<T>(obj); return true; } catch(...){ return false; }  }
 			T operator()() const { return cast<T>(obj); }
 			operator T() const { return cast<T>(obj); }
 		};
-		// boost::python::ptr does not seem to be neede in pybind11 when casting from raw pointer
+		// boost::python::ptr does not seem to be needed in pybind11 when casting from raw pointer
 		// make it no-op
 		template<typename T>
 		T* ptr(T* p){ return p; }
@@ -61,6 +67,8 @@
 		typedef dict kwargs;
 		typedef tuple args_;
 		typedef scope module_;
+		// pybind11 is a class, mimick here
+		inline object none(){ return object(); }
 		#if 0
 			// pybind11 exposes import as py::module::import, mimick here
 			namespace module{

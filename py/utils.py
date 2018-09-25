@@ -154,7 +154,7 @@ def sphere(center,radius,mat=defaultMaterial,fixed=False,wire=False,color=None,h
     b.shape.wire=wire
     _commonBodySetup(b,([center] if isinstance(center,Node) else [_mkDemNode(pos=center),]),mat=mat,fixed=fixed)
     if vel: b.vel=vel
-    b.aspherical=False
+    #b.aspherical=False
     b.mask=mask
     return b
 
@@ -164,7 +164,7 @@ def ellipsoid(center,semiAxes,ori=Quaternion.Identity,angVel=None,color=None,mat
     p.shape=Ellipsoid(semiAxes=semiAxes,color=color if color else random.random())
     _commonBodySetup(p,([center] if isinstance(center,Node) else [_mkDemNode(pos=center,ori=ori),]),mat=mat,fixed=fixed)
     p.shape.wire=wire
-    p.aspherical=True
+    #p.aspherical=True
     p.mask=mask
     p.shape.visible=visible
     if angVel: p.shape.nodes[0].dem.angVel=angVel
@@ -176,7 +176,7 @@ def capsule(center,radius,shaft,ori=Quaternion.Identity,fixed=False,color=None,w
     p.shape=Capsule(radius=radius,shaft=shaft,color=color if color else random.random())
     _commonBodySetup(p,([center] if isinstance(center,Node) else [_mkDemNode(pos=center,ori=ori),]),mat=mat,fixed=fixed)
     p.shape.wire=wire
-    p.aspherical=True
+    #p.aspherical=True
     p.mask=mask
     return p
 
@@ -200,7 +200,7 @@ def wall(position,axis,sense=0,glAB=None,fixed=True,mass=0,color=None,mat=defaul
     else: node=_mkDemNode(pos=position)
     _commonBodySetup(p,[node],mat=mat,fixed=fixed)
     p.shape.nodes[0].dem.mass=mass
-    p.aspherical=False # wall never rotates anyway
+    #p.aspherical=False # wall never rotates anyway
     p.mask=mask
     p.shape.visible=visible
     return p
@@ -277,7 +277,7 @@ def facet(vertices,fakeVel=None,halfThick=0.,fixed=True,wire=True,color=None,hig
     if fakeVel: p.shape.fakeVel=fakeVel
     p.shape.wire=wire
     _commonBodySetup(p,nodes,mat=mat,fixed=fixed)
-    p.aspherical=False # mass and inertia are 0 anyway; fell free to change to ``True`` if needed
+    #p.aspherical=False # mass and inertia are 0 anyway; fell free to change to ``True`` if needed
     p.mask=mask
     p.shape.visible=visible
     return p
@@ -298,7 +298,7 @@ def tetra(vertices,fixed=True,wire=True,color=None,highlight=False,mat=defaultMa
     p.shape=__class(color=color if color else random.random())
     assert len(nodes)==4
     _commonBodySetup(p,nodes,mat=mat,fixed=fixed)
-    p.aspherical=False
+    #p.aspherical=False
     p.mask=mask
     p.shape.wire=wire
     p.shape.visible=visible
@@ -316,7 +316,7 @@ def infCylinder(position,radius,axis,glAB=None,fixed=True,mass=0,color=None,wire
     p.shape.wire=wire
     node=position if isinstance(position,Node) else _mkDemNode(pos=position)
     _commonBodySetup(p,[node],mat=mat,fixed=fixed)
-    p.aspherical=False # only rotates along one axis
+    #p.aspherical=False # only rotates along one axis
     p.mask=mask
     if angVel is not None: p.angVel=angVel
     return p

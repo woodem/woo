@@ -242,7 +242,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(float,'surfEnergy',0,noGui=True,doc="Detect whether deprecated surfEnergy is used."),
     ]
     def __init__(self,**kw):
-        woo.core.Object.__init__(self)
+        # woo.core.Object.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Object,**kw)
     def postLoad(self,what):
         'Do various consistency adjustments, such as materials matching the selected model type'

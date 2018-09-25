@@ -18,17 +18,16 @@ void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	for(auto kwitem: kw){
 		string key=py::cast<string>(kwitem.first);
 		if(key!="whats") continue;
-		auto value=kwitem.second;
-		if(!py::isinstance<string>(value)) continue;
-		string whatStr=py::cast<string>(value);
+		py::extract<string> isStr(py::cast<py::object>(kwitem.second));
+		if(!isStr.check()) continue;
+		string whatStr=isStr();
 	#else
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
 		py::tuple item=py::extract<py::tuple>(kwl[i]);
 		string key=py::extract<string>(item[0]);
 		if(key!="whats") continue;
-		py::object value=item[1];
-		py::extract<string> isStr(value);
+		py::extract<string> isStr(item[1]);
 		if(!isStr.check()) continue;
 		string whatStr=isStr();
 	#endif
@@ -246,14 +245,14 @@ void LawTester::run(){
 		py::object main=py::import("__main__");
 		py::object globals=main.attr("__dict__");
 		py::dict locals;
-		locals["C"]=C?py::cast(C):py::object();
+		locals["C"]=C?py::cast(C):py::none();
 		locals["pA"]=py::cast(pA);
 		locals["pB"]=py::cast(pB);
 		locals["stage"]=py::cast(stg);
 		locals["scene"]=py::cast(scene->shared_from_this());
 		locals["S"]=py::cast(scene->shared_from_this());
 		// this will give a nice error message when energy is not used
-		locals["E"]=scene->trackEnergy?py::cast(scene->energy):py::object();
+		locals["E"]=scene->trackEnergy?py::cast(scene->energy):py::none();
 		locals["tester"]=py::cast(this->shared_from_this());
 
 		errCmd=&stg->until;

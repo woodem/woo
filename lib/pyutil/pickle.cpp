@@ -18,7 +18,7 @@ namespace woo{
 				py::object cPickle=py::import("cPickle");
 			#endif
 		#else
-			py::object cPickle=py::module::import("cPickle");
+			py::object cPickle=py::module::import("pickle");
 		#endif
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");

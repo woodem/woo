@@ -51,7 +51,7 @@ py::object GlSetup::pyCallStatic(py::tuple args, py::dict kw){
 	#else
 		py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
 	#endif
-	return py::object();
+	return py::none();
 }
 
 void GlSetup::ensureObjs(){
@@ -97,14 +97,15 @@ void GlSetup::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 		// we don't consume unknown keys, Object's business to use them or error out
 		if(I==objAccessorNames.end()) continue; 
 		size_t index=I-objAccessorNames.begin();
-		#ifdef WOO_PYBIND11
-			if(!py::isinstance<shared_ptr<Object>>(item.second)) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
-			auto o=py::cast<shared_ptr<Object>>(item.second);
+		//	if(!py::isinstance<shared_ptr<Object>>(item.second)) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
+		//	auto o=py::cast<shared_ptr<Object>>(item.second);
+		#if WOO_PYBIND11
+			py::extract<shared_ptr<Object>> ex(py::cast<py::object>(item.second));
 		#else
 			py::extract<shared_ptr<Object>> ex(item[1]);
-			if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
-			const auto o(ex());
 		#endif
+		if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
+		const auto o(ex());
 		const auto oPtr=o.get();
 		if(!o) woo::TypeError(key+" must not be None.");
 		if(std::type_index(typeid(*oPtr))!=objTypeIndices[index]) woo::TypeError(key+" must be a "+objTypeNames[index]+" (not "+o->getClassName()+").");

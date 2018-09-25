@@ -83,7 +83,7 @@ class TestImpose(unittest.TestCase):
             S=woo.core.Scene(fields=[DemField(par=[a])],engines=DemField.minimalEngines(verletDist=0.))
             self.assertRaises(RuntimeError,lambda : S.selfTest())
     def testInterpolatedMotion(self):
-        'DEM: InterpolatedMotion computes correct and position rotation'
+        'DEM: InterpolatedMotion computes correct position and rotation'
         import math
         a=Capsule.make((0,0,0),radius=.3,shaft=.6,ori=Quaternion.Identity)
         p1,p2=Vector3(1,1,1),Vector3(0,0,0)

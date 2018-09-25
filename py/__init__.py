@@ -126,7 +126,15 @@ warnings.simplefilter('default')
 if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 
 # import eigen before plugins because of its converters, so that default args to python methods can use Vector3r etc
-import minieigen
+if 'pb11' in wooOptions.flavor:
+    ## HACK, for testing only
+    sys.path.append('/home/eudoxos/minieigen11/build')
+    import _minieigen11 as minieigen
+    if 'minieigen' in sys.modules and id(sys.modules['minieigen'])!=id(sys.modules['_minieigen11']): raise RuntimeError('This Woo build uses pybind11. minieigen module (boost::python-based) is already imported, but we need pybind11-based _minieigen11 instead. The two may not be mixed as we want to preserve source compatibility. Sorry.')
+    sys.modules['minieigen']=sys.modules['_minieigen11']
+    print('WARN: hijacking minieigen module, points to _minieigen11.')
+else:
+    import minieigen
 
 # c++ initialization code
 cxxInternalName='_cxxInternal'

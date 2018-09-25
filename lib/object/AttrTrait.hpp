@@ -32,7 +32,7 @@ namespace woo{
 		map<string,int> _enumName2Num; // filled automatically from _enumNames
 
 		// avoid throwing exceptions when not initialized, just return None
-		void _resetInternalPythonObjects() { _ini=_range=_choice=_buttons=[]()->py::object{ return py::object(); }; }
+		void _resetInternalPythonObjects() { _ini=_range=_choice=_buttons=[]()->py::object{ return py::none(); }; }
 		AttrTraitBase(): _flags(0)              { _resetInternalPythonObjects(); }
 		AttrTraitBase(int flags): _flags(flags) { _resetInternalPythonObjects(); }
 
@@ -48,6 +48,8 @@ namespace woo{
 		std::function<py::object()> _range;
 		std::function<py::object()> _choice;
 		std::function<py::object()> _buttons;
+		std::function<py::object()> _pyType; // only used by the UI
+		//py::object pyPyType=py::none(); // only used by the UI
 		// getters (setters below, to return the same reference type)
 		#define ATTR_FLAG_DO(flag,isFlag) bool isFlag() const { return _flags&(int)Flags::flag; }
 			ATTR_FLAG_DO(noSave,isNoSave)
@@ -73,6 +75,8 @@ namespace woo{
 		py::object pyGetRange()const{ return _range(); }
 		py::object pyGetChoice()const{ return _choice(); }
 		py::object pyGetButtons(){ return _buttons(); }
+		py::object pyGetPyType(){ return _pyType(); }
+		void pySetPyType(py::object value){ _pyType=std::function<py::object()>([value](){ return value; }); }
 		py::object pyGetBits()const{ return py::cast(_bits); }
 		py::object pyUnit() const { return py::cast(_unit); }
 		// define alternative units: name and factor, by which the base unit is multiplied to obtain this one
@@ -174,7 +178,9 @@ namespace woo{
 				.def_property_readonly("prefUnit",&AttrTraitBase::pyPrefUnit)
 				.def_property_readonly("altUnits",&AttrTraitBase::pyAltUnits)
 				.def_readonly("startGroup",&AttrTraitBase::_startGroup)
-				#ifndef WOO_PYBIND11
+				#ifdef WOO_PYBIND11
+					.def_readonly("hideIf",&AttrTraitBase::_hideIf)
+				#else
 					.def_property_readonly("hideIf",&AttrTraitBase::_hideIf)
 				#endif
 				.def_property_readonly("ini",&AttrTraitBase::pyGetIni)
@@ -182,6 +188,8 @@ namespace woo{
 				.def_property_readonly("choice",&AttrTraitBase::pyGetChoice)
 				.def_property_readonly("bits",&AttrTraitBase::pyGetBits)
 				.def_property_readonly("buttons",&AttrTraitBase::pyGetButtons)
+				.def_property("pyType",&AttrTraitBase::pyGetPyType,&AttrTraitBase::pySetPyType)
+				//.def_readwrite("pyType",&AttrTraitBase::pyPyType)
 				.def("__str__",&AttrTraitBase::pyStr)
 				.def("__repr__",&AttrTraitBase::pyStr)
 				.def("_resetInternalPythonObjects",&AttrTraitBase::_resetInternalPythonObjects,"Internal purposes only: release any internally-help python objects of this trait. The trait will be invalid at this point. Should be called at Python shutdown.")

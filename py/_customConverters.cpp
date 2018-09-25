@@ -1,7 +1,32 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 
+#ifdef WOO_PYBIND11
+#include<woo/lib/base/Types.hpp>
+#include<woo/lib/pyutil/compat.hpp>
+#include<woo/core/Master.hpp>
 
-#ifndef WOO_PYBIND11
+#include<woo/lib/object/Object.hpp>
+#include<woo/core/Field.hpp>
+#include<woo/pkg/dem/Contact.hpp>
+#include<woo/pkg/dem/Particle.hpp>
+
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Object>>)
+
+WOO_PYTHON_MODULE(_customConverters);
+PYBIND11_MODULE(_customConverters,mod){
+	mod.attr("__name__")="woo._customConverters";
+	std::cerr<<"WARN: importing stub woo._customConverters (not yet implemented in pybind11)."<<std::endl;
+
+	#define _OPAQUE_LIST_EXPOSE(Type) py::class_<vector<shared_ptr<Type>>>(mod, #Type "List").def(py::init<>());
+		_OPAQUE_LIST_EXPOSE(Node);
+		_OPAQUE_LIST_EXPOSE(Particle);
+		_OPAQUE_LIST_EXPOSE(Object);
+	#undef _OPAQUE_LIST_EXPOSE
+};
+
+#else
 
 // this is not currently used, but can be enabled if needed
 // probably breaks compilation for older (like <=1.35 or so)

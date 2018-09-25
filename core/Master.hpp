@@ -191,7 +191,6 @@ class Master{
 		_DEPREC_ERR(tags);
 	#undef _DEPREC_ERR
 
-	static py::object pyGetInstance();
 	void pyReset();
 	py::list pyPlugins();
 
