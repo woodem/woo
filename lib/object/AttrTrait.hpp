@@ -32,7 +32,7 @@ namespace woo{
 		map<string,int> _enumName2Num; // filled automatically from _enumNames
 
 		// avoid throwing exceptions when not initialized, just return None
-		void _resetInternalPythonObjects() { _ini=_range=_choice=_buttons=[]()->py::object{ return py::none(); }; }
+		void _resetInternalPythonObjects() { _ini=_range=_choice=_buttons=_pyType=[]()->py::object{ return py::none(); }; }
 		AttrTraitBase(): _flags(0)              { _resetInternalPythonObjects(); }
 		AttrTraitBase(int flags): _flags(flags) { _resetInternalPythonObjects(); }
 
@@ -49,7 +49,6 @@ namespace woo{
 		std::function<py::object()> _choice;
 		std::function<py::object()> _buttons;
 		std::function<py::object()> _pyType; // only used by the UI
-		//py::object pyPyType=py::none(); // only used by the UI
 		// getters (setters below, to return the same reference type)
 		#define ATTR_FLAG_DO(flag,isFlag) bool isFlag() const { return _flags&(int)Flags::flag; }
 			ATTR_FLAG_DO(noSave,isNoSave)
@@ -75,6 +74,7 @@ namespace woo{
 		py::object pyGetRange()const{ return _range(); }
 		py::object pyGetChoice()const{ return _choice(); }
 		py::object pyGetButtons(){ return _buttons(); }
+		// _pyType is settable from python
 		py::object pyGetPyType(){ return _pyType(); }
 		void pySetPyType(py::object value){ _pyType=std::function<py::object()>([value](){ return value; }); }
 		py::object pyGetBits()const{ return py::cast(_bits); }
