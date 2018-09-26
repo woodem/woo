@@ -53,7 +53,7 @@ def testModule(module):
 
     @param module: fully-qualified module name, e.g. woo.tests.core
     """
-    suite=unittest.defaultTestLoader().loadTestsFromName(module)
+    suite=unittest.defaultTestLoader.loadTestsFromName(module)
     return MyTestRunner(verbosity=2).run(suite)
 
 def testAll(sysExit=False):

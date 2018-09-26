@@ -35,6 +35,10 @@ class FallingHorse(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(str,'vtkPrefix',"/tmp/{tid}-",filename=True,doc="Prefix for saving :obj:`woo.dem.VtkExport` and :obj:`woo.dem.VtkFlowExport` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys."),
         _PAT(bool,'grid',False,'Use grid collider (experimental)'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)

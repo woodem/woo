@@ -44,15 +44,14 @@ void GlSetup::postLoad(GlSetup&,void* attr){
 }
 
 
-py::object GlSetup::pyCallStatic(py::tuple args, py::dict kw){
-	if(py::len(kw)>0) woo::RuntimeError("Keyword arguments not accepted.");
-	#ifdef WOO_PYBIND11
-		py::extract<GlSetup&>(args[0])().pyCall(args.attr("__getitem__")(py::slice(1,-1,1)));
-	#else
+#ifndef WOO_PYBIND11
+	py::object GlSetup::pyCallStatic(py::args_ args, py::kwargs kw){
+		if(py::len(kw)>0) woo::RuntimeError("Keyword arguments not accepted.");
+		//pb11: py::extract<GlSetup&>(args[0])().pyCall(args.attr("__getitem__")(py::slice(1,-1,1)));
 		py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
-	#endif
-	return py::none();
-}
+		return py::none();
+	}
+#endif
 
 void GlSetup::ensureObjs(){
 	if(objs.size()!=objTypeIndices.size()){

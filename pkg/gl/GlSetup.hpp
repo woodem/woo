@@ -58,13 +58,15 @@ struct GlSetup: public Object{
 	// proxy for raw_function, extracts instance from args[0]
 	// return value and kw only to satisfy interface
 	// http://stackoverflow.com/questions/27488096/boost-python-raw-function-method
-	static py::object pyCallStatic(py::tuple args, py::dict kw);
+	#ifndef WOO_PYBIND11
+		static py::object pyCallStatic(py::args_ args, py::kwargs kw);
+	#endif
 	void pyCall(const py::args_& args);
 
 	WOO_DECL_LOGGER;
 
 	#ifdef WOO_PYBIND11
-		#define woo_gl_GlSetup__extras_PY .def("__call__",&GlSetup::pyCallStatic,"Replace all current functors by those passed as arguments."); \
+		#define woo_gl_GlSetup__extras_PY .def("__call__",&GlSetup::pyCall,"Replace all current functors by those passed as arguments."); \
 			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
 			for(size_t i=0; i<oo.size(); i++){ \
 				const auto& o=oo[i]; const auto oPtr=o.get(); \

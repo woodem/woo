@@ -93,7 +93,7 @@ class TestSimpleClump(unittest.TestCase):
         self.assertTrue(len(S.dem.con)==0)
 
 def sphereClumpPrincipalAxes(cc,rr):
-    'Return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres'
+    'Clump: return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres'
     ii=range(len(rr))
     Ii=[Matrix3(Vector3.Ones*((8/15.)*pi*rr[i]**5)) for i in ii]
     Vi=[(4/3.)*pi*rr[i]**3 for i in ii]
@@ -103,14 +103,14 @@ def sphereClumpPrincipalAxes(cc,rr):
     pos=Sg/V
     import numpy, numpy.linalg
     Ic_orientG=Ig-V*(pos.dot(pos)*Matrix3.Identity-pos.outer(pos))
-    eigval,eigvec=numpy.linalg.eigh(numpy.matrix(Ic_orientG))
+    eigval,eigvec=numpy.linalg.eigh(numpy.array(Ic_orientG))
     ori=Quaternion(Matrix3(*eigvec.tolist()))
     inertia=Vector3(tuple(eigval))
     return V,pos,ori,inertia
 
 
 class TestSphereClumpGeom(unittest.TestCase):
-    "Test geometry of clumps composed of spheres only"
+    "Clump: geometry of clumps composed of spheres only"
     def setUp(self):
         # c has no self-intersections
         self.c=SphereClumpGeom(centers=[(0,0,0),(0,0,3)],radii=(1,.5),div=-1)

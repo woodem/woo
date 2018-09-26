@@ -55,6 +55,8 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		#else
 			/* boost::python pickling support, as per http://www.boost.org/doc/libs/1_42_0/libs/python/doc/v2/pickle.html */ 
 			.def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object::pyUpdateAttrs)
+			// try to make the same as in pybind11
+			// .def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object__setstate__<Object>)
 			.add_property_readonly("__safe_for_unpickling__",&Object::getClassName,"just define the attr, return some bogus data")
 			.add_property_readonly("__getstate_manages_dict__",&Object::getClassName,"just define the attr, return some bogus data")
 		#endif

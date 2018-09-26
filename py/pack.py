@@ -215,13 +215,12 @@ class inGtsSurface_py(Predicate):
         self.surf=surf
         self.noPad=noPad
         inf=float('inf')
-        mn,mx=[inf,inf,inf],[-inf,-inf,-inf]
+        self.box=AlignedBox3()
         for v in surf.vertices():
             c=v.coords()
-            mn,mx=[min(mn[i],c[i]) for i in (0,1,2)],[max(mx[i],c[i]) for i in (0,1,2)]
-        self.mn,self.mx=tuple(mn),tuple(mx)
+            self.box.extend(Vector3(c[0],c[1],c[2]))
         import gts
-    def aabb(self): return self.mn,self.mx
+    def aabb(self): return self.box
     def __call__(self,_pt,pad=0.):
         p=gts.Point(*_pt)
         if self.noPad:

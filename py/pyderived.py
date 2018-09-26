@@ -25,6 +25,12 @@ class PyAttrTrait(object):
                 PyAttrTrait(Vector3,'color',Vector3(.2,.2,.2),"Color parameter",rgbColor=True),
                 PyAttrTrait(float,'length',1.5e-3,"Length",unit='mm'),
             ]
+            # this is needed for new-style pickling with pybind11
+            def __new__(klass,**kw):
+                self=super().__new__(klass)
+                self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+                return self
+            # this is needed for old-style pickling with boost::python
             def __init__(self,**kw):
                 woo.core.Preprocessor.__init__(self)
                 self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)

@@ -520,6 +520,10 @@ class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
             self.postLoadCounter+=10
             self.aF=self.aF_trigger
         else: raise RuntimeError(self.__class__.__name__+'.postLoad called with unknown attribute id %s'%I)
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Object,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
         self.wooPyInit(_TestPyClass,woo.core.Object,**kw)
@@ -534,6 +538,10 @@ class _TestPyClass2(_TestPyClass):
         _PAT(int,'f2',0,triggerPostLoad=True,doc='Float attr in derived class'),
         _PAT(int,'f2counter',0,doc='Count how many times was f2 manipulated (to test triggerPostLoad in class with python parent)'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,_TestPyClass,**kw)
+        return self
     def __init__(self,**kw):
         _TestPyClass.__init__(self)
         self.wooPyInit(_TestPyClass2,_TestPyClass,**kw)

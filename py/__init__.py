@@ -125,16 +125,18 @@ warnings.simplefilter('default')
 # disable warning for unclosed files/sockets
 if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 
-# import eigen before plugins because of its converters, so that default args to python methods can use Vector3r etc
-if 'pb11' in wooOptions.flavor:
-    ## HACK, for testing only
+# import both if possible
+# we will check build features after the binary import
+# and based on that use one or another
+try: import minieigen
+except ImportError: pass
+try:
+    print('WARN: adding /home/eudoxos/minieigen11/build to path for _minieigen11')
     sys.path.append('/home/eudoxos/minieigen11/build')
-    import _minieigen11 as minieigen
-    if 'minieigen' in sys.modules and id(sys.modules['minieigen'])!=id(sys.modules['_minieigen11']): raise RuntimeError('This Woo build uses pybind11. minieigen module (boost::python-based) is already imported, but we need pybind11-based _minieigen11 instead. The two may not be mixed as we want to preserve source compatibility. Sorry.')
-    sys.modules['minieigen']=sys.modules['_minieigen11']
-    print('WARN: hijacking minieigen module, points to _minieigen11.')
-else:
-    import minieigen
+    import _minieigen11
+except ImportError: pass
+
+# warnings.filterwarnings("error",category=ImportWarning)
 
 # c++ initialization code
 cxxInternalName='_cxxInternal'
@@ -263,6 +265,17 @@ if 'gts' in config.features:
     from . import gts
     # so that it does not get imported twice
     sys.modules['gts']=gts
+
+if 'pybind11' in config.features:
+    print('WARN: pybind11 support is experimental.')
+    import _minieigen11
+    # if 'minieigen' in sys.m
+    print('WARN: hijacking minieigen module, points to _minieigen11.')
+    if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
+    sys.modules['minieigen']=sys.modules['_minieigen11']
+    assert(hasattr(_minieigen11,'_pybind11_based_') and _minieigen11._pybind11_based_)
+else:
+    import minieigen
 
 
 ##

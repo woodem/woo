@@ -593,7 +593,7 @@ shared_ptr<T> Object_ctor_kwAttrs(py::args_& t, py::kwargs& d){
 	return instance;
 }
 
-#ifdef WOO_PYBIND11
+// #ifdef WOO_PYBIND11
 template<typename T>
 shared_ptr<T> Object__setstate__(py::dict state){
 	shared_ptr<T> instance=make_shared<T>();
@@ -601,6 +601,6 @@ shared_ptr<T> Object__setstate__(py::dict state){
 	instance->callPostLoad(NULL);
 	return instance;
 }
-#endif
+// #endif
 
 }; /* namespace woo */
