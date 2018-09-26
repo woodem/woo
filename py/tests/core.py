@@ -165,28 +165,20 @@ class TestObjectInstantiation(unittest.TestCase):
         'Core: postLoad & Attr::triggerPostLoad'
         WTC=woo.core.WooTestClass
         # stage right after construction
-        self.assertTrue(self.t.postLoadStage==WTC.postLoad_ctor)
+        print('SHOULD BE EQUAL:',self.t.postLoadStage,WTC.postLoad_ctor)
+        self.assertEqual(self.t.postLoadStage,WTC.postLoad_ctor)
         baz0=self.t.baz
         self.t.foo_incBaz=1 # assign whatever, baz should be incremented
-        self.assertTrue(self.t.baz==baz0+1)
-        self.assertTrue(self.t.postLoadStage==WTC.postLoad_foo)
+        self.assertEqual(self.t.baz,baz0+1)
+        self.assertEqual(self.t.postLoadStage,WTC.postLoad_foo)
         self.t.foo_incBaz=1 # again
-        self.assertTrue(self.t.baz==baz0+2)
+        self.assertEqual(self.t.baz,baz0+2)
         self.t.bar_zeroBaz=1 # assign to reset baz
-        self.assertTrue(self.t.baz==0)
-        self.assertTrue(self.t.postLoadStage==WTC.postLoad_bar)
+        self.assertEqual(self.t.baz,0)
+        self.assertEqual(self.t.postLoadStage,WTC.postLoad_bar)
         # assign to baz to test postLoad again
         self.t.baz=-1
         self.assertTrue(self.t.postLoadStage==WTC.postLoad_baz)
-    @unittest.skipIf(not hasattr(woo.core,'WooTestClassStatic'),'Built without static attrs')
-    def testTriggerPostLoad_static(self):
-        'Core: Attr::triggerPostLoad (static)'
-        ts=self.ts
-        self.assertTrue(ts.numTriggered==0)
-        ts.trigger=1
-        self.assertTrue(ts.numTriggered==1)
-        ts.trigger=-1
-        self.assertTrue(ts.numTriggered==2)
 
     def testUnicodeStrConverter(self):
         'Core: std::string attributes can be assigned unicode string'
@@ -408,6 +400,9 @@ class TestIO(unittest.TestCase):
                 t.saveTmp(quiet=True)
                 woo.master.loadTmpAny()
             except (RuntimeError,ValueError):
+                print(20*'*'+' error with class '+c.__name__)
+                import traceback
+                traceback.print_exc()
                 failed.add(c.__name__)
         failed=list(failed); failed.sort()
         self.assertTrue(len(failed)==0,'Failed classes were: '+' '.join(failed))

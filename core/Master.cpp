@@ -140,13 +140,13 @@ void Master::pyRegisterClass(py::module_& mod){
 		.add_property_readonly("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
 		// tmp storage
 		.def("loadTmpAny",&Master::loadTmp,WOO_PY_ARGS(py::arg("name")=""),"Load any object from named temporary store.")
-		.def("deepcopy",
-			#ifdef WOO_PYBIND11
-				&Master::pyDeepcopy,
-			#else
-				py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),
-			#endif
-				"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``.")
+		#ifdef WOO_PYBIND11
+			.def_static("deepcopy",[](const shared_ptr<Object>& obj, py::kwargs kw){ shared_ptr<Object> copy=instance().deepcopy(obj); copy->pyUpdateAttrs(kw); return copy; },
+		#else
+			.def("deepcopy",py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),
+		#endif
+			"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``."
+		)
 		.def("saveTmpAny",&Master::saveTmp,WOO_PY_ARGS(py::arg("obj"),py::arg("name")="",py::arg("quiet")=false),"Save any object to named temporary store; *quiet* will supress warning if the name is already used.")
 		.def("lsTmp",&Master::pyLsTmp,"Return list of all memory-saved simulations.")
 		.def("rmTmp",&Master::rmTmp,py::arg("name"),"Remove memory-saved simulation.")
@@ -235,13 +235,16 @@ bool Master::isInheritingFrom_recursive(const string& className, const string& b
 	return false;
 }
 
+#ifndef WOO_PYBIND11
 py::object Master::pyDeepcopy(py::args_ args, py::kwargs kw){
 	if(py::len(args)>2) woo::RuntimeError("Master.deepcopy takes no extra unnamed arguments (besides the implicit Master instance, and the Object).");
-	py::extract<shared_ptr<Master>> m(args[0]);
-	shared_ptr<Object> copy=m()->deepcopy(py::extract<shared_ptr<Object>>(args[1])());
+	// not necessary to extract this, just ignore it
+	// py::extract<shared_ptr<Master>> m(args[0]);
+	shared_ptr<Object> copy=instance().deepcopy(py::extract<shared_ptr<Object>>(args[1])());
 	copy->pyUpdateAttrs(kw);
 	return py::cast(copy);
 }
+#endif
 
 shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
 	std::stringstream ss;

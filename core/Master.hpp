@@ -115,8 +115,11 @@ class Master{
 
 		/* temporary storage */
 		shared_ptr<woo::Object> deepcopy(shared_ptr<woo::Object> obj);
-		// static, first arg ist Mater instance (http://stackoverflow.com/questions/27488096/boost-python-raw-function-method)
-		static py::object pyDeepcopy(py::args_ args, py::kwargs kw);
+		#ifndef WOO_PYBIND11
+			// static, first arg ist Master instance (http://stackoverflow.com/questions/27488096/boost-python-raw-function-method)
+			static py::object pyDeepcopy(py::args_ args, py::kwargs kw);
+		#endif
+
 		shared_ptr<woo::Object> loadTmp(const string& name);
 		void saveTmp(shared_ptr<woo::Object> s, const string& name, bool quiet=false);
 		void rmTmp(const string& name);

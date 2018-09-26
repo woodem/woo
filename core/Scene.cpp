@@ -292,9 +292,14 @@ void Scene::postLoad(Scene&,void*){
 		// this happens e.g. when reloading scene and should not be a reason for warning
 		// LOG_WARN("woo.core.Plot object belonging to another Scene? Reassigning.");
 	}
-	plot->scene=static_pointer_cast<Scene>(shared_from_this());
+	/* XXX this is myterious pb in pybind11 only... */
+	try{
+		plot->scene=static_pointer_cast<Scene>(shared_from_this());
+	} catch(std::bad_weak_ptr){ LOG_WARN("WARNING: bad_weak_ptr in Scene::postLoad (plot->scene)."); }
 
-	if(ctrl) ctrl->scene=static_pointer_cast<Scene>(shared_from_this());
+	try{
+		if(ctrl) ctrl->scene=static_pointer_cast<Scene>(shared_from_this());
+	} catch(std::bad_weak_ptr){ LOG_WARN("WARNING: bad_weak_ptr in Scene::postLoad (ctrl->scene)."); }
 
 	//
 	// assign fields to engines

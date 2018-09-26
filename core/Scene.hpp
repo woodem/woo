@@ -181,6 +181,14 @@ struct Scene: public Object{
 		// constants for some values of subStep
 		enum {SUBSTEP_INIT=-1,SUBSTEP_PROLOGUE=0};
 
+		#ifdef WOO_PYBIND11
+			#define woo_core_Scene__setLastSave_MAKE_INLINE_LATER__NOT_MACRO .def("setLastSave",[](const shared_ptr<Scene>& self, const string& s){ self->lastSave=s; })
+		#else
+			void setLastSave(const std::string& s){ lastSave=s; }
+			#define woo_core_Scene__setLastSave_MAKE_INLINE_LATER__NOT_MACRO .def("setLastSave",&Scene::setLastSave)
+		#endif
+
+
 		#ifdef WOO_OPENGL
 			#define woo_core_Scene__ATTRS__OPENGL \
 				((vector<shared_ptr<DisplayParameters>>,dispParams,,AttrTrait<>().noGui(),"Saved display states.")) \
@@ -264,6 +272,7 @@ struct Scene: public Object{
 		.def("stop",&Scene::pyStop) \
 		.def("one",&Scene::pyOne) \
 		.def("wait",&Scene::pyWait) \
+		woo_core_Scene__setLastSave_MAKE_INLINE_LATER__NOT_MACRO \
 		.add_property_readonly("running",&Scene::running) \
 		.def("paused",&Scene::pyPaused,WOO_PY_ARGS(py::arg("allowBg")=false),WOO_PY_RETURN__TAKE_OWNERSHIP,"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
 		.def("selfTest",&Scene::pySelfTest,"Run self-tests (they are usually run automatically with, see :obj:`selfTestEvery`).") \

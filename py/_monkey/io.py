@@ -529,7 +529,7 @@ def Master_loadTmp(o,name='',quiet=None): # quiet deprecated
     o.scene=woo.core.Scene.loadTmp(name)
     return o.scene
 def Master_saveTmp(o,name='',quiet=False):
-    o.scene.lastSave=':memory:'+name
+    o.scene.setLastSave(':memory:'+name)
     o.scene.saveTmp(name,quiet)
 
 woo.core.Master.save=Master_save

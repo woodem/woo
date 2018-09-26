@@ -350,7 +350,7 @@ template<> struct _SerializeMaybe<false>{
 		auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
 		py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
 		return [traitPtr,_classObj,mod]() mutable { \
-			_classObj.def(py::init<>()); \
+			_classObj.def(py::init<>([](){ shared_ptr<thisClass> instance=make_shared<thisClass>(); instance->callPostLoad(NULL); return instance; })); \
 			_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);})); \
 			_classObj.def(py::pickle([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>)); \
 			/*_classObj.def("__setstate__",Object__setstate__<thisClass>);*/ \

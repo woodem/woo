@@ -58,6 +58,7 @@ namespace woo{
 			((string,strVar,"",,"Test string type var.")) \
 			((int,deprecatedAttr,-1,AttrTrait<>().deprecated(),"deprecated, and this exaplins why...")) \
 			((shared_ptr<Object>,any,,,"This can be really anything, and is used to test anything.")) \
+			((vector<shared_ptr<Object>>,objList,vector<shared_ptr<Object>>({make_shared<Object>(),make_shared<Object>()}),AttrTrait<Attr::readonly>(),"Testing opaque object list.")) \
 			,/*ctor*/ \
 			,/*py*/ \
 				.add_property("aaccuRaw",&WooTestClass::aaccuGetRaw,&WooTestClass::aaccuSetRaw,"Access OpenMPArrayAccumulator data directly. Writing resizes and sets the 0th thread value, resetting all other ones.") \
