@@ -275,6 +275,10 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(float,'tessMaxBox',0,unit='mm',doc='Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.'),
         _PAT(bool,'tagged',False,doc='Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Object,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Object,**kw)
