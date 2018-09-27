@@ -37,6 +37,10 @@ class PsdRender(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(bool,'saveShapePack',True,'Create a .shapepack file with particle geometries.'),
 
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)

@@ -74,6 +74,10 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'massFactor',.2,'Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter'),
         _PAT(float,'rateStep',.01,'Increase strain rate by this relative amount at the beginning of the triaxial phase, until the value given in :obj:`maxRates` is reached.'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)

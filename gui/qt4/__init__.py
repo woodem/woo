@@ -184,6 +184,10 @@ class UiPrefs(woo.core.Object,woo.pyderived.PyWooObject):
             _GLViewer.GLViewer.paraviewLike3d=self.paraviewLike3d
         except ImportError: pass # no OpenGL
         woo.master.cmap=self.defaultCmap
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Object,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Object,**kw)

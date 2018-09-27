@@ -16,7 +16,7 @@
 	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy::take_ownership
 
 	// forward decl
-	namespace woo { class Object; }; 
+	namespace woo { struct Object; }; 
 
 	#include<pybind11/pybind11.h>
 	namespace pybind11{

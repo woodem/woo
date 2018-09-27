@@ -21,7 +21,10 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'dtSafety',.7,doc=':obj:`woo.core.Scene.dtSafety`'),
         _PAT(str,'saveDone','',doc='File to same simulation at the end; not saved if empty.'),
     ]
-
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(DissipChute,woo.core.Preprocessor,**kw)

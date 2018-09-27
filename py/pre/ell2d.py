@@ -39,6 +39,10 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(int,'ell2Step',0,"How often should :obj:`woo.pre.ell2d.ell2plot` run. If non-positive, never run that one."),
         _PAT(float,'dtSafety',.5,'Safety coefficient for critical timestep; should be smaller than one.'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
