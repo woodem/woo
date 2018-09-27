@@ -23,9 +23,9 @@ py::dict Object_pyDict_pickleable(const Object& o) { return o.pyDict(/*all*/fals
 std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 	checkPyClassRegistersItself("Object");
 	#ifdef WOO_PYBIND11
-		py::class_<Object,shared_ptr<Object>> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
+		py::class_<Object,shared_ptr<Object>> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.");
 	#else
-		py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via boost::serialization, equality comparison, attribute traits.");
+		py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.");
 	#endif
 	return [classObj]() mutable {
 		classObj

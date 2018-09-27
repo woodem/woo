@@ -81,6 +81,16 @@ WOO_PYTHON_MODULE(config)
 		false;
 	#endif
 
+	#if defined(__clang__)
+		mod.attr("compiler")=py::make_tuple("clang",__clang_version__);
+	#elif defined(__INTEL_COMPILER)
+		mod.attr("compiler")=py::make_tuple("icc",BOOST_PP_STRINGIZE(__INTEL_COMPILER));
+	#elif defined(__GNUC__) /* must come after clang and icc, which also define __GNUC__ */
+		mod.attr("compiler")=py::make_tuple("gcc", BOOST_PP_STRINGIZE(__GNUC__) "." BOOST_PP_STRINGIZE(__GNUC_MINOR__) "." BOOST_PP_STRINGIZE(__GNUC_PATCHLEVEL__));
+	#else
+		mod.attr("compiler")=py::make_tuple("unknown (not gcc,clang,icc)","unknown")
+	#endif
+		
 	mod.attr("prefix")=BOOST_PP_STRINGIZE(WOO_PREFIX);
 	mod.attr("suffix")=BOOST_PP_STRINGIZE(WOO_SUFFIX);
 

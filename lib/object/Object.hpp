@@ -14,34 +14,15 @@
 
 #include<boost/preprocessor.hpp>
 #include<boost/version.hpp>
-#include<boost/archive/binary_oarchive.hpp>
-#include<boost/archive/binary_iarchive.hpp>
-#ifndef WOO_NOXML
-	#include<boost/archive/xml_oarchive.hpp>
-	#include<boost/archive/xml_iarchive.hpp>
-	// declare supported archive types so that we can declare the templates explcitily in headers
-	// and specialize them explicitly in implementation files
-	#define WOO_BOOST_ARCHIVES (boost::archive::binary_iarchive)(boost::archive::binary_oarchive)(boost::archive::xml_iarchive)(boost::archive::xml_oarchive)
-#else
-	#define WOO_BOOST_ARCHIVES (boost::archive::binary_iarchive)(boost::archive::binary_oarchive)
-#endif
 
-#include<boost/serialization/export.hpp> // must come after all supported archive types
-
-#include<boost/serialization/base_object.hpp>
-#include<boost/serialization/shared_ptr.hpp>
-#include<boost/serialization/weak_ptr.hpp>
-#include<boost/serialization/list.hpp>
-#include<boost/serialization/vector.hpp>
-#include<boost/serialization/map.hpp>
-#include<boost/serialization/set.hpp>
-#include<boost/serialization/nvp.hpp>
-
+#include<woo/lib/object/serialization.hpp>
 
 #include<woo/lib/object/ObjectIO.hpp>
+
 #include<woo/lib/base/Math.hpp>
 #include<woo/lib/base/Logging.hpp>
 #include<woo/lib/object/AttrTrait.hpp>
+
 
 
 /*! Macro defining what classes can be found in this plugin -- must always be used in the respective .cpp file.
@@ -52,16 +33,14 @@
  	#error Boost >= 1.42 is required
 #endif
 
-#define _WOO_PLUGIN_BOOST_REGISTER(x,y,z) BOOST_CLASS_EXPORT_IMPLEMENT(z); BOOST_SERIALIZATION_FACTORY_0(z);
-#define WOO_REGISTER_OBJECT(name) BOOST_CLASS_EXPORT_KEY(name);
-
-// the __attribute__((constructor(priority))) construct not supported before gcc 4.3
-// it will only produce warning from log4cxx if not used
-#if __GNUC__ == 4 && __GNUC_MINOR__ >=3
-	#define WOO_CTOR_PRIORITY(p) (p)
+#ifdef WOO_CEREAL
+	#define WOO_REGISTER_OBJECT(name) CEREAL_REGISTER_TYPE_WITH_NAME(name,#name);
+	#define _WOO_PLUGIN_BOOST_REGISTER(x,y,z)
 #else
-	#define WOO_CTOR_PRIORITY(p)
+	#define _WOO_PLUGIN_BOOST_REGISTER(x,y,z) BOOST_CLASS_EXPORT_IMPLEMENT(z); BOOST_SERIALIZATION_FACTORY_0(z);
+	#define WOO_REGISTER_OBJECT(name) BOOST_CLASS_EXPORT_KEY(name);
 #endif
+
 #define _PLUGIN_CHECK_REPEAT(x,y,z) void z::must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(){}
 #define _WOO_PLUGIN_REPEAT(x,y,z) BOOST_PP_STRINGIZE(z),
 #define _WOO_FACTORY_REPEAT(x,y,z) __attribute__((unused)) bool BOOST_PP_CAT(_registered,z)=Master::instance().registerClassFactory(BOOST_PP_STRINGIZE(z),(Master::FactoryFunc)([](void)->shared_ptr<woo::Object>{ return make_shared<z>(); }));
@@ -275,7 +254,10 @@ template<> struct _setAttrMaybe</*hidden*/false,/*namedEnum*/true>{
 template<bool noSave> struct _SerializeMaybe{};
 template<> struct _SerializeMaybe<true>{
 	template<class ArchiveT, typename T>
-	static void serialize(ArchiveT& ar, T& obj, const char* name){ /*std::cerr<<"["<<name<<"]";*/ ar & boost::serialization::make_nvp(name,obj); }
+	static void serialize(ArchiveT& ar, T& obj, const char* name){
+		/*std::cerr<<"["<<name<<"]";*/
+		ar & cereal::make_nvp(name,obj);
+	}
 };
 template<> struct _SerializeMaybe<false>{
 	template<class ArchiveT, typename T>
@@ -286,34 +268,48 @@ template<> struct _SerializeMaybe<false>{
 // serialization of a single attribute
 #define _WOO_BOOST_SERIALIZE_REPEAT(x,klass,z) _SerializeMaybe<!(_ATTR_TRAIT_TYPE(klass,z)::compileFlags & woo::Attr::noSave)>::serialize(ar,_ATTR_NAM(z), BOOST_PP_STRINGIZE(_ATTR_NAM(z)));
 
+#ifdef WOO_CEREAL
+	#define _WOO_SERIALIZE_BASE_NVP(baseClass) cereal::make_nvp(#baseClass,cereal::base_class<baseClass>(this))
+#else
+	#define _WOO_SERIALIZE_BASE_NVP(baseClass) BOOST_SERIALIZATION_BASE_OBJECT_NVP(baseClass)
+#endif
 // the body of the serialization function
 #define _WOO_BOOST_SERIALIZE_BODY(thisClass,baseClass,attrs) \
-	ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(baseClass);  \
+	ar & _WOO_SERIALIZE_BASE_NVP(baseClass);  \
 	/* with ADL, either the generic (empty) version above or baseClass::preLoad etc will be called (compile-time resolution) */ \
-	if(ArchiveT::is_loading::value) preLoad(*this); else preSave(*this); \
+	if(archive_is_loading<ArchiveT>()) preLoad(*this); else preSave(*this); \
 	BOOST_PP_SEQ_FOR_EACH(_WOO_BOOST_SERIALIZE_REPEAT,thisClass,attrs) \
-	if(ArchiveT::is_loading::value) postLoad(*this,NULL); else postSave(*this);
+	if(archive_is_loading<ArchiveT>()) postLoad(*this,NULL); else postSave(*this);
 
 // declaration/implementation version of the whole serialization function
 // declaration first:
 #define _WOO_BOOST_SERIALIZE_DECL(thisClass,baseClass,attrs)\
-	friend class boost::serialization::access;\
-	private: template<class ArchiveT> void serialize(ArchiveT & ar, unsigned int version);
+	friend class cereal::access;\
+	private: template<class ArchiveT> void serialize(ArchiveT & ar,  std::uint32_t const version);
 
-// implementation: must provide explicit instantiation
-#define _WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE(x,thisClass,archiveType) template void thisClass::serialize<archiveType>(archiveType & ar, unsigned int version);
-#define _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,attrs)\
-	template<class ArchiveT> void thisClass::serialize(ArchiveT & ar, unsigned int version){ \
-		_WOO_BOOST_SERIALIZE_BODY(thisClass,baseClass,attrs) \
-	} \
-	/* explicit instantiation for all available archive types -- see http://www.boost.org/doc/libs/1_55_0/libs/serialization/doc/pimpl.html */ \
-	BOOST_PP_SEQ_FOR_EACH(_WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE,thisClass,WOO_BOOST_ARCHIVES)
+#ifdef WOO_CEREAL
+	#define _WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE(x,thisClass,archiveType) template void thisClass::serialize<archiveType>(archiveType & ar, unsigned int version);
+	#define _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,attrs)\
+		template<class ArchiveT> void thisClass::serialize(ArchiveT & ar, std::uint32_t const version){ \
+			_WOO_BOOST_SERIALIZE_BODY(thisClass,baseClass,attrs) \
+		} \
+		/* explicit instantiation for all avialbale archive types; not sure if necessary for cereal */ \
+		BOOST_PP_SEQ_FOR_EACH(_WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE,thisClass,WOO_BOOST_ARCHIVES)
+#else
+	#define _WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE(x,thisClass,archiveType) template void thisClass::serialize<archiveType>(archiveType & ar, unsigned int version);
+	#define _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,attrs)\
+		template<class ArchiveT> void thisClass::serialize(ArchiveT & ar, std::uint32_t const version){ \
+			_WOO_BOOST_SERIALIZE_BODY(thisClass,baseClass,attrs) \
+		} \
+		/* explicit instantiation for all available archive types -- see http://www.boost.org/doc/libs/1_55_0/libs/serialization/doc/pimpl.html */ \
+		BOOST_PP_SEQ_FOR_EACH(_WOO_BOOST_SERIALIZE_IMPL_INSTANTIATE,thisClass,WOO_BOOST_ARCHIVES)
+#endif
 
 // inline version of the serialization function
 // no need for explcit instantiation, as the code is in headers
 #define _WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) \
-	friend class boost::serialization::access; \
-	private: template<class ArchiveT> void serialize(ArchiveT & ar, unsigned int version){ \
+	friend class cereal::access; \
+	private: template<class ArchiveT> void serialize(ArchiveT & ar, std::uint32_t const version){ \
 		_WOO_BOOST_SERIALIZE_BODY(thisClass,baseClass,attrs) \
 	}
 
@@ -517,18 +513,9 @@ template<> struct _SerializeMaybe<false>{
 	
 
 
-// used only in some exceptional cases, might disappear in the future
-#define REGISTER_ATTRIBUTES(baseClass,attrs) _REGISTER_ATTRIBUTES_DEPREC(_SOME_CLASS,baseClass,BOOST_PP_SEQ_FOR_EACH(_ATTR_NAME_ADD_DUMMY_FIELDS,~,attrs),)
-
-
-
-
 /* this used to be in lib/factory/Factorable.hpp */
 #define REGISTER_CLASS_AND_BASE(cn,bcn) public: EIGEN_MAKE_ALIGNED_OPERATOR_NEW ; virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
 
-// this is used only in Object declaration itself below
-#define WOO_TOPLEVEL_OBJECT_REGISTER_CLASS_BASE(cn,bcn) public: virtual string getClassName() const {return #cn;}; virtual vector<string> getBaseCLassNames() const {return #bcn; }
- 
 namespace woo{
 
 struct Object: public boost::noncopyable, public enable_shared_from_this<Object> {

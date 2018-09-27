@@ -2,8 +2,11 @@
 
 #pragma once
 
-#include<locale>
-#include<boost/archive/codecvt_null.hpp>
+#ifndef WOO_CEREAL
+	#include<locale>
+	#include<boost/archive/codecvt_null.hpp>
+	#include<boost/math/special_functions/nonfinite_num_facets.hpp>
+#endif
 #include<boost/iostreams/filtering_stream.hpp>
 #include<boost/iostreams/filter/bzip2.hpp>
 #include<boost/iostreams/filter/gzip.hpp>
@@ -11,11 +14,6 @@
 #include<boost/algorithm/string.hpp>
 #include<boost/filesystem/operations.hpp>
 #include<boost/version.hpp>
-#if BOOST_VERSION<104800
-	#error You need boost >= 1.48 for boost/math/special_functions/nonfinite_num_facets.hpp . Woo does not provide its own copy since rev. 3048, you might need to revert back, or upgrade your boost installation. [boost version should have been checked by the configure script already?]
-#else
-	#include<boost/math/special_functions/nonfinite_num_facets.hpp>
-#endif
 
 namespace woo{
 /* Utility template functions for (de)serializing objects using boost::serialization from/to streams or files.
@@ -30,21 +28,31 @@ struct ObjectIO{
 	// save to given stream and archive format
 	template<class T, class oarchive>
 	static void save(std::ostream& ofs, const string& objectTag, T& object){
-		std::locale default_locale(std::locale::classic(), new boost::archive::codecvt_null<char>);
-		std::locale locale2(default_locale, new boost::math::nonfinite_num_put<char>);
-		ofs.imbue(locale2);
-		oarchive oa(ofs,boost::archive::no_codecvt);
-		oa << boost::serialization::make_nvp(objectTag.c_str(),object);
-		ofs.flush();
+		#ifdef WOO_CEREAL
+			oarchive oa(ofs);
+			oa<<cereal::make_nvp(objectTag.c_str(),object);
+		#else
+			std::locale default_locale(std::locale::classic(), new boost::archive::codecvt_null<char>);
+			std::locale locale2(default_locale, new boost::math::nonfinite_num_put<char>);
+			ofs.imbue(locale2);
+			oarchive oa(ofs,boost::archive::no_codecvt);
+			oa << boost::serialization::make_nvp(objectTag.c_str(),object);
+		#endif
+		ofs.flush();	
 	}
 	// load from given stream and archive format
 	template<class T, class iarchive>
 	static void load(std::istream& ifs, const string& objectTag, T& object){
-		std::locale default_locale(std::locale::classic(), new boost::archive::codecvt_null<char>);
-		std::locale locale2(default_locale, new boost::math::nonfinite_num_get<char>);
-		ifs.imbue(locale2);
-		iarchive ia(ifs,boost::archive::no_codecvt);
-		ia >> boost::serialization::make_nvp(objectTag.c_str(),object);
+		#ifdef WOO_CEREAL
+			iarchive ia(ifs);
+			ia>>cereal::make_nvp(objectTag.c_str(),object);
+		#else
+			std::locale default_locale(std::locale::classic(), new boost::archive::codecvt_null<char>);
+			std::locale locale2(default_locale, new boost::math::nonfinite_num_get<char>);
+			ifs.imbue(locale2);
+			iarchive ia(ifs,boost::archive::no_codecvt);
+			ia >> boost::serialization::make_nvp(objectTag.c_str(),object);
+		#endif
 	}
 	// save to given file, guessing compression and XML/binary from extension
 	template<class T>
@@ -62,10 +70,10 @@ struct ObjectIO{
 			#ifdef WOO_NOXML
 				throw std::runtime_error("Serialization to XML is not supported in this build of Woo (recompile without the 'noxml' feature).");
 			#else
-				save<T,boost::archive::xml_oarchive>(out,objectTag,object);
+				save<T,cereal::XMLOutputArchive>(out,objectTag,object);
 			#endif
 		}
-		else save<T,boost::archive::binary_oarchive>(out,objectTag,object);
+		else save<T,cereal::BinaryOutputArchive>(out,objectTag,object);
 		// rename to the file requested;
 		// see http://stackoverflow.com/questions/7054844/is-rename-atomic
 		boost::filesystem::rename(tmp,fileName);
@@ -84,10 +92,10 @@ struct ObjectIO{
 			#ifdef WOO_NOXML
 				throw std::runtime_error("De-serialization from XML is not supported in this build of Woo (disable the 'noxml' feature).");
 			#else
-				load<T,boost::archive::xml_iarchive>(in,objectTag,object);
+				load<T,cereal::XMLInputArchive>(in,objectTag,object);
 			#endif
 		}
-		else load<T,boost::archive::binary_iarchive>(in,objectTag,object);
+		else load<T,cereal::BinaryInputArchive>(in,objectTag,object);
 	}
 };
 

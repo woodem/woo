@@ -130,7 +130,6 @@ class Dispatcher1D : public Dispatcher,
 
 
 	public:
-	REGISTER_ATTRIBUTES(Dispatcher,);
 	REGISTER_CLASS_AND_BASE(Dispatcher1D,Dispatcher DynLibDispatcher);
 };
 
@@ -178,7 +177,6 @@ class Dispatcher2D : public Dispatcher,
 			else return "";
 		}
 	public:
-	REGISTER_ATTRIBUTES(Dispatcher,);
 	REGISTER_CLASS_AND_BASE(Dispatcher2D,Dispatcher DynLibDispatcher);
 };
 

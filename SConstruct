@@ -108,7 +108,7 @@ opts.AddVariables(
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
 	EnumVariable('PGO','Whether to "gen"erate or "use" Profile-Guided Optimization','',['','gen','use'],{'no':'','0':'','false':''},1),
-	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','pybind11','never_use_this_one']),
+	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','pybind11','cereal','never_use_this_one']),
 	('jobs','Number of jobs to run at the same time (same as -j, but saved)',2,None,int),
 	#('extraModules', 'Extra directories with their own SConscript files (must be in-tree) (whitespace separated)',None,None,Split),
 	('cxxstd','Name of the c++ standard (or dialect) to compile with. With gcc, use gnu++11 (gcc >=4.7) or gnu++0x (with gcc 4.5, 4.6)','c++17'),
@@ -406,9 +406,10 @@ def CheckBoost(context):
 		('boost_iostreams','boost/iostreams/device/file.hpp','boost::iostreams::file_sink("");',True),
 		('boost_regex','boost/regex.hpp','boost::regex("");',True),
 		('boost_chrono','boost/chrono/chrono.hpp','boost::chrono::system_clock::now();',True),
-		('boost_serialization','boost/archive/archive_exception.hpp','try{} catch (const boost::archive::archive_exception& e) {};',True),
 	]+(
 		[] if 'pybind11' in context.env['features'] else [('boost_python-py%s'%env['PYVER'],'boost/python.hpp','boost::python::scope();',True),]
+	)+(
+		[] if 'cereal' in context.env['features'] else [('boost_serialization','boost/archive/archive_exception.hpp','try{} catch (const boost::archive::archive_exception& e) {};',True),]
 	)
 	failed=[]
 	def checkLib_maybeMT(lib,header,func):
@@ -503,6 +504,7 @@ if not env.GetOption('clean'):
 	ok&=conf.CheckBoost()
 	ok&=conf.CheckCXXHeader('Eigen/Core')
 	if 'pybind11' in env['features']: ok&=conf.CheckCXXHeader('pybind11/pybind11.h')
+	if 'cereal' in env['features']: ok&=conf.CheckCXXHeader('cereal/cereal.hpp')
 
 	if not ok:
 		print "\nOne of the essential libraries above was not found, unable to continue.\n\nCheck `%s' for possible causes, note that there are options that you may need to customize:\n\n"%(buildDir+'/config.log')+opts.GenerateHelpText(env)
@@ -639,6 +641,7 @@ else: env.Append(CPPDEFINES=['NDEBUG'])
 if 'openmp' in env['features']:
 	env.Append(CXXFLAGS='-fopenmp',LIBS='gomp',CPPDEFINES='WOO_OPENMP')
 	if intel: env.Append(SHLINKFLAGS='-openmp')
+	if clang: env.Append(CXXFLAGS='-fopenmp=libomp',SHLINKFLAGS='-fopenmp')
 if env['optimize']:
 	env.Append(CXXFLAGS=['-O%d'%env['optimize']])
 	# do not state architecture if not provided

@@ -248,9 +248,15 @@ py::object Master::pyDeepcopy(py::args_ args, py::kwargs kw){
 
 shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
 	std::stringstream ss;
-	woo::ObjectIO::save<shared_ptr<Object>,boost::archive::binary_oarchive>(ss,"woo__Object",obj);
-	auto ret=make_shared<Object>();
-	woo::ObjectIO::load<shared_ptr<Object>,boost::archive::binary_iarchive>(ss,"woo__Object",ret);
+    #ifdef WOO_CEREAL
+        woo::ObjectIO::save<shared_ptr<Object>,cereal::BinaryOutputArchive>(ss,"woo__Object",obj);
+        auto ret=make_shared<Object>();
+        woo::ObjectIO::load<shared_ptr<Object>,cereal::BinaryInputArchive>(ss,"woo__Object",ret);
+    #else
+        woo::ObjectIO::save<shared_ptr<Object>,boost::archive::binary_oarchive>(ss,"woo__Object",obj);
+        auto ret=make_shared<Object>();
+        woo::ObjectIO::load<shared_ptr<Object>,boost::archive::binary_iarchive>(ss,"woo__Object",ret);
+    #endif
 	return ret;
 }
 
@@ -258,14 +264,22 @@ shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
 void Master::saveTmp(shared_ptr<Object> obj, const string& name, bool quiet){
 	if(memSavedSimulations.count(name)>0 && !quiet){  LOG_INFO("Overwriting in-memory saved simulation "<<name); }
 	std::ostringstream oss;
-	woo::ObjectIO::save<shared_ptr<Object>,boost::archive::binary_oarchive>(oss,"woo__Object",obj);
+    #ifdef WOO_CEREAL
+    	woo::ObjectIO::save<shared_ptr<Object>,cereal::BinaryOutputArchive>(oss,"woo__Object",obj);
+    #else
+    	woo::ObjectIO::save<shared_ptr<Object>,boost::archive::binary_oarchive>(oss,"woo__Object",obj);
+    #endif
 	memSavedSimulations[name]=oss.str();
 }
 shared_ptr<Object> Master::loadTmp(const string& name){
 	if(memSavedSimulations.count(name)==0) throw std::runtime_error("No memory-saved simulation "+name);
 	std::istringstream iss(memSavedSimulations[name]);
 	auto obj=make_shared<Object>();
-	woo::ObjectIO::load<shared_ptr<Object>,boost::archive::binary_iarchive>(iss,"woo__Object",obj);
+    #ifdef WOO_CEREAL
+    	woo::ObjectIO::load<shared_ptr<Object>,cereal::BinaryInputArchive>(iss,"woo__Object",obj);
+    #else
+    	woo::ObjectIO::load<shared_ptr<Object>,boost::archive::binary_iarchive>(iss,"woo__Object",obj);
+    #endif
 	return obj;
 }
 

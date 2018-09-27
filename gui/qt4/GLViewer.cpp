@@ -344,11 +344,19 @@ void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
 		std::istringstream oglre(val);
 		Renderer rendererDummyInstance;
 		woo::ObjectIO::load<Renderer,
-			#ifdef WOO_NOXML
-				boost::archive::binary_iarchive
+			#ifdef WOO_CEREAL
+				#ifdef WOO_NOXML
+					cereal::BinaryInputArchive
+				#else
+					cereal::XMLInputArchive
+				#endif
 			#else
-				boost::archive::xml_iarchive
-		#endif
+				#ifdef WOO_NOXML
+					boost::archive::binary_iarchive
+				#else
+					boost::archive::xml_iarchive
+				#endif
+			#endif
 		>(oglre,"renderer",rendererDummyInstance);
 	}
 	else { LOG_WARN("Renderer configuration not found in display parameters, skipped.");}
@@ -364,10 +372,18 @@ void GLViewer::saveDisplayParameters(size_t n){
 	std::ostringstream oglre;
 	Renderer rendererDummyInstance;
 	woo::ObjectIO::save<Renderer,
-		#ifdef WOO_NOXML
-			boost::archive::binary_oarchive
+		#ifdef WOO_CEREAL
+			#ifdef WOO_NOXML
+				cereal::BinaryOutputArchive
+			#else
+				cereal::XMLOutputArchive
+			#endif
 		#else
-			boost::archive::xml_oarchive
+			#ifdef WOO_NOXML
+				boost::archive::binary_oarchive
+			#else
+				boost::archive::xml_oarchive
+			#endif
 		#endif
 			>(oglre,"renderer",rendererDummyInstance);	
 	dp->setValue("Renderer",oglre.str());
