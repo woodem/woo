@@ -106,6 +106,10 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'cylAxDiv',-1.,'Fineness of division of the STL cylinder; see :obj:`woo.triangulated.cylinder` ``axDiv``. The defaults create nearly-square triangulation'),
         _PAT(float,'dtSafety',.7,'Timestep safety coefficient.'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
