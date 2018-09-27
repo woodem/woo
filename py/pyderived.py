@@ -28,12 +28,13 @@ class PyAttrTrait(object):
             # this is needed for new-style pickling with pybind11
             def __new__(klass,**kw):
                 self=super().__new__(klass)
-                self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+                # do not use self.__class__ here, it would break classes derived further from this class
+                self.wooPyInit(SamplePyDerivedPreprocessor,woo.core.Preprocessor,**kw)
                 return self
             # this is needed for old-style pickling with boost::python
             def __init__(self,**kw):
                 woo.core.Preprocessor.__init__(self)
-                self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
+                self.wooPyInit(SamplePyDerivedPreprocessor,woo.core.Preprocessor,**kw) 
             def __call__(self):
                 pass
                 # ...
@@ -270,6 +271,12 @@ class PyWooObject(object):
             _attrTraits=[
                 # see below
             ]
+            # new-style pickling with pybind11
+            def __new__(klass,**kw):
+                self=super().__new__(klass)
+                self.wooPyInit(SomeClass,woo.core.Object,**kw)
+                return self
+            # for old-style pickling with boost::python
             def __init__(self,**kw):
                 woo.core.Object.__init__(self)
                 self.wooPyInit(SomeClass,woo.core.Object,**kw)   # do NOT use self.__class__ instead of SomeClass, that would break classes deriving from SomeClass
@@ -302,6 +309,9 @@ class PyWooObject(object):
             def postLoad(self,I):
                 if I==None: pass                  # called when constructed/loaded
                 elif I=='aF_trigger': pass # called when aF_trigger is modified
+            def __new__(klass,**kw):
+                pass
+                # ...
             def __init__(self,**kw):
                 pass
                 # ...
@@ -332,6 +342,12 @@ class PyWooObject(object):
                 # don't forget to eventually call parent's class postLoad, if you define postLoad in the derived class
                 # otherwise the triggers from the parents class would not work
                 else: super(SomeChild,self).postLoad(I)
+            # newer pickling (pybind11)
+            def __new__(klass,**kw):
+                self=super().__new__(klass)
+                self.wooPyInit(SomeChild,SomeClass,**kw) # this class, parent class, keywords
+                return self
+            # older pickling (boost::python)
             def __init__(self,**kw):
                 SomeClass.__init__(self) # default-construct the parent
                 self.wooPyInit(SomeChild,SomeClass,**kw) # this class, parent class, keywords
