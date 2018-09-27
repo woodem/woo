@@ -277,11 +277,11 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
-        self.wooPyInit(klass,woo.core.Object,**kw)
+        self.wooPyInit(MeshImport,woo.core.Object,**kw)
         return self
     def __init__(self,**kw):
         woo.core.Object.__init__(self)
-        self.wooPyInit(self.__class__,woo.core.Object,**kw)
+        self.wooPyInit(MeshImport,woo.core.Object,**kw)
     def doImport(self,mat,mask=woo.dem.DemField.defaultStaticMask,**kw):
         'Do the actual import. Nastern: ``**kw`` is passed to :obj:`woo.dem.Facet.make`. STL: some values from ``**kw`` used (``color``) and passed to :obj:`woo.utils.importSTL <woo._utils2.importSTL>`.'
         fmt=None

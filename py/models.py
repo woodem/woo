@@ -243,7 +243,7 @@ class ContactModelSelector(woo.core.Object,woo.pyderived.PyWooObject):
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
-        self.wooPyInit(klass,woo.core.Object,**kw)
+        self.wooPyInit(ContactModelSelector,woo.core.Object,**kw)
         return self
     def __init__(self,**kw):
         # woo.core.Object.__init__(self)

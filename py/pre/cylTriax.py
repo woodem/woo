@@ -71,9 +71,13 @@ class CylTriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'massFactor',10.,'Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter'),
         _PAT(float,'maxUnbalanced',.05,'Maximum unbalanced force at the end of compaction'),
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(CylTriaxTest,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
-        self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
+        self.wooPyInit(CylTriaxTest,woo.core.Preprocessor,**kw)
     def __call__(self):
         # preprocessor builds the simulation when called
         return prepareCylTriax(self)

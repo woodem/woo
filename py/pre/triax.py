@@ -76,11 +76,11 @@ class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
-        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        self.wooPyInit(TriaxTest,woo.core.Preprocessor,**kw)
         return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
-        self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
+        self.wooPyInit(TriaxTest,woo.core.Preprocessor,**kw)
     def __call__(self):
         # preprocessor builds the simulation when called
         return prepareTriax(self)

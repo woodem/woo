@@ -23,7 +23,7 @@ class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
-        self.wooPyInit(klass,woo.core.Preprocessor,**kw)
+        self.wooPyInit(DissipChute,woo.core.Preprocessor,**kw)
         return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)

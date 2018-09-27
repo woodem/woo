@@ -11,9 +11,13 @@ class PourFeliciter(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     _PAT=woo.pyderived.PyAttrTrait # less typing
     _attrTraits=[
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
-        self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
+        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
     def __call__(self):
         # preprocessor builds the simulation when called
         pass
@@ -34,6 +38,10 @@ class NewtonsCradle(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(int,'plotEvery',10,'How often to collect plot data'),
         _PAT(float,'dtSafety',.7,':obj:`woo.core.Scene.dtSafety`')
     ]
+    def __new__(klass,**kw):
+        self=super().__new__(klass)
+        self.wooPyInit(newtonsCradle,woo.core.Preprocessor,**kw)
+        return self
     def __init__(self,**kw):
         woo.core.Preprocessor.__init__(self)
         self.wooPyInit(self.__class__,woo.core.Preprocessor,**kw)
