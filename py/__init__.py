@@ -130,10 +130,7 @@ if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 # and based on that use one or another
 try: import minieigen
 except ImportError: pass
-try:
-    print('WARN: adding /home/eudoxos/minieigen11/build to path for _minieigen11')
-    sys.path.append('/home/eudoxos/minieigen11/build')
-    import _minieigen11
+try: import _minieigen11
 except ImportError: pass
 
 # warnings.filterwarnings("error",category=ImportWarning)
