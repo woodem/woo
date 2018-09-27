@@ -316,7 +316,7 @@ env.Append(CPPPATH='',LIBPATH='',LIBS='',CXXFLAGS=('-std='+env['cxxstd'] if env[
 # guess which compiler we use, for compiler-specific things
 clang=('clang' in env['CXX'])
 intel=('icc' in env['CXX'] or 'icpc' in env['CXX'])
-gcc=('gcc' in env['CXX'] or 'g++' in env['CXX'])
+gcc=('gcc' in env['CXX'] or ('g++' in env['CXX'] and 'clang++' not in env['CXX']))
 
 
 def CheckCXX(context):
