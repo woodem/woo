@@ -54,8 +54,8 @@
 		typedef boost::archive::binary_iarchive BinaryInputArchive;
 		typedef boost::archive::binary_oarchive BinaryOutputArchive;
 		#ifndef WOO_NOXML
-			typedef boost::archive::xml_iarchive BinaryInputArchive;
-			typedef boost::archive::xml_oarchive BinaryOutputArchive;
+			typedef boost::archive::xml_iarchive XMLInputArchive;
+			typedef boost::archive::xml_oarchive XMLOutputArchive;
 		#endif
 	}}
 #endif
