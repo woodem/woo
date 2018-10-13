@@ -26,7 +26,13 @@
 	#include<cereal/types/tuple.hpp>
 	// this is the closest equivalent in cereal for make_array,
 	// but only works for binary archives...
-	namespace cereal { constexpr auto make_array=binary_data; }
+	#if __cplusplus>=201703L
+		namespace cereal { constexpr auto make_array=binary_data; }
+	#else
+		// copied definition of binary_data verbatim
+ 		namespace cereal { template <class T> inline BinaryData<T> make_array(T && data, size_t size ){ return {std::forward<T>(data), size}; } }
+	#endif
+	#define BOOST_SERIALIZATION_NVP CEREAL_NVP
 #else
 	template<class A> constexpr bool archive_is_loading(){ return A::is_loading::value; }
 	#include<boost/archive/binary_oarchive.hpp>
@@ -108,6 +114,21 @@
 			if(archive_is_loading<Archive>()) a.resize(shape);
 			ar & cereal::make_nvp("data",cereal::binary_data(a.data(),a.num_elements()));
 		};
+
+		template<class Archive>
+		void serialize(Archive & ar, Quaternionr & g, const unsigned int version)
+		{
+			Real &w=g.w(), &x=g.x(), &y=g.y(), &z=g.z();
+			ar & CEREAL_NVP(w) & CEREAL_NVP(x) & CEREAL_NVP(y) & CEREAL_NVP(z);
+		}
+
+		template<class Archive, typename Scalar, int AmbientDim>
+		void serialize(Archive & ar, Eigen::AlignedBox<Scalar,AmbientDim>& b, const unsigned int version){
+			auto& min(b.min()); auto& max(b.max());
+			ar & CEREAL_NVP(min) & CEREAL_NVP(max);
+		}
+
+
 	} // namespace cereal
 #else
 	// fast serialization (no version infor and no tracking) for basic math types
@@ -135,39 +156,39 @@
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector2r & g, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),2));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),2));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector2i & g, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),2));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),2));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector3r & g, const unsigned int version)
 	{
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),3));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),3));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector3i & g, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),3));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),3));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector4r & g, const unsigned int version)
 	{
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),4));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),4));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector6r & g, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),6));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),6));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Vector6i & g, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(g.data(),6));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(g.data(),6));
 	}
 
 	template<class Archive>
@@ -191,17 +212,17 @@
 
 	template<class Archive>
 	void serialize(Archive & ar, Matrix3r & m, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Matrix3i & m, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(m.data(),3*3));
 	}
 
 	template<class Archive>
 	void serialize(Archive & ar, Matrix6r & m, const unsigned int version){
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),6*6));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(m.data(),6*6));
 	}
 
 	template<class Archive>
@@ -209,7 +230,7 @@
 		int size=v.size();
 		ar & BOOST_SERIALIZATION_NVP(size);
 		if(Archive::is_loading::value) v.resize(size);
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(v.data(),size));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(v.data(),size));
 	};
 
 	template<class Archive>
@@ -217,7 +238,7 @@
 		int rows=m.rows(), cols=m.cols();
 		ar & BOOST_SERIALIZATION_NVP(rows) & BOOST_SERIALIZATION_NVP(cols);
 		if(Archive::is_loading::value) m.resize(rows,cols);
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(m.data(),cols*rows));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(m.data(),cols*rows));
 	};
 
 	template<class Archive, typename Scalar, size_t Dimension>
@@ -225,9 +246,9 @@
 		typedef typename boost::multi_array<Scalar,Dimension>::size_type size_type;
 		boost::array<size_type,Dimension> shape;
 		if(!Archive::is_loading::value) std::memcpy(shape.data(),a.shape(),sizeof(size_type)*shape.size());
-		ar & boost::serialization::make_nvp("shape",boost::serialization::make_array(shape.data(),shape.size()));
+		ar & cereal::make_nvp("shape",boost::serialization::make_array(shape.data(),shape.size()));
 		if(Archive::is_loading::value) a.resize(shape);
-		ar & boost::serialization::make_nvp("data",boost::serialization::make_array(a.data(),a.num_elements()));
+		ar & cereal::make_nvp("data",boost::serialization::make_array(a.data(),a.num_elements()));
 	};
 
 

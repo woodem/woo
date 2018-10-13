@@ -2,9 +2,6 @@
 
 // for ZeroInitializer template
 #include<woo/lib/base/Math.hpp>
-
-#include<boost/serialization/split_free.hpp>
-#include<boost/lexical_cast.hpp>
 #include<string>
 
 #ifdef WOO_OPENMP
@@ -220,14 +217,17 @@ public:
 #endif
 
 #ifdef WOO_CEREAL
+	#include<cereal/cereal.hpp>
 	namespace cereal{
 		template<class Archive, class Scalar> void save(Archive &ar, const OpenMPAccumulator<Scalar>& a){ Scalar value=a.get(); ar & value; }
-		template<class Archive, class Scalar> void load(Archive &ar, const OpenMPAccumulator<Scalar>& a){ Scalar value; ar & value; a.set(value); }
+		template<class Archive, class Scalar> void load(Archive &ar,        OpenMPAccumulator<Scalar>& a){ Scalar value; ar & value; a.set(value); }
 
 		template<class Archive, class Scalar> void save(Archive &ar, const OpenMPArrayAccumulator<Scalar>& a){ size_t size=a.size(); ar & cereal::make_nvp("size",size); for(size_t i=0; i<size; i++) { Scalar item(a.get(i)); ar & item; } }
-		template<class Archive, class Scalar> void load(Archive &ar,       OpenMPArrayAccumulator<int>& a){ size_t size; ar & cereal::make_nvp("size",size); a.resize(size); for(size_t i=0; i<size; i++){ int item; ar & item; a.set(i,item); } }
+		template<class Archive, class Scalar> void load(Archive &ar,       OpenMPArrayAccumulator<Scalar>& a){ size_t size; ar & cereal::make_nvp("size",size); a.resize(size); for(size_t i=0; i<size; i++){ int item; ar & item; a.set(i,item); } }
 	};
 #else
+	#include<boost/serialization/nvp.hpp>
+	#include<boost/serialization/split_free.hpp>
 	// boost serialization
 	BOOST_SERIALIZATION_SPLIT_FREE(OpenMPAccumulator<int>);
 	template<class Archive> void save(Archive &ar, const OpenMPAccumulator<int>& a, unsigned int version){ int value=a.get(); ar & BOOST_SERIALIZATION_NVP(value); }
