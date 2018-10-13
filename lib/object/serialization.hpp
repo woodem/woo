@@ -13,6 +13,10 @@
 		template<> constexpr bool archive_is_loading<cereal::XMLInputArchive>(){ return true; }
 	#endif
 
+	#ifndef WOO_NOXML
+		#error Cereal currently does not work with XML serialization (binary_data equivalent not available for XML); you have to compile with the "noxml" feature.
+	#endif
+
 	#include<cereal/cereal.hpp>
 	#include<cereal/types/array.hpp>
 	#include<cereal/types/vector.hpp>
@@ -24,14 +28,9 @@
 	#include<cereal/types/string.hpp>
 	#include<cereal/types/tuple.hpp>
 	#include<cereal/types/tuple.hpp>
-	// this is the closest equivalent in cereal for make_array,
-	// but only works for binary archives...
-	#if __cplusplus>=201703L
-		namespace cereal { constexpr auto make_array=binary_data; }
-	#else
-		// copied definition of binary_data verbatim
- 		namespace cereal { template <class T> inline BinaryData<T> make_array(T && data, size_t size ){ return {std::forward<T>(data), size}; } }
-	#endif
+	// this is the closest equivalent in cereal for make_array, but only works for binary archives...
+	// XXX: copied definition of binary_data verbatim
+ 	namespace cereal { template <class T> inline BinaryData<T> make_array(T && data, size_t size ){ return {std::forward<T>(data), size}; } }
 	#define BOOST_SERIALIZATION_NVP CEREAL_NVP
 #else
 	template<class A> constexpr bool archive_is_loading(){ return A::is_loading::value; }

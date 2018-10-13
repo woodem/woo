@@ -14,10 +14,10 @@ try:
     if 'qt4' in woo.config.features:
         from PyQt4.QtGui import *
         from PyQt4.QtCore import *
-    else:
+    if 'qt5' in woo.config.features:
         from PyQt5.QtGui import *
         from PyQt5.QtCore import *
-except ImportError, RuntimeError: pass
+except ImportError: pass
 
 
 

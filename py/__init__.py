@@ -274,8 +274,7 @@ if 'pybind11' in config.features:
     print('WARN: hijacking minieigen module, points to _minieigen11.')
     if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
     sys.modules['minieigen']=sys.modules['_minieigen11']
-    #assert(hasattr(_minieigen11,'_pybind11_based_') and _minieigen11._pybind11_based_)
-    assert('pybind11_builtins' in _minieigen11.Vector3.__class__)
+    assert(_minieigen11.Vector3.__class__.__name__=='pybind11_type')
 else:
     import minieigen
 

@@ -12,6 +12,7 @@ import wooMain
 import sys, os
 PY3K=future.utils.PY3
 
+import woo
 if 'qt4' in woo.config.features:
     print(40*'#'+'\n\nWOO IS DEPRECATING QT4, PLEASE MOVE TO QT5 (re-compile with qt5 feature).\n\n'+40*'#') 
 
