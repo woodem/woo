@@ -2,11 +2,6 @@
 
 // for ZeroInitializer template
 #include<woo/lib/base/Math.hpp>
-<<<<<<< HEAD
-
-#include<boost/lexical_cast.hpp>
-=======
->>>>>>> 5d2fac580420e368f746b12e9ecc44fdfd38dc69
 #include<string>
 
 #ifdef WOO_OPENMP
