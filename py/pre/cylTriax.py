@@ -502,7 +502,7 @@ def plotBatchResults(db,titleRegex=None,out=None,stressPath=True,sorter=None):
 
     results=woo.batch.dbReadResults(db)
     if sorter: results=sorter(results)
-    if out==None: out='%s.pdf'%re.sub('\.results$','',db)
+    if out==None: out='%s.pdf'%re.sub(r'\.results$','',db)
 
     from matplotlib.ticker import FuncFormatter
     kiloPascal=FuncFormatter(lambda x,pos=0: '%g'%(1e-3*x))

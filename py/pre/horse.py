@@ -168,7 +168,7 @@ def plotBatchResults(db):
 
     import re,math,woo.batch,os
     results=woo.batch.dbReadResults(db)
-    out='%s.pdf'%re.sub('\.sqlite$','',db)
+    out='%s.pdf'%re.sub(r'\.sqlite$','',db)
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     fig=Figure();
@@ -206,7 +206,7 @@ def finished(S):
     figs=S.plot.plot(noShow=True,subPlots=False)
     
     if repName:
-        repExtra=re.sub('\.xhtml$','',repName)
+        repExtra=re.sub(r'\.xhtml$','',repName)
         svgs=[]
         for i,fig in enumerate(figs):
             svgs.append(('Figure %d'%i,repExtra+'.fig-%d.svg'%i))

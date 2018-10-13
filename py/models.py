@@ -49,10 +49,10 @@ class HertzModel(CundallModel):
         ':math:`\\delta(a)`'
         return a**2/self.R
     def a_delta(self,delta):
-        ':math:`a(\\delta)=\\sqrt{R\delta}`'
+        ':math:`a(\\delta)=\\sqrt{R\\delta}`'
         return sqrt(self.R*delta)
     def F_delta(self,delta):
-        ':math:`F(\\delta)`'
+        r':math:`F(\\delta)`'
         return self.K*sqrt(self.R)*delta**(3/2.) if delta>=0 else float('nan')
     def a_F(self,F):
         ':math:`a(F)`'
@@ -166,43 +166,43 @@ class SchwarzModel(HertzModel):
             if what=='a(delta)':
                 ddHat=numpy.linspace(-1.3,2.,num=N)
                 aaHat=numpy.linspace(0,2.1,num=N)
-                pylab.plot(m.deltaHat_aHat(aaHat),aaHat,label='$\\alpha$=%g %s'%(m.alpha,m.name),**kw)
+                pylab.plot(m.deltaHat_aHat(aaHat),aaHat,label=r'$\alpha$=%g %s'%(m.alpha,m.name),**kw)
                 ddH=m.deltaHat_aHat(aaHat)
-                if i in aHi: pylab.plot(ddH,[m.aHat(m.aHi(m.deltaUnhat(dh))) for dh in ddH],label='$\\alpha$=%g $a_{\mathrm{hi}}$'%m.alpha,linewidth=1,alpha=.4)
+                if i in aHi: pylab.plot(ddH,[m.aHat(m.aHi(m.deltaUnhat(dh))) for dh in ddH],label=r'$\alpha$=%g $a_{\mathrm{hi}}$'%m.alpha,linewidth=1,alpha=.4)
                 pylab.plot(ddHat[::stride],m.aHat_deltaHat(ddHat[::stride],loading=True),'o',**invKw)
                 pylab.plot(ddHat[::stride],m.aHat_deltaHat(ddHat[::stride],loading=False),'o',**invKw)
             elif what=='F(delta)':
                 ffHat=numpy.linspace(-2.1,1.5,num=N)
                 ddHat=numpy.linspace(-1.3,2.,num=N)
-                pylab.plot(ddHat,m.fHat_aHat(m.aHat_deltaHat(ddHat)),label='$\\alpha$=%g %s'%(m.alpha,m.name),**kw)
+                pylab.plot(ddHat,m.fHat_aHat(m.aHat_deltaHat(ddHat)),label=r'$\alpha$=%g %s'%(m.alpha,m.name),**kw)
                 pylab.plot(ddHat,m.fHat_aHat(m.aHat_deltaHat(ddHat,loading=False)),**kw)
                 pylab.plot([m.deltaHat(m.delta_a(m.a_F(m.fUnhat(fh))[0])) for fh in ffHat[::stride]],ffHat[::stride],'o',**invKw)
                 pylab.plot([m.deltaHat(m.delta_a(m.a_F(m.fUnhat(fh))[1])) for fh in ffHat[::stride]],ffHat[::stride],'o',**invKw)
             elif what=='a(F)':
                 aaHat=numpy.linspace(0,2.5,num=N)
                 ffHat=numpy.linspace(-3,4,num=N)
-                pylab.plot(ffHat,[a[0] for a in m.aHat_fHat(ffHat)],label='$\\alpha$=%g %s'%(m.alpha,m.name),**kw)
+                pylab.plot(ffHat,[a[0] for a in m.aHat_fHat(ffHat)],label=r'$\alpha$=%g %s'%(m.alpha,m.name),**kw)
                 pylab.plot(ffHat,[a[1] for a in m.aHat_fHat(ffHat)],**kw)
                 pylab.plot(m.fHat_aHat(aaHat[::stride]),aaHat[::stride],'o',label=None,**invKw)
         if what=='a(delta)': 
             ddH=[m.deltaHat(HertzModel.delta_a(m,m.aUnhat(a))) for a in aaHat]
             pylab.plot(ddH,aaHat,label='Hertz',**kw)
-            pylab.xlabel('$\hat\delta$')
-            pylab.ylabel('$\hat a$')
+            pylab.xlabel(r'$\hat\delta$')
+            pylab.ylabel(r'$\hat a$')
             pylab.ylim(ymax=2.1)
             pylab.xlim(xmax=2.)
         elif what=='F(delta)':
             pylab.plot(ddHat,[m.fHat(HertzModel.F_delta(m,m.deltaUnhat(d))) for d in ddHat],label='Hertz',**kw)
-            pylab.xlabel('$\hat\delta$')
-            pylab.ylabel('$\hat P$')
+            pylab.xlabel(r'$\hat\delta$')
+            pylab.ylabel(r'$\hat P$')
             pylab.xlim(-1.3,2)
             pylab.ylim(-2.1,2)
             pylab.axhline(color='k')
             pylab.axvline(color='k')
         elif what=='a(F)':
             pylab.plot(ffHat,[m.aHat(HertzModel.a_F(m,m.fUnhat(f))) for f in ffHat],label='Hertz',**kw)
-            pylab.xlabel('$\hat P$')
-            pylab.ylabel('$\hat a$')
+            pylab.xlabel(r'$\hat P$')
+            pylab.ylabel(r'$\hat a$')
             pylab.xlim(xmax=4)
         pylab.grid(True)
         try:
