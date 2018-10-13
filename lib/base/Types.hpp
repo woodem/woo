@@ -42,7 +42,22 @@ using boost::lexical_cast;
 
 #include<memory>
 
-#ifndef WOO_PYBIND11
+#if defined(WOO_CEREAL) or defined(WOO_PYBIND11)
+	#define WOO_STD_SHAREDPTR
+#endif
+
+#ifdef WOO_STD_SHAREDPTR
+	using std::shared_ptr;
+	using std::enable_shared_from_this;
+	using std::static_pointer_cast;
+	using std::dynamic_pointer_cast;
+	using std::make_shared;
+	using std::weak_ptr;
+	// boost::python with std::shared_ptr
+	#ifndef WOO_PYBIND11
+		#define WOO_PY_DERIVED_BASE_SHAREDPTR_CONVERTIBLE(Derived,Base) boost::python::implicitly_convertible<std::shared_ptr<Derived>,std::shared_ptr<Base>>();
+	#endif
+#else
 	/* Avoid using std::shared_ptr, because boost::serialization does not support it.
 	   For boost::python, declaring get_pointer template would be enough.
 		See http://stackoverflow.com/questions/6568952/c0x-stdshared-ptr-vs-boostshared-ptr
@@ -56,13 +71,8 @@ using boost::lexical_cast;
 	using boost::dynamic_pointer_cast;
 	using boost::make_shared;
 	using boost::weak_ptr;
-#else
-	using std::shared_ptr;
-	using std::enable_shared_from_this;
-	using std::static_pointer_cast;
-	using std::dynamic_pointer_cast;
-	using std::make_shared;
-	using std::weak_ptr;
+	// not needed here
+	#define WOO_PY_DERIVED_BASE_SHAREDPTR_CONVERTIBLE(Derived,Base)
 #endif
 
 using std::unique_ptr;
