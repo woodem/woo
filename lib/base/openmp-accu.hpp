@@ -2,8 +2,11 @@
 
 // for ZeroInitializer template
 #include<woo/lib/base/Math.hpp>
+<<<<<<< HEAD
 
 #include<boost/lexical_cast.hpp>
+=======
+>>>>>>> 5d2fac580420e368f746b12e9ecc44fdfd38dc69
 #include<string>
 
 #ifdef WOO_OPENMP
@@ -222,26 +225,21 @@ public:
 	#include<cereal/cereal.hpp>
 	namespace cereal{
 		template<class Archive, class Scalar> void save(Archive &ar, const OpenMPAccumulator<Scalar>& a){ Scalar value=a.get(); ar & value; }
-		template<class Archive, class Scalar> void load(Archive &ar, const OpenMPAccumulator<Scalar>& a){ Scalar value; ar & value; a.set(value); }
+		template<class Archive, class Scalar> void load(Archive &ar,        OpenMPAccumulator<Scalar>& a){ Scalar value; ar & value; a.set(value); }
 
 		template<class Archive, class Scalar> void save(Archive &ar, const OpenMPArrayAccumulator<Scalar>& a){ size_t size=a.size(); ar & cereal::make_nvp("size",size); for(size_t i=0; i<size; i++) { Scalar item(a.get(i)); ar & item; } }
-		template<class Archive, class Scalar> void load(Archive &ar,       OpenMPArrayAccumulator<int>& a){ size_t size; ar & cereal::make_nvp("size",size); a.resize(size); for(size_t i=0; i<size; i++){ int item; ar & item; a.set(i,item); } }
+		template<class Archive, class Scalar> void load(Archive &ar,       OpenMPArrayAccumulator<Scalar>& a){ size_t size; ar & cereal::make_nvp("size",size); a.resize(size); for(size_t i=0; i<size; i++){ int item; ar & item; a.set(i,item); } }
 	};
 #else
 	#include<boost/serialization/split_free.hpp>
 	#include<boost/serialization/nvp.hpp>
-	// boost serialization
 	BOOST_SERIALIZATION_SPLIT_FREE(OpenMPAccumulator<int>);
 	BOOST_SERIALIZATION_SPLIT_FREE(OpenMPAccumulator<Real>);
 	template<class Archive, class Scalar> void save(Archive &ar, const OpenMPAccumulator<Scalar>& a, unsigned int version){ Scalar value=a.get(); ar & BOOST_SERIALIZATION_NVP(value); }
 	template<class Archive, class Scalar> void load(Archive &ar,       OpenMPAccumulator<Scalar>& a, unsigned int version){ Scalar value; ar & BOOST_SERIALIZATION_NVP(value); a.set(value); }
-	//template<class Archive> void save(Archive &ar, const OpenMPAccumulator<Real>& a, unsigned int version){ Real value=a.get(); ar & BOOST_SERIALIZATION_NVP(value); }
-	//template<class Archive> void load(Archive &ar,       OpenMPAccumulator<Real>& a, unsigned int version){ Real value; ar & BOOST_SERIALIZATION_NVP(value); a.set(value); }
 
 	BOOST_SERIALIZATION_SPLIT_FREE(OpenMPArrayAccumulator<int>);
 	BOOST_SERIALIZATION_SPLIT_FREE(OpenMPArrayAccumulator<Real>);
 	template<class Archive, class Scalar> void save(Archive &ar, const OpenMPArrayAccumulator<Scalar>& a, unsigned int version){ size_t size=a.size(); ar & BOOST_SERIALIZATION_NVP(size); for(size_t i=0; i<size; i++) { Scalar item(a.get(i)); ar & boost::serialization::make_nvp(("item"+std::to_string(i)).c_str(),item); } }
 	template<class Archive, class Scalar> void load(Archive &ar,       OpenMPArrayAccumulator<Scalar>& a, unsigned int version){ size_t size; ar & BOOST_SERIALIZATION_NVP(size); a.resize(size); for(size_t i=0; i<size; i++){ Scalar item; ar & boost::serialization::make_nvp(("item"+std::to_string(i)).c_str(),item); a.set(i,item); } }
-	//template<class Archive> void save(Archive &ar, const OpenMPArrayAccumulator<Real>& a, unsigned int version){ size_t size=a.size(); ar & BOOST_SERIALIZATION_NVP(size); for(size_t i=0; i<size; i++) { Real item(a.get(i)); ar & boost::serialization::make_nvp(("item"+std::to_string(i)).c_str(),item); } }
-	//template<class Archive> void load(Archive &ar,       OpenMPArrayAccumulator<Real>& a, unsigned int version){ size_t size; ar & BOOST_SERIALIZATION_NVP(size); a.resize(size); for(size_t i=0; i<size; i++){ Real item; ar & boost::serialization::make_nvp(("item"+std::to_string(i)).c_str(),item); a.set(i,item); } }
 #endif

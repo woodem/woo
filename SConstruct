@@ -321,7 +321,7 @@ gcc=('gcc' in env['CXX'] or ('g++' in env['CXX'] and 'clang++' not in env['CXX']
 
 def CheckCXX(context):
 	# see http://llvm.org/bugs/show_bug.cgi?id=13530#c3, workaround number 4.
-	if clang: context.env.Append(CPPDEFINES={'__float128':'void'})
+	# if clang: context.env.Append(CPPDEFINES={'__float128':'void'})
 	context.Message('Checking whether c++ compiler "%s %s" works...'%(env['CXX'],' '.join(env['CXXFLAGS'])))
 	ret=context.TryLink('#include<iostream>\nint main(int argc, char**argv){std::cerr<<std::endl;return 0;}\n','.cpp')
 	context.Result(ret)

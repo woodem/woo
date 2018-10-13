@@ -25,6 +25,10 @@ import sys,os,os.path,re,string
 WIN=sys.platform=='win32'
 PY3K=(sys.version_info[0]==3)
 
+if not PY3K:
+    print(80*'*'+'\n'+80*'*'+'\n\n WOO WILL NO LONGER SUPPORT PYTHON 2.x IN NEAR FUTURE \n\n    YOU ARE STILL RUNNING ON PYTHON 2.x\n\n         DO NOT WAIT WITH UPGRADE ANYMORE\n\n'+80*'*'+'\n'+80*'*')
+    warnings.warn('Python 2.x is deprecated (you are running %d.%d), Woo will remove its support in a short time.'%(sys.version_info[0],sys.version_info[1]),DeprecationWarning)
+
 if WIN:
     class WooOsEnviron(object):
         '''Class setting env vars via both CRT and win32 API, so that values can be read back
@@ -270,7 +274,8 @@ if 'pybind11' in config.features:
     print('WARN: hijacking minieigen module, points to _minieigen11.')
     if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
     sys.modules['minieigen']=sys.modules['_minieigen11']
-    assert(hasattr(_minieigen11,'_pybind11_based_') and _minieigen11._pybind11_based_)
+    #assert(hasattr(_minieigen11,'_pybind11_based_') and _minieigen11._pybind11_based_)
+    assert('pybind11_builtins' in _minieigen11.Vector3.__class__)
 else:
     import minieigen
 
