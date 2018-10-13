@@ -12,6 +12,9 @@ import wooMain
 import sys, os
 PY3K=future.utils.PY3
 
+if 'qt4' in woo.config.features:
+    print(40*'#'+'\n\nWOO IS DEPRECATING QT4, PLEASE MOVE TO QT5 (re-compile with qt5 feature).\n\n'+40*'#') 
+
 if wooMain.options.fakeDisplay:
     # do nothing, let all the imports happen without error
     # running anything Qt-related will fail/crash later, this should be used only when generating docs
@@ -20,7 +23,9 @@ else:
     # signal import error witout display
     if 1:
 
-        import woo.runtime, wooMain
+        import woo.runtime, wooMain, woo.config
+        if ('qt4' not in woo.config.features) and ('qt5' not in woo.config.features):
+            raise ImportError("Woo was compiled without GUI support (qt4 or qt5 feature).")
         if wooMain.options.forceNoGui:
             woo.runtime.hasDisplay=False
             raise ImportError("Woo was started with the -n switch; woo.qt interface will not be enabled.")
@@ -118,6 +123,7 @@ else:
             #    IPython.terminal.pt_inputhooks.get_inputhook_func('gt4' if 'qt4' in woo.config.features else 'qt5')
             else:
                 # this is deprecated in IPython >= 5.x
+                print('FEATURES',woo.config.features)
                 import IPython.lib.inputhook #guisupport
                 wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
 
