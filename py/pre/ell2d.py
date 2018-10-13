@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+from builtins import super
 from woo.dem import *
 import woo.core
 import woo.dem
@@ -16,7 +16,7 @@ try:
     else:
         from PyQt5.QtGui import *
         from PyQt5.QtCore import *
-except ImportError: pass
+except ImportError, RuntimeError: pass
 
 
 
