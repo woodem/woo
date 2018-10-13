@@ -9,6 +9,8 @@
 	#define staticmethod(name)
 	//def("__boost_python_deprecated_filler_" name,[](const auto& o){ return 0; })
 	#define WOO_PY_DICT_CONTAINS(dict,key) dict.contains(key)
+	#define WOO_PY_DICT_UPDATE(src,dst) { for(auto kv: src) dst[kv.first]=kv.second; }
+
 	// pybind11 needs args separated
 	#define WOO_PY_ARGS(...) __VA_ARGS__
 	#define WOO_PY_GETTER_COPY(func) py::cpp_function(func,py::return_value_policy::copy)
@@ -55,6 +57,7 @@
 	#define WOO_PY_GETTER_COPY(func) py::make_function(func,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_EXPOSE_COPY(classT,attr) py::make_getter(attr,py::return_value_policy<py::return_by_value>())
 	#define WOO_PY_DICT_CONTAINS(dict,key) dict.has_key(key)
+	#define WOO_PY_DICT_UPDATE(src,dst) dst.update(src);
 	// boost::python wants args to be grouped in parens
 	#define WOO_PY_ARGS(...) (__VA_ARGS__)
 
