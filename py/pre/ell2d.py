@@ -7,6 +7,7 @@ import woo.pyderived
 import woo.models
 import math
 from minieigen import *
+from builtins import super
 nan=float('nan')
 
 try:

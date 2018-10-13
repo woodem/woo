@@ -2,7 +2,7 @@
 '''
 Collection of classes providing python-only implementation of various implementation models, mostly for testing or plotting in documentation. Plus a class for selecting material model along with all its parameters for use in preprocessors.
 '''
-from builtins import range, object, str
+from builtins import range, object, str, super
 
 from math import pi,sqrt
 import numpy

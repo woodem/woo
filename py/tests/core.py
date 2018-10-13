@@ -27,6 +27,7 @@ try: from woo.qt import *
 except: pass
 
 import woo
+woo.master.usesApi=10104
 
 ## TODO tests
 class TestInteractions(unittest.TestCase): pass
@@ -165,7 +166,6 @@ class TestObjectInstantiation(unittest.TestCase):
         'Core: postLoad & Attr::triggerPostLoad'
         WTC=woo.core.WooTestClass
         # stage right after construction
-        print('SHOULD BE EQUAL:',self.t.postLoadStage,WTC.postLoad_ctor)
         self.assertEqual(self.t.postLoadStage,WTC.postLoad_ctor)
         baz0=self.t.baz
         self.t.foo_incBaz=1 # assign whatever, baz should be incremented

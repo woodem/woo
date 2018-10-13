@@ -16,7 +16,6 @@
 #include<boost/version.hpp>
 
 #include<woo/lib/object/serialization.hpp>
-
 #include<woo/lib/object/ObjectIO.hpp>
 
 #include<woo/lib/base/Math.hpp>

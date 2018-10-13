@@ -16,6 +16,8 @@ logging.basicConfig(level=logging.INFO)
 log=logging.getLogger('woo/setup.py')
 
 DISTBUILD=None # set to None if building locally, or to a string when dist-building on a bot
+# QQQ
+DISTBUILD='test'
 if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
 WIN=(sys.platform=='win32')
 PY3=(sys.version_info[0]==3)
@@ -119,6 +121,11 @@ hotCxx=[] # plugins to be compiled separately despite chunkSize>1
 # XXX
 chunkSize=1
 # features+=['noxml']
+# QQQ
+features=['noxml']
+flavor='py2test'
+os.environ['CXX']='ccache clang++'
+os.environ['CC']='ccache clang'
 
 ## arch-specific optimizations
 march='corei7' if WIN else 'native'
@@ -161,7 +168,7 @@ def wooPrepareChunks():
     if 'opengl' in features: srcs+=[glob('gui/qt4/*.cpp')+glob('gui/qt4/*.cc')]
     if 'gts' in features: srcs+=[[f] for f in glob('py/3rd-party/pygts-0.3.1/*.cpp')]
     pkg=glob('pkg/*.cpp')+glob('pkg/*/*.cpp')+glob('pkg/*/*/*.cpp')+glob('core/*.cpp')
-    # print(srcs,pkg)
+    print(srcs,pkg)
     for i in range(0,len(pkg),chunkSize): srcs.append(pkg[i:i+chunkSize])
     hot=[]
     for i in range(len(srcs)):
@@ -341,7 +348,8 @@ else:
     
 ##
 ## Debug-specific
-##
+
+# QQQ##
 if debug:
     cppDef+=[('WOO_DEBUG',None),]
     cxxFlags+=['-Os']

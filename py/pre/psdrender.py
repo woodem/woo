@@ -9,6 +9,8 @@ import woo.pyderived
 import woo.models
 import math
 from minieigen import *
+from builtins import super
+
 
 
 class PsdRender(woo.core.Preprocessor,woo.pyderived.PyWooObject):

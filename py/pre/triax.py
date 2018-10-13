@@ -9,6 +9,8 @@ import woo.triangulated
 import math
 from minieigen import *
 import woo.models
+from builtins import super
+
 
 
 class TriaxTest(woo.core.Preprocessor,woo.pyderived.PyWooObject):

@@ -26,7 +26,13 @@
 	#include<cereal/types/tuple.hpp>
 	// this is the closest equivalent in cereal for make_array,
 	// but only works for binary archives...
-	namespace cereal { constexpr auto make_array=binary_data; }
+	#if __cplusplus>=201703L
+		namespace cereal { constexpr auto make_array=binary_data; }
+	#else
+		// copied definition of binary_data verbatim
+ 		namespace cereal { template <class T> inline BinaryData<T> make_array(T && data, size_t size ){ return {std::forward<T>(data), size}; } }
+	#endif
+	#define BOOST_SERIALIZATION_NVP CEREAL_NVP
 #else
 	template<class A> constexpr bool archive_is_loading(){ return A::is_loading::value; }
 	#include<boost/archive/binary_oarchive.hpp>

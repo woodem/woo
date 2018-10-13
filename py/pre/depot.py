@@ -6,6 +6,8 @@ from woo.fem import *
 import woo.core, woo.dem, woo.pyderived, woo.models, woo.config
 import math
 from minieigen import *
+from builtins import super
+
 
 class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     ''''Deposition of particles inside cylindrical tube. This preprocessor was created for pre-generation of dense packing inside cylindrical chamber, which is then exported to STL serving as input to `OpenFOAM <http://openfoam.org>`__ for computing permeability (pressure loss) of the layering.

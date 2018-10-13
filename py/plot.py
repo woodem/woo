@@ -805,7 +805,7 @@ def Scene_plot_saveDataTxt(P,fileName,vars=None):
     >>> S.plot.addData(a=2,b=12,c=22,d=32)
     >>> pprint(S.plot.data)
     {'a': [1, 2], 'b': [11, 12], 'c': [21, 22], 'd': [31, 32]}
-    >>> txt=woo.master.tmpFilename()+'.txt.bz2'
+    >>> txt=woo.master.tmpFilename()+'.txt.gz'
     >>> S.plot.saveDataTxt(txt,vars=('a','b','c'))
     >>> import numpy
     >>> d=numpy.genfromtxt(txt,dtype=None,names=True)
