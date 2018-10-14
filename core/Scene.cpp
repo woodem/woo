@@ -97,7 +97,12 @@ void Scene::backgroundLoop(){
 		}
 	} catch(std::exception& e){
 		LOG_ERROR("Exception: "<<endl<<e.what());
-		except=make_shared<std::exception>(e);
+		// some compilers report ambiguity here...
+		#ifdef WOO_STD_SHAREDPTR
+			except=std::make_shared<std::exception>(e);
+		#else
+			except=boost::make_shared<std::exception>(e);
+		#endif
 		{ boost::mutex::scoped_lock l(runMutex); runningFlag=false; }
 		return;
 	}
