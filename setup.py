@@ -124,8 +124,12 @@ chunkSize=1
 # QQQ
 features=['noxml']
 flavor='py2test'
-os.environ['CXX']='ccache clang++'
-os.environ['CC']='ccache clang'
+if DISTBUILD:
+    os.environ['CXX']='clang++'
+    os.environ['CC']='clang'
+else:
+    os.environ['CXX']='ccache clang++'
+    os.environ['CC']='ccache clang'
 
 ## arch-specific optimizations
 march='corei7' if WIN else 'native'
