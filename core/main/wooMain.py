@@ -473,23 +473,30 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             class WooPrompt(Prompts):
                 def in_prompt_tokens(self,cli=None): return [(Token.Prompt,'Woo ['),(Token.PromptNum,str(self.shell.execution_count)),(Token.Prompt,']: '),(Token.Generic,'')]
                 def out_prompt_tokens(self): return [(Token.OutPrompt,'--> ['),(Token.OutPromptNum,str(self.shell.execution_count)),(Token.OutPrompt,']: '),(Token.Generic,'')]
-            registry=ipshell.pt_cli.application.key_bindings_registry
-            # shortcuts setup
-            # tersely documented at http://ipython.readthedocs.io/en/latest/config/details.html#keyboard-shortcuts
-            from prompt_toolkit.keys import Keys
-            import traceback
-            def _catch(c):
-                'Wrap all shortcut calls in this catcher, otherwise the whole program crashes when there is exception in the event callback'
-                try: c()
-                except: traceback.print_exc()
-            # add shortcuts here (we discard the event object which the callback always receives)
-            registry.add_binding(Keys.F8)(lambda e: _catch(lambda: woo.master.scene.plot.plot()))
-            if qt:
-                registry.add_binding(Keys.F9)(lambda e:  _catch(lambda: woo.qt.Generator()))
-                registry.add_binding(Keys.F12)(lambda e: _catch(lambda: woo.qt.Controller()))
-            if 'opengl' in woo.config.features:
-                registry.add_binding(Keys.F10)(lambda e: _catch(lambda: [woo.qt.Controller(),woo.qt.View()]))
-                registry.add_binding(Keys.F11)(lambda e: _catch(lambda: woo.qt.View()))
+            # IPython<7.0
+            if hasattr(ipshell,'pt_cli'): registry=ipshell.pt_cli.application.key_bindings_registry
+            # IPython 7.x
+            elif hasattr(ipshell,'pt_app'): registry=ipshell.pt_app.key_bindings
+            # something else
+            else: registry=None
+            if registry:
+                # shortcuts setup
+                # tersely documented at http://ipython.readthedocs.io/en/latest/config/details.html#keyboard-shortcuts
+                from prompt_toolkit.keys import Keys
+                import traceback
+                def _catch(c):
+                    'Wrap all shortcut calls in this catcher, otherwise the whole program crashes when there is exception in the event callback'
+                    try: c()
+                    except: traceback.print_exc()
+                # add shortcuts here (we discard the event object which the callback always receives)
+                registry.add_binding(Keys.F8)(lambda e: _catch(lambda: woo.master.scene.plot.plot()))
+                if qt:
+                    registry.add_binding(Keys.F9)(lambda e:  _catch(lambda: woo.qt.Generator()))
+                    registry.add_binding(Keys.F12)(lambda e: _catch(lambda: woo.qt.Controller()))
+                if 'opengl' in woo.config.features:
+                    registry.add_binding(Keys.F10)(lambda e: _catch(lambda: [woo.qt.Controller(),woo.qt.View()]))
+                    registry.add_binding(Keys.F11)(lambda e: _catch(lambda: woo.qt.View()))
+            else: print('WARN: prompt_toolkit not used by IPython, key bindings were not set.')
             ipshell.prompts=WooPrompt(ipshell)
         ipshell()
         # similar to the workaround, as for 0.10 (perhaps not needed?)
