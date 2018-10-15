@@ -102,9 +102,12 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(float,'stlTol',.2e-3,unit='m',doc='Tolerance for STL export (maximum distance between ideal shape and triangulation; passed to :obj:`_triangulated.spheroidsToStl`)'),
         _PAT(bool,'stlUnion',False,doc='Compute union of surfaces before exporting to STL (removing surface parts which are inside overlapping volumes). This also causes clusters to be exported as separate solids (will be configurable in the future).'),
         _PAT(bool,'stlCyl',True,doc='Export also cylinder surface (top, bottom and lateral surface are separate solids within the STL file.'),
+        _PAT(bool,'stlParticles',True,doc='Export spheroidal particles in the STL.'),
         _PAT(str,'scadOut','',filename=True,doc='Output OpenSCAD script with union of all particles.'),
+        _PAT(bool,'scadCyl',False,doc='Export also cylinder surface (top, bottom, lateral surfaces) to SCAD.'),
         _PAT(str,'sheetOut','',filename=True,doc='Output particle coordinates and radii as spreadsheet, in any format supported by pyexcel (XLS, XLSX, CSV, ODS, ...).'),
         _PAT(bool,'scadCon',True,doc='Export cylinders along contacts (for easier meshing of close parts).'),
+        _PAT(bool,'scadConAll',False,doc='Export also cylinders for contacts between the particles and the boundary.'),
         _PAT(Vector2,'extraHt',(.5,.5),unit='m',doc='Extra height to be added to bottom and top of the resulting packing, when the new STL-exported cylinder is created.'),
         _PAT(float,'cylAxDiv',-1.,'Fineness of division of the STL cylinder; see :obj:`woo.triangulated.cylinder` ``axDiv``. The defaults create nearly-square triangulation'),
         _PAT(float,'dtSafety',.7,'Timestep safety coefficient.'),
@@ -163,7 +166,9 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         if not S.pre.stlOut:
             print('Not running STL export (stlOut empty)')
         else:
-            n=woo.triangulated.spheroidsToSTL(S.pre.stlOut,S.dem,tol=S.pre.stlTol,merge=S.pre.stlUnion,solid="particles")
+            n=0
+            if S.pre.stlParticles:
+                n+=woo.triangulated.spheroidsToSTL(S.pre.stlOut,S.dem,tol=S.pre.stlTol,merge=S.pre.stlUnion,solid="particles")
             if S.pre.stlCyl:
                 # delete the triangulated cylinder
                 for p in S.dem.par:
@@ -188,20 +193,29 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                 if S.pre.scadCon:
                     scad.write('fnCyl=8; // set contact triangulation precision here\n')
                     scad.write('crr=.2; // cylinder radius relative to minimum radius of both contacting particles\n')
-                scad.write('\nunion(){\n    %group(){ // pellets; remove the % to make non-transparent & exported in STL\n');
-                for p in S.dem.par:
-                    if p.mask==woo.dem.DemField.defaultInletMask:
-                        np+=1
-                        scad.write('        translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
-                scad.write('    }; // end pellets')
+                if S.pre.scadCyl:
+                    scad.write('// cylinder holder\n%group(){\n')
+                    scad.write('    translate([0,0,%g]) cylinder(h=%g,r=%g,$fn=%d);\n'%(-S.pre.extraHt[0],S.pre.htDiam[0]+sum(S.pre.extraHt),S.pre.htDiam[1]/2.,S.pre.cylDiv))
+                    scad.write('}\n')
+                if 1:
+                    scad.write('\nunion(){\n    group(){ // pellets; change to %group() to make transparent & not exported in STL\n');
+                    for p in S.dem.par:
+                        if p.mask==woo.dem.DemField.defaultInletMask:
+                            np+=1
+                            scad.write('        translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                    scad.write('    }; // end pellets\n')
                 if S.pre.scadCon:
                     scad.write('    // contacts represented as cylinders\n    {\n')
                     for c in S.dem.con:
-                        if not (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
+                        if not S.pre.scadConAll and not (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
                         # print(c.pA.mask,c.pB.mask,c.pA.shape,c.pB.shape)
                         nc+=1
+                        ra,rb=c.pA.shape.equivRadius,c.pB.shape.equivRadius
+                        if math.isnan(ra): minConRad=rb
+                        elif math.isnan(rb): minConRad=ra
+                        else: minConRad=min(ra,rb)
                         (axis,angle),p=c.geom.node.ori.toAxisAngle(),c.geom.node.loc2glob([-c.geom.lens[0],0,0])
-                        scad.write('        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],min(c.pA.shape.equivRadius,c.pB.shape.equivRadius),sum(c.geom.lens),c.pA.id,c.pB.id))
+                        scad.write('        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],minConRad,sum(c.geom.lens),c.pA.id,c.pB.id))
                     scad.write('    }; // end contacts/\n')
                 scad.write('}\n');
             print('Exported %d particles and %d contacts to %s'%(np,nc,S.pre.scadOut))
