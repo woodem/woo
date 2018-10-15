@@ -110,7 +110,7 @@ afterCurrentAlpha=.2
 "Color alpha value for part of lines after :obj:`woo.plot.current`, between 0 (invisible) to 1 (full color)"
 scatterMarkerKw=dict(verts=[(0.,0.),(-30.,10.),(-25,0),(-30.,-10.)],marker=None)
 "Parameters for the current position marker"
-annotateKw=dict(horizontalalignment='left',verticalalignment='upper right',fontsize=9)
+annotateKw=dict(horizontalalignment='left',verticalalignment='baseline',fontsize=9)
 "Parameters for annotation (current value) display"
 lineKw=dict(linewidth=1.5,alpha=.8)
 "Parameters for the normal line plot"
