@@ -124,7 +124,6 @@ else:
             #    IPython.terminal.pt_inputhooks.get_inputhook_func('gt4' if 'qt4' in woo.config.features else 'qt5')
             else:
                 # this is deprecated in IPython >= 5.x
-                print('FEATURES',woo.config.features)
                 import IPython.lib.inputhook #guisupport
                 wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
 
