@@ -26,10 +26,14 @@ import json
 import minieigen
 import numpy
 import sys
+import warnings
 # we don't support h5py on Windows, as it is too complicated to install
 # this is an ugly hack :|
 try:
-    import h5py
+    # silence warnings from h5py
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')    
+        import h5py
     haveH5py=True
 except ImportError:
     haveH5py=False

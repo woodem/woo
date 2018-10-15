@@ -37,8 +37,8 @@ def ipython_version():
         elif IPython.__version__.startswith('4.'):  ret=400
         elif IPython.__version__.startswith('5.'):  ret=500
         elif IPython.__version__.startswith('6.'):  ret=600
-        elif IPython.__version__.startswith('7.'):  ret=600
-        elif IPython.__version__.startswith('8.'):  ret=600
+        elif IPython.__version__.startswith('7.'):  ret=700
+        elif IPython.__version__.startswith('8.'):  ret=800
         else: raise ValueError() # nothing detected, issue a warning
     except ValueError:
         print('WARN: unable to extract IPython version from %s, defaulting to 5.0'%(IPython.__version__))

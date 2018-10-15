@@ -137,7 +137,6 @@ except ImportError: pass
 try: import _minieigen11
 except ImportError: pass
 
-# warnings.filterwarnings("error",category=ImportWarning)
 
 # c++ initialization code
 cxxInternalName='_cxxInternal'

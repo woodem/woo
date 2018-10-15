@@ -104,7 +104,8 @@ else:
             # see http://stackoverflow.com/questions/9872517/how-to-embed-ipython-0-12-so-that-it-inherits-namespace-of-the-caller for details
             # fixes http://gpu.doxos.eu/trac/ticket/40
             from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
-            from IPython.config.configurable import MultipleInstanceError
+            try: from traitlets.config.configurable import MultipleInstanceError
+            except: from IPython.config.configurable import MultipleInstanceError # produces ShimWarning
             try: ipshell=InteractiveShellEmbed.instance()
             except MultipleInstanceError:
                 print('Already running inside ipython, not embedding new instance.')
