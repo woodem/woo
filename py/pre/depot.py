@@ -162,7 +162,53 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         woo.dem.BoxOutlet(box=((-r,-r,0),(r,r,h)))(S,S.dem)
         S.stop()
 
-
+        if not S.pre.scadOut: print('Not running OpenSCAD export (scadOut empty)')
+        else:
+            np,nc1,nc2=0,0,0
+            with open(S.pre.scadOut,'w') as scad:
+                import time
+                scad.write('// Generated from %s%s on %s\n'%(self.__class__.__module__,self.__class__.__name__,time.asctime()))
+                scad.write('$fn=15; // set arc triangulation precision here\n')
+                if S.pre.scadCon:
+                    scad.write('fnCyl=8; // set contact triangulation precision here\n')
+                    scad.write('crr=.2; // cylinder radius relative to minimum radius of both contacting particles\n')
+                if S.pre.scadCyl:
+                    scad.write('// cylinder holder\n%group(){\n')
+                    scad.write('    translate([0,0,%g]) cylinder(h=%g,r=%g,$fn=%d);\n'%(-S.pre.extraHt[0],S.pre.htDiam[0]+sum(S.pre.extraHt),S.pre.htDiam[1]/2.,S.pre.cylDiv))
+                    scad.write('}\n')
+                if 1:
+                    scad.write('\nunion(){\n    group(){ // pellets; change to %group() to make transparent & not exported in STL\n');
+                    for p in S.dem.par:
+                        if p.mask==woo.dem.DemField.defaultInletMask:
+                            np+=1
+                            scad.write('        translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
+                    scad.write('    }; // end pellets\n')
+                if S.pre.scadCon:
+                    def con2scad(c):
+                        ra,rb=c.pA.shape.equivRadius,c.pB.shape.equivRadius
+                        if math.isnan(ra): minConRad=rb
+                        elif math.isnan(rb): minConRad=ra
+                        else: minConRad=min(ra,rb)
+                        (axis,angle),p=c.geom.node.ori.toAxisAngle(),c.geom.node.loc2glob([-c.geom.lens[0],0,0])
+                        return '        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],minConRad,sum(c.geom.lens),c.pA.id,c.pB.id)
+                    scad.write('    // inter-particle contacts\n    group(){\n')
+                    for c in S.dem.con:
+                        if not (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
+                        # print(c.pA.mask,c.pB.mask,c.pA.shape,c.pB.shape)
+                        nc1+=1
+                        scad.write(con2scad(c))
+                    scad.write('    }; // end inter-particle contacts\n')
+                    scad.write('    // particle-boundary contacts\n    %group(){\n')
+                    for c in S.dem.con:
+                        # these were already done above
+                        if (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
+                        # skip contacts with the cylinder bottom
+                        if isinstance(c.pA.shape,woo.dem.Wall) or isinstance(c.pB.shape,woo.dem.Wall): continue
+                        nc2+=1
+                        scad.write(con2scad(c))
+                    scad.write('    }; // end particle-boundary contacts\n')
+                scad.write('}\n');
+            print('Exported %d particles, %d inter-particle and %d boundary contacts to %s'%(np,nc1,nc2,S.pre.scadOut))
         if not S.pre.stlOut:
             print('Not running STL export (stlOut empty)')
         else:
@@ -183,42 +229,6 @@ class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):
                 n+=woo.triangulated.facetsToSTL(S.pre.stlOut,S.dem,append=True,mask=S.lab.cylBits[2],solid="top")
             print('Exported %d facets to %s'%(n,S.pre.stlOut))
 
-        if not S.pre.scadOut: print('Not running OpenSCAD export (scadOut empty)')
-        else:
-            np,nc=0,0
-            with open(S.pre.scadOut,'w') as scad:
-                import time
-                scad.write('// Generated from %s%s on %s\n'%(self.__class__.__module__,self.__class__.__name__,time.asctime()))
-                scad.write('$fn=15; // set arc triangulation precision here\n')
-                if S.pre.scadCon:
-                    scad.write('fnCyl=8; // set contact triangulation precision here\n')
-                    scad.write('crr=.2; // cylinder radius relative to minimum radius of both contacting particles\n')
-                if S.pre.scadCyl:
-                    scad.write('// cylinder holder\n%group(){\n')
-                    scad.write('    translate([0,0,%g]) cylinder(h=%g,r=%g,$fn=%d);\n'%(-S.pre.extraHt[0],S.pre.htDiam[0]+sum(S.pre.extraHt),S.pre.htDiam[1]/2.,S.pre.cylDiv))
-                    scad.write('}\n')
-                if 1:
-                    scad.write('\nunion(){\n    group(){ // pellets; change to %group() to make transparent & not exported in STL\n');
-                    for p in S.dem.par:
-                        if p.mask==woo.dem.DemField.defaultInletMask:
-                            np+=1
-                            scad.write('        translate([%g,%g,%g]) sphere(r=%g); // #%d\n'%(p.pos[0],p.pos[1],p.pos[2],p.shape.radius,p.id))
-                    scad.write('    }; // end pellets\n')
-                if S.pre.scadCon:
-                    scad.write('    // contacts represented as cylinders\n    {\n')
-                    for c in S.dem.con:
-                        if not S.pre.scadConAll and not (c.pA.mask==c.pB.mask==woo.dem.DemField.defaultInletMask): continue
-                        # print(c.pA.mask,c.pB.mask,c.pA.shape,c.pB.shape)
-                        nc+=1
-                        ra,rb=c.pA.shape.equivRadius,c.pB.shape.equivRadius
-                        if math.isnan(ra): minConRad=rb
-                        elif math.isnan(rb): minConRad=ra
-                        else: minConRad=min(ra,rb)
-                        (axis,angle),p=c.geom.node.ori.toAxisAngle(),c.geom.node.loc2glob([-c.geom.lens[0],0,0])
-                        scad.write('        translate([%g,%g,%g]) rotate(a=%g,v=[%g,%g,%g]) rotate([0,90,0]) cylinder(r=crr*%g,h=%g,$fn=fnCyl); // ##%d+%d \n'%(p[0],p[1],p[2],angle*180/math.pi,axis[0],axis[1],axis[2],minConRad,sum(c.geom.lens),c.pA.id,c.pB.id))
-                    scad.write('    }; // end contacts/\n')
-                scad.write('}\n');
-            print('Exported %d particles and %d contacts to %s'%(np,nc,S.pre.scadOut))
         if not S.pre.sheetOut: print('Not running spreadsheet export (sheetOut empty)')
         else:
             data=[['x','y','z','r']]+[[p.pos[0],p.pos[1],p.pos[2],p.shape.equivRadius] for p in S.dem.par if p.mask==woo.dem.DemField.defaultInletMask]
