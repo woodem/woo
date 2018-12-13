@@ -69,8 +69,8 @@ elif 'OMP_NUM_THREADS' not in os.environ:
     import multiprocessing
     wooOsEnviron['OMP_NUM_THREADS']=str(multiprocessing.cpu_count())
     
-import distutils.sysconfig
-soSuffix=distutils.sysconfig.get_config_vars()['SO']
+import sysconfig
+soSuffix=sysconfig.get_config_vars()['SO']
 #if WIN and 'TERM' in os.environ:
 #    # unbuffered output on windows, in case we're in a real terminal
 #    # http://stackoverflow.com/a/881751

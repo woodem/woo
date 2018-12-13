@@ -138,13 +138,13 @@ void ContactLoop::run(){
 		CONTACTLOOP_CHECKPOINT("loop-begin");
 		const shared_ptr<Contact>& C=(*dem.contacts)[i];
 
-		if(unlikely(removeUnseen && !C->isReal() && C->stepLastSeen<scene->step)) { removeAfterLoop(C); continue; }
-		if(unlikely(!C->isReal() && !C->isColliding())){ removeAfterLoop(C); continue; }
+		if(WOO_UNLIKELY(removeUnseen && !C->isReal() && C->stepLastSeen<scene->step)) { removeAfterLoop(C); continue; }
+		if(WOO_UNLIKELY(!C->isReal() && !C->isColliding())){ removeAfterLoop(C); continue; }
 
 		/* this block is called exactly once for every potential contact created; it should check whether shapes
 			should be swapped, and also set minDist00Sq if used (Sphere-Sphere only)
 		*/
-		if(unlikely(!C->isReal() && C->isFresh(scene))){
+		if(WOO_UNLIKELY(!C->isReal() && C->isFresh(scene))){
 			bool swap=false;
 			const shared_ptr<CGeomFunctor>& cgf=geoDisp->getFunctor2D(C->leakPA()->shape,C->leakPB()->shape,swap);
 			if(!cgf) continue;
@@ -159,7 +159,7 @@ void ContactLoop::run(){
 
 		// if minDist00Sq is defined, we might see that there is no contact without ever calling the functor
 		// saving quite a few calls for sphere-sphere contacts
-		if(likely(dist00 && !C->isReal() && !C->isFresh(scene) && C->minDist00Sq>0 && (sA->nodes[0]->pos-(sB->nodes[0]->pos+shift2)).squaredNorm()>C->minDist00Sq)){
+		if(WOO_LIKELY(dist00 && !C->isReal() && !C->isFresh(scene) && C->minDist00Sq>0 && (sA->nodes[0]->pos-(sB->nodes[0]->pos+shift2)).squaredNorm()>C->minDist00Sq)){
 			CONTACTLOOP_CHECKPOINT("dist00Sq-too-far");
 			continue;
 		}
@@ -192,7 +192,7 @@ void ContactLoop::run(){
 		}
 		CONTACTLOOP_CHECKPOINT("law");
 
-		if(applyForces && C->isReal() && likely(!deterministic)){
+		if(applyForces && C->isReal() && WOO_LIKELY(!deterministic)){
 			applyForceUninodal(C,pA);
 			applyForceUninodal(C,pB);
 			#if  0
@@ -254,7 +254,7 @@ void ContactLoop::run(){
 	}
 	// apply forces deterministically, after the parallel loop
 	// this could be also loop over particles in parallel (since per-particle loop would still be deterministic) but time per particle is very small here
-	if(unlikely(deterministic) && applyForces){
+	if(WOO_UNLIKELY(deterministic) && applyForces){
 		// non-paralell loop here
 		for(const auto& C: *dem.contacts){
 			if(!C->isReal()) continue;

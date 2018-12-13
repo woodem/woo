@@ -34,13 +34,13 @@ void Leapfrog::nonviscDamp2nd(const Real& dt, const Vector3r& force, const Vecto
 }
 
 Vector3r Leapfrog::computeAccel(const Vector3r& force, const Real& mass, const DemData& dyn){
-	if(likely(dyn.isBlockedNone())) return force/mass;
+	if(WOO_LIKELY(dyn.isBlockedNone())) return force/mass;
 	Vector3r ret(Vector3r::Zero());
 	for(int i=0; i<3; i++) if(!(dyn.isBlockedAxisDOF(i,false))) ret[i]+=force[i]/mass;
 	return ret;
 }
 Vector3r Leapfrog::computeAngAccel(const Vector3r& torque, const Vector3r& inertia, const DemData& dyn){
-	if(likely(dyn.isBlockedNone())) return (torque.array()/inertia.array()).matrix();
+	if(WOO_LIKELY(dyn.isBlockedNone())) return (torque.array()/inertia.array()).matrix();
 	Vector3r ret(Vector3r::Zero());
 	for(int i=0; i<3; i++) if(!(dyn.isBlockedAxisDOF(i,true))) ret[i]+=torque[i]/inertia[i];
 	return ret;
@@ -159,7 +159,7 @@ void Leapfrog::run(){
 		Vector3r& f=dyn.force;
 		Vector3r& t=dyn.torque;
 
-		if(unlikely(reallyTrackEnergy)){
+		if(WOO_UNLIKELY(reallyTrackEnergy)){
 			if(damp) doDampingDissipation(node);
 			if(hasGravity) doGravityWork(dyn,*dem,node->pos);
 		}
@@ -213,7 +213,7 @@ void Leapfrog::run(){
 
 		// kinetic energy
 		// accelerations are needed, therefore not evaluated earlier;
-		if(unlikely(reallyTrackEnergy)) doKineticEnergy(node,pprevFluctVel,pprevFluctAngVel,linAccel,angAccel);
+		if(WOO_UNLIKELY(reallyTrackEnergy)) doKineticEnergy(node,pprevFluctVel,pprevFluctAngVel,linAccel,angAccel);
 
 
 		// update positions from velocities

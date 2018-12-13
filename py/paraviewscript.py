@@ -51,8 +51,8 @@ def findPV():
         return pvExec
     else:
         # on Linux, find it in $PATH
-        import distutils.spawn
-        return distutils.spawn.find_executable('paraview')
+        import woo.utils
+        return woo.utils.find_executable('paraview')
 
 def launchPV(script):
     'Launch paraview as background process, passing --script=*script* as the only argument. If Paraview executable is not found via :obj:`findPV`, only a warning is printed and Paraview is not launched.'

@@ -59,7 +59,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 			// the conditional ensures Ft.norm()>0.
 			Real FtNorm=Ft.norm();
 			Real ratio=maxFt/FtNorm;
-			if(unlikely(FtNorm==0.)) ratio=0.; // in case |Ft|^2>0 && sqrt(|Ft|^2)==0.
+			if(WOO_UNLIKELY(FtNorm==0.)) ratio=0.; // in case |Ft|^2>0 && sqrt(|Ft|^2)==0.
 			// do this while Ft is still the trial value
 			if(scene->trackEnergy){
 				/* in the linear displacement-force graph, compute the are sliced away by the force drop; it has the
@@ -82,7 +82,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 			throw std::runtime_error("NaN force in contact (message above)?!");
 		}
 	}
-	if(unlikely(scene->trackEnergy)){
+	if(WOO_UNLIKELY(scene->trackEnergy)){
 		Real elast=0.5*(pow2(ph.force[0])/ph.kn+(ph.kt!=0.?Ft.squaredNorm()/ph.kt:0.));
 		if(isnan(elast)){
 			LOG_WARN("elast==NaN: Fn="<<ph.force[0]<<", kn="<<ph.kn<<", Ft=("<<Ft[0]<<","<<Ft[1]<<"), kt="<<ph.kt);
@@ -112,7 +112,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 		if(Tr.squaredNorm()>maxTr*maxTr){
 			Real TrNorm=Tr.norm();
 			Real ratio=maxTr/TrNorm;
-			if(unlikely(TrNorm==0.)) ratio=0.; // in case |Ft|^2>0 && sqrt(|Ft|^2)==0.
+			if(WOO_UNLIKELY(TrNorm==0.)) ratio=0.; // in case |Ft|^2>0 && sqrt(|Ft|^2)==0.
 			// TODO: dissipation
 			Tr*=ratio;
 		};

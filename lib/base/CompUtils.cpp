@@ -43,7 +43,7 @@ Vector2r CompUtils::closestParams_LineLine(const Vector3r& P, const Vector3r& u,
 	Vector3r w0(P-Q);
 	Real a=u.squaredNorm(), b=u.dot(v), c=v.squaredNorm(), d=u.dot(w0), e=v.dot(w0);
 	Real denom=a*c-b*b;
-	if(unlikely(denom==0.)){
+	if(WOO_UNLIKELY(denom==0.)){
 		parallel=true;
 		return Vector2r(0,b!=0.?(d/b):(e/c));
 	} else {
@@ -58,7 +58,7 @@ Real CompUtils::distSq_LineLine(const Vector3r& P, const Vector3r& u, const Vect
 }
 Vector3r CompUtils::closestSegmentPt(const Vector3r& P, const Vector3r& A, const Vector3r& B, Real* normPos){
 	Vector3r BA=B-A;
-	if(unlikely(BA.squaredNorm()==0.)){ if(normPos) *normPos=0.; return A; }
+	if(WOO_UNLIKELY(BA.squaredNorm()==0.)){ if(normPos) *normPos=0.; return A; }
 	Real u=(P.dot(BA)-A.dot(BA))/(BA.squaredNorm());
 	if(normPos) *normPos=u;
 	return A+min(1.,max(0.,u))*BA;

@@ -72,12 +72,8 @@
 #endif
 
 // mimick expectation macros that linux has (see e.g. http://kerneltrap.org/node/4705)
-#ifndef likely
-	#define likely(x) __builtin_expect(!!(x),1)
-#endif
-#ifndef unlikely
-	#define unlikely(x) __builtin_expect(!!(x),0)
-#endif
+#define WOO_LIKELY(x) __builtin_expect(!!(x),1)
+#define WOO_UNLIKELY(x) __builtin_expect(!!(x),0)
 
 // templates of those types with single parameter are not possible, use macros for now
 #define VECTOR2_TEMPLATE(Scalar) Eigen::Matrix<Scalar,2,1>

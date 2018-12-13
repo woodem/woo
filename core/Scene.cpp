@@ -391,7 +391,7 @@ void Scene::doOneStep(){
 		subStep=SUBSTEP_INIT;
 	}
 	for(const shared_ptr<Field>& f: fields) if(f->scene!=this) f->scene=this;
-	if(likely(!subStepping && subStep==SUBSTEP_INIT)){
+	if(WOO_LIKELY(!subStepping && subStep==SUBSTEP_INIT)){
 		/* set substep to 0 during the loop, so that engines/nextEngines handler know whether we are inside the loop currently */
 		subStep=SUBSTEP_PROLOGUE;
 		// ** 1. ** prologue
@@ -406,7 +406,7 @@ void Scene::doOneStep(){
 			if(!e->field && e->needsField()) throw std::runtime_error(e->pyStr()+" has no field to run on, but requires one.");
 			if(e->dead || !e->isActivated()) continue;
 			e->run();
-			if(unlikely(TimingInfo_enabled)) {TimingInfo::delta now=TimingInfo::getNow(); e->timingInfo.nsec+=now-last; e->timingInfo.nExec+=1; last=now;}
+			if(WOO_UNLIKELY(TimingInfo_enabled)) {TimingInfo::delta now=TimingInfo::getNow(); e->timingInfo.nsec+=now-last; e->timingInfo.nExec+=1; last=now;}
 		}
 		// ** 3. ** epilogue
 		if(isPeriodic) cell->setNextGradV();

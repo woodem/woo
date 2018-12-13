@@ -53,7 +53,7 @@ bool Law2_L6Geom_IcePhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys
 	Eigen::Map<const Vector2r> velT(&g.vel[1]);
 	const Real& angVelW(g.angVel[0]); Eigen::Map<const Vector2r> angVelR(&g.angVel[1]);
 	Real Ee0; // elastic energies
-	bool energy(unlikely(scene->trackEnergy));
+	bool energy(WOO_UNLIKELY(scene->trackEnergy));
 	// compute current (with old forces) elastic potential for the case the contact disappears
 	if(energy) Ee0=elastE(ph); 
 	// fresh contact, set uN0 for the first time

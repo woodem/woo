@@ -97,7 +97,7 @@ void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yield
 		xi+=vel*dt;
 		resultF=ft;
 		// viscous dissipation, only without slip
-		if(unlikely(trackEnergy)){
+		if(WOO_UNLIKELY(trackEnergy)){
 			law->addWork(ph,LudingPhys::WORK_VISCOUS,visc*vel.squaredNorm()*dt,xyz);
 		}
 	} else {
@@ -110,7 +110,7 @@ void Luding_genericSlidingRoutine(Law2_L6Geom_LudingPhys* law, const Real& yield
 			VecT2 xiPrev=xi;
 			xi=(-1/k)*(resultF+visc*vel);
 			// compute dissipation
-		   if(unlikely(trackEnergy)){
+		   if(WOO_UNLIKELY(trackEnergy)){
 				// XXX: sometimes bogus negative value??
 				Real W=xiPrev.squaredNorm()-xi.squaredNorm();
 				//if(W>0) law->addWork(ph,LudingPhys::WORK_PLASTIC,(1./2)*k*W);
@@ -153,7 +153,7 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 
 	if(g.uN>0){
 		// breaking contact, commit dissipation data now
-		if(unlikely(scene->trackEnergy)){
+		if(WOO_UNLIKELY(scene->trackEnergy)){
 			// compute normal plastic work (non-incremental)
 			// use previous kn2 and deltaMax, those won't be increased in the step the contact is broken
 			const Real& kn2(ph.kn);
@@ -201,7 +201,7 @@ bool Law2_L6Geom_LudingPhys::go(const shared_ptr<CGeom>& cg, const shared_ptr<CP
 	// after eq (8); final normal force
 	Real fn=fHys+ph.viscN*(-1.)*velN;
 	// force: viscN*velN; distance: velN*Δt
-	if(unlikely(scene->trackEnergy)) addWork(ph,LudingPhys::WORK_VISCOUS,ph.viscN*velN*velN*scene->dt,g.node->pos);
+	if(WOO_UNLIKELY(scene->trackEnergy)) addWork(ph,LudingPhys::WORK_VISCOUS,ph.viscN*velN*velN*scene->dt,g.node->pos);
 	// plastic work computed when contact dissolves
 
 	// TANGENT

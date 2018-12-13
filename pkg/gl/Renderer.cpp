@@ -310,7 +310,7 @@ void Renderer::renderRawNode(shared_ptr<Node> node){
 		if(isnan(x[0])) return;
 	}
 	else{ x=(scene->isPeriodic?scene->cell->canonicalizePt(node->pos):node->pos); }
-	if(likely(!fastDraw)){
+	if(WOO_LIKELY(!fastDraw)){
 		Quaternionr ori=(node->hasData<GlData>()?node->getData<GlData>().dGlOri:Quaternionr::Identity())*node->ori;
 		glPushMatrix();
 			GLUtils::setLocalCoords(x,ori);

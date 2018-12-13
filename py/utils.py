@@ -40,6 +40,17 @@ hasGL=True
 try: import woo.gl
 except ImportError: hasGL=False
 
+
+def find_executable(ex):
+    'Thin wrapper for find_executable, using either shutil.which or distutils.spawn.find_executable.'
+    try:
+        import shutil
+        return shutil.which(ex)
+    except ImportError:
+        import distutils.spawn
+        return distutils.spawn.find_executable(ex)
+
+
 def spherePWaveDt(radius,density,young):
     r"""Compute P-wave critical timestep for a single (presumably representative) sphere, using formula for P-Wave propagation speed :math:`\Delta t_{c}=\frac{r}{\sqrt{E/\rho}}`. If you want to compute minimum critical timestep for all spheres in the simulation, use :obj:`woo.utils.pWaveDt` instead.
 
@@ -398,11 +409,10 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     .. note:: ``avconv`` and ``ffmpeg`` need symlinks, which are not available under Windows.
     """
     # find which encoder to actually use
-    import distutils.spawn
-    menc=distutils.spawn.find_executable('mencoder')
-    ffmp=distutils.spawn.find_executable('ffmpeg')
-    avco=distutils.spawn.find_executable('avconv')
-    conv=distutils.spawn.find_executable('convert')
+    menc=find_executable('mencoder')
+    ffmp=find_executable('ffmpeg')
+    avco=find_executable('avconv')
+    conv=find_executable('convert')
     # the first one wins
     WIN=(sys.platform=='win32')
     IMG=out.endswith('.gif') or out.endswith('.mng')

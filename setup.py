@@ -16,8 +16,6 @@ logging.basicConfig(level=logging.INFO)
 log=logging.getLogger('woo/setup.py')
 
 DISTBUILD=None # set to None if building locally, or to a string when dist-building on a bot
-# QQQ
-DISTBUILD='test'
 if 'DEB_BUILD_ARCH' in os.environ: DISTBUILD='debian'
 WIN=(sys.platform=='win32')
 PY3=(sys.version_info[0]==3)
@@ -38,8 +36,8 @@ if 'WOO_QT5' not in os.environ:
     try:
         import PyQt4
         log.info("PyQt4 found.")
-        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT4.')
-        QT5=False
+        if QT5: log.warn('Both PyQt4 and PyQt5 are importable, using QT5.')
+        QT5=True
     except ImportError:
         log.info('PyQt4 not importable:',exc_info=True)
 
@@ -119,23 +117,21 @@ chunkSize=1 # (1 if WIN else 10)
 hotCxx=[] # plugins to be compiled separately despite chunkSize>1
 
 # XXX
-chunkSize=1
+chunkSize=10
 # features+=['noxml']
 # QQQ
-features=['noxml']
-flavor='py2test'
+# features=['noxml']
+# flavor='py2test'
 if DISTBUILD:
     os.environ['CXX']='clang++'
     os.environ['CC']='clang'
 else:
-    os.environ['CXX']='ccache clang++'
-    os.environ['CC']='ccache clang'
+    os.environ['CXX']='g++'
+    os.environ['CC']='gcc'
 
-## arch-specific optimizations
-march='corei7' if WIN else 'native'
-# lower, but at least some machine-specific optimizations
-# FIXME: code will fail to execute on older CPUs
-if DISTBUILD: march='core2' 
+if not DISTBUILD:
+    ## arch-specific optimizations
+    march='corei7' if WIN else 'native'
 
 ##
 ## end build options
@@ -348,7 +344,7 @@ else:
     cppDirs+=['/usr/include/eigen3']
     # we want to use gold with gcc under Linux
     # binutils now require us to select gold explicitly (see https://launchpad.net/ubuntu/saucy/+source/binutils/+changelog)
-    linkFlags+=['-fuse-ld=gold']
+    if not DISTBUILD: linkFlags+=['-fuse-ld=gold']
     
 ##
 ## Debug-specific

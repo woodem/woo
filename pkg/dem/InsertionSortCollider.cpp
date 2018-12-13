@@ -74,7 +74,7 @@ void InsertionSortCollider::handleBoundInversion(Particle::id_t id1, Particle::i
 	ISC_CHECKPOINT("handle: find-contact");
 	bool hasCon=(bool)C;
 	// interaction doesn't exist and shouldn't, or it exists and should
-	if(likely(!overlap && !hasCon)) return;
+	if(WOO_LIKELY(!overlap && !hasCon)) return;
 	if(overlap && hasCon){  return; }
 	// create interaction if not yet existing
 	if(overlap /* && !hasCon */){ // second condition redundant
@@ -176,7 +176,7 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 	for(long i=max(iStart,iBegin+1); i<iEnd; i++){
 		// no inversion here, short-circuit the whole walking setup and avoid the write after the while loop
 		if(!(v[i-1]>v[i])){
-			if(unlikely(earlyStop)){ /*cerr<<"{"<<i-iStart<<"}";*/ return; }
+			if(WOO_UNLIKELY(earlyStop)){ /*cerr<<"{"<<i-iStart<<"}";*/ return; }
 			continue;
 		}
 
@@ -194,7 +194,7 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 			// also, do not collide particle with itself; it sometimes happens for facets aligned perpendicular to an axis, for reasons that are not very clear
 			// see https://bugs.launchpad.net/woo/+bug/669095
 			// do not collide minimum with minimum and maximum with maximum (suggested by Bruno)
-			if(viInitIsMin!=v[j].flags.isMin && likely(doCollide && viInitBB && v[j].flags.hasBB && (viInit.id!=v[j].id))){
+			if(viInitIsMin!=v[j].flags.isMin && WOO_LIKELY(doCollide && viInitBB && v[j].flags.hasBB && (viInit.id!=v[j].id))){
 				handleBoundInversion(viInit.id,v[j].id,/*separating*/!viInitIsMin);
 			}
 			j--;
@@ -264,7 +264,7 @@ vector<Particle::id_t> InsertionSortCollider::probeAabb(const Vector3r& mn, cons
 				int pmn1,pmx1,pmn2,pmx2;
 				Real mn1=cellWrap(minima[3*id1+axis],wMn,wMn+dim,pmn1), mx1=cellWrap(maxima[3*id1+axis],wMn,wMn+dim,pmx1);
 				Real mn2=cellWrap(mn[axis],wMn,wMn+dim,pmn2), mx2=cellWrap(mx[axis],wMn,wMn+dim,pmx2);
-				if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
+				if(WOO_UNLIKELY((pmn1!=pmx1) || (pmn2!=pmx2))){
 					Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
 					LOG_FATAL("Particle #"<<(pmn1!=pmx1?id1:-1)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
 					throw runtime_error(__FILE__ ": Particle larger than half of the cell size encountered.");
@@ -534,7 +534,7 @@ void InsertionSortCollider::run(){
 				VecBounds& BBj=BB[j];
 				const Particle::id_t id=BBj[i].id;
 				const shared_ptr<Particle>& b=(*particles)[id];
-				if(likely(b)){
+				if(WOO_LIKELY(b)){
 					const shared_ptr<Bound>& bv=b->shape->bound;
 					// coordinate is min/max if has bounding volume, otherwise both are the position. Add periodic shift so that we are inside the cell
 					// watch out for the parentheses around ?: within ?: (there was unwanted conversion of the Reals to bools!)
@@ -568,9 +568,9 @@ void InsertionSortCollider::run(){
 	for(Particle::id_t id=0; id<nPar; id++){
 		BOOST_STATIC_ASSERT(sizeof(Vector3r)==3*sizeof(Real));
 		const shared_ptr<Particle>& b=(*particles)[id];
-		if(likely(b)){
+		if(WOO_LIKELY(b)){
 			const shared_ptr<Bound>& bv=b->shape->bound;
-			if(likely(bv)) { memcpy(&minima[3*id],&bv->min,3*sizeof(Real)); memcpy(&maxima[3*id],&bv->max,3*sizeof(Real)); } // ⇐ faster than 6 assignments 
+			if(WOO_LIKELY(bv)) { memcpy(&minima[3*id],&bv->min,3*sizeof(Real)); memcpy(&maxima[3*id],&bv->max,3*sizeof(Real)); } // ⇐ faster than 6 assignments 
 			else{ const Vector3r& pos=b->shape->nodes[0]->pos; memcpy(&minima[3*id],&pos,3*sizeof(Real)); memcpy(&maxima[3*id],&pos,3*sizeof(Real)); }
 		} else { memset(&minima[3*id],0,3*sizeof(Real)); memset(&maxima[3*id],0,3*sizeof(Real)); }
 	}
@@ -625,7 +625,7 @@ void InsertionSortCollider::run(){
 				for(long i=0; i<2*nPar; i++){
 					// start from the lower bound (i.e. skipping upper bounds)
 					// skip bodies without bbox, because they don't collide
-					if(unlikely(!(V[i].flags.isMin && V[i].flags.hasBB))) continue;
+					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))) continue;
 					const Particle::id_t& iid=V[i].id;
 					// go up until we meet the upper bound
 					for(long j=i+1; /* handle case 2. of swapped min/max */ j<2*nPar && V[j].id!=iid; j++){
@@ -640,7 +640,7 @@ void InsertionSortCollider::run(){
 			} else { // periodic case: see comments above
 				// parallelizing this decreases performance slightly
 				for(long i=0; i<2*nPar; i++){
-					if(unlikely(!(V[i].flags.isMin && V[i].flags.hasBB))) continue;
+					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))) continue;
 					const Particle::id_t& iid=V[i].id;
 					long cnt=0;
 					// we might wrap over the periodic boundary here; that's why the condition is different from the aperiodic case
@@ -785,7 +785,7 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 		const Real iCmpCoord=v[i].coord+(i==loIdx ? v.cellDim : 0); 
 		// no inversion, early return
 		if(v[i_1].coord<=iCmpCoord){
-			if(unlikely(earlyStop)){ return; }
+			if(WOO_UNLIKELY(earlyStop)){ return; }
 			continue;
 		}
 		// vi is the copy that will travel down the list, while other elts go up
@@ -807,11 +807,11 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 			vNew=v[j];
 			// inversions close the the split need special care
 			// parallel: loIdx modification is safe since j>iBegin (when loIdx is incremented) and j1>iBegin+1 (when loIdx is decremented);
-			if(unlikely(j==loIdx && vi.coord<0)) { vi.period-=1; vi.coord+=v.cellDim; loIdx=v.norm(loIdx+1); }
-			else if(unlikely(j1==loIdx)) { vNew.period+=1; vNew.coord-=v.cellDim; loIdx=v.norm(loIdx-1); }
-			if(viIsMin!=v[j].flags.isMin && likely(doCollide && viHasBB && v[j].flags.hasBB)){
+			if(WOO_UNLIKELY(j==loIdx && vi.coord<0)) { vi.period-=1; vi.coord+=v.cellDim; loIdx=v.norm(loIdx+1); }
+			else if(WOO_UNLIKELY(j1==loIdx)) { vNew.period+=1; vNew.coord-=v.cellDim; loIdx=v.norm(loIdx-1); }
+			if(viIsMin!=v[j].flags.isMin && WOO_LIKELY(doCollide && viHasBB && v[j].flags.hasBB)){
 				// see https://bugs.launchpad.net/woo/+bug/669095 and similar problem in aperiodic insertionSort
-				if(likely(vi.id!=vNew.id)){
+				if(WOO_LIKELY(vi.id!=vNew.id)){
 					handleBoundInversionPeri(vi.id,vNew.id,/*separating*/(!viIsMin && !viIsInf && !v[j].flags.isInf));
 				}
 			}
@@ -852,11 +852,11 @@ void InsertionSortCollider::insertionSortPeri_orig(VecBounds& v, bool doCollide,
 			Bounds& vNew(v[j1]); // elt at j+1 being overwritten by the one at j and adjusted
 			vNew=v[j];
 			// inversions close the the split need special care
-			if(unlikely(j==loIdx && vi.coord<0)) { vi.period-=1; vi.coord+=v.cellDim; loIdx=v.norm(loIdx+1); }
-			else if(unlikely(j1==loIdx)) { vNew.period+=1; vNew.coord-=v.cellDim; loIdx=v.norm(loIdx-1); }
-			if(viIsMin!=v[j].flags.isMin && likely(doCollide && viHasBB && v[j].flags.hasBB)){
+			if(WOO_UNLIKELY(j==loIdx && vi.coord<0)) { vi.period-=1; vi.coord+=v.cellDim; loIdx=v.norm(loIdx+1); }
+			else if(WOO_UNLIKELY(j1==loIdx)) { vNew.period+=1; vNew.coord-=v.cellDim; loIdx=v.norm(loIdx-1); }
+			if(viIsMin!=v[j].flags.isMin && WOO_LIKELY(doCollide && viHasBB && v[j].flags.hasBB)){
 				// see https://bugs.launchpad.net/woo/+bug/669095 and similar problem in aperiodic insertionSort
-				if(likely(vi.id!=vNew.id)){
+				if(WOO_LIKELY(vi.id!=vNew.id)){
 					handleBoundInversionPeri(vi.id,vNew.id,/*separating*/(!viIsMin && !viIsInf && !v[j].flags.isInf));
 				}
 			}
@@ -883,7 +883,7 @@ void InsertionSortCollider::handleBoundInversionPeri(Particle::id_t id1, Particl
 		if(watchIds(id1,id2)) LOG_DEBUG("Inversion #"<<id1<<"+#"<<id2<<", overlap=="<<overlap<<", hasCon=="<<hasCon);
 	#endif
 	// interaction doesn't exist and shouldn't, or it exists and should
-	if(likely(!overlap && !hasCon)) return;
+	if(WOO_LIKELY(!overlap && !hasCon)) return;
 	if(overlap && hasCon){  return; }
 	// create interaction if not yet existing
 	if(overlap && !hasCon){ // second condition only for readability
@@ -976,7 +976,7 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 		int pmn1,pmx1,pmn2,pmx2;
 		Real mn1=cellWrap(min1,wMn,wMn+dim,pmn1), mx1=cellWrap(max1,wMn,wMn+dim,pmx1);
 		Real mn2=cellWrap(min2,wMn,wMn+dim,pmn2), mx2=cellWrap(max2,wMn,wMn+dim,pmx2);
-		if(unlikely((pmn1!=pmx1) || (pmn2!=pmx2))){
+		if(WOO_UNLIKELY((pmn1!=pmx1) || (pmn2!=pmx2))){
 			Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
 			LOG_INFO("Particle #"<<(pmn1!=pmx1?id1:id2)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
 			LOG_INFO("Does not matter, try with the new algo now :)");

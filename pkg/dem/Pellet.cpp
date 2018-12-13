@@ -72,7 +72,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 			if(Fn<Fy){
 				Real uNPl0=uNPl; // needed when tracking energy
 				uNPl=uN-Fy/ph.kn;
-				if(unlikely(scene->trackEnergy)){
+				if(WOO_UNLIKELY(scene->trackEnergy)){
 					// backwards trapezoid integration
 					Real Fy0=Fy+yieldForceDerivative(uN,d0,ph.kn,ph.normPlastCoeff)*(uNPl0-uNPl);
 					Real dissip=.5*abs(Fy0+Fy)*abs(uNPl-uNPl0);
@@ -116,7 +116,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 	if(Ft.squaredNorm()>pow2(maxFt)){
 		Real FtNorm=Ft.norm();
 		Real ratio=maxFt/FtNorm;
-		if(unlikely(scene->trackEnergy)){
+		if(WOO_UNLIKELY(scene->trackEnergy)){
 			Real dissip=(.5*(FtNorm-maxFt)+maxFt)*(FtNorm-maxFt)/ph.kt;
 			scene->energy->add(dissip,"plast",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
 			tryAddDissipState(DISSIP_SHEAR_PLAST,dissip,C);
@@ -125,7 +125,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 	}
 	assert(!isnan(Fn)); assert(!isnan(Ft[0]) && !isnan(Ft[1]));
 	// elastic potential energy
-	if(unlikely(scene->trackEnergy)) scene->energy->add(0.5*(pow2(Fn)/ph.kn+Ft.squaredNorm()/ph.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
+	if(WOO_UNLIKELY(scene->trackEnergy)) scene->energy->add(0.5*(pow2(Fn)/ph.kn+Ft.squaredNorm()/ph.kt),"elast",elastPotIx,EnergyTracker::IsResettable);
 	return true;
 }
 

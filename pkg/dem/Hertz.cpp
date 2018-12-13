@@ -100,7 +100,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		if(g.uN>0){
 			// TODO: track nonzero energy of broken contact with adhesion
 			// TODO: take residual shear force in account?
-			// if(unlikely(scene->trackEnergy)) scene->energy->add(normalElasticEnergy(ph.kn0,0),"dmtComeGo",dmtIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
+			// if(WOO_UNLIKELY(scene->trackEnergy)) scene->energy->add(normalElasticEnergy(ph.kn0,0),"dmtComeGo",dmtIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
 			return false;
 		}
 		// pure Hertz/DMT
@@ -115,7 +115,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		// Schwarz model
 
 		// new contacts with adhesion add energy to the system, which is then taken away again
-		if(unlikely(scene->trackEnergy) && C->isFresh(scene)){
+		if(WOO_UNLIKELY(scene->trackEnergy) && C->isFresh(scene)){
 			// TODO: scene->energy->add(???,"dmtComeGo",dmtIx,EnergyTracker::IsIncrement)
 		}
 
@@ -177,7 +177,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 	// total normal force
 	Fn=Fne+Fna+Fnv; 
 	// normal viscous dissipation
-	if(unlikely(scene->trackEnergy)) scene->energy->add(Fnv*velN*dt,"viscN",viscNIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
+	if(WOO_UNLIKELY(scene->trackEnergy)) scene->energy->add(Fnv*velN*dt,"viscN",viscNIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
 
 	// shear sense; zero shear stiffness in tension (XXX: should be different with adhesion)
 	ph.kt=ph.kt0*sqrt(g.uN<0?-g.uN:0);
@@ -189,17 +189,17 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		Real FtNorm=Ft.norm();
 		Real ratio=maxFt/FtNorm;
 		// sliding dissipation
-		if(unlikely(scene->trackEnergy)) scene->energy->add((.5*(FtNorm-maxFt)+maxFt)*(FtNorm-maxFt)/ph.kt,"plast",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
+		if(WOO_UNLIKELY(scene->trackEnergy)) scene->energy->add((.5*(FtNorm-maxFt)+maxFt)*(FtNorm-maxFt)/ph.kt,"plast",plastIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
 		// cerr<<"uN="<<g.uN<<",Fn="<<Fn<<",|Ft|="<<Ft.norm()<<",maxFt="<<maxFt<<",ratio="<<ratio<<",Ft2="<<(Ft*ratio).transpose()<<endl;
 		Ft*=ratio;
 	} else {
 		// viscous tangent force (only applied in the absence of sliding)
 		Ft+=eta*velT;
-		if(unlikely(scene->trackEnergy)) scene->energy->add(eta*velT.dot(velT)*dt,"viscT",viscTIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
+		if(WOO_UNLIKELY(scene->trackEnergy)) scene->energy->add(eta*velT.dot(velT)*dt,"viscT",viscTIx,EnergyTracker::IsIncrement|EnergyTracker::ZeroDontCreate);
 	}
 	assert(!isnan(Fn)); assert(!isnan(Ft[0]) && !isnan(Ft[1]));
 	// elastic potential energy
-	if(unlikely(scene->trackEnergy)){
+	if(WOO_UNLIKELY(scene->trackEnergy)){
 		// XXX: this is incorrect with adhesion
 		// skip if in tension, since we would get NaN from delta^(2/5)
 		if(g.uN<0) scene->energy->add(normalElasticEnergy(kn0,-g.uN)+0.5*Ft.squaredNorm()/ph.kt,"elast",elastPotIx,EnergyTracker::IsResettable);
