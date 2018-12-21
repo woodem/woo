@@ -174,6 +174,7 @@ py::list ParticleContainer::pyFreeIds(){
 }
 
 Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, int nodes){
+	if(!p) woo::ValueError("Particle to be added is None.");
 	if(p->id>=0) IndexError("Particle already has id "+lexical_cast<string>(p->id)+" set; appending such particle (for the second time) is not allowed.");
 	if(nodes!=-1 && nodes!=0 && nodes!=1) ValueError("nodes must be ∈ {-1,0,1} (not "+to_string(nodes)+").");
 	if(nodes!=0){
