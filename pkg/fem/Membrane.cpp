@@ -353,7 +353,7 @@ void Membrane::computeNodalDisplacements(Real dt, bool rotIncr){
 			if(aa.angle()>M_PI) aa.angle()-=2*M_PI;
 			Vector3r rot=Vector3r(aa.angle()*aa.axis()); // rotation vector in local coords
 			// if(aa.angle()>3)
-			if(rot.head<2>().squaredNorm()>3.1*3.1) LOG_WARN("Membrane's in-plane rotation in a node is > 3.1 radians, expect unstability!");
+			if(!noWarnExcessRot) if(rot.head<2>().squaredNorm()>3.1*3.1) LOG_WARN("Membrane's in-plane rotation in a node is > 3.1 radians, expect unstability!");
 			phiXy.segment<2>(2*i)=rot.head<2>(); // drilling rotation discarded
 			#ifdef MEMBRANE_DEBUG_ROT
 				AngleAxisr rr(refRot[i]);

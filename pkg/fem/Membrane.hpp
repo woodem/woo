@@ -42,6 +42,7 @@ struct Membrane: public Facet{
 		((bool,enableStress,false,,"Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.")) \
 		((MatrixXr,EBcst,,AttrTrait<>().readonly(),"CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).")) \
 		((MatrixXr,DBdkt,,AttrTrait<>().readonly(),"DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. \n\n.. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.")) \
+		((bool,noWarnExcessRot,false,,"Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.")) \
 		woo_dem_Membrane__ATTRS__MEMBRANE_DEBUG_ROT \
 		,/*ctor*/ createIndex(); \
 		,/*py*/ \
