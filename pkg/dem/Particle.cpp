@@ -39,6 +39,9 @@ void Particle::checkNodes(bool dyn, bool checkOne) const {
 	if(!shape || (checkOne  && shape->nodes.size()!=1) || (dyn && !shape->nodes[0]->hasData<DemData>())) woo::AttributeError("Particle #"+lexical_cast<string>(id)+" has no Shape"+(checkOne?string(", or the shape has no/multiple nodes")+string(!dyn?".":", or node.dem is None."):string(".")));
 }
 
+string Particle::pyStr() const { return "<Particle #"+to_string(id)+" ["+(shape?shape->getClassName():"no-shape")+"] @ "+lexical_cast<string>(this)+">"; }
+
+
 void Particle::selfTest(){
 	if(shape) shape->selfTest(static_pointer_cast<Particle>(shared_from_this()));
 	// test other things here as necessary

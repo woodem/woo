@@ -62,7 +62,7 @@ struct Particle: public Object{
 	#endif
 	void setRefPos(const Vector3r&);
 	std::vector<shared_ptr<Node> > getNodes();
-	virtual string pyStr() const override { return "<Particle #"+to_string(id)+" @ "+lexical_cast<string>(this)+">"; }
+	virtual string pyStr() const override;
 	int countRealContacts() const;
 	void postLoad(Particle&,void*);
 
