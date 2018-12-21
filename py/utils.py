@@ -622,7 +622,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
     repName=str(repFmt).format(S=S,**(dict(S.tags)))
     rep=codecs.open(repName,'w','utf-8','replace')
     print('Writing report to file://'+os.path.abspath(repName))
-    repBase=re.sub('\.x?html$','',repName)
+    repBase=re.sub(r'\.x?html$','',repName)
     s=htmlReportHead(S,headline,dialect=dialect,repBase=repBase,hideWooExtra=hideWooExtra)
     s+=afterHead
 
