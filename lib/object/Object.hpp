@@ -146,6 +146,7 @@ void _wooDef_deprecatedProperty(classObjT& _classObj, traitT& trait){
 	_classObj.add_property(trait._name.c_str(),errorGetter,errorSetter,trait._doc.c_str());
 };
 
+#pragma GCC visibility push(hidden)
 template<bool namedEnum> struct  _def_woo_attr__namedEnum{};
 /* instantiation for attribute which IS NOT not a named enumeration */
 template<> struct _def_woo_attr__namedEnum<false>{
@@ -180,7 +181,8 @@ template<> struct _def_woo_attr__namedEnum<false>{
 // https://mail.python.org/pipermail/cplusplus-sig/2009-February/014263.html documents the current solution
 template<> struct _def_woo_attr__namedEnum<true>{
 	template<typename classObjT, typename traitT, typename classT, typename attrT, attrT classT::*A>
-	void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName){
+	void wooDef(classObjT& _classObj, traitT& trait, const char* className, const char *attrName) 
+	{
 		if(trait.isDeprecated()){ _wooDef_deprecatedProperty(_classObj,trait); return; }
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad();
 		const char* docStr(trait._doc.c_str());
@@ -198,6 +200,7 @@ template<> struct _def_woo_attr__namedEnum<true>{
 		else if(!_ro &&  _post) _classObj.add_property(attrName,getter,setterPostLoad,docStr);
 	}
 };
+#pragma GCC visibility pop
 
 #define _DEF_READWRITE_CUSTOM(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE(thisClass,attr)::compileFlags & woo::Attr::namedEnum)); _def_woo_attr__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
 
