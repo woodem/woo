@@ -81,8 +81,8 @@ import sys
 pyMain='$EXECDIR/woo'+('-'+env['flavor'] if env['flavor'] else '')
 env.InstallAs(pyMain,env.Textfile('main.py','#!%s%s\nimport wooMain,sys; sys.exit(wooMain.main())\n'%(env['PYTHON'],' ' if env['PYVER'].startswith('2') else '')))
 env.InstallAs(pyMain+'-batch',env.Textfile('batch.py','#!%s\nimport wooMain,sys; sys.exit(wooMain.batch())\n'%env['PYTHON']))
-env.AddPostAction(pyMain,Chmod(pyMain,0755))
-env.AddPostAction(pyMain+'-batch',Chmod(pyMain+'-batch',0755))
+env.AddPostAction(pyMain,Chmod(pyMain,0o755))
+env.AddPostAction(pyMain+'-batch',Chmod(pyMain+'-batch',0o755))
 
 env.Install('$LIBDIR','core/main/wooMain.py')
 ## for --rebuild
@@ -102,13 +102,13 @@ env.Install('$LIBDIR/woo/_monkey',[env.File(env.Glob('py/_monkey/*.py'),'_monkey
 import subprocess, sys
 setups=[str(s) for s in env.Glob('wooExtra/*/setup.py')]
 if setups:
-	print 'Running setup.py (parallel):',' '.join([os.path.dirname(s) for s in setups])
+	print('Running setup.py (parallel):',' '.join([os.path.dirname(s) for s in setups]))
 
 # http://stackoverflow.com/a/23616229/761090
 pp=[subprocess.Popen([env['PYTHON'],'-W','ignore',os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s)) for s in setups]
 exits=[p.wait() for p in pp]
 if sum(exits)>0:
-	print 'Error running:','. '.join([setups[i] for i,e in enumerate(exits) if e>0])
+	print('Error running:','. '.join([setups[i] for i,e in enumerate(exits) if e>0]))
 	sys.exit(1)
 
 

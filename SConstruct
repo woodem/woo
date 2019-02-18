@@ -22,6 +22,8 @@
 #
 # And as usually, clean up the code, get rid of workarounds and hacks etc.
 import os,os.path,string,re,sys,shutil
+from builtins import bytes, str, range
+
 import SCons
 # SCons version numbers are needed a few times
 # rewritten for python2.4
@@ -68,9 +70,9 @@ optsFile='scons.flavor-'+(env['flavor'] if env['flavor'] else 'default')
 if env['flavor']=='default': env['flavor']=''
 flavor=env['flavor']
 env['cxxFlavor']=('_'+re.sub('[^a-zA-Z0-9_]','_',env['flavor']) if env['flavor'] else '')
-print '@@@ Using flavor',(flavor if flavor else '[none]'),'('+optsFile+') @@@'
+print('@@@ Using flavor',(flavor if flavor else '[none]'),'('+optsFile+') @@@')
 if not os.path.exists(optsFile):
-	print '@@@ Will create new flavor file',optsFile
+	print('@@@ Will create new flavor file',optsFile)
 	opts=Variables()
 	opts.Save(optsFile,env)
 else:
@@ -79,7 +81,7 @@ else:
 if 'AddVariables' not in dir(opts): opts.AddVariables=opts.AddOptions
 
 # save flavor file so that we know compilation flags
-env['buildFlavor']=dict([(l.split('=',1)[0].strip(),eval(l.split('=',1)[1])) for l in file(flavorFile)])
+env['buildFlavor']=dict([(l.split('=',1)[0].strip(),eval(l.split('=',1)[1])) for l in open(flavorFile)])
 
 env['buildCmdLine']=sys.argv
 
@@ -140,13 +142,13 @@ opts.AddVariables(
 opts.Update(env)
 
 if str(env['features'])=='all':
-	print 'ERROR: using "features=all" is illegal, since it breaks feature detection at runtime (SCons limitation). Write out all features separated by commas instead. Sorry.'
+	print('ERROR: using "features=all" is illegal, since it breaks feature detection at runtime (SCons limitation). Write out all features separated by commas instead. Sorry.')
 	Exit(1)
 
 if saveFlavor: opts.Save(optsFile,env)
 
 if 'qt4' in env['features'] and 'qt5' in env['features']:
-	print 'ERROR: qt4 and qt5 features are mutually exclusive, but both were given.'
+	print('ERROR: qt4 and qt5 features are mutually exclusive, but both were given.')
 	Exit(1)
 if 'qt4' in env['features'] or 'qt5' in env['features']: env.Append(features=['qt'])
 
@@ -160,7 +162,7 @@ if env['PYTHON']==sys.executable:
 	if not VENV and not hasattr(site,'getsitepackages'):
 		# avoid this warning for rebuilds using -R, which should actually work just fine
 		if saveFlavor:
-			print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+			print('WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.')
 		VENV=True
 	if VENV:
 		defaultEXECDIR=sys.prefix+'/bin'
@@ -178,7 +180,7 @@ else:
 		# was actually never tested!!
 		# avoid this warning for rebuilds using -R, which should actually work just fine
 		if saveFlavor:
-			print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+			print('WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.')
 		VENV=True
 	if VENV:
 		defaultEXECDIR=subprocess.check_output([pyexe,'-c','import sys; print(sys.prefix)']).strip()+'/bin'
@@ -190,7 +192,7 @@ else:
 
 if 'EXECDIR' not in env: env['EXECDIR']=defaultEXECDIR
 if 'LIBDIR' not in env:
-	if not defaultLIBDIR: print 'WARN: no good default value of LIBDIR was found, you will have to specify one my hand'
+	if not defaultLIBDIR: print('WARN: no good default value of LIBDIR was found, you will have to specify one my hand')
 	else: env['LIBDIR']=defaultLIBDIR
 
 # set optimization based on debug, if required 
@@ -198,7 +200,7 @@ if env['optimize']<0: env['optimize']=(None if env['debug'] else -env['optimize'
 
 # handle colon-separated lists:
 for k in ('CPPPATH','LIBPATH','QTDIR','PATH'):
-	if env.has_key(k):
+	if k in env:
 		env[k]=colonSplit(env[k])
 
 ## detect virtual environment
@@ -208,14 +210,14 @@ VENV=hasattr(sys,'real_prefix')
 if not VENV and not hasattr(site,'getsitepackages'):
 	# avoid this warning for rebuilds using -R, which should actually work just fine
 	if saveFlavor:
-		print 'WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.'
+		print('WARN: it seems that you are running SCons inside a virtual environment, without having set it up properly (e.g. "source /my/virtual/env/bin/activate"). (sys.real_prefix is not defined, but site.getsitepackages is not defined either.) I will pretend we are inside a virtual environment, but things may break.')
 	VENV=True
 
 if VENV:
 	defaultEXECDIR=sys.prefix+'/bin'
 	pp=[p for p in sys.path if p.endswith('/site-packages')]
 	defaultLIBDIR=pp[-1] if pp else None
-	if not defaultLIBDIR: print 'WARN: no good default value of LIBDIR was found, you will have to specify one my hand'
+	if not defaultLIBDIR: print('WARN: no good default value of LIBDIR was found, you will have to specify one my hand')
 else:
 	defaultEXECDIR='/usr/local/bin'
 	# defaultLIBDIR=site.getsitepackages()[0]
@@ -226,16 +228,16 @@ else:
 # fakeroot needs FAKEROOTKEY and LD_PRELOAD
 propagatedEnvVars=['HOME','TERM','DISTCC_HOSTS','LD_PRELOAD','FAKEROOTKEY','LD_LIBRARY_PATH','CCACHE_PREFIX']
 for v in propagatedEnvVars:
-	if os.environ.has_key(v): env.Append(ENV={v:os.environ[v]})
-if env.has_key('PATH'): env.Append(ENV={'PATH':env['PATH']})
+	if v in os.environ: env.Append(ENV={v:os.environ[v]})
+if 'PATH' in env: env.Append(ENV={'PATH':env['PATH']})
 
 # get number of jobs from DEB_BUILD_OPTIONS if defined
 # see http://www.de.debian.org/doc/debian-policy/ch-source.html#s-debianrules-options
-if os.environ.has_key('DEB_BUILD_OPTIONS'):
+if 'DEB_BUILD_OPTIONS' in os.environ:
 	for opt in os.environ['DEB_BUILD_OPTIONS'].split():
 		if opt.startswith('parallel='):
 			j=opt.split('=')[1].split(',')[0] # there was a case of 5, in hardy...
-			print "Setting number of jobs (using DEB_BUILD_OPTIONS) to `%s'"%j
+			print("Setting number of jobs (using DEB_BUILD_OPTIONS) to `%s'"%j)
 			env['jobs']=int(j)
 
 
@@ -251,7 +253,7 @@ def getRealWooVersion():
 	"Attempts to get woo version from RELEASE file if it exists or from bzr/svn, or from VERSION"
 	import os.path,re,os
 	if os.path.exists('RELEASE'):
-		return file('RELEASE').readline().strip()
+		return open('RELEASE').readline().strip()
 	baseVer='1.0'
 	if os.path.exists('.git'):
 		r0=os.popen("git rev-list HEAD --count 2>/dev/null").readlines()[0][:-1]
@@ -261,18 +263,18 @@ def getRealWooVersion():
 		r0=os.popen("LC_ALL=C bzr revno 2>/dev/null").readlines()[0][:-1]
 		return baseVer+'.'+r0+'+bzr'
 	if os.path.exists('VERSION'):
-		return file('VERSION').readline().strip()
+		return open('VERSION').readline().strip()
 	return None
 
 ## ALL generated stuff should go here - therefore we must determine it very early!!
-if not env.has_key('realVersion') or not env['realVersion']: env['realVersion']=getRealWooVersion() or 'unknown' # unknown if nothing returned
-if not env.has_key('version'): env['version']=env['realVersion']
+if 'realVersion' not in env or not env['realVersion']: env['realVersion']=getRealWooVersion() or 'unknown' # unknown if nothing returned
+if 'version' not in env: env['version']=env['realVersion']
 
 suffix=('-'+env['flavor'] if (env['flavor'] and env['flavor']!='default') else '')
-print "Woo version is `%s' (%s), installed files will be suffixed with `%s'."%(env['version'],env['realVersion'],suffix)
+print("Woo version is `%s' (%s), installed files will be suffixed with `%s'."%(env['version'],env['realVersion'],suffix))
 
 buildDir=os.path.abspath(env.subst('$buildPrefix/build'+suffix+('' if not env['debug'] else '/dbg')))
-print "All intermediary files will be in `%s'."%env.subst(buildDir)
+print("All intermediary files will be in `%s'."%env.subst(buildDir))
 env['buildDir']=buildDir
 # these MUST be first so that builddir's headers are read before any locally installed ones
 buildInc='$buildDir/include'
@@ -287,12 +289,12 @@ env.SConsignFile(buildDir+'/scons-signatures')
 if len(sys.argv)>1 and ('clean' in sys.argv) or ('tags' in sys.argv) or ('doc' in sys.argv):
 	if 'clean' in sys.argv:
 		if os.path.exists(buildDir):
-			print "Cleaning: %s."%buildDir; shutil.rmtree(buildDir)
-		else: print "Nothing to clean: %s."%buildDir
+			print("Cleaning: %s."%buildDir); shutil.rmtree(buildDir)
+		else: print("Nothing to clean: %s."%buildDir)
 		sys.argv.remove('clean')
 	if 'tags' in sys.argv:
 		cmd="ctags -R --extra=+q --fields=+n --exclude='.*' --exclude=attic --exclude=doc --exclude=scons-local --exclude=include --exclude=lib/triangulation --exclude='*0' --exclude=debian --exclude='*.so' --exclude='*.s' --exclude='*.ii' --langmap=c++:+.inl,c++:+.tpp,c++:+.ipp"
-		print cmd; os.system(cmd)
+		print(cmd); os.system(cmd)
 		sys.argv.remove('tags')
 	if 'doc' in sys.argv:
 		raise RuntimeError("'doc' argument not supported by scons now. See doc/README")
@@ -300,7 +302,7 @@ if len(sys.argv)>1 and ('clean' in sys.argv) or ('tags' in sys.argv) or ('doc' i
 	#	print cmd; os.system(cmd)
 	#	sys.argv.remove('doc')
 	# still something on the command line? Ignore, but warn about that
-	if len(sys.argv)>1: print "!!! WARNING: Shortcuts (clean,tags,doc) cannot be mixed with regular targets or options; ignoring:\n"+''.join(["!!!\t"+a+"\n" for a in sys.argv[1:]])
+	if len(sys.argv)>1: print("!!! WARNING: Shortcuts (clean,tags,doc) cannot be mixed with regular targets or options; ignoring:\n"+''.join(["!!!\t"+a+"\n" for a in sys.argv[1:]]))
 	# bail out
 	Exit(0)
 
@@ -333,7 +335,7 @@ def CheckCXX(context):
 		env.Append(LINKFLAGS='-fuse-ld=gold')
 		ret2=context.TryLink('#include<iostream>\nint main(int argc, char**argv){std::cerr<<std::endl;return 0;}\n','.cpp')
 		if not ret2:
-			print '(-fuse-ld=gold not supported by the compiler, make sure that gold is used yourself)'
+			print('(-fuse-ld=gold not supported by the compiler, make sure that gold is used yourself)')
 			env.Replace(LINKFLAGS=prev)
 	return ret
 
@@ -373,7 +375,7 @@ def CheckPython(context):
 		ret=context.TryLink('#include<Python.h>\nint main(int argc, char **argv){Py_Initialize(); Py_Finalize();}\n','.cpp')
 		if not ret: raise RuntimeError
 	except (ImportError,RuntimeError,distutils.sysconfig.DistutilsPlatformError,subprocess.CalledProcessError):
-		for k in origs.keys(): context.env[k]=origs[k]
+		for k in list(origs.keys()): context.env[k]=origs[k]
 		context.Result('error')
 		return False
 	context.Result('ok'); return True
@@ -472,14 +474,14 @@ def CheckLibLinkedTo(context,lib,linkedTo):
 	try:
 		cmd=env.subst('$SHCXXCOM -print-file-name='+lib)
 		# print cmd
-		lib2=subprocess.check_output(cmd,shell=True).split('\n')[0]
+		lib2=subprocess.check_output(cmd,shell=True).split(b'\n')[0]
 	except subprocess.CalledProcessError:
 		context.Result('WARN: error finding path for %s using compiler (proceeding)'%lib)
 		return True
 	try:
 		context.Message(' lib is %s, running ldd ... '%lib2)
 		out=subprocess.check_output(['ldd',lib2])
-		if linkedTo not in out:
+		if bytes(linkedTo,'utf8') not in out:
 			context.Result('not found')
 			return False
 		context.Result('ok')
@@ -494,10 +496,10 @@ if not env.GetOption('clean'):
 	ok=True
 	ok&=conf.CheckCXX()
 	if not ok:
-			print "\nYour compiler is broken, no point in continuing. See `%s' for what went wrong and use the CXX/CXXFLAGS parameters to change your compiler."%(buildDir+'/config.log')
+			print("\nYour compiler is broken, no point in continuing. See `%s' for what went wrong and use the CXX/CXXFLAGS parameters to change your compiler."%(buildDir+'/config.log'))
 			Exit(1)
 	ok&=conf.CheckLibWithHeader('pthread','pthread.h','c','pthread_exit(NULL);',autoadd=1)
-	if env['PYTHON']!=sys.executable: print '*** Using foreign Python interpreter',env['PYTHON']
+	if env['PYTHON']!=sys.executable: print('*** Using foreign Python interpreter',env['PYTHON'])
 	ok&=(conf.CheckPython() and conf.CheckCXXHeader(['Python.h','numpy/ndarrayobject.h'],'<>'))
 	ok&=conf.CheckPythonModules()
 	ok&=conf.EnsureBoostVersion(14800)
@@ -507,11 +509,11 @@ if not env.GetOption('clean'):
 	if 'cereal' in env['features']: ok&=conf.CheckCXXHeader('cereal/cereal.hpp')
 
 	if not ok:
-		print "\nOne of the essential libraries above was not found, unable to continue.\n\nCheck `%s' for possible causes, note that there are options that you may need to customize:\n\n"%(buildDir+'/config.log')+opts.GenerateHelpText(env)
+		print("\nOne of the essential libraries above was not found, unable to continue.\n\nCheck `%s' for possible causes, note that there are options that you may need to customize:\n\n"%(buildDir+'/config.log')+opts.GenerateHelpText(env))
 		Exit(1)
 	def featureNotOK(featureName,note=None):
-		print "\nERROR: Unable to compile with optional feature `%s'.\n\nIf you are sure, remove it from features (scons features=featureOne,featureTwo for example) and build again. Config log is %s."%(featureName,buildDir+'/config.log')
-		if note: print "Note:",note
+		print("\nERROR: Unable to compile with optional feature `%s'.\n\nIf you are sure, remove it from features (scons features=featureOne,featureTwo for example) and build again. Config log is %s."%(featureName,buildDir+'/config.log'))
+		if note: print("Note:",note)
 		Exit(1)
 	# workarounds
 	if conf.CheckConflictingMathDecls(): env.Append(CPPDEFINES=['WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT'])
@@ -554,7 +556,7 @@ if not env.GetOption('clean'):
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)
 		if not ok: featureNotOK('opencl','OpenCL headers not found. Install an OpenCL SDK, and add appropriate directory to CPPPATH, LDPATH if necessary (note: this is not a test that your computer has an OpenCL-capable device)')
 		env['haveClHpp']=conf.CheckCXXHeader('CL/cl.hpp')
-		if not env['haveClHpp']: print '(OK, local version (from Khronos website) will be used instead; some SDK\'s (Intel) are not providing cl.hpp)'
+		if not env['haveClHpp']: print('(OK, local version (from Khronos website) will be used instead; some SDK\'s (Intel) are not providing cl.hpp)')
 	if 'vtk' in env['features']:
 		if not conf.CheckCXXHeader('vtkVersion.h'): featureNotOK('vtk',note='VTK headers not found; add the respective include directory to CPPPATH (usually something like /usr/include/vtk-?.?).')
 		vtk5=conf.CheckLibWithHeader(['vtkCommon'],'vtkInstantiator.h','c++','vtkInstantiator::New();',autoadd=1)
@@ -581,7 +583,7 @@ if not env.GetOption('clean'):
 		ok=conf.CheckLibWithHeader('log4cxx','log4cxx/logger.h','c++','log4cxx::Logger::getLogger("");',autoadd=1)
 		if not ok: featureNotOK('log4cxx')
 	if 'gl2ps' in env['features']:
-		print 'WARN: the gl2ps feature is deprecated and has no effect'
+		print('WARN: the gl2ps feature is deprecated and has no effect')
 	if 'cgal' in env['features']:
 		ok=conf.CheckLibWithHeader('CGAL','CGAL/Exact_predicates_inexact_constructions_kernel.h','c++','CGAL::Exact_predicates_inexact_constructions_kernel::Point_3();')
 		env.Append(CXXFLAGS='-frounding-math') # required by cgal, otherwise we get assertion failure at startup
@@ -647,7 +649,7 @@ if env['optimize']:
 	# do not state architecture if not provided
 	# used for debian packages, where 'native' would generate instructions outside the package architecture
 	# (such as SSE instructions on i386 builds, if the builder supports them)
-	if env.has_key('march') and env['march']: env.Append(CXXFLAGS=['-march=%s'%env['march']]),
+	if 'march' in env and env['march']: env.Append(CXXFLAGS=['-march=%s'%env['march']]),
 else:
 	pass
 
@@ -664,7 +666,7 @@ if env['PGO']=='gen': env.Append(CXXFLAGS=['-fprofile-generate'],LINKFLAGS=['-fp
 if env['PGO']=='use': env.Append(CXXFLAGS=['-fprofile-use'],LINKFLAGS=['-fprofile-use'])
 
 if clang:
-	print 'Looks like we use clang, adding some flags to avoid warning flood.'
+	print('Looks like we use clang, adding some flags to avoid warning flood.')
 	env.Append(CXXFLAGS=['-Qunused-arguments','-Wno-empty-body','-Wno-self-assign'])
 if intel:
 	env.Append(CXXFLAGS=['-Wno-deprecated'])
@@ -672,7 +674,7 @@ if gcc:
 	env.Append(CXXFLAGS=['-Wno-nonnull-compare'])
 	ver=os.popen('LC_ALL=C '+env['CXX']+' --version').readlines()[0].split()[-1]
 	if ver.startswith('4.6'):
-		print 'Using gcc 4.6, adding -pedantic to avoid ICE at string initializer_list (http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50478)'
+		print('Using gcc 4.6, adding -pedantic to avoid ICE at string initializer_list (http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50478)')
 		env.Append(CXXFLAGS='-pedantic')
 
 if 'EXTRA_SHLINKFLAGS' in env: env.Append(SHLINKFLAGS=env['EXTRA_SHLINKFLAGS'])
@@ -696,7 +698,7 @@ if not env.GetOption('clean'):
 	def mkSymlink(link,target):
 		if exists(link) and not islink(link):
 			import shutil
-			print 'Removing directory %s, was replaced by a symlink in post-0.60 versions.'%link
+			print('Removing directory %s, was replaced by a symlink in post-0.60 versions.'%link)
 			shutil.rmtree(link)
 		if not exists(link):
 			if lexists(link): os.remove(link) # remove dangling symlink
@@ -725,11 +727,12 @@ env.Export('env');
 # and when it changes, force rebuild of all combined files
 # changes to $buildDir/combined-files are cheked at the end of 
 # the SConscript file
-import md5
+if sys.version_info[0]==2: from md5 import md5
+else: from hashlib import md5
 combinedFiles=env.subst('$buildDir/combined-files')
 
 if os.path.exists(combinedFiles):
-	combinedFilesMd5=md5.md5(file(combinedFiles).read()).hexdigest()
+	combinedFilesMd5=md5(open(combinedFiles).read().encode('utf8')).hexdigest()
 	os.remove(combinedFiles)
 else:
 	combinedFilesMd5=None
@@ -770,13 +773,13 @@ if not COMMAND_LINE_TARGETS:
 			if ff not in toInstall and not ff.endswith('.pyo') and not ff.endswith('.pyc') and not os.path.islink(ff) and not os.path.basename(ff).startswith('.nfs'):
 				# HACK
 				if os.path.basename(ff).startswith('_cxxInternal'): continue
-				print "Deleting extra plugin", ff
+				print("Deleting extra plugin", ff)
 				os.remove(ff)
 
 
 ### check if combinedFiles is different; if so, force rebuild of all of them
-if os.path.exists(combinedFiles) and combinedFilesMd5!=md5.md5(open(combinedFiles).read()).hexdigest():
-	print 'Rebuilding combined files, since the md5 has changed.'
+if os.path.exists(combinedFiles) and combinedFilesMd5!=md5(open(combinedFiles).read().encode('utf8')).hexdigest():
+	print('Rebuilding combined files, since the md5 has changed.')
 	combs=[l.split(':')[0] for l in open(combinedFiles)]
 	for c in combs:
 		env.AlwaysBuild(c)
