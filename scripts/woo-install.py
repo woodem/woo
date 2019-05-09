@@ -93,7 +93,7 @@ call(['woo','-j%d'%args.jobs,'--test'],failOk=True)
 if not root:
     call(['woo','-RR','-x'])
 
-if args.clean>0:
+if args.clean:
     import shutil
     shutils.rmtree(args.build_prefix)
     if args.clean>1: shutils.rmtree(args.src)
