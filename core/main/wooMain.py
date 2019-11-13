@@ -302,7 +302,7 @@ def main(sysArgv=None):
 
     if opts.noGdb:
         woo.master.disableGdb()
-    if 'log4cxx' in woo.config.features and opts.verbosity:
+    if opts.verbosity and (('log4cxx' in woo.config.features) or ('spdlog' in woo.config.features)):
         woo.log.setLevel('',[woo.log.INFO,woo.log.DEBUG,woo.log.TRACE][min(opts.verbosity,2)])
 
     ## modify sys.argv in-place so that it can be handled by userSession
