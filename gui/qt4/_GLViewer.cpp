@@ -17,6 +17,10 @@ using boost::algorithm::iends_with;
 static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.qt4");
 #endif
 
+#ifdef WOO_SPDLOG
+	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");
+#endif
+
 
 
 //#define POST_SYNTH_EVENT(EVT,checker) void evt##EVT(){QApplication::postEvent(OpenGLManager::self,new QCustomEvent(YadeQtMainWindow::EVENT_##EVT)); bool wait=true; if(wait){while(!(bool)(OpenGLManager::self->checker)) usleep(50000);} }

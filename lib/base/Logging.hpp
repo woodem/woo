@@ -37,10 +37,10 @@
 	#else
 		#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 	#endif
-	#include"spdlog/spdlog.h"
-	#include"spdlog/async.h"
-	#include"spdlog/sinks/stdout_color_sinks.h"
-	#include"spdlog/fmt/ostr.h"
+	#include<woo/lib/spdlog/spdlog.h>
+	#include<woo/lib/spdlog/async_logger.h>
+	#include<woo/lib/spdlog/sinks/stdout_color_sinks.h>
+	#include<woo/lib/spdlog/fmt/ostr.h>
 
 	#define LOG_TRACE(...) SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__)
 	#define LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__)
@@ -49,8 +49,8 @@
 	#define LOG_ERROR(...) SPDLOG_LOGGER_ERROR(logger,__VA_ARGS__)
 	#define LOG_FATAL(...) SPDLOG_LOGGER_CRITICAL(logger,__VA_ARGS__)
 
-	#define WOO_DECL_LOGGER public: static shared_ptr<spdlog::logger> logger;
-	#define WOO_IMPL_LOGGER(classname) shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
+	#define WOO_DECL_LOGGER public: static std::shared_ptr<spdlog::logger> logger;
+	#define WOO_IMPL_LOGGER(classname) std::shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
 #elif defined(WOO_LOG4CXX)
 
 #	include<log4cxx/logger.h>
@@ -101,10 +101,10 @@
 #define _TRVHEAD cerr<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<": "
 #define _TRV(x) #x"="<<x<<"; "
 #define _TRVTAIL "\n"
-#define TRVAR1(a) LOG_TRACE( _TRV(a) );
-#define TRVAR2(a,b) LOG_TRACE( _TRV(a) << _TRV(b) );
-#define TRVAR3(a,b,c) LOG_TRACE( _TRV(a) << _TRV(b) << _TRV(c) );
-#define TRVAR4(a,b,c,d) LOG_TRACE( _TRV(a) << _TRV(b) << _TRV(c) << _TRV(d) );
-#define TRVAR5(a,b,c,d,e) LOG_TRACE( _TRV(a) << _TRV(b) << _TRV(c) << _TRV(d) << _TRV(e) );
-#define TRVAR6(a,b,c,d,e,f) LOG_TRACE( _TRV(a) << _TRV(b) << _TRV(c) << _TRV(d) << _TRV(e) << _TRV(f));
+#define TRVAR1(a) LOG_TRACE("{}",_TRV(a));
+#define TRVAR2(a,b) LOG_TRACE("{}{}",_TRV(a),_TRV(b));
+#define TRVAR3(a,b,c) LOG_TRACE("{}{}{}",_TRV(a),_TRV(b),_TRV(c));
+#define TRVAR4(a,b,c,d) LOG_TRACE("{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d));
+#define TRVAR5(a,b,c,d,e) LOG_TRACE("{}{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d),_TRV(e));
+#define TRVAR6(a,b,c,d,e,f) LOG_TRACE("{}{}{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d),_TRV(e),_TRV(f));
 
