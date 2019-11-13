@@ -804,7 +804,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
 
 
 
-def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dtSafety=.9,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None):
+def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dtSafety=.9,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None,bias=None):
     '''Create dense packing periodic in the +x direction, suitable for use with ConveyorInlet.
 :param useEnergy: use :obj:`woo.utils.unbalancedEnergy` instead of :obj:`woo.utils.unbalancedForce` as stop criterion.
 :param goal: target unbalanced force/energy; if unbalanced energy is used, this value is **multiplied by .2**.
@@ -812,7 +812,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 :param mat: material for particles
 :param gravity: gravity acceleration (as Vector3)
 '''
-    print('woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),(gen.dumps(format='expr',width=-1,noMagic=True) if gen is not None else 'None')))
+    print('woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s,bias=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),(gen.dumps(format='expr',width=-1,noMagic=True) if gen is not None else 'None'),(bias.dumps(format='expr',width=-1,noMagic=True) if bias is not None else 'None')))
     dim=list(dim) # make modifiable in case of excess width
 
 
@@ -851,7 +851,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         print('Porosity: %g %%'%(100*(1-(mass/vol)/mat.density)))
 
     if memoizeDir and not dontBlock:
-        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr',width=-1,noMagic=True)+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr',width=-1,noMagic=True) if gen else '')+'ver7b'
+        params=str(dim)+str(nRepeatCells)+str(cellSize)+str(psd)+str(goal)+str(damping)+mat.dumps(format='expr',width=-1,noMagic=True)+str(gravity)+str(porosity)+str(botLine)+str(leftLine)+str(rightLine)+str(clumps)+str(useEnergy)+(gen.dumps(format='expr',width=-1,noMagic=True) if gen else '')+(bias.dumps(format='expr',width=-1,noMagic=True) if bias else '')+'ver7b'
         import hashlib
         paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.bandfeed'
@@ -921,6 +921,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
             mask=1,
             label='inlet',
             doneHook='S.dem.par.remove(S.lab.wallId)',
+            spatialBias=bias,
             #periSpanMask=1, # x is periodic
         ),
         #PyRunner(200,'plot.addData(uf=utils.unbalancedForce(),i=O.scene.step)'),

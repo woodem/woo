@@ -187,7 +187,8 @@ def makeTraitInfo(obj,klass,trait):
     if trait.static: ret.append('static')
     if hasattr(trait,'pyType'):
         if isinstance(trait.pyType,(list,tuple)): ret.append('type: ['+trait.pyType[0].__name__+", …]")
-        else: ret.append('type: '+trait.pyType.__name__)
+        elif trait.pyType is not None: ret.append('type: '+trait.pyType.__name__)
+        else: ret.append('type: None') # ??
     else:
         tt=None
         if hasVal and not isinstance(val,woo.core.Object) and val!=None:
@@ -385,7 +386,7 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
             if traitInfo: kOut.write(u'\n      ['+traitInfo+']\n')
             kOut.write('\n')
 
-    klasses=[c for c in allWooClasses if (c.__module__==mod.__name__ or (hasattr(mod,'_docInlineModules') and sys.modules[c.__module__] in mod._docInlineModules))]
+    klasses=[c for c in allWooClasses if (c.__module__==mod.__name__ or (hasattr(mod,'_docInlineModules') and c.__module__ in sys.modules and sys.modules[c.__module__] in mod._docInlineModules))]
     klasses.sort(key=lambda x: x.__name__)
     #
     tops,klassesUnder=classDocHierarchy_topsAndDict(mod)

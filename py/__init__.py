@@ -363,10 +363,10 @@ try:
     import wooExtra
     import pkgutil, zipimport
     extrasLoaded=[]
-    for importer, modname, ispkg in pkgutil.iter_modules(wooExtra.__path__):
+    for importer, modname, ispkg in pkgutil.iter_modules(wooExtra.__path__,'wooExtra.'):
         try:
             try:
-                m=__import__('wooExtra.'+modname,fromlist='wooExtra')
+                m=__import__(modname,fromlist='wooExtra')
             except:
                 print(50*'#')
                 import traceback
@@ -383,7 +383,7 @@ try:
                     m.__loader__=zipimport.zipimporter(zip)
                     m.__file__=os.path.join(m.__path__[0],os.path.basename(m.__file__))
         except ImportError:
-            sys.stderr.write('ERROR importing wooExtra.%s:'%modname)
+            sys.stderr.write('ERROR importing %s:'%modname)
             raise
     # disable informative message if plain import into python script
     if sys.argv[0].split('/')[-1].startswith('woo'): sys.stderr.write('wooExtra modules loaded: %s.\n'%(', '.join(extrasLoaded)))

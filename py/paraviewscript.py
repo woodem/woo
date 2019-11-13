@@ -420,15 +420,10 @@ if sphereFiles:
     # don't show glyphs for more than 5e4 spheres by default to avoid veeery sloooow rendering
     isBig=(spheres.CellData.Proxy.GetDataInformation().GetNumberOfCells()>5e4)
     # setup glyphs, but don't show those by default
-    gl=Glyph(GlyphType='Sphere',ScaleMode='scalar',Scalars=['POINTS','radius'])
+    gl=Glyph(GlyphType='Sphere',ScaleArray=['POINTS','radius'])
     gl.GlyphType.Radius=1.0
-    if hasattr(gl,'MaskPoints'): # PV 4.0
-        gl.MaskPoints=0 
-        gl.SetScaleFactor=1.0
-        gl.RandomMode=0
-    elif hasattr(gl,'GlyphMode'): # PV>=4.3
-        gl.GlyphMode='All Points'
-        gl.ScaleFactor=1.0
+    gl.GlyphMode='All Points'
+    gl.ScaleFactor=1.0
     rep=Show()
     rep.Visibility=(0 if isBig else 1)
     rep.ColorArrayName=('POINT_DATA','radius')

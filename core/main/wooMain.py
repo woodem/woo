@@ -182,10 +182,9 @@ def main(sysArgv=None):
                 if not os.path.isdir(dd): continue
                 cmd=None
                 if os.path.exists(dd+'/.git'): cmd=['git','-C',dd,'pull','origin','master']
-                elif os.path.exists(dd+'/.bzr'): cmd=['bzr','up',dd]
                 if not cmd: continue
                 print('Running: '+' '.join(cmd))
-                if subprocess.call(cmd): raise RuntimeError('Error updating %d from repository.'%(dd))
+                if subprocess.call(cmd): raise RuntimeError('Error updating %s from repository.'%(dd))
         # rebuild
         cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
         print('Rebuilding Woo using',' '.join(cmd))
