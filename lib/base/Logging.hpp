@@ -30,7 +30,28 @@
 #define LOG_DEBUG_EARLY(msg) { if(getenv("WOO_DEBUG")) std::cerr<<"DEBUG "<<_LOG_HEAD<<msg<<std::endl; }
 #define LOG_DEBUG_EARLY_FRAGMENT(msg) { if(getenv("WOO_DEBUG")) std::cerr<<msg; }
 
-#ifdef WOO_LOG4CXX
+
+#ifdef WOO_SPDLOG
+	#ifdef WOO_DEBUG
+		#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+	#else
+		#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
+	#endif
+	#include"spdlog/spdlog.h"
+	#include"spdlog/async.h"
+	#include"spdlog/sinks/stdout_color_sinks.h"
+	#include"spdlog/fmt/ostr.h"
+
+	#define LOG_TRACE(...) SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__)
+	#define LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__)
+	#define LOG_INFO(...) SPDLOG_LOGGER_INFO(logger,__VA_ARGS__)
+	#define LOG_WARN(...) SPDLOG_LOGGER_WARN(logger,__VA_ARGS__)
+	#define LOG_ERROR(...) SPDLOG_LOGGER_ERROR(logger,__VA_ARGS__)
+	#define LOG_FATAL(...) SPDLOG_LOGGER_CRITICAL(logger,__VA_ARGS__)
+
+	#define WOO_DECL_LOGGER public: static shared_ptr<spdlog::logger> logger;
+	#define WOO_IMPL_LOGGER(classname) shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
+#elif defined(WOO_LOG4CXX)
 
 #	include<log4cxx/logger.h>
 #	include<log4cxx/basicconfigurator.h>
