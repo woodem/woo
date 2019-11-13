@@ -61,7 +61,7 @@ def _ensureInitialized():
                 print('Import submodules from ',fqmodname)
                 subImport(sys.modules[fqmodname])
                 
-    modExcludeRegex='^woo\.(_cxxInternal.*)(\..*|$)'
+    modExcludeRegex=r'^woo\.(_cxxInternal.*)(\..*|$)'
     subImport(woo,exclude=modExcludeRegex)
     try:
         import wooExtra
@@ -84,7 +84,7 @@ def _ensureInitialized():
     allWooMods=set([sys.modules[m] for m in sys.modules if m.startswith('woo') and sys.modules[m] and sys.modules[m].__name__==m])
     
 
-def allWooPackages(outDir='/tmp',skip='^(woo|wooExtra(|\..*))$'):
+def allWooPackages(outDir='/tmp',skip=r'^(woo|wooExtra(|\..*))$'):
     '''Generate documentation of packages in the Restructured Text format. Each package is written to file called *out*/.`woo.[package].rst` and list of files created is returned.'''
 
     global allWooClasses,allWooMods
