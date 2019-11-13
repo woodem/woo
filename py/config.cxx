@@ -67,6 +67,9 @@ WOO_PYTHON_MODULE(config)
 		#ifdef WOO_PYBIND11
 			features.append("pybind11");
 		#endif
+		#ifdef WOO_SPDLOG
+			features.append("spdlog");
+		#endif
 
 	#ifndef WOO_PYBIND11
 		auto mod=py::scope();
