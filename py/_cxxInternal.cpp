@@ -45,15 +45,29 @@
 	}
 #endif
 
+#ifdef WOO_SPDLOG
+	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.boot");
+	void initSpdlog(){
+		spdlog::set_pattern("%H:%M:%S [%-8n] %s:%# %^[%l] %v%$");
+		if(!logger){ std::cerr<<"Logger not yet constructed...?"<<std::endl; return; }
+		auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::debug:spdlog::level::warn);
+		spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l){
+			l->set_level(defaultLevel);
+			l->flush_on(spdlog::level::err);
+		});
+		LOG_DEBUG("SpdLog initialized.");
+	};
+#endif
+
 #if defined(WOO_DEBUG) && !defined(__MINGW64__)
 	void crashHandler(int sig){
 	switch(sig){
 		case SIGABRT:
 		case SIGSEGV:
 			signal(SIGSEGV,SIG_DFL); signal(SIGABRT,SIG_DFL); // prevent loops - default handlers
-			cerr<<"SIGSEGV/SIGABRT handler called; gdb batch file is `"<<Master::instance().gdbCrashBatch<<"'"<<endl;
+			LOG_FATAL("SIGSEGV/SIGABRT handler called; gdb batch file is `{}'",Master::instance().gdbCrashBatch);
 			int ret=std::system((string("gdb -x ")+Master::instance().gdbCrashBatch).c_str());
-			if(ret) cerr<<"Running the debugger failed (exit status "<<ret<<"); do you have gdb?"<<endl;
+			if(ret) LOG_FATAL("Running the debugger failed (exit status {}); do you have gdb?",ret);
 			raise(sig); // reemit signal after exiting gdb
 			break;
 		}
@@ -77,6 +91,10 @@
 
 /* Initialize woo - load config files, register python classes, set signal handlers */
 void wooInitialize(){
+
+	#ifdef WOO_SPDLOG
+		initSpdlog();
+	#endif
 
 	PyEval_InitThreads();
 
@@ -113,7 +131,7 @@ void wooInitialize(){
 		if(boost::filesystem::exists(confDir+"/logging.conf")){
 			std::string logConf=confDir+"/logging.conf";
 			log4cxx::PropertyConfigurator::configure(logConf);
-			LOG_INFO("Loaded "<<logConf);
+			LOG_INFO("Loaded {}",logConf);
 		}
 	#endif
 	

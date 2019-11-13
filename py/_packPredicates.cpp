@@ -10,6 +10,9 @@
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.pack.predicates");
 #endif
 
+#ifdef WOO_SPDLOG
+	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.pack.predicates");
+#endif
 /*
 This file contains various predicates that say whether a given point is within the solid,
 or, not closer than "pad" to its boundary, if pad is nonzero
@@ -353,11 +356,11 @@ public:
 		normal=_normal; normal-=edge*edge.dot(normal); normal.normalize();
 		inside=edge.cross(normal);
 		aperture=_aperture;
-		// LOG_DEBUG("edge="<<edge<<", normal="<<normal<<", inside="<<inside<<", aperture="<<aperture);
+		// LOG_DEBUG("edge={}, normal={}, inside={}, aperture={}",edge,normal,inside,aperture);
 	}
 	bool operator()(const Vector3r& pt, Real pad=0.) const {
 		Real distUp=normal.dot(pt-c)-aperture/2, distDown=-normal.dot(pt-c)-aperture/2, distInPlane=-inside.dot(pt-c);
-		// LOG_DEBUG("pt="<<pt<<", distUp="<<distUp<<", distDown="<<distDown<<", distInPlane="<<distInPlane);
+		// LOG_DEBUG("pt={}, distUp={}, distDown={}, distInPlane={}",pt,distUp,distDown,distInPlane);
 		if(distInPlane>=pad) return true;
 		if(distUp     >=pad) return true;
 		if(distDown   >=pad) return true;
@@ -387,8 +390,8 @@ shared_ptr<SpherePack> SpherePack_filtered(const shared_ptr<SpherePack>& sp, con
 	}
 	// do not warn for inifinite predicates, which are always larger than the packing
 	for(int ax:{0,1,2}){
-		if(pbox.min()[ax]!=-Inf && pbox.min()[ax]<sbox.min()[ax]) LOG_WARN("SpherePack.filtered: axis="<<ax<<", packing aabb (min="<<sbox.min()[ax]<<") outside of the predicate aabb (min="<<pbox.min()[ax]<<")");
-		if(pbox.max()[ax]!=Inf && pbox.max()[ax]>sbox.max()[ax]) LOG_WARN("SpherePack.filtered: axis="<<ax<<", packing aabb (max="<<sbox.max()[ax]<<") outside of the predicate aabb (max="<<pbox.max()[ax]<<").");
+		if(pbox.min()[ax]!=-Inf && pbox.min()[ax]<sbox.min()[ax]) LOG_WARN("SpherePack.filtered: axis={}, packing aabb (min={}) outside of the predicate aabb (min={})",ax,sbox.min()[ax],pbox.min()[ax]);
+		if(pbox.max()[ax]!=Inf && pbox.max()[ax]>sbox.max()[ax]) LOG_WARN("SpherePack.filtered: axis={}, packing aabb (max={}) outside of the predicate aabb (max={}).",ax,sbox.max()[ax],pbox.max()[ax]);
 	}
 	// if(!sbox.contains(pbox)) LOG_WARN("Packing's box does not fully contain box of the predicate");
 	//#if dimP[0]>dimS[0] or dimP[1]>dimS[1] or dimP[2]>dimS[2]: warnings.warn("Packing's dimension (%s) doesn't fully contain dimension of the predicate (%s)."%(dimS,dimP))

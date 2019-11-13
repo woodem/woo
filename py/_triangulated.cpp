@@ -23,6 +23,11 @@
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.triangulated");
 #endif
 
+#ifdef WOO_SPDLOG
+	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.triangulated");
+#endif
+
+
 int facetsToSTL(const string& out, const shared_ptr<DemField>& dem, const string& solid, int mask, bool append){
 	auto particleOk=[&](const shared_ptr<Particle>&p){ return (mask==0 || (p->mask & mask)) && (p->shape->isA<Facet>()); };
 	std::ofstream stl(out,append?(std::ofstream::app|std::ofstream::binary):std::ofstream::binary); // binary better, anyway
@@ -77,8 +82,6 @@ int facetsToSTL(const string& out, const shared_ptr<DemField>& dem, const string
 	}
 #endif
 
-//#define LOG_TRACE LOG_WARN
-//#define LOG_DEBUG LOG_WARN
 
 int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol, const string& solid, int mask, bool append, bool clipCell, bool merge){
 	if(tol==0 || isnan(tol)) throw std::runtime_error("tol must be non-zero.");
@@ -97,9 +100,9 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		}
 		if(isinf(minRad) || isnan(minRad)) throw std::runtime_error("Minimum radius not found (relative tolerance specified); no matching particles?");
 		tol=-minRad*tol;
-		LOG_DEBUG("Minimum radius "<<minRad<<".");
+		LOG_DEBUG("Minimum radius {}.",minRad);
 	}
-	LOG_DEBUG("Triangulation tolerance is "<<tol);
+	LOG_DEBUG("Triangulation tolerance is {}",tol);
 	
 	std::ofstream stl(out,append?(std::ofstream::app|std::ofstream::binary):std::ofstream::binary); // binary better, anyway
 	if(!stl.good()) throw std::runtime_error("Failed to open output file "+out+" for writing.");
@@ -129,7 +132,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 			Real r=sphere?sphere->radius:ellipsoid->semiAxes.minCoeff();
 			// 1 is for icosahedron
 			int tess=ceil(M_PI/(5*acos(1-tol/r)));
-			LOG_DEBUG("Tesselation level for #"<<p->id<<": "<<tess);
+			LOG_DEBUG("Tesselation level for #{}: {}",p->id,tess);
 			tess=max(tess,0);
 			auto uSphTri(CompUtils::unitSphereTri20(/*0 for icosahedron*/max(tess-1,0)));
 			const auto& uPts=std::get<0>(uSphTri); // unit sphere point coords
@@ -152,7 +155,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		// do not write out directly, store first for later
 		ppts.push_back(pts);
 		ttri.push_back(tri);
-		LOG_TRACE("#"<<p->id<<" triangulated: "<<tri.size()<<","<<pts.size()<<" faces,vertices.");
+		LOG_TRACE("#{} triangulated: {},{} faces,vertices.",p->id,tri.size(),pts.size());
 
 		if(scene->isPeriodic){
 			// make sure we have aabb, in skewed coords and such
@@ -181,18 +184,18 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				vector<Vector3i> tri2(tri); // same topology
 				ppts.push_back(pts2);
 				ttri.push_back(tri2);
-				LOG_TRACE("  offset "<<off.transpose()<<": #"<<p->id<<": "<<tri2.size()<<","<<pts2.size()<<" faces,vertices.");
+				LOG_TRACE("  offset {}: #{}: {},{} faces,vertices.",off.transpose(),p->id,tri2.size(),pts2.size());
 			}
 		}
 	}
 
 	if(!merge){
-		LOG_DEBUG("Will export (unmerged) "<<ppts.size()<<" particles to STL.");
+		LOG_DEBUG("Will export (unmerged) {} particles to STL.",ppts.size());
 		stl<<"solid "<<solid<<"\n";
 		for(size_t i=0; i<ppts.size(); i++){
 			const auto& pts(ppts[i]);
 			const auto& tri(ttri[i]);
-			LOG_TRACE("Exporting "<<i<<" with "<<tri.size()<<" faces.");
+			LOG_TRACE("Exporting {} with {} faces.",i,tri.size());
 			for(const Vector3i& t: tri){
 				Vector3r pp[]={pts[t[0]],pts[t[1]],pts[t[2]]};
 				// skip triangles which are entirely out of the canonical periodic cell
@@ -237,7 +240,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 	vector<vector<GtsEdge*>> eedge(N);
 	vector<AlignedBox3r> boxes(N);
 	for(size_t i=0; i<N; i++){
-		LOG_TRACE("** Creating GTS surface for #"<<i<<", with "<<ttri[i].size()<<" faces, "<<ppts[i].size()<<" vertices.");
+		LOG_TRACE("** Creating GTS surface for #{}, with {} faces, {} vertices.",i,ttri[i].size(),ppts[i].size());
 		AlignedBox3r box;
 		// new surface object
 		ssurf[i]=gts_surface_new(gts_surface_class(),gts_face_class(),gts_edge_class(),gts_vertex_class());
@@ -252,7 +255,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		std::map<std::pair<int,int>,int> edgeIndices;
 		for(size_t t=0; t<ttri[i].size(); t++){
 			//const Vector3i& t(ttri[i][t]);
-			//LOG_TRACE("Face with vertices "<<ttri[i][t][0]<<","<<ttri[i][t][1]<<","<<ttri[i][t][2]);
+			//LOG_TRACE("Face with vertices {},{},{}",ttri[i][t][0],ttri[i][t][1],ttri[i][t][2]);
 			Vector3i eIxs;
 			for(int a:{0,1,2}){
 				int A(ttri[i][t][a]), B(ttri[i][t][(a+1)%3]);
@@ -261,14 +264,14 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				if(ABI==edgeIndices.end()){ // this edge not created yet
 					edgeIndices[AB]=eedge[i].size(); // last index 
 					eIxs[a]=eedge[i].size();
-					//LOG_TRACE("  New edge #"<<eIxs[a]<<": "<<A<<"--"<<B<<" (length "<<(ppts[i][A]-ppts[i][B]).norm()<<")");
+					//LOG_TRACE("  New edge #{}: {}--{} (length {})",eIxs[a],A,B,(ppts[i][A]-ppts[i][B]).norm());
 					eedge[i].push_back(gts_edge_new(gts_edge_class(),vvert[i][A],vvert[i][B]));
 				} else {
 					eIxs[a]=ABI->second;
-					//LOG_TRACE("  Found edge #"<<ABI->second<<" for "<<A<<"--"<<B);
+					//LOG_TRACE("  Found edge #{} for {}--{}",ABI->second,A,B);
 				}
 			}
-			//LOG_TRACE("  New face: edges "<<eIxs[0]<<"--"<<eIxs[1]<<"--"<<eIxs[2]);
+			//LOG_TRACE("  New face: edges {}--{}--{}",eIxs[0],eIxs[1],eIxs[2]);
 			GtsFace* face=gts_face_new(gts_face_class(),eedge[i][eIxs[0]],eedge[i][eIxs[1]],eedge[i][eIxs[2]]);
 			gts_surface_add_face(ssurf[i],face);
 		}
@@ -277,7 +280,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		if(!gts_surface_is_closed(ssurf[i])) LOG_ERROR("Surface of #"+to_string(iid[i])+" is not closed (expect troubles).");
 		assert(!gts_surface_is_self_intersecting(ssurf[i]));
 		// copy bounds
-		LOG_TRACE("Setting bounds of surf #"<<i);
+		LOG_TRACE("Setting bounds of surf #{}",i);
 		boxes[i]=box;
 		for(int ax:{0,1,2}){
 			bounds[ax][2*i+0]=Bound(box.min()[ax],/*id*/i,/*isMin*/true);
@@ -304,7 +307,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				if(boxes[bb[i].id].intersection(boxes[bb[j].id]).isEmpty()) continue; 
 			#endif
 			int0.push_back(std::make_pair(min(bb[i].id,bb[j].id),max(bb[i].id,bb[j].id)));
-			LOG_TRACE("Broad-phase collision "<<int0.back().first<<"+"<<int0.back().second);
+			LOG_TRACE("Broad-phase collision {}+{}",int0.back().first,int0.back().second);
 		}
 	}
 
@@ -314,12 +317,12 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 	*/
 	std::list<std::pair<int,int>> int1;
 	for(const std::pair<int,int> ij: int0){
-		LOG_TRACE("Testing narrow-phase collision "<<ij.first<<"+"<<ij.second);
+		LOG_TRACE("Testing narrow-phase collision {}+{}",ij.first,ij.second);
 		#if 0
 			GtsRange gr1, gr2;
 			gts_surface_distance(ssurf[ij.first],ssurf[ij.second],/*delta ??*/(gfloat).2,&gr1,&gr2);
 			if(gr1.min>0 && gr2.min>0) continue;
-			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" (min. distances "<<gr1.min<<", "<<gr2.min);
+			LOG_TRACE("  GTS reports collision {}+{} (min. distances {}, {}",ij.first,ij.second,gr1.min,gr2.min);
 		#else
 			GtsSurface *s1(ssurf[ij.first]), *s2(ssurf[ij.second]);
 			GNode* t1=gts_bb_tree_surface(s1);
@@ -341,9 +344,9 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 			g_slist_free(l);
 			if(n1==0) continue;
 			#if 1
-				if(n2==0){ LOG_ERROR("n1==0 but n2=="<<n2<<" (no narrow-phase collision)"); continue; }
+				if(n2==0){ LOG_ERROR("n1==0 but n2=={} (no narrow-phase collision)",n2); continue; }
 			#endif
-			LOG_TRACE("  GTS reports collision "<<ij.first<<"+"<<ij.second<<" ("<<n1<<" edges describe the intersection)");
+			LOG_TRACE("  GTS reports collision {}+{} ({} edges describe the intersection)",ij.first,ij.second,n1);
 		#endif
 		int1.push_back(ij);
 	}
@@ -362,20 +365,20 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		int numThisCluster=0; int cluster1st=-1;
 		for(size_t i=0; i<N; i++){ if(clusters[i]!=n) continue; numThisCluster++; if(cluster1st<0) cluster1st=(int)i; }
 		GtsSurface* clusterSurf=NULL;
-		LOG_DEBUG("Cluster "<<n<<" has "<<numThisCluster<<" surfaces.");
+		LOG_DEBUG("Cluster {} has {} surfaces.",n,numThisCluster);
 		if(numThisCluster==1){
 			clusterSurf=ssurf[cluster1st]; 
 		} else {
 			clusterSurf=ssurf[cluster1st]; // surface of the cluster itself
-			LOG_TRACE("  Initial cluster surface from "<<cluster1st<<".");
+			LOG_TRACE("  Initial cluster surface from {}.",cluster1st);
 			/* composed surface */
 			for(size_t i=0; i<N; i++){
 				if(clusters[i]!=n || ((int)i)==cluster1st) continue;
-				LOG_TRACE("   Adding "<<i<<" to the cluster");
+				LOG_TRACE("   Adding {} to the cluster",i);
 				// ssurf[i] now belongs to cluster #n
 				// trees need to be rebuild every time anyway, since the merged surface keeps changing in every cycle
 				//if(gts_surface_face_number(clusterSurf)==0) LOG_ERROR("clusterSurf has 0 faces.");
-				//if(gts_surface_face_number(ssurf[i])==0) LOG_ERROR("Surface #"<<i<<" has 0 faces.");
+				//if(gts_surface_face_number(ssurf[i])==0) LOG_ERROR("Surface #{} has 0 faces.",i);
 				GNode* t1=gts_bb_tree_surface(clusterSurf);
 				GNode* t2=gts_bb_tree_surface(ssurf[i]);
 				GtsSurfaceInter* I=gts_surface_inter_new(gts_surface_inter_class(),clusterSurf,ssurf[i],t1,t2,/*is_open_1*/false,/*is_open_2*/false);
@@ -386,7 +389,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 				gts_bb_tree_destroy(t1,TRUE);
 				gts_bb_tree_destroy(t2,TRUE);
 				if(gts_surface_face_number(merged)==0){
-					LOG_ERROR("Cluster #"<<n<<": 0 faces after fusing #"<<i<<" (why?), adding #"<<i<<" separately!");
+					LOG_ERROR("Cluster #{}: 0 faces after fusing #{} (why?), adding #{} separately!",n,i,i);
 					// this will cause an extra 1-particle cluster to be created
 					clusters[i]=numClusters;
 					numClusters+=1;
@@ -403,7 +406,7 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		   pygts_edge_cleanup(clusterSurf);
 	      pygts_face_cleanup(clusterSurf);
 		#endif
-		LOG_TRACE("  STL: cluster "<<n<<" output");
+		LOG_TRACE("  STL: cluster {} output",n);
 		stl<<"solid "<<solid<<"_"<<n<<"\n";
 		/* output cluster to STL here */
 		_gts_face_to_stl_data data(stl,scene,clipCell,numTri);

@@ -550,6 +550,7 @@ if not env.GetOption('clean'):
 			if not conf.CheckLibLinkedTo('lib'+env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
 	if 'spdlog' in env['features']:
 		env.Append(CPPPATH=[buildInc+'/woo/lib'])
+		env.Append(CPPDEFINES=['SPDLOG_COMPILED_LIB'])
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)

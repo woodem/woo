@@ -5,16 +5,41 @@
 #include<woo/core/Master.hpp>
 enum{ll_TRACE,ll_DEBUG,ll_INFO,ll_WARN,ll_ERROR,ll_FATAL};
 
-#ifdef WOO_LOG4CXX
-
+#ifdef WOO_SPDLOG
+	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.log");
+	void logSetLevel(std::string loggerName, int level){
+		// std::string fullName(loggerName.empty()?"woo":("woo."+loggerName));
+		spdlog::level::level_enum newLevel;
+		switch(level){
+				case ll_TRACE: newLevel=spdlog::level::level_enum::trace; break;
+				case ll_DEBUG: newLevel=spdlog::level::level_enum::debug; break;
+				case ll_INFO:  newLevel=spdlog::level::level_enum::info; break;
+				case ll_WARN:  newLevel=spdlog::level::level_enum::warn; break;
+				case ll_ERROR: newLevel=spdlog::level::level_enum::err; break;
+				case ll_FATAL: newLevel=spdlog::level::level_enum::critical; break;
+			default: throw std::invalid_argument("Unrecognized logging level "+lexical_cast<std::string>(level));
+		}
+		std::shared_ptr<spdlog::logger> log;
+		// apply to all loggers (TODO: match wildcard)
+		if(loggerName.empty()){
+			spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l){
+				l->set_level(newLevel);
+			});
+		} else {
+			log=spdlog::get(loggerName);
+			if(!log){ LOG_WARN("No logger named '{}', ignoring level setting.",loggerName); return; }
+			log->set_level(newLevel);
+		}
+	}
+	// void logLoadConfig(std::string f){ log4cxx::PropertyConfigurator::configure(f); }
+	void logLoadConfig(std::string f){ throw std::runtime_error("logLoadConfig: not supported with spdlog."); }
+#elif defined(WOO_LOG4CXX)
 	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.log");
-
 	#include<log4cxx/logmanager.h>
-
 	void logSetLevel(std::string loggerName,int level){
 		std::string fullName(loggerName.empty()?"woo":("woo."+loggerName));
 		if(!log4cxx::LogManager::exists(fullName)){
-			LOG_WARN("No logger named "<<loggerName<<", ignoring level setting.");			
+			LOG_WARN("No logger named {}, ignoring level setting.",loggerName);			
 			// throw std::invalid_argument("No logger named `"+fullName+"'");
 		} 
 		log4cxx::LevelPtr l;
