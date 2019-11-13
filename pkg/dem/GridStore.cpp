@@ -31,7 +31,7 @@ void GridStore::postLoad(GridStore&,void* I){
 	mutexes.reserve(nMutexes);
 	// mutexes will be deleted automatically when the container is freed
 	for(size_t i=0; i<nMutexes; i++) mutexes.push_back(new boost::mutex);
-	LOG_TRACE(mutexes.size()<<" mutexes, "<<gridSize.prod()<<" cells, "<<exNumMaps<<" extension maps");
+	LOG_TRACE("{} mutexes, {} cells, {} extension maps",mutexes.size(),gridSize.prod(),exNumMaps);
 	assert(mutexes.size()==(size_t)(exNumMaps+(denseLock?gridSize.prod():0)));
 }
 
@@ -150,7 +150,7 @@ void GridStore::append(const Vector3i& ijk, const GridStore::id_t& id, bool noSi
 				#if 1
 					LOG_ERROR("gridEx.find(ijk)!=gridEx.end() when creating new extension vector; gridEx(ijk) contents:");
 					auto ex=gridEx.find(ijk)->second;
-					for(size_t i=0; i<ex.size(); i++) LOG_ERROR("ex["<<ijk<<"]["<<i<<"]="<<ex[i]);
+					for(size_t i=0; i<ex.size(); i++) LOG_ERROR("ex[{}][{}]={}",ijk,i,ex[i]);
 				#endif
 				#ifdef WOO_OPENMP
 					assert(omp_in_parallel());

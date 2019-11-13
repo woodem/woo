@@ -30,7 +30,7 @@ void Facet::selfTest(const shared_ptr<Particle>& p){
 	for(int i:{0,1,2}) if((nodes[i]->pos-nodes[(i+1)%3]->pos).squaredNorm()==0) throw std::runtime_error("Facet #"+to_string(p->id)+": nodes "+to_string(i)+" and "+to_string((i+1)%3)+" are coincident.");
 	// check that we don't have contact with another Facet -- it is not forbidden but usually a bug
 	size_t ffCon=boost::range::count_if(p->contacts,[&](const Particle::MapParticleContact::value_type& C)->bool{ return C.second->isReal() && dynamic_pointer_cast<Facet>(C.second->leakOther(p.get())->shape); });
-	if(ffCon>0) LOG_WARN("Facet.selfTest: Facet #"<<p->id<<" has "<<ffCon<<" contacts with other facets. This is not per se an error though very likely unintended -- there is no functor to handle such contact and it will be uselessly recomputed in every step. Set both particles masks to have some DemField.loneMask bits and contact will not be created at all.");
+	if(ffCon>0) LOG_WARN("Facet.selfTest: Facet #{} has {} contacts with other facets. This is not per se an error though very likely unintended -- there is no functor to handle such contact and it will be uselessly recomputed in every step. Set both particles masks to have some DemField.loneMask bits and contact will not be created at all.",p->id,ffCon);
 	Shape::selfTest(p);
 }
 
@@ -232,7 +232,7 @@ void Facet::adjustBoundaryContactGeom(const short e0e1[2], const Vector3r& fNorm
 	Real p0=out0.dot(normal), p1=out1.dot(normal), pMin=out0.dot(out1), pMax=1.;
 	Real t01=(p0-pMin)/(pMax-pMin); //(p0-pMin)/(p1+p0);
 	Real t10=(p1-pMin)/(pMax-pMin); //(p0-pMin)/(p1+p0);
-	LOG_TRACE("\n***VERTEX***: edge vectors "<<out0.transpose()<<", "<<out1.transpose()<<"\n    p0="<<p0<<", p1="<<p1<<", pMin="<<pMin<<", pMax="<<pMax<<"\n    t01="<<t01<<", t10="<<t10);
+	LOG_TRACE("\n***VERTEX***: edge vectors {}, {}\n    p0={}, p1={}, pMin={}, pMax={}\n    t01={}, t10={}",out0.transpose(),out1.transpose(),p0,p1,pMin,pMax,t01,t10);
 	adjustBoundaryContactGeom_impl(fNormal,this->nodes[e1]->pos,(t01*outVec[e0].normalized()+(1-t01)*outVec[e1].normalized()),otherCenter,(t01*n21lim[e0]+(1-t01)*n21lim[e1]),normal,contPt);
 }
 
@@ -241,13 +241,13 @@ void Facet::adjustBoundaryContactGeom_impl(const Vector3r& fN, const Vector3r& e
 	if(isnan(nnLim)) return; // not neighbour or angle not defined
 	LOG_TRACE("==============================================");
 	Real nn=normal.dot(fN); // project contact normal onto facet normal
-	LOG_TRACE("\n  nnLim="<<nnLim<<", fN="<<fN.transpose()<<"\n  norm="<<normal.transpose()<<", nn="<<nn);
+	LOG_TRACE("\n  nnLim={}, fN={}\n  norm={}, nn={}",nnLim,fN.transpose(),normal.transpose(),nn);
 	// no need to adjust
 	if((nn>=0 && nnLim>0 && nn>=nnLim) || (nn<0 && nnLim<0 && nn<=nnLim)){ LOG_TRACE("\n  No adjustment needed (nn)."); return; }
 	// outer
 	Real noLim=(abs(nnLim)>=1.?1.:sqrt(1.-nnLim*nnLim));
-	if(isnan(noLim)) LOG_ERROR("noLim is NaN, nnLim="<<nnLim<<" !!");
-	LOG_TRACE("\n  noLim="<<noLim);
+	if(isnan(noLim)) LOG_ERROR("noLim is NaN, nnLim={} !!",nnLim);
+	LOG_TRACE("\n  noLim={}",noLim);
 	Vector2r nno;
 	// from the other side of the neighboring facet, adjust to our normal
 	if((nnLim>=0 && nn<=-noLim) || (nnLim<=0 && nn>=noLim)){
@@ -256,18 +256,18 @@ void Facet::adjustBoundaryContactGeom_impl(const Vector3r& fN, const Vector3r& e
 		// adjust here
 		nno=Vector2r(nnLim,noLim);
 	}
-	LOG_TRACE("\n  Adjusted: nno="<<nno.transpose());
+	LOG_TRACE("\n  Adjusted: nno={}",nno.transpose());
 	normal=nno[0]*fN+nno[1]*unitOutVec;
-	LOG_TRACE("\n  Adjusted: normal="<<normal.transpose());
+	LOG_TRACE("\n  Adjusted: normal={}",normal.transpose());
 	// adjust contact point
 	contPt=otherCenter-normal*((otherCenter-edgePt).dot(normal));
-	LOG_TRACE("\n Adjusted: contPt="<<contPt.transpose());
+	LOG_TRACE("\n Adjusted: contPt={}",contPt.transpose());
 }
 
 #if 0
 void Facet::adjustContPtOnEdgeBetweenFacets(const Vector3r& edgePt, const Vector3r& normal, const Vector3r& projectedPt, Vector3r& contPt) const {
 	contPt=projectedPt-normal*((projectedPt-edgePt).dot(normal));
-	LOG_TRACE("\n  ** New contact point "<<contPt.transpose());
+	LOG_TRACE("\n  ** New contact point {}",contPt.transpose());
 }
 #endif
 
@@ -362,7 +362,7 @@ bool Cg2_Facet_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<
 	Real dist=normal.norm();
 	//#define CATCH_NAN_FACET_SPHERE
 	#ifdef CATCH_NAN_FACET_SPHERE
-		if(dist==0) LOG_FATAL("dist==0.0 between Facet #"<<C->leakPA()->id<<" @ "<<f.nodes[0]->pos.transpose()<<", "<<f.nodes[1]->pos.transpose()<<", "<<f.nodes[2]->pos.transpose()<<" and Sphere #"<<C->leakPB()->id<<" @ "<<s.nodes[0]->pos.transpose()<<", r="<<s.radius);
+		if(dist==0) LOG_FATAL("dist==0.0 between Facet #{} @ {}, {}, {} and Sphere #{} @ {}, r={}",C->leakPA()->id,f.nodes[0]->pos.transpose(),f.nodes[1]->pos.transpose(),f.nodes[2]->pos.transpose(),C->leakPB()->id,s.nodes[0]->pos.transpose(),s.radius);
 		normal/=dist; // normal is normalized now
 	#else
 		// this tries to handle that
@@ -421,8 +421,8 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 
 	// find nearest points both ways, A-B and B-A
 	// a is the facet considered as facet, b is the other one (vertices, edges)
-	//LOG_TRACE("A: "<<pp[0][0].transpose()<<"; "<<pp[0][1].transpose()<<"; "<<pp[0][2].transpose());
-	//LOG_TRACE("B: "<<pp[1][0].transpose()<<"; "<<pp[1][1].transpose()<<"; "<<pp[1][2].transpose());
+	//LOG_TRACE("A: {}; {}; {}",pp[0][0].transpose(),pp[0][1].transpose(),pp[0][2].transpose());
+	//LOG_TRACE("B: {}; {}; {}",pp[1][0].transpose(),pp[1][1].transpose(),pp[1][2].transpose());
 	for(short a:{0,1}){
 		short b=(a==0?1:0);
 		// dist of vertices to the triangle
@@ -442,7 +442,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 			}
 			Real d2=(c-p).squaredNorm();
 			Vector6r cc;
-			//LOG_TRACE("ab="<<a<<b<<": w="<<w<<" d="<<sqrt(d2)<<" triD="<<triD<<"; c="<<c.transpose()<<", p="<<p.transpose());
+			//LOG_TRACE("ab={}{}: w={} d={} triD={}; c={}, p={}",a,b,w,sqrt(d2),triD,c.transpose(),p.transpose());
 			if (a==0) cc<<c,p; else cc<<p,c;
 			if(d2<triD2){
 				close.push_back(cc);
@@ -459,7 +459,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 			Vector2r st; bool parallel;
 			Real d2=CompUtils::distSq_SegmentSegment(em[0][e0],ee[0][e0],eh[0][e0],em[1][e1],ee[1][e1],eh[1][e1],st,parallel);
 			Vector6r c; c<<em[0][e0]+st[0]*ee[0][e0],em[1][e1]+st[1]*ee[1][e1];
-			//LOG_TRACE("ee="<<e0<<e1<<": d="<<sqrt(d2)<<"; "<<c.transpose());
+			//LOG_TRACE("ee={}{}: d={}; {}",e0,e1,sqrt(d2),c.transpose());
 			// too far || vertex proximity was already detected above (in vertex-triangle tests)
 			if(d2>=triD2 || max(abs(st[0]),abs(st[1]))>.99*max(eh[0][e0],eh[1][e1])){
 				if(close.empty() && must && d2<=minD2){ minPts=c; minD2=d2; }
@@ -468,7 +468,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 		}
 	}
 	// handle close points
-	//LOG_TRACE(close.size()<<" close points, must="<<must<<", minD2="<<minD2<<".");
+	//LOG_TRACE("{} close points, must={}, minD2={}.",close.size(),must,minD2);
 	if(close.empty() && !must){
 		//LOG_TRACE("---------------------------------------------------------");
 		return false;
@@ -482,7 +482,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 		ptA=minPts.head<3>(); ptB=minPts.tail<3>();
 		Real d=(ptB-ptA).norm();
 		uN=d-triD;
-		//LOG_TRACE("minPts: uN="<<uN<<"; "<<ptA.transpose()<<", "<<ptB.transpose());
+		//LOG_TRACE("minPts: uN={}; {}, {}",uN,ptA.transpose(),ptB.transpose());
 		normal=(ptB-ptA)/d;
 	} else {
 		// weighted average
@@ -491,7 +491,7 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 			Real d=(v.head<3>()-v.tail<3>()).norm();
 			minUn=min(minUn,d-triD);
 			Real w=d-triD; 
-			//LOG_TRACE("Close: w="<<w<<", d="<<d<<"; "<<v.transpose());
+			//LOG_TRACE("Close: w={}, d={}; {}",w,d,v.transpose());
 			assert(w<=0);
 			wSum+=w;
 			c+=v*w;
@@ -499,14 +499,14 @@ bool Cg2_Facet_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 		c/=wSum;
 		ptA=c.head<3>(); ptB=c.tail<3>();
 		uN=minUn;
-		//LOG_TRACE("Weighted: uN="<<uN<<"; "<<ptA.transpose()<<", "<<ptB.transpose());
+		//LOG_TRACE("Weighted: uN={}; {}, {}",uN,ptA.transpose(),ptB.transpose());
 		normal=(ptB-ptA).normalized();
-		// LOG_TRACE((ptB-ptA).transposed()<<", |ptB-ptA|="<<(ptB-ptA).norm()<<", normal="<<(ptB-ptA).normalized());
+		// LOG_TRACE("{}, |ptB-ptA|={}, normal={}",(ptB-ptA).transposed(),(ptB-ptA).norm(),(ptB-ptA).normalized());
 	}
 
-	// LOG_TRACE("ptA="<<ptA.transpose()<<", A.halfThick="<<A.halfThick<<", uN="<<uN<<", normal="<<normal);
+	// LOG_TRACE("ptA={}, A.halfThick={}, uN={}, normal={}",ptA.transpose(),A.halfThick,uN,normal);
 	contPt=ptA+(A.halfThick+.5*uN)*normal;
-	//LOG_TRACE("contPt "<<contPt<<", normal "<<normal);
+	//LOG_TRACE("contPt {}, normal {}",contPt,normal);
 
 	Vector3r linA,angA,linB,angB;
 	std::tie(linA,angA)=A.interpolatePtLinAngVel(ptA);

@@ -66,7 +66,7 @@ vector<shared_ptr<Node>> SparcField::nodesAround(const Vector3r& pt, int count, 
 				}
 				locator->FindPointsWithinRadius(radius*(*relLocPtDens),(const double*)(&pt),&ids);
 				int n=ids.GetNumberOfIds();
-				LOG_DEBUG("Found "<<n<<" neighbors with relLocPtDens="<<(*relLocPtDens));
+				LOG_DEBUG("Found {} neighbors with relLocPtDens={}",n,(*relLocPtDens));
 				// we don't want to look any furher: either return what is OK or throw an exception
 				if(forceNextDone){
 					if(n<mnMxPts[0]) throw std::runtime_error("Unable to find suitable number of neighbors (at least "+to_string(mnMxPts[0])+", less than "+to_string(mnMxPts[1])+" if possible) within "+to_string(neighAdjSteps)+". Check neighAdjSteps and neighAdjFact values.");
@@ -78,16 +78,16 @@ vector<shared_ptr<Node>> SparcField::nodesAround(const Vector3r& pt, int count, 
 					if(fallback>0){
 						// go with what was previous, and use that no matter what
 						(*relLocPtDens)=fallback; forceNextDone=true;
-						LOG_TRACE("   "<<n<<" points not enough ("<<mnMxPts[0]<<" required), forcing use of previous relLocPtDens="<<fallback);
+						LOG_TRACE("   {} points not enough ({} required), forcing use of previous relLocPtDens={}",n,mnMxPts[0],fallback);
 					} 
 					else{
 						(*relLocPtDens)*=neighAdjFact[1]; // increase distance
-						LOG_TRACE("   "<<n<<" points not enough ("<<mnMxPts[0]<<" required), next try with relLocPtDens="<<*relLocPtDens);
+						LOG_TRACE("   {} points not enough ({} required), next try with relLocPtDens={}",n,mnMxPts[0],*relLocPtDens);
 					}
 				}
 				if(n>mnMxPts[1]){
 					*relLocPtDens*=neighAdjFact[0];
-					LOG_TRACE("   "<<n<<" points is too much (max "<<mnMxPts[1]<<" advised), next try with relLocPtDense="<<*relLocPtDens);
+					LOG_TRACE("   {} points is too much (max {} advised), next try with relLocPtDense={}",n,mnMxPts[1],*relLocPtDens);
 				}
 			}
 		}
@@ -95,11 +95,11 @@ vector<shared_ptr<Node>> SparcField::nodesAround(const Vector3r& pt, int count, 
 	int numIds=ids.GetNumberOfIds();
 	vector<shared_ptr<Node>> ret; ret.reserve(numIds);
 	bool selfSeen=false;
-	LOG_DEBUG(numIds<<" nodes around "<<pt.transpose()<<" (radius="<<radius<<", count="<<count<<")");
-	if(self) LOG_DEBUG("   self is nid "<<self->getData<SparcData>().nid<<" at "<<self->pos.transpose());
+	LOG_DEBUG("{} nodes around {} (radius={}, count={})",numIds,pt.transpose(),radius,count);
+	if(self) LOG_DEBUG("   self is nid {} at {}",self->getData<SparcData>().nid,self->pos.transpose());
 	for(int i=0; i<numIds; i++){
-		if(nodes[ids.GetId(i)]){ LOG_TRACE("Nid "<<ids.GetId(i)<<", at "<<nodes[ids.GetId(i)]->pos.transpose());}
-		else{ LOG_TRACE("Nid "<<ids.GetId(i)<<" is None?!");}
+		if(nodes[ids.GetId(i)]){ LOG_TRACE("Nid {}, at {}",ids.GetId(i),nodes[ids.GetId(i)]->pos.transpose());}
+		else{ LOG_TRACE("Nid {} is None?!",ids.GetId(i));}
 		ret.push_back(nodes[ids.GetId(i)]);
 		if(self && nodes[ids.GetId(i)].get()==self.get()) selfSeen=true;
 	};
@@ -117,10 +117,10 @@ void ExplicitNodeIntegrator::findNeighbors(const shared_ptr<Node>&n) const {
 	Vector3r pos(!useNext?n->pos:n->pos+dta.v*scene->dt);
 	// maximum number of tries to get satisfactory number of points
 	dta.neighbors=mff->nodesAround(pos,/*count*/-1,rSearch,/*self=*/n,/*relLocPtDensity*/&dta.relLocPtDensity,/*mnMxPt*/Vector2i(wlsPhi.size(),mff->neighRelMax*wlsPhi.size()));
-	LOG_DEBUG("Nid "<<dta.nid<<" has "<<dta.neighbors.size()<<" neighbors");
+	LOG_DEBUG("Nid {} has {} neighbors",dta.nid,dta.neighbors.size());
 	// say if number of neighbors changes between steps
 	if(!useNext && prevN>0 && dta.neighbors.size()!=prevN){
-		LOG_INFO("Nid "<<dta.nid<<" changed number of neighbors: "<<prevN<<" → "<<dta.neighbors.size());
+		LOG_INFO("Nid {} changed number of neighbors: {} → {}",dta.nid,prevN,dta.neighbors.size());
 	}
 };
 
@@ -136,7 +136,7 @@ Real ExplicitNodeIntegrator::pointWeight(Real distSq, Real relLocPtDensity) cons
 			//Real w=pow(sqrt(distSq),-1); // make all points the same weight first
 			Real hSq=pow2(relLocPtDensity*rSearch);
 			//assert(distSq<=hSq); // taken care of by neighbor search algorithm already
-			if(distSq>hSq) LOG_WARN("distSq="<<distSq<<">hSq="<<hSq<<" ?: returning 0");
+			if(distSq>hSq) LOG_WARN("distSq={}>hSq={} ?: returning 0",distSq,hSq);
 			return exp(-gaussAlpha*(distSq/hSq));
 		}
 		default:
@@ -208,7 +208,7 @@ void ExplicitNodeIntegrator::updateLocalInterp(const shared_ptr<Node>& n) const 
 			break;
 		}
 	}
-	LOG_DEBUG("stencil is "<<stencil.rows()<<"×"<<stencil.cols()<<", bVec is "<<bVec.rows()<<"×"<<bVec.cols()<<", dxDyDz is "<<dta.dxDyDz.rows()<<"×"<<dta.dxDyDz.cols());
+	LOG_DEBUG("stencil is {}×{}, bVec is {}×{}, dxDyDz is {}×{}",stencil.rows(),stencil.cols(),bVec.rows(),bVec.cols(),dta.dxDyDz.rows(),dta.dxDyDz.cols());
 	#ifdef SPARC_INSPECT
 		dta.weightSq=weightSq; dta.stencil=stencil; dta.bVec=bVec;
 	#endif
@@ -906,7 +906,7 @@ void StaticEquilibriumSolver::solverInit(VectorXr& currV){
 			solverNewton->jacEigen=jacEigen;
 			solverNewton->epsScale=epsScale;
 			status=solverNewton->solveNumericalDiffInit(currV);
-			LOG_TRACE("Newton solver: initial solution has residuum "<<solverNewton->fnorm0<<" (tol. rel "<<solverNewton->xtol<<"×"<<solverNewton->fnorm0<<"="<<solverNewton->fnorm0*solverNewton->xtol<<", abs "<<solverNewton->abstol<<")");
+			LOG_TRACE("Newton solver: initial solution has residuum {} (tol. rel {}×{}={}, abs {})",solverNewton->fnorm0,solverNewton->xtol,solverNewton->fnorm0,solverNewton->fnorm0*solverNewton->xtol,solverNewton->abstol);
 			#ifdef SPARC_INSPECT
 				residuals=solverNewton->fvec; residuum=solverNewton->fnorm; jac=solverNewton->jac; jacInv=solverNewton->jacInv;
 			#endif
@@ -937,7 +937,7 @@ int StaticEquilibriumSolver::solverStep(VectorXr& currV){
 			assert(solverPowell);
 			status=solverPowell->solveNumericalDiffOneStep(currV);
 			SPARC_TRACE_OUT("Powell inner iteration "<<nIter<<endl<<"Solver proposed solution "<<currV.transpose()<<endl<<"Residuals vector "<<solverPowell->fvec.transpose()<<endl<<"Error norm "<<lexical_cast<string>(solverPowell->fnorm)<<endl);
-			LOG_TRACE("Powell inner iteration "<<nIter<<" with residuum "<<solverPowell->fnorm);
+			LOG_TRACE("Powell inner iteration {} with residuum {}",nIter,solverPowell->fnorm);
 			#ifdef SPARC_INSPECT
 				residuals=solverPowell->fvec; residuum=solverPowell->fnorm; jac=solverPowell->fjac;
 			#endif
@@ -946,7 +946,7 @@ int StaticEquilibriumSolver::solverStep(VectorXr& currV){
 			assert(solverLM);
 			status=solverLM->minimizeOneStep(currV);
 			SPARC_TRACE_OUT("Levenberg-Marquardt inner iteration "<<nIter<<endl<<"Solver proposed solution "<<currV.transpose()<<endl<<"Residuals vector "<<solverLM->fvec.transpose()<<endl<<"Error norm "<<solverLM->fnorm<<endl);
-			LOG_TRACE("Levenberg-Marquardt inner iteration "<<nIter<<" with residuum "<<solverLM->fnorm);
+			LOG_TRACE("Levenberg-Marquardt inner iteration {} with residuum {}",nIter,solverLM->fnorm);
 			#ifdef SPARC_INSPECT
 				residuals=solverLM->fvec; residuum=solverLM->fnorm; jac=solverLM->fjac;
 			#endif
@@ -954,7 +954,7 @@ int StaticEquilibriumSolver::solverStep(VectorXr& currV){
 		case SOLVER_NEWTON:
 			assert(solverNewton);
 			status=solverNewton->solveNumericalDiffOneStep(currV);
-			LOG_TRACE("Newton inner iteration "<<nIter<<", residuum "<<solverNewton->fnorm<<" (functor "<<solverNewton->nfev<<"×, jacobian "<<solverNewton->njev<<"×)");
+			LOG_TRACE("Newton inner iteration {}, residuum {} (functor {}×, jacobian {}×)",nIter,solverNewton->fnorm,solverNewton->nfev,solverNewton->njev);
 			#ifdef SPARC_INSPECT
 				residuals=solverNewton->fvec; residuum=solverNewton->fnorm; jac=solverNewton->jac; jacInv=solverNewton->jacInv;
 			#endif
@@ -970,7 +970,7 @@ void StaticEquilibriumSolver::run(){
 	#ifdef SPARC_TRACE
 		if(!dbgOut.empty() && scene->step==0 && bfs::exists(dbgOut)){
 			bfs::remove(bfs::path(dbgOut));
-			LOG_WARN("Old StaticEquilibriumSolver.dbgOut "<<dbgOut<<" deleted.");
+			LOG_WARN("Old StaticEquilibriumSolver.dbgOut {} deleted.",dbgOut);
 		}
 		if(!out.is_open()) out.open(dbgOut.empty()?"/dev/null":dbgOut.c_str(),ios::out|ios::app);
 		if(scene->step==0) out<<"# vim: guifont=Monospace\\ 7:nowrap:syntax=c:foldenable:foldmethod=syntax:foldopen=percent:foldclose=all:\n";
@@ -1014,9 +1014,9 @@ void StaticEquilibriumSolver::run(){
 		if(solver==SOLVER_POWELL && (status==Eigen::HybridNonLinearSolverSpace::NotMakingProgressIterations || status==Eigen::HybridNonLinearSolverSpace::NotMakingProgressJacobian)){
 			// try decreasing factor
 			solverPowell->parameters.factor*=.6;
-			if(++nFactorLowered<10){ LOG_WARN("Step "<<scene->step<<": Powell solver did not converge (error="<<solverPowell->fnorm<<"), lowering factor to "<<solverPowell->parameters.factor); if(substep) goto substepDone; else continue; }
+			if(++nFactorLowered<10){ LOG_WARN("Step {}: Powell solver did not converge (error={}), lowering factor to {}",scene->step,solverPowell->fnorm,solverPowell->parameters.factor); if(substep) goto substepDone; else continue; }
 			// or give up
-			LOG_WARN("Step "<<scene->step<<": Powell solver not converging, but factor already lowered too many times ("<<nFactorLowered<<"). giving up.");
+			LOG_WARN("Step {}: Powell solver not converging, but factor already lowered too many times ({}). giving up.",scene->step,nFactorLowered);
 		}
 		string msg="[unhandled solver]";
 		switch(solver){
@@ -1038,7 +1038,7 @@ void StaticEquilibriumSolver::run(){
 		return;
 	solutionFound:
 		progress=PROGRESS_DONE;
-		// LOG_WARN("Solution found, error norm "<<solver->fnorm);
+		// LOG_WARN("Solution found, error norm {}",solver->fnorm);
 		switch(solver){
 			case SOLVER_NONE: nIter=1; break;
 			case SOLVER_POWELL: nIter=solverPowell->iter; break; 
@@ -1048,7 +1048,7 @@ void StaticEquilibriumSolver::run(){
 		}
 		// residuum=solver->fnorm;
 		epiloguePhase(currV,residuals);
-		LOG_TRACE("Solution found after "<<nIter<<" (inner) iterations.");
+		LOG_TRACE("Solution found after {} (inner) iterations.",nIter);
 		return;
 };
 

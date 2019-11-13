@@ -266,7 +266,7 @@ vector<Particle::id_t> InsertionSortCollider::probeAabb(const Vector3r& mn, cons
 				Real mn2=cellWrap(mn[axis],wMn,wMn+dim,pmn2), mx2=cellWrap(mx[axis],wMn,wMn+dim,pmx2);
 				if(WOO_UNLIKELY((pmn1!=pmx1) || (pmn2!=pmx2))){
 					Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
-					LOG_FATAL("Particle #"<<(pmn1!=pmx1?id1:-1)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
+					LOG_FATAL("Particle #{} spans over half of the cell size {} (axis={}, min={}, max={}, span={})",(pmn1!=pmx1?id1:-1),dim,axis,(pmn1!=pmx1?mn1:mn2),(pmn1!=pmx1?mx1:mx2),span);
 					throw runtime_error(__FILE__ ": Particle larger than half of the cell size encountered.");
 				}
 				if(!(mn1<=mx2 && mx1 >= mn2)) goto noOverlap;
@@ -308,7 +308,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 			if(!isnan(dMin)) minR=min(.5*dMin,minR);
 		}
 		if(isinf(minR)){
-			LOG_WARN("\n  Negative verletDist="<<verletDist<<" was about to be set from minimum particle radius, but not Particle/Inlet with valid radius was found.\n  SETTING InsertionSortCollider.verletDist=0.0\n  THIS CAN SERIOUSLY DEGRADE PERFORMANCE.\n  Set verletDist=0.0 yourself to get rid of this warning.");
+			LOG_WARN("\n  Negative verletDist={} was about to be set from minimum particle radius, but not Particle/Inlet with valid radius was found.\n  SETTING InsertionSortCollider.verletDist=0.0\n  THIS CAN SERIOUSLY DEGRADE PERFORMANCE.\n  Set verletDist=0.0 yourself to get rid of this warning.",verletDist);
 			verletDist=0.0;
 		} else verletDist=abs(verletDist)*minR;
 	}
@@ -324,7 +324,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 			// below we throw exception for particle that has no functor afer the dispatcher has been called
 			// that would prevent mistakenly boundless particless triggering collisions every time
 			if(!p->shape->bound){
-				LOG_TRACE("recomputeBounds because of #"<<p->id<<" without bound");
+				LOG_TRACE("recomputeBounds because of #{} without bound",p->id);
 				recomputeBounds=true;
 				break;
 			}
@@ -345,7 +345,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 					//cerr<<"#"<<p->id<<": rot="<<aa.angle()<<" (max "<<aabb.maxRot<<")"<<endl;
 				}
 				if(maxRot>aabb.maxRot){
-					LOG_TRACE("recomputeBounds because of #"<<p->id<<" rotating too much");
+					LOG_TRACE("recomputeBounds because of #{} rotating too much",p->id);
 					recomputeBounds=true;
 					break;
 				}
@@ -360,7 +360,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 				// maxVel2b=max(maxVel2b,p->shape->nodes[i]->getData<DemData>().vel.squaredNorm());
 			}
 			if(d2+moveDueToRot2>aabb.maxD2){
-				LOG_TRACE("recomputeBounds because of #"<<p->id<<" moved too far");
+				LOG_TRACE("recomputeBounds because of #{} moved too far",p->id);
 				recomputeBounds=true;
 				break;
 			}
@@ -489,7 +489,7 @@ void InsertionSortCollider::run(){
 		if(forceInitSort){ doInitSort=true; forceInitSort=false; }
 		assert(BB[0].size==BB[1].size); assert(BB[1].size==BB[2].size);
 		if(BB[0].size!=2*nPar){
-			LOG_DEBUG("Resize bounds containers from "<<BB[0].size<<" to "<<nPar*2<<", will std::sort.");
+			LOG_DEBUG("Resize bounds containers from {} to {}, will std::sort.",BB[0].size,nPar*2);
 			// bodies deleted; clear the container completely, and do as if all bodies were added (rather slow…)
 			// future possibility: insertion sort with such operator that deleted bodies would all go to the end, then just trim bounds
 			if(2*nPar<BB[0].size){ for(int i: {0,1,2}){ BB[i].vec.clear(); BB[i].size=0; }}
@@ -589,7 +589,7 @@ void InsertionSortCollider::run(){
 			if(!periodic) for(int i:{0,1,2}){
 				//Vector3i invs=countInversions();
 				insertionSort(BB[i],/*collide*/true,i); 
-				//LOG_INFO(invs.sum()<<"/"<<stepInvs<<" invs (counted/insertion sort)");
+				//LOG_INFO("{}/{} invs (counted/insertion sort)",invs.sum(),stepInvs);
 			}
 			else for(int i:{0,1,2}) insertionSortPeri(BB[i],/*collide*/true,i);
 			ISC_CHECKPOINT("insertion-sort-done");
@@ -799,7 +799,7 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 				if (v[j].coord>2*v.cellDim){
 					// this condition is not strictly necessary, but the loop of insertionSort would have to run more times.
 					// Since size of particle is required to be < .5*cellDim, this would mean simulation explosion anyway
-					LOG_FATAL("Particle #"<<v[j].id<<" going faster than 1 cell in one step? Not handled.");
+					LOG_FATAL("Particle #{} going faster than 1 cell in one step? Not handled.",v[j].id);
 					throw runtime_error(__FILE__ ": particle moving too fast (skipped 1 cell).");
 				}
 			#endif
@@ -880,7 +880,7 @@ void InsertionSortCollider::handleBoundInversionPeri(Particle::id_t id1, Particl
 	const shared_ptr<Contact>& C=dem->contacts->find(id1,id2);
 	bool hasCon=(bool)C;
 	#ifdef PISC_DEBUG
-		if(watchIds(id1,id2)) LOG_DEBUG("Inversion #"<<id1<<"+#"<<id2<<", overlap=="<<overlap<<", hasCon=="<<hasCon);
+		if(watchIds(id1,id2)) LOG_DEBUG("Inversion #{}+#{}, overlap=={}, hasCon=={}",id1,id2,overlap,hasCon);
 	#endif
 	// interaction doesn't exist and shouldn't, or it exists and should
 	if(WOO_LIKELY(!overlap && !hasCon)) return;
@@ -888,14 +888,14 @@ void InsertionSortCollider::handleBoundInversionPeri(Particle::id_t id1, Particl
 	// create interaction if not yet existing
 	if(overlap && !hasCon){ // second condition only for readability
 		#ifdef PISC_DEBUG
-			if(watchIds(id1,id2)) LOG_DEBUG("Attemtping collision of #"<<id1<<"+#"<<id2);
+			if(watchIds(id1,id2)) LOG_DEBUG("Attemtping collision of #{}+#{}",id1,id2);
 		#endif
 		const shared_ptr<Particle>& pA((*particles)[id1]);
 		const shared_ptr<Particle>& pB((*particles)[id2]);
 		if(!Collider::mayCollide(dem,pA,pB)) return;
 		makeContactLater(pA,pB,periods);
 		#ifdef PISC_DEBUG
-			if(watchIds(id1,id2)) LOG_DEBUG("Created intr #"<<id1<<"+#"<<id2<<", periods="<<periods);
+			if(watchIds(id1,id2)) LOG_DEBUG("Created intr #{}+#{}, periods={}",id1,id2,periods);
 		#endif
 		return;
 	}
@@ -903,7 +903,7 @@ void InsertionSortCollider::handleBoundInversionPeri(Particle::id_t id1, Particl
 		if(!C->isReal()) {
 			removeContactLater(C);
 			#ifdef PISC_DEBUG
-				if(watchIds(id1,id2)) LOG_DEBUG("Erased intr #"<<id1<<"+#"<<id2);
+				if(watchIds(id1,id2)) LOG_DEBUG("Erased intr #{}+#{}",id1,id2);
 			#endif
 		}
 		return;
@@ -935,7 +935,7 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 		assert(!isinf(min2) || min2<0); // check that minimum is minus infinity
 		period=0; // does not matter where the contact happens really
 		#ifdef PISC_DEBUG
-			if(watchIds(id1,id2)){ LOG_DEBUG("    Some particle infinite along the "<<axis<<" axis."); }
+			if(watchIds(id1,id2)){ LOG_DEBUG("    Some particle infinite along the {} axis.",axis); }
 		#endif
 		return true; // do other axes
 	}
@@ -978,7 +978,7 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 		Real mn2=cellWrap(min2,wMn,wMn+dim,pmn2), mx2=cellWrap(max2,wMn,wMn+dim,pmx2);
 		if(WOO_UNLIKELY((pmn1!=pmx1) || (pmn2!=pmx2))){
 			Real span=(pmn1!=pmx1?mx1-mn1:mx2-mn2); if(span<0) span=dim-span;
-			LOG_INFO("Particle #"<<(pmn1!=pmx1?id1:id2)<<" spans over half of the cell size "<<dim<<" (axis="<<axis<<", min="<<(pmn1!=pmx1?mn1:mn2)<<", max="<<(pmn1!=pmx1?mx1:mx2)<<", span="<<span<<")");
+			LOG_INFO("Particle #{} spans over half of the cell size {} (axis={}, min={}, max={}, span={})",(pmn1!=pmx1?id1:id2),dim,axis,(pmn1!=pmx1?mn1:mn2),(pmn1!=pmx1?mx1:mx2),span);
 			LOG_INFO("Does not matter, try with the new algo now :)");
 			#ifdef PISC_DBG_NEW_PERIOD_ALGO
 				origFailed=true;
@@ -1038,10 +1038,10 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 	#ifdef PISC_DBG_NEW_PERIOD_ALGO
 		// compare old and new algos; period difference is only significant if there was overlap found
 		if(periDbgNew && !origFailed && ((origResult && origPeriod!=newPeriod) || origResult!=newResult)){
-			if(origPeriod!=newPeriod) LOG_FATAL("Period mismatch in ##"<<id1<<"+"<<id2<<": old="<<origPeriod<<", new="<<newPeriod);
-			if(origResult!=newResult) LOG_FATAL("Overlap mispatch in ##"<<id1<<"+"<<id2<<": old="<<origResult<<", new="<<newResult);
-			LOG_FATAL("#"<<id1<<": axis "<<axis<<", span "<<min1<<".."<<max1);
-			LOG_FATAL("#"<<id2<<": axis "<<axis<<", span "<<min2<<".."<<max2);
+			if(origPeriod!=newPeriod) LOG_FATAL("Period mismatch in ##{}+{}: old={}, new={}",id1,id2,origPeriod,newPeriod);
+			if(origResult!=newResult) LOG_FATAL("Overlap mispatch in ##{}+{}: old={}, new={}",id1,id2,origResult,newResult);
+			LOG_FATAL("#{}: axis {}, span {}..{}",id1,axis,min1,max1);
+			LOG_FATAL("#{}: axis {}, span {}..{}",id2,axis,min2,max2);
 		}
 	#endif
 	period=newPeriod;
@@ -1069,7 +1069,7 @@ bool InsertionSortCollider::spatialOverlapPeri(Particle::id_t id1, Particle::id_
 		if(!spatialOverlapPeri_axis(axis,id1,id2,minima[3*id1+axis],maxima[3*id1+axis],minima[3*id2+axis],maxima[3*id2+axis],scene->cell->getSize()[axis],periods[axis])) return false;
 	}
 	#ifdef PISC_DEBUG
-		if(watchIds(id1,id2)) LOG_DEBUG("Overlap #"<<id1<<"+#"<<id2<<", periods "<<periods);
+		if(watchIds(id1,id2)) LOG_DEBUG("Overlap #{}+#{}, periods {}",id1,id2,periods);
 	#endif
 	return true;
 }

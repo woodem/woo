@@ -27,7 +27,7 @@ void EnergyTracker::add(const Real& val, const std::string& name, int &id, int f
 	// if ZeroDontCreate is set, the value is zero and no such energy exists, it will not be created and id will be still negative
 	if(id<0) findId(name,id,flg,/*newIfNotFound*/!(val==0. && (flg&ZeroDontCreate)));
 	if(id>=0){
-		if(isnan(val)){ LOG_WARN("Ignoring attempt to add NaN to energy '"<<name<<"'."); return; }
+		if(isnan(val)){ LOG_WARN("Ignoring attempt to add NaN to energy '{}'.",name); return; }
 		energies.add(id,val);
 		if(!isnan(xyz[0]) && grid && !(flg&IsResettable)) grid->add(val,id,xyz);
 	}

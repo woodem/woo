@@ -96,7 +96,7 @@ void Scene::backgroundLoop(){
 			if(throttle>0){ boost::this_thread::sleep(boost::posix_time::milliseconds(int(1000*throttle))); }
 		}
 	} catch(std::exception& e){
-		LOG_ERROR("Exception: "<<endl<<e.what());
+		LOG_ERROR("Exception: {}",e.what());
 		// some compilers report ambiguity here...
 		#ifdef WOO_STD_SHAREDPTR
 			except=std::make_shared<std::exception>(e);
@@ -221,27 +221,27 @@ void Scene::initCl(){
 		LOG_WARN("OpenCL device will be chosen automatically; set --cl-dev or Scene.clDev to override (and get rid of this warning)");
 		LOG_WARN("==== OpenCL devices: ====");
 		for(size_t i=0; i<platforms.size(); i++){
-			LOG_WARN("   "<<i<<". platform: "<<platforms[i].getInfo<CL_PLATFORM_NAME>());
+			LOG_WARN("   {}. platform: {}",i,platforms[i].getInfo<CL_PLATFORM_NAME>());
 			platforms[i].getDevices(CL_DEVICE_TYPE_ALL,&devices);
 			for(size_t j=0; j<devices.size(); j++){
-				LOG_WARN("      "<<j<<". device: "<<devices[j].getInfo<CL_DEVICE_NAME>());
+				LOG_WARN("      {}. device: {}",j,devices[j].getInfo<CL_DEVICE_NAME>());
 			}
 		}
 		LOG_WARN("==== --------------- ====");
 	}
 	cl::Platform::get(&platforms);
 	if(platforms.empty()){ throw std::runtime_error("No OpenCL platforms available."); }
-	if(pNum>=(int)platforms.size()){ LOG_WARN("Only "<<platforms.size()<<" platforms available, taking 0th platform."); pNum=0; }
+	if(pNum>=(int)platforms.size()){ LOG_WARN("Only {} platforms available, taking 0th platform.",platforms.size()); pNum=0; }
 	if(pNum<0) pNum=0;
 	platform=boost::make_shared<cl::Platform>(platforms[pNum]);
 	platform->getDevices(CL_DEVICE_TYPE_ALL,&devices);
 	if(devices.empty()){ throw std::runtime_error("No OpenCL devices available on the platform "+platform->getInfo<CL_PLATFORM_NAME>()+"."); }
-	if(dNum>=(int)devices.size()){ LOG_WARN("Only "<<devices.size()<<" devices available, taking 0th device."); dNum=0; }
+	if(dNum>=(int)devices.size()){ LOG_WARN("Only {} devices available, taking 0th device.",devices.size()); dNum=0; }
 	if(dNum<0) dNum=0;
 	device=boost::make_shared<cl::Device>(devices[dNum]);
 	// create context only for one device
 	context=boost::make_shared<cl::Context>(vector<cl::Device>({*device}));
-	LOG_WARN("OpenCL ready: platform \""<<platform->getInfo<CL_PLATFORM_NAME>()<<"\", device \""<<device->getInfo<CL_DEVICE_NAME>()<<"\".");
+	LOG_WARN("OpenCL ready: platform \"{}\", device \"{}\".",platform->getInfo<CL_PLATFORM_NAME>(),device->getInfo<CL_DEVICE_NAME>());
 	queue=boost::make_shared<cl::CommandQueue>(*context,*device);
 	clDev=Vector2i(pNum,dNum);
 	_clDev=clDev;
@@ -323,7 +323,7 @@ void Scene::postLoad(Scene&,void*){
 
 void Scene::selfTest_maybe(bool force){
 	if(!force && ((selfTestEvery<0) || (selfTestEvery>0 && (step%selfTestEvery!=0)) || (selfTestEvery==0 && step!=0))) return;
-	LOG_INFO("Running self-tests at step "<<step<<" (selfTestEvery=="<<selfTestEvery<<", force="<<force<<")");
+	LOG_INFO("Running self-tests at step {} (selfTestEvery=={}, force={})",step,selfTestEvery,force);
 	try{
 		for(const auto& f: fields){
 			f->scene=this;
@@ -337,7 +337,7 @@ void Scene::selfTest_maybe(bool force){
 			e->selfTest();
 		}
 	} catch(std::exception&) {
-		if(!force) LOG_ERROR("selfTest failed (step="<<step<<", selfTestEvery="<<selfTestEvery<<", force="<<force<<").");
+		if(!force) LOG_ERROR("selfTest failed (step={}, selfTestEvery={}, force={}).",step,selfTestEvery,force);
 		throw;
 	};
 };
@@ -367,13 +367,13 @@ void Scene::doOneStep(){
 				if(!e->field && e->needsField())  throw std::runtime_error(e->pyStr()+" has no field to run on, but requires one.");
 				if(e->dead) continue; // skip completely dead engines, but not those who are not isActivated()
 				Real crDt=e->critDt();
-				LOG_INFO("Critical dt from "+e->pyStr()+": "<<crDt);
+				LOG_INFO("Critical dt from "+e->pyStr()+": {}",crDt);
 				dt=min(dt,crDt);
 			}
 			for(const auto& f: fields){
 				f->scene=this;
 				Real crDt=f->critDt();
-				LOG_INFO("Critical dt from "+f->pyStr()+": "<<crDt);
+				LOG_INFO("Critical dt from "+f->pyStr()+": {}",crDt);
 				dt=min(dt,crDt);
 			}
 			if(isinf(dt)) throw std::runtime_error("Failed to obtain meaningful dt from engines and fields automatically.");
@@ -417,11 +417,11 @@ void Scene::doOneStep(){
 	} else {
 		/* IMPORTANT: take care to copy EXACTLY the same sequence as is in the block above !! */
 		if(TimingInfo::enabled){ TimingInfo::enabled=false; LOG_INFO("Master.timingEnabled disabled, since Master.subStepping is used."); }
-		if(subStep<SUBSTEP_INIT || subStep>(int)engines.size()){ LOG_ERROR("Invalid value of Scene::subStep ("<<subStep<<"), setting to SUBSTEP_INIT=-1 (prologue will be run)."); subStep=SUBSTEP_INIT; }
+		if(subStep<SUBSTEP_INIT || subStep>(int)engines.size()){ LOG_ERROR("Invalid value of Scene::subStep ({}), setting to SUBSTEP_INIT=-1 (prologue will be run).",subStep); subStep=SUBSTEP_INIT; }
 		// if subStepping is disabled, it means we have not yet finished last step completely; in that case, do that here by running all remaining substeps at once
 		// if subStepping is enabled, just run the step we need (the loop is traversed only once, with subs==subStep)
 		int maxSubStep=subStep;
-		if(!subStepping){ maxSubStep=engines.size(); LOG_INFO("Running remaining sub-steps ("<<subStep<<"…"<<maxSubStep<<") before disabling sub-stepping."); }
+		if(!subStepping){ maxSubStep=engines.size(); LOG_INFO("Running remaining sub-steps ({}…{}) before disabling sub-stepping.",subStep,maxSubStep); }
 		for(int subs=subStep; subs<=maxSubStep; subs++){
 			assert(subs>=-1 && subs<=(int)engines.size());
 			// ** 1. ** prologue

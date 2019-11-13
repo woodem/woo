@@ -75,10 +75,10 @@ Vector3r PsdAxialBias::unitPos(const Real& d){
 	} else {
 		Real f0,f1,t;
 		std::tie(f0,f1,t)=linearInterpolateRel(d,psdPts,pos);
-		LOG_TRACE("PSD interp for "<<d<<": "<<f0<<".."<<f1<<", pos="<<pos<<", t="<<t);
+		LOG_TRACE("PSD interp for {}: {}..{}, pos={}, t={}",d,f0,f1,pos,t);
 		if(t==0.){
 			// we want the interval to the left of our point
-			if(pos==0){ LOG_WARN("PsdAxiaBias.unitPos: discrete PSD interpolation returned point at the beginning for d="<<d<<", which should be zero. No interpolation done, setting 0."); p=0; return p3; }
+			if(pos==0){ LOG_WARN("PsdAxiaBias.unitPos: discrete PSD interpolation returned point at the beginning for d={}, which should be zero. No interpolation done, setting 0.",d); p=0; return p3; }
 			f1=f0; f0=psdPts[pos-1].y();
 		}
 		// pick randomly in our interval
@@ -122,7 +122,7 @@ Vector3r LayeredAxialBias::unitPos(const Real& d){
 	Real& p(p3[axis]);
 	int ll=-1;
 	for(size_t i=0; i<layerSpec.size(); i++){ if(layerSpec[i][0]<=d && layerSpec[i][1]>d) ll=i; }
-	if(ll<0){ LOG_WARN("No matching fraction for d="<<d<<", no bias applied."); return p3; }
+	if(ll<0){ LOG_WARN("No matching fraction for d={}, no bias applied.",d); return p3; }
 	const auto& l(layerSpec[ll]);
 	Real r=Mathr::UnitRandom()*xRangeSum[ll];
 	for(int j=2; j<l.size(); j+=2){
@@ -134,7 +134,7 @@ Vector3r LayeredAxialBias::unitPos(const Real& d){
 		}
 		r-=d; 
 	}
-	LOG_ERROR("internal error: layerSpec["<<ll<<"]="<<l.transpose()<<": did not select any layer for d="<<d<<" with xRangeSum["<<ll<<"]="<<xRangeSum[ll]<<"; final r="<<r<<" (original must have been r0="<<r+xRangeSum[ll]<<"). What's up? Applying no bias and proceeding.");
+	LOG_ERROR("internal error: layerSpec[{}]={}: did not select any layer for d={} with xRangeSum[{}]={}; final r={} (original must have been r0={}). What's up? Applying no bias and proceeding.",ll,l.transpose(),d,ll,xRangeSum[ll],r,r+xRangeSum[ll]);
 	return p3;
 }
 
@@ -207,7 +207,7 @@ bool Inlet::everythingDone(){
 		LOG_INFO("mass or number reached, making myself dead.");
 		dead=true;
 		if(zeroRateAtStop) currRate=0.;
-		if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy("Inlet",doneHook); }
+		if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: {}",doneHook); Engine::runPy("Inlet",doneHook); }
 		return true;
 	}
 	return false;
@@ -295,17 +295,17 @@ void RandomInlet::run(){
 			if(attempt>=maxAttempts){
 				generator->revokeLast(); // last particle could not be placed
 				if(massRate<=0){
-					LOG_DEBUG("maxAttempts="<<maxAttempts<<" reached; since massRate is not positive, we're done in this step");
+					LOG_DEBUG("maxAttempts={} reached; since massRate is not positive, we're done in this step",maxAttempts);
 					goto stepDone;
 				}
 				switch(atMaxAttempts){
 					case MAXATT_ERROR: throw std::runtime_error("RandomInlet.maxAttempts reached ("+lexical_cast<string>(maxAttempts)+")"); break;
 					case MAXATT_DEAD:{
-						LOG_INFO("maxAttempts="<<maxAttempts<<" reached, making myself dead.");
+						LOG_INFO("maxAttempts={} reached, making myself dead.",maxAttempts);
 						this->dead=true;
 						return;
 					}
-					case MAXATT_WARN: LOG_WARN("maxAttempts "<<maxAttempts<<" reached before required mass amount was generated; continuing, since maxAttemptsError==False"); break;
+					case MAXATT_WARN: LOG_WARN("maxAttempts {} reached before required mass amount was generated; continuing, since maxAttemptsError==False",maxAttempts); break;
 					case MAXATT_SILENT: break;
 					case MAXATT_DONE: Engine::runPy("RandomInlet",doneHook); break;
 					default: throw std::invalid_argument("Invalid value of RandomInlet.atMaxAttempts="+to_string(atMaxAttempts)+".");
@@ -315,7 +315,7 @@ void RandomInlet::run(){
 			/***** each maxAttempts/attPerPar, try a new particles *****/	
 			// the first condition after || guards against FPE in attempt%0
 			if(attempt==0 || ((maxAttempts/attemptPar>0) && (attempt%(maxAttempts/attemptPar))==0)){
-				LOG_DEBUG("attempt "<<attempt<<": trying with a new particle.");
+				LOG_DEBUG("attempt {}: trying with a new particle.",attempt);
 				if(attempt>0) generator->revokeLast(); // if not at the beginning, revoke the last particle
 
 				// random choice of material with equal probability
@@ -328,7 +328,7 @@ void RandomInlet::run(){
 				// generate a new particle
 				std::tie(diam,pee)=(*generator)(mat,scene->time);
 				assert(!pee.empty());
-				LOG_TRACE("Placing "<<pee.size()<<"-sized particle; first component is a "<<pee[0].par->getClassName()<<", extents from "<<pee[0].extents.min().transpose()<<" to "<<pee[0].extents.max().transpose());
+				LOG_TRACE("Placing {}-sized particle; first component is a {}, extents from {} to {}",pee.size(),pee[0].par->getClassName(),pee[0].extents.min().transpose(),pee[0].extents.max().transpose());
 				// all particles in the clump will share a single matState instance
 				if(matState){
 					for(auto& pe: pee) pe.par->matState=matState;
@@ -336,7 +336,7 @@ void RandomInlet::run(){
 			}
 
 			pos=randomPosition(diam,padDist); // overridden in child classes
-			LOG_TRACE("Trying pos="<<pos.transpose());
+			LOG_TRACE("Trying pos={}",pos.transpose());
 			for(const auto& pe: pee){
 				// make translated copy
 				AlignedBox3r peBox(pe.extents); peBox.translate(pos); 
@@ -364,7 +364,7 @@ void RandomInlet::run(){
 					if(collideExisting){
 						vector<Particle::id_t> ids=collider->probeAabb(peBox.min(),peBox.max());
 						for(const auto& id: ids){
-							LOG_TRACE("Collider reports intersection with #"<<id);
+							LOG_TRACE("Collider reports intersection with #{}",id);
 							if(id>(Particle::id_t)dem->particles->size() || !(*dem->particles)[id]) continue;
 							const shared_ptr<Shape>& sh2((*dem->particles)[id]->shape);
 							// no spheres, or they are too close
@@ -379,14 +379,14 @@ void RandomInlet::run(){
 							const auto& genSh(generated[i]->shape);
 							// for spheres, try to compute whether they really touch
 							if(!peSphere || !genSh->isA<Sphere>() || (pos-genSh->nodes[0]->pos).squaredNorm()<pow2(peSphere->radius+genSh->cast<Sphere>().radius)){
-								LOG_TRACE("Collision with "<<i<<"-th particle generated in this step.");
+								LOG_TRACE("Collision with {}-th particle generated in this step.",i);
 								goto tryAgain;
 							}
 						}
 					}
 				}
 			}
-			LOG_DEBUG("No collision (attempt "<<attempt<<"), particle will be created :-) ");
+			LOG_DEBUG("No collision (attempt {}), particle will be created :-) ",attempt);
 			if(spheresOnly){
 				// num will be the same for all spheres within this clump (abuse the *num* counter)
 				for(const auto& pe: pee){

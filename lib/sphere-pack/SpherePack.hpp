@@ -119,11 +119,11 @@ public:
 	// transformations
 	void translate(const Vector3r& shift){ for(Sph& s: pack) s.c+=shift; }
 	void rotate(const Vector3r& axis, Real angle){
-		if(cellSize!=Vector3r::Zero()) { LOG_WARN("Periodicity reset when rotating periodic packing (non-zero cellSize="<<cellSize<<")"); cellSize=Vector3r::Zero(); }
+		if(cellSize!=Vector3r::Zero()) { LOG_WARN("Periodicity reset when rotating periodic packing (non-zero cellSize={})",cellSize); cellSize=Vector3r::Zero(); }
 		Vector3r mid=midPt(); Quaternionr q(AngleAxisr(angle,axis)); for(Sph& s: pack) s.c=q*(s.c-mid)+mid;
 	}
 	void rotateAroundOrigin(const Quaternionr& rot){
-		if(cellSize!=Vector3r::Zero()){ LOG_WARN("Periodicity reset when rotating periodic packing (non-zero cellSize="<<cellSize<<")"); cellSize=Vector3r::Zero(); }
+		if(cellSize!=Vector3r::Zero()){ LOG_WARN("Periodicity reset when rotating periodic packing (non-zero cellSize={})",cellSize); cellSize=Vector3r::Zero(); }
 		for(Sph& s: pack) s.c=rot*s.c;
 	}
 	void scale(Real scale, bool keepRadius=false);

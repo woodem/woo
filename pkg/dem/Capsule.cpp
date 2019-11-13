@@ -376,7 +376,7 @@ bool Cg2_Facet_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<
 		//cerr<<"[2]";
 		Array2r weights(fcd[0]-touchDist,fcd[1]-touchDist);
 		weights/=weights.sum();
-		// if(weights.maxCoeff()>0) LOG_ERROR("weights are positive but should not be: "<<weights.transpose());
+		// if(weights.maxCoeff()>0) LOG_ERROR("weights are positive but should not be: {}",weights.transpose());
 		normal=(weights[0]*(ccp[0]-ffp[0])+weights[1]*(ccp[1]-ffp[1])).normalized(); // interpolated normal; is this not a nonsense?!
 		#if 0
 			contPt=weights[0]*ccp[0]+weights[1]*ccp[1]; // point on the segment line weighted by distance

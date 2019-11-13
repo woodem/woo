@@ -262,7 +262,7 @@ shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
 
 /* named temporary store */
 void Master::saveTmp(shared_ptr<Object> obj, const string& name, bool quiet){
-	if(memSavedSimulations.count(name)>0 && !quiet){  LOG_INFO("Overwriting in-memory saved simulation "<<name); }
+	if(memSavedSimulations.count(name)>0 && !quiet){  LOG_INFO("Overwriting in-memory saved simulation {}",name); }
 	std::ostringstream oss;
     #ifdef WOO_CEREAL
     	woo::ObjectIO::save<shared_ptr<Object>,cereal::BinaryOutputArchive>(oss,"woo__Object",obj);
@@ -307,7 +307,7 @@ void Master::registerPluginClasses(const char* module, const char* fileAndClasse
 
 void Master::pyRegisterAllClasses(){
 
-	LOG_DEBUG("called with "<<modulePluginClasses.size()<<" module+class pairs.");
+	LOG_DEBUG("called with {} module+class pairs.",modulePluginClasses.size());
 	std::map<std::string,py::object> pyModules;
 	// py::object wooScope=py::import("woo");
 
@@ -353,7 +353,7 @@ void Master::pyRegisterAllClasses(){
 		string name(moduleName.second);
 		shared_ptr<Object> obj;
 		try {
-			LOG_DEBUG("Factoring class "<<name);
+			LOG_DEBUG("Factoring class {}",name);
 			obj=factorClass(name);
 			assert(obj);
 			// needed for Master::childClasses
@@ -454,7 +454,7 @@ void Master::pyTmpToFile(const string& mark, const string& filename){
 	if(boost::algorithm::ends_with(filename,".bz2")) out.push(boost::iostreams::bzip2_compressor());
 	out.push(boost::iostreams::file_sink(filename));
 	if(!out.good()) throw runtime_error("Error while opening file `"+filename+"' for writing.");
-	LOG_INFO("Saving memory-stored '"<<mark<<"' to file "<<filename);
+	LOG_INFO("Saving memory-stored '{}' to file {}",mark,filename);
 	out<<memSavedSimulations[mark];
 }
 
@@ -568,7 +568,7 @@ void Master::usesApi_set(py::object o){
 	usesApi_locations.push_back(to_string(ua)+": "+woo::pyCallerInfo());
 	if(usesApi>0 && ua!=usesApi){
 		LOG_WARN("Updating woo.master.usesApi which was set to different values previously:");
-		for(const auto& l: usesApi_locations) LOG_WARN("  "<<l);
+		for(const auto& l: usesApi_locations) LOG_WARN("  {}",l);
 	}
 	usesApi=ua;
 }
@@ -580,13 +580,13 @@ bool Master::checkApi(int minApi, const string& msg, bool pyWarn) const{
 	if(usesApi==0){
 		const char* m="Script did not set woo.master.usesApi, all functions with changed APIs will pessimistically warn about possible functionality changes. See https://woodem.org/api.html for details.";
 		if(pyWarn){ PyErr_WarnEx(PyExc_FutureWarning,m,/*stacklevel*/1); }
-		else{ LOG_WARN(m); }
+		else{ LOG_WARN("{}",m); }
 		return false;
 	}
 	if(usesApi<minApi){
 		string m("\n"+woo::pyCallerInfo()+":\n   possible API incompatibility:\n   "+msg+"\n   (woo.master.api="+to_string(api)+" > woo.master.usesApi="+to_string(usesApi)+"; this call requires at least minApi="+to_string(minApi)+").\n   See https://woodem.org/api.html#api-"+to_string(minApi)+" for details.");
 		if(pyWarn){ PyErr_WarnEx(PyExc_DeprecationWarning,m.c_str(),/*stacklevel*/1); }
-		else{ LOG_WARN(m); }
+		else{ LOG_WARN("{}",m); }
 		return false;
 	}
 	return true;

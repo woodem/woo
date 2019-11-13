@@ -51,7 +51,7 @@ Real DynDt::nodalCritDtSq(const shared_ptr<Node>& n) const {
 		for(const auto& cn: clump.nodes) nodalStiffAdd(cn,ktrans,krot);
 	};
 	Real ret=Inf;
-	LOG_TRACE("ktrans="<<ktrans.transpose()<<", krot="<<krot.transpose()<<", mass="<<dyn.mass<<", inertia="<<dyn.inertia.transpose());
+	LOG_TRACE("ktrans={}, krot={}, mass={}, inertia={}",ktrans.transpose(),krot.transpose(),dyn.mass,dyn.inertia.transpose());
 	for(int i:{0,1,2}){ if(ktrans[i]!=0 && dyn.mass>0. && !dyn.isBlockedAxisDOF(i,/*rot*/false)) ret=min(ret,dyn.mass/abs(ktrans[i])); }
 	for(int i:{0,1,2}){ if(krot[i]!=0 && dyn.inertia[i]>0. && !dyn.isBlockedAxisDOF(i,/*rot*/true)) ret=min(ret,dyn.inertia[i]/abs(krot[i])); }
 	return 2*ret; // (sqrt(2)*sqrt(ret))^2
@@ -63,8 +63,8 @@ Real DynDt::critDt_stiffness() const {
 	Real ret=Inf;
 	for(const auto& n: field->cast<DemField>().nodes){
 		ret=min(ret,nodalCritDtSq(n));
-		if(ret==0){ LOG_ERROR("DynDt::nodalCriDtSq returning 0 for node at "<<n->pos<<"??"); }
-		if(isnan(ret)){ LOG_ERROR("DynDt::nodalCritDtSq returning nan for node at "<<n->pos<<"??"); }
+		if(ret==0){ LOG_ERROR("DynDt::nodalCriDtSq returning 0 for node at {}??",n->pos); }
+		if(isnan(ret)){ LOG_ERROR("DynDt::nodalCritDtSq returning nan for node at {}??",n->pos); }
 		assert(!isnan(ret));
 	}
 	return sqrt(ret);
@@ -93,17 +93,17 @@ void DynDt::run(){
 	Real crDt=critDt_compute();
 
 	if(isinf(crDt)){
-		if(!dryRun) LOG_INFO("No timestep computed, keeping the current value "<<scene->dt);
+		if(!dryRun) LOG_INFO("No timestep computed, keeping the current value {}",scene->dt);
 		return;
 	}
 	int nSteps=scene->step-stepPrev;
 	Real maxNewDt=scene->dt*pown(1.+maxRelInc,nSteps);
-	LOG_DEBUG("dt="<<scene->dt<<", crDt="<<crDt<<" ("<<crDt*scene->dtSafety<<" with dtSafety="<<scene->dtSafety<<"), maxNewDt="<<maxNewDt<<" with exponent "<<1.+maxRelInc<<"^"<<nSteps<<"="<<pown(1.+maxRelInc,nSteps));
+	LOG_DEBUG("dt={}, crDt={} ({} with dtSafety={}), maxNewDt={} with exponent {}^{}={}",scene->dt,crDt,crDt*scene->dtSafety,scene->dtSafety,maxNewDt,1.+maxRelInc,nSteps,pown(1.+maxRelInc,nSteps));
 	Real nextDt=min(crDt*scene->dtSafety,maxNewDt);
 	if(!dryRun){
 		// don't bother with diagnostics if there is no change
 		if(nextDt!=scene->dt){
-			LOG_INFO("Timestep "<<scene->dt<<" -> "<<nextDt);
+			LOG_INFO("Timestep {} -> {}",scene->dt,nextDt);
 			this->dt=NaN; // only meaningful with dryRun
 			scene->nextDt=nextDt;
 		}

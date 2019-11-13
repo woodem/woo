@@ -33,10 +33,10 @@ WOO_IMPL_LOGGER(ClusterAnalysis);
 
 void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int level){
 	if(ids.size()<2){
-		LOG_TRACE("single particle, nothing to do @ conn "<<level);
+		LOG_TRACE("single particle, nothing to do @ conn {}",level);
 		return;
 	}
-	LOG_WARN("== conn "<<level<<", "<<ids.size()<<" particles ==");
+	LOG_WARN("== conn {}, {} particles ==",level,ids.size());
 	// two-way mapping:
 	// find particle id from vertex number i: ids[i]; complexity O(1)
 	// find vertex number i from particle id: id2i[id]; complexity O(log n)
@@ -55,12 +55,12 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 		> Graph;
 	//boost::property<boost::vertex_index_t,int>,boost::property<boost::edge_index_t,int>>> Graph;
 	Graph conn(ids.size());
-	LOG_TRACE("Conn "<<level<<", "<<ids.size()<<" vertices.");
+	LOG_TRACE("Conn {}, {} vertices.",level,ids.size());
 
 	for(size_t i=0; i<ids.size(); i++){
 		assert((*dem->particles)[i]);
 		const auto& p((*dem->particles)[ids[i]]);
-		// LOG_WARN("#"<<p->id<<": "<<p->shape->nodes[0]->pos<<" "<<box.contains(p->shape->nodes[0]->pos)<<" || "<<box.min()<<" --- "<<box.max()<<" "<<box.isEmpty());
+		// LOG_WARN("#{}: {} {} || {} --- {} {}",p->id,p->shape->nodes[0]->pos,box.contains(p->shape->nodes[0]->pos),box.min(),box.max(),box.isEmpty());
 		id2i[ids[i]]=i;
 		for(const auto& idCon: p->contacts){
 			if(!idCon.second->isReal()) continue;
@@ -71,7 +71,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 			const auto& iOther=id2i.find(idCon.first);
 			if(iOther==id2i.end()) continue;
 			boost::add_edge(i,iOther->second,EdgeWeightProp(1),conn);
-			LOG_TRACE("   + "<<i<<" ⇔ "<<iOther->second);
+			LOG_TRACE("   + {} ⇔ {}",i,iOther->second);
 		}
 	}
 	if(level>0){
@@ -97,11 +97,11 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 		int mincut=-1;
 		do{
 			auto parities=boost::make_one_bit_color_map(num_vertices(conn),boost::get(boost::vertex_index,conn));
-			LOG_TRACE("  --- mincut, conn "<<level);
+			LOG_TRACE("  --- mincut, conn {}",level);
 			mincut=boost::stoer_wagner_min_cut(conn,boost::get(boost::edge_weight,conn),boost::parity_map(parities));
 			if(mincut<level){
 				//throw std::runtime_error
-				LOG_ERROR("ClusterAnalysis: Stoer-Wagner min-cut on contact graph reported minimum cut with weight "+to_string(mincut)+" but it should not be smaller than current connectivity level "+to_string(level));
+				LOG_ERROR("ClusterAnalysis: Stoer-Wagner min-cut on contact graph reported minimum cut with weight {}, but it should not be smaller than current connectivity level {}",mincut,level);
 				return;
 			}
 			if(mincut==level){
@@ -116,7 +116,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 				for(auto E=eds.first; E!=eds.second; ++E){
 					auto a(boost::source(*E,conn)),b(boost::target(*E,conn));
 					if(boost::get(parities,a)!=boost::get(parities,b)){
-						LOG_DEBUG("   | "<<a<<" ⇔ "<<b<<", weight "<<mincut<<(ie==0?" (edge weight bumped)":""));
+						LOG_DEBUG("   | {} ⇔ {}, weight {}{}",a,b,mincut,(ie==0?" (edge weight bumped)":""));
 						// only change weight for the first edge in the cut
 						if (ie==0) { boost::get(boost::edge_weight,conn)[*E]=2; ie++; };
 						// but remember all of them for later removal
@@ -125,9 +125,9 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 				}
 			}
 		} while(mincut==level);
-		LOG_TRACE("  --- no more cuts (weight "<<mincut<<" for conn "<<level<<")");
+		LOG_TRACE("  --- no more cuts (weight {} for conn {})",mincut,level);
 		for(const auto& ab: cuts){
-			LOG_TRACE("  - "<<ab.first<<" ⇔ "<<ab.second);
+			LOG_TRACE("  - {} ⇔ {}",ab.first,ab.second);
 			boost::remove_edge(ab.first,ab.second,conn);
 		}
 	}
@@ -135,7 +135,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 	// connected components analysis on assembled graph
 	vector<size_t> id2small(boost::num_vertices(conn));
 	size_t smallNum=boost::connected_components(conn,id2small.data());
-	LOG_TRACE("conn "<<level<<": "<<smallNum<<" connected components.");
+	LOG_TRACE("conn {}: {} connected components.",level,smallNum);
 	assert(id2small.size()==ids.size());
 	// count particles in each cluster
 	vector<int> smallSizes(smallNum,0);
@@ -151,7 +151,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 		small2big[small]=big2small.size();
 		big2small.push_back(small);
 	}
-	LOG_TRACE("conn "<<level<<": "<<big2small.size()<<" conn components >= clustMin (="<<clustMin<<").");
+	LOG_TRACE("conn {}: {} conn components >= clustMin (={}).",level,big2small.size(),clustMin);
 
 	// find existing labels
 	vector<int> exBig(small2big.size(),-1);
@@ -165,7 +165,7 @@ void ClusterAnalysis::analyzeParticles(const vector<Particle::id_t>& ids, int le
 			if((int)ll.size()<=level || exBig[label]<0) continue;
 			// existing label mismatch, overwrite older value
 			if(ll[level]!=exBig[label]){
-				LOG_WARN("#"<<p->id<<": cluster level "<<level<<", label "<<exBig[label]<<" → "<<ll[level]);
+				LOG_WARN("#{}: cluster level {}, label {} → {}",p->id,level,exBig[label],ll[level]);
 				exBig[label]=ll[level];
 			}
 		}

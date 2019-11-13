@@ -414,7 +414,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 			}
 			int32_t numFaces;
 			in.read(reinterpret_cast<char*>(&numFaces),sizeof(int32_t));
-			LOG_TRACE("binary STL: number of faces "<<numFaces);
+			LOG_TRACE("binary STL: number of faces {}",numFaces);
 			struct bin_face{ // 50 bytes total
 				float normal[3], v[9];
 				uint16_t color;
@@ -425,12 +425,11 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 			for(int i=0; i<numFaces; i++){
 				in.read(reinterpret_cast<char*>(&faces[i]),50);
 				const auto& f(faces[i]);
-				LOG_TRACE("binary STL: face #"<<i<<" @ "<<(int)in.tellg()-50<<": normal ("<<f.normal[0]<<", "<<f.normal[1]<<", "<<f.normal[2]<<"), "
-					" vertex 0 ("<<f.v[0]<<", "<<f.v[1]<<", "<<f.v[2]<<"), "
-					" vertex 1 ("<<f.v[3]<<", "<<f.v[4]<<", "<<f.v[5]<<"), "
-					" vertex 2 ("<<f.v[6]<<", "<<f.v[7]<<", "<<f.v[8]<<"), "
-					" color "<<f.color
-				);
+				LOG_TRACE("binary STL: face #{} @ {}: normal ({}, {}, {})",i,(int)in.tellg()-50,f.normal[0],f.normal[1],f.normal[2]);
+				LOG_TRACE("  vertex 0 ({}, {}, {})",f.v[0],f.v[1],f.v[2]);
+				LOG_TRACE("  vertex 1 ({}, {}, {})",f.v[3],f.v[4],f.v[5]);
+				LOG_TRACE("  vertex 2 ({}, {}, {})",f.v[6],f.v[7],f.v[8]);
+				LOG_TRACE("  color {}",f.color);
 				for(int j:{0,3,6}) vertices.push_back(ori*(Vector3r(f.v[j+0],f.v[j+1],f.v[j+2])*scale+shift));
 				if(readColors && f.color!=0) LOG_WARN("STL: face #"+to_string(i)+": color not imported (not implemented yet).");
 			}
@@ -496,7 +495,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 		locator->InitPointInsertion(points,bounds);
 	#endif
 
-	LOG_TRACE("Vertex merge threshold is "<<threshold);
+	LOG_TRACE("Vertex merge threshold is {}",threshold);
 	vector<shared_ptr<Node>> nodes;
 	for(size_t v0=0; v0<vertices.size(); v0+=3){
 		size_t vIx[3];
@@ -536,7 +535,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 				nodes.push_back(n);
 				#if 0 and defined(WOO_VTK)
 					//QQ if(v0>0){ // don't add points for the first face, which were added to the locator above already
-						LOG_TRACE("Face #"<<v0/3<<"; new vertex "<<n->pos<<" (number of vertices: "<<points->GetNumberOfPoints()<<")");
+						LOG_TRACE("Face #{}; new vertex {} (number of vertices: {})",v0/3,n->pos,points->GetNumberOfPoints());
 						__attribute__((unused)) vtkIdType id=locator->InsertNextPoint(n->pos.data());
 						assert(id==nodes.size()-1); // assure same index of node and point
 					//QQ }
@@ -546,10 +545,10 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 		}
 		// degenerate facet (due to tolerance), don't add
 		if(vIx[0]==vIx[1] || vIx[1]==vIx[2] || vIx[2]==vIx[0]){
-			LOG_TRACE("STL: Face#"<<v0/3<<" is degenerate (vertex indices "<<vIx[0]<<","<<vIx[1]<<","<<vIx[2]<<"), skipping.");
+			LOG_TRACE("STL: Face#{} is degenerate (vertex indices {},{},{}), skipping.",v0/3,vIx[0],vIx[1],vIx[2]);
 			continue;
 		}
-		LOG_TRACE("STL: Face #"<<v0/3<<", node indices "<<vIx[0]<<(isNew[0]?"*":"")<<", "<<vIx[1]<<(isNew[1]?"*":"")<<", "<<vIx[2]<<(isNew[2]?"*":"")<<" ("<<nodes.size()<<" nodes)");
+		LOG_TRACE("STL: Face #{}, node indices {}{}, {}{}, {}{} ({} nodes)",v0/3,vIx[0],(isNew[0]?"*":""),vIx[1],(isNew[1]?"*":""),vIx[2],(isNew[2]?"*":""),nodes.size());
 		// create facet
 		shared_ptr<Facet> facet;
 		if(!flex) facet=make_shared<Facet>();

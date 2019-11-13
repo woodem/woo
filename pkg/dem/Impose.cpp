@@ -270,9 +270,9 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 					local["prevTime"]=prevTimeOrig;
 					py::exec(hooks[hookNo].c_str(),global,local);
 			} catch (py::error_already_set& e){
-					LOG_ERROR("Python error from "<<this->pyStr()<<".hook["<<hookNo<<"]: "<<hooks[hookNo]);
-					LOG_ERROR("Node "<<n->pyStr()<<", time "<<scene->time<<". Error follows.");
-					LOG_ERROR(parsePythonException_gilLocked());
+					LOG_ERROR("Python error from {}.hook[{}]: {}",this->pyStr(),hookNo,hooks[hookNo]);
+					LOG_ERROR("Node {}, time {}. Error follows.",n->pyStr(),scene->time);
+					LOG_ERROR("{}",parsePythonException_gilLocked());
 					//\n"<<parsePythonException_gilLocked());
 			}
 		}

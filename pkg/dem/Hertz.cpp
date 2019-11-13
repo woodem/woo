@@ -72,7 +72,7 @@ void Cp2_HertzMat_HertzPhys::go(const shared_ptr<Material>& m1, const shared_ptr
 		// no damping at all
 		ph.alpha_sqrtMK=0.0;
 	}
-	LOG_DEBUG("K="<<ph.K<<", G="<<G<<", nu="<<nu<<", R="<<ph.R<<", kn0="<<kn0<<", kt0="<<ph.kt0<<", tanPhi="<<ph.tanPhi<<", alpha_sqrtMK="<<ph.alpha_sqrtMK);
+	LOG_DEBUG("K={}, G={}, nu={}, R={}, kn0={}, kt0={}, tanPhi={}, alpha_sqrtMK={}",ph.K,G,nu,ph.R,kn0,ph.kt0,ph.tanPhi,ph.alpha_sqrtMK);
 }
 
 
@@ -204,7 +204,7 @@ bool Law2_L6Geom_HertzPhys_DMT::go(const shared_ptr<CGeom>& cg, const shared_ptr
 		// skip if in tension, since we would get NaN from delta^(2/5)
 		if(g.uN<0) scene->energy->add(normalElasticEnergy(kn0,-g.uN)+0.5*Ft.squaredNorm()/ph.kt,"elast",elastPotIx,EnergyTracker::IsResettable);
 	}
-	LOG_DEBUG("uN="<<g.uN<<", Fn="<<Fn<<"; duT/dt="<<velT[0]<<","<<velT[1]<<", Ft="<<Ft[0]<<","<<Ft[1]);
+	LOG_DEBUG("uN={}, Fn={}; duT/dt={},{}, Ft={},{}",g.uN,Fn,velT[0],velT[1],Ft[0],Ft[1]);
 	return true;
 }
 

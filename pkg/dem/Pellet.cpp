@@ -37,7 +37,7 @@ void Law2_L6Geom_PelletPhys_Pellet::tryAddDissipState(int what, Real E, const sh
 		switch(what){
 			case DISSIP_NORM_PLAST: pms.normPlast+=E/2.; break; 
 			case DISSIP_SHEAR_PLAST: pms.shearPlast+=E/2.; break; 
-			default: LOG_FATAL("what="<<what<<"??"); throw std::logic_error("Invalid what value (programming error)");
+			default: LOG_FATAL("what={}??",what); throw std::logic_error("Invalid what value (programming error)");
 		}
 	}
 }

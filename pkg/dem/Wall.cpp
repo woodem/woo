@@ -151,7 +151,7 @@ bool Cg2_Wall_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<Sh
 		// rotate if the wall is rotated
 		if(wall.nodes[0]->ori!=Quaternionr::Identity()){
 			AngleAxisr aa(wall.nodes[0]->ori);
-			if(abs(aa.axis()[ax1])>1e-9 || abs(aa.axis()[ax2])>1e-9) LOG_ERROR("Rotation of wall does not respect its Wall.axis="<<wall.axis<<": rotated around "<<aa.axis()<<" by "<<aa.angle()<<" rad.");
+			if(abs(aa.axis()[ax1])>1e-9 || abs(aa.axis()[ax2])>1e-9) LOG_ERROR("Rotation of wall does not respect its Wall.axis={}: rotated around {} by {} rad.",wall.axis,aa.axis(),aa.angle());
 			glRotatef(aa.angle()*(180./M_PI),aa.axis()[0],aa.axis()[1],aa.axis()[2]);
 		}
 		//glColor3v(CompUtils::mapColor(shape->getBaseColor()));

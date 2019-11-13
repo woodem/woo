@@ -174,18 +174,18 @@ void LabelMapper::__setitem__woo(const string& label, const shared_ptr<Object>& 
 				assert(wooMap.find(label)!=wooMap.end());
 				assert(type==LABEL_PLAIN); // such a label should not have been created at all
 				if(wooMap[label].get()!=o.get() && !writable){
-					LOG_WARN("Label '"<<label<<"' overwrites "<<wooMap[label]->pyStr()<<" with "<<o->pyStr());
+					LOG_WARN("Label '{}' overwrites {} with {}",label,wooMap[label]->pyStr(),o->pyStr());
 				}
 				break;
 			case IN_PY:
 				assert(pyMap.find(label)!=pyMap.end());
 				assert(type==LABEL_PLAIN);
-				LOG_WARN("Label '"<<label<<"' changes type from pure python object to woo.Object, overwriting "<<pyAsStr(pyMap[label])<<" with "<<o->pyStr());
+				LOG_WARN("Label '{}' changes type from pure python object to woo.Object, overwriting {} with {}",label,pyAsStr(pyMap[label]),o->pyStr());
 				pyMap.erase(label);
 				break;
 			case IN_WOO_SEQ:
 				assert(wooSeqMap.find(label)!=wooSeqMap.end());
-				LOG_WARN("Label '"<<label<<"' changes types from sequence of woo.Object to woo.Object, deleting "<<wooSeqMap.find(label)->second.size()<<" items in the sequence.");
+				LOG_WARN("Label '{}' changes types from sequence of woo.Object to woo.Object, deleting {} items in the sequence.",label,wooSeqMap.find(label)->second.size());
 				wooSeqMap.erase(label);
 				break;
 			/* NOWEHERE is OK */
@@ -196,11 +196,11 @@ void LabelMapper::__setitem__woo(const string& label, const shared_ptr<Object>& 
 		where=whereIs(lab0); // find base label again
 		switch(where){
 			case IN_WOO:
-				LOG_WARN("Sequence label '"<<lab0<<"["<<index<<"]' creates a new sequence, deleting '"<<lab0<<"' with "<<wooMap[lab0]->pyStr());
+				LOG_WARN("Sequence label '{}[{}]' creates a new sequence, deleting '{}' with {}",lab0,index,lab0,wooMap[lab0]->pyStr());
 				wooMap.erase(lab0);
 				break;
 			case IN_PY:
-				LOG_WARN("Sequence label '"<<lab0<<"["<<index<<"]' creates a new sequence, deleting '"<<lab0<<"' with "<<pyAsStr(pyMap[lab0]));
+				LOG_WARN("Sequence label '{}[{}]' creates a new sequence, deleting '{}' with {}",lab0,index,lab0,pyAsStr(pyMap[lab0]));
 				pyMap.erase(lab0);
 				break;
 			case NOWHERE: ;
@@ -237,7 +237,7 @@ void LabelMapper::__setitem__wooSeq(const string& label, const vector<shared_ptr
 			wooSeqMap.erase(label);
 			break;
 	};
-	if(where!=NOWHERE && (!writable || where!=IN_WOO_SEQ)) LOG_WARN("Label '"<<label<<"' overwrites "<<old<<" with a new sequence of "<<oo.size()<<" woo.Object's.");
+	if(where!=NOWHERE && (!writable || where!=IN_WOO_SEQ)) LOG_WARN("Label '{}' overwrites {} with a new sequence of {} woo.Object's.",label,old,oo.size());
 	wooSeqMap[label]=oo;
 };
 
@@ -251,15 +251,15 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 	if(type==LABEL_PLAIN){
 		switch(where){
 			case IN_WOO:
-				LOG_WARN("Label '"<<label<<" changes type from woo.Object to pure-python object, overwriting "<<wooMap[label]->pyStr()<<" with "<<pyAsStr(o));
+				LOG_WARN("Label '{} changes type from woo.Object to pure-python object, overwriting {} with {}",label,wooMap[label]->pyStr(),pyAsStr(o));
 				wooMap.erase(label);
 				break;
 			case IN_PY:
-				if(o.ptr()!=pyMap[label].ptr() && !writable) LOG_WARN("Label '"<<label<<"' overwrites "<<pyAsStr(pyMap[label])<<" with "<<pyAsStr(o));
+				if(o.ptr()!=pyMap[label].ptr() && !writable) LOG_WARN("Label '{}' overwrites {} with {}",label,pyAsStr(pyMap[label]),pyAsStr(o));
 				pyMap.erase(label); // if only replaced later, crashes python (reference counting problem?)
 				break;
 			case IN_WOO_SEQ:
-				LOG_WARN("Label '"<<label<<"' changes type from sequence of woo.Object to pure-python object, deleting "<<wooSeqMap.find(label)->second.size()<<" items in the sequence.");
+				LOG_WARN("Label '{}' changes type from sequence of woo.Object to pure-python object, deleting {} items in the sequence.",label,wooSeqMap.find(label)->second.size());
 				wooSeqMap.erase(label);
 			// NOWHERE is OK
 		};
@@ -269,15 +269,15 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 		where=whereIs(lab0); // find base label again
 		switch(where){
 			case IN_WOO:
-				LOG_WARN("Sequence label '"<<lab0<<"["<<index<<"]' overwrites '"<<lab0<<"' containing "<<wooMap[lab0]->pyStr()<<" with a new python list");
+				LOG_WARN("Sequence label '{}[{}]' overwrites '{}' containing {} with a new python list",lab0,index,lab0,wooMap[lab0]->pyStr());
 				wooMap.erase(lab0);
 				break;
 			case IN_WOO_SEQ:
-				LOG_WARN("Sequence label '"<<lab0<<"["<<index<<"]' overwrites '"<<lab0<<"' containing "<<wooMap[lab0]->pyStr()<<" with a new python list");
+				LOG_WARN("Sequence label '{}[{}]' overwrites '{}' containing {} with a new python list",lab0,index,lab0,wooMap[lab0]->pyStr());
 				break;
 			case IN_PY:
 				if(!py::extract<py::list>(pyMap[lab0]).check()){
-					LOG_WARN("Sequence label '"<<lab0<<"["<<index<<"]' overwrites non-list python object "<<pyAsStr(pyMap[lab0]));
+					LOG_WARN("Sequence label '{}[{}]' overwrites non-list python object {}",lab0,index,pyAsStr(pyMap[lab0]));
 					pyMap[lab0]=py::list();
 				} else {
 				}
@@ -289,7 +289,7 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 		py::list lst=py::extract<py::list>(pyMap[lab0])();
 		// extend the list so that it is long enough
 		while(py::len(lst)<index+1) lst.append(py::none());
-		if(!py::object(lst[index]).is_none() && !writable) LOG_WARN("Label '"<<lab0<<"["<<index<<"]' overwrites old item "<<pyAsStr(lst[index])<<" with "<<pyAsStr(o));
+		if(!py::object(lst[index]).is_none() && !writable) LOG_WARN("Label '{}[{}]' overwrites old item {} with {}",lab0,index,pyAsStr(lst[index]),pyAsStr(o));
 		lst[index]=o;
 	}
 }

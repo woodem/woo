@@ -56,7 +56,7 @@ void Membrane::setRefConf(){
 	for(int i:{0,1,2}){
 		// facet node orientation minus vertex node orientation, in local frame (read backwards)
 		refRot[i]=nodes[i]->ori.conjugate()*node->ori;
-		//LOG_WARN("refRot["<<i<<"]="<<AngleAxisr(refRot[i]).angle()<<"/"<<AngleAxisr(refRot[i]).axis().transpose());
+		//LOG_WARN("refRot[{}]={}/{}",i,AngleAxisr(refRot[i]).angle(),AngleAxisr(refRot[i]).axis().transpose());
 	};
 	// set displacements to zero
 	uXy=phiXy=Vector6r::Zero();
@@ -307,7 +307,7 @@ void Membrane::updateNode(){
 		Vector3r xy0=ori0.conjugate()*(nodes[i]->pos-node->pos);
 		#ifdef MEMBRANE_DEBUG_ROT
 			if(xy0[2]>1e-5*(max(abs(xy0[0]),abs(xy0[1])))){
-				LOG_ERROR("z-coordinate is not zero for node "<<i<<": ori0="<<AngleAxisr(ori0).axis()<<" !"<<AngleAxisr(ori0).angle()<<", xy0="<<xy0<<", position in global-oriented centroid-origin CS "<<(nodes[i]->pos-node->pos).transpose());
+				LOG_ERROR("z-coordinate is not zero for node {}: ori0={} !{}, xy0={}, position in global-oriented centroid-origin CS {}",i,AngleAxisr(ori0).axis(),AngleAxisr(ori0).angle(),xy0,(nodes[i]->pos-node->pos).transpose());
 			}
 		#else
 			assert(xy0[2]<1e-5*(max(abs(xy0[0]),abs(xy0[1])))); // z-coord should be zero
@@ -330,7 +330,7 @@ void Membrane::computeNodalDisplacements(Real dt, bool rotIncr){
 		// relative tolerance of 1e-6 was too little, in some cases?!
 		#ifdef MEMBRANE_DEBUG_ROT
 			if(xy[2]>1e-5*(max(abs(xy[0]),abs(xy[1])))){
-				LOG_ERROR("local z-coordinate is not zero for node "<<i<<": node->ori="<<AngleAxisr(node->ori).axis()<<" !"<<AngleAxisr(node->ori).angle()<<", xy="<<xy<<", position in global-oriented centroid-origin CS "<<(nodes[i]->pos-node->pos).transpose());
+				LOG_ERROR("local z-coordinate is not zero for node {}: node->ori={} !{}, xy={}, position in global-oriented centroid-origin CS {}",i,AngleAxisr(node->ori).axis(),AngleAxisr(node->ori).angle(),xy,(nodes[i]->pos-node->pos).transpose());
 			}
 		#else
 			assert(xy[2]<1e-5*(max(abs(xy[0]),abs(xy[1]))));
@@ -358,7 +358,7 @@ void Membrane::computeNodalDisplacements(Real dt, bool rotIncr){
 			#ifdef MEMBRANE_DEBUG_ROT
 				AngleAxisr rr(refRot[i]);
 				AngleAxisr cr(nodes[i]->ori.conjugate()*node->ori);
-				LOG_TRACE("node "<<i<<"\n   refRot : "<<rr.axis()<<" !"<<rr.angle()<<"\n   currRot: "<<cr.axis()<<" !"<<cr.angle()<<"\n   diffRot: "<<aa.axis()<<" !"<<aa.angle());
+				LOG_TRACE("node {}\n   refRot : {} !{}\n   currRot: {} !{}\n   diffRot: {} !{}",i,rr.axis(),rr.angle(),cr.axis(),cr.angle(),aa.axis(),aa.angle());
 				drill[i]=rot[2];
 				currRot[i]=nodes[i]->ori.conjugate()*node->ori;
 			#endif
@@ -407,8 +407,8 @@ void In2_Membrane_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Mat
 	} else {
 		Fdkt=Vector9r::Zero();
 	}
-	LOG_TRACE("CST: "<<Fcst.transpose())
-	LOG_TRACE("DKT: "<<Fdkt.transpose())
+	LOG_TRACE("CST: {}",Fcst.transpose());
+	LOG_TRACE("DKT: {}",Fdkt.transpose());
 	// surface load, if any
 	Real surfLoadForce=0.;
 	if(!isnan(ff.surfLoad) && ff.surfLoad!=0.){ surfLoadForce=(1/3.)*ff.getArea()*ff.surfLoad; }
@@ -417,8 +417,8 @@ void In2_Membrane_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Mat
 		Vector3r Fl=Vector3r(Fcst[2*i],Fcst[2*i+1],Fdkt[3*i]+surfLoadForce);
 		Vector3r Tl=Vector3r(Fdkt[3*i+1],Fdkt[3*i+2],0);
 		ff.nodes[i]->getData<DemData>().addForceTorque(ff.node->ori*Fl,ff.node->ori*Tl);
-		LOG_TRACE("  "<<i<<" F: "<<Fl.transpose()<<" \t| "<<ff.node->ori*Fl);
-		LOG_TRACE("  "<<i<<" T: "<<Tl.transpose()<<" \t| "<<ff.node->ori*Tl);
+		LOG_TRACE("  {} F: {} \t| {}",i,Fl.transpose(),ff.node->ori*Fl);
+		LOG_TRACE("  {} T: {} \t| {}",i,Tl.transpose(),ff.node->ori*Tl);
 	}
 }
 

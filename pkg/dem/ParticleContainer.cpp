@@ -40,7 +40,7 @@ Particle::id_t ParticleContainer::findFreeId(){
 		#ifdef WOO_OPENMP
 			assert(subDom<(int)subDomains.size());
 			id_t max=subDomains[subDom].size();
-			// LOG_TRACE("subDom="<<subDom<<", max="<<max);
+			// LOG_TRACE("subDom={}, max={}",subDom,max);
 			id_t& low(subDomainsLowestFree[subDom]);
 			for(; low<max; low++){
 				if(!(bool)subDomains[subDom][low]) return low;
@@ -132,10 +132,10 @@ bool ParticleContainer::remove(Particle::id_t id){
 				if(subDom<(int)subDomains.size() && localId<(id_t)subDomains[subDom].size() && subDomains[subDom][localId]==b){
 					subDomainsLowestFree[subDom]=min(subDomainsLowestFree[subDom],localId);
 				} else {
-					LOG_FATAL("Particle::subDomId inconsistency detected for parts #"<<id<<" while erasing (cross thumbs)!");
-					if(subDom>=(int)subDomains.size()){ LOG_FATAL("\tsubDomain="<<subDom<<" (max "<<subDomains.size()-1<<")"); }
-					else if(localId>=(id_t)subDomains[subDom].size()){ LOG_FATAL("\tsubDomain="<<subDom<<", localId="<<localId<<" (max "<<subDomains[subDom].size()-1<<")"); }
-					else if(subDomains[subDom][localId]!=b) { LOG_FATAL("\tsubDomains="<<subDom<<", localId="<<localId<<"; erasing #"<<id<<", subDomain record points to #"<<subDomains[subDom][localId]->id<<"."); }
+					LOG_FATAL("Particle::subDomId inconsistency detected for parts #{} while erasing (cross thumbs)!",id);
+					if(subDom>=(int)subDomains.size()){ LOG_FATAL("\tsubDomain={} (max {})",subDom,subDomains.size()-1); }
+					else if(localId>=(id_t)subDomains[subDom].size()){ LOG_FATAL("\tsubDomain={}, localId={} (max {})",subDom,localId,subDomains[subDom].size()-1); }
+					else if(subDomains[subDom][localId]!=b) { LOG_FATAL("\tsubDomains={}, localId={}; erasing #{}, subDomain record points to #{}.",subDom,localId,id,subDomains[subDom][localId]->id); }
 				}
 			}
 		#else
@@ -256,11 +256,11 @@ void ParticleContainer::pyRemask(vector<id_t> ids, int mask, bool visible, bool 
 	if(removeOverlapping && !parts.empty()){
 		list<id_t> toRemove;
 		for(const auto& p2: *this){
-			if(!p2->shape || !p2->shape->bound){ LOG_DEBUG("#"<<p2->id<<" has no shape/bound, skipped for overlap check."); continue; }
+			if(!p2->shape || !p2->shape->bound){ LOG_DEBUG("#{} has no shape/bound, skipped for overlap check.",p2->id); continue; }
 			AlignedBox3r b2(p2->shape->bound->min,p2->shape->bound->max);
 			for(id_t id: ids){
 				const auto& p=(*this)[id];
-				if(!p->shape || !p->shape->bound){ LOG_DEBUG("#"<<p2->id<<" (being remasked) has no shape/bound, skipped for overlap check."); continue; }
+				if(!p->shape || !p->shape->bound){ LOG_DEBUG("#{} (being remasked) has no shape/bound, skipped for overlap check.",p2->id); continue; }
 				AlignedBox3r b1(p->shape->bound->min,p->shape->bound->max);
 				//cerr<<"distance ##"<<id<<"+"<<p2->id<<" is "<<b1.exteriorDistance(b2)<<endl;
 				if(b1.exteriorDistance(b2)<=0 && Collider::mayCollide(dem,p2,p)) toRemove.push_back(p2->id);

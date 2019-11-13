@@ -127,7 +127,7 @@ void Cg2_Any_Any_L6Geom__Base::handleSpheresLikeContact(const shared_ptr<Contact
 			currTrsf.col(2)=currTrsf.col(0).cross(currTrsf.col(1)); // normalized automatically
 			#ifdef WOO_DEBUG
 				if(abs(currTrsf.determinant()-1)>.05){
-					LOG_ERROR("##"<<C->leakPA()->id<<"+"<<C->leakPB()->id<<", |trsf|="<<currTrsf.determinant());
+					LOG_ERROR("##{}+{}, |trsf|={}",C->leakPA()->id,C->leakPB()->id,currTrsf.determinant());
 					g.trsf=currTrsf;
 					throw runtime_error("Transformation matrix far from orthonormal.");
 				}

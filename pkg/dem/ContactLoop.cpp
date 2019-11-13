@@ -170,7 +170,7 @@ void ContactLoop::run(){
 
 		CONTACTLOOP_CHECKPOINT("geom");
 		if(!geomCreated){
-			if(/* has both geo and phy */C->isReal()) LOG_ERROR("CGeomFunctor "<<geoDisp->getClassName()<<" did not update existing contact ##"<<pA->id<<"+"<<pB->id);
+			if(/* has both geo and phy */C->isReal()) LOG_ERROR("CGeomFunctor {} did not update existing contact ##{}+{}",geoDisp->getClassName(),pA->id,pB->id);
 			continue;
 		}
 
@@ -203,7 +203,7 @@ void ContactLoop::run(){
 					// if(sh->nodes.size()!=1) continue;
 					#if 0
 						for(size_t i=0; i<sh->nodes.size(); i++){
-							if((sh->nodes[i]->getData<DemData>().flags&DemData::DOF_ALL)!=DemData::DOF_ALL) LOG_WARN("Multinodal #"<<particle->id<<" has free DOFs, but force will not be applied; set ContactLoop.applyForces=False and use IntraForce(...) dispatcher instead.");
+							if((sh->nodes[i]->getData<DemData>().flags&DemData::DOF_ALL)!=DemData::DOF_ALL) LOG_WARN("Multinodal #{} has free DOFs, but force will not be applied; set ContactLoop.applyForces=False and use IntraForce(...) dispatcher instead.",particle->id);
 						}
 					#endif
 					Vector3r F,T,xc;

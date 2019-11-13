@@ -100,7 +100,7 @@ bool ContactContainer::remove(shared_ptr<Contact> c, bool threadSafe){
 					// check that the particle really is not in dem-particles
 					if(((long)dem->particles->size()<=id2 || p.get()!=(*dem->particles)[id2].get())) return false;
 					// if the particle is still there, but not the contact, we've a problem somewhere
-					LOG_FATAL("Contact ##"<<id<<"+"<<id2<<" vanished from particle #"<<id<<"!");
+					LOG_FATAL("Contact ##{}+{} vanished from particle #{}!",id,id2,id);
 					abort();
 				}
 				return false;

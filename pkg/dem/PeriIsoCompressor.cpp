@@ -24,7 +24,7 @@ void PeriIsoCompressor::run(){
 			const Bound& bv=*((*dem->particles)[0]->shape->bound);
 			const Vector3r sz=bv.max-bv.min;
 			charLen=(sz[0]+sz[1]+sz[2])/3.;
-			LOG_INFO("No charLen defined, taking avg bbox size of body #0 = "<<charLen);
+			LOG_INFO("No charLen defined, taking avg bbox size of body #0 = {}",charLen);
 		} else { LOG_FATAL("No charLen defined and body #0 does not exist has no bound"); throw; }
 	}
 	Real maxDisplPerStep=2e-3*charLen;// this should be tunable somehow…
@@ -74,10 +74,10 @@ void PeriIsoCompressor::run(){
 			// sigmaGoal reached and packing stable
 			if(state==stresses.size()){ // no next stress to go for
 				LOG_INFO("Finished");
-				if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: "<<doneHook); Engine::runPy("PeriIsoCompressor",doneHook); }
-			} else { LOG_INFO("Loaded to "<<sigmaGoal<<" done, going to "<<stresses[state]<<" now"); }
+				if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: {}",doneHook); Engine::runPy("PeriIsoCompressor",doneHook); }
+			} else { LOG_INFO("Loaded to {} done, going to {} now",sigmaGoal,stresses[state]); }
 		} else {
-			if((step%globalUpdateInt)==0){ LOG_DEBUG("Stress="<<sigma<<", goal="<<sigmaGoal<<", unbalanced="<<currUnbalanced); }
+			if((step%globalUpdateInt)==0){ LOG_DEBUG("Stress={}, goal={}, unbalanced={}",sigma,sigmaGoal,currUnbalanced); }
 		}
 	} else {
 		// currUnbalanced=NaN; // if stresses not ok, don't report currUnbalanced as it was not computed.
@@ -123,17 +123,17 @@ void WeirdTriaxControl::run(){
 			assert(mass>0);//user set
 			Real dampFactor=1-growDamping*Mathr::Sign(strain_rate*(goal[axis]-stress(axis,axis)));
 			strain_rate+=dampFactor*scene->dt*(goal[axis]-stress(axis,axis))/mass;
-			LOG_TRACE(axis<<": stress="<<stress(axis,axis)<<", goal="<<goal[axis]<<", gradV="<<strain_rate);
+			LOG_TRACE("{}: stress={}, goal={}, gradV={}",axis,stress(axis,axis),goal[axis],strain_rate);
 		} else {
 			// control strain, see "true strain" definition here http://en.wikipedia.org/wiki/Finite_strain_theory
 			strain_rate=(exp(goal[axis]-strain[axis])-1)/scene->dt;
-			LOG_TRACE ( axis<<": strain="<<strain[axis]<<", goal="<<goal[axis]<<", cellGrow="<<strain_rate*scene->dt);
+			LOG_TRACE("{}: strain={}, goal={}, cellGrow={}",axis,strain[axis],goal[axis],strain_rate*scene->dt);
 		}
 		// limit maximum strain rate
 		if (abs(strain_rate)>maxStrainRate[axis]) strain_rate=Mathr::Sign(strain_rate)*maxStrainRate[axis];
 
 		// crude way of predicting stress, for steps when it is not computed from intrs
-		if(doUpdate) LOG_DEBUG(axis<<": cellGrow="<<strain_rate*scene->dt<<", new stress="<<stress(axis,axis)<<", new strain="<<strain[axis]);
+		if(doUpdate) LOG_DEBUG("{}: cellGrow={}, new stress={}, new strain={}",axis,strain_rate*scene->dt,stress(axis,axis),strain[axis]);
 		// used only for temporary goal comparisons. The exact value is assigned in strainStressStiffUpdate
 		strain[axis]+=strain_rate*scene->dt;
 		// signal if condition not satisfied
@@ -147,7 +147,7 @@ void WeirdTriaxControl::run(){
 			// since strain is prescribed exactly, tolerances need just to accomodate rounding issues
 			if((goal[axis]!=0 && abs((curr-goal[axis])/goal[axis])>1e-6) || abs(curr-goal[axis])>1e-6){
 				allOk=false;
-				if(doUpdate) LOG_DEBUG("Strain not OK; "<<abs(curr-goal[axis])<<">1e-6");}
+				if(doUpdate) LOG_DEBUG("Strain not OK; {}>1e-6",abs(curr-goal[axis]));}
 		}
 	}
  	for (int k=0;k<3;k++) strainRate[k]=scene->cell->nextGradV(k,k);
@@ -160,11 +160,11 @@ void WeirdTriaxControl::run(){
 	if(allOk){
 		if(doUpdate || currUnbalanced<0){
 			currUnbalanced=DemFuncs::unbalancedForce(scene,dem,/*useMaxForce*/false);
-			LOG_DEBUG("Stress/strain="<< (stressMask&1?stress(0,0):strain[0]) <<"," <<(stressMask&2?stress(1,1):strain[1])<<"," <<(stressMask&4?stress(2,2):strain[2]) <<", goal="<<goal<<", unbalanced="<<currUnbalanced );
+			LOG_DEBUG("Stress/strain={},{},{}, goal={}, unbalanced={}",(stressMask&1?stress(0,0):strain[0]),(stressMask&2?stress(1,1):strain[1]),(stressMask&4?stress(2,2):strain[2]),goal,currUnbalanced);
 		}
 		if(currUnbalanced<maxUnbalanced){
 			if (!doneHook.empty()){
-				LOG_DEBUG ( "Running doneHook: "<<doneHook );
+				LOG_DEBUG("Running doneHook: {}",doneHook);
 				Engine::runPy("WeirdTriaxControl",doneHook);
 			}
 		}

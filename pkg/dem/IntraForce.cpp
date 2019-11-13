@@ -33,7 +33,7 @@ void IntraForce::run(){
 		const shared_ptr<Particle>& p((*dem.particles)[i]);
 		if(!p) continue;
 		if(!p->shape || !p->material){
-			LOG_ERROR("#"<<i<<" has no shape/material.");
+			LOG_ERROR("#{} has no shape/material.",i);
 			continue;
 		}
 		operator()(p->shape,p->material,p);

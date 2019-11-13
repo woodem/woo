@@ -163,7 +163,7 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 			Vector3r pAxis(Vector3r::Zero()); pAxis[infCyl->axis]=infCyl->glAB[1]-infCyl->glAB[0];
 			// axial rotation; warn if not around the axis
 			AngleAxisr aa(n0->ori); Vector3r axRotVecDeg(aa.axis()*aa.angle()*180./M_PI);
-			if(aa.angle()>1e-6 && abs(aa.axis()[infCyl->axis])<.999999) LOG_WARN("#"<<p->id<<": InfCylinder rotation not aligned with its axis (cylinder axis "<<infCyl->axis<<"; rotation axis "<<aa.axis()<<", angle "<<aa.angle()<<")");
+			if(aa.angle()>1e-6 && abs(aa.axis()[infCyl->axis])<.999999) LOG_WARN("#{}: InfCylinder rotation not aligned with its axis (cylinder axis {}; rotation axis {}, angle {})",p->id,infCyl->axis,aa.axis(),aa.angle());
 			bool open=!cylCapTexture.empty();
 			if(open){
 				os<<"/*capped cylinder*/";
@@ -396,7 +396,7 @@ void POVRayExport::writeFacetsMeshInc(std::ofstream& os, bool doStatic){
 				for(const auto& uv: vert_uv){ os<<", "<<"<"<<to_string(uv[0])<<","<<to_string(uv[1])<<">";}
 				os<<" }\n";
 			} else {
-				if(!vert_uv.empty()) LOG_WARN("Not exporting uv for mesh with "<<nodevec.size()<<" vertices but only "<<vert_uv.size()<<" with uvCoord defined.");
+				if(!vert_uv.empty()) LOG_WARN("Not exporting uv for mesh with {} vertices but only {} with uvCoord defined.",nodevec.size(),vert_uv.size());
 			}
 
 			if(!normals.empty()){

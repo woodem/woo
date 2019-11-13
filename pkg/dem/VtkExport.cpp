@@ -197,10 +197,10 @@ void VtkExport::exportMatState(const shared_ptr<MatState>& state, vector<vtkSmar
 		auto arr=vtkSmartPointer<vtkDoubleArray>::New();
 		arr->SetNumberOfComponents(1);
 		arr->SetName(("matState "+state->getScalarName(sz)).c_str());
-		LOG_DEBUG("New array '"<<arr->GetName()<<"'");
+		LOG_DEBUG("New array '{}'",arr->GetName());
 		if(prevDone>0){
 			arr->SetNumberOfTuples(prevDone); arr->FillComponent(0,nanValue);
-			LOG_DEBUG("   Filling "<<prevDone<<" missing values.");
+			LOG_DEBUG("   Filling {} missing values.",prevDone);
 		}
 		matStates.push_back(arr);
 	}
@@ -636,7 +636,7 @@ void VtkExport::run(){
 		boost::filesystem::path p(out+"foo");
 		auto dir=p.parent_path();
 		if(!boost::filesystem::exists(dir)){
-			LOG_INFO("Creating directory for output files as requested: "<<dir.string());
+			LOG_INFO("Creating directory for output files as requested: {}",dir.string());
 			boost::filesystem::create_directories(dir);
 		}
 	}

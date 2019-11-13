@@ -93,13 +93,13 @@ void CLDemRun::run(){
 		sim->run(1);
 		if(setDt){
 			scene->dt=sim->scene.dt;
-			LOG_WARN("Setting O.scene.dt according to clDem "<<scene->dt);
+			LOG_WARN("Setting O.scene.dt according to clDem {}",scene->dt);
 		}
 	}
 	else{
 		// in case timestep was adjusted in woo
 		if(sim->scene.dt!=scene->dt){
-			LOG_WARN("Setting clDem Δt="<<sim->scene.dt);
+			LOG_WARN("Setting clDem Δt={}",sim->scene.dt);
 			sim->scene.dt=scene->dt;
 		}
 		sim->run(steps>0?steps:stepPeriod);
@@ -109,8 +109,8 @@ void CLDemRun::run(){
 }
 
 
-#define _THROW_ERROR(a){ std::ostringstream o; o<<a; LOG_ERROR(a); throw std::runtime_error(o.str()); }
-#define _CHK_ERR(where,err,cexpr,yexpr){ if(err > relTol) LOG_ERROR(where<<": "<<#err<<"="<<err<<">"<<relTol<<": "<<cexpr<<"/"<<yexpr); if(err>relTol*raiseLimit) _THROW_ERROR(where<<": "<<#err<<"="<<err<<">"<<relTol<<"*"<<raiseLimit<<": "<<cexpr<<"/"<<yexpr); }
+#define _THROW_ERROR(a){ std::ostringstream o; o<<a; LOG_ERROR("{}",a); throw std::runtime_error(o.str()); }
+#define _CHK_ERR(where,err,cexpr,yexpr){ if(err > relTol) LOG_ERROR("{}: {}={}>{}: {}/{}",where,#err,err,relTol,cexpr,yexpr); if(err>relTol*raiseLimit) _THROW_ERROR(where<<": "<<#err<<"="<<err<<">"<<relTol<<"*"<<raiseLimit<<": "<<cexpr<<"/"<<yexpr); }
 
 
 void CLDemRun::compareParticleNodeDyn(const string& pId, const clDem::Particle& cp, const shared_ptr<Node>& yn, const Real kgU, const Real mU, const Real sU){
@@ -368,7 +368,7 @@ void CLDemRun::doCompare(){
 			Vector2i ids(C->leakPA()->id,C->leakPB()->id);
 			string cId="##"+lexical_cast<string>(ids[0])+"+"+lexical_cast<string>(ids[1]);
 			clDem::CpuCollider::ConLoc* cl=sim->cpuCollider->find(ids[0],ids[1]);
-			if(!cl) LOG_ERROR(cId<<": not in clDem");
+			if(!cl) LOG_ERROR("{}: not in clDem",cId);
 		}
 	}
 
@@ -398,7 +398,7 @@ void CLDemRun::doCompare(){
 			//if(fabs(ce)/(NU*mU)<relTol && fabs(ye)/(NU*mU)<relTol) continue;
 			Real eErr=abs(ye-ce)/(NU*mU);
 			_CHK_ERR("Energy "<<clDem::energyDefinitions[i].name<<"/"<<name,eErr,ce,ye);
-			//if(eErr>relTol) LOG_ERROR("Energy: "<<clDem::energyDefinitions[i].name<<"/"<<name<<" differs "<<eErr<<">"<<relTol<<": "<<ce<<"/"<<ye);
+			//if(eErr>relTol) LOG_ERROR("Energy: {}/{} differs {}>{}: {}/{}",clDem::energyDefinitions[i].name,name,eErr,relTol,ce,ye);
 		}
 	}
 }

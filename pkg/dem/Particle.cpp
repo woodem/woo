@@ -140,7 +140,7 @@ void Shape::setFromRaw_helper_checkRaw_makeNodes(const vector<Real>& raw, size_t
 }
 
 shared_ptr<Node> Shape::setFromRaw_helper_nodeFromCoords(vector<shared_ptr<Node>>& nn, const vector<Real>& raw, size_t pos){
-	if(raw.size()<pos+3){ LOG_ERROR("Raw data too short (length "<<raw.size()<<", pos="<<pos<<"; this should be checked automatically before invoking this function."); throw std::logic_error("Error in setFromRaw_helper_nodeFromCoords: see error message."); }
+	if(raw.size()<pos+3){ LOG_ERROR("Raw data too short (length {}, pos={}; this should be checked automatically before invoking this function.",raw.size(),pos); throw std::logic_error("Error in setFromRaw_helper_nodeFromCoords: see error message."); }
 	Vector3r p(raw[pos],raw[pos+1],raw[pos+2]);
 	if(isnan(p[0]) || isnan(p[1])){ //return existing node
 		int p2i=int(p[2]);
@@ -270,7 +270,7 @@ void Particle::postLoad(Particle&,void* attr){
 		if(!shape) return;
 		for(const auto& n: shape->nodes){
 			if(!n->hasData<DemData>()) continue;
-			LOG_TRACE("Adding "<<this->pyStr()<<" to "<<n->pyStr()<<".dem.parRef [linIx="<<n->getData<DemData>().linIx<<"] ");
+			LOG_TRACE("Adding {} to {}.dem.parRef [linIx={}] ",this->pyStr(),n->pyStr(),n->getData<DemData>().linIx);
 			n->getData<DemData>().addParRef_raw(this);
 		}
 	}
@@ -294,7 +294,7 @@ void DemData::addParRef(const shared_ptr<Particle>& p){
 
 void DemData::addParRef_raw(Particle* p){
 	if(boost::range::find_if(parRef,[&p](const Particle* i)->bool{ return p==i; })!=parRef.end()){
-		LOG_TRACE(p->pyStr()<<": already in parRef, skipping.");
+		LOG_TRACE("{}: already in parRef, skipping.",p->pyStr());
 		return;
 	}
 	parRef.push_back(p);
@@ -481,7 +481,7 @@ void DemField::pyNodesAppendFromParticles(const vector<shared_ptr<Particle>>& pp
 }
 
 void DemField::removeParticle(Particle::id_t id){
-	LOG_DEBUG("Removing #"<<id);
+	LOG_DEBUG("Removing #{}",id);
 	assert(id>=0);
 	assert((int)particles->size()>id);
 	// don't actually delete the particle until before returning, so that p is not dangling
@@ -490,7 +490,7 @@ void DemField::removeParticle(Particle::id_t id){
 		if(n->getData<DemData>().isClumped()) throw std::runtime_error("#"+to_string(id)+": a node is clumped, remove the clump itself instead!");
 	}
 	if(!p->shape || p->shape->nodes.empty()){
-		LOG_TRACE("Removing #"<<id<<" without shape or nodes");
+		LOG_TRACE("Removing #{} without shape or nodes",id);
 		if(saveDead) deadParticles.push_back((*particles)[id]);
 		particles->remove(id);
 		return;
@@ -508,7 +508,7 @@ void DemField::removeParticle(Particle::id_t id){
 		if(dyn.parRef.empty()){
 			if(dyn.linIx<0) continue; // node not in DemField.nodes
 			if(dyn.linIx>(int)nodes.size() || nodes[dyn.linIx].get()!=n.get()) throw std::runtime_error("Node in #"+to_string(id)+" has invalid linIx entry!");
-			LOG_DEBUG("Removing #"<<id<<" / DemField::nodes["<<dyn.linIx<<"]"<<" (not used anymore)");
+			LOG_DEBUG("Removing #{} / DemField::nodes[{}] (not used anymore)",id,dyn.linIx);
 			boost::mutex::scoped_lock lock(nodesMutex);
 			if(saveDead) deadNodes.push_back(n);
 			(*nodes.rbegin())->getData<DemData>().linIx=dyn.linIx;
@@ -521,11 +521,11 @@ void DemField::removeParticle(Particle::id_t id){
 		vector<shared_ptr<Contact>> cc; cc.reserve(p->contacts.size());
 		for(const auto& idCon: p->contacts) cc.push_back(idCon.second);
 		for(const auto& c: cc){
-			LOG_DEBUG("Removing #"<<id<<" / ##"<<c->leakPA()->id<<"+"<<c->leakPB()->id);
+			LOG_DEBUG("Removing #{} / ##{}+{}",id,c->leakPA()->id,c->leakPB()->id);
 			contacts->remove(c);
 		}
 	}
-	LOG_TRACE("Actually removing #"<<id<<" now");
+	LOG_TRACE("Actually removing #{} now",id);
 	if(saveDead) deadParticles.push_back((*particles)[id]);
 	particles->remove(id);
 };

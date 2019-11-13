@@ -51,7 +51,7 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 	Real dist=relPos.norm();
 	#define CATCH_NAN_FACET_INFCYLINDER
 	#ifdef CATCH_NAN_FACET_INFCYLINDER
-		if(dist==0.) LOG_FATAL("dist==0.0 between InfCylinder #"<<C->leakPA()->id<<" @ "<<cyl.nodes[0]->pos.transpose()<<", r="<<cylRad<<" and Sphere #"<<C->leakPB()->id<<" @ "<<sphere.nodes[0]->pos.transpose()<<", r="<<sphere.radius);
+		if(dist==0.) LOG_FATAL("dist==0.0 between InfCylinder #{} @ {}, r={} and Sphere #{} @ {}, r={}",C->leakPA()->id,cyl.nodes[0]->pos.transpose(),cylRad,C->leakPB()->id,sphere.nodes[0]->pos.transpose(),sphere.radius);
 	#else
 		#error You forgot to implement dist==0 handler with InfCylinder
 	#endif

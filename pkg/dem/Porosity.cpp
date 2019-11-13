@@ -36,7 +36,7 @@ vector<Vector3r> AnisoPorosityAnalyzer::splitRay(Real theta, Real phi, Vector3r 
 	Vector3r unitR(cos(phi)*cos(theta),cos(phi)*sin(theta),sin(phi));
 	for(int i:{0,1,2}) if(abs(unitR[i])<epsN) unitR[i]=0;
 	Vector3r unitN=Tinv*unitR;
-	LOG_TRACE("unitR="<<unitR.transpose()<<"unitN="<<unitN.transpose());
+	LOG_TRACE("unitR={}unitN={}",unitR.transpose(),unitN.transpose());
 	// for now suppose we want the ray to stop when it reaches the same periodic coordinate, along whichever axis it comes first
 	Vector3r rayN=unitN/unitN.array().abs().maxCoeff();
 	Real totLenN=rayN.norm();
@@ -51,7 +51,7 @@ vector<Vector3r> AnisoPorosityAnalyzer::splitRay(Real theta, Real phi, Vector3r 
 		// find in which sense we come to cell boundary first, and where the ray will be split
 		Real t=/*true max is sqrt(3)*/10.;
 		for(int i:{0,1,2}){ if(unitN[i]==0) continue; Real tt=((unitN[i]>0?1:0)-pt0N[i])/unitN[i]; /*cerr<<"[u"<<i<<"="<<unitN[i]<<";t"<<i<<"="<<tt<<"]";*/ if(tt>0) t=min(t,tt); }
-		LOG_TRACE("Split "<<N<<" (l="<<cummLenN<<"/"<<totLenN<<"): from "<<pt0N.transpose()<<", unitN="<<unitN<<", t="<<t);
+		LOG_TRACE("Split {} (l={}/{}): from {}, unitN={}, t={}",N,cummLenN,totLenN,pt0N.transpose(),unitN,t);
 		assert(t>0); assert(t<sqrt(3));
 		if(cummLenN+t>=totLenN){ t=totLenN-cummLenN; done=true; }
 		else cummLenN+=t;
@@ -59,7 +59,7 @@ vector<Vector3r> AnisoPorosityAnalyzer::splitRay(Real theta, Real phi, Vector3r 
 		if(t>epsN){
 			Vector3r aR=T*pt0N, bR=T*(pt0N+unitN*t);
 			rayPtsR.push_back(aR); rayPtsR.push_back(bR);
-			LOG_TRACE("Added points: local "<<pt0N.transpose()<<" -- "<<(pt0N+unitN*t).transpose()<<"; global "<<aR.transpose()<<" -- "<<bR.transpose());
+			LOG_TRACE("Added points: local {} -- {}; global {} -- {}",pt0N.transpose(),(pt0N+unitN*t).transpose(),aR.transpose(),bR.transpose());
 		}
 		pt0N+=unitN*t;
 		if(++N>10){
@@ -135,7 +135,7 @@ void AnisoPorosityAnalyzer::initialize(){
 		pack.add(s->nodes[0]->pos,s->radius);
 	}
 	__attribute__((unused)) int sh=pack.addShadows();
-	LOG_DEBUG("Added "<<sh<<" shadow spheres");
+	LOG_DEBUG("Added {} shadow spheres",sh);
 	initStep=scene->step;
 	initNum=dem->particles->size();
 }

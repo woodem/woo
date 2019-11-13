@@ -174,7 +174,7 @@ void RawShapeClump::recompute(int _div, bool failOk/* =false */, bool fastOnly/*
 		long nCellsApprox=(aabb.sizes()/dx).prod();
 		 // don't compute anything, it would take too long
 		if(fastOnly && nCellsApprox>1e5){ makeInvalid(); return; }
-		if(nCellsApprox>1e8) LOG_WARN("RawShapeClump: space grid has "<<nCellsApprox<<" cells, computing inertia can take a long time.");
+		if(nCellsApprox>1e8) LOG_WARN("RawShapeClump: space grid has {} cells, computing inertia can take a long time.",nCellsApprox);
 		Vector3r x;
 		for(x.x()=aabb.min().x()+dx/2.; x.x()<aabb.max().x(); x.x()+=dx){
 			for(x.y()=aabb.min().y()+dx/2.; x.y()<aabb.max().y(); x.y()+=dx){
@@ -249,7 +249,7 @@ std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> RawShapeClump:
 	cd->equivRad=equivRad;
 
 	if(!isnan(clumpPos.maxCoeff())){
-		LOG_FATAL(__FILE__<<":"<<__LINE__<<": specifying clumpPos/clumpOri not yet implemented, garbage will be returned!");
+		LOG_FATAL("{}:{}: specifying clumpPos/clumpOri not yet implemented, garbage will be returned!",__FILE__,__LINE__);
 		cn->pos=clumpPos;
 		cn->ori=clumpOri;
 	}
@@ -429,7 +429,7 @@ void ShapePack::loadTxt(const string& in) {
 		if(boost::algorithm::ends_with(idStr,"u")){ id=lexical_cast<int>(idStr.substr(0,idStr.size()-1)); clumped=false; }
 		else{ id=lexical_cast<int>(idStr); clumped=true; }
 		if(id!=lastId && id!=(int)raws.size()){
-			LOG_WARN(in<<":"<<lineNo<<": shape numbers not contiguous.");
+			LOG_WARN("{}:{}: shape numbers not contiguous.",in,lineNo);
 		}
 		// creating a new particle
 		if(id!=lastId){

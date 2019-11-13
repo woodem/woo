@@ -77,15 +77,15 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 			_WATCH_MSG("\tPlastic slip by "<<((Ft/ratio)*(1-ratio)).transpose()<<", ratio="<<ratio<<", new Ft="<<Ft.transpose()<<endl);
 		}
 		if(isnan(ph.force.maxCoeff())){
-			LOG_FATAL("##"<<C->leakPA()->id<<"+"<<C->leakPB()->id<<" ("<<C->leakPA()->shape->getClassName()<<"+"<<C->leakPB()->shape->getClassName()<<") has NaN force!");
-			LOG_FATAL("    uN="<<uN<<", velT="<<velT.transpose()<<", F="<<ph.force.transpose()<<"; maxFt="<<maxFt<<"; kn="<<ph.kn<<", kt="<<ph.kt);
+			LOG_FATAL("##{}+{} ({}+{}) has NaN force!",C->leakPA()->id,C->leakPB()->id,C->leakPA()->shape->getClassName(),C->leakPB()->shape->getClassName());
+			LOG_FATAL("    uN={}, velT={}, F={}; maxFt={}; kn={}, kt={}",uN,velT.transpose(),ph.force.transpose(),maxFt,ph.kn,ph.kt);
 			throw std::runtime_error("NaN force in contact (message above)?!");
 		}
 	}
 	if(WOO_UNLIKELY(scene->trackEnergy)){
 		Real elast=0.5*(pow2(ph.force[0])/ph.kn+(ph.kt!=0.?Ft.squaredNorm()/ph.kt:0.));
 		if(isnan(elast)){
-			LOG_WARN("elast==NaN: Fn="<<ph.force[0]<<", kn="<<ph.kn<<", Ft=("<<Ft[0]<<","<<Ft[1]<<"), kt="<<ph.kt);
+			LOG_WARN("elast==NaN: Fn={}, kn={}, Ft=({},{}), kt={}",ph.force[0],ph.kn,Ft[0],Ft[1],ph.kt);
 			elast=0.; // this should not happen...?!
 		}
 		scene->energy->add(elast,"elast",elastPotIx,EnergyTracker::IsResettable);
@@ -116,7 +116,7 @@ bool Law2_L6Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shar
 			// TODO: dissipation
 			Tr*=ratio;
 		};
-		if(isnan(ph.torque.maxCoeff())) LOG_ERROR("NaN in torque in "+C->pyStr());
+		if(isnan(ph.torque.maxCoeff())) LOG_ERROR("NaN in torque in {}",C->pyStr());
 	} else {
 		// in case we disable rolling&twisting during the simulation
 		ph.torque=Vector3r::Zero();

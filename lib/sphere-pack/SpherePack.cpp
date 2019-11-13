@@ -172,7 +172,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 				if (i==0) psdCumm2.push_back(0);
 				else psdCumm2.push_back(psdCumm2[i-1] + 3.0*volume*(1-porosity)/M_PI*(psdCumm[i]-psdCumm[i-1])/(psdSizes[i]-psdSizes[i-1])*(pow(psdSizes[i-1],-2)-pow(psdSizes[i],-2)));
 			}
-			LOG_DEBUG(i<<". "<<psdRadii[i]<<", cdf="<<psdCumm[i]<<", cdf2="<<(distributeMass?lexical_cast<string>(psdCumm2[i]):string("--")));
+			LOG_DEBUG("{}. {}, cdf={}, cdf2={}",i,psdRadii[i],psdCumm[i],(distributeMass?lexical_cast<string>(psdCumm2[i]):string("--")));
 			// check monotonicity
 			if(i>0 && (psdSizes[i-1]>psdSizes[i] || psdCumm[i-1]>psdCumm[i])) throw invalid_argument("SpherePack:makeCloud: psdSizes and psdCumm must be both non-decreasing.");
 		}
@@ -242,21 +242,21 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 			if(num>0) {
 				if (mode!=RDIST_RMEAN) {
 					Real nextPoro = porosity+(1-porosity)/10.;
-					LOG_WARN("Exceeded "<<maxTry<<" tries to insert non-overlapping sphere to packing. Only "<<i<<" spheres was added, although you requested "<<num<<". Trying again with porosity "<<nextPoro<<". The size distribution is being scaled down");
+					LOG_WARN("Exceeded {} tries to insert non-overlapping sphere to packing. Only {} spheres was added, although you requested {}. Trying again with porosity {}. The size distribution is being scaled down",maxTry,i,num,nextPoro);
 					pack.clear();
 					return makeCloud(mn, mx, -1., rRelFuzz, num, periodic, nextPoro, psdSizes, psdCumm, distributeMass,seed,hSizeFound?hSize:Matrix3r::Zero());}
-				else LOG_WARN("Exceeded "<<maxTry<<" tries to insert non-overlapping sphere to packing. Only "<<i<<" spheres was added, although you requested "<<num<<".");
+				else LOG_WARN("Exceeded {} tries to insert non-overlapping sphere to packing. Only {} spheres was added, although you requested {}.",maxTry,i,num);
 			}
 			return i;}
 	}
-	if (appliedPsdScaling<1) LOG_WARN("The size distribution has been scaled down by a factor pack.appliedPsdScaling="<<appliedPsdScaling);
+	if (appliedPsdScaling<1) LOG_WARN("The size distribution has been scaled down by a factor pack.appliedPsdScaling={}",appliedPsdScaling);
 	return pack.size();
 }
 
 void SpherePack::cellFill(Vector3r vol){
 	Vector3i count;
 	for(int i=0; i<3; i++) count[i]=(int)(ceil(vol[i]/cellSize[i]));
-	LOG_DEBUG("Filling volume "<<vol<<" with cell "<<cellSize<<", repeat counts are "<<count);
+	LOG_DEBUG("Filling volume {} with cell {}, repeat counts are {}",vol,cellSize,count);
 	cellRepeat(count);
 }
 
@@ -292,7 +292,7 @@ int SpherePack::psdGetPiece(Real x, const vector<Real>& cumm, Real& norm){
 	if((i==sz-1) && cumm[i]<=x){ i=sz-2; norm=1.; return i;}
 	i--; // lower interval limit intex
 	norm=(x-cumm[i])/(cumm[i+1]-cumm[i]);
-	//LOG_TRACE("count="<<sz<<", x="<<x<<", piece="<<i<<" in "<<cumm[i]<<"…"<<cumm[i+1]<<", norm="<<norm);
+	//LOG_TRACE("count={}, x={}, piece={} in {}…{}, norm={}",sz,x,i,cumm[i],cumm[i+1],norm);
 	return i;
 }
 

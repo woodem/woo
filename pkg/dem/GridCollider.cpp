@@ -42,7 +42,7 @@ bool GridCollider::tryAddContact(const Particle::id_t& idA, const Particle::id_t
 		C->stepLastSeen=scene->step; // mark contact as seen by us; unseen will be deleted by ContactLoop automatically
 		return false; // already in contact, nothing to do
 	}
-	LOG_TRACE("Creating new contact ##"<<idA<<"+"<<idB);
+	LOG_TRACE("Creating new contact ##{}+{}",idA,idB);
 	shared_ptr<Contact> newC=make_shared<Contact>();
 	// mimick the way clDem::Collider does the job so that results are easily comparable
 	if(idA<idB){ newC->pA=pA; newC->pB=pB; }

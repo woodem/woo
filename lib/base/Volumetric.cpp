@@ -171,18 +171,18 @@ Real woo::Volumetric::triangleArea(const Vector3r& v0, const Vector3r& v1, const
 
 
 void woo::Volumetric::computePrincipalAxes(const Real& M, const Vector3r& Sg, const Matrix3r& Ig, Vector3r& pos, Quaternionr& ori, Vector3r& inertia){
-	assert(M>0); // LOG_TRACE("M=\n"<<M<<"\nIg=\n"<<Ig<<"\nSg=\n"<<Sg);
+	assert(M>0); // LOG_TRACE("M=\n{}\nIg=\n{}\nSg=\n{}",M,Ig,Sg);
 	// clump's centroid
 	pos=Sg/M;
 	// this will calculate translation only, since rotation is zero
 	Matrix3r Ic_orientG=inertiaTensorTranslate(Ig, -M /* negative mass means towards centroid */, pos); // inertia at clump's centroid but with world orientation
-	//LOG_TRACE("Ic_orientG=\n"<<Ic_orientG);
+	//LOG_TRACE("Ic_orientG=\n{}",Ic_orientG);
 	Ic_orientG(1,0)=Ic_orientG(0,1); Ic_orientG(2,0)=Ic_orientG(0,2); Ic_orientG(2,1)=Ic_orientG(1,2); // symmetrize
 	Eigen::SelfAdjointEigenSolver<Matrix3r> decomposed(Ic_orientG);
 	const Matrix3r& R_g2c(decomposed.eigenvectors());
 	//cerr<<"R_g2c:"<<endl<<R_g2c<<endl;
 	// has NaNs for identity matrix??
-	//LOG_TRACE("R_g2c=\n"<<R_g2c);
+	//LOG_TRACE("R_g2c=\n{}",R_g2c);
 	// set quaternion from rotation matrix
 	ori=Quaternionr(R_g2c); ori.normalize();
 	inertia=decomposed.eigenvalues();

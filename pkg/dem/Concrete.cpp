@@ -99,7 +99,7 @@ Real ConcretePhys::solveBeta(const Real c, const Real N){
 		Real df=(c*N*exp(N*ret)+exp(ret))/aux;
 		ret-=f/df;
 	}
-	LOG_FATAL("No convergence after "<<maxIter<<" iters; c="<<c<<", N="<<N<<", ret="<<ret<<", f="<<f);
+	LOG_FATAL("No convergence after {} iters; c={}, N={}, ret={}, f={}",maxIter,c,N,ret,f);
 	throw runtime_error("ConcretePhys::solveBeta failed to converge.");
 }
 
@@ -114,7 +114,7 @@ Real ConcretePhys::computeDmgOverstress(Real dt){
 	Real beta=solveBeta(c,dmgRateExp);
 	Real deltaDmgStrain=(epsN*omega-dmgStrain)*exp(beta);
 	dmgStrain+=deltaDmgStrain;
-	LOG_TRACE("deltaDmgStrain="<<deltaDmgStrain<<", viscous overstress "<<(epsN*omega-dmgStrain)*E);
+	LOG_TRACE("deltaDmgStrain={}, viscous overstress {}",deltaDmgStrain,(epsN*omega-dmgStrain)*E);
 	/* σN=Kn(εN-εd); dmgOverstress=σN-(1-ω)*Kn*εN=…=Kn(ω*εN-εd) */
 	return (epsN*omega-dmgStrain)*E;
 }
@@ -123,7 +123,7 @@ Real ConcretePhys::computeViscoplScalingFactor(Real sigmaTNorm, Real sigmaTYield
 	if(sigmaTNorm<sigmaTYield) return 1.;
 	Real c=coh0*pow(plTau/(G*dt),plRateExp)*pow(sigmaTNorm-sigmaTYield,plRateExp-1.);
 	Real beta=solveBeta(c,plRateExp);
-	//LOG_DEBUG("scaling factor "<<1.-exp(beta)*(1-sigmaTYield/sigmaTNorm));
+	//LOG_DEBUG("scaling factor {}",1.-exp(beta)*(1-sigmaTYield/sigmaTNorm));
 	return 1.-exp(beta)*(1-sigmaTYield/sigmaTNorm);
 }
 

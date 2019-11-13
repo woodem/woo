@@ -79,7 +79,7 @@ void OpenCLCollider::updateBounds(const vector<cl_float>(&mini)[3], const vector
 /* find initial contact set on the CPU */
 vector<Vector2i> OpenCLCollider::initSortCPU(){
 	vector<Vector2i> ret;
-	LOG_TRACE("Initial sort, number of bounds "<<cpuBounds[0].size());
+	LOG_TRACE("Initial sort, number of bounds {}",cpuBounds[0].size());
 	// sort all arrays without looking for inversions first
 	for(int ax:{0,1,2}) std::sort(cpuBounds[ax].begin(),cpuBounds[ax].end(),[](const CpuAxBound& b1, const CpuAxBound& b2) -> bool { return (isnan(b1.coord)||isnan(b2.coord))?true:(b1.coord<b2.coord)||(b1.coord==b2.coord&&b1.id<b2.id);} );
 	// traverse one axis, always from lower bound to upper bound of the same particle
@@ -87,19 +87,19 @@ vector<Vector2i> OpenCLCollider::initSortCPU(){
 	// along other two axes
 
 //	for(uint i = 0; i < cpuBounds[0].size(); i++){
-//		LOG_DEBUG(cpuBounds[0][i].coord);
+//		LOG_DEBUG("{}",cpuBounds[0][i].coord);
 //	}
 
 	int ax0=0; // int ax1=(ax0+1)%3, ax2=(ax0+2)%3;
 	for(size_t i=0; i<cpuBounds[ax0].size(); i++){
 		const CpuAxBound& b(cpuBounds[ax0][i]);
 		if(!b.isMin || isnan(b.coord)) continue;
-		LOG_TRACE("← "<<b.coord<<", #"<<b.id);
+		LOG_TRACE("← {}, #{}",b.coord,b.id);
 		for(size_t j=i+1; cpuBounds[ax0][j].id!=b.id && /* just in case, e.g. maximum smaller than minimum */ j<cpuBounds[ax0].size(); j++){
 			numInvs++;
 			const CpuAxBound& b2(cpuBounds[ax0][j]);
 			if(!b2.isMin || isnan(b2.coord)) continue; // overlaps of this kind have been already checked when b2.id was processed upwards
-			LOG_TRACE("\t→ "<<b2.coord<<", #"<<b2.id);
+			LOG_TRACE("\t→ {}, #{}",b2.coord,b2.id);
 			if(!bboxOverlap(b.id,b2.id)){ LOG_TRACE("\t-- no overlap"); continue; } // when no overlap along all axes, stop
 			/* create new potential contact here */
 			LOG_TRACE("\t++ new contact");
@@ -117,7 +117,7 @@ vector<Vector2i> OpenCLCollider::inversionsCPU(vector<CpuAxBound>& bb){
 	LOG_DEBUG("INVERSIONS_CPU");
 
 	for(long i=0; i<iMax; i++){
-	//	LOG_DEBUG(bb[i].coord);
+	//	LOG_DEBUG("{}",bb[i].coord);
 		const CpuAxBound bbInit=bb[i]; // copy, so that it is const
 		if(isnan(bbInit.coord)) continue;
 		long j=i-1;
@@ -130,7 +130,7 @@ vector<Vector2i> OpenCLCollider::inversionsCPU(vector<CpuAxBound>& bb){
 				if(bbInit.isMin) inv.push_back(Vector2i(minId,maxId));
 				// max going below min
 				else inv.push_back(Vector2i(maxId,minId));
-				LOG_TRACE("["<<maxId<<"↔ "<<minId<<"]");
+				LOG_TRACE("[{}↔ {}]",maxId,minId);
 			}
 			bb[j+1]=bb[j];
 			j--;
@@ -210,7 +210,7 @@ vector<Vector2i> OpenCLCollider::initSortGPU(){
     queue.enqueueReadBuffer(boundBufs[ax], CL_TRUE, 0, 2*N * sizeof (AxBound), gpuBounds[ax].data());
 	LOG_DEBUG("H");
 	//for (int i = 0; i < 2*N; i++){
-	//	LOG_DEBUG(gpuBounds[0][i].coord);
+	//	LOG_DEBUG("{}",gpuBounds[0][i].coord);
 	//}
 
 	// bitonic sort needs a power-of-two array; fill with infinities
@@ -221,12 +221,12 @@ vector<Vector2i> OpenCLCollider::initSortGPU(){
     queue.enqueueReadBuffer(boundBufs[ax], CL_TRUE, 0, powerOfTwo * sizeof (AxBound), gpuBounds[ax].data());
 
 	//for (int i = 0; i < powerOfTwo; i++){
-	//	LOG_DEBUG(gpuBounds[0][i].coord);
+	//	LOG_DEBUG("{}",gpuBounds[0][i].coord);
 	//}
 
 	global_size=(trunc(trunc(sqrt(powerOfTwo / 2)) / local_size) + 1) * local_size;
 
-	LOG_DEBUG(global_size);
+	LOG_DEBUG("{}",global_size);
 	try {
 		cl::Kernel k2(program, "sortBitonic");
 		LOG_DEBUG("J");
@@ -269,7 +269,7 @@ vector<Vector2i> OpenCLCollider::initSortGPU(){
 		if(gpuBounds[0][i].coord > gpuBounds[0][i+1].coord){
 			LOG_DEBUG("FAIL\n");
 		}
-//		LOG_DEBUG(gpuBounds[0][i].coord);
+//		LOG_DEBUG("{}",gpuBounds[0][i].coord);
 //		cerr << "test: \n";
 	}
 
@@ -297,10 +297,10 @@ vector<Vector2i> OpenCLCollider::initSortGPU(){
 	}
 
 	for(uint i = 0; i < gpuBounds[0].size(); i++){
-		LOG_DEBUG(gpuBounds[0][i].coord);
+		LOG_DEBUG("{}",gpuBounds[0][i].coord);
 	}
 
-LOG_DEBUG(N);
+LOG_DEBUG("");
 	global_size = (trunc(trunc(sqrt(2*N)) / local_size) + 1) * local_size;
 	try {
 		cl::Kernel createOverlayK(program, "createOverlay");
@@ -366,7 +366,7 @@ LOG_DEBUG(N);
 
 			queue.enqueueWriteBuffer(gMemCheck, CL_TRUE, 0, sizeof (cl_uint), &memCheck);
 		LOG_DEBUG("7");
-		LOG_DEBUG(test);
+		LOG_DEBUG("{}",test);
 			queue.enqueueWriteBuffer(gCounter, CL_TRUE, 0, sizeof (cl_uint), &test);
 		LOG_DEBUG("8");
 			createOverlayK.setArg(1, gOverlay);
@@ -404,8 +404,8 @@ LOG_DEBUG(N);
 	std::vector<cl_uint2> overlay1;
 	overlay1.resize(counter);
 	LOG_DEBUG("R-start");
-	LOG_DEBUG(counter);
-	LOG_DEBUG(overAlocMem);
+	LOG_DEBUG("{}",counter);
+	LOG_DEBUG("{}",overAlocMem);
 	queue.enqueueReadBuffer(gOverlay, CL_TRUE, 0, counter * sizeof (cl_uint2), overlay1.data());
 	LOG_DEBUG("R-end");
 	std::sort(overlay1.begin(), overlay1.end(), [](const cl_uint2& a, const cl_uint2 & b)->bool {
@@ -437,10 +437,8 @@ vector<Vector2i> OpenCLCollider::inversionsGPU(int ax){
 	vector<Vector2i> inv;
 
 	int N = gpuBounds[ax].size();		
-	LOG_DEBUG("N size");
-	LOG_DEBUG(N);
-	LOG_DEBUG("mini size");
-	LOG_DEBUG(mini[ax].size());
+	LOG_DEBUG("N size {}",N);
+	LOG_DEBUG("mini size {}",mini[ax].size());
 	
 	int local_size = 16;
 	int global_size = (trunc(trunc(sqrt(N)) / local_size) + 1) * local_size;
@@ -476,7 +474,6 @@ vector<Vector2i> OpenCLCollider::inversionsGPU(int ax){
 	
 	queue.enqueueReadBuffer(boundsG, CL_TRUE, 0, N * sizeof(AxBound), gpuBounds[ax].data());
 	LOG_DEBUG("F");
-	LOG_DEBUG(ax);
 	
 	global_size = (trunc(trunc(sqrt(N/2)) / local_size) + 1) * local_size;
  	
@@ -491,8 +488,7 @@ vector<Vector2i> OpenCLCollider::inversionsGPU(int ax){
 	LOG_DEBUG("I");
 	queue.enqueueWriteBuffer(gpuNoOfInv, CL_TRUE, 0, sizeof (cl_uint), &noOfInv);
 	LOG_DEBUG("J");
-	LOG_DEBUG(global_size);
-	LOG_DEBUG(N);
+	LOG_DEBUG("{}",global_size);
 	/*compute No. of inversions for alloc mem*/
 	try {
 		cl::Kernel computeNoOfInvK(program, "computeNoOfInv");
@@ -536,8 +532,7 @@ vector<Vector2i> OpenCLCollider::inversionsGPU(int ax){
 		LOG_DEBUG("O");
 	queue.enqueueReadBuffer(gpuNoOfInv, CL_TRUE, 0, sizeof(cl_uint), &noOfInv);
 		LOG_DEBUG("P");
-	LOG_DEBUG("No. of inversions");
-	LOG_DEBUG(noOfInv);
+	LOG_DEBUG("No. of inversions {}",noOfInv);
 
 	//inv.resize(noOfInv);
 	vector<cl_uint2> inversions(noOfInv);
@@ -597,7 +592,7 @@ vector<Vector2i> OpenCLCollider::inversionsGPU(int ax){
 	for(uint i = 0; i < noOfInv; i++){
 		inv.push_back(Vector2i(inversions[i].lo, inversions[i].hi));
 	}
-	LOG_DEBUG(inv.size());
+	LOG_DEBUG("{}",inv.size());
 	return inv;
 
 	#if 0
@@ -651,8 +646,8 @@ bool OpenCLCollider::compareInversions(vector<Vector2i>(&cpuInv)[3], vector<Vect
 	}
 	// report as exception; sorted arrays available for post-mortem analysis
 	if(axErr!=Vector3i::Zero()){
-		LOG_ERROR("Inversions along some axes not equal (1=lengths differ, 2=only values differ): "<<axErr.transpose());
-		LOG_ERROR("Number of inversions cpu/gpu: "<<cpuInv[0].size()<<","<<cpuInv[1].size()<<","<<cpuInv[2].size()<<" / "<<gpuInv[0].size()<<","<<gpuInv[1].size()<<","<<gpuInv[2].size());
+		LOG_ERROR("Inversions along some axes not equal (1=lengths differ, 2=only values differ): {}",axErr.transpose());
+		LOG_ERROR("Number of inversions cpu/gpu: {},{},{} / {},{},{}",cpuInv[0].size(),cpuInv[1].size(),cpuInv[2].size(),gpuInv[0].size(),gpuInv[1].size(),gpuInv[2].size());
 		return false;
 	}
 	return true;
@@ -664,7 +659,7 @@ bool OpenCLCollider::checkBoundsSorted(){
 	if(cpu){
 		for(int ax=0; ax<3; ax++){
 			for(size_t i=0; i<cpuBounds[ax].size()-1; i++){
-				if(cpuBounds[ax][i].coord>cpuBounds[ax][i+1].coord){ ok=false; LOG_ERROR("cpuBounds["<<ax<<"]["<<i<<"].coord="<<">"<<"cpuBounds["<<ax<<"]["<<i+1<<"].coord: "<<cpuBounds[ax][i].coord<<">"<<cpuBounds[ax][i+1].coord) }
+				if(cpuBounds[ax][i].coord>cpuBounds[ax][i+1].coord){ ok=false; LOG_ERROR("cpuBounds[{}][{}].coord=>cpuBounds[{}][{}].coord: {}>{}",ax,i,ax,i+1,cpuBounds[ax][i].coord,cpuBounds[ax][i+1].coord); }
 			}
 		}
 	}
@@ -672,7 +667,7 @@ bool OpenCLCollider::checkBoundsSorted(){
 	if(gpu){
 		for(int ax=0; ax<3; ax++){
 			for(size_t i=0; i<gpuBounds[ax].size()-1; i++){
-				if(gpuBounds[ax][i].coord>gpuBounds[ax][i+1].coord){ ok=false; LOG_ERROR("gpuBounds["<<ax<<"]["<<i<<"].coord="<<">"<<"gpuBounds["<<ax<<"]["<<i+1<<"].coord: "<<gpuBounds[ax][i].coord<<">"<<gpuBounds[ax][i+1].coord) }
+				if(gpuBounds[ax][i].coord>gpuBounds[ax][i+1].coord){ ok=false; LOG_ERROR("gpuBounds[{}][{}].coord=>gpuBounds[{}][{}].coord: {}>{}",ax,i,ax,i+1,gpuBounds[ax][i].coord,gpuBounds[ax][i+1].coord); }
 			}
 		}
 	}
@@ -762,7 +757,7 @@ void OpenCLCollider::run(){
 		if(cpu&&gpu){
 			bool err=false;
 			if(cpuInit.size()!=gpuInit.size()) {
-				LOG_ERROR("Initial contacts differ in length (cpu/gpu): " << cpuInit.size() << " / " << gpuInit.size());
+				LOG_ERROR("Initial contacts differ in length (cpu/gpu): {} / {}",cpuInit.size(),gpuInit.size());
 				err=true;
 			}
 			for(auto init: {&cpuInit,&gpuInit}) std::sort(init->begin(),init->end(),[](const Vector2i& p1, const Vector2i& p2){ return (p1[0]<p2[0] || (p1[0]==p2[0] && p1[1]<p2[1])); });
@@ -773,12 +768,12 @@ void OpenCLCollider::run(){
 				std::set_difference(cpuSet.begin(),cpuSet.end(),gpuSet.begin(),gpuSet.end(),std::inserter(cpuExtra,cpuExtra.end()));
 				std::set_difference(gpuSet.begin(),gpuSet.end(),cpuSet.begin(),cpuSet.end(),std::inserter(gpuExtra,gpuExtra.end()));
 				if(!cpuExtra.empty()){
-					LOG_ERROR("There are "<<cpuExtra.size()<<" extra contacts on the CPU:");
-					for(const Vector2i& v: cpuExtra) LOG_ERROR("\t"<<v[0]<<","<<v[1]);
+					LOG_ERROR("There are {} extra contacts on the CPU:",cpuExtra.size());
+					for(const Vector2i& v: cpuExtra) LOG_ERROR("\t{},{}",v[0],v[1]);
 				}
 				if(!gpuExtra.empty()){
-					LOG_ERROR("There are "<<gpuExtra.size()<<" extra contacts on the GPU:");
-					for(const Vector2i& v: gpuExtra) LOG_ERROR("\t"<<v[0]<<","<<v[1]);
+					LOG_ERROR("There are {} extra contacts on the GPU:",gpuExtra.size());
+					for(const Vector2i& v: gpuExtra) LOG_ERROR("\t{},{}",v[0],v[1]);
 				}
 				throw std::runtime_error("Initial sort errors (see above).");
 			} 
@@ -786,7 +781,7 @@ void OpenCLCollider::run(){
 		if(!checkBoundsSorted()) throw std::runtime_error("OpenCLCollider: bounds are not sorted");
 		// create contacts
 		for(const Vector2i& ids: (gpu?gpuInit:cpuInit)){
-			if(dem->contacts->exists(ids[0],ids[1])){ LOG_TRACE("##"<<ids[0]<<"+"<<ids[1]<<"exists already."); continue; } // contact already there, stop
+			if(dem->contacts->exists(ids[0],ids[1])){ LOG_TRACE("##{}+{}exists already.",ids[0],ids[1]); continue; } // contact already there, stop
 			shared_ptr<Contact> c=make_shared<Contact>();
 			c->pA=(*dem->particles)[ids[0]]; c->pB=(*dem->particles)[ids[1]];
 			dem->contacts->add(c); // single-threaded, can be thread-unsafe

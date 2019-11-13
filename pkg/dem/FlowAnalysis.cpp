@@ -40,7 +40,7 @@ void FlowAnalysis::setupGrid(){
 	if(!masks.empty()){
 		nFractions=masks.size();
 	}
-	LOG_WARN("There are "<<nFractions<<" grid(s) "<<boxCells[0]<<"x"<<boxCells[1]<<"x"<<boxCells[2]<<"="<<boxCells.prod()<<" storing "<<NUM_PT_DATA<<" numbers per point (total "<<boxCells.prod()*nFractions*NUM_PT_DATA<<" items)");
+	LOG_WARN("There are {} grid(s) {}x{}x{}={} storing {} numbers per point (total {} items)",nFractions,boxCells[0],boxCells[1],boxCells[2],boxCells.prod(),NUM_PT_DATA,boxCells.prod()*nFractions*NUM_PT_DATA);
 	data.resize(boost::extents[nFractions][boxCells[0]][boxCells[1]][boxCells[2]][NUM_PT_DATA]);
 	// zero all array items
 	std::fill(data.origin(),data.origin()+data.size(),0);
@@ -69,7 +69,7 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 		for(size_t i=0; i<masks.size(); i++){
 			if(mask&masks[i]){
 				if(found){
-					LOG_WARN("Particle with mask "<<mask<<" matching both masks["<<fraction<<"]="<<masks[i]<<" and masks["<<i<<"]="<<masks[i]<<"; only first match used.");
+					LOG_WARN("Particle with mask {} matching both masks[{}]={} and masks[{}]={}; only first match used.",mask,fraction,masks[i],i,masks[i]);
 				} else {
 					found=true; 
 					fraction=i;
@@ -86,7 +86,7 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 	// that ensure that even points just touching the grid from outside are accounted for correctly.
 	Vector3r n=(parPosLocal-ijk2xyz(ijk))/cellSize; // normalized coordinate in the cube (0..1)x(0..1)x(0..1)
 	if(n.minCoeff()<0 || n.maxCoeff()>1){
-		LOG_ERROR("n="<<n.transpose()<<", ijk="<<ijk.transpose()<<", pos="<<parPosLocal.transpose()<<", ijk2xyz="<<ijk2xyz(ijk));
+		LOG_ERROR("n={}, ijk={}, pos={}, ijk2xyz={}",n.transpose(),ijk.transpose(),parPosLocal.transpose(),ijk2xyz(ijk));
 	}
 	// matState
 	Real msScalar=NaN;
@@ -94,7 +94,7 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 		msScalar=par->matState->getScalar(matStateScalar,scene->time,scene->step);
 		if(matStateName.empty()){
 			matStateName=par->matState->getScalarName(matStateScalar);
-			if(matStateName.empty()) LOG_WARN("#"<<par->id<<": matState scalar no. "<<matStateScalar<<" has empty name?");
+			if(matStateName.empty()) LOG_WARN("#{}: matState scalar no. {} has empty name?",par->id,matStateScalar);
 		}
 	}
 

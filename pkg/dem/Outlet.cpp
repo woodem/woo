@@ -36,7 +36,7 @@ void Outlet::run(){
 				if(nn.get()!=n.get() && !(inside!=isInside(nn->pos,loc2))){ otherOk=false; break; }
 			}
 			if(!otherOk) continue;
-			LOG_TRACE("DemField.par["<<i<<"] marked for deletion.");
+			LOG_TRACE("DemField.par[{}] marked for deletion.",i);
 			delParIdLoc.insert(std::make_tuple(p->id,loc));
 		}
 		// if this is a clump, check positions of all attached nodes, and masks of their particles
@@ -54,7 +54,7 @@ void Outlet::run(){
 				}
 					
 			}
-			LOG_TRACE("DemField.nodes["<<i<<"]: clump marked for deletion, with all its particles.");
+			LOG_TRACE("DemField.nodes[{}]: clump marked for deletion, with all its particles.",i);
 			delClumpIxs.insert(i);
 			otherNotOk: ;
 		}
@@ -83,10 +83,10 @@ void Outlet::run(){
 		}
 		locs.push_back(loc);
 		if(savePar) par.push_back(p);
-		LOG_TRACE("DemField.par["<<id<<"] will be "<<(deleting?"deleted.":"marked."));
+		LOG_TRACE("DemField.par[{}] will be {}",id,(deleting?"deleted.":"marked."));
 		if(deleting) dem->removeParticle(id);
 		else p->mask|=markMask;
-		LOG_DEBUG("DemField.par["<<id<<"] "<<(deleting?"deleted.":"marked."));
+		LOG_DEBUG("DemField.par[{}] {}",id,(deleting?"deleted.":"marked."));
 	}
 	for(const auto& ix: delClumpIxs){
 		const shared_ptr<Node>& n(dem->nodes[ix]);
@@ -96,14 +96,14 @@ void Outlet::run(){
 		mass+=m;
 		stepMass+=m;
 		if(save) diamMassTime.push_back(Vector3r(2*n->getData<DemData>().cast<ClumpData>().equivRad,m,scene->time));
-		LOG_TRACE("DemField.nodes["<<ix<<"] (clump) will be "<<(deleting?"deleted":"marked")<<", with all its particles.");
+		LOG_TRACE("DemField.nodes[{}] (clump) will be {}, with all its particles.",ix,(deleting?"deleted":"marked"));
 		if(deleting) dem->removeClump(ix);
 		else {
 			// apply markMask on all clumps (all particles attached to all nodes in this clump)
 			const auto& cd=n->getData<DemData>().cast<ClumpData>();
 			for(const auto& nn: cd.nodes) for(Particle* p: nn->getData<DemData>().parRef) p->mask|=markMask;
 		}
-		LOG_TRACE("DemField.nodes["<<ix<<"] (clump) "<<(deleting?"deleted.":"marked."));
+		LOG_TRACE("DemField.nodes[{}] (clump) {}",ix,(deleting?"deleted.":"marked."));
 	}
 
 	// use the whole stepPeriod for the first time (might be residuum from previous packing), if specified

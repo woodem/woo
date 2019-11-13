@@ -102,12 +102,12 @@ void ConveyorInlet::postLoad(ConveyorInlet&,void* attr){
 	packVel=massRate*cellLen/(rho*vol);
 	// maximum rate achievable with given velocity
 	maxRate=vel*rho*vol/cellLen;
-	LOG_INFO("l="<<cellLen<<" m, V="<<vol<<" m³, rho="<<rho<<" kg/m³, vel="<<vel<<" m/s, packVel="<<packVel<<" m/s, massRate="<<massRate<<" kg/s, maxRate="<<maxRate<<" kg/s");
+	LOG_INFO("l={} m, V={} m³, rho={} kg/m³, vel={} m/s, packVel={} m/s, massRate={} kg/s, maxRate={} kg/s",cellLen,vol,rho,vel,packVel,massRate,maxRate);
 	// comparisons are true only if neither operand is NaN
 	if(zTrim && vel>packVel) {
 		// with z-trimming, reduce number of volume (proportionally) and call this function again
 		Real zTrimVol=vol*(packVel/vel);
-		LOG_INFO("zTrim in effect: trying to reduce volume from "<<vol<<" to "<<zTrimVol<<" (factor "<<(packVel/vel)<<")");
+		LOG_INFO("zTrim in effect: trying to reduce volume from {} to {} (factor {})",vol,zTrimVol,(packVel/vel));
 		if(!shapePack){
 			sortPacking(zTrimVol);
 			sortPacking(); // sort packing again, along x, as that will not be done in the above block again
@@ -125,7 +125,7 @@ void ConveyorInlet::postLoad(ConveyorInlet&,void* attr){
 	if(massRate>maxRate*(1+1e-6)) throw std::runtime_error("ConveyorInlet: massRate="+to_string(massRate)+" kg/s > "+to_string(maxRate)+" - maximum to achieve desired vel="+to_string(vel)+" m/s");
 	if(isnan(massRate)) massRate=maxRate;
 	if(isnan(vel)) vel=packVel;
-	LOG_INFO("packVel="<<packVel<<"m/s, vel="<<vel<<"m/s, massRate="<<massRate<<"kg/s, maxRate="<<maxRate<<"kg/s; dilution factor "<<massRate/maxRate);
+	LOG_INFO("packVel={}m/s, vel={}m/s, massRate={}kg/s, maxRate={}kg/s; dilution factor {}",packVel,vel,massRate,maxRate,massRate/maxRate);
 
 
 	avgRate=(vol*rho/cellLen)*vel; // (kg/m)*(m/s)→kg/s
@@ -134,7 +134,7 @@ void ConveyorInlet::postLoad(ConveyorInlet&,void* attr){
 	if(shapePack){
 		size_t N=shapePack->raws.size();
 		centers.resize(N); radii.resize(N);
-		LOG_INFO("Copying data from shapePack over to centers, radii ("<<N<<" items).");
+		LOG_INFO("Copying data from shapePack over to centers, radii ({} items).",N);
 		for(size_t i=0; i<N; i++){
 			centers[i]=shapePack->raws[i]->pos;
 			radii[i]=shapePack->raws[i]->equivRad;
@@ -168,7 +168,7 @@ void ConveyorInlet::sortPacking(const Real& zTrimVol){
 			currVol+=(doClumps?clumps[i]->volume:(4/3.)*M_PI*pow3(radii[i]));
 			if(currVol>zTrimVol){
 				zTrimHt=centers[i][2]+radii[i];
-				LOG_INFO("Z-sorted packing reached volume "<<currVol<<">="<<zTrimVol<<" at sphere/clump "<<i<<"/"<<N<<", zTrimHt="<<zTrimHt<<", discarding remaining spheres/clumps.");
+				LOG_INFO("Z-sorted packing reached volume {}>={} at sphere/clump {}/{}, zTrimHt={}, discarding remaining spheres/clumps.",currVol,zTrimVol,i,N,zTrimHt);
 				centers.resize(i+1); radii.resize(i+1); if(doClumps) clumps.resize(i+1);
 				return;
 			}
@@ -245,7 +245,7 @@ void ConveyorInlet::run(){
 		for(const Real& r:radii) maxRad=max(r,maxRad);
 		if(isinf(maxRad)) throw std::logic_error("ConveyorInlet.radii: infinite value?");
 		barrierLayer=maxRad*abs(barrierLayer);
-		LOG_INFO("Setting barrierLayer="<<barrierLayer);
+		LOG_INFO("Setting barrierLayer={}",barrierLayer);
 	}
 
 	Real timeSpan;
@@ -283,22 +283,22 @@ void ConveyorInlet::run(){
 
 	Real stepMass=0;
 	int stepNum=0;
-	// LOG_DEBUG("lenToDo="<<lenToDo<<", time="<<scene->time<<", virtPrev="<<virtPrev<<", packVel="<<packVel<<" (packVelCorrected="<<packVelCorrected);
+	// LOG_DEBUG("lenToDo={}, time={}, virtPrev={}, packVel={} (packVelCorrected={}",lenToDo,scene->time,virtPrev,packVel,packVelCorrected);
 	Real lenDone=0;
 	while(true){
 		// done forever
 		if(Inlet::everythingDone()) return;
 
-		LOG_TRACE("Doing next particle: mass/maxMass="<<mass<<"/"<<maxMass<<", num/maxNum"<<num<<"/"<<maxNum);
+		LOG_TRACE("Doing next particle: mass/maxMass={}/{}, num/maxNum{}/{}",mass,maxMass,num,maxNum);
 		if(nextIx<0) nextIx=centers.size()-1;
 		Real nextX=centers[nextIx][0];
 		Real dX=lastX-nextX+((lastX<nextX && (nextIx==(int)centers.size()-1))?cellLen:0); // when wrapping, fix the difference
-		LOG_DEBUG("len toDo/done "<<lenToDo<<"/"<<lenDone<<", lastX="<<lastX<<", nextX="<<nextX<<", dX="<<dX<<", nextIx="<<nextIx);
+		LOG_DEBUG("len toDo/done {}/{}, lastX={}, nextX={}, dX={}, nextIx={}",lenToDo,lenDone,lastX,nextX,dX,nextIx);
 		if(isnan(abs(dX)) || isnan(abs(nextX)) || isnan(abs(lenDone)) || isnan(abs(lenToDo))) std::logic_error("ConveyorInlet: some parameters are NaN.");
 		if(lenDone+dX>lenToDo){
 			// the next sphere would not fit
 			lastX=CompUtils::wrapNum(lastX-(lenToDo-lenDone),cellLen); // put lastX before the next sphere
-			LOG_DEBUG("Conveyor done: next sphere "<<nextIx<<" would not fit, setting lastX="<<lastX);
+			LOG_DEBUG("Conveyor done: next sphere {} would not fit, setting lastX={}",nextIx,lastX);
 			break;
 		}
 		lastX=CompUtils::wrapNum(nextX,cellLen);
@@ -332,24 +332,24 @@ void ConveyorInlet::run(){
 			std::tie(nn,pp)=r->makeParticles(material,/*pos*/newPos,/*ori*/node->ori,/*mask*/mask,/*scale*/1.);
 			for(auto& p: pp){
 				dem->particles->insert(p);
-				LOG_TRACE("[shapePack] new particle #"<<p->id<<" at "<<newPos<<"("<<p->shape->nodes[0]->pos<<"): "<<p->shape->pyStr());
+				LOG_TRACE("[shapePack] new particle #{} at {}({}): {}",p->id,newPos,p->shape->nodes[0]->pos,p->shape->pyStr());
 			}
 		} else {
 			if(!hasClumps()){
 				auto sphere=DemFuncs::makeSphere(radii[nextIx],material);
 				sphere->mask=mask;
 				nn.push_back(sphere->shape->nodes[0]);
-				//LOG_TRACE("x="<<x<<", "<<lenToDo<<"-("<<1+currWraps<<")*"<<cellLen<<"+"<<currX);
+				//LOG_TRACE("x={}, {}-({})*{}+{}",x,lenToDo,1+currWraps,cellLen,currX);
 				dem->particles->insert(sphere);
 				nn[0]->pos=newPos;
-				LOG_TRACE("New sphere #"<<sphere->id<<", r="<<radii[nextIx]<<" at "<<nn[0]->pos.transpose());
+				LOG_TRACE("New sphere #{}, r={} at {}",sphere->id,radii[nextIx],nn[0]->pos.transpose());
 			} else {
 				const auto& clump=clumps[nextIx];
 				vector<shared_ptr<Particle>> spheres;
 				std::tie(nn,spheres)=clump->makeParticles(material,/*pos*/newPos,/*ori*/Quaternionr::Identity(),/*mask*/mask,/*scale*/1.);
 				for(auto& sphere: spheres){
 					dem->particles->insert(sphere);
-					LOG_TRACE("[clump] new sphere #"<<sphere->id<<", r="<<radii[nextIx]<<" at "<<nn[0]->pos.transpose());
+					LOG_TRACE("[clump] new sphere #{}, r={} at {}",sphere->id,radii[nextIx],nn[0]->pos.transpose());
 				}
 			}
 		}

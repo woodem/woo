@@ -205,7 +205,7 @@ void LawTester::run(){
 		// keep track of v[0] changing sign
 		// 0s and NaNs will not pass here, which is eaxctly what we want
 		if(stg->step>0 && v[0]*l6g->vel[0]<0){
-			LOG_DEBUG("Incrementing bounces, as v[0] changes sign: prev "<<v[0]<<", curr "<<l6g->vel[0]<<".");
+			LOG_DEBUG("Incrementing bounces, as v[0] changes sign: prev {}, curr {}.",v[0],l6g->vel[0]);
 			stg->bounces+=1;
 		}
 		if(C->isFresh(scene)) stg->timeC0=scene->time-stageT0;
@@ -261,7 +261,7 @@ void LawTester::run(){
 
 		bool isDone=py::extract<bool>(result)();
 		if(isDone){
-			LOG_INFO("Stage "<<stage<<" done at step "<<scene->step);
+			LOG_INFO("Stage {} done at step {}",stage,scene->step);
 			stageT0=-1;
 			if(!stg->done.empty()){
 				errCmd=&stg->done;

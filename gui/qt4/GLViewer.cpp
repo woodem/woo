@@ -84,7 +84,7 @@ void SnapshotEngine::run(){
 	std::ostringstream fss; fss<<fileBase<<std::setw(5)<<std::setfill('0')<<counter++<<"."<<boost::algorithm::to_lower_copy(format);
 	boost::filesystem::path p(fss.str());
 	boost::filesystem::create_directories(p.parent_path());
-	LOG_DEBUG("GL view → "<<fss.str())
+	LOG_DEBUG("GL view → {}",fss.str());
 	glv->setSnapshotFormat(QString(format.c_str()));
 	glv->nextSnapFile=fss.str();
 	glv->nextSnapMsg=false;
@@ -92,7 +92,7 @@ void SnapshotEngine::run(){
 	long waiting=0;
 	while(!glv->nextSnapFile.empty()){
 		boost::this_thread::sleep(boost::posix_time::milliseconds(10)); waiting++;
-		if(((waiting) % 1000)==0) LOG_WARN("Already waiting "<<waiting/100<<"s for snapshot to be saved. Something went wrong?");
+		if(((waiting) % 1000)==0) LOG_WARN("Already waiting {}s for snapshot to be saved. Something went wrong?",waiting/100);
 		if(waiting/100.>deadTimeout){
 			if(ignoreErrors){ LOG_WARN("Timeout waiting for snapshot to be saved, making myself Engine::dead"); dead=true; return; }
 			else throw runtime_error("SnapshotEngine: Timeout waiting for snapshot to be saved.");
@@ -124,7 +124,7 @@ void GLViewer::closeEvent(QCloseEvent *e){
 		auto confirm=QMessageBox::warning(this,"Confirmation","There is an active SnapshotEngine in the simulation, closing the 3d view may cause errors. Really close?",QMessageBox::Yes|QMessageBox::No);
 	 	if (confirm==QMessageBox::No){ e->ignore(); return; }
 	}
-	LOG_DEBUG("Will emit closeView for view #"<<viewId);
+	LOG_DEBUG("Will emit closeView for view #{}",viewId);
 	OpenGLManager::self->emitCloseView(viewId);
 	e->accept();
 }
@@ -330,7 +330,7 @@ void GLViewer::startClipPlaneManipulation(int planeNo){
 
 void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
 	/* when build with WOO_NOXML, serialize to binary; otherwise, prefer xml for readability */
-	LOG_DEBUG("Loading display parameters from #"<<n);
+	LOG_DEBUG("Loading display parameters from #{}",n);
 	vector<shared_ptr<DisplayParameters> >& dispParams=Master::instance().getScene()->dispParams;
 	if(dispParams.size()<=(size_t)n){
 		string msg("Display parameters #"+lexical_cast<string>(n)+" don't exist (number of entries "+lexical_cast<string>(dispParams.size())+")");
@@ -365,7 +365,7 @@ void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
 	}
 
 void GLViewer::saveDisplayParameters(size_t n){
-	LOG_DEBUG("Saving display parameters to #"<<n);
+	LOG_DEBUG("Saving display parameters to #{}",n);
 	vector<shared_ptr<DisplayParameters> >& dispParams=Master::instance().getScene()->dispParams;
 	if(dispParams.size()<=n){while(dispParams.size()<=n) dispParams.push_back(make_shared<DisplayParameters>());} assert(n<dispParams.size());
 	shared_ptr<DisplayParameters>& dp=dispParams[n];
@@ -396,7 +396,7 @@ string GLViewer::getState(){
 		QString origStateFileName=stateFileName();
 		string tmpFile=Master::instance().tmpFilename();
 		setStateFileName(QString(tmpFile.c_str())); saveStateToFile(); setStateFileName(origStateFileName);
-		LOG_DEBUG("State saved to temp file "<<tmpFile);
+		LOG_DEBUG("State saved to temp file {}",tmpFile);
 		// read tmp file contents and return it as string
 		// this will replace all whitespace by space (nowlines will disappear, which is what we want)
 		std::ifstream in(tmpFile.c_str()); string ret; while(!in.eof()){string ss; in>>ss; ret+=" "+ss;}; in.close();
@@ -414,9 +414,9 @@ string GLViewer::getState(){
 void GLViewer::setState(string state){
 	string tmpFile=Master::instance().tmpFilename();
 	std::ofstream out(tmpFile.c_str());
-	if(!out.good()){ LOG_ERROR("Error opening temp file `"<<tmpFile<<"', loading aborted."); return; }
+	if(!out.good()){ LOG_ERROR("Error opening temp file `{}', loading aborted.",tmpFile); return; }
 	out<<state; out.close();
-	LOG_DEBUG("Will load state from temp file "<<tmpFile);
+	LOG_DEBUG("Will load state from temp file {}",tmpFile);
 	QString origStateFileName=stateFileName(); setStateFileName(QString(tmpFile.c_str())); restoreStateFromFile(); setStateFileName(origStateFileName);
 	boost::filesystem::remove(boost::filesystem::path(tmpFile));
 }
@@ -453,7 +453,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 						if(!boost::filesystem::exists(out2)){ nextSnapFile=out2; break; }
 					}
 				} else nextSnapFile=out;
-				LOG_INFO("Will save snapshot to "<<nextSnapFile);
+				LOG_INFO("Will save snapshot to {}",nextSnapFile);
 			#endif
 		} else if (e->modifiers() & Qt::ShiftModifier){
 			renderer->setRefNow=true;
@@ -526,7 +526,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		centerScene();
 	}
 	#if 0
-		else if(e->key()==Qt::Key_D &&(e->modifiers() & Qt::AltModifier)){ /*Body::id_t id; if((id=Master::instance().getScene()->selection)>=0){ const shared_ptr<Body>& b=Body::byId(id); b->setDynamic(!b->isDynamic()); LOG_INFO("Body #"<<id<<" now "<<(b->isDynamic()?"":"NOT")<<" dynamic"); }*/ LOG_INFO("Selection not supported!!"); }
+		else if(e->key()==Qt::Key_D &&(e->modifiers() & Qt::AltModifier)){ /*Body::id_t id; if((id=Master::instance().getScene()->selection)>=0){ const shared_ptr<Body>& b=Body::byId(id); b->setDynamic(!b->isDynamic()); LOG_INFO("Body #{} now {} dynamic",id,(b->isDynamic()?"":"NOT")); }*/ LOG_INFO("Selection not supported!!"); }
 	#endif
 	else if(e->key()==Qt::Key_D) {
 		if(e->modifiers() & Qt::ShiftModifier) renderer->showDate=!renderer->showDate;
@@ -616,7 +616,7 @@ void GLViewer::centerPeriodic(){
 	Vector3r center=.5*scene->cell->getSize();
 	center=scene->cell->shearPt(center);
 	float radius=sqrt(3.)*.5*scene->cell->getSize().maxCoeff();
-	LOG_DEBUG("Periodic scene center="<<center<<", radius="<<radius);
+	LOG_DEBUG("Periodic scene center={}, radius={}",center,radius);
 	setSceneCenter(qglviewer::Vec(center[0],center[1],center[2]));
 	setSceneRadius(radius);
 	showEntireScene();
@@ -651,7 +651,7 @@ void GLViewer::centerMedianQuartile(){
 		median[i]=*(coords[i].begin()+nNodes/2);
 		interQuart[i]=*(coords[i].begin()+3*nNodes/4)-*(coords[i].begin()+nNodes/4);
 	}
-	LOG_DEBUG("Median position is"<<median<<", inter-quartile distance is "<<interQuart);
+	LOG_DEBUG("Median position is{}, inter-quartile distance is {}",median,interQuart);
 	setSceneCenter(qglviewer::Vec(median[0],median[1],median[2]));
 	setSceneRadius(2*(interQuart[0]+interQuart[1]+interQuart[2])/3.);
 	showEntireScene();
@@ -678,7 +678,7 @@ void GLViewer::centerScene(){
 	Vector3r center=box.center();
 	Vector3r halfSize=box.sizes()*.5;
 	float radius=halfSize.maxCoeff(); if(radius<=0) radius=1;
-	LOG_DEBUG("Scene center="<<center<<", halfSize="<<halfSize<<", radius="<<radius);
+	LOG_DEBUG("Scene center={}, halfSize={}, radius={}",center,halfSize,radius);
 	setSceneCenter(qglviewer::Vec(center[0],center[1],center[2]));
 	setSceneRadius(radius*1.5);
 	showEntireScene();
@@ -778,7 +778,7 @@ void GLViewer::draw(bool withNames, bool fast)
 // set frame coordinates, and isDynamic=false;
 void GLViewer::postSelection(const QPoint& point) 
 {
-	LOG_DEBUG("Selection is "<<selectedName());
+	LOG_DEBUG("Selection is {}",selectedName());
 	//cerr<<"Selection is "<<selectedName()<<endl;
 	int selection=selectedName();
 	if(selection<0 || selection>=(int)renderer->glNamedObjects.size()) return;
@@ -843,7 +843,7 @@ void GLViewer::postDraw(){
 	Real scaleStep=pow(10,(floor(log10(displayedSceneRadius()*2)-.7))); // unconstrained
 	int nSegments=((int)(wholeDiameter/gridStep))+1;
 	Real realSize=nSegments*gridStep;
-	//LOG_TRACE("nSegments="<<nSegments<<",gridStep="<<gridStep<<",realSize="<<realSize);
+	//LOG_TRACE("nSegments={},gridStep={},realSize={}",nSegments,gridStep,realSize);
 	glPushMatrix();
 
 	nSegments *= 2; // there's an error in QGLViewer::drawGrid(), fix it by '* 2'
@@ -878,10 +878,10 @@ void GLViewer::postDraw(){
 			}
 		} while(maxSqLen>pow2(renderer->oriAxesPx));
 
-		//LOG_DEBUG("Screen offsets for axes: "<<" x("<<screenDxDy[0][0]<<","<<screenDxDy[0][1]<<") y("<<screenDxDy[1][0]<<","<<screenDxDy[1][1]<<") z("<<screenDxDy[2][0]<<","<<screenDxDy[2][1]<<")");
+		//LOG_DEBUG("Screen offsets for axes:  x({},{}) y({},{}) z({},{})",screenDxDy[0][0],screenDxDy[0][1],screenDxDy[1][0],screenDxDy[1][1],screenDxDy[2][0],screenDxDy[2][1]);
 		int margin=10; // screen pixels
 		int scaleCenter[2]; scaleCenter[0]=abs(extremalDxDy[0])+margin; scaleCenter[1]=abs(extremalDxDy[1])+margin;
-		//LOG_DEBUG("Center of scale "<<scaleCenter[0]<<","<<scaleCenter[1]);
+		//LOG_DEBUG("Center of scale {},{}",scaleCenter[0],scaleCenter[1]);
 		//displayMessage(QString().sprintf("displayed scene radius %g",displayedSceneRadius()));
 		startScreenCoordinatesSystem();
 			glDisable(GL_LIGHTING);
@@ -1076,7 +1076,7 @@ void GLViewer::postDraw(){
 			else if(iends_with(_snapTo,".svg")) setSnapshotFormat("SVG");
 		#endif
 		else {
-			LOG_WARN("Unable to deduce raster snapshot format from filename "<<_snapTo<<", or format is not supported; using PNG (recognized extensions are png, jpg, jpeg.");
+			LOG_WARN("Unable to deduce raster snapshot format from filename {}, or format is not supported; using PNG (recognized extensions are png, jpg, jpeg.",_snapTo);
 			setSnapshotFormat("PNG");
 		}
 		saveSnapshot(QString(_snapTo.c_str()),/*overwrite*/ true);

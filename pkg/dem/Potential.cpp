@@ -138,21 +138,21 @@ bool Cg2_Shape_Shape_L6Geom__Potential::go(const shared_ptr<Shape>& s1, const sh
 		solution=C->geom->node->pos;
 	}
 
-	LOG_TRACE("BFGS: initial "<<solution.transpose());
+	LOG_TRACE("BFGS: initial {}",solution.transpose());
 	ParticleBFGSFunctor_R3::JacobianType jac; functor.df(solution,jac);
-	LOG_TRACE("BFGS: gradient "<<jac);
+	LOG_TRACE("BFGS: gradient {}",jac);
 	#if 1
 		int status=solver.minimizeInit(solution);
-		LOG_TRACE("BFGS: initialized, status="<<status<<" "<<BFGS_status2str(status));
+		LOG_TRACE("BFGS: initialized, status={} {}",status,BFGS_status2str(status));
 		do{
-			LOG_TRACE("BFGS: gradient="<<solver.gradient.transpose()<<", pnorm="<<solver.pnorm<<", g0norm="<<solver.g0norm<<", fp0="<<solver.fp0);
+			LOG_TRACE("BFGS: gradient={}, pnorm={}, g0norm={}, fp0={}",solver.gradient.transpose(),solver.pnorm,solver.g0norm,solver.fp0);
 			status=solver.minimizeOneStep(solution);
-			LOG_TRACE("BFGS: solution step, solution="<<solution.transpose()<<", status="<<status<<" "<<BFGS_status2str(status));
+			LOG_TRACE("BFGS: solution step, solution={}, status={} {}",solution.transpose(),status,BFGS_status2str(status));
 		} while(status==BFGSSpace::Running);
 	#else
 		int status=solver.minimize(solution);
 	#endif
-	LOG_TRACE("BFGS: final solution "<<solution.transpose()<<", status="<<status<<" "<<BFGS_status2str(status));
+	LOG_TRACE("BFGS: final solution {}, status={} {}",solution.transpose(),status,BFGS_status2str(status));
 	// solution found
 	if(status==BFGSSpace::Success){
 		Real p1=l1(solution), p2=l2(solution);

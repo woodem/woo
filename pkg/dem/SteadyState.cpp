@@ -18,44 +18,44 @@ void DetectSteadyState::run(){
 	switch(stage){
 		case STAGE_INIT: {
 			if(scene->time-stageEntered<=waitInit) return;
-			LOG_INFO("Entering 'flow' stage at "<<scene->time);
+			LOG_INFO("Entering 'flow' stage at {}",scene->time);
 			stage=STAGE_FLOW;
 			stageEntered=scene->time;
 			if(!hookFlow.empty()){
-				LOG_DEBUG("Executing hookFlow: "<<hookFlow);
+				LOG_DEBUG("Executing hookFlow: {}",hookFlow);
 				runPy("DetectSteadyState.hookFlow",hookFlow);
 			}
 			break;
 		}
 		case STAGE_FLOW: {
 			if(efflux<influx*relFlow) return;
-			LOG_INFO("Entering 'trans' stage at "<<scene->time);
+			LOG_INFO("Entering 'trans' stage at {}",scene->time);
 			stage=STAGE_TRANS;
 			stageEntered=scene->time;
 			if(!hookTrans.empty()){
-				LOG_DEBUG("Executing hookTrans: "<<hookTrans);
+				LOG_DEBUG("Executing hookTrans: {}",hookTrans);
 				runPy("DetectSteadyState.hookTrans",hookTrans);
 			}
 			break;
 		}
 		case STAGE_TRANS: {
 			if(scene->time-stageEntered<=waitTrans) return;
-			LOG_INFO("Entering 'steady' stage at "<<scene->time);
+			LOG_INFO("Entering 'steady' stage at {}",scene->time);
 			stage=STAGE_STEADY;
 			stageEntered=scene->time;
 			if(!hookSteady.empty()){
-				LOG_DEBUG("Executing hookSteady: "<<hookSteady);
+				LOG_DEBUG("Executing hookSteady: {}",hookSteady);
 				runPy("DetectSteadyState.hookSteady",hookSteady);
 			}
 			break;
 		}
 		case STAGE_STEADY: {
 			if(scene->time-stageEntered<=waitSteady) return;
-			LOG_INFO("Entering 'done' stage at "<<scene->time);
+			LOG_INFO("Entering 'done' stage at {}",scene->time);
 			stage=STAGE_DONE;
 			stageEntered=scene->time;
 			if(!hookDone.empty()){
-				LOG_DEBUG("Executing hookDone: "<<hookDone);
+				LOG_DEBUG("Executing hookDone: {}",hookDone);
 				runPy("DetectSteadyState.hookDone",hookDone);
 			}
 			break;

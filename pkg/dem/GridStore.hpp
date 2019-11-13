@@ -150,7 +150,7 @@ struct GridStore: public Object{
 		if(l<denseSz) return (*grid)[i][j][k][l+1];
 		const auto& gridEx=getGridEx(ijk);
 		const auto& ijkI=gridEx.find(ijk);
-		if(ijkI==gridEx.end()) LOG_FATAL("ijk="<<ijk.transpose()<<", l="<<l<<", denseSz="<<denseSz);
+		if(ijkI==gridEx.end()) LOG_FATAL("ijk={}, l={}, denseSz={}",ijk.transpose(),l,denseSz);
 		assert(ijkI!=gridEx.end());
 		const vector<id_t>& ex=ijkI->second;
 		int exIx=l-denseSz; /* int so that we detect underflow when debugging */

@@ -48,8 +48,8 @@ void Suspicious::run(){
 		const auto& dyn=node->getData<DemData>();
 		Particle::id_t id=-1;
 		if(!dyn.parRef.empty()){ id=(*dyn.parRef.begin())->id; }
-		if(dyn.vel.norm()>avgVel*relThreshold){ parVelOk=allOk=false; LOG_ERROR("S.dem.nodes["<<dyn.linIx<<"] / S.dem.par["<<id<<"]: velocity "<<dyn.vel.transpose()<<", norm="<<dyn.vel.norm()<<" exceeds limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<dyn.vel.norm()/avgVel<<"]"); if(!dyn.parRef.empty()) errPar.push_back(static_pointer_cast<Particle>((*dyn.parRef.begin())->shared_from_this())); }
-		if(dyn.force.norm()>avgForce*relThreshold){ parForceOk=allOk=false; LOG_ERROR("S.dem.nodes["<<dyn.linIx<<"] / S.dem.par["<<id<<"]: force "<<dyn.force.transpose()<<", norm="<<dyn.force.norm()<<" exceeds limit value of "<<relThreshold<<"*"<<avgForce<<" [*"<<dyn.force.norm()/avgForce<<"]"); if(!dyn.parRef.empty()) errPar.push_back(static_pointer_cast<Particle>((*dyn.parRef.begin())->shared_from_this())); }
+		if(dyn.vel.norm()>avgVel*relThreshold){ parVelOk=allOk=false; LOG_ERROR("S.dem.nodes[{}] / S.dem.par[{}]: velocity {}, norm={} exceeds limit value of {}*{} [*{}]",dyn.linIx,id,dyn.vel.transpose(),dyn.vel.norm(),relThreshold,avgVel,dyn.vel.norm()/avgVel); if(!dyn.parRef.empty()) errPar.push_back(static_pointer_cast<Particle>((*dyn.parRef.begin())->shared_from_this())); }
+		if(dyn.force.norm()>avgForce*relThreshold){ parForceOk=allOk=false; LOG_ERROR("S.dem.nodes[{}] / S.dem.par[{}]: force {}, norm={} exceeds limit value of {}*{} [*{}]",dyn.linIx,id,dyn.force.transpose(),dyn.force.norm(),relThreshold,avgForce,dyn.force.norm()/avgForce); if(!dyn.parRef.empty()) errPar.push_back(static_pointer_cast<Particle>((*dyn.parRef.begin())->shared_from_this())); }
 	}
 
 	for(const auto& C: *dem.contacts){
@@ -57,9 +57,9 @@ void Suspicious::run(){
 		const Real& un=abs(C->geom->cast<L6Geom>().uN);
 		const Real& fn=abs(C->phys->force[0]);
 		Real ft=Vector2r(C->phys->force[1],C->phys->force[2]).norm();
-		if(un>avgUn*relThreshold){ LOG_ERROR("S.dem.con["<<C->pyId1()<<","<<C->pyId2()<<"]: overlap "<<un<<" exceeds the limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<un/avgUn<<"]"); errCon.push_back(C); }
-		if(fn>avgFn*relThreshold){ LOG_ERROR("S.dem.con["<<C->pyId1()<<","<<C->pyId2()<<"]: overlap "<<un<<" exceeds the limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<un/avgFn<<"]"); errCon.push_back(C); }
-		if(ft>avgFt*relThreshold){ LOG_ERROR("S.dem.con["<<C->pyId1()<<","<<C->pyId2()<<"]: overlap "<<un<<" exceeds the limit value of "<<relThreshold<<"*"<<avgVel<<" [*"<<un/avgFt<<"]"); errCon.push_back(C); }
+		if(un>avgUn*relThreshold){ LOG_ERROR("S.dem.con[{},{}]: overlap {} exceeds the limit value of {}*{} [*{}]",C->pyId1(),C->pyId2(),un,relThreshold,avgVel,un/avgUn); errCon.push_back(C); }
+		if(fn>avgFn*relThreshold){ LOG_ERROR("S.dem.con[{},{}]: overlap {} exceeds the limit value of {}*{} [*{}]",C->pyId1(),C->pyId2(),un,relThreshold,avgVel,un/avgFn); errCon.push_back(C); }
+		if(ft>avgFt*relThreshold){ LOG_ERROR("S.dem.con[{},{}]: overlap {} exceeds the limit value of {}*{} [*{}]",C->pyId1(),C->pyId2(),un,relThreshold,avgVel,un/avgFt); errCon.push_back(C); }
 	}
 	#if 0 // SSS: TODO or remove
 	#ifdef WOO_OPENGL

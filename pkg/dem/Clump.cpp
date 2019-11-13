@@ -121,7 +121,7 @@ void SphereClumpGeom::recompute(int _div, bool failOk, bool fastOnly){
 		long nCellsApprox=(aabb.sizes()/dx).prod();
 		 // don't compute anything, it would take too long
 		if(fastOnly && nCellsApprox>1e5){ makeInvalid(); return; }
-		if(nCellsApprox>1e8) LOG_WARN("SphereClumpGeom: space grid has "<<nCellsApprox<<" cells, computing inertia can take a long time.");
+		if(nCellsApprox>1e8) LOG_WARN("SphereClumpGeom: space grid has {} cells, computing inertia can take a long time.",nCellsApprox);
 		Vector3r x;
 		for(x.x()=aabb.min().x()+dx/2.; x.x()<aabb.max().x(); x.x()+=dx){
 			for(x.y()=aabb.min().y()+dx/2.; x.y()<aabb.max().y(); x.y()+=dx){
@@ -254,7 +254,7 @@ shared_ptr<Node> ClumpData::makeClump(const vector<shared_ptr<Node>>& nn, shared
 		#ifdef WOO_DEBUG
 			AngleAxisr aa(*(clump->relOri.rbegin()));
 		#endif
-		LOG_TRACE("relPos="<<clump->relPos.rbegin()->transpose()<<", relOri="<<aa.axis()<<":"<<aa.angle());
+		LOG_TRACE("relPos={}, relOri={}:{}",clump->relPos.rbegin()->transpose(),aa.axis(),aa.angle());
 		dem.setClumped(cNode);
 	}
 	return cNode;
