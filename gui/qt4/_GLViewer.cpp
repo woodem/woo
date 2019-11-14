@@ -13,10 +13,6 @@
 using boost::algorithm::iends_with;
 
 
-#ifdef WOO_LOG4CXX
-static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.qt4");
-#endif
-
 #ifdef WOO_SPDLOG
 	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");
 #endif

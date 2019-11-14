@@ -110,7 +110,7 @@ opts.AddVariables(
 	BoolVariable('gprof','Enable profiling information for gprof',0),
 	('optimize','Turn on optimizations; negative value sets optimization based on debugging: not optimize with debugging and vice versa. -3 (the default) selects -O3 for non-debug and no optimization flags for debug builds',-3,None,int),
 	EnumVariable('PGO','Whether to "gen"erate or "use" Profile-Guided Optimization','',['','gen','use'],{'no':'','0':'','false':''},1),
-	ListVariable('features','Optional features that are turned on','log4cxx,opengl,opencl,gts,openmp,vtk,qt4',names=['spdlog','opengl','log4cxx','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','pybind11','cereal','never_use_this_one']),
+	ListVariable('features','Optional features that are turned on','opengl,opencl,gts,openmp,vtk,qt4',names=['opengl','cgal','openmp','opencl','gts','vtk','gl2ps','qt4','qt5','hdf5','cldem','sparc','noxml','voro','oldabi','pybind11','cereal','never_use_this_one']),
 	('jobs','Number of jobs to run at the same time (same as -j, but saved)',2,None,int),
 	#('extraModules', 'Extra directories with their own SConscript files (must be in-tree) (whitespace separated)',None,None,Split),
 	('cxxstd','Name of the c++ standard (or dialect) to compile with. With gcc, use gnu++11 (gcc >=4.7) or gnu++0x (with gcc 4.5, 4.6)','c++17'),
@@ -502,8 +502,12 @@ if not env.GetOption('clean'):
 	ok&=conf.EnsureBoostVersion(14800)
 	ok&=conf.CheckBoost()
 	ok&=conf.CheckCXXHeader('Eigen/Core')
+
 	if 'pybind11' in env['features']: ok&=conf.CheckCXXHeader('pybind11/pybind11.h')
 	if 'cereal' in env['features']: ok&=conf.CheckCXXHeader('cereal/cereal.hpp')
+	# for spdlog
+	env.Append(CPPPATH=[buildInc+'/woo/lib'])
+	env.Append(CPPDEFINES=['SPDLOG_COMPILED_LIB','WOO_SPDLOG'])
 
 	if not ok:
 		print("\nOne of the essential libraries above was not found, unable to continue.\n\nCheck `%s' for possible causes, note that there are options that you may need to customize:\n\n"%(buildDir+'/config.log')+opts.GenerateHelpText(env))
@@ -548,9 +552,6 @@ if not env.GetOption('clean'):
 			elif conf.CheckLibWithHeader(['libQGLViewer-qt5'],'QGLViewer/qglviewer.h','c++','QGLViewer();',autoadd=1): env['QGLVIEWER_LIB']='libQGLViewer-qt5'
 			else: featureNotOK('qt5','Building with Qt5 implies the QGLViewer library installed (package libqglviewer-dev-qt package in debian/ubuntu, libQGLViewer in RPM-based distributions)')
 			if not conf.CheckLibLinkedTo('lib'+env['QGLVIEWER_LIB']+'.so','libQt5Gui.so.5'): featureNotOK('qt5','%s does not link to libQt5Gui.so.5 (are you mixing qt4/qt5 libs?)'%env['QGLVIEWER_LIB'])
-	if 'spdlog' in env['features']:
-		env.Append(CPPPATH=[buildInc+'/woo/lib'])
-		env.Append(CPPDEFINES=['SPDLOG_COMPILED_LIB'])
 	if 'opencl' in env['features']:
 		env.Append(CPPDEFINES=['CL_USE_DEPRECATED_OPENCL_1_1_APIS'])
 		ok=conf.CheckLibWithHeader('OpenCL','CL/cl.h','c','clGetPlatformIDs(0,NULL,NULL);',autoadd=1)

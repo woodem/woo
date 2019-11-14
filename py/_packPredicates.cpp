@@ -6,10 +6,6 @@
 #include<woo/lib/sphere-pack/SpherePack.hpp>
 #include<woo/core/Master.hpp>
 
-#ifdef WOO_LOG4CXX
-	static log4cxx::LoggerPtr logger=log4cxx::Logger::getLogger("woo.pack.predicates");
-#endif
-
 #ifdef WOO_SPDLOG
 	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.pack.predicates");
 #endif

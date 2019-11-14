@@ -63,7 +63,18 @@ def makeLog(name):
     try:
         import coloredlogs
         coloredlogs.install(level='INFO',fmt='%(asctime)s %(name)-8s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',datefmt='%H:%M:%S')
+        return logging.getLogger(name)
     except ImportError: pass
+    ## does not really color... why?
+    #try:
+    #    import colorlog
+    #    handler=colorlog.StreamHandler()
+    #    handler.setFormatter(colorlog.ColoredFormatter('%(asctime)s %(name)-8s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',datefmt='%H:%M:%S',reset=True))
+    #    ret=colorlog.getLogger(name)
+    #    ret.addHandler(handler)
+    #    ret.setLevel('INFO')
+    #    return ret
+    #except ImportError: pass
     return logging.getLogger(name)
 
 

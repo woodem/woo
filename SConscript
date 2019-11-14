@@ -101,15 +101,23 @@ env.Install('$LIBDIR/woo/_monkey',[env.File(env.Glob('py/_monkey/*.py'),'_monkey
 # using their respective setup.py
 import subprocess, sys
 setups=[str(s) for s in env.Glob('wooExtra/*/setup.py')]
-if setups:
-	print('Running setup.py (parallel):',' '.join([os.path.dirname(s) for s in setups]))
+# parallel, it seems to corrupt the namespace package (?)
+if 0:
+	if setups:
+		print('Running setup.py (parallel):',' '.join([os.path.dirname(s) for s in setups]))
 
-# http://stackoverflow.com/a/23616229/761090
-pp=[subprocess.Popen([env['PYTHON'],'-W','ignore',os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s)) for s in setups]
-exits=[p.wait() for p in pp]
-if sum(exits)>0:
-	print('Error running:','. '.join([setups[i] for i,e in enumerate(exits) if e>0]))
-	sys.exit(1)
+	# http://stackoverflow.com/a/23616229/761090
+	pp=[subprocess.Popen([env['PYTHON'],'-W','ignore',os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s)) for s in setups]
+	exits=[p.wait() for p in pp]
+	if sum(exits)>0:
+		print('Error running:','. '.join([setups[i] for i,e in enumerate(exits) if e>0]))
+		sys.exit(1)
+else:
+	for s in setups:
+		print('Running setup.py in %s'%s)
+		p=subprocess.Popen([env['PYTHON'],'-W','ignore',os.path.abspath(s),'--quiet','install'],cwd=os.path.dirname(s))
+		exit=p.wait()
+		if exit>0: raise RuntimeError('Error running %s'%s)
 
 
 

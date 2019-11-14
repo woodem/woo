@@ -883,7 +883,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     S.dem.par.add(gtsSurface2Facets(p,mask=0b011),nodes=False) # nodes not needed
     if 1: ## XXX
         S.lab.wallId=S.dem.par.add(woo.dem.Wall.make(0,axis=0,mat=mat,fixed=True))
-        log.warn('makeBandFeedPack: Adding artificial wall to avoid periodic-inlet issues (under investigation)')
+        log.warning('makeBandFeedPack: Adding artificial wall to avoid periodic-inlet issues (under investigation)')
     S.dem.loneMask=0b010
 
 

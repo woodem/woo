@@ -302,8 +302,16 @@ from paraview.simple import *
         
 
 def readPointCellData(src):
-    src.PointArrayStatus=src.GetPointDataInformation().keys()
-    src.CellArrayStatus=src.GetCellDataInformation().keys()
+    # not sure this works really?
+    if 0: # does not work??
+        src.PointArrayStatus=src.GetPointDataInformation().keys()
+        src.CellArrayStatus=src.GetCellDataInformation().keys()
+    else:
+        # https://discourse.paraview.org/t/loading-data-with-python/768/2
+        stp=src.GetProperty('PointArrayInfo')
+        src.PointArrayStatus=[stp[i] for i in range(0,len(stp),2)]
+        stc=src.GetProperty('CellArrayInfo')
+        src.CellArrayStatus=[stc[i] for i in range(0,len(stc),2)]
     src.UpdatePipeline()
 
 def readDataOrPvd(reader,FileName):

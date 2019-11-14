@@ -51,56 +51,13 @@
 
 	#define WOO_DECL_LOGGER public: static std::shared_ptr<spdlog::logger> logger;
 	#define WOO_IMPL_LOGGER(classname) std::shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
-#elif defined(WOO_LOG4CXX)
-
-#	include<log4cxx/logger.h>
-#	include<log4cxx/basicconfigurator.h>
-#	include<log4cxx/propertyconfigurator.h>
-#	include<log4cxx/helpers/exception.h>
-
-// logger is local for every class, but if it is missing, we will use the parent's class logger automagically.
-// TRACE doesn't really exist in log4cxx 0.9.7 (does in 0.10), otput through DEBUG then
-#ifndef WOO_DEBUG
-#	define LOG_TRACE(msg){}
-#	define LOG_DEBUG(msg){}
 #else
-#	ifdef LOG4CXX_TRACE
-#		define LOG_TRACE(msg) {LOG4CXX_TRACE(logger, _LOG_HEAD<<msg);}
-#	else
-#		define LOG_TRACE(msg) {LOG4CXX_DEBUG(logger, _LOG_HEAD<<msg);}
-#	endif
-#	define LOG_DEBUG(msg) {LOG4CXX_DEBUG(logger, _LOG_HEAD<<msg);}
-#endif
-#	define LOG_INFO(msg)  {LOG4CXX_INFO(logger,  _LOG_HEAD<<msg);}
-#	define LOG_WARN(msg)  {LOG4CXX_WARN(logger,  _LOG_HEAD<<msg);}
-#	define LOG_ERROR(msg) {LOG4CXX_ERROR(logger, _LOG_HEAD<<msg);}
-#	define LOG_FATAL(msg) {LOG4CXX_FATAL(logger, _LOG_HEAD<<msg);}
-
-#	define WOO_DECL_LOGGER public: static log4cxx::LoggerPtr logger
-#	define WOO_IMPL_LOGGER(classname) log4cxx::LoggerPtr classname::logger = log4cxx::Logger::getLogger("woo." #classname)
-
-#else
-
-#include<iostream>
-
-#	define _POOR_MANS_LOG(level,msg) {std::cerr<<level " "<<_LOG_HEAD<<msg<<std::endl;}
-#	define LOG_TRACE(msg) // _POOR_MANS_LOG("TRACE",msg)
-#	define LOG_DEBUG(msg) // _POOR_MANS_LOG("DEBUG",msg)
-#	define LOG_INFO(msg)  // _POOR_MANS_LOG("INFO ",msg)
-#	define LOG_WARN(msg)  _POOR_MANS_LOG("WARN ",msg)
-#	define LOG_ERROR(msg) _POOR_MANS_LOG("ERROR",msg)
-#	define LOG_FATAL(msg) _POOR_MANS_LOG("FATAL",msg)
-
-#	define WOO_DECL_LOGGER
-#	define WOO_IMPL_LOGGER(classname)
-
+	#error WOO_SPDLOG should be defined automatically
 #endif
 
 // these macros are temporary
 #define TRACE LOG_TRACE("Been here")
-#define _TRVHEAD cerr<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<": "
 #define _TRV(x) #x"="<<x<<"; "
-#define _TRVTAIL "\n"
 #define TRVAR1(a) LOG_TRACE("{}",_TRV(a));
 #define TRVAR2(a,b) LOG_TRACE("{}{}",_TRV(a),_TRV(b));
 #define TRVAR3(a,b,c) LOG_TRACE("{}{}{}",_TRV(a),_TRV(b),_TRV(c));
