@@ -20,12 +20,8 @@ from minieigen import *
 from woo.core import Object
 
 import re,itertools,math
-import logging
-logging.trace=logging.debug
-logging.basicConfig(level=logging.INFO)
-#from logging import debug,info,warning,error
-#from woo import *
 import woo._customConverters, woo.core, woo.utils
+log=woo.utils.makeLog('ObjectEditor')
 import woo.qt
 import woo.document
 import sys
@@ -294,7 +290,7 @@ class AttrEditor_FloatRange(AttrEditor,QFrame):
     def setFocus(self): self.slider.setFocus()
     def multiplierChanged(self,convSpec):
         if isinstance(self.multiplier,tuple): raise RuntimeError("Float range cannot have multiple units.")
-        logging.debug("New multiplier is "+str(self.multiplier))
+        log.debug("New multiplier is "+str(self.multiplier))
         if self.multiplier: self.setToolTip("Unit-conversion %s: factor %g"%(convSpec,self.multiplier))
         else: self.setToolTip('')
         self.refresh()
@@ -575,14 +571,14 @@ class AttrEditor_MatrixX(AttrEditor,QFrame):
                     mult=(self.multiplier[col] if isinstance(self.multiplier,tuple) else self.multiplier)
                     if mult: v/=mult
                     val[self.idxConverter(row,col)]=v
-            logging.debug('setting'+str(val))
+            log.debug('setting'+str(val))
             self.trySetter(val)
         except ValueError: self.refresh()
     def setFocus(self): self.grid.itemAtPosition(0,0).widget().setFocus()
     def multiplierChanged(self,convSpec):
         if self.multiplier: self.setToolTip(convSpec)
         else: self.setToolTip('')
-        logging.debug("Multiplier changed to "+str(self.multiplier))
+        log.debug("Multiplier changed to "+str(self.multiplier))
         self.refresh()
 
 class AttrEditor_MatrixXi(AttrEditor,QFrame):
@@ -612,7 +608,7 @@ class AttrEditor_MatrixXi(AttrEditor,QFrame):
             if w.value()!=val[self.idxConverter(row,col)]:
                 modified=True; val[self.idxConverter(row,col)]=w.value()
         if not modified: return
-        logging.debug('setting'+str(val))
+        log.debug('setting'+str(val))
         self.trySetter(val)
     def setFocus(self): self.grid.itemAtPosition(0,0).widget().setFocus()
 
@@ -884,13 +880,13 @@ class ObjectEditor(QFrame):
         else:
             # no objAttrLabelList
             if self.ser==None:
-                logging.debug('New None Object')
+                log.debug('New None Object')
                 # show None
                 lay=QGridLayout(self); lay.setContentsMargins(2,2,2,2); lay.setVerticalSpacing(0)
                 lab=QLabel('<b>None</b>'); lab.setFrameShape(QFrame.Box); lab.setFrameShadow(QFrame.Sunken); lab.setLineWidth(2); lab.setAlignment(Qt.AlignHCenter);
                 if self.showType: lay.addWidget(lab,0,0,1,-1)
                 return # no timers, nothing will change at all
-            logging.debug('New Object of type %s'%ser.__class__.__name__)
+            log.debug('New Object of type %s'%ser.__class__.__name__)
         # create entries for all attributes of this object
         if ser:
             self.setWindowTitle(str(ser))
@@ -952,7 +948,7 @@ class ObjectEditor(QFrame):
         groupNo=len(self.entryGroups)-1
 
         #if not match: print 'No attr match for docstring of %s.%s'%(obj.__class__.__name__,attr)
-        #logging.debug('Attr %s is of type %s'%(attr,((t[0].__name__,) if isinstance(t,tuple) else t.__name__)))
+        #log.debug('Attr %s is of type %s'%(attr,((t[0].__name__,) if isinstance(t,tuple) else t.__name__)))
         self.entries.append(self.EntryData(obj=obj,name=attr,T=t,groupNo=groupNo,doc=doc,trait=trait,containingClass=klass,editor=self,label=label))
 
     def getDocstring(self,attr=None):
@@ -1486,7 +1482,7 @@ class SeqObjectComboBox(QFrame):
             self.combo.setCurrentIndex(len(currSeq)-1)
             return
         if len(currSeq)==0: ix=-1
-        logging.debug('%s comboIndexSlot len=%d, ix=%d'%(self.getItemType().__name__,len(currSeq),ix))
+        log.debug('%s comboIndexSlot len=%d, ix=%d'%(self.getItemType().__name__,len(currSeq),ix))
         self.downButton.setEnabled(ix<len(currSeq)-1)
         self.upButton.setEnabled(ix>0)
         self.combo.setEnabled(ix>=0)
@@ -1520,7 +1516,7 @@ class SeqObjectComboBox(QFrame):
             ser=(self.seqEdit.ser if self.seqEdit else None) if forceIx<0 else currSeq[forceIx] 
             if comboEnabled and len(currSeq)==cnt and (ix<0 or (ix<len(currSeq) and ser==currSeq[ix])): return
             if not comboEnabled and len(currSeq)==0: return
-            logging.debug(self.getItemType().__name__+' rebuilding list from scratch')
+            log.debug(self.getItemType().__name__+' rebuilding list from scratch')
             self.combo.clear()
             if len(currSeq)>0:
                 prevIx=-1
@@ -1547,10 +1543,10 @@ class SeqObjectComboBox(QFrame):
                 elif prevIx>=0: newIx=prevIx # if found what was active before, use it
                 elif ix>=0: newIx=ix         # otherwise use the previous index (e.g. after deletion)
                 else: newIx=0                  # fallback to 0
-                logging.debug('%s setting index %d'%(self.getItemType().__name__,newIx))
+                log.debug('%s setting index %d'%(self.getItemType().__name__,newIx))
                 self.combo.setCurrentIndex(newIx)
             else:
-                logging.debug('%s EMPTY, setting index 0'%(self.getItemType().__name__))
+                log.debug('%s EMPTY, setting index 0'%(self.getItemType().__name__))
                 self.combo.setCurrentIndex(-1)
             enableKill=(not self.trait.noGuiResize and len(currSeq)>(self.trait.range[0] if self.trait.range else 0))
             enableNew=(not self.trait.noGuiResize and (not self.trait.range or len(currSeq)<self.trait.range[1]))
@@ -1568,7 +1564,7 @@ class SeqObjectComboBox(QFrame):
         ser=dialog.result()
         ix=self.combo.currentIndex()
         currSeq=list(self.getter()); currSeq.insert(ix,ser); self.setter(currSeq)
-        logging.debug('%s new item created at index %d'%(self.getItemType().__name__,ix))
+        log.debug('%s new item created at index %d'%(self.getItemType().__name__,ix))
         self.refreshEvent(forceIx=ix)
     def loadSlot(self):
         f=QFileDialog.getOpenFileName(self,msg,'.')
@@ -1857,16 +1853,16 @@ class SeqFundamentalEditor(QFrame):
         #print 'aaa',len(currSeq)
         # clear everything
         for row in range(self.form.rowCount()):
-            logging.trace('counts',self.form.rowCount(),self.form.count())
+            log.trace('counts',self.form.rowCount(),self.form.count())
             for wi in self.form.itemAt(row,QFormLayout.FieldRole),self.form.itemAt(row,QFormLayout.LabelRole):
                 self.form.removeItem(wi)
                 if not wi or not wi.widget(): continue
-                logging.trace('deleting widget',wi.widget())
+                log.trace('deleting widget',wi.widget())
                 # for some reason, deleting does not make the thing disappear visually; hiding does, however
                 # FIXME: this might be the reason why ever-resizing sequences eat up RAM!!
                 widget=wi.widget(); widget.hide(); del widget 
-            logging.trace('counts after ',self.form.rowCount(),self.form.count())
-        logging.debug('cleared')
+            log.trace('counts after ',self.form.rowCount(),self.form.count())
+        log.debug('cleared')
         # add everything
         Klass=_fundamentalEditorMap.get(self.itemType,None)
         if not Klass:
@@ -1900,13 +1896,13 @@ class SeqFundamentalEditor(QFrame):
             if li<0: continue # in the split, do not show anything
             widget=Klass(self,ItemGetter(self.getter,i),ItemSetter(self.getter,self.setter,i))
             self.form.insertRow(i,'%d. '%li,widget)
-            logging.debug('added item %d %s'%(i,str(widget)))
+            log.debug('added item %d %s'%(i,str(widget)))
             # set units correctly
             if self.multiplier:
                 widget.multiplier=self.multiplier
                 widget.multiplierChanged(self.convSpec)
         if len(currSeq)==0: self.form.insertRow(0,'<i>empty</i>',QLabel('<i>(right-click for menu)</i>'))
-        logging.debug('rebuilt, will refresh now')
+        log.debug('rebuilt, will refresh now')
         self.refreshEvent(dontRebuild=True) # avoid infinite recursion it the length would change meanwhile
     def refreshEvent(self,dontRebuild=False,forceIx=-1):
         currSeq=self.getter()
@@ -1920,7 +1916,7 @@ class SeqFundamentalEditor(QFrame):
             item=self.form.itemAt(i,QFormLayout.FieldRole)
             if not item: continue # some error condition, oh well
             widget=item.widget()
-            logging.trace('got item #%d %s'%(i,str(widget)))
+            log.trace('got item #%d %s'%(i,str(widget)))
             if hasattr(widget,'hot') and not widget.hot: # it can be a QLabel as well
                 widget.refresh()
             if forceIx>=0 and forceIx==i: widget.setFocus()

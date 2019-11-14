@@ -304,6 +304,7 @@ from paraview.simple import *
 def readPointCellData(src):
     src.PointArrayStatus=src.GetPointDataInformation().keys()
     src.CellArrayStatus=src.GetCellDataInformation().keys()
+    src.UpdatePipeline()
 
 def readDataOrPvd(reader,FileName):
     # PVD not yet supported in readPointCellData (how?), hence disabled
@@ -420,7 +421,8 @@ if sphereFiles:
     # don't show glyphs for more than 5e4 spheres by default to avoid veeery sloooow rendering
     isBig=(spheres.CellData.Proxy.GetDataInformation().GetNumberOfCells()>5e4)
     # setup glyphs, but don't show those by default
-    gl=Glyph(GlyphType='Sphere',ScaleArray=['POINTS','radius'])
+    gl=Glyph(Input=spheres,GlyphType='Sphere')
+    gl.ScaleArray=['POINTS','radius']
     gl.GlyphType.Radius=1.0
     gl.GlyphMode='All Points'
     gl.ScaleFactor=1.0

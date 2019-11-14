@@ -50,6 +50,22 @@ def find_executable(ex):
         import distutils.spawn
         return distutils.spawn.find_executable(ex)
 
+# https://stackoverflow.com/a/55276759/761090
+import logging
+from functools import partial,partialmethod
+logging.TRACE=logging.DEBUG-5
+logging.addLevelName(logging.TRACE,'TRACE')
+logging.Logger.trace=partialmethod(logging.Logger.log,logging.TRACE)
+logging.trace=partial(logging.log,logging.TRACE)
+
+def makeLog(name):
+    import logging
+    try:
+        import coloredlogs
+        coloredlogs.install(level='INFO',fmt='%(asctime)s %(name)-8s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',datefmt='%H:%M:%S')
+    except ImportError: pass
+    return logging.getLogger(name)
+
 
 def spherePWaveDt(radius,density,young):
     r"""Compute P-wave critical timestep for a single (presumably representative) sphere, using formula for P-Wave propagation speed :math:`\Delta t_{c}=\frac{r}{\sqrt{E/\rho}}`. If you want to compute minimum critical timestep for all spheres in the simulation, use :obj:`woo.utils.pWaveDt` instead.
