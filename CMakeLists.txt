@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-OPTION(WOO_DEBUG "Include debugging information" ON)
+OPTION(WOO_DEBUG "Include debugging information" OFF)
 OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
 OPTION(WOO_VTK "Use VTK, enable related functionality" OFF)
 OPTION(WOO_HDF5 "Use HDF5, enable related functionality" OFF)
@@ -106,10 +106,10 @@ execute_process(COMMAND git log -1 --format=%h
 )
 execute_process(
 	COMMAND ${PYTHON_EXECUTABLE} "-cimport site;print(site.getsitepackages()[0])"
-	OUTPUT_VARIABLE WOO_MODULEDIR
+	OUTPUT_VARIABLE WOO_TOP_MODULEDIR
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-set(WOO_MODULEDIR "${WOO_MODULEDIR}/woo")
+set(WOO_MODULEDIR "${WOO_TOP_MODULEDIR}/woo")
 message(STATUS "Python modules installed in ${WOO_MODULEDIR}")
 
 
@@ -324,7 +324,7 @@ install(PROGRAMS "${WOO_MAIN_SCRIPT}" "${WOO_MAIN_SCRIPT}-batch"
 
 install(FILES
 	core/main/wooMain.py
-	DESTINATION ${WOO_MODULEDIR}
+	DESTINATION ${WOO_TOP_MODULEDIR}
 )
 install(FILES
 	py/apiversion.py
