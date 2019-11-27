@@ -2,6 +2,7 @@
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/core/Field.hpp>
 #include<woo/core/Scene.hpp>
+#include<woo/pkg/dem/Contact.hpp>
 // #include<boost/regex.hpp>
 
 WOO_PLUGIN(dem,(AxialGravity) /* (CentralGravityEngine)(AxialGravityEngine)(HdapsGravityEngine)*/ );

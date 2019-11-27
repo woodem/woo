@@ -1,5 +1,6 @@
 #include<woo/pkg/dem/Impose.hpp>
 #include<woo/lib/smoothing/LinearInterpolate.hpp>
+#include<woo/pkg/dem/Contact.hpp>
 
 WOO_PLUGIN(dem,(HarmonicOscillation)(AlignedHarmonicOscillations)(CircularOrbit)(StableCircularOrbit)(ConstantForce)(RadialForce)(Local6Dofs)(VariableAlignedRotation)(InterpolatedMotion)(VelocityAndReadForce)(ReadForce)(CombinedImpose)(VariableVelocity3d));
 

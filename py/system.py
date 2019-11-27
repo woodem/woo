@@ -33,10 +33,12 @@ def releaseInternalPythonObjects():
     if 'WOO_DEBUG' in os.environ: msg=lambda x: sys.stderr.write(x)
     else: msg=lambda x: None
     msg("Entered woo._releaseInternalPythonObjects, releasing woo.master.scene\n")
-    woo.master.releaseScene() # 
-    msg("woo.master.scene released, releasing attribute traits...\n")
-    for c in woo.core.Object._derivedCxxClasses:
-        for trait in c._attrTraits: trait._resetInternalPythonObjects()
+    woo.master.releaseScene()
+    if hasattr(woo.core.Object,'_derivedCxxClasses'): 
+        msg("woo.master.scene released, releasing attribute traits...\n")
+        for c in woo.core.Object._derivedCxxClasses:
+            for trait in c._attrTraits: trait._resetInternalPythonObjects()
+    else: msg("woo.core.Object does not define _derivedCxxClasses (skipping cleanup)")
     if woo.master.scene: woo.master.scene.plot._resetInternalPythonObjects()
     msg("traits released.\n")
 

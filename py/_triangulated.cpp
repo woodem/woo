@@ -209,10 +209,10 @@ int spheroidsToSTL(const string& out, const shared_ptr<DemField>& dem, Real tol,
 		}
 		stl<<"endsolid "<<solid<<"\n";
 		stl.close();
-		return numTri;
 	}
+	return numTri;
 
-#if WOO_GTS
+#ifdef WOO_GTS
 	/*****
 	Convert all triangulation to GTS surfaces, find their distances, isolate connected components,
 	merge these components incrementally and write to STL

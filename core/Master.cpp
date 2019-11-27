@@ -11,6 +11,7 @@
 #include<boost/algorithm/string.hpp>
 #include<boost/thread/mutex.hpp>
 #include<boost/version.hpp>
+#include<algorithm>
 
 
 
@@ -299,9 +300,14 @@ shared_ptr<Object> Master::factorClass(const std::string& name){
 
 void Master::registerPluginClasses(const char* module, const char* fileAndClasses[]){
 	assert(fileAndClasses[0]!=NULL); // must be file name
+	auto& mpc(modulePluginClasses);
 	for(int i=1; fileAndClasses[i]!=NULL; i++){
-		LOG_DEBUG_EARLY("Plugin "<<fileAndClasses[0]<<", class "<<module<<"."<<fileAndClasses[i]);	
-		modulePluginClasses.push_back({module,fileAndClasses[i]});
+		LOG_DEBUG_EARLY("Plugin "<<fileAndClasses[0]<<", class "<<module<<"."<<fileAndClasses[i]);
+		if(std::find(mpc.begin(),mpc.end(),std::pair<string,string>({module,fileAndClasses[i]}))!=mpc.end()){
+			LOG_DEBUG_EARLY("**** "<<module<<"."<<fileAndClasses[i]<<" already registered ****");
+			continue;
+		}
+		mpc.push_back({module,fileAndClasses[i]});
 	}
 }
 
@@ -379,7 +385,7 @@ void Master::pyRegisterAllClasses(){
 		catch (std::runtime_error& e){
 			/* FIXME: this catches all errors! Some of them are not harmful, however:
 			 * when a class is not factorable, it is OK to skip it; */	
-			 cerr<<"Caught non-critical error for class "<<module<<"."<<name;
+			 LOG_WARN("Caught non-critical error for class {}.{}",module,name);
 		}
 	}
 
@@ -420,6 +426,7 @@ void Master::pyRegisterAllClasses(){
 			}
 		}
 	}
+	LOG_DEBUG_EARLY("************** pythonables left : "<<pythonables.size()<<" *******************");
 	for(auto klass_func: defPyAttrsFuncs){
 		LOG_DEBUG_EARLY("Defining class attributes for: "<<std::get<0>(klass_func));
 		std::get<1>(klass_func)();

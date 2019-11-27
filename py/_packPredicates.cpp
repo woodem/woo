@@ -64,6 +64,7 @@ class PredicateBoolean: public Predicate{
 		const shared_ptr<Predicate> A,B;
 	public:
 		PredicateBoolean(const shared_ptr<Predicate>& _A, const shared_ptr<Predicate>& _B): A(_A), B(_B){}
+		virtual ~PredicateBoolean()=default;
 		const shared_ptr<Predicate> getA(){ return A;}
 		const shared_ptr<Predicate> getB(){ return B;}
 };

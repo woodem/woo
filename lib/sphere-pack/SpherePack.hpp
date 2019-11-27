@@ -17,6 +17,7 @@ struct Predicate{
 	public:
 		virtual bool operator() (const Vector3r& pt,Real pad=0.) const = 0;
 		virtual AlignedBox3r aabb() const = 0;
+		virtual ~Predicate()=default;
 		Vector3r dim() const { return aabb().sizes(); }
 		Vector3r center() const { return aabb().center(); }
 };

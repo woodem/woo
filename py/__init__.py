@@ -133,9 +133,10 @@ if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 # we will check build features after the binary import
 # and based on that use one or another
 try: import minieigen
-except ImportError: pass
-try: import _minieigen11
-except ImportError: pass
+except ImportError:
+    try: import _minieigen11
+    except ImportError:
+        raise RuntimeError('minieigen is not importable (and _minieigen11 is not, either).')
 
 
 # c++ initialization code

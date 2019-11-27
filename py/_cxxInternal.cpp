@@ -75,6 +75,37 @@ void wooInitialize(){
 
 	PyEval_InitThreads();
 
+	// this is probably too late already
+	#if 0
+		#ifdef WOO_PYBIND11
+			py::module::import("_minieigen11");
+		#else
+			py::import("minieigen"); 
+		#endif
+	#else
+		// early check that minieigen is importable
+		#ifdef WOO_PYBIND11
+			const string meig="_minieigen11";
+		#else
+			const string meig="minieigen"; 
+		#endif
+		try{
+			if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
+			#ifdef WOO_PYBIND11
+				auto minieigen=py::module::import(meig.c_str());
+			#else
+				auto minieigen=py::import(meig.c_str());
+			#endif
+			LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
+		} catch(py::error_already_set& e){
+				throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
+		} catch(...){
+			throw std::runtime_error("Error importing "+meig+" (details not reported).");
+		}
+	#endif
+
+
+
 	Master& master(Master::instance());
 	
 	string confDir;
@@ -94,14 +125,16 @@ void wooInitialize(){
 
 	confDir+="/woo";
 
-
 	master.confDir=confDir;
 	#if defined(WOO_DEBUG) && !defined(__MINGW64__)
 		std::ofstream gdbBatch;
 		master.gdbCrashBatch=master.tmpFilename();
 		gdbBatch.open(master.gdbCrashBatch.c_str()); gdbBatch<<"attach "<<lexical_cast<string>(getpid())<<"\nset pagination off\nthread info\nthread apply all backtrace\ndetach\nquit\n"; gdbBatch.close();
-		signal(SIGABRT,crashHandler);
-		signal(SIGSEGV,crashHandler);
+		// XXX DISABLED for now
+		#if 0
+			signal(SIGABRT,crashHandler);
+			signal(SIGSEGV,crashHandler);
+		#endif
 	#endif
 	
 #if 0
@@ -119,9 +152,8 @@ void wooInitialize(){
 
 	// check that the decimal separator is "." (for GTS imports)
 	if(atof("0.5")==0.0){
-		LOG_WARN("Decimal separator is not '.'; this can cause erratic mesh imports from GTS and perhaps other problems. Please report this to http://bugs.launchpad.net/woo .");
+		LOG_WARN("Decimal separator is not '.'; this can cause erratic mesh imports from GTS and perhaps other problems. Please report this to https://github.com/woodem/woo .");
 	}
-
 	// register all python classes here
 	master.pyRegisterAllClasses();
 }

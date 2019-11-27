@@ -1,5 +1,6 @@
 #include<woo/pkg/dem/Collision.hpp>
 #include<woo/pkg/dem/ParticleContainer.hpp>
+#include<woo/pkg/dem/Contact.hpp>
 #ifdef WOO_OPENGL
 	#include<woo/lib/opengl/OpenGLWrapper.hpp>
 #endif

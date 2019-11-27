@@ -10,6 +10,9 @@
 #include<woo/pkg/dem/Contact.hpp>
 #include<woo/pkg/dem/Particle.hpp>
 
+// #include<pybind11/eigen.h>
+#include<pybind11/stl.h>
+
 PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
 PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
 PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Object>>)

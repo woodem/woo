@@ -57,11 +57,10 @@
 
 // these macros are temporary
 #define TRACE LOG_TRACE("Been here")
-#define _TRV(x) #x"="<<x<<"; "
-#define TRVAR1(a) LOG_TRACE("{}",_TRV(a));
-#define TRVAR2(a,b) LOG_TRACE("{}{}",_TRV(a),_TRV(b));
-#define TRVAR3(a,b,c) LOG_TRACE("{}{}{}",_TRV(a),_TRV(b),_TRV(c));
-#define TRVAR4(a,b,c,d) LOG_TRACE("{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d));
-#define TRVAR5(a,b,c,d,e) LOG_TRACE("{}{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d),_TRV(e));
-#define TRVAR6(a,b,c,d,e,f) LOG_TRACE("{}{}{}{}{}{}",_TRV(a),_TRV(b),_TRV(c),_TRV(d),_TRV(e),_TRV(f));
+#define TRVAR1(a) LOG_TRACE("{}={}",#a,a);
+#define TRVAR2(a,b) LOG_TRACE("{}={}, {}={}",#a,a,#b,b);
+#define TRVAR3(a,b,c) LOG_TRACE("{}={}, {}={}, {}={}",#a,a,#b,b,#c,c);
+#define TRVAR4(a,b,c,d) LOG_TRACE("{}={}, {}={}, {}={}, {}={}",#a,a,#b,b,#c,c,#d,d);
+#define TRVAR5(a,b,c,d,e) LOG_TRACE("{}={}, {}={}, {}={}, {}={}, {}={}",#a,a,#b,b,#c,c,#d,d,#e,e);
+#define TRVAR6(a,b,c,d,e,f) LOG_TRACE("{}={}, {}={}, {}={}, {}={}, {}={}, {}={}",#a,a,#b,b,#c,c,#d,d,#e,e,#f,f);
 

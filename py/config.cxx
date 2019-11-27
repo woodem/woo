@@ -108,6 +108,9 @@ WOO_PYTHON_MODULE(config)
 
 	mod.attr("sourceRoot")=BOOST_PP_STRINGIZE(WOO_SOURCE_ROOT);
 	mod.attr("buildRoot")=BOOST_PP_STRINGIZE(WOO_BUILD_ROOT);
+	#ifdef WOO_BUILD_PROGRAM
+		mod.attr("buildProgram")=BOOST_PP_STRINGIZE(WOO_BUILD_PROGRAM);
+	#endif
 	mod.attr("flavor")=BOOST_PP_STRINGIZE(WOO_FLAVOR);
 	#ifdef WOO_SCONS_PATH
 		mod.attr("sconsPath")=BOOST_PP_STRINGIZE(WOO_SCONS_PATH);

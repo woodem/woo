@@ -3,6 +3,7 @@
 #include<Python.h>
 #include<string>
 #ifdef WOO_PYBIND11
+	#include<pybind11/pybind11.h>
 	typedef pybind11::gil_scoped_acquire GilLock;
 #else
 	//! class (scoped lock) managing python's Global Interpreter Lock (gil)
