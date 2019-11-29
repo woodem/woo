@@ -40,6 +40,16 @@ class TestSceneLabels(unittest.TestCase):
         self.assertTrue(self.S.lab.objs3[0]==None)
         self.assertTrue(self.S.lab.objs3[2]==o2)
         self.assertTrue(len(self.S.lab.objs3)==3)
+    def testString(self):
+        'LabelMapper: strings and bytes'
+        self.S.lab.emptyStr=''
+        self.S.lab.emptyBytes=b''
+        self.S.lab.someStr='abcdef'
+        self.S.lab.someBytes=b'abcdef'
+        self.assertTrue(self.S.lab._whereIs('emptyStr')==woo.core.LabelMapper.inPy)
+        self.assertTrue(self.S.lab._whereIs('emptyBytes')==woo.core.LabelMapper.inPy)
+        self.assertTrue(self.S.lab._whereIs('someStr')==woo.core.LabelMapper.inPy)
+        self.assertTrue(self.S.lab._whereIs('someBytes')==woo.core.LabelMapper.inPy)
     def testMixedSeq(self):
         'LabelMapper: mixed sequences rejected, undetermined accepted'
         # mixed sequences
