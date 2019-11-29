@@ -8,8 +8,10 @@ OPTION(WOO_DEBUG "Include debugging information" OFF)
 OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
 OPTION(WOO_VTK "Use VTK, enable related functionality" OFF)
 OPTION(WOO_HDF5 "Use HDF5, enable related functionality" OFF)
-OPTION(WOO_OPENGL "Use OpenGL (requires QT5)" OFF)
+# OPTION(WOO_OPENGL "Use OpenGL (requires QT5)" OFF)
+OPTION(WOO_GTS "Use GTS (and build internal pygts), enable related functionality" ON)
 OPTION(WOO_QT5 "Build Qt5-based user interface" OFF)
+OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
 OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" ON)
 
@@ -22,10 +24,8 @@ if(WOO_CLANG)
 	#set(CMAKE_EXE_LINKER_FLAGS "-lz -fuse-ld=lld")
 	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-lambda-capture")
 else()
-	# set(CMAKE_EXE_LINKER_FLAGS "-lz -fuse-ld=gold -lharfbuzz")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
 endif(WOO_CLANG)
-
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold")
 
 # https://stackoverflow.com/a/24305849/761090
 find_program(CCACHE_FOUND "ccache")
@@ -45,6 +45,7 @@ if (${FORCE_COLORED_OUTPUT})
 endif ()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_INSTALL_MESSAGE LAZY)
 
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system serialization thread iostreams filesystem)
@@ -55,6 +56,8 @@ find_package(PkgConfig REQUIRED)
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
 
+set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
+find_package(Backward REQUIRED)
 
 find_package(VTK REQUIRED)
 add_definitions(-DWOO_VTK)
@@ -62,12 +65,41 @@ add_definitions(-DWOO_VTK)
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)
 	set(CMAKE_BUILD_TYPE Debug)
+else()
+	add_definitions(-DNDEBUG)
+	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 if(WOO_PYBIND11)
 	add_definitions(-DWOO_PYBIND11)
 	find_package(pybind11 REQUIRED)
 else()
 	find_package(Boost REQUIRED COMPONENTS python)
+endif()
+if(WOO_OPENMP)
+	add_definitions(-DWOO_OPENMP)
+	find_package(OpenMP REQUIRED)
+endif()
+if(WOO_GTS)
+	add_definitions(-DWOO_GTS)
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(GTS REQUIRED gts)
+	# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
+	add_library(GTS INTERFACE)
+	target_include_directories(GTS INTERFACE ${GTS_INCLUDE_DIRS})
+	target_link_libraries(GTS INTERFACE ${GTS_LIBRARIES})
+	set(WOO_CXX_GTS_SOURCES
+		py/3rd-party/pygts-0.3.1/cleanup.cpp
+		py/3rd-party/pygts-0.3.1/edge.cpp
+		py/3rd-party/pygts-0.3.1/face.cpp
+		py/3rd-party/pygts-0.3.1/object.cpp
+		py/3rd-party/pygts-0.3.1/point.cpp
+		py/3rd-party/pygts-0.3.1/pygts.cpp
+		py/3rd-party/pygts-0.3.1/segment.cpp
+		py/3rd-party/pygts-0.3.1/surface.cpp
+		py/3rd-party/pygts-0.3.1/triangle.cpp
+		py/3rd-party/pygts-0.3.1/vertex.cpp
+	)
+	add_definitions(-DPYGTS_HAS_NUMPY)
 endif()
 if(WOO_VTK)
 	find_package(VTK REQUIRED)
@@ -78,21 +110,44 @@ if(WOO_HDF5)
 	add_definitions(-DWOO_HDF5)
 	set(HDF5_PREFER_PARALLEL false)
 endif()
-if(WOO_OPENGL)
-	find_package(GL REQUIRED)
-	find_package(GLU REQUIRED)
-	find_package(glut REQUIRED)
-	find_package(gle REQUIRED)
-	find_package(qglviewer REQUIRED)
-	add_definitions(-DWOO_OPENGL)
-endif()
 if(WOO_QT5)
-	find_package(Qt5 COMPONENTS QtGui QtWidgets QtCore QtOpenGL REQUIRED)
-	add_definitions(-DWOO_QT5)
+	find_package(Qt5 COMPONENTS Widgets Core OpenGL Xml REQUIRED)
+	add_definitions(-DWOO_QT5 -DWOO_OPENGL)
 	set(CMAKE_AUTOMOC ON)
 	set(CMAKE_AUTOUIC ON)
 	set(CMAKE_AUTORCC ON)
-endif()
+	set(OpenGL_GL_PREFERENCE GLVND)
+	find_package(OpenGL REQUIRED)
+	find_package(GLUT REQUIRED)
+	find_package(GLEW REQUIRED)
+	# GLE
+	find_path(GLE_INCLUDE_DIR NAMES GL/gle.h PATHS /usr/include /usr/local/include)
+	find_library(GLE_LIB NAMES gle)
+	if(GLE_INCLUDE_DIR AND GLE_LIB)
+		# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
+		add_library(GLE INTERFACE)
+		target_include_directories(GLE INTERFACE ${GLE_INCLUDE_DIR})
+		target_link_libraries(GLE INTERFACE ${GLE_LIB})
+	else()
+		message(FATAL_ERROR "GLE library/headers not found.")
+	endif()
+	# QGLViewer
+	find_path(QGLVIEWER_INCLUDE_DIR NAMES qglviewer.h PATHS /usr/include/QGLViewer /usr/local/include/QGLViewer /usr/include/qglviewer /usr/local/include/qglviewer)
+	find_library(QGLVIEWER_LIB NAMES QGLViewer qglviewer-qt5)
+	if(QGLVIEWER_INCLUDE_DIR AND QGLVIEWER_LIB)
+		add_library(QGLViewer INTERFACE)
+		target_include_directories(QGLViewer INTERFACE ${QGLVIEWER_INCLUDE_DIR})
+		target_link_libraries(QGLViewer INTERFACE ${QGLVIEWER_LIB})
+	else()
+		message(FATAL_ERROR "QGLViewer library/headers not found.")
+	endif()
+	set(WOO_CXX_GUI_SOURCES
+		gui/qt4/GLViewer.cpp
+		gui/qt4/GLViewer.qrc
+		gui/qt4/_GLViewer.cpp
+		gui/qt4/OpenGLManager.cpp
+	)
+endif(WOO_QT5)
 if(WOO_OPENMP)
 	find_package(OpenMP REQUIRED)
 	add_definitions(-DWOO_OPENMP)
@@ -111,7 +166,6 @@ execute_process(
 )
 set(WOO_MODULEDIR "${WOO_TOP_MODULEDIR}/woo")
 message(STATUS "Python modules installed in ${WOO_MODULEDIR}")
-
 
 ## prepare header directories (symlink)
 macro(create_symlink target linkname)
@@ -159,6 +213,7 @@ if(WOO_DEBUG)
 	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
 endif()
 
+
 set(WOO_CXX_SOURCES
 	# python
 	py/config.cxx
@@ -190,6 +245,7 @@ set(WOO_CXX_SOURCES
 	core/Test.cpp
 	core/Timing.cpp
 	# lib
+	lib/backward/backward.cpp
 	lib/base/CompUtils.cpp
 	lib/base/Math.cpp
 	lib/base/Volumetric.cpp
@@ -283,21 +339,35 @@ set(WOO_CXX_SOURCES
 if(WOO_PYBIND11)
 	pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
 		${WOO_CXX_SOURCES}
+		${WOO_CXX_GUI_SOURCES}
+		${WOO_CXX_GTS_SOURCES}
 	)
 else()
 	add_library(${CXX_INTERNAL} SHARED
 		${WOO_CXX_SOURCES}
+		${WOO_CXX_GUI_SOURCES}
+		${WOO_CXX_GTS_SOURCES}
 	)
 	set_target_properties(${CXX_INTERNAL} PROPERTIES PREFIX "")
 	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python)
 endif(WOO_PYBIND11)
 
+if(WOO_QT5)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml OpenGL::OpenGL GLUT::GLUT GLEW::GLEW QGLViewer GLE)
+endif(WOO_QT5)
+if(WOO_OPENMP)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC OpenMP::OpenMP_CXX)
+endif(WOO_OPENMP)
+
+if(WOO_GTS)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC GTS)
+endif(WOO_GTS)
 
 set_source_files_properties(py/config.cxx
 	PROPERTIES
 	COMPILE_DEFINITIONS "WOO_REVISION=${WOO_GIT_REVISION_HASH};WOO_VERSION=${PROJECT_VERSION};WOO_SOURCE_ROOT=${CMAKE_SOURCE_DIR};WOO_BUILD_ROOT=${CMAKE_BINARY_DIR};WOO_FLAVOR=${WOO_FLAVOR};WOO_BUILD_PROGRAM=${CMAKE_MAKE_PROGRAM}"
 )
-target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
+target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local Backward::Backward)
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
 	Boost::serialization
@@ -409,7 +479,73 @@ install(FILES
 	DESTINATION ${WOO_MODULEDIR}/data
 )
 
+if(WOO_GTS)
+	install(FILES
+		py/3rd-party/pygts-0.3.1/__init__.py
+		py/3rd-party/pygts-0.3.1/pygts.py
+		DESTINATION ${WOO_MODULEDIR}/gts
+	)
+endif(WOO_GTS)
+
+if(WOO_QT5)
+	macro(PYQT_QRC SRC DST)
+		add_custom_target("${DST}" ALL
+		#add_custom_command(OUTPUT "${DST}" ALL
+			COMMAND pyrcc5 -o ${DST} ${SRC}
+			DEPENDS ${SRC}
+			VERBATIM
+		)
+	endmacro()
+	macro(PYQT_UI SRC DST)
+		add_custom_target("${DST}" ALL
+		#add_custom_command(OUTPUT "${DST}" ALL
+			COMMAND pyuic5 --from-imports -o ${DST} ${SRC}
+			DEPENDS ${SRC}
+			VERBATIM
+		)
+	endmacro()
+	PYQT_QRC(${CMAKE_SOURCE_DIR}/gui/qt4/img.qrc img_rc.py)
+	PYQT_UI(${CMAKE_SOURCE_DIR}/gui/qt4/controller.ui ui_controller.py)
+	#add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/ui_controller.py
+	#	COMMAND pyuic5 --from-imports -o ${CMAKE_BINARY_DIR}/ui_controller.py gui/qt4/controller.ui
+	#	DEPENDS gui/qt4/controller.ui
+	#	VERBATIM
+	#)
+	install(FILES
+		${CMAKE_BINARY_DIR}/img_rc.py
+		${CMAKE_BINARY_DIR}/ui_controller.py
+		gui/qt4/DisplayProfiles.py
+		gui/qt4/ExceptionDialog.py
+		gui/qt4/img_rc.py
+		gui/qt4/__init__.py
+		gui/qt4/Inspector.py
+		gui/qt4/ObjectEditor.py
+		gui/qt4/ui_controller.py
+		DESTINATION ${WOO_MODULEDIR}/qt
+	)
+endif()
+
 
 ##
-## TODO: run setup.py for wooExtra modules
+## run setup.py for wooExtra modules
 ##
+macro(RUN_WOOEXTRA_SETUPS SRCDIR)
+	file(GLOB WOOEXTRA_SETUPS ${SRCDIR}/wooExtra/*/setup.py)
+	foreach(SETUP ${WOOEXTRA_SETUPS})
+		get_filename_component(SETUP_DIR ${SETUP} DIRECTORY)
+		message(STATUS "Running setup.py in ${SETUP_DIR}")
+		execute_process(
+			COMMAND ${PYTHON_EXECUTABLE} -W ignore "${SETUP}" --quiet install
+			WORKING_DIRECTORY ${SETUP_DIR}
+			RESULT_VARIABLE SETUP_STATUS
+			ERROR_VARIABLE SETUP_ERROR
+		)
+		if(NOT "${SETUP_STATUS}" EQUAL 0)
+			message(FATAL_ERROR "Error installing from ${SETUP}:\n${SETUP_ERROR}")
+		endif()
+	endforeach()
+endmacro()
+# https://stackoverflow.com/q/59083388/761090
+# install(CODE "RUN_WOOEXTRA_SETUPS(${CMAKE_SOURCE_DIR})")
+
+
