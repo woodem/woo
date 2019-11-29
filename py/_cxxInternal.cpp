@@ -137,7 +137,6 @@ void wooInitialize(){
 		#endif
 	#endif
 	
-#if 0
 	#ifndef __MINGW64__ // posix
 		if(getenv("TERM")){
 			tcgetattr(STDIN_FILENO,&termios_attrs);
@@ -148,7 +147,6 @@ void wooInitialize(){
 			cerr<<"woo._cxxInternal: QUIT/TERM/INT handler registered."<<endl;
 		}
 	#endif
-#endif
 
 	// check that the decimal separator is "." (for GTS imports)
 	if(atof("0.5")==0.0){
