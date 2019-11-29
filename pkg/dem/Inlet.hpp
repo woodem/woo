@@ -132,11 +132,15 @@ WOO_REGISTER_OBJECT(SpatialBias);
 struct AxialBias: public SpatialBias{
 	void postLoad(AxialBias&,void*);
 	Vector3r unitPos(const Real& diam) override;
+	// used from here and PsdAxialBias
+	Real clampOrApplyPhase(Real p);
 	#define woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS \
 		AxialBias,SpatialBias,"Bias position (within unit interval) along :obj:`axis` :math:`p`, so that radii are distributed along :obj:`axis`, as in :math:`p=\\frac{d-d_0}{d_1-d_0}+f\\left(a-\\frac{1}{2}\\right)`, where :math:`f` is the :obj:`fuzz`, :math:`a` is unit random number, :math:`d` is the current particle diameter and :math:`d_0` and :math:`d_1` are diameters at the lower and upper end (:obj:`d01`). :math:`p` is clamped to :math:`\\rangle0,1\\langle` after the computation.", \
 			((int,axis,0,AttrTrait<Attr::triggerPostLoad>(),"Axis which is biased.")) \
 			((Vector2r,d01,Vector2r(NaN,NaN),,"Diameter at the lower and upper end (the order matters); it is possible that :math:`r_0>r_1`, in which case the bias is reversed (bigger radii have smaller coordinate).")) \
-			((Real,fuzz,0,,"Allow for random variations around the position determined from diameter."))
+			((Real,fuzz,0,,"Allow for random variations around the position determined from diameter.")) \
+			((bool,phase,NaN,,"If NaN, coordinate after fuzz will be clamped to 0…1. If a number, it will be added to the coordinate after fuzz (zero is allowed) and the value will be modulated to 0…1 (rather than clamped), overflowing between beginning and end."))
+
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(AxialBias);

@@ -45,11 +45,17 @@ void AxialBias::postLoad(AxialBias&,void*){
 	if(axis<0 || axis>2) throw std::runtime_error("AxialBias.axis: must be in 0..2 (not "+to_string(axis)+").");
 }
 
+Real AxialBias::clampOrApplyPhase(Real p0){
+	if(std::isnan(phase)) return CompUtils::clamped(p0,0,1);
+	Real p1=p0+phase;
+	return p1-std::floor(p1);
+}
+
 Vector3r AxialBias::unitPos(const Real& d){
 	Vector3r p3=Mathr::UnitRandom3();
 	if(axis<0 || axis>2) throw std::runtime_error("AxialBias.axis: must be in 0..2 (not "+to_string(axis)+")");
 	Real& p(p3[axis]);
-	p=CompUtils::clamped((d-d01[0])/(d01[1]-d01[0])+(p-.5)*fuzz,0,1);
+	p=clampOrApplyPhase((d-d01[0])/(d01[1]-d01[0])+(p-.5)*fuzz);
 	return p3;
 }
 
@@ -95,7 +101,7 @@ Vector3r PsdAxialBias::unitPos(const Real& d){
 		}
 	}
 	// apply fuzz
-	p=CompUtils::clamped(p+fuzz*(Mathr::UnitRandom()-.5),0,1);
+	p=this->clampOrApplyPhase(p+fuzz*(Mathr::UnitRandom()-.5));
 	if(invert) p=1-p;
 	return p3;
 }
