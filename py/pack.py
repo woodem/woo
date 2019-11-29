@@ -187,10 +187,6 @@ def SpherePack_toSimulation(self,scene,rot=Matrix3.Identity,**kw):
 SpherePack.toSimulation=SpherePack_toSimulation
 
 
-# in c++
-SpherePack.filtered=SpherePack_filtered
-
-
 class inGtsSurface_py(Predicate):
     """This class was re-implemented in c++, but should stay here to serve as reference for implementing
     Predicates in pure python code. C++ allows us to play dirty tricks in GTS which are not accessible

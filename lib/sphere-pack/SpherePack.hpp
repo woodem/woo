@@ -72,6 +72,9 @@ public:
 	void toFile(const string& file) const;
 	// void fromSimulation();
 
+	shared_ptr<SpherePack> filtered(const shared_ptr<Predicate>& p, bool recenter=true);
+
+
 	// random generation; if num<0, insert as many spheres as possible; if porosity>0, recompute meanRadius (porosity>0.65 recommended) and try generating this porosity with num spheres.
 	long makeCloud(Vector3r min, Vector3r max, Real rMean=-1, Real rFuzz=0, int num=-1, bool periodic=false, Real porosity=-1, const vector<Real>& psdSizes=vector<Real>(), const vector<Real>& psdCumm=vector<Real>(), bool distributeMass=false, int seed=0, Matrix3r hSize=Matrix3r::Zero());
 

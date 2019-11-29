@@ -397,6 +397,52 @@ void SpherePack::canonicalize(){
 }
 
 
+shared_ptr<SpherePack> SpherePack::filtered(const shared_ptr<Predicate>& p, bool recenter){
+	auto sp=this;
+	auto ret=make_shared<SpherePack>();
+	ret->cellSize=sp->cellSize;
+	size_t N=sp->pack.size();
+	Vector3r off=Vector3r::Zero();
+	auto sbox=sp->aabb();
+	auto pbox=p->aabb();
+	if(recenter && !isinf(pbox.sizes().maxCoeff())){
+		off=pbox.center()-sbox.center();
+		// it is sphere which are shifted by *off* below, so move also sbox here (only)
+		sbox.translate(off);
+	}
+	// do not warn for inifinite predicates, which are always larger than the packing
+	for(int ax:{0,1,2}){
+		if(pbox.min()[ax]!=-Inf && pbox.min()[ax]<sbox.min()[ax]) LOG_WARN("SpherePack.filtered: axis={}, packing aabb (min={}) outside of the predicate aabb (min={})",ax,sbox.min()[ax],pbox.min()[ax]);
+		if(pbox.max()[ax]!=Inf && pbox.max()[ax]>sbox.max()[ax]) LOG_WARN("SpherePack.filtered: axis={}, packing aabb (max={}) outside of the predicate aabb (max={}).",ax,sbox.max()[ax],pbox.max()[ax]);
+	}
+	// if(!sbox.contains(pbox)) LOG_WARN("Packing's box does not fully contain box of the predicate");
+	//#if dimP[0]>dimS[0] or dimP[1]>dimS[1] or dimP[2]>dimS[2]: warnings.warn("Packing's dimension (%s) doesn't fully contain dimension of the predicate (%s)."%(dimS,dimP))
+
+	if(!sp->hasClumps()){
+		for(size_t i=0; i<N; i++){
+			if(!(*p)(sp->pack[i].c+off,sp->pack[i].r)) continue; // sphere is outside
+			ret->add(sp->pack[i].c+off,sp->pack[i].r);
+		}
+		return ret;
+	}
+	// with clumps
+	std::set<int> delSph, delClump;
+	for(size_t i=0; i<N; i++){
+		if((*p)(sp->pack[i].c+off,sp->pack[i].r)) continue; // sphere is inside
+		if(sp->pack[i].clumpId>=0) delClump.insert(sp->pack[i].clumpId);
+		else delSph.insert(i);
+	}
+	for(size_t i=0; i<N; i++){
+		const int& clumpId(sp->pack[i].clumpId);
+		// either the sphere as such, or the whole clump was to be removed
+		if((clumpId<0 && delSph.count(i)>0) || (clumpId>=0 && delClump.count(clumpId)>0)) continue; // skip this one
+		ret->add(sp->pack[i].c+off,sp->pack[i].r,clumpId);
+	}
+	return ret;
+}
+
+
+
 
 int SpherePack::removeShadows(){
 	int ret=0;

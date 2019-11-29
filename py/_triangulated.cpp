@@ -51,7 +51,7 @@ int facetsToSTL(const string& out, const shared_ptr<DemField>& dem, const string
 		_gts_face_to_stl_data(std::ofstream& _stl, Scene* _scene, bool _clipCell, int& _numTri): stl(_stl),scene(_scene),clipCell(_clipCell),numTri(_numTri){};
 		std::ofstream& stl;
 		const Scene* scene;
-		const bool& clipCell;
+		const bool clipCell;
 		int& numTri;
 	};
 	void _gts_face_to_stl(GtsTriangle* t,_gts_face_to_stl_data* data){

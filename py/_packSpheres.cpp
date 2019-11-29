@@ -33,6 +33,7 @@ BOOST_PYTHON_MODULE(_packSpheres){
 		.def("load",&SpherePack::fromFile,WOO_PY_ARGS(py::arg("fileName")),"Load packing from external text file (current data will be discarded).").def("loadTxt",&SpherePack::fromFile,"Identical to :obj:`load`, with newer name for ShapePack compatibility.")
 		.def("reset",&SpherePack::reset,"Re-inialize this object (clear all spheres and reset periodic cell size.")
 		.def("save",&SpherePack::toFile,WOO_PY_ARGS(py::arg("fileName")),"Save packing to external text file (will be overwritten).").def("saveTxt",&SpherePack::toFile,"Identical to :obj:`save:`, with newer name for ShapePack compatibility.")
+		.def("filtered",&SpherePack::filtered,WOO_PY_ARGS(py::arg("predicate"),py::arg("recenter")=true),"Return new :obj:`SpherePack` object, without any spheres which don't match *predicate*. Clumps are handled gracefully, i.e. if any of clump's spheres does not satisfy the predicate, the whole clump is taken away. If *recenter* is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.")
 	#if PY_MAJOR_VERSION==2
 		.def("makeCloud",&SpherePack::makeCloud,WOO_PY_ARGS(py::arg("minCorner")=Vector3r(Vector3r::Zero()),py::arg("maxCorner")=Vector3r(Vector3r::Zero()),py::arg("rMean")=-1,py::arg("rRelFuzz")=0,py::arg("num")=-1,py::arg("periodic")=false,py::arg("porosity")=0.5,py::arg("psdSizes")=vector<Real>(),py::arg("psdCumm")=vector<Real>(),py::arg("distributeMass")=false,py::arg("seed")=0,py::arg("hSize")=Matrix3r(Matrix3r::Zero())),
 	#else
