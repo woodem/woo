@@ -91,7 +91,7 @@ def flavorFromArgv0(argv0,batch=False):
 def main(sysArgv=None):
     '''Entry point for the woo executable. *sysArgv* (if specified) replaces sys.argv, which is used for option processing.
     '''
-    import sys,os,os.path,time,re,logging
+    import sys,os,os.path,time,re,logging,subprocess
     if sysArgv: sys.argv=sysArgv
 
     global options
@@ -131,6 +131,7 @@ def main(sysArgv=None):
     par.add_argument('--test',help="Run regression test suite and exit; the exists status is 0 if all tests pass, 1 if a test fails and 2 for an unspecified exception.",dest="test",action='store_true')
     par.add_argument('--no-gdb',help='Do not show backtrace when Woo crashes (only effective with \-\-debug).',dest='noGdb',action='store_true',)
     par.add_argument('--in-gdb',help='Run Woo inside gdb (must be in $PATH).',dest='inGdb',action='store_true')
+    par.add_argument('--in-lldb',help='Run Woo inside lldb (must be in $PATH; executables tried are lldb, lldb-7, lldb-8, lddb-9 in this order).',dest='inLldb',action='store_true')
     par.add_argument('--in-pdb',help='Run Woo inside pdb',dest='inPdb',action='store_true')
     par.add_argument('--in-valgrind',help='Run inside valgrind (must be in $PATH); automatically adds python ignore files',dest='inValgrind',action='store_true')
     par.add_argument('--fake-display',help='Allow importing the woo.qt4 module without initializing Qt4. This is only useful for generating documentation and should not be used otherwise.',dest='fakeDisplay',action='store_true')
@@ -169,7 +170,7 @@ def main(sysArgv=None):
     # re-build woo so that the binary is up-to-date
     if opts.rebuild: # only possible under Linux
         options.rebuilding=True
-        import subprocess, woo.config, glob
+        import woo.config, glob
         if not woo.config.sourceRoot: raise RuntimeError('This build does not define woo.config.sourceRoot (packaged version?)')
         if opts.rebuild>1:
             if os.path.exists(woo.config.sourceRoot+'/.git'): cmd=['git','-C',woo.config.sourceRoot,'pull','origin','master']
@@ -226,8 +227,19 @@ def main(sysArgv=None):
         if opts.debug:
             print('Spawning: gdb -x '+gdbBatch.name+' '+sys.executable)
         sys.exit(subprocess.call(['gdb']+([] if opts.debug else ['-batch-silent'])+['-x',gdbBatch.name,sys.executable]))
+    if opts.inLldb:
+        lldbExec,lldbMaybe=None,['lldb','lldb-7','lldb-8','lldb-9']
+        import shutil
+        for ll in lldbMaybe:
+            lldbExec=shutil.which(ll)
+            if lldbExec: break
+        if lldbExec is None: raise RuntimeError("Unable to find any of %s in $PATH"%(','.join(lldbMaybe)))
+        cmd=[lldbExec,sys.executable,'--batch','--one-line','run','--one-line-on-crash','bt all','--']+[arg for arg in sys.argv if arg!='--in-lldb']
+        if opts.debug:
+            print('Spawning: ',' '.join(cmd))
+        sys.exit(subprocess.call(cmd))
     if opts.inValgrind:
-        import subprocess,urllib.request,os.path
+        import urllib.request,os.path
         saveTo='/tmp/valgrind-python.supp'
         if not os.path.exists(saveTo):
             print('Downloading '+saveTo)
