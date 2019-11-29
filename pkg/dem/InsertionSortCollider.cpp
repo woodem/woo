@@ -11,7 +11,11 @@
 #include<boost/static_assert.hpp>
 #include<boost/algorithm/string/join.hpp>
 
-#if defined(WOO_OPENMP) && defined(__GNUC__)
+#if __has_include(<execution>)
+	#include<execution>
+#endif
+
+#if defined(WOO_OPENMP) && defined(__GNUC__) && !defined(__clang__)
 	#include<parallel/algorithm>
 #endif
 
@@ -576,6 +580,13 @@ void InsertionSortCollider::run(){
 	}
 	ISC_CHECKPOINT("copy-minima-maxima");
 
+	#if 1 && defined(WOO_OPENMP)
+		for(const auto& pending: field->cast<DemField>().contacts->threadsPending){
+			for(const auto& p: pending){
+				if(!p.contact) LOG_FATAL("Pending-removal contact is NULL?!");
+			}
+		}
+	#endif
 	// process interactions that the constitutive law asked to be erased
 	field->cast<DemField>().contacts->removePending(*this,scene);
 
@@ -601,11 +612,17 @@ void InsertionSortCollider::run(){
 				// important to reset loInx for periodic simulation (!!)
 				LOG_DEBUG("Initial std::sort over all axes");
 				for(int i:{0,1,2}) {
-					BB[i].loIdx=0;
-					#if defined(WOO_OPENMP) && defined(__GNUC__) && /*this one crashes here, why..? */ !defined(__INTEL_COMPILER) 
-						__gnu_parallel::sort(BB[i].vec.begin(),BB[i].vec.end());
+					#ifdef __cpp_lib_execution
+						std::sort(std::execution_par,BB[i].vec.begin(),BB[i].vec.end());
 					#else
-						std::sort(BB[i].vec.begin(),BB[i].vec.end());
+						#if defined(WOO_OPENMP) && defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+							__gnu_parallel::sort(BB[i].vec.begin(),BB[i].vec.end());
+						#else
+							#ifdef WOO_OPENMP
+								#warning Clang and Intel compilers will use non-parallel sort; compile with c++17 and <execution> header for std::sort parallel algorithm, with gcc (will uses __gnu_parallel::sort)
+							#endif
+							std::sort(BB[i].vec.begin(),BB[i].vec.end());
+						#endif
 					#endif
 				}
 				numReinit++;
@@ -767,7 +784,8 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 	#else
 		const bool earlyStop=false;
 		const bool partial=false;
-		assert(iBegin==iStart);
+		// cerr<<"[["<<iBegin<<"("<<v.norm(iBegin)<<"),"<<iEnd<<"("<<v.norm(iEnd)<<"),"<<iStart<<"]]";
+		// assert(iBegin==iStart); // this one does not necessarily hold
 		assert(v.norm(iBegin)==v.norm(iEnd));
 	#endif
 	// don't start at iBegin+1 for partial sort, since we may need to adjust loIdx at that index as well
