@@ -149,7 +149,10 @@ void LabelMapper::opaque_sequence_with_woo_objects_error(py::object oo){
 
 void LabelMapper::__setitem__(const string& label, py::object o){
 	py::extract<shared_ptr<Object>> exObj(o);
+	py::extract<py::str> exStr(o);
 	ensureUsedModsOk(label);
+	// empty string (would be mistakenly identified as sequence of other objects
+	if(exStr.check() && py::len(exStr())==0){ __setitem__py(label,exStr()); return; }
 	// woo objects
 	if(exObj.check()){ __setitem__woo(label,exObj()); return; }
 	// list of woo objects
