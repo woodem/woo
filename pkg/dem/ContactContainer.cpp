@@ -162,7 +162,10 @@ bool ContactContainer::existsReal(ParticleContainer::id_t idA, ParticleContainer
 
 
 void ContactContainer::requestRemoval(const shared_ptr<Contact>& c, bool force){
-	c->reset(); PendingContact v={c,force};
+	// this calls Contact::reset() (not shared_ptr<Contact>::reset), cleaning internal data (CGeom, CPhys)
+	c->reset();
+	// put into potentially-to-be-deleted list
+	PendingContact v={c,force};
 	#ifdef WOO_OPENMP
 		threadsPending[omp_get_thread_num()].push_back(v);
 	#else
