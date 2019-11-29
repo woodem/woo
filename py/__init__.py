@@ -168,15 +168,16 @@ try:
                     
 except ImportError:
     print('Error importing woo.%s (--flavor=%s).'%(cxxInternalName,wooOptions.flavor if wooOptions.flavor else ' '))
-    #traceback.print_exc()
+    traceback.print_exc()
     import glob
     sos=glob.glob(re.sub('__init__.py$','',__file__)+'/_cxxInternal_*'+soSuffix)
     flavs=[re.sub('(^.*/_cxxInternal_)(.*)(\\'+soSuffix+'$)',r'\2',so) for so in sos]
     if sos:
         maxFlav=max([len(flav) for flav in flavs])
-        print('Available flavors are:')
+        print('\nAvailable Woo flavors are:\n--------------------------')
         for so,flav in zip(sos,flavs):
             print('\t{0: <{1}}\t{2}'.format(flav,maxFlav,so))
+        print()
     raise
 sys.modules['woo._cxxInternal']=_cxxInternal
 
