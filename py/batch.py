@@ -800,7 +800,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                 if firstLine<0: firstLine=0
                 # text file, space separated
                 # read file in memory, remove newlines and comments; the [''] makes lines 1-indexed
-                with open(file,'r') as f: ll=[re.sub('\s*#.*','',l[:-1]) for l in ['']+f.readlines()]
+                with open(file,'r') as f: ll=[re.sub(r'\s*#.*','',l[:-1]) for l in ['']+f.readlines()]
                 # usable lines are those that contain something else than just spaces
                 usableLines=[i for i in range(len(ll)) if not re.match(r'^\s*(#.*)?$',ll[i])]
                 headings=ll[usableLines[0]].split()
