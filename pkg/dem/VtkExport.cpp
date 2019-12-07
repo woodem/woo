@@ -17,9 +17,9 @@ WOO_PLUGIN(dem,(VtkExport));
 WOO_IMPL_LOGGER(VtkExport);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
-#if VTK_MAJOR_VERSION>=8
+#if VTK_MAJOR_VERSION>=7
 	/* undef'd below */
-	#define InsertNextTupleValue InsertNextTuple
+	#define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
 

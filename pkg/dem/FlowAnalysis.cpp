@@ -13,6 +13,14 @@
 #include<vtkZLibDataCompressor.h>
 #include<vtkXMLImageDataWriter.h>
 
+#if VTK_MAJOR_VERSION>=7
+	/* undef'd below */
+	#define SetTupleValue SetTypedTuple
+	#define GetTupleValue GetTypedTuple
+#endif
+
+
+
 WOO_PLUGIN(dem,(FlowAnalysis));
 WOO_IMPL_LOGGER(FlowAnalysis);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_FlowAnalysis__CLASS_BASE_DOC_ATTRS_PY);
@@ -390,5 +398,14 @@ string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>&
 		glPopMatrix();
 	}
 #endif /* WOO_OPENGL */
+
+
+
+#if VTK_MAJOR_VERSION>=7
+	// defined above, revert here
+	#undef SetTupleValue
+	#undef GetTupleValue
+#endif
+
 
 #endif /* WOO_VTK */
