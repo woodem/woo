@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 PROJECT(woo VERSION 1.2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 OPTION(WOO_DEBUG "Include debugging information" OFF)
 OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
@@ -14,6 +14,7 @@ OPTION(WOO_QT5 "Build Qt5-based user interface" OFF)
 OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
 OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" ON)
+SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
 
@@ -109,6 +110,7 @@ if(WOO_HDF5)
 	find_package(HDF5 REQUIRED COMPONENTS CXX HL)
 	add_definitions(-DWOO_HDF5)
 	set(HDF5_PREFER_PARALLEL false)
+	include_directories(SYSTEM PUBLIC ${HDF5_CXX_INCLUDE_DIRS})
 endif()
 if(WOO_QT5)
 	find_package(Qt5 COMPONENTS Widgets Core OpenGL Xml REQUIRED)
@@ -133,13 +135,13 @@ if(WOO_QT5)
 	endif()
 	# QGLViewer
 	find_path(QGLVIEWER_INCLUDE_DIR NAMES qglviewer.h PATHS /usr/include/QGLViewer /usr/local/include/QGLViewer /usr/include/qglviewer /usr/local/include/qglviewer)
-	find_library(QGLVIEWER_LIB NAMES QGLViewer qglviewer-qt5)
+	find_library(QGLVIEWER_LIB NAMES QGLViewer QGLViewer-qt5 qglviewer-qt5)
 	if(QGLVIEWER_INCLUDE_DIR AND QGLVIEWER_LIB)
 		add_library(QGLViewer INTERFACE)
 		target_include_directories(QGLViewer INTERFACE ${QGLVIEWER_INCLUDE_DIR})
 		target_link_libraries(QGLViewer INTERFACE ${QGLVIEWER_LIB})
 	else()
-		message(FATAL_ERROR "QGLViewer library/headers not found.")
+		message(FATAL_ERROR "QGLViewer library/headers not found (headers: ${QGLVIEWER_INCLUDE_DIR}, lib: ${QGLVIEWER_LIBS}).")
 	endif()
 	set(WOO_CXX_GUI_SOURCES
 		gui/qt4/GLViewer.cpp
@@ -160,12 +162,18 @@ execute_process(COMMAND git log -1 --format=%h
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 execute_process(
-	COMMAND ${PYTHON_EXECUTABLE} "-cimport site;print(site.getsitepackages()[0])"
+	COMMAND ${PYTHON_EXECUTABLE} "-cimport sysconfig;print(sysconfig.get_path('platlib','${WOO_INSTALL_SCHEME}'))"
 	OUTPUT_VARIABLE WOO_TOP_MODULEDIR
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 set(WOO_MODULEDIR "${WOO_TOP_MODULEDIR}/woo")
-message(STATUS "Python modules installed in ${WOO_MODULEDIR}")
+message(STATUS "Python modules to be installed in ${WOO_MODULEDIR} (scheme: ${WOO_INSTALL_SCHEME})")
+execute_process(
+	COMMAND ${PYTHON_EXECUTABLE} "-cimport sysconfig;print(sysconfig.get_path('scripts','${WOO_INSTALL_SCHEME}'))"
+	OUTPUT_VARIABLE WOO_BIN_DIR
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "Executables to be installed in ${WOO_BIN_DIR} (scheme: ${WOO_INSTALL_SCHEME})")
 
 ## prepare header directories (symlink)
 macro(create_symlink target linkname)
@@ -179,11 +187,10 @@ macro(create_symlink target linkname)
 	endif()
 endmacro()
 MESSAGE(STATUS "Symlinking headers …")
-FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/woo")
-create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/woo/pkg")
-create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/woo/lib")
-create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/woo/core")
-
+FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/include/woo")
+create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo/pkg")
+create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo/lib")
+create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo/core")
 
 add_library(spdlog_local STATIC
 	lib/spdlog/src/async.cpp
@@ -196,7 +203,6 @@ add_library(spdlog_local STATIC
 target_include_directories(spdlog_local PUBLIC lib/)
 target_compile_definitions(spdlog_local PUBLIC SPDLOG_COMPILED_LIB)
 add_definitions(-DWOO_SPDLOG)
-# add_definitions(-DWOO_GTS)
 
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
 	set(WOO_MAIN_SCRIPT "woo-${WOO_FLAVOR}")
@@ -352,6 +358,7 @@ else()
 	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python)
 endif(WOO_PYBIND11)
 
+target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
 if(WOO_QT5)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml OpenGL::OpenGL GLUT::GLUT GLEW::GLEW QGLViewer GLE)
 endif(WOO_QT5)
@@ -362,6 +369,10 @@ endif(WOO_OPENMP)
 if(WOO_GTS)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC GTS)
 endif(WOO_GTS)
+
+if(WOO_HDF5)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC ${HDF5_CXX_LIBRARIES} ${HDF5_HL_LIBRARIES})
+endif(WOO_HDF5)
 
 set_source_files_properties(py/config.cxx
 	PROPERTIES
@@ -378,18 +389,19 @@ target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Boost::filesystem
 	${VTK_LIBRARIES}
 )
-target_include_directories(${CXX_INTERNAL} PUBLIC ${VTK_INCLUDE_DIRS})
+target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})
 install(TARGETS ${CXX_INTERNAL}
 	LIBRARY DESTINATION ${WOO_MODULEDIR}
 )
 
 
-file(WRITE "${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
-file(WRITE "${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
+FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+file(WRITE "bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
+file(WRITE "bin/${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
 
 
-install(PROGRAMS "${WOO_MAIN_SCRIPT}" "${WOO_MAIN_SCRIPT}-batch"
-	DESTINATION bin
+install(PROGRAMS "bin/${WOO_MAIN_SCRIPT}" "bin/${WOO_MAIN_SCRIPT}-batch"
+	DESTINATION ${WOO_BIN_DIR}
 )
 
 install(FILES
@@ -529,23 +541,29 @@ endif()
 ##
 ## run setup.py for wooExtra modules
 ##
-macro(RUN_WOOEXTRA_SETUPS SRCDIR)
-	file(GLOB WOOEXTRA_SETUPS ${SRCDIR}/wooExtra/*/setup.py)
-	foreach(SETUP ${WOOEXTRA_SETUPS})
-		get_filename_component(SETUP_DIR ${SETUP} DIRECTORY)
-		message(STATUS "Running setup.py in ${SETUP_DIR}")
-		execute_process(
-			COMMAND ${PYTHON_EXECUTABLE} -W ignore "${SETUP}" --quiet install
-			WORKING_DIRECTORY ${SETUP_DIR}
-			RESULT_VARIABLE SETUP_STATUS
-			ERROR_VARIABLE SETUP_ERROR
-		)
-		if(NOT "${SETUP_STATUS}" EQUAL 0)
-			message(FATAL_ERROR "Error installing from ${SETUP}:\n${SETUP_ERROR}")
-		endif()
-	endforeach()
-endmacro()
-# https://stackoverflow.com/q/59083388/761090
-# install(CODE "RUN_WOOEXTRA_SETUPS(${CMAKE_SOURCE_DIR})")
+#macro(RUN_WOOEXTRA_SETUPS SRCDIR)
+#endmacro()
+#
+configure_file(wooExtra.cmake ${CMAKE_BINARY_DIR}/wooExtra.cmake @ONLY)
+install(SCRIPT ${CMAKE_BINARY_DIR}/wooExtra.cmake)
 
-
+#https://stackoverflow.com/q/59083388/761090
+#install(CODE [=[
+#	message(STATUS "Installing ${CMAKE_SOURCE_DIR}/wooExtra/*")
+#	file(GLOB WOOEXTRA_SETUPS ${CMAKE_SOURCE_DIR}/wooExtra/*/setup.py)
+#	foreach(SETUP ${WOOEXTRA_SETUPS})
+#		get_filename_component(SETUP_DIR ${SETUP} DIRECTORY)
+#		message(STATUS "Running setup.py in ${SETUP_DIR}")
+#		execute_process(
+#			COMMAND ${PYTHON_EXECUTABLE} -W ignore "${SETUP}" --quiet install
+#			WORKING_DIRECTORY ${SETUP_DIR}
+#			RESULT_VARIABLE SETUP_STATUS
+#			ERROR_VARIABLE SETUP_ERROR
+#		)
+#		if(NOT "${SETUP_STATUS}" EQUAL 0)
+#			message(FATAL_ERROR "Error installing from ${SETUP}:\n${SETUP_ERROR}")
+#		endif()
+#	endforeach()
+#]=])
+#
+#
