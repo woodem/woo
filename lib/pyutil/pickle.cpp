@@ -18,7 +18,11 @@ namespace woo{
 				py::object cPickle=py::import("cPickle");
 			#endif
 		#else
-			py::object cPickle=py::module::import("pickle");
+			#if PY_MAJOR_VERSION >= 3
+				py::object cPickle=py::module::import("pickle");
+			#else
+				py::object cPickle=py::module::import("cPickle");
+			#endif
 		#endif
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");
