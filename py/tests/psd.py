@@ -103,9 +103,10 @@ class PsdSphereGeneratorTest(unittest.TestCase):
 class BiasedPositionTest(unittest.TestCase):
     def testAxialBias(self):
         'Inlet: axial bias'
-        bb=AxialBias(axis=0,d01=(2,1),fuzz=.1)
+        bb=AxialBias(axis=0,d01=(2,1),fuzz=.1,phase=float('nan'))
         d0,d1=bb.d01
         for d in numpy.linspace(.5,2.5):
             p=bb.unitPos(d)[0]
             pMid=numpy.clip((d-d0)/(d1-d0),0,1)
+            # print('d=%g,p=%g,pMid=%g,abs(p-pMid)=%g <= bb.fuzz/2.=%g',d,p,pMid,abs(p-pMid),bb.fuzz/2.)
             self.assertTrue(abs(p-pMid)<=bb.fuzz/2.)

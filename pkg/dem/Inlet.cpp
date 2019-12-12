@@ -38,7 +38,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL_LOGGER(RandomInlet);
 WOO_IMPL_LOGGER(PsdAxialBias);
 WOO_IMPL_LOGGER(LayeredAxialBias);
-
+WOO_IMPL_LOGGER(AxialBias);
 
 
 void AxialBias::postLoad(AxialBias&,void*){
@@ -46,7 +46,9 @@ void AxialBias::postLoad(AxialBias&,void*){
 }
 
 Real AxialBias::clampOrApplyPhase(Real p0){
-	if(std::isnan(phase)) return CompUtils::clamped(p0,0,1);
+	if(std::isnan(phase)){
+		return CompUtils::clamped(p0,0,1);
+	}
 	Real p1=p0+phase;
 	return p1-std::floor(p1);
 }

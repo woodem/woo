@@ -93,6 +93,10 @@ WOO_PYTHON_MODULE(config)
 	#else
 		mod.attr("compiler")=py::make_tuple("unknown (not gcc,clang,icc)","unknown")
 	#endif
+
+	#ifdef WOO_BUILD_JOBS
+		mod.attr("buildJobs")=WOO_BUILD_JOBS;
+	#endif
 		
 	mod.attr("prefix")=BOOST_PP_STRINGIZE(WOO_PREFIX);
 	mod.attr("suffix")=BOOST_PP_STRINGIZE(WOO_SUFFIX);

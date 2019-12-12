@@ -189,7 +189,9 @@ def main(sysArgv=None):
         # rebuild
         if not hasattr(woo.config,'sconsPath'):
             # cmake
-            cmd=([woo.config.buildProgram,'-C',woo.config.buildRoot,'install'])
+            if hasattr(woo.config,'buildJobs') and woo.config.buildJobs>0: jobs=['-j',str(woo.config.buildJobs)]
+            else: jobs=[]
+            cmd=([woo.config.buildProgram]+jobs+['-C',woo.config.buildRoot,'install'])
         else:
             cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
         print('Rebuilding Woo using',' '.join(cmd))

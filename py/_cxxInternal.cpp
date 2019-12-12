@@ -144,7 +144,7 @@ void wooInitialize(){
 			signal(SIGQUIT,quitHandler);
 			signal(SIGTERM,quitHandler);
 			signal(SIGINT,quitHandler);
-			cerr<<"woo._cxxInternal: QUIT/TERM/INT handler registered."<<endl;
+			// cerr<<"woo._cxxInternal: QUIT/TERM/INT handler registered."<<endl;
 		}
 	#endif
 

@@ -15,6 +15,7 @@ OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
 OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" ON)
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
+SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
 
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
 
@@ -376,7 +377,7 @@ endif(WOO_HDF5)
 
 set_source_files_properties(py/config.cxx
 	PROPERTIES
-	COMPILE_DEFINITIONS "WOO_REVISION=${WOO_GIT_REVISION_HASH};WOO_VERSION=${PROJECT_VERSION};WOO_SOURCE_ROOT=${CMAKE_SOURCE_DIR};WOO_BUILD_ROOT=${CMAKE_BINARY_DIR};WOO_FLAVOR=${WOO_FLAVOR};WOO_BUILD_PROGRAM=${CMAKE_MAKE_PROGRAM}"
+	COMPILE_DEFINITIONS "WOO_REVISION=${WOO_GIT_REVISION_HASH};WOO_VERSION=${PROJECT_VERSION};WOO_SOURCE_ROOT=${CMAKE_SOURCE_DIR};WOO_BUILD_ROOT=${CMAKE_BINARY_DIR};WOO_FLAVOR=${WOO_FLAVOR};WOO_BUILD_PROGRAM=${CMAKE_MAKE_PROGRAM};WOO_BUILD_JOBS=${WOO_BUILD_JOBS}"
 )
 target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local Backward::Backward)
 target_link_libraries(${CXX_INTERNAL} PUBLIC
@@ -541,29 +542,6 @@ endif()
 ##
 ## run setup.py for wooExtra modules
 ##
-#macro(RUN_WOOEXTRA_SETUPS SRCDIR)
-#endmacro()
-#
 configure_file(wooExtra.cmake ${CMAKE_BINARY_DIR}/wooExtra.cmake @ONLY)
 install(SCRIPT ${CMAKE_BINARY_DIR}/wooExtra.cmake)
 
-#https://stackoverflow.com/q/59083388/761090
-#install(CODE [=[
-#	message(STATUS "Installing ${CMAKE_SOURCE_DIR}/wooExtra/*")
-#	file(GLOB WOOEXTRA_SETUPS ${CMAKE_SOURCE_DIR}/wooExtra/*/setup.py)
-#	foreach(SETUP ${WOOEXTRA_SETUPS})
-#		get_filename_component(SETUP_DIR ${SETUP} DIRECTORY)
-#		message(STATUS "Running setup.py in ${SETUP_DIR}")
-#		execute_process(
-#			COMMAND ${PYTHON_EXECUTABLE} -W ignore "${SETUP}" --quiet install
-#			WORKING_DIRECTORY ${SETUP_DIR}
-#			RESULT_VARIABLE SETUP_STATUS
-#			ERROR_VARIABLE SETUP_ERROR
-#		)
-#		if(NOT "${SETUP_STATUS}" EQUAL 0)
-#			message(FATAL_ERROR "Error installing from ${SETUP}:\n${SETUP_ERROR}")
-#		endif()
-#	endforeach()
-#]=])
-#
-#

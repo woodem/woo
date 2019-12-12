@@ -139,9 +139,10 @@ struct AxialBias: public SpatialBias{
 			((int,axis,0,AttrTrait<Attr::triggerPostLoad>(),"Axis which is biased.")) \
 			((Vector2r,d01,Vector2r(NaN,NaN),,"Diameter at the lower and upper end (the order matters); it is possible that :math:`r_0>r_1`, in which case the bias is reversed (bigger radii have smaller coordinate).")) \
 			((Real,fuzz,0,,"Allow for random variations around the position determined from diameter.")) \
-			((bool,phase,NaN,,"If NaN, coordinate after fuzz will be clamped to 0…1. If a number, it will be added to the coordinate after fuzz (zero is allowed) and the value will be modulated to 0…1 (rather than clamped), overflowing between beginning and end."))
+			((float,phase,NaN,,"If NaN, coordinate after fuzz will be clamped to 0…1. If a number, it will be added to the coordinate after fuzz (zero is allowed) and the value will be modulated to 0…1 (rather than clamped), overflowing between beginning and end."))
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS);
+	WOO_DECL_LOGGER;
 };
 WOO_REGISTER_OBJECT(AxialBias);
 
