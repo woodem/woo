@@ -134,9 +134,9 @@ if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 # and based on that use one or another
 try: import minieigen
 except ImportError:
-    try: import _minieigen11
+    try: import minieigen11
     except ImportError:
-        raise RuntimeError('minieigen is not importable (and _minieigen11 is not, either).')
+        raise RuntimeError('minieigen is not importable (and minieigen11 is not, either).')
 
 
 # c++ initialization code
@@ -270,12 +270,12 @@ if 'gts' in config.features:
 
 if 'pybind11' in config.features:
     print('WARN: pybind11 support is experimental.')
-    import _minieigen11
+    import minieigen11
     # if 'minieigen' in sys.m
-    print('WARN: hijacking minieigen module, points to _minieigen11.')
+    print('WARN: hijacking minieigen module, points to minieigen11.')
     if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
-    sys.modules['minieigen']=sys.modules['_minieigen11']
-    assert(_minieigen11.Vector3.__class__.__name__=='pybind11_type')
+    sys.modules['minieigen']=sys.modules['minieigen11']
+    assert(minieigen11.Vector3.__class__.__name__=='pybind11_type')
 else:
     import minieigen
 

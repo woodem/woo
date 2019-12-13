@@ -75,34 +75,26 @@ void wooInitialize(){
 
 	PyEval_InitThreads();
 
-	// this is probably too late already
-	#if 0
-		#ifdef WOO_PYBIND11
-			py::module::import("_minieigen11");
-		#else
-			py::import("minieigen"); 
-		#endif
+	// early check that minieigen is importable
+	// (this is probably too late already)
+	#ifdef WOO_PYBIND11
+		const string meig="minieigen11";
 	#else
-		// early check that minieigen is importable
-		#ifdef WOO_PYBIND11
-			const string meig="_minieigen11";
-		#else
-			const string meig="minieigen"; 
-		#endif
-		try{
-			if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
-			#ifdef WOO_PYBIND11
-				auto minieigen=py::module::import(meig.c_str());
-			#else
-				auto minieigen=py::import(meig.c_str());
-			#endif
-			LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
-		} catch(py::error_already_set& e){
-				throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
-		} catch(...){
-			throw std::runtime_error("Error importing "+meig+" (details not reported).");
-		}
+		const string meig="minieigen"; 
 	#endif
+	try{
+		if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
+		#ifdef WOO_PYBIND11
+			auto minieigen=py::module::import(meig.c_str());
+		#else
+			auto minieigen=py::import(meig.c_str());
+		#endif
+		LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
+	} catch(py::error_already_set& e){
+			throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
+	} catch(...){
+		throw std::runtime_error("Error importing "+meig+" (details not reported).");
+	}
 
 
 
