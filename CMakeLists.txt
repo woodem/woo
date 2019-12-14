@@ -66,8 +66,10 @@ find_package(PythonLibs REQUIRED)
 set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
 find_package(Backward REQUIRED)
 
-find_package(VTK REQUIRED)
-add_definitions(-DWOO_VTK)
+if(WOO_VTK)
+	find_package(VTK REQUIRED)
+	add_definitions(-DWOO_VTK)
+endif()
 
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)
@@ -161,6 +163,9 @@ if(WOO_OPENMP)
 	add_definitions(-DWOO_OPENMP)
 	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
+
+# don't compile XML serialization, binary works better
+add_definitions(-DWOO_NOXML)
 
 execute_process(COMMAND git log -1 --format=%h
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
