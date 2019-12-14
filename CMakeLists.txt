@@ -407,11 +407,11 @@ install(TARGETS ${CXX_INTERNAL}
 
 
 FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-file(WRITE "bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
-file(WRITE "bin/${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
+file(WRITE "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
+file(WRITE "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
 
 
-install(PROGRAMS "bin/${WOO_MAIN_SCRIPT}" "bin/${WOO_MAIN_SCRIPT}-batch"
+install(PROGRAMS "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}-batch"
 	DESTINATION ${WOO_BIN_DIR}
 )
 
