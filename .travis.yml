@@ -1,7 +1,7 @@
 language: python
 python: 3.6
 dist: bionic
-compiler: gcc
+compiler: clang
 sudo: required
 addons:
    apt:
@@ -27,6 +27,6 @@ install:
 script:
    - mkdir -p build
    - cd build
-   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
+   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF -DWOO_CLANG=ON ..
    - ninja install
    - timeout 60 woo --test
