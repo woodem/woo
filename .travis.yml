@@ -1,26 +1,14 @@
 language: python
-# we need different executable name for 2.7 and 3.4, specify matrix explicitly: 
-# see http://docs.travis-ci.com/user/customizing-the-build/
-##python:
-#   - 3.4
-###   - 2.7
-matrix:
-   include:
-      - python: "2.7"
-        env: WOO_EXEC=woo-travis
-# disabled for now, since packaged boost::python only links against python 3.2, which is not sufficient
-#      - python: "3.4"
-#        env: WOO_EXEC=woo-travis-py3
+dist: bionic
+compiler: gcc
 install:
-   # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
-   # ipython>=6.0 does not support python <= 3.2
-   - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile 'ipython<6.0' colour_runner xlsxwriter prettytable setuptools matplotlib
-   # see what's there really
-   - dpkg -l 
-   # use non-default version of gcc (ubuntu 14.04)
-   - WOO_FLAVOR=travis CC=clang CXX=clang++ python setup.py install 
+   - pip3 install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
 script:
-   - timeout 60 $WOO_EXEC --test # py3 stalls?!
+   - mkdir -p build
+   - cd build
+   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
+   - ninja install
+   - timeout 60 woo --test
 ## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
 ## add libvtk5-dev and libgts-dev when those are approved
 ## https://github.com/travis-ci/apt-package-whitelist/issues/779
@@ -29,16 +17,17 @@ sudo: false
 addons:
    apt:
       sources:
-         - ubuntu-toolchain-r-test
-         - boost-latest
+         - 'ppa:nschloe/pybind11-backports'
       packages:
-         - python-all
-         - python-all-dev
          - python3-all
          - python3-all-dev
          - libeigen3-dev
          - libhdf5-serial-dev
-         - binutils-gold
-         - libboost1.55-all-dev
-         - clang
+         - libboost-all-dev
+         - libgts-dev
+         - pybind11-dev
+         - cmake
+         - cmake-data
+         - ninja-build
+         - libvtk6-dev
 

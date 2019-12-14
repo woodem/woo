@@ -2,22 +2,27 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 PROJECT(woo VERSION 1.2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 OPTION(WOO_DEBUG "Include debugging information" OFF)
 OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
 OPTION(WOO_VTK "Use VTK, enable related functionality" ON)
 OPTION(WOO_HDF5 "Use HDF5, enable related functionality" ON)
-# OPTION(WOO_OPENGL "Use OpenGL (requires QT5)" OFF)
 OPTION(WOO_GTS "Use GTS (and build internal pygts), enable related functionality" ON)
-OPTION(WOO_QT5 "Build Qt5-based user interface" ON)
+OPTION(WOO_QT5 "Build Qt5-based user interface (implies also OpenGL)" ON)
 OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
 OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" OFF)
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
-
+OPTION(WOO_CCACHE "Use ccache when compiling" ON)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
+
+if(DEFINED ENV{VIRTUAL_ENV})
+	if("${WOO_INSTALL_SCHEME}" STREQUAL "posix_user")
+		message(STATUS "Setting WOO_INSTALL_SCHEME to posix_prefix (in virtual environment)")
+		set(WOO_INSTALL_SCHEME "posix_prefix")
+	endif()
+endif()
 
 
 if(WOO_CLANG)
@@ -30,11 +35,11 @@ else()
 endif(WOO_CLANG)
 
 # https://stackoverflow.com/a/24305849/761090
-find_program(CCACHE_FOUND "ccache")
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    # set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
+if(WOO_CCACHE)
+	find_program(CCACHE_FOUND "ccache" REQUIRED)
+	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+	# set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(WOO_CCACHE)
 
 # https://medium.com/@alasher/colored-c-compiler-output-with-ninja-clang-gcc-10bfe7f2b949
 option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
