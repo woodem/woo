@@ -29,4 +29,5 @@ addons:
          - cmake-data
          - ninja-build
          - libvtk6-dev
+         - libdoubleconversion-dev # for building minieigen11
 
