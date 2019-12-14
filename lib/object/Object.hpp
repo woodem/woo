@@ -322,7 +322,8 @@ template<> struct _SerializeMaybe<false>{
 
 
 
-#define _REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec)  _WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) public: \
+#define _REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec) \
+	_WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) public: \
 	void pySetAttr(const std::string& key, const py::object& value) override {BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR,thisClass,attrs); BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC,thisClass,deprec); baseClass::pySetAttr(key,value); } \
 	/* return dictionary of all acttributes and values; deprecated attributes omitted */ py::dict pyDict(bool all=true) const override { py::dict ret; BOOST_PP_SEQ_FOR_EACH(_PYDICT_ATTR,thisClass,attrs); WOO_PY_DICT_UPDATE(baseClass::pyDict(all),ret); return ret; } \
 	void callPostLoad(void* addr) override { baseClass::callPostLoad(addr); postLoad(*this,addr); }

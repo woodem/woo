@@ -14,17 +14,6 @@ struct PelletMat: public FrictMat{
 };
 WOO_REGISTER_OBJECT(PelletMat);
 
-#if 0
-	struct AgglomPelletMat: public PelletMat{
-		WOO_CLASS_BASE_DOC_ATTRS_CTOR(AgglomPelletMat,PelletMat,"Pellet material with additional agglomeration parameters",
-			/*attrs*/
-			,/*ctor*/createIndex();
-		);
-		REGISTER_CLASS_INDEX(AgglomPelletMat,PelletMat);
-	};
-	WOO_REGISTER_OBJECT(AgglomPelletMat);
-#endif
-
 struct PelletMatState: public MatState{
 	size_t getNumScalars() const override { return 4; }
 	string getScalarName(int index) override {

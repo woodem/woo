@@ -5,6 +5,9 @@ WOO_PLUGIN(dem,(Rod)(Truss)(Bo1_Rod_Aabb)(In2_Truss_ElastMat)(Cg2_Rod_Sphere_L6G
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Rod__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Truss__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Rod_Sphere_L6Geom__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Rod_Aabb__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_In2_Truss_ElastMat__CLASS_BASE_DOC_ATTRS);
+
 
 void Rod::lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk){
 	throw std::runtime_error("Rod::lumpMassInertia: not yet implemented.");

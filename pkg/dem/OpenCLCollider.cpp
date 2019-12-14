@@ -4,8 +4,9 @@
 #include<algorithm>
 
 WOO_PLUGIN(dem,(OpenCLCollider));
-
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_OpenCLCollider__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL_LOGGER(OpenCLCollider);
+
 
 #define OCLC_TIMING
 

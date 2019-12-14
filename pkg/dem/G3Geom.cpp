@@ -5,6 +5,11 @@
 #include<woo/pkg/dem/G3Geom.hpp>
 
 WOO_PLUGIN(dem,(G3Geom)(Cg2_Sphere_Sphere_G3Geom)(Cg2_Wall_Sphere_G3Geom)(Law2_G3Geom_FrictPhys_IdealElPl)(G3GeomCData));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_G3Geom__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Sphere_Sphere_G3Geom__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Sphere_G3Geom__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_G3GeomCData__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Law2_G3Geom_FrictPhys_IdealElPl__CLASS_BASE_DOC_ATTRS);
 
 void G3Geom::rotateVectorWithContact(Vector3r& v){
 	assert(!isnan(orthonormalAxis.maxCoeff()) && !isnan(twistAxis.maxCoeff()));

@@ -23,6 +23,8 @@
 WOO_PLUGIN(dem,(InsertionSortCollider));
 WOO_IMPL_LOGGER(InsertionSortCollider);
 
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_InsertionSortCollider__CLASS_BASE_DOC_ATTRS_CTOR_PY);
+
 void InsertionSortCollider::makeRemoveContactLater_process() {
 
 	#if defined(WOO_OPENMP) || defined(WOO_OPENGL)

@@ -3,12 +3,16 @@
 #include<woo/pkg/dem/Sphere.hpp>
 
 WOO_PLUGIN(dem,(AnisoPorosityAnalyzer));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_AnisoPorosityAnalyzer__CLASS_BASE_DOC_ATTRS_PY);
 
 #ifdef WOO_OPENGL
 WOO_PLUGIN(gl,(GlExtra_AnisoPorosityAnalyzer));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_gl_GlExtra_AnisoPorosityAnalyzer__CLASS_BASE_DOC_ATTRS);
 #endif
 
 WOO_IMPL_LOGGER(AnisoPorosityAnalyzer);
+
+
 
 Real AnisoPorosityAnalyzer::relSolid(Real theta, Real phi, Vector3r pt0, bool vis){
 	setField();

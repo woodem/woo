@@ -3,6 +3,7 @@
 #include<woo/pkg/dem/MeshVolume.hpp>
 
 WOO_PLUGIN(dem,(MeshVolume));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_MeshVolume__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL_LOGGER(MeshVolume);
 
 void MeshVolume::init(){

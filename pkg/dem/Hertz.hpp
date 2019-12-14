@@ -81,26 +81,30 @@ struct Law2_L6Geom_HertzPhys_DMT: public LawFunctor{
 	#ifdef WOO_SCHWARZ_COUNTERS
 		Real pyAvgIter(){ avgIter=nCallsIters[1]*1./nCallsIters[0]; return avgIter; }
 		void pyResetCounters(){ nCallsIters.resetAll(); }
-	#endif
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(Law2_L6Geom_HertzPhys_DMT,LawFunctor,"Law for Hertz contact with optional adhesion (DMT (Derjaguin-Muller-Toporov) :cite:`Derjaguin1975`), non-linear viscosity (:cite:`Antypov2011`) The formulation is taken mainly from :cite:`Johnson1987`. The parameters are given through :obj:`Cp2_FrictMat_HertzPhys`. More details are given in :ref:`hertzian_contact_models`.",
-		((bool,noAttraction,true,,"Avoid non-physical normal attraction which may result from viscous effects by making the normal force zero if there is attraction (:math:`F_n>0`). This condition is only applied to elastic and viscous part of the normal force. Adhesion, if present, is not limited. See :cite:`Antypov2011`, the 'Model choice' section (pg. 5), for discussion of this effect.\n.. note:: It is technically not possible to break the contact completely while there is still geometrical overlap, so only force is set to zero but the contact still exists."))
-		#ifdef WOO_SCHWARZ_COUNTERS
-			((OpenMPArrayAccumulator<int>,nCallsIters,,AttrTrait<>().noGui(),"Count number of calls of the functor and of iterations in the Halley solver (if used)."))
+		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_ATTRS \
+			((OpenMPArrayAccumulator<int>,nCallsIters,,AttrTrait<>().noGui(),"Count number of calls of the functor and of iterations in the Halley solver (if used).")) \
 			((Real,avgIter,NaN,AttrTrait<>().buttons({"reset counters","self.resetCounters()",""},/*showBefore*/true).readonly(),"Average number of Halley iterations per contact when using the Schwarz model (updated on-demand)."))
-		#endif
-		((int,digits,std::numeric_limits<Real>::digits/2,AttrTrait<>().range(Vector2i(1,std::numeric_limits<Real>::digits)),"Precision for Halley iteration with the Schwarz model, measured in binary digits; the maximum is the number of digits of the floating point type for given platform. Precision above 2/3 of the maximum will very likely have no effect on the result, but it will require extra (few) iterations before converging."))
-		((int,plastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy."))
-		((int,viscNIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of viscous dissipation in the normal sense."))
-		((int,viscTIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of viscous dissipation in the tangent sense."))
-		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy."))
-		((int,dmtIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic energy of new/broken contacts."))
-		, /* ctor */ nCallsIters.resize(2);
-		, /*py*/
-			#ifdef WOO_SCHWARZ_COUNTERS
-				.add_property_readonly("avgIter",&Law2_L6Geom_HertzPhys_DMT::pyAvgIter,"Override the variable so that it shows up in the UI, being always up-to-date.")
-				.def("resetCounters",&Law2_L6Geom_HertzPhys_DMT::pyResetCounters,"Reset *nCallsIters* and thus *avgIter*.")
-			#endif
-	);
+		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_PY \
+			.add_property_readonly("avgIter",&Law2_L6Geom_HertzPhys_DMT::pyAvgIter,"Override the variable so that it shows up in the UI, being always up-to-date.") \
+			.def("resetCounters",&Law2_L6Geom_HertzPhys_DMT::pyResetCounters,"Reset *nCallsIters* and thus *avgIter*.")
+	#else
+		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_ATTRS
+		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_PY
+	#endif
+	#define woo_dem_Law2_L6Geom_HertzPhys_DMT__CLASS_BASE_DOC_ATTRS_CTOR_PY \
+		Law2_L6Geom_HertzPhys_DMT,LawFunctor,"Law for Hertz contact with optional adhesion (DMT (Derjaguin-Muller-Toporov) :cite:`Derjaguin1975`), non-linear viscosity (:cite:`Antypov2011`) The formulation is taken mainly from :cite:`Johnson1987`. The parameters are given through :obj:`Cp2_FrictMat_HertzPhys`. More details are given in :ref:`hertzian_contact_models`.", \
+		((bool,noAttraction,true,,"Avoid non-physical normal attraction which may result from viscous effects by making the normal force zero if there is attraction (:math:`F_n>0`). This condition is only applied to elastic and viscous part of the normal force. Adhesion, if present, is not limited. See :cite:`Antypov2011`, the 'Model choice' section (pg. 5), for discussion of this effect.\n.. note:: It is technically not possible to break the contact completely while there is still geometrical overlap, so only force is set to zero but the contact still exists.")) \
+		woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_ATTRS \
+		((int,digits,std::numeric_limits<Real>::digits/2,AttrTrait<>().range(Vector2i(1,std::numeric_limits<Real>::digits)),"Precision for Halley iteration with the Schwarz model, measured in binary digits; the maximum is the number of digits of the floating point type for given platform. Precision above 2/3 of the maximum will very likely have no effect on the result, but it will require extra (few) iterations before converging.")) \
+		((int,plastIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy.")) \
+		((int,viscNIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of viscous dissipation in the normal sense.")) \
+		((int,viscTIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of viscous dissipation in the tangent sense.")) \
+		((int,elastPotIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic potential energy.")) \
+		((int,dmtIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index for elastic energy of new/broken contacts.")) \
+		, /* ctor */ nCallsIters.resize(2); \
+		, /*py*/ woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_PY
+	
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Law2_L6Geom_HertzPhys_DMT__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(Law2_L6Geom_HertzPhys_DMT);
 

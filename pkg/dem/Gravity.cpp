@@ -6,6 +6,7 @@
 // #include<boost/regex.hpp>
 
 WOO_PLUGIN(dem,(AxialGravity) /* (CentralGravityEngine)(AxialGravityEngine)(HdapsGravityEngine)*/ );
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialGravity__CLASS_BASE_DOC_ATTRS);
 
 void AxialGravity::run(){
 	axisDir.normalize();

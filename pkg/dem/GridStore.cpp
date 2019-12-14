@@ -6,6 +6,7 @@
 #include<boost/range/algorithm/set_algorithm.hpp>
 
 WOO_PLUGIN(dem,(GridStore));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_GridStore__CLASS_BASE_DOC_ATTRS_PY);
 
 WOO_IMPL_LOGGER(GridStore);
 

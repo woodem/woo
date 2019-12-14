@@ -4,6 +4,7 @@
 #include<woo/pkg/dem/Sphere.hpp>
 
 WOO_PLUGIN(dem,(Cp2_FrictMat_FrictPhys_CrossAnisotropic));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_FrictMat_FrictPhys_CrossAnisotropic__CLASS_BASE_DOC_ATTRS);
 
 WOO_IMPL_LOGGER(Cp2_FrictMat_FrictPhys_CrossAnisotropic);
 

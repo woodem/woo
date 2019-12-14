@@ -65,7 +65,9 @@ WOO_REGISTER_OBJECT(Gl1_Rod);
 struct Bo1_Rod_Aabb: public BoundFunctor{
 	void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Rod);
-	WOO_CLASS_BASE_DOC(Bo1_Rod_Aabb,BoundFunctor,"Compute :obj:`woo.dem.Aabb` of a :obj:`Rod` particle")
+	#define woo_dem_Bo1_Rod_Aabb__CLASS_BASE_DOC \
+		Bo1_Rod_Aabb,BoundFunctor,"Compute :obj:`woo.dem.Aabb` of a :obj:`Rod` particle"
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Rod_Aabb__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Bo1_Rod_Aabb);
 
@@ -73,9 +75,9 @@ struct In2_Truss_ElastMat: public IntraFunctor{
 	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
 	FUNCTOR2D(Truss,ElastMat);
 	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override;
-	WOO_CLASS_BASE_DOC_ATTRS(In2_Truss_ElastMat,IntraFunctor,"Compute elastic response of cylinder determined by 2 nodes.",
+	#define woo_dem_In2_Truss_ElastMat__CLASS_BASE_DOC_ATTRS \
+		In2_Truss_ElastMat,IntraFunctor,"Compute elastic response of cylinder determined by 2 nodes.", \
 		((bool,setL0,true,,"Automatically set equilibrium length of truss, when first encountered."))
-		/*attrs*/
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_In2_Truss_ElastMat__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(In2_Truss_ElastMat);

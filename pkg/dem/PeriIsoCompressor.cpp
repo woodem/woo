@@ -12,6 +12,10 @@
 WOO_IMPL_LOGGER(PeriIsoCompressor);
 
 WOO_PLUGIN(dem,(PeriIsoCompressor))
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PeriIsoCompressor__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_WeirdTriaxControl__CLASS_BASE_DOC_ATTRS);
+
+
 
 void PeriIsoCompressor::run(){
 	dem=static_cast<DemField*>(field.get());
