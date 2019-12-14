@@ -3,17 +3,13 @@ python: 3.6
 dist: bionic
 compiler: gcc
 install:
-   - pip3 install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
+   - pip3 install xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
 script:
    - mkdir -p build
    - cd build
    - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
    - ninja install
    - timeout 60 woo --test
-## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
-## add libvtk5-dev and libgts-dev when those are approved
-## https://github.com/travis-ci/apt-package-whitelist/issues/779
-## https://github.com/travis-ci/apt-package-whitelist/issues/526 
 sudo: required
 before_script:
     - sudo add-apt-repository -y ppa:nschloe/pybind11-backports
