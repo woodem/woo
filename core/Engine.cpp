@@ -201,13 +201,13 @@ void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 		py::extract<int> exInt(t[i]);
 		if(exStr.check()){
 			if(!cmdDone) command=exStr();
-			else throw std::invalid_argument(("PyRunner.command was already specified (extra unnamed string argument, at position "+lexical_cast<string>(i)+")").c_str());
+			else throw std::invalid_argument(("PyRunner.command was already specified (extra unnamed string argument, at position "+to_string(i)+")").c_str());
 			cmdDone=true;
 			continue;
 		} 
 		if(exInt.check()){
 			if(!stepDone) stepPeriod=exInt();
-			else throw std::invalid_argument(("PyRunner.stepPeriod was already specified (extra unnamed int argument, at position "+lexical_cast<string>(i)+")").c_str());
+			else throw std::invalid_argument(("PyRunner.stepPeriod was already specified (extra unnamed int argument, at position "+to_string(i)+")").c_str());
 			stepDone=true;
 			continue;
 		}

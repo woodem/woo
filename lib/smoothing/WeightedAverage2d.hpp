@@ -27,7 +27,7 @@ struct GridContainer{
 	Vector2i xy2cell(Vector2r xy, bool* inGrid=NULL) const {
 		Vector2i ret((int)(floor((xy[0]-lo[0])/cellSizes[0])),(int)(floor((xy[1]-lo[1])/cellSizes[1])));
 		if(ret[0]<0 || ret[0]>=nCells[0] || ret[1]<0 || ret[1]>=nCells[1]){
-			if(inGrid) *inGrid=false; else throw std::invalid_argument("Cell coordinates outside grid (xy="+lexical_cast<string>(xy[0])+","+lexical_cast<string>(xy[1])+", computed cell coordinates "+lexical_cast<string>(ret[0])+","+lexical_cast<string>(ret[1])+").");
+			if(inGrid) *inGrid=false; else throw std::invalid_argument("Cell coordinates outside grid (xy="+to_string(xy[0])+","+to_string(xy[1])+", computed cell coordinates "+to_string(ret[0])+","+to_string(ret[1])+").");
 		} else {if(inGrid) *inGrid=true;}
 		return ret;
 	}

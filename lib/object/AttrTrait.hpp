@@ -87,7 +87,7 @@ namespace woo{
 			return py::cast(_prefUnit);
 		}
 
-		string pyStr(){ return "<AttrTrait '"+_name+"', flags="+to_string(_flags)+" @ '"+lexical_cast<string>(this)+">"; }
+		string pyStr(){ return "<AttrTrait '"+_name+"', flags="+to_string(_flags)+" @ '"+ptr_to_string(this)+">"; }
 
 
 		void namedEnum_validValues(std::ostream& os, const string& pre0="", const string& post0="", const string& pre="", const string& post="") const {
@@ -351,7 +351,7 @@ namespace woo{
 	AttrTrait<flags> makeAttrTrait(const AttrTrait<flags>& at){ return at; }
 
 	struct ClassTrait{
-		string pyStr(){ return "<ClassTrait '"+_name+"' @ "+lexical_cast<string>(this)+">"; }
+		string pyStr(){ return "<ClassTrait '"+_name+"' @ "+ptr_to_string(this)+">"; }
 		string _doc;
 		string _name;
 		string title;

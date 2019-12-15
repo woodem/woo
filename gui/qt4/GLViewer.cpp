@@ -10,8 +10,6 @@
 #include<woo/lib/base/Types.hpp>
 #include<woo/core/Field.hpp>
 #include<woo/core/DisplayParameters.hpp>
-#include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/convenience.hpp>
 #include<boost/algorithm/string.hpp>
 #include<boost/version.hpp>
 #include<boost/make_shared.hpp>
@@ -52,7 +50,7 @@ WOO_IMPL_LOGGER(SnapshotEngine);
 
 void SnapshotEngine::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==0) return;
-	if(py::len(t)!=2) throw std::invalid_argument(("SnapshotEngine takes exactly 2 unnamed arguments iterPeriod,fileBase ("+lexical_cast<string>(py::len(t))+" given)").c_str());
+	if(py::len(t)!=2) throw std::invalid_argument(("SnapshotEngine takes exactly 2 unnamed arguments iterPeriod,fileBase ("+to_string(py::len(t))+" given)").c_str());
 	py::extract<int> ii(t[0]);
 	py::extract<string> ff(t[1]);
 	if(!(ii.check()&&ff.check())) throw std::invalid_argument("TypeError: SnapshotEngine takes 2 unnamed argument of type int, string (iterPeriod, fileBase)");
@@ -82,8 +80,8 @@ void SnapshotEngine::run(){
 	const shared_ptr<GLViewer>& glv=OpenGLManager::self->views[0];
 	if(fileBase.empty()) fileBase=Master::instance().tmpFilename()+"/";
 	std::ostringstream fss; fss<<fileBase<<std::setw(5)<<std::setfill('0')<<counter++<<"."<<boost::algorithm::to_lower_copy(format);
-	boost::filesystem::path p(fss.str());
-	boost::filesystem::create_directories(p.parent_path());
+	filesystem::path p(fss.str());
+	filesystem::create_directories(p.parent_path());
 	LOG_DEBUG("GL view → {}",fss.str());
 	glv->setSnapshotFormat(QString(format.c_str()));
 	glv->nextSnapFile=fss.str();
@@ -91,7 +89,7 @@ void SnapshotEngine::run(){
 	// wait for the renderer to save the frame (will happen at next postDraw)
 	long waiting=0;
 	while(!glv->nextSnapFile.empty()){
-		boost::this_thread::sleep(boost::posix_time::milliseconds(10)); waiting++;
+		std::this_thread::sleep_for(std::chrono::milliseconds(10)); waiting++;
 		if(((waiting) % 1000)==0) LOG_WARN("Already waiting {}s for snapshot to be saved. Something went wrong?",waiting/100);
 		if(waiting/100.>deadTimeout){
 			if(ignoreErrors){ LOG_WARN("Timeout waiting for snapshot to be saved, making myself Engine::dead"); dead=true; return; }
@@ -99,7 +97,7 @@ void SnapshotEngine::run(){
 		}
 	}
 	snapshots.push_back(fss.str());
-	boost::this_thread::sleep(boost::posix_time::microseconds(msecSleep));
+	std::this_thread::sleep_for(std::chrono::microseconds(msecSleep));
 	if(!plot.empty()){ Engine::runPy("SnapshotEngine","import woo.plot; S.plot.addImgData("+plot+"='"+fss.str()+"')"); }
 }
 
@@ -159,7 +157,7 @@ GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QW
 	framesDone=0;
 
 	if(viewId==0) setWindowTitle("3d view");
-	else setWindowTitle(("Secondary view #"+lexical_cast<string>(viewId)).c_str());
+	else setWindowTitle(("Secondary view #"+to_string(viewId)).c_str());
 
 	setWindowIcon(QIcon(":/woo-logo.svg"));
 
@@ -325,7 +323,7 @@ void GLViewer::startClipPlaneManipulation(int planeNo){
 	const Vector3r& pos(renderer->clipPlanes[planeNo]->pos); const Quaternionr& ori(renderer->clipPlanes[planeNo]->ori);
 	manipulatedFrame()->setPositionAndOrientation(qglviewer::Vec(pos[0],pos[1],pos[2]),qglviewer::Quaternion(ori.x(),ori.y(),ori.z(),ori.w()));
 	string grp=strBoundGroup();
-	displayMessage("Manipulating clip plane #"+lexical_cast<string>(planeNo+1)+(grp.empty()?grp:" (bound planes:"+grp+")"));
+	displayMessage("Manipulating clip plane #"+to_string(planeNo+1)+(grp.empty()?grp:" (bound planes:"+grp+")"));
 }
 
 void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
@@ -333,7 +331,7 @@ void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
 	LOG_DEBUG("Loading display parameters from #{}",n);
 	vector<shared_ptr<DisplayParameters> >& dispParams=Master::instance().getScene()->dispParams;
 	if(dispParams.size()<=(size_t)n){
-		string msg("Display parameters #"+lexical_cast<string>(n)+" don't exist (number of entries "+lexical_cast<string>(dispParams.size())+")");
+		string msg("Display parameters #"+to_string(n)+" don't exist (number of entries "+to_string(dispParams.size())+")");
 		if(fromHandler) displayMessage(msg.c_str());
 		else throw std::runtime_error(msg.c_str());
 		return;
@@ -360,7 +358,7 @@ void GLViewer::useDisplayParameters(size_t n, bool fromHandler){
 		>(oglre,"renderer",rendererDummyInstance);
 	}
 	else { LOG_WARN("Renderer configuration not found in display parameters, skipped.");}
-	if(dp->getValue("GLViewer",val)){ GLViewer::setState(val); displayMessage("Loaded view configuration #"+lexical_cast<string>(n)); }
+	if(dp->getValue("GLViewer",val)){ GLViewer::setState(val); displayMessage("Loaded view configuration #"+to_string(n)); }
 	else { LOG_WARN("GLViewer configuration not found in display parameters, skipped."); }
 	}
 
@@ -388,7 +386,7 @@ void GLViewer::saveDisplayParameters(size_t n){
 			>(oglre,"renderer",rendererDummyInstance);	
 	dp->setValue("Renderer",oglre.str());
 	dp->setValue("GLViewer",GLViewer::getState());
-	displayMessage("Saved view configuration to #"+lexical_cast<string>(n));
+	displayMessage("Saved view configuration to #"+to_string(n));
 }
 
 string GLViewer::getState(){
@@ -400,7 +398,7 @@ string GLViewer::getState(){
 		// read tmp file contents and return it as string
 		// this will replace all whitespace by space (nowlines will disappear, which is what we want)
 		std::ifstream in(tmpFile.c_str()); string ret; while(!in.eof()){string ss; in>>ss; ret+=" "+ss;}; in.close();
-		boost::filesystem::remove(boost::filesystem::path(tmpFile));
+		filesystem::remove(filesystem::path(tmpFile));
 		return ret;
 	#else
 		QDomDocument doc("QGLVIEWER");
@@ -418,7 +416,7 @@ void GLViewer::setState(string state){
 	out<<state; out.close();
 	LOG_DEBUG("Will load state from temp file {}",tmpFile);
 	QString origStateFileName=stateFileName(); setStateFileName(QString(tmpFile.c_str())); restoreStateFromFile(); setStateFileName(origStateFileName);
-	boost::filesystem::remove(boost::filesystem::path(tmpFile));
+	filesystem::remove(filesystem::path(tmpFile));
 }
 
 void GLViewer::keyPressEvent(QKeyEvent *e)
@@ -450,7 +448,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 					for(int i=0; ;i++){
 						std::ostringstream fss; fss<<std::setw(4)<<std::setfill('0')<<i;
 						string out2=boost::algorithm::replace_all_copy(out,"{#}",fss.str());
-						if(!boost::filesystem::exists(out2)){ nextSnapFile=out2; break; }
+						if(!filesystem::exists(out2)){ nextSnapFile=out2; break; }
 					}
 				} else nextSnapFile=out;
 				LOG_INFO("Will save snapshot to {}",nextSnapFile);
@@ -497,8 +495,8 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 		int n=0; if(e->key()==Qt::Key_1) n=1; else if(e->key()==Qt::Key_2) n=2; else if(e->key()==Qt::Key_3) n=3; assert(n>0); int planeId=n-1;
 		if(planeId>=(int)renderer->clipPlanes.size()) return; // no such clipping plane
 		if(e->modifiers() & Qt::AltModifier){
-			if(boundClipPlanes.count(planeId)==0) {boundClipPlanes.insert(planeId); displayMessage("Added plane #"+lexical_cast<string>(planeId+1)+" to the bound group: "+strBoundGroup());}
-			else {boundClipPlanes.erase(planeId); displayMessage("Removed plane #"+lexical_cast<string>(planeId+1)+" from the bound group: "+strBoundGroup());}
+			if(boundClipPlanes.count(planeId)==0) {boundClipPlanes.insert(planeId); displayMessage("Added plane #"+to_string(planeId+1)+" to the bound group: "+strBoundGroup());}
+			else {boundClipPlanes.erase(planeId); displayMessage("Removed plane #"+to_string(planeId+1)+" from the bound group: "+strBoundGroup());}
 		}
 		else if(manipulatedClipPlane>=0 && manipulatedClipPlane!=planeId) {
 			const Quaternionr& o=renderer->clipPlanes[planeId]->ori;
@@ -583,7 +581,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 			Quaternionr& ori=renderer->clipPlanes[manipulatedClipPlane]->ori;
 			ori=Quaternionr(AngleAxisr(M_PI,Vector3r(0,1,0)))*ori; 
 			manipulatedFrame()->setOrientation(qglviewer::Quaternion(qglviewer::Vec(0,1,0),M_PI)*manipulatedFrame()->orientation());
-			displayMessage("Plane #"+lexical_cast<string>(manipulatedClipPlane+1)+" reversed.");
+			displayMessage("Plane #"+to_string(manipulatedClipPlane+1)+" reversed.");
 		}
 		else {
 			camera()->setRevolveAroundPoint(sceneCenter());

@@ -4,9 +4,8 @@
 #include<woo/pkg/sparc/SparcField.hpp>
 
 #include<boost/preprocessor.hpp>
-#include<boost/filesystem/convenience.hpp>
 
-namespace bfs=boost::filesystem;
+namespace bfs=filesystem;
 
 
 using boost::format;
@@ -103,7 +102,7 @@ vector<shared_ptr<Node>> SparcField::nodesAround(const Vector3r& pt, int count, 
 		ret.push_back(nodes[ids.GetId(i)]);
 		if(self && nodes[ids.GetId(i)].get()==self.get()) selfSeen=true;
 	};
-	if(self && !selfSeen) throw std::runtime_error("SparcFields::nodesAround: central node at "+lexical_cast<string>(self->pos.transpose())+" given but not found within neighbors around "+lexical_cast<string>(pt.transpose())+".");
+	if(self && !selfSeen) throw std::runtime_error("SparcFields::nodesAround: central node at "+to_string(self->pos.transpose())+" given but not found within neighbors around "+to_string(pt.transpose())+".");
 	_ids->Delete();
 	return ret;
 };
@@ -175,7 +174,7 @@ void ExplicitNodeIntegrator::updateLocalInterp(const shared_ptr<Node>& n) const 
 	#endif
 	if(eig_isnan(relPos)){
 		cerr<<"=== Relative positions for nid "<<dta.nid<<":\n"<<relPos<<endl;
-		throw std::runtime_error("NaN's in relative positions in O.sparc.nodes["+lexical_cast<string>(dta.nid)+"].sparc."+string(useNext?"nextRelPos":"relPos")+") .");
+		throw std::runtime_error("NaN's in relative positions in O.sparc.nodes["+to_string(dta.nid)+"].sparc."+string(useNext?"nextRelPos":"relPos")+") .");
 	}
 	if(relPos.rows()<(int)wlsPhi.size()) throw std::runtime_error((format("Node #%d at %s has only %d neighbors (%d is minimum, including itself)")%dta.nid%n->pos.transpose()%sz%(wlsPhi.size()-1)).str());
 	// evaluate basis functions (in wlsPhi) at all points
@@ -536,7 +535,7 @@ int StaticEquilibriumSolver::ResidualsFunctorBase::operator()(const VectorXr &v,
 
 	ses->solutionPhase(v,resid);
 
-	SPARC_TRACE_SES_OUT("### errors |"<<lexical_cast<string>(resid.blueNorm())<<"| = "<<resid.transpose()<<endl);
+	SPARC_TRACE_SES_OUT("### errors |"<<to_string(resid.blueNorm())<<"| = "<<resid.transpose()<<endl);
 	return 0;
 };
 
@@ -544,7 +543,7 @@ int StaticEquilibriumSolver::ResidualsFunctorBase::operator()(const VectorXr &v,
 void StaticEquilibriumSolver::copyLocalVelocityToNodes(const VectorXr &v) const{
 	assert(v.size()==nDofs);
 	#ifdef WOO_DEBUG
-		if(eig_isnan(v)) throw std::runtime_error("Solver proposing nan's in velocities, vv = "+lexical_cast<string>(v.transpose()));
+		if(eig_isnan(v)) throw std::runtime_error("Solver proposing nan's in velocities, vv = "+to_string(v.transpose()));
 	#endif
 	for(const shared_ptr<Node>& n: field->nodes){
 		SparcData& dta=n->getData<SparcData>();
@@ -805,7 +804,7 @@ template<> string solverStatus2str<StaticEquilibriumSolver::SolverPowell>(int st
 		// CASE_STATUS(UserAsked);
 	}
 	#undef CASE_STATUS
-	throw std::logic_error(("solverStatus2str<HybridNonLinearSolver> called with unknown status number "+lexical_cast<string>(status)).c_str());
+	throw std::logic_error(("solverStatus2str<HybridNonLinearSolver> called with unknown status number "+to_string(status)).c_str());
 }
 
 template<> string solverStatus2str<StaticEquilibriumSolver::SolverLM>(int status){
@@ -825,7 +824,7 @@ template<> string solverStatus2str<StaticEquilibriumSolver::SolverLM>(int status
 		CASE_STATUS(UserAsked);
 	}
 	#undef CASE_STATUS
-	throw std::logic_error(("solverStatus2str<LevenbergMarquardt> called with unknown status number "+lexical_cast<string>(status)).c_str());
+	throw std::logic_error(("solverStatus2str<LevenbergMarquardt> called with unknown status number "+to_string(status)).c_str());
 }
 
 template<> string solverStatus2str<StaticEquilibriumSolver::SolverNewton>(int status){
@@ -839,7 +838,7 @@ template<> string solverStatus2str<StaticEquilibriumSolver::SolverNewton>(int st
 		CASE_STATUS(UserAsked);
 	}
 	#undef CASE_STATUS
-	throw std::logic_error(("solverStatus2str<NewtonSolver> called with unknown status number "+lexical_cast<string>(status)).c_str());
+	throw std::logic_error(("solverStatus2str<NewtonSolver> called with unknown status number "+to_string(status)).c_str());
 }
 
 
@@ -936,7 +935,7 @@ int StaticEquilibriumSolver::solverStep(VectorXr& currV){
 		case SOLVER_POWELL:
 			assert(solverPowell);
 			status=solverPowell->solveNumericalDiffOneStep(currV);
-			SPARC_TRACE_OUT("Powell inner iteration "<<nIter<<endl<<"Solver proposed solution "<<currV.transpose()<<endl<<"Residuals vector "<<solverPowell->fvec.transpose()<<endl<<"Error norm "<<lexical_cast<string>(solverPowell->fnorm)<<endl);
+			SPARC_TRACE_OUT("Powell inner iteration "<<nIter<<endl<<"Solver proposed solution "<<currV.transpose()<<endl<<"Residuals vector "<<solverPowell->fvec.transpose()<<endl<<"Error norm "<<to_string(solverPowell->fnorm)<<endl);
 			LOG_TRACE("Powell inner iteration {} with residuum {}",nIter,solverPowell->fnorm);
 			#ifdef SPARC_INSPECT
 				residuals=solverPowell->fvec; residuum=solverPowell->fnorm; jac=solverPowell->fjac;

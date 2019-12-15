@@ -5,7 +5,7 @@
 #include<set>
 #include<list>
 #include<time.h>
-#include<boost/thread/thread.hpp>
+#include<thread>
 #include<iostream>
 #include<boost/smart_ptr/scoped_ptr.hpp>
 #include<boost/preprocessor/cat.hpp>
@@ -221,7 +221,7 @@ std::string Dispatcher_indexToClassName(int idx){
 			if(inst->getClassIndex()==idx) return clss.first;
 		}
 	}
-	throw std::runtime_error("No class with index "+boost::lexical_cast<string>(idx)+" found (top-level indexable is "+topName+")");
+	throw std::runtime_error("No class with index "+to_string(idx)+" found (top-level indexable is "+topName+")");
 }
 
 

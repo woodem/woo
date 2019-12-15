@@ -63,7 +63,7 @@ void Scene::pyOne(){
 void Scene::pyWait(){
 	if(!running()) return;
 	Py_BEGIN_ALLOW_THREADS;
-		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) boost::this_thread::sleep(boost::posix_time::milliseconds(40));
+		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	Py_END_ALLOW_THREADS;
 	// handle possible exception: reset it and rethrow
 	if(!except) return;

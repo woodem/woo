@@ -83,7 +83,7 @@ Particle::id_t ParticleContainer::insert(shared_ptr<Particle>& p){
 			if(subDomains.empty()){ b->subDomId=Particle::ID_NONE; return false; }
 			// there are subdomains, but it was requested to add the parts to one that does not exists
 			// it is an error condition, since traversal of subdomains would siletly skip this parts
-			// if(subDom>=(int)subDomains.size()) throw std::invalid_argument(("ParticleContainer::setParticleSubdomain: adding #"+lexical_cast<string>(b->id)+" to non-existent sub-domain "+lexical_cast<string>(subDom)).c_str());
+			// if(subDom>=(int)subDomains.size()) throw std::invalid_argument(("ParticleContainer::setParticleSubdomain: adding #"+to_string(b->id)+" to non-existent sub-domain "+to_string(subDom)).c_str());
 			assert(subDom<(int)subDomains.size());
 			id_t localId=findFreeDomainLocalId(subDom);
 			if(localId>=(id_t)subDomains[subDom].size()) subDomains[subDom].resize(localId+1);
@@ -99,7 +99,7 @@ Particle::id_t ParticleContainer::insert(shared_ptr<Particle>& p){
 #endif /* WOO_SUBDOMAINS */
 
 const shared_ptr<Particle>& ParticleContainer::safeGet(Particle::id_t id){
-	if(!exists(id)) throw std::invalid_argument("No such particle: #"+lexical_cast<string>(id)+".");
+	if(!exists(id)) throw std::invalid_argument("No such particle: #"+to_string(id)+".");
 	return (*this)[id];
 }
 
@@ -175,7 +175,7 @@ py::list ParticleContainer::pyFreeIds(){
 
 Particle::id_t ParticleContainer::pyAppend(shared_ptr<Particle> p, int nodes){
 	if(!p) woo::ValueError("Particle to be added is None.");
-	if(p->id>=0) IndexError("Particle already has id "+lexical_cast<string>(p->id)+" set; appending such particle (for the second time) is not allowed.");
+	if(p->id>=0) IndexError("Particle already has id "+to_string(p->id)+" set; appending such particle (for the second time) is not allowed.");
 	if(nodes!=-1 && nodes!=0 && nodes!=1) ValueError("nodes must be ∈ {-1,0,1} (not "+to_string(nodes)+").");
 	if(nodes!=0){
 		if(!p->shape) woo::ValueError("Particle.shape is None; unable to add nodes.");
@@ -230,7 +230,7 @@ shared_ptr<Node> ParticleContainer::pyAppendClumped(const vector<shared_ptr<Part
 shared_ptr<Particle> ParticleContainer::pyGetItem(Particle::id_t id){
 	if(id<0 && id>=-(int)size()) id+=size();
 	if(exists(id)) return (*this)[id];
-	woo::IndexError("No such particle: #"+lexical_cast<string>(id)+".");
+	woo::IndexError("No such particle: #"+to_string(id)+".");
 	return shared_ptr<Particle>(); // make compiler happy
 }
 

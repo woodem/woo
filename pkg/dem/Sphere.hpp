@@ -15,7 +15,7 @@ namespace woo{
 		bool isInside(const Vector3r& pt) const override;
 		// update dynamic properties (mass, intertia) of the sphere based on current radius
 		void lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk) override;
-		virtual string pyStr() const override { return "<Sphere r="+to_string(radius)+" @ "+lexical_cast<string>(this)+">"; }
+		virtual string pyStr() const override { return "<Sphere r="+to_string(radius)+" @ "+ptr_to_string(this)+">"; }
 		Real equivRadius() const override { return radius; }
 		Real volume() const override;
 		AlignedBox3r alignedBox() const override;

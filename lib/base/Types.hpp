@@ -34,8 +34,8 @@
 
 
 
-#include<boost/lexical_cast.hpp>
-using boost::lexical_cast;
+//#include<boost/lexical_cast.hpp>
+// using boost::lexical_cast;
 
 // enables beautiful constructs like: for(int x: {0,1,2})...
 #include<initializer_list>
@@ -92,6 +92,7 @@ using std::unique_ptr;
 #include<stdexcept>
 #include<tuple>
 #include<cmath>
+#include<sstream>
 using std::vector;
 using std::map;
 using std::set;
@@ -116,15 +117,30 @@ using std::abs;
 		using std::isinf;
 #endif
 
+#if __has_include(<filesystem>)
+	#include<filesystem>
+	namespace filesystem=std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+	#include<experimental/filesystem>
+	namespace filesystem=std::experimental::filesystem;
+#else
+	#error Neither <filesystem> nor <experimental/filesystem> are includable!
+#endif
+
+
 // workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=52015
 // "std::to_string does not work under MinGW"
 // reason: gcc built without --enable-c99 does not support to_string (checked with 4.7.1)
 // so we just emulate that thing with lexical_cast
 #if defined(__MINGW64__) || defined(__MINGW32__)
-	template<typename T> string to_string(const T& t){ return lexical_cast<string>(t); }
+	template<typename T> string to_string(const T& t){ return to_string(t); }
 #else
 	using std::to_string;
 #endif
+
+template<typename T>
+std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(); }
+
 
 // override keyword not supported until gcc 4.7
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ < 7

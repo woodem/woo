@@ -307,7 +307,7 @@ void RandomInlet::run(){
 					goto stepDone;
 				}
 				switch(atMaxAttempts){
-					case MAXATT_ERROR: throw std::runtime_error("RandomInlet.maxAttempts reached ("+lexical_cast<string>(maxAttempts)+")"); break;
+					case MAXATT_ERROR: throw std::runtime_error("RandomInlet.maxAttempts reached ("+to_string(maxAttempts)+")"); break;
 					case MAXATT_DEAD:{
 						LOG_INFO("maxAttempts={} reached, making myself dead.",maxAttempts);
 						this->dead=true;

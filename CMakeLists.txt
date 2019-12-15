@@ -15,6 +15,7 @@ OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
 OPTION(WOO_CCACHE "Use ccache when compiling" ON)
+OPTION(WOO_CEREAL "Use cereal instead of boost::serialization (experimental!)" OFF)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
 
 if(DEFINED ENV{VIRTUAL_ENV})
@@ -55,7 +56,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INSTALL_MESSAGE LAZY)
 
 find_package(Eigen3 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system serialization thread iostreams filesystem)
+find_package(Boost REQUIRED COMPONENTS serialization iostreams system)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 #include(FindPython3)
@@ -83,6 +84,10 @@ if(WOO_PYBIND11)
 	find_package(pybind11 REQUIRED)
 else()
 	find_package(Boost REQUIRED COMPONENTS python)
+endif()
+if(WOO_CEREAL)
+	add_definitions(-DWOO_CEREAL)
+	# TODO: find headers
 endif()
 if(WOO_OPENMP)
 	add_definitions(-DWOO_OPENMP)
@@ -393,11 +398,10 @@ target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local Backward::Backward)
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
 	Boost::serialization
-	Boost::system
-	Boost::thread
 	Boost::iostreams
 	Boost::boost
-	Boost::filesystem
+	Boost::system
+	stdc++fs
 	${VTK_LIBRARIES}
 )
 target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})

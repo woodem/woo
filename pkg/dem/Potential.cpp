@@ -64,7 +64,7 @@ void Cg2_Shape_Shape_L6Geom__Potential::setMinDist00Sq(const shared_ptr<Shape>& 
 
 void Cg2_Shape_Shape_L6Geom__Potential::pyHandleCustomCtorArgs(py::tuple& t, py::dict& d){
 	if(py::len(t)==0) return; // nothing to do
-	if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+lexical_cast<string>(py::len(t))+" non-keyword ards given instead)").c_str());
+	if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)").c_str());
 	if(!potentialDispatcher) potentialDispatcher=make_shared<PotentialDispatcher>();
 	vector<shared_ptr<PotentialFunctor>> vf=py::extract<vector<shared_ptr<PotentialFunctor>>>((t[0]))();
 	for(const auto& f: vf) potentialDispatcher->add(f);

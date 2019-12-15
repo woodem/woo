@@ -403,7 +403,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 		boundDispatcher->operator()(p->shape);
 		if(!p->shape->bound){
 			if(noBoundOk) continue;
-			throw std::runtime_error("InsertionSortCollider: No bound was created for #"+lexical_cast<string>(p->id)+", provide a Bo1_*_Aabb functor for it. (Particle without Aabb are not supported yet, and perhaps will never be (what is such a particle good for?!)");
+			throw std::runtime_error("InsertionSortCollider: No bound was created for #"+to_string(p->id)+", provide a Bo1_*_Aabb functor for it. (Particle without Aabb are not supported yet, and perhaps will never be (what is such a particle good for?!)");
 		}
 		Aabb& aabb=p->shape->bound->cast<Aabb>();
 		const int nNodes=p->shape->nodes.size();
@@ -1124,7 +1124,7 @@ py::object InsertionSortCollider::dbgInfo(){
 
 void InsertionSortCollider::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==0) return; // nothing to do
-	if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+lexical_cast<string>(py::len(t))+" non-keyword ards given instead)").c_str());
+	if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)").c_str());
 	if(py::len(t)!=1) throw invalid_argument("GridCollider optionally takes exactly one list of GridBoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)");
 	if(!boundDispatcher) boundDispatcher=make_shared<BoundDispatcher>();
 	vector<shared_ptr<BoundFunctor>> vf=py::extract<vector<shared_ptr<BoundFunctor>>>((t[0]))();

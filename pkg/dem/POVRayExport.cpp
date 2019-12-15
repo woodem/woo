@@ -1,7 +1,5 @@
 #include<woo/pkg/dem/POVRayExport.hpp>
 
-#include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/convenience.hpp>
 #include<boost/range/join.hpp>
 #include<boost/range/algorithm/sort.hpp>
 #include<boost/range/algorithm/copy.hpp>
@@ -52,9 +50,9 @@ void POVRayExport::run(){
 	out=scene->expandTags(out);
 	string staticInc=out+"_static.inc";
 	string masterPov=out+"_master.pov";
-	if(!boost::filesystem::exists(masterPov)) writeMasterPov(masterPov);
+	if(!filesystem::exists(masterPov)) writeMasterPov(masterPov);
 	// overwrite static mesh when run the first time always
-	if(nDone==1 || !boost::filesystem::exists(staticInc)) writeParticleInc(staticInc,/*doStatic*/true);
+	if(nDone==1 || !filesystem::exists(staticInc)) writeParticleInc(staticInc,/*doStatic*/true);
 
 	string frameInc=out+(boost::format("_frame_%05d.inc")%frameCounter).str();
 	writeParticleInc(frameInc,/*doStatic*/false);
@@ -197,10 +195,10 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 void POVRayExport::writeMasterPov(const string& masterPov){
 	std::ofstream os;
 	os.open(masterPov);
-	string staticInc=boost::filesystem::path(out+"_static.inc").filename().string();
-	string masterBase=boost::filesystem::path(masterPov).filename().string();
-	string texturesInc=boost::filesystem::path(out+"_textures.inc").filename().string();
-	string frameIncBase=boost::filesystem::path(out+"_frame_").filename().string();
+	string staticInc=filesystem::path(out+"_static.inc").filename().string();
+	string masterBase=filesystem::path(masterPov).filename().string();
+	string texturesInc=filesystem::path(out+"_textures.inc").filename().string();
+	string frameIncBase=filesystem::path(out+"_frame_").filename().string();
 
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+masterPov+"'.");
 	os<<

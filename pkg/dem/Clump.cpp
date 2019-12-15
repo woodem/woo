@@ -224,8 +224,8 @@ shared_ptr<Node> ClumpData::makeClump(const vector<shared_ptr<Node>>& nn, shared
 	// first loop: compute clump's centroid and principal orientation
 	for(const auto& n: nn){
 		const auto& dem=n->getData<DemData>();
-		if(dem.isClumped()) woo::RuntimeError("Node "+lexical_cast<string>(n)+": already clumped.");
-		if(dem.parRef.empty()) woo::RuntimeError("Node "+lexical_cast<string>(n)+": back-references (demData.parRef) empty (Node does not belong to any particle)");
+		if(dem.isClumped()) woo::RuntimeError("Node "+n->pyStr()+": already clumped.");
+		if(dem.parRef.empty()) woo::RuntimeError("Node "+n->pyStr()+": back-references (demData.parRef) empty (Node does not belong to any particle)");
 		M+=dem.mass;
 		Sg+=dem.mass*n->pos;
 		Ig+=woo::Volumetric::inertiaTensorTranslate(woo::Volumetric::inertiaTensorRotate(dem.inertia.asDiagonal(),n->ori.conjugate()),dem.mass,-1.*n->pos);

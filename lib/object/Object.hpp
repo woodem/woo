@@ -558,7 +558,7 @@ struct Object: public boost::noncopyable, public enable_shared_from_this<Object>
 		virtual void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){ return; }
 		
 		//! string representation of this object
-		virtual std::string pyStr() const { return "<"+getClassName()+" @ "+boost::lexical_cast<string>(this)+">"; }
+		virtual std::string pyStr() const { return "<"+getClassName()+" @ "+ptr_to_string(this)+">"; }
 	
 	// overridden by REGISTER_CLASS_BASE_BASE in derived classes
 	virtual string getClassName() const { return "Object"; }

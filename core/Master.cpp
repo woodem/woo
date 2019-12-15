@@ -5,11 +5,8 @@
 #include<woo/lib/multimethods/FunctorWrapper.hpp>
 #include<woo/lib/multimethods/Indexable.hpp>
 #include<cstdlib>
-#include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/convenience.hpp>
-#include<boost/filesystem/exception.hpp>
 #include<boost/algorithm/string.hpp>
-#include<boost/thread/mutex.hpp>
+#include<mutex>
 #include<boost/version.hpp>
 #include<algorithm>
 

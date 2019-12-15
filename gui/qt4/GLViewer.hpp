@@ -123,7 +123,7 @@ class GLViewer : public QGLViewer
 		int manipulatedClipPlane;
 		set<int> boundClipPlanes;
 		shared_ptr<qglviewer::LocalConstraint> xyPlaneConstraint;
-		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+lexical_cast<string>(i+1);return ret;}
+		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+to_string(i+1); return ret;}
 
 		// set initial view as specified by Renderer::iniViewDir and friends
 		void setInitialView();

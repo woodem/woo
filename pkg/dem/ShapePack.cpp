@@ -11,7 +11,6 @@
 	#include<woo/pkg/gl/GlData.hpp>
 #endif
 
-#include<boost/filesystem/convenience.hpp>
 #include<boost/tokenizer.hpp>
 
 
@@ -396,7 +395,7 @@ void ShapePack::saveTxt(const string& out) const {
 }
 
 void ShapePack::loadTxt(const string& in) {
-	if(!boost::filesystem::exists(in)) throw std::invalid_argument("ShapePack.loadTxt: '"+in+"' doesn't exist.");
+	if(!filesystem::exists(in)) throw std::invalid_argument("ShapePack.loadTxt: '"+in+"' doesn't exist.");
 	std::ifstream f(in);
 	if(!f.good()) throw std::runtime_error("ShapePack.loadTxt: '"+in+"' couldn't be opened (but exists).");
 	raws.clear();

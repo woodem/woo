@@ -36,10 +36,10 @@ py::list Particle::pyCon()const{ py::list ret; for(const auto& i: contacts){ if(
 py::list Particle::pyTacts()const{	py::list ret; for(const auto& i: contacts){ if(i.second->isReal()) ret.append(i.second); } return ret;}
 
 void Particle::checkNodes(bool dyn, bool checkOne) const {
-	if(!shape || (checkOne  && shape->nodes.size()!=1) || (dyn && !shape->nodes[0]->hasData<DemData>())) woo::AttributeError("Particle #"+lexical_cast<string>(id)+" has no Shape"+(checkOne?string(", or the shape has no/multiple nodes")+string(!dyn?".":", or node.dem is None."):string(".")));
+	if(!shape || (checkOne  && shape->nodes.size()!=1) || (dyn && !shape->nodes[0]->hasData<DemData>())) woo::AttributeError("Particle #"+to_string(id)+" has no Shape"+(checkOne?string(", or the shape has no/multiple nodes")+string(!dyn?".":", or node.dem is None."):string(".")));
 }
 
-string Particle::pyStr() const { return "<Particle #"+to_string(id)+" ["+(shape?shape->getClassName():"no-shape")+"] @ "+lexical_cast<string>(this)+">"; }
+string Particle::pyStr() const { return "<Particle #"+to_string(id)+" ["+(shape?shape->getClassName():"no-shape")+"] @ "+ptr_to_string(this)+">"; }
 
 
 void Particle::selfTest(){
@@ -239,7 +239,7 @@ void DemData::blocked_vec_set(const std::string& dofs){
 		#define _GET_DOF(DOF_ANY,ch) if(c==ch) { flags|=DemData::DOF_ANY; continue; }
 		_GET_DOF(DOF_X,'x'); _GET_DOF(DOF_Y,'y'); _GET_DOF(DOF_Z,'z'); _GET_DOF(DOF_RX,'X'); _GET_DOF(DOF_RY,'Y'); _GET_DOF(DOF_RZ,'Z');
 		#undef _GET_DOF
-		throw std::invalid_argument("Invalid  DOF specification `"+lexical_cast<string>(c)+"' in '"+dofs+"', characters must be ∈{x,y,z,X,Y,Z}.");
+		throw std::invalid_argument("Invalid  DOF specification `"+to_string(c)+"' in '"+dofs+"', characters must be ∈{x,y,z,X,Y,Z}.");
 	}
 }
 

@@ -8,11 +8,10 @@
 #include<boost/random/uniform_real.hpp>
 #include<boost/random/variate_generator.hpp>
 
-#include<boost/filesystem/convenience.hpp>
 #include<boost/tokenizer.hpp>
 #include<boost/algorithm/string.hpp>
 
-#include<boost/chrono/chrono.hpp>
+#include<chrono>
 
 
 #include<iostream>
@@ -26,13 +25,12 @@
 
 WOO_IMPL_LOGGER(SpherePack);
 
-using boost::lexical_cast;
 using std::string;
 using std::invalid_argument;
 
 // seed for random numbers
 unsigned long long getNow(){
-	return boost::chrono::duration_cast<boost::chrono::nanoseconds>(boost::chrono::steady_clock::now().time_since_epoch()).count();
+	return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
 
@@ -49,7 +47,7 @@ void SpherePack::fromList(const py::list& l){
 
 void SpherePack::fromLists(const vector<Vector3r>& centers, const vector<Real>& radii){
 	pack.clear();
-	if(centers.size()!=radii.size()) throw std::invalid_argument(("The same number of centers and radii must be given (is "+lexical_cast<string>(centers.size())+", "+lexical_cast<string>(radii.size())+")").c_str());
+	if(centers.size()!=radii.size()) throw std::invalid_argument(("The same number of centers and radii must be given (is "+to_string(centers.size())+", "+to_string(radii.size())+")").c_str());
 	size_t l=centers.size();
 	for(size_t i=0; i<l; i++){
 		add(centers[i],radii[i]);
@@ -72,7 +70,7 @@ py::tuple SpherePack::toCcRr() const {
 }
 
 void SpherePack::fromFile(const string& fname) {
-	if(!boost::filesystem::exists(fname)) {
+	if(!filesystem::exists(fname)) {
 		throw std::invalid_argument(string("File with spheres `")+fname+"' doesn't exist.");
 	}
 	std::ifstream sphereFile(fname.c_str());
@@ -161,7 +159,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 		rMean=cbrt(volume*(1-porosity)/(M_PI*(4/3.)*(1+rRelFuzz*rRelFuzz)*num));}
 	if(psdSizes.size()>0){
 		err=(mode>=0); mode=RDIST_PSD;
-		if(psdSizes.size()!=psdCumm.size()) throw std::invalid_argument(("SpherePack.makeCloud: psdSizes and psdCumm must have same dimensions ("+lexical_cast<string>(psdSizes.size())+"!="+lexical_cast<string>(psdCumm.size())).c_str());
+		if(psdSizes.size()!=psdCumm.size()) throw std::invalid_argument(("SpherePack.makeCloud: psdSizes and psdCumm must have same dimensions ("+to_string(psdSizes.size())+"!="+to_string(psdCumm.size())).c_str());
 		if(psdSizes.size()<=1) throw invalid_argument("SpherePack.makeCloud: psdSizes must have at least 2 items");
 		if((*psdCumm.begin())!=0. && (*psdCumm.rbegin())!=1.) throw invalid_argument("SpherePack.makeCloud: first and last items of psdCumm *must* be exactly 0 and 1.");
 		psdRadii.reserve(psdSizes.size());
@@ -172,7 +170,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 				if (i==0) psdCumm2.push_back(0);
 				else psdCumm2.push_back(psdCumm2[i-1] + 3.0*volume*(1-porosity)/M_PI*(psdCumm[i]-psdCumm[i-1])/(psdSizes[i]-psdSizes[i-1])*(pow(psdSizes[i-1],-2)-pow(psdSizes[i],-2)));
 			}
-			LOG_DEBUG("{}. {}, cdf={}, cdf2={}",i,psdRadii[i],psdCumm[i],(distributeMass?lexical_cast<string>(psdCumm2[i]):string("--")));
+			LOG_DEBUG("{}. {}, cdf={}, cdf2={}",i,psdRadii[i],psdCumm[i],(distributeMass?to_string(psdCumm2[i]):string("--")));
 			// check monotonicity
 			if(i>0 && (psdSizes[i-1]>psdSizes[i] || psdCumm[i-1]>psdCumm[i])) throw invalid_argument("SpherePack:makeCloud: psdSizes and psdCumm must be both non-decreasing.");
 		}

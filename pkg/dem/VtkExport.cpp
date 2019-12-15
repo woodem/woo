@@ -11,7 +11,6 @@
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/pkg/dem/Funcs.hpp>
 
-#include<boost/filesystem.hpp>
 
 WOO_PLUGIN(dem,(VtkExport));
 WOO_IMPL_LOGGER(VtkExport);
@@ -166,7 +165,7 @@ py::dict VtkExport::makePvdFiles() const {
 		for(size_t i=0; i<outTimes.size(); i++){
 			// for(const string& outName: item.second){
 			// since pvd is in the same directory as output files, relative path is simply basename
-			boost::filesystem::path p(item.second[i]);
+			filesystem::path p(item.second[i]);
 			pvd<<"      <DataSet timestep=\""+to_string(outTimes[i])+"\" group=\"\" part=\"0\" file=\""+p.filename().string()+"\"/>\n";
 		}
 		pvd<<
@@ -633,11 +632,11 @@ void VtkExport::run(){
 
 	if(mkDir){
 		// try to create directory for output files, if not there already
-		boost::filesystem::path p(out+"foo");
+		filesystem::path p(out+"foo");
 		auto dir=p.parent_path();
-		if(!boost::filesystem::exists(dir)){
+		if(!filesystem::exists(dir)){
 			LOG_INFO("Creating directory for output files as requested: {}",dir.string());
-			boost::filesystem::create_directories(dir);
+			filesystem::create_directories(dir);
 		}
 	}
 

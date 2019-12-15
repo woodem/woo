@@ -7,16 +7,10 @@
 #include<woo/lib/base/Logging.hpp>
 
 #include<stdexcept>
-#include<boost/regex.hpp>
 
 #include<woo/lib/pyutil/except.hpp>
 #include<woo/lib/pyutil/converters.hpp>
 #include<woo/lib/pyutil/gil.hpp>
-
-#include<boost/foreach.hpp>
-#ifndef FOREACH
-#define FOREACH BOOST_FOREACH
-#endif
 
 struct Scene;
 struct Field;

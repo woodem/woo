@@ -120,7 +120,7 @@ class FunctorWrapper //: public Object
 			+ "5. " + typeid(Parm5).name() + "\n"
 			+ "6. " + typeid(Parm6).name() + "\n"
 			+ "7. " + typeid(Parm7).name() + "\n"
-			+ "number of types used in the call: " + boost::lexical_cast<string>(n) + "\n").c_str());
+			+ "number of types used in the call: " + to_string(n) + "\n").c_str());
 		}
 
 	public :

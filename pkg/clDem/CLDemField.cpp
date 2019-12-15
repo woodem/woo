@@ -64,7 +64,7 @@ bool CLDemField::renderingBbox(Vector3r& mn, Vector3r& mx){
 }
 
 void CLDemField::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
-	if(py::len(args)>1) woo::TypeError("CLDemField takes at most 1 non-keyword arguments ("+lexical_cast<string>(py::len(args))+" given)");
+	if(py::len(args)>1) woo::TypeError("CLDemField takes at most 1 non-keyword arguments ("+to_string(py::len(args))+" given)");
 	if(py::len(args)==0) return;
 	py::extract<shared_ptr<clDem::Simulation>> ex(args[0]);
 	if(!ex.check()) woo::TypeError("CLDemField: non-keyword arg must be a clDem.Simulation instance.");
@@ -144,7 +144,7 @@ void CLDemRun::compareParticleNodeDyn(const string& pId, const clDem::Particle& 
 void CLDemRun::doCompare(){
 	// get DEM field to compare with
 	shared_ptr<DemField> dem;
-	FOREACH(const auto& f, scene->fields){
+	for(const auto& f: scene->fields){
 		dem=dynamic_pointer_cast<DemField>(f);
 		if(dem) break;
 	}
@@ -154,14 +154,14 @@ void CLDemRun::doCompare(){
 
 	// find contact loop
 	shared_ptr<ContactLoop> loop;
-	FOREACH(const auto& e, scene->engines){
+	for(const auto& e: scene->engines){
 		loop=dynamic_pointer_cast<ContactLoop>(e);
 		if(loop) break;
 	}
 	if(!loop) _THROW_ERROR("No ContactLoop in scene.engines.");
 
 	shared_ptr<Cp2_FrictMat_FrictPhys> cp2Frict;
-	FOREACH(const auto& f, loop->phyDisp->functors){
+	for(const auto& f: loop->phyDisp->functors){
 		cp2Frict=dynamic_pointer_cast<Cp2_FrictMat_FrictPhys>(f);
 		if(cp2Frict) break;
 	}
@@ -172,12 +172,12 @@ void CLDemRun::doCompare(){
 	Real sU=scene->dt;
 
 	/* compare particles */
-	FOREACH(const shared_ptr< ::Particle> yp, *dem->particles){
+	for(const shared_ptr< ::Particle> yp: *dem->particles){
 		// no particles in woo and clDem
 		::Particle::id_t yId=yp->id;
 		if(!yp->shape || yp->shape->nodes.empty() || !yp->shape->nodes[0]->hasData<CLDemData>()) _THROW_ERROR("#"<<yId<<": no CLDemData with clDem id information.");
 		clDem::par_id_t clId=yp->shape->nodes[0]->getData<CLDemData>().clIx;
-		string pId="#"+lexical_cast<string>(clId)+"/"+lexical_cast<string>(yId);
+		string pId="#"+to_string(clId)+"/"+to_string(yId);
 		const clDem::Particle& cp(sim->par[clId]);
 		int shapeT=clDem::par_shapeT_get(&cp);
 		if(shapeT==Shape_None) _THROW_ERROR(pId<<": not in clDem");
@@ -259,10 +259,10 @@ void CLDemRun::doCompare(){
 
 	#if 0
 		// check clumps
-		FOREACH(const shared_ptr< ::Node> yn, dem->clumps){
+		for(const shared_ptr< ::Node> yn: dem->clumps){
 			if(yn->hasData<CLDemData>()) _THROW_ERROR("clump@"<<yn<<": no CLDemData with clDem id information.");
 			clDem::par_id_t clId=yn->getData<CLDemData>().clIx;
-			string pId="clump#"+lexical_cast<string>(clId)+"/@"+lexical_cast<string>(yn);
+			string pId="clump#"+to_string(clId)+"/@"+to_string(yn);
 			const clDem::Particle& cp(sim->par[clId]);
 			int shapeT=clDem::par_shapeT_get(&cp);
 			if(shapeT==Shape_None) _THROW_ERROR(pId<<": not in clDem");
@@ -303,7 +303,7 @@ void CLDemRun::doCompare(){
 	/* compare contacts */
 	for(const clDem::Contact& cc: sim->con){
 		if(cc.ids.s0<0) continue; // invalid contact
-		string cId="##"+lexical_cast<string>(cc.ids.s0)+"+"+lexical_cast<string>(cc.ids.s1);
+		string cId="##"+to_string(cc.ids.s0)+"+"+to_string(cc.ids.s1);
 		const shared_ptr< ::Contact>& yc(dem->contacts->find(cc.ids.s0,cc.ids.s1));
 		if(!yc){ _THROW_ERROR(cId<<": not in woo"); continue; }
 		int geomT=clDem::con_geomT_get(&cc);
@@ -364,9 +364,9 @@ void CLDemRun::doCompare(){
 	}
 	/* check the other way */
 	if(sim->cpuCollider){
-		FOREACH(const auto& C, *dem->contacts){
+		for(const auto& C: *dem->contacts){
 			Vector2i ids(C->leakPA()->id,C->leakPB()->id);
-			string cId="##"+lexical_cast<string>(ids[0])+"+"+lexical_cast<string>(ids[1]);
+			string cId="##"+to_string(ids[0])+"+"+to_string(ids[1]);
 			clDem::CpuCollider::ConLoc* cl=sim->cpuCollider->find(ids[0],ids[1]);
 			if(!cl) LOG_ERROR("{}: not in clDem",cId);
 		}
@@ -428,7 +428,7 @@ shared_ptr<clDem::Simulation> CLDemField::wooToClDem(const shared_ptr< ::Scene>&
 	for(const auto& yp: *dem->particles){
 		ymm.insert(std::make_pair(yp->material.get(),ymm.size())); // this makes sure materials are numbered consecutively
 	}
-	if(ymm.size()>(size_t)clDem::SCENE_MAT_NUM_) throw std::runtime_error("Woo uses "+lexical_cast<string>(ymm.size())+" materials, which is more than the maximum "+lexical_cast<string>(clDem::SCENE_MAT_NUM_)+" clDem was compiled with.");
+	if(ymm.size()>(size_t)clDem::SCENE_MAT_NUM_) throw std::runtime_error("Woo uses "+to_string(ymm.size())+" materials, which is more than the maximum "+to_string(clDem::SCENE_MAT_NUM_)+" clDem was compiled with.");
 	// copy materials
 	for(const auto& ymi: ymm){
 		const ::Material* ym(ymi.first);
@@ -449,7 +449,7 @@ shared_ptr<clDem::Simulation> CLDemField::wooToClDem(const shared_ptr< ::Scene>&
 
 	// create particles
 	for(auto& yp: *dem->particles){
-		string pId="#"+lexical_cast<string>(yp->id);
+		string pId="#"+to_string(yp->id);
 		if(!yp->shape) throw std::runtime_error(pId+": Particle.shape==None.");
 		clDem::Particle cp;
 		par_matId_set(&cp,ymm[yp->material.get()]);
@@ -472,7 +472,7 @@ shared_ptr<clDem::Simulation> CLDemField::wooToClDem(const shared_ptr< ::Scene>&
 		}
 		if(monoNodal){
 			// other cases must be taken care of by the shape handler
-			if(yp->shape->nodes.size()!=1) throw std::runtime_error(pId+": should have exactly one node, has "+lexical_cast<string>(yp->shape->nodes.size()));
+			if(yp->shape->nodes.size()!=1) throw std::runtime_error(pId+": should have exactly one node, has "+to_string(yp->shape->nodes.size()));
 			auto& node(yp->shape->nodes[0]);
 			auto& dyn(node->getData<DemData>());
 			cp.pos=clDem::fromEigen(node->pos);
@@ -502,12 +502,12 @@ shared_ptr<clDem::Simulation> CLDemField::wooToClDem(const shared_ptr< ::Scene>&
 	#if 0
 		// create clumps
 		for(const auto& yn: dem->clumps){
-			if(!yn->hasData<DemData>() || !dynamic_pointer_cast<ClumpData>(yn->getDataPtr<DemData>())) throw std::runtime_error("clump @ 0x"+lexical_cast<string>(yn.get())+": does not have associated ClumpData instance");
+			if(!yn->hasData<DemData>() || !dynamic_pointer_cast<ClumpData>(yn->getDataPtr<DemData>())) throw std::runtime_error("clump @ 0x"+to_string(yn.get())+": does not have associated ClumpData instance");
 			const ::ClumpData& ycd(yn->getData<DemData>().cast<ClumpData>());
 			vector<clDem::par_id_t> cIds;
 			for(size_t i=0; i<ycd.nodes.size(); i++){
 				const auto& yn=ycd.nodes[i];
-				if(!yn->hasData<CLDemData>()) throw runtime_error("clump @0x"+lexical_cast<string>(yn.get())+"/"+lexical_cast<string>(i)+": member without CLDemData?");
+				if(!yn->hasData<CLDemData>()) throw runtime_error("clump @0x"+to_string(yn.get())+"/"+to_string(i)+": member without CLDemData?");
 				cIds.push_back(yn->getData<CLDemData>().clIx);
 			}
 			sim->makeClumped(cIds);
@@ -515,7 +515,7 @@ shared_ptr<clDem::Simulation> CLDemField::wooToClDem(const shared_ptr< ::Scene>&
 	#endif
 
 	// copy existing contacts
-	FOREACH(const shared_ptr< ::Contact>& c, *dem->contacts){
+	for(const shared_ptr< ::Contact>& c: *dem->contacts){
 		clDem::Contact con;
 		par_id2_t ids={c->leakPA()->id,c->leakPB()->id};
 		con.ids=ids;
@@ -629,7 +629,7 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 				ymats[i]=fm;
 				break;
 			}
-			default: throw std::runtime_error("materials["+lexical_cast<string>(i)+": unhandled matT "+lexical_cast<string>(matT)+".");
+			default: throw std::runtime_error("materials["+to_string(i)+": unhandled matT "+to_string(matT)+".");
 		}
 	}
 	if(mmatT==clDem::Mat_None) throw std::runtime_error("No materials defined.");
@@ -692,7 +692,7 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 	for(size_t i=0; i<sim->par.size(); i++){
 		const clDem::Particle& cp=sim->par[i];
 		auto yp=make_shared< ::Particle>();
-		string pId="#"+lexical_cast<string>(i);
+		string pId="#"+to_string(i);
 		// material
 		int matId=par_matId_get(&cp);
 		assert(matId>=0 && matId<clDem::SCENE_MAT_NUM_);
@@ -724,8 +724,8 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 				long ix=cp.shape.clump.ix;
 				for(int ii=ix; sim->clumps[ii].id>=0; ii++){
 					long id=sim->clumps[ii].id;
-					if(id>=(long)dem->particles->size()) throw std::runtime_error(pId+": clump members mut come before the clump (references #"+lexical_cast<string>(id)+")");
-					if(!(*dem->particles)[id]->shape->nodes[0]->getData<DemData>().isClumped()) throw std::runtime_error(pId+": clump members should have been marked as clumped (#"+lexical_cast<string>(id));
+					if(id>=(long)dem->particles->size()) throw std::runtime_error(pId+": clump members mut come before the clump (references #"+to_string(id)+")");
+					if(!(*dem->particles)[id]->shape->nodes[0]->getData<DemData>().isClumped()) throw std::runtime_error(pId+": clump members should have been marked as clumped (#"+to_string(id)+")");
 					// avoid check in CLlumpData::makeClump
 					(*dem->particles)[id]->shape->nodes[0]->getData<DemData>().setNoClump();
 					members.push_back((*dem->particles)[id]->shape->nodes[0]);
@@ -740,7 +740,7 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 				//dem->particles.insertAt(yp,i);
 				break;
 			}
-			default: throw std::runtime_error(pId+": unhandled shapeT "+lexical_cast<string>(shapeT)+".");
+			default: throw std::runtime_error(pId+": unhandled shapeT "+to_string(shapeT)+".");
 		}
 		if(yp){
 			// copy pos, ori, vel, angVel & c
@@ -782,7 +782,7 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 	}
 	// real/"real" contacts
 	for(const clDem::Contact& c: sim->con){
-		string cId="##"+lexical_cast<string>(c.ids.s0)+"+"+lexical_cast<string>(c.ids.s1);
+		string cId="##"+to_string(c.ids.s0)+"+"+to_string(c.ids.s1);
 		if(c.ids.s0<0) continue; // invalid contact
 		if(clDem::con_geomT_get(&c)!=Geom_None) throw std::runtime_error(cId+": pre-existing geom not handled yet.");
 		if(clDem::con_physT_get(&c)!=Phys_None) throw std::runtime_error(cId+": pre-existing phys not handled yet.");
@@ -800,7 +800,7 @@ shared_ptr< ::Scene> CLDemField::clDemToWoo(const shared_ptr<clDem::Simulation>&
 	if(isnan(sim->scene.verletDist)){
 		// potential contacts
 		for(const clDem::par_id2_t ids: sim->pot){
-			string cId="pot##"+lexical_cast<string>(ids.s0)+"+"+lexical_cast<string>(ids.s1);
+			string cId="pot##"+to_string(ids.s0)+"+"+to_string(ids.s1);
 			auto yc=make_shared< ::Contact>();
 			if(ids.s0<0) continue;
 			::Particle::id_t idA=wooIds[ids.s0], idB=wooIds[ids.s1];
