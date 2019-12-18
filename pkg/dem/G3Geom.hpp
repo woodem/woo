@@ -63,7 +63,9 @@ struct Law2_G3Geom_FrictPhys_IdealElPl: public LawFunctor{
 		((bool,noSlip,false,,"Disable plastic slipping")) \
 		((bool,noBreak,false,,"Disable removal of contacts when in tension.")) \
 		((int,plastDissipIx,-1,AttrTrait<Attr::noSave|Attr::hidden>(),"Index of plastically dissipated energy")) \
-		((int,elastPotIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for elastic potential energy"))
+		((int,elastPotIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for elastic potential energy")) \
+		/* debugging only, but okay to have no-op here */ \
+		((Vector2i,watch,Vector2i(-1,-1),,"Print debug information for this couple of IDs"))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Law2_G3Geom_FrictPhys_IdealElPl__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Law2_G3Geom_FrictPhys_IdealElPl);

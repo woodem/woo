@@ -6,7 +6,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_MatchMaker__CLASS_BASE_DOC_ATTRS
 WOO_PLUGIN(core,(MatchMaker));
 
 Real MatchMaker::operator()(int id1, int id2, Real val1, Real val2) const {
-	FOREACH(const Vector3r& m, matches){
+	for(const Vector3r& m: matches){
 		if(((int)m[0]==id1 && (int)m[1]==id2) || ((int)m[0]==id2 && (int)m[1]==id1)) return m[2];
 	}
 	// no match

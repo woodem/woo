@@ -124,7 +124,7 @@ void SpherePack::toFile(const string& fname) const {
 		f<<"##USER-DATA:: "<<userData<<std::endl;
 	}
 	bool clumps=hasClumps();
-	FOREACH(const Sph& s, pack){
+	for(const Sph& s: pack){
 		f<<s.c[0]<<" "<<s.c[1]<<" "<<s.c[2]<<" "<<s.r;
 		if(clumps) f<<" "<<s.clumpId;
 		f<<std::endl;
@@ -300,13 +300,13 @@ py::tuple SpherePack::psd(int bins, bool mass) const {
 	Real minD=std::numeric_limits<Real>::infinity(); Real maxD=-minD;
 	// volume, but divided by π*4/3
 	Real vol=0; long N=pack.size();
-	FOREACH(const Sph& s, pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow3(s.r); }
+	for(const Sph& s: pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow3(s.r); }
 	if(minD==maxD){ minD-=.5; maxD+=.5; } // emulates what numpy.histogram does
 	// create bins and bin edges
 	vector<Real> hist(bins,0); vector<Real> cumm(bins+1,0); /* cummulative values compute from hist at the end */
 	vector<Real> edges(bins+1); for(int i=0; i<=bins; i++){ edges[i]=minD+i*(maxD-minD)/bins; }
 	// weight each grain by its "volume" relative to overall "volume"
-	FOREACH(const Sph& s, pack){
+	for(const Sph& s: pack){
 		int bin=int(bins*(2*s.r-minD)/(maxD-minD)); bin=min(bin,bins-1); // to make sure
 		if (mass) hist[bin]+=pow3(s.r)/vol; else hist[bin]+=1./N;
 	}
@@ -454,7 +454,7 @@ void SpherePack::scale(Real scale, bool keepRadius){
 	bool periodic=(cellSize!=Vector3r::Zero());
 	Vector3r mid=periodic?Vector3r::Zero():midPt();
 	cellSize*=scale;
-	FOREACH(Sph& s, pack){
+	for(Sph& s: pack){
 		s.c=scale*(s.c-mid)+mid;
 		if(!keepRadius) s.r*=abs(scale);
 	}

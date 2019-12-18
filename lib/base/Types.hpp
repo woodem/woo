@@ -1,8 +1,5 @@
 #pragma once
 
-// replace deprecated BOOST_FOREACH by range-for
-#define FOREACH(a,b) for(a:b)
-
 #ifdef WOO_DEBUG
 	#define WOO_CAST dynamic_cast
 	#define WOO_PTR_CAST dynamic_pointer_cast
@@ -25,21 +22,7 @@
 	#define WOO_NOWARN_OVERRIDE_POP
 #endif
 
-#if 0
-	// for internal woo::Object macros which do funny things internally
-	#define WOO_NOWARN_UNEVALUATED_PUSH  _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wunevaluated-expression\"")
-	#define WOO_NOWARN_UNEVALUATED_POP
-#endif
-
-
-
-
-//#include<boost/lexical_cast.hpp>
-// using boost::lexical_cast;
-
-// enables beautiful constructs like: for(int x: {0,1,2})...
 #include<initializer_list>
-
 #include<memory>
 
 #if defined(WOO_CEREAL) or defined(WOO_PYBIND11)
@@ -75,13 +58,7 @@
 	#define WOO_PY_DERIVED_BASE_SHAREDPTR_CONVERTIBLE(Derived,Base)
 #endif
 
-using std::unique_ptr;
 
-#if 0
-	#include<memory>
-	using std::shared_ptr;
-	namespace boost { namespace python { template<class T> T* get_pointer(std::shared_ptr<T> const& p){ return p.get(); } } }
-#endif
 
 #include<vector>
 #include<map>
@@ -93,6 +70,7 @@ using std::unique_ptr;
 #include<tuple>
 #include<cmath>
 #include<sstream>
+using std::unique_ptr;
 using std::vector;
 using std::map;
 using std::set;
@@ -110,12 +88,11 @@ using std::logic_error;
 using std::max;
 using std::min;
 using std::abs;
-#ifndef WOO_WORKAROUND_CXX11_MATH_DECL_CONFLICT
-		// this would trigger bugs under Linux (math.h is included somewhere behind the scenes?)
-		// see  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
-		using std::isnan;
-		using std::isinf;
-#endif
+using std::isnan;
+using std::isinf;
+using std::to_string;
+template<typename T>
+std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(); }
 
 #if __has_include(<filesystem>)
 	#include<filesystem>
@@ -125,27 +102,6 @@ using std::abs;
 	namespace filesystem=std::experimental::filesystem;
 #else
 	#error Neither <filesystem> nor <experimental/filesystem> are includable!
-#endif
-
-
-// workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=52015
-// "std::to_string does not work under MinGW"
-// reason: gcc built without --enable-c99 does not support to_string (checked with 4.7.1)
-// so we just emulate that thing with lexical_cast
-#if defined(__MINGW64__) || defined(__MINGW32__)
-	template<typename T> string to_string(const T& t){ return to_string(t); }
-#else
-	using std::to_string;
-#endif
-
-template<typename T>
-std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(); }
-
-
-// override keyword not supported until gcc 4.7
-#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ < 7
-	// #define override
-	#error GCC<=4.6 is no longer supported
 #endif
 
 // includes python headers, which also define PY_MAJOR_VERSION
@@ -170,7 +126,6 @@ std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(
 #else
 	#define WOO_next_OR__next__ "next"
 #endif
-
 
 typedef unsigned int uint;
 typedef unsigned long ulong;

@@ -12,6 +12,7 @@
 #include<boost/algorithm/string.hpp>
 using boost::algorithm::iends_with;
 
+#include<iomanip>
 
 #ifdef WOO_SPDLOG
 	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");

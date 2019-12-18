@@ -23,6 +23,8 @@
 
 #include<woo/pkg/mesh/Mesh.hpp>
 
+#include<iomanip> // std::setprecision
+
 
 WOO_PLUGIN(dem,(POVRayExport));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_POVRayExport__CLASS_BASE_DOC_ATTRS);

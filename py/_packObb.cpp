@@ -12,9 +12,6 @@
 
 #include<vector>
 #include<stdexcept>
-#ifndef FOREACH
-	#define FOREACH BOOST_FOREACH
-#endif
 
 // compute minimum bounding for a cloud of points
 
@@ -22,7 +19,7 @@
 Real computeOBB(const std::vector<Vector3r>& pts, const Matrix3r& rot, Vector3r& center, Vector3r& halfSize){
 	const Real inf=std::numeric_limits<Real>::infinity();
 	Vector3r mn(inf,inf,inf), mx(-inf,-inf,-inf);
-	FOREACH(const Vector3r& pt, pts){
+	for(const Vector3r& pt: pts){
 		Vector3r ptT=rot*pt;
 		mn=mn.array().min(ptT.array()).matrix(); mx=mx.array().max(ptT.array()).matrix();
 	}

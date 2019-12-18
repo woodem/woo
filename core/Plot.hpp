@@ -44,4 +44,5 @@ namespace woo{
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_Plot__CLASS_BASE_DOC_ATTRS_PY);
 	};
 };
-WOO_REGISTER_OBJECT(woo::Plot);
+// must be without woo:: namespace
+WOO_REGISTER_OBJECT(Plot);

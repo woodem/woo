@@ -227,7 +227,7 @@ bool Master::isInheritingFrom(const string& className, const string& baseClassNa
 }
 bool Master::isInheritingFrom_recursive(const string& className, const string& baseClassName){
 	if(classBases[className].find(baseClassName)!=classBases[className].end()) return true;
-	FOREACH(const string& parent,classBases[className]){
+	for(const string& parent: classBases[className]){
 		if(isInheritingFrom_recursive(parent,baseClassName)) return true;
 	}
 	return false;

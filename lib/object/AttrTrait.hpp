@@ -10,6 +10,7 @@ namespace woo{
 	#define ATTR_FLAGS_VALUES noSave=(1<<0), readonly=(1<<1), triggerPostLoad=(1<<2), hidden=(1<<3), noGuiResize=(1<<4), noGui=(1<<5), pyByRef=(1<<6), static_=(1<<7), multiUnit=(1<<8), noDump=(1<<9), activeLabel=(1<<10), rgbColor=(1<<11), filename=(1<<12), existingFilename=(1<<13), dirname=(1<<14), namedEnum=(1<<15), colormap=(1<<16), deprecated=(1<<17)
 	// this will disappear later
 	namespace Attr { enum flags { ATTR_FLAGS_VALUES }; }
+
 	// prohibit copies, only references should be passed around
 
 	// see http://stackoverflow.com/questions/10570589/template-member-function-specialized-on-pointer-to-data-member and http://ideone.com/95xIt for the logic behind
