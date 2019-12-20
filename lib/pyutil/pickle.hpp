@@ -7,8 +7,13 @@
 namespace woo{
 	class Pickler{
 		static bool initialized;
-		static py::object cPickle_dumps;
-		static py::object cPickle_loads;
+		#ifdef WOO_PYBIND11
+			static py::handle cPickle_dumps;
+			static py::handle cPickle_loads;
+		#else
+			static py::object cPickle_dumps;
+			static py::object cPickle_loads;
+		#endif
 		static void ensureInitialized();
 		public:
 			static std::string dumps(py::object o);

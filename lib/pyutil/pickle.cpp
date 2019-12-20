@@ -3,8 +3,13 @@
 #include<woo/lib/pyutil/compat.hpp>
 
 namespace woo{
-	py::object Pickler::cPickle_dumps;
-	py::object Pickler::cPickle_loads;
+	#ifdef WOO_PYBIND11
+		py::handle Pickler::cPickle_dumps;
+		py::handle Pickler::cPickle_loads;
+	#else
+		py::object Pickler::cPickle_dumps;
+		py::object Pickler::cPickle_loads;
+	#endif
 	bool Pickler::initialized=false;
 
 	void Pickler::ensureInitialized(){
@@ -23,6 +28,9 @@ namespace woo{
 			#else
 				py::object cPickle=py::module::import("cPickle");
 			#endif
+		#endif
+		#ifdef WOO_PYBIND11
+
 		#endif
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");
