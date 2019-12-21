@@ -494,7 +494,6 @@ struct Shape: public Object, public Indexable{
 WOO_REGISTER_OBJECT(Shape);
 
 struct Material: public Object, public Indexable{
-	// XXX: is createIndex() called here at all??
 	#define woo_dem_Material__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Material,Object,ClassTrait().doc("Particle material").section("Material properties","TODO",{"MatState"}), \
 		((Real,density,1000,AttrTrait<>().densityUnit(),"Density")) \
