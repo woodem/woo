@@ -8,6 +8,7 @@ addons:
       packages:
          - python3-all
          - python3-all-dev
+         - python3-numpy
          - libeigen3-dev
          - libhdf5-serial-dev
          - libboost-all-dev
