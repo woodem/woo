@@ -28,7 +28,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_InsertionSortCollider__CLASS_BASE
 void InsertionSortCollider::makeRemoveContactLater_process() {
 
 	#if defined(WOO_OPENMP) || defined(WOO_OPENGL)
-		boost::mutex::scoped_lock lock(dem->contacts->manipMutex);
+		std::scoped_lock lock(dem->contacts->manipMutex);
 	#endif
 
 	ISC_CHECKPOINT("later: start");

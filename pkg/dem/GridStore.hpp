@@ -26,7 +26,7 @@ struct GridStore: public Object{
 	struct Vector3iComparator{ bool operator()(const Vector3i& a, const Vector3i& b) const { return (a[0]<b[0] || (a[0]==b[0] && (a[1]<b[1] || (a[1]==b[1] && a[2]<b[2])))); };	};
 	typedef boost::multi_array<id_t,4> gridT;
 	typedef std::map<Vector3i,vector<id_t>,Vector3iComparator> gridExT;
-	typedef boost::ptr_vector<boost::mutex> mutexesT;
+	typedef boost::ptr_vector<std::mutex> mutexesT;
 	std::unique_ptr<gridT> grid;
 	vector<gridExT> gridExx;
 	mutexesT mutexes;
@@ -100,7 +100,7 @@ struct GridStore: public Object{
 
 	// return lock pointer for given cell
 	template<bool mutexEx>
-	boost::mutex* getMutex(const Vector3i& ijk){
+	std::mutex* getMutex(const Vector3i& ijk){
 		checkIndices(ijk); size_t ix=ijk2lin(ijk);
 		if(!mutexEx){ assert(denseLock); assert(ix<(size_t)gridSize.prod()); assert(gridSize.prod()+exNumMaps==(int)mutexes.size()); return &mutexes[exNumMaps+ix];
 		} else { assert(exNumMaps>0); int mIx=ix%exNumMaps; assert(mIx<(int)mutexes.size() && mIx>=0); return &mutexes[mIx]; }

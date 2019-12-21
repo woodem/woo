@@ -460,7 +460,7 @@ void RandomInlet::run(){
 			}
 			ClumpData::applyToMembers(clump,/*reset*/false); // apply velocity
 			#ifdef WOO_OPENGL
-				boost::mutex::scoped_lock lock(dem->nodesMutex);
+				std::scoped_lock lock(dem->nodesMutex);
 			#endif
 			dyn.linIx=dem->nodes.size();
 			dem->nodes.push_back(clump);
@@ -486,7 +486,7 @@ void RandomInlet::run(){
 			assert(node0->hasData<DemData>());
 			dem->particles->insert(p);
 			#ifdef WOO_OPENGL
-				boost::mutex::scoped_lock lock(dem->nodesMutex);
+				std::scoped_lock lock(dem->nodesMutex);
 			#endif
 			dyn.linIx=dem->nodes.size();
 			dem->nodes.push_back(node0);

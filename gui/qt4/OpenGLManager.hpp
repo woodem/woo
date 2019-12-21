@@ -6,7 +6,7 @@
 
 #include<QObject>
 #include<QThread>
-#include<boost/thread/mutex.hpp>
+#include<mutex>
 
 /*
 Singleton class managing OpenGL views,
@@ -43,7 +43,7 @@ class OpenGLManager: public QObject{
 		virtual void startTimerSlot();
 		void centerAllViews();
 	private:
-		boost::mutex viewsMutex;
+		std::mutex viewsMutex;
 		int viewsMutexMissed;
 		long frameMeasureTime;
 		long frameSaveState;

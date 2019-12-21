@@ -7,7 +7,7 @@ struct Suspicious: public PeriodicEngine {
 	void run() override;
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override;
-		boost::mutex errMutex; // guard errPar and errCon while the engine is active
+		std::mutex errMutex; // guard errPar and errCon while the engine is active
 	#endif
 	#define woo_dem_Suspicious__CLASS_BASE_DOC_ATTRS \
 		Suspicious,PeriodicEngine,"Watch the simulation and signal suspicious evolutions, such as sudden increase in contact force beyond usual measure or unsual velocity.", \

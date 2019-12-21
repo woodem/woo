@@ -86,8 +86,9 @@ else()
 	find_package(Boost REQUIRED COMPONENTS python)
 endif()
 if(WOO_CEREAL)
+	# requires -DWOO_NOXML but that is set by default already
 	add_definitions(-DWOO_CEREAL)
-	# TODO: find headers
+	# TODO: check headers and version
 endif()
 if(WOO_OPENMP)
 	add_definitions(-DWOO_OPENMP)
@@ -222,8 +223,8 @@ add_definitions(-DWOO_SPDLOG)
 
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
 	set(WOO_MAIN_SCRIPT "woo-${WOO_FLAVOR}")
-	string(REGEX REPLACE "([^a-zA-Z0-9_])" "_" WOO_CXX_FLAVOR "${WOO_FLAVOR}")
-	set(CXX_INTERNAL "_cxxInternal_${WOO_CXX_FLAVOR}")
+	string(REGEX REPLACE "([^a-zA-Z0-9_])" "_" WOO_CXX_FLAVOR "_${WOO_FLAVOR}")
+	set(CXX_INTERNAL "_cxxInternal${WOO_CXX_FLAVOR}")
 else()
 	set(WOO_MAIN_SCRIPT "woo")
 	set(WOO_CXX_FLAVOR "")

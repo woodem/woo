@@ -31,8 +31,8 @@ OpenGLManager::OpenGLManager(QObject* parent): QObject(parent){
 void OpenGLManager::timerEvent(QTimerEvent* event){
 #if 1
 	if(views.empty() || !views[0]) return;
-	boost::mutex::scoped_lock lock(viewsMutex,boost::try_to_lock);
-	if(!lock) return;
+	std::unique_lock lock(viewsMutex,std::try_to_lock);
+	if(!lock.owns_lock()) return;
 	if(views.size()>1) LOG_WARN("Only one (primary) view will be rendered.");
 	Real t;
 	const auto& s=Master::instance().getScene();
@@ -89,7 +89,7 @@ void OpenGLManager::timerEvent(QTimerEvent* event){
 }
 
 void OpenGLManager::createViewSlot(){
-	boost::mutex::scoped_lock lock(viewsMutex);
+	std::scoped_lock lock(viewsMutex);
 	if(views.size()==0){
 		views.push_back(make_shared<GLViewer>(0,/*shareWidget*/(QGLWidget*)0));
 	} else {
@@ -103,7 +103,7 @@ void OpenGLManager::resizeViewSlot(int id, int wd, int ht){
 }
 
 void OpenGLManager::closeViewSlot(int id){
-	boost::mutex::scoped_lock lock(viewsMutex);
+	std::scoped_lock lock(viewsMutex);
 	for(long i=(long)views.size()-1; (!views[i]) && i>=0; i--){ views.resize(i); } // delete empty views from the end
 	if(id<0){ // close the last one existing
 		assert(*views.rbegin()); // this should have been sanitized by the loop above
@@ -116,7 +116,7 @@ void OpenGLManager::closeViewSlot(int id){
 	}
 }
 void OpenGLManager::centerAllViews(){
-	boost::mutex::scoped_lock lock(viewsMutex);
+	std::scoped_lock lock(viewsMutex);
 	for(const shared_ptr<GLViewer>& g: views){ if(!g) continue; g->centerScene(); }
 }
 void OpenGLManager::startTimerSlot(){
@@ -133,7 +133,7 @@ int OpenGLManager::waitForNewView(float timeout){
 	emitCreateView();
 	float t=0;
 	while(views.size()!=origViewCount+1){
-		boost::this_thread::sleep(boost::posix_time::milliseconds(50));
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		t+=.05;
 		// wait at most 5 secs
 		if(t>=timeout) {

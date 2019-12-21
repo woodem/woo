@@ -94,8 +94,8 @@ void SpherePack::fromFile(const string& fname) {
 			vector<string> tokens; for(const string& s: toks) tokens.push_back(s);
 			if(tokens.empty()) continue;
 			if(tokens[0]=="##PERIODIC::"){
-				if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+lexical_cast<string>(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
-				cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));
+				if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+to_string(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
+				cellSize=Vector3r(std::stod(tokens[1]),std::stod(tokens[2]),std::stod(tokens[3]));
 				continue;
 			}
 			// 4 or 5 columns, but all lines must have the same
@@ -103,14 +103,14 @@ void SpherePack::fromFile(const string& fname) {
 			if(tokens.size()!=4 && tokens.size()!=5) throw std::invalid_argument(fname+":"+to_string(lineNo)+": line has "+to_string(tokens.size())+" columns (must be 4 or 5).");
 			if(nCols==0) nCols=tokens.size(); // set the first time
 			if(nCols!=tokens.size()) throw std::invalid_argument(fname+":"+to_string(lineNo)+": all line must have the same number of columns (previous had "+to_string(nCols)+", this one has "+to_string(tokens.size())+")");
-			C=Vector3r(lexical_cast<Real>(tokens[0]),lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]));
-			r=lexical_cast<Real>(tokens[3]);
+			C=Vector3r(std::stod(tokens[0]),std::stod(tokens[1]),std::stod(tokens[2]));
+			r=std::stod(tokens[3]);
 			pack.push_back(Sph(C,r));
 			// if clumpId was specified, set it now
-			if(tokens.size()==5) pack.rbegin()->clumpId=lexical_cast<int>(tokens[4]);
+			if(tokens.size()==5) pack.rbegin()->clumpId=std::stoi(tokens[4]);
 		}
 	}
-	catch(boost::bad_lexical_cast &){
+	catch(std::invalid_argument&){
 		throw std::runtime_error(fname+":"+to_string(lineNo)+": error parsing number.");
 	}
 }

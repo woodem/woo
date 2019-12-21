@@ -13,7 +13,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Suspicious__CLASS_BASE_DOC_ATTRS);
 
 void Suspicious::run(){
 	#ifdef WOO_OPENL
-		boost::mutex::scoped_lock l(errMutex);
+		std::scoped_lock l(errMutex);
 	#endif
 	const auto& dem=field->cast<DemField>();
 	long nNode=0,nCon=0;
@@ -76,7 +76,7 @@ void Suspicious::run(){
 #ifdef WOO_OPENGL
 #include<woo/lib/opengl/GLUtils.hpp>
 void Suspicious::render(const GLViewInfo& viewInfo){
-	boost::mutex::scoped_lock l(errMutex);
+	std::scoped_lock l(errMutex);
 	Vector3r size=.05*viewInfo.sceneRadius*Vector3r::Ones();
 	for(const auto& p: errPar){
 		Vector3r pos=p->shape->nodes[0]->pos;

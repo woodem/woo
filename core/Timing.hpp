@@ -43,7 +43,7 @@ struct TimingDeltas{
 		#ifdef WOO_OPENMP
 			// last time point, separate for each thread
 			vector<TimingInfo::delta> last;
-			boost::mutex mapMutex;
+			std::mutex mapMutex;
 			struct LabelCountTime{ string label; long nExec; TimingInfo::delta nsec; LabelCountTime(): nExec(0), nsec(0){}; };
 			std::map<int,LabelCountTime> timingMap;
 			vector<int> nThreads;

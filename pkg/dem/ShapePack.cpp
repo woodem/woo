@@ -416,7 +416,7 @@ void ShapePack::loadTxt(const string& in) {
 		if(tokens.empty()) continue; // empty line
 		if(tokens[0]=="##PERIODIC::"){
 			if(tokens.size()!=4) throw std::invalid_argument(in+":"+to_string(lineNo)+": starts with ##PERIODIC:: but the line is malformed.");
-			cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));
+			cellSize=Vector3r(std::stod(tokens[1]),std::stod(tokens[2]),std::stod(tokens[3]));
 			continue;
 		}
 		// strip all tokens after first comment
@@ -425,8 +425,8 @@ void ShapePack::loadTxt(const string& in) {
 		if(tokens.size()<6) throw std::invalid_argument(in+":"+to_string(lineNo)+": insufficient number of columns ("+to_string(tokens.size())+")");
 		const string& idStr(tokens[0]);
 		int id; bool clumped;
-		if(boost::algorithm::ends_with(idStr,"u")){ id=lexical_cast<int>(idStr.substr(0,idStr.size()-1)); clumped=false; }
-		else{ id=lexical_cast<int>(idStr); clumped=true; }
+		if(boost::algorithm::ends_with(idStr,"u")){ id=std::stoi(idStr.substr(0,idStr.size()-1)); clumped=false; }
+		else{ id=std::stoi(idStr); clumped=true; }
 		if(id!=lastId && id!=(int)raws.size()){
 			LOG_WARN("{}:{}: shape numbers not contiguous.",in,lineNo);
 		}
@@ -441,10 +441,10 @@ void ShapePack::loadTxt(const string& in) {
 		// read particle data, no checking whatsoever
 		auto ss=make_shared<RawShape>();
 		ss->className=tokens[1];
-		ss->center=Vector3r(lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]),lexical_cast<Real>(tokens[4]));
-		ss->radius=lexical_cast<Real>(tokens[5]);
+		ss->center=Vector3r(std::stod(tokens[2]),std::stod(tokens[3]),std::stod(tokens[4]));
+		ss->radius=std::stod(tokens[5]);
 		ss->raw.reserve(tokens.size()-6);
-		for(size_t r=6; r<tokens.size(); r++) ss->raw.push_back(lexical_cast<Real>(tokens[r]));
+		for(size_t r=6; r<tokens.size(); r++) ss->raw.push_back(std::stod(tokens[r]));
 		(*raws.rbegin())->cast<RawShapeClump>().rawShapes.push_back(ss);
 	}
 	/* convert sphere-only RawShapeClumps to SphereClumpGeoms */

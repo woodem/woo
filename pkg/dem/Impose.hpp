@@ -93,7 +93,12 @@ struct Local6Dofs: public Impose{
 	void force(const Scene* scene, const shared_ptr<Node>& n)   override { doImpose(scene,n,/*velocity*/false); }
 	void doImpose(const Scene* scene, const shared_ptr<Node>& n, bool velocity);
 	void postLoad(Local6Dofs&,void*){
-		for(int i=0;i<6;i++) if(whats[i]!=0 && whats[i]!=Impose::FORCE && whats[i]!=Impose::VELOCITY) throw std::runtime_error("Local6Dofs.whats components must be 0, "+to_string(Impose::FORCE)+" or "+to_string(Impose::VELOCITY)+" (whats["+to_string(i)+"] invalid: "+lexical_cast<string>(whats.transpose())+")");
+		for(int i=0;i<6;i++){
+			if(whats[i]!=0 && whats[i]!=Impose::FORCE && whats[i]!=Impose::VELOCITY){
+				std::ostringstream oss; oss<<whats.transpose();
+				throw std::runtime_error("Local6Dofs.whats components must be 0, "+to_string(Impose::FORCE)+" or "+to_string(Impose::VELOCITY)+" (whats["+to_string(i)+"] invalid: "+oss.str()+")");
+			}
+		}
 	}
 	#define woo_dem_Local6Dofs__CLASS_BASE_DOC_ATTRS_CTOR \
 		Local6Dofs,Impose,"Impose force or velocity along all local 6 axes given by the *trsf* matrix.", \

@@ -13,6 +13,11 @@ static void Object_setAttr(py::object self, py::str name, py::object value){
 #endif
 }
 #endif
+
+#ifdef WOO_CEREAL
+	CEREAL_REGISTER_TYPE(Object); CEREAL_REGISTER_DYNAMIC_INIT(Object);
+#endif
+
 namespace woo {
 
 vector<py::object> Object::derivedCxxClasses;

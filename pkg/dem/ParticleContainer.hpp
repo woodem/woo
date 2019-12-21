@@ -42,7 +42,7 @@ struct ParticleContainer: public Object{
 	DemField* dem; // backptr to DemField, set by DemField::postLoad; do not modify!
 	typedef int id_t;
 
-	boost::mutex manipMutex; // to synchronize with rendering, and between threads
+	std::mutex manipMutex; // to synchronize with rendering, and between threads
 
 	private:
 		typedef std::vector<shared_ptr<Particle> > ContainerT;

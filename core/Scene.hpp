@@ -30,13 +30,13 @@ struct Field;
 struct Scene: public Object{
 	private:
 		// this is managed by methods of Scene exclusively
-		boost::mutex runMutex;
+		std::mutex runMutex;
 		bool runningFlag;
-		boost::thread::id bgThreadId;
+		std::thread::id bgThreadId;
 		// this will be std::atomic<bool>
 		// once libstdc++ headers are accepted by clang++
 		bool stopFlag; 
-		bool stopFlagSet(){ boost::mutex::scoped_lock l(runMutex); return stopFlag; }
+		bool stopFlagSet(){ std::scoped_lock l(runMutex); return stopFlag; }
 		shared_ptr<std::exception> except;
 	public:
 		// interface for python,
@@ -115,9 +115,9 @@ struct Scene: public Object{
 		pyTagsProxy pyGetTags(){ return pyTagsProxy(this); }
 		shared_ptr<Cell> pyGetCell(){ return (isPeriodic?cell:shared_ptr<Cell>()); }
 
-		boost::posix_time::ptime clock0;
+		std::chrono::system_clock::time_point clock0;
 		bool clock0adjusted; // flag to adjust clock0 in postLoad only once
-		long pyGetDuration(){ return (boost::posix_time::second_clock::local_time()-clock0).total_seconds(); }
+		long pyGetDuration(){ return (long)std::chrono::duration<double>(std::chrono::system_clock::now()-clock0).count(); }
 
 		typedef std::map<std::string,std::string> StrStrMap;
 
@@ -142,7 +142,7 @@ struct Scene: public Object{
 		#ifdef WOO_LOOP_MUTEX_HELP
 			bool engineLoopMutexWaiting;
 		#endif
-		boost::timed_mutex engineLoopMutex;
+		std::timed_mutex engineLoopMutex;
 		struct PausedContextManager{
 			shared_ptr<Scene> scene;
 			bool allowBg;
@@ -252,7 +252,7 @@ struct Scene: public Object{
 		, /*ctor*/ \
 			fillDefaultTags(); \
 			runningFlag=false; \
-			clock0=boost::posix_time::second_clock::local_time(); \
+			clock0=std::chrono::system_clock::now(); \
 			clock0adjusted=false; \
 		, /* dtor */ pyStop();  \
 		, /* py */ \

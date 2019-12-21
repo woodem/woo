@@ -26,11 +26,11 @@
 	#include<unistd.h> // for getpid
 #endif
 
-namespace fs=boost::filesystem;
+namespace fs=filesystem;
 
-class RenderMutexLock: public boost::mutex::scoped_lock{
+class RenderMutexLock: public std::scoped_lock<std::mutex>{
 	public:
-	RenderMutexLock(): boost::mutex::scoped_lock(Master::instance().renderMutex){/* cerr<<"Lock renderMutex"<<endl; */}
+	RenderMutexLock(): std::scoped_lock<std::mutex>(Master::instance().renderMutex){/* cerr<<"Lock renderMutex"<<endl; */}
 	~RenderMutexLock(){/* cerr<<"Unlock renderMutex"<<endl;*/ }
 };
 
@@ -64,7 +64,7 @@ Master& Master::instance(){
 
 Master::Master(){
 	LOG_DEBUG_EARLY("Constructing woo::Master.");
-	startupLocalTime=boost::posix_time::microsec_clock::local_time();
+	startupLocalTime=std::chrono::system_clock::now();
 	#ifdef __MINGW64__
 		// check that (some) env vars set from python will work under windows.
 		crtWin32EnvCheck("WOO_TEMP");
@@ -83,7 +83,9 @@ Master::Master(){
 		if(!fs::exists(tmp)) throw std::runtime_error("Provided temp directory WOO_TEMP="+tmpFileDir+" does not exist.");
 		LOG_DEBUG_EARLY("Using temp dir"<<getenv("WOO_TEMP"));
 	} else {
-		tmp=fs::unique_path(fs::temp_directory_path()/"woo-tmp-%%%%%%%%");
+		auto random_string=[](const int len){ std::string ret(len,'_'); constexpr char alphanum[]="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; for(int i=0;i<len;++i) ret[i]=alphanum[rand()%(sizeof(alphanum)-1)]; return ret; };
+		fs::path tmp;
+		while(tmp=fs::temp_directory_path()/("/woo-tmp-"+random_string(8)),fs::exists(tmp));
 		tmpFileDir=tmp.string();
 		LOG_DEBUG_EARLY("Creating temp dir "<<tmpFileDir);
 		if(!fs::create_directory(tmp)) throw std::runtime_error("Creating temporary directory "+tmpFileDir+" failed.");
@@ -203,15 +205,15 @@ void Master::pyRegisterClass(py::module_& mod){
 
 const map<string,set<string>>& Master::getClassBases(){return classBases;}
 
-Real Master::getRealTime(){ return (boost::posix_time::microsec_clock::local_time()-startupLocalTime).total_milliseconds()/1e3; }
-boost::posix_time::time_duration Master::getRealTime_duration(){return boost::posix_time::microsec_clock::local_time()-startupLocalTime;}
+Real Master::getRealTime(){ std::chrono::duration<Real>(std::chrono::system_clock::now()-startupLocalTime).count(); }
+std::chrono::duration<float> Master::getRealTime_duration(){return std::chrono::system_clock::now()-startupLocalTime;}
 
 string Master::getTmpFileDir(){ return tmpFileDir; }
 
 std::string Master::tmpFilename(){
 	assert(!tmpFileDir.empty());
-	boost::mutex::scoped_lock lock(tmpFileCounterMutex);
-	return tmpFileDir+"/tmp-"+lexical_cast<string>(tmpFileCounter++);
+	std::scoped_lock<std::mutex> lock(tmpFileCounterMutex);
+	return tmpFileDir+"/tmp-"+to_string(tmpFileCounter++);
 }
 
 const shared_ptr<Scene>& Master::getScene(){return scene;}

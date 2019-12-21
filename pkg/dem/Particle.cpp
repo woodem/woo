@@ -509,7 +509,7 @@ void DemField::removeParticle(Particle::id_t id){
 			if(dyn.linIx<0) continue; // node not in DemField.nodes
 			if(dyn.linIx>(int)nodes.size() || nodes[dyn.linIx].get()!=n.get()) throw std::runtime_error("Node in #"+to_string(id)+" has invalid linIx entry!");
 			LOG_DEBUG("Removing #{} / DemField::nodes[{}] (not used anymore)",id,dyn.linIx);
-			boost::mutex::scoped_lock lock(nodesMutex);
+			std::scoped_lock lock(nodesMutex);
 			if(saveDead) deadNodes.push_back(n);
 			(*nodes.rbegin())->getData<DemData>().linIx=dyn.linIx;
 			nodes[dyn.linIx]=*nodes.rbegin(); // move the last node to the current position
@@ -543,7 +543,7 @@ void DemField::removeClump(size_t linIx){
 			assert(p && p->shape && p->shape->nodes.size()>0);
 			for(auto& n: p->shape->nodes){
 				#ifdef WOO_DEBUG
-					if(std::find_if(cd.nodes.begin(),cd.nodes.end(),[&n](const shared_ptr<Node>& a)->bool{ return(a.get()==n.get()); })==cd.nodes.end()) throw std::runtime_error("#"+to_string(p->id)+" should contain node at "+lexical_cast<string>(n->pos.transpose()));
+					if(std::find_if(cd.nodes.begin(),cd.nodes.end(),[&n](const shared_ptr<Node>& a)->bool{ return(a.get()==n.get()); })==cd.nodes.end()) throw std::runtime_error("#"+to_string(p->id)+" should contain node at "+to_string(n->pos[0])+" "+to_string(n->pos[1])+" "+to_string(n->pos[2]));
 				#endif
 				n->getData<DemData>().setNoClump(); // fool the test in removeParticle
 			}
@@ -557,7 +557,7 @@ void DemField::removeClump(size_t linIx){
 	}
 	if(saveDead) deadNodes.push_back(node);
 	// remove the clump node here
-	boost::mutex::scoped_lock lock(nodesMutex);
+	std::scoped_lock lock(nodesMutex);
 	(*nodes.rbegin())->getData<DemData>().linIx=cd.linIx;
 	nodes[cd.linIx]=*nodes.rbegin();
 	nodes.resize(nodes.size()-1);

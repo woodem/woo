@@ -590,3 +590,8 @@ shared_ptr<T> Object__setstate__(py::dict state){
 // #endif
 
 }; /* namespace woo */
+
+#ifdef WOO_CEREAL
+	CEREAL_FORCE_DYNAMIC_INIT(Object);
+#endif
+

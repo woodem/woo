@@ -85,7 +85,7 @@ namespace woo{
 		#ifdef WOO_OPENMP
 			} else {
 				// slow mutex-protected
-				boost::mutex::scoped_lock lock(mapMutex);
+				std::scoped_lock lock(mapMutex);
 				auto& lct=timingMap[index];
 				lct.nExec+=1;
 				lct.nsec+=dt;
@@ -102,7 +102,7 @@ namespace woo{
 	}
 	void TimingDeltas::reset(){
 		#ifdef WOO_OPENMP
-			boost::mutex::scoped_lock lock(mapMutex);
+			std::scoped_lock lock(mapMutex);
 			timingMap.clear();
 		#endif
 		nExec.resetAll();

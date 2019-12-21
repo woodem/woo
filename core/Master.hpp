@@ -1,6 +1,5 @@
 #pragma once
 
-#include<boost/date_time/posix_time/posix_time.hpp>
 #include<fstream>
 #include<set>
 #include<list>
@@ -31,11 +30,6 @@
 #ifndef __MINGW64__
 	#include<signal.h>
 #endif
-
-#ifndef FOREACH
-# define FOREACH BOOST_FOREACH
-#endif
-
 
 struct Scene;
 using namespace woo;
@@ -84,13 +78,13 @@ class Master{
 
 	bool checkApi(int minApi, const string& msg, bool pyWarn) const;
 
-	boost::posix_time::ptime startupLocalTime;
+	std::chrono::system_clock::time_point startupLocalTime;
 
 	map<string,string> memSavedSimulations;
 
 	// to avoid accessing simulation when it is being loaded (should avoid crashes with the UI)
-	boost::mutex loadingSimulationMutex;
-	boost::mutex tmpFileCounterMutex;
+	std::mutex loadingSimulationMutex;
+	std::mutex tmpFileCounterMutex;
 	long tmpFileCounter;
 	bool termFlag;
 	std::string tmpFileDir;
@@ -110,7 +104,7 @@ class Master{
 		* 1. GLViewer::paintGL (deffered lock: if fails, no GL painting is done)
 		* 2. other threads that wish to manipulate GL
 		* 3. Master when substantial changes to the scene are being made (bodies being deleted, simulation loaded etc) so that GL doesn't access those and crash */
-		boost::try_mutex renderMutex;
+		std::mutex renderMutex;
 
 
 		/* temporary storage */
@@ -172,7 +166,7 @@ class Master{
 		string getTmpFileDir();
 		void setTmpFileDir(const string& t);
 		Real getRealTime();
-		boost::posix_time::time_duration getRealTime_duration();
+		std::chrono::duration<float> getRealTime_duration();
 
 		// configuration directory used for logging config and possibly other things
 		std::string confDir;

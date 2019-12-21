@@ -106,7 +106,7 @@ WOO_IMPL_LOGGER(GLViewer);
 bool GLViewer::rotCursorFreeze=false;
 bool GLViewer::paraviewLike3d=true;
 
-GLLock::GLLock(GLViewer* _glv): boost::try_mutex::scoped_lock(Master::instance().renderMutex), glv(_glv){
+GLLock::GLLock(GLViewer* _glv): std::scoped_lock<std::mutex>(Master::instance().renderMutex), glv(_glv){
 	glv->makeCurrent();
 }
 GLLock::~GLLock(){ glv->doneCurrent(); }
@@ -421,7 +421,6 @@ void GLViewer::setState(string state){
 
 void GLViewer::keyPressEvent(QKeyEvent *e)
 {
-	// last_user_event = boost::posix_time::second_clock::local_time();
 
 	if(false){}
 	/* special keys: Escape and Space */
@@ -458,7 +457,10 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 			displayMessage("Will use current positions/orientations for scaling.");
 		} else {
 			renderer->scaleOn=!renderer->scaleOn;
-			displayMessage("Scaling is "+(renderer->scaleOn?string("on (displacements ")+lexical_cast<string>(renderer->dispScale.transpose())+", rotations "+lexical_cast<string>(renderer->rotScale)+")":string("off")));
+			std::ostringstream oss;
+			if(renderer->scaleOn) oss<<"Scaling is on (displacements "<<renderer->dispScale.transpose()<<", rotations "<<renderer->rotScale<<")";
+			else oss<<"Scaling is off";
+			displayMessage(oss.str());
 			return;
 		}
 	}
@@ -1187,8 +1189,11 @@ void GLViewer::renderRange(ScalarRange& range, int i){
 
 string GLViewer::getRealTimeString(){
 	std::ostringstream oss;
-	boost::posix_time::time_duration t=Master::instance().getRealTime_duration();
-	unsigned d=t.hours()/24,h=t.hours()%24,m=t.minutes(),s=t.seconds();
+	auto t=(long)Master::instance().getRealTime();
+	int d=t/(24*60*60); t-=d*24*60*60;
+	int h=t/(60*60); t-=h*60*60;
+	int m=t/60; t-=m*60;
+	int s=t;
 	oss<<"clock ";
 	if(d>0) oss<<d<<"days "<<_W2<<h<<":"<<_W2<<m<<":"<<_W2<<s;
 	else if(h>0) oss<<_W2<<h<<":"<<_W2<<m<<":"<<_W2<<s;
@@ -1226,7 +1231,6 @@ void GLViewer::mouseMoveEvent(QMouseEvent *e){
  * mostly copied over from ManipulatedFrame::mouseDoubleClickEvent
  */
 void GLViewer::mouseDoubleClickEvent(QMouseEvent *event){
-	// last_user_event = boost::posix_time::second_clock::local_time();
 
 	if(manipulatedClipPlane<0) { /* LOG_DEBUG("Double click not on clipping plane"); */ QGLViewer::mouseDoubleClickEvent(event); return; }
 	if (event->modifiers() == Qt::NoModifier){
@@ -1239,7 +1243,6 @@ void GLViewer::mouseDoubleClickEvent(QMouseEvent *event){
 }
 
 void GLViewer::wheelEvent(QWheelEvent* event){
-	// last_user_event = boost::posix_time::second_clock::local_time();
 
 	if(manipulatedClipPlane<0){
 		// with right button pressed (which is normally used for camera rotation), roll the scene
@@ -1291,6 +1294,5 @@ void GLViewer::initFromDOMElement(const QDomElement& element){
 	#endif
 }
 
-// boost::posix_time::ptime GLViewer::getLastUserEvent(){return last_user_event;};
 
 #endif
