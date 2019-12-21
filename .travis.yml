@@ -9,6 +9,7 @@ addons:
          - python3-all
          - python3-all-dev
          - python3-numpy
+         - python3-future
          - libeigen3-dev
          - libhdf5-serial-dev
          - libboost-all-dev
