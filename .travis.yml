@@ -9,7 +9,6 @@ addons:
          - python3-all
          - python3-all-dev
          - python3-numpy
-         - python3-future
          - libeigen3-dev
          - libhdf5-serial-dev
          - libboost-all-dev
@@ -27,7 +26,7 @@ before_install:
     - sudo apt-get -q update
     - sudo apt-get -y install pybind11-dev
 install:
-   - pip3 install xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
+   - pip3 install future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
 script:
    - mkdir -p build
    - cd build
