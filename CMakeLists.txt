@@ -477,7 +477,6 @@ install(FILES
 	py/pre/horse.py
 	py/pre/__init__.py
 	py/pre/psdrender.py
-	py/pre/staticmixer.py
 	py/pre/toys.py
 	py/pre/triax.py
 	DESTINATION ${WOO_MODULEDIR}/pre
