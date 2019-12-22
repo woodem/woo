@@ -205,7 +205,7 @@ void Master::pyRegisterClass(py::module_& mod){
 
 const map<string,set<string>>& Master::getClassBases(){return classBases;}
 
-Real Master::getRealTime(){ std::chrono::duration<Real>(std::chrono::system_clock::now()-startupLocalTime).count(); }
+Real Master::getRealTime(){ return std::chrono::duration<Real>(std::chrono::system_clock::now()-startupLocalTime).count(); }
 std::chrono::duration<float> Master::getRealTime_duration(){return std::chrono::system_clock::now()-startupLocalTime;}
 
 string Master::getTmpFileDir(){ return tmpFileDir; }
