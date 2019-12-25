@@ -478,11 +478,6 @@ install(FILES
 )
 install(FILES
 	py/data/horse.coarse.gts
-	py/data/horse.coarse.stl
-	py/data/horse.nmesh
-	py/data/ng.ini
-	py/data/ngmesh.ini
-	py/data/ship.stl
 	py/data/woodem-6.small.svg
 	py/data/woodem-6.woodem.svg
 	py/data/woodem-6.woo.svg
