@@ -1,2 +1,8 @@
 build-src-tree
+build
+build-*
 *.~
+*.bandfeed
+*.perifeed
+*.triax-compact
+*.randomdense

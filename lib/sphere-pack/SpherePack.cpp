@@ -8,11 +8,10 @@
 #include<boost/random/uniform_real.hpp>
 #include<boost/random/variate_generator.hpp>
 
-#include<boost/filesystem/convenience.hpp>
 #include<boost/tokenizer.hpp>
 #include<boost/algorithm/string.hpp>
 
-#include<boost/chrono/chrono.hpp>
+#include<chrono>
 
 
 #include<iostream>
@@ -26,13 +25,12 @@
 
 WOO_IMPL_LOGGER(SpherePack);
 
-using boost::lexical_cast;
 using std::string;
 using std::invalid_argument;
 
 // seed for random numbers
 unsigned long long getNow(){
-	return boost::chrono::duration_cast<boost::chrono::nanoseconds>(boost::chrono::steady_clock::now().time_since_epoch()).count();
+	return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
 
@@ -49,7 +47,7 @@ void SpherePack::fromList(const py::list& l){
 
 void SpherePack::fromLists(const vector<Vector3r>& centers, const vector<Real>& radii){
 	pack.clear();
-	if(centers.size()!=radii.size()) throw std::invalid_argument(("The same number of centers and radii must be given (is "+lexical_cast<string>(centers.size())+", "+lexical_cast<string>(radii.size())+")").c_str());
+	if(centers.size()!=radii.size()) throw std::invalid_argument(("The same number of centers and radii must be given (is "+to_string(centers.size())+", "+to_string(radii.size())+")").c_str());
 	size_t l=centers.size();
 	for(size_t i=0; i<l; i++){
 		add(centers[i],radii[i]);
@@ -72,7 +70,7 @@ py::tuple SpherePack::toCcRr() const {
 }
 
 void SpherePack::fromFile(const string& fname) {
-	if(!boost::filesystem::exists(fname)) {
+	if(!filesystem::exists(fname)) {
 		throw std::invalid_argument(string("File with spheres `")+fname+"' doesn't exist.");
 	}
 	std::ifstream sphereFile(fname.c_str());
@@ -96,8 +94,8 @@ void SpherePack::fromFile(const string& fname) {
 			vector<string> tokens; for(const string& s: toks) tokens.push_back(s);
 			if(tokens.empty()) continue;
 			if(tokens[0]=="##PERIODIC::"){
-				if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+lexical_cast<string>(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
-				cellSize=Vector3r(lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]),lexical_cast<Real>(tokens[3]));
+				if(tokens.size()!=4) throw std::invalid_argument(("Spheres file "+fname+":"+to_string(lineNo)+" contains ##PERIODIC::, but the line is malformed.").c_str());
+				cellSize=Vector3r(std::stod(tokens[1]),std::stod(tokens[2]),std::stod(tokens[3]));
 				continue;
 			}
 			// 4 or 5 columns, but all lines must have the same
@@ -105,14 +103,14 @@ void SpherePack::fromFile(const string& fname) {
 			if(tokens.size()!=4 && tokens.size()!=5) throw std::invalid_argument(fname+":"+to_string(lineNo)+": line has "+to_string(tokens.size())+" columns (must be 4 or 5).");
 			if(nCols==0) nCols=tokens.size(); // set the first time
 			if(nCols!=tokens.size()) throw std::invalid_argument(fname+":"+to_string(lineNo)+": all line must have the same number of columns (previous had "+to_string(nCols)+", this one has "+to_string(tokens.size())+")");
-			C=Vector3r(lexical_cast<Real>(tokens[0]),lexical_cast<Real>(tokens[1]),lexical_cast<Real>(tokens[2]));
-			r=lexical_cast<Real>(tokens[3]);
+			C=Vector3r(std::stod(tokens[0]),std::stod(tokens[1]),std::stod(tokens[2]));
+			r=std::stod(tokens[3]);
 			pack.push_back(Sph(C,r));
 			// if clumpId was specified, set it now
-			if(tokens.size()==5) pack.rbegin()->clumpId=lexical_cast<int>(tokens[4]);
+			if(tokens.size()==5) pack.rbegin()->clumpId=std::stoi(tokens[4]);
 		}
 	}
-	catch(boost::bad_lexical_cast &){
+	catch(std::invalid_argument&){
 		throw std::runtime_error(fname+":"+to_string(lineNo)+": error parsing number.");
 	}
 }
@@ -126,7 +124,7 @@ void SpherePack::toFile(const string& fname) const {
 		f<<"##USER-DATA:: "<<userData<<std::endl;
 	}
 	bool clumps=hasClumps();
-	FOREACH(const Sph& s, pack){
+	for(const Sph& s: pack){
 		f<<s.c[0]<<" "<<s.c[1]<<" "<<s.c[2]<<" "<<s.r;
 		if(clumps) f<<" "<<s.clumpId;
 		f<<std::endl;
@@ -161,7 +159,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 		rMean=cbrt(volume*(1-porosity)/(M_PI*(4/3.)*(1+rRelFuzz*rRelFuzz)*num));}
 	if(psdSizes.size()>0){
 		err=(mode>=0); mode=RDIST_PSD;
-		if(psdSizes.size()!=psdCumm.size()) throw std::invalid_argument(("SpherePack.makeCloud: psdSizes and psdCumm must have same dimensions ("+lexical_cast<string>(psdSizes.size())+"!="+lexical_cast<string>(psdCumm.size())).c_str());
+		if(psdSizes.size()!=psdCumm.size()) throw std::invalid_argument(("SpherePack.makeCloud: psdSizes and psdCumm must have same dimensions ("+to_string(psdSizes.size())+"!="+to_string(psdCumm.size())).c_str());
 		if(psdSizes.size()<=1) throw invalid_argument("SpherePack.makeCloud: psdSizes must have at least 2 items");
 		if((*psdCumm.begin())!=0. && (*psdCumm.rbegin())!=1.) throw invalid_argument("SpherePack.makeCloud: first and last items of psdCumm *must* be exactly 0 and 1.");
 		psdRadii.reserve(psdSizes.size());
@@ -172,7 +170,7 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 				if (i==0) psdCumm2.push_back(0);
 				else psdCumm2.push_back(psdCumm2[i-1] + 3.0*volume*(1-porosity)/M_PI*(psdCumm[i]-psdCumm[i-1])/(psdSizes[i]-psdSizes[i-1])*(pow(psdSizes[i-1],-2)-pow(psdSizes[i],-2)));
 			}
-			LOG_DEBUG("{}. {}, cdf={}, cdf2={}",i,psdRadii[i],psdCumm[i],(distributeMass?lexical_cast<string>(psdCumm2[i]):string("--")));
+			LOG_DEBUG("{}. {}, cdf={}, cdf2={}",i,psdRadii[i],psdCumm[i],(distributeMass?to_string(psdCumm2[i]):string("--")));
 			// check monotonicity
 			if(i>0 && (psdSizes[i-1]>psdSizes[i] || psdCumm[i-1]>psdCumm[i])) throw invalid_argument("SpherePack:makeCloud: psdSizes and psdCumm must be both non-decreasing.");
 		}
@@ -302,13 +300,13 @@ py::tuple SpherePack::psd(int bins, bool mass) const {
 	Real minD=std::numeric_limits<Real>::infinity(); Real maxD=-minD;
 	// volume, but divided by π*4/3
 	Real vol=0; long N=pack.size();
-	FOREACH(const Sph& s, pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow3(s.r); }
+	for(const Sph& s: pack){ maxD=max(2*s.r,maxD); minD=min(2*s.r,minD); vol+=pow3(s.r); }
 	if(minD==maxD){ minD-=.5; maxD+=.5; } // emulates what numpy.histogram does
 	// create bins and bin edges
 	vector<Real> hist(bins,0); vector<Real> cumm(bins+1,0); /* cummulative values compute from hist at the end */
 	vector<Real> edges(bins+1); for(int i=0; i<=bins; i++){ edges[i]=minD+i*(maxD-minD)/bins; }
 	// weight each grain by its "volume" relative to overall "volume"
-	FOREACH(const Sph& s, pack){
+	for(const Sph& s: pack){
 		int bin=int(bins*(2*s.r-minD)/(maxD-minD)); bin=min(bin,bins-1); // to make sure
 		if (mass) hist[bin]+=pow3(s.r)/vol; else hist[bin]+=1./N;
 	}
@@ -456,7 +454,7 @@ void SpherePack::scale(Real scale, bool keepRadius){
 	bool periodic=(cellSize!=Vector3r::Zero());
 	Vector3r mid=periodic?Vector3r::Zero():midPt();
 	cellSize*=scale;
-	FOREACH(Sph& s, pack){
+	for(Sph& s: pack){
 		s.c=scale*(s.c-mid)+mid;
 		if(!keepRadius) s.r*=abs(scale);
 	}

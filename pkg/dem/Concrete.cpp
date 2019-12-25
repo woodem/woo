@@ -333,7 +333,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 			if(!p->matState) continue;
 			assert(p->matState->isA<ConcreteMatState>());
 			auto& cms=p->matState->cast<ConcreteMatState>();
-			boost::mutex::scoped_lock l(cms.lock);
+			std::scoped_lock l(cms.lock);
 			cms.numBrokenCohesive+=1;
 		}
 		return false;

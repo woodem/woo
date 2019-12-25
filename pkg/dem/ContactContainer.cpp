@@ -18,7 +18,7 @@ bool ContactContainer::IsReal::operator()(const shared_ptr<Contact>& c){ return 
 bool ContactContainer::add(const shared_ptr<Contact>& c, bool threadSafe){
 	assert(dem);
 	#if defined(WOO_OPENMP) || defined(WOO_OPENGL)
-		boost::mutex::scoped_lock lock(manipMutex);
+		std::scoped_lock lock(manipMutex);
 	#endif
 	Particle *pA=c->leakPA(), *pB=c->leakPB();
 	if(!threadSafe){
@@ -40,9 +40,9 @@ bool ContactContainer::add(const shared_ptr<Contact>& c, bool threadSafe){
 void ContactContainer::clear(){
 	assert(dem);
 	#if defined(WOO_OPENMP) || defined(WOO_OPENGL)
-		boost::mutex::scoped_lock lock(manipMutex);
+		std::scoped_lock lock(manipMutex);
 	#endif
-	FOREACH(const shared_ptr<Particle>& p, *dem->particles) p->contacts.clear();
+	for(const shared_ptr<Particle>& p: *dem->particles) p->contacts.clear();
 	linView.clear(); // clear the linear container
 	clearPending();
 	dirty=true;
@@ -82,7 +82,7 @@ void ContactContainer::linView_remove(const size_t& ix){
 bool ContactContainer::remove(shared_ptr<Contact> c, bool threadSafe){
 	assert(dem);
 	#if defined(WOO_OPENMP) || defined(WOO_OPENGL)
-		boost::mutex::scoped_lock lock(manipMutex);
+		std::scoped_lock lock(manipMutex);
 	#endif
 
 	// take ownership of particles
@@ -110,7 +110,7 @@ bool ContactContainer::remove(shared_ptr<Contact> c, bool threadSafe){
 			// damn, we have no idea what id2 is, what to do now?
 			// if the contact is still there, it is serious
 			if(linView.size()>c->linIx && linView[c->linIx].get()==c.get()){
-				throw std::logic_error("Contact @ "+lexical_cast<string>(c)+": "+to_string(id)+" + ??; contact object still in Scene.dem.con["+to_string(c->linIx)+"]. Dropping to python so that you can inspect what's going on.");
+				throw std::logic_error("Contact @ "+ptr_to_string(c.get())+": "+to_string(id)+" + ??; contact object still in Scene.dem.con["+to_string(c->linIx)+"]. Dropping to python so that you can inspect what's going on.");
 			} else {
 				// it seems the contact is not in DemField::contacts where it should be either
 				// so let's assume it was taken care of by DemField::deleteParticle already
@@ -122,7 +122,7 @@ bool ContactContainer::remove(shared_ptr<Contact> c, bool threadSafe){
 	if(!pA && !pB){
 		// contact still in contacts, that is error
 		if(linView.size()>c->linIx && linView[c->linIx].get()==c.get()){
-			throw std::logic_error("Contact @ "+lexical_cast<string>(c)+": ?? + ??; contact object still in Scene.dem.con["+to_string(c->linIx)+"]. Dropping to python so that you can inspect what's going on.");
+			throw std::logic_error("Contact @ "+ptr_to_string(c.get())+": ?? + ??; contact object still in Scene.dem.con["+to_string(c->linIx)+"]. Dropping to python so that you can inspect what's going on.");
 		}
 		// if not in contacts anymore, it is OK
 		return false;
@@ -207,7 +207,7 @@ void ContactContainer::removeNonReal(){
 
 int ContactContainer::countReal() const{
 	int ret=0;
-	FOREACH(__attribute__((unused)) const shared_ptr<Contact>& c, *this) ret++;
+	for([[maybe_unused]] const shared_ptr<Contact>& c: *this) ret++;
 	return ret;
 };
 
@@ -218,7 +218,7 @@ shared_ptr<Contact> ContactContainer::pyByIds(const Vector2i& ids){return find(i
 
 shared_ptr<Contact> ContactContainer::pyNth(int n){
 	int sz(size());
-	if(n<-sz || n>sz-1) IndexError("Linear index out of range ("+lexical_cast<string>(-sz)+".."+lexical_cast<string>(sz-1)+")");
+	if(n<-sz || n>sz-1) IndexError("Linear index out of range ("+to_string(-sz)+".."+to_string(sz-1)+")");
 	return linView[n>=0?n:sz+n];
 }
 ContactContainer::pyIterator ContactContainer::pyIter(){ return ContactContainer::pyIterator(this); }

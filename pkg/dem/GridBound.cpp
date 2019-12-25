@@ -2,10 +2,16 @@
 WOO_PLUGIN(dem,(GridBound)(GridBoundFunctor)(GridBoundDispatcher)(Grid1_Sphere)(Grid1_Wall)(Grid1_InfCylinder)(Grid1_Facet))
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_GridBound));
+	WOO_IMPL__CLASS_BASE_DOC(woo_gl_Gl1_GridBound__CLASS_BASE_DOC);
 #endif
 
-WOO_IMPL__CLASS_BASE_DOC_PY(woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Wall__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Facet__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_InfCylinder__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Sphere__CLASS_BASE_DOC_ATTRS);
+
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_GridBound__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_PY(woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY);
 
 
 

@@ -80,7 +80,7 @@ namespace woo{
             static void postLoadStatic(void* attr){
                 if(attr==&trigger) numTriggered++;
             }
-            WOO_CLASS_BASE_DOC_STATICATTRS(WooTestClassStatic,Object,"Class for testing static attributes access.",
+            WO0_CLASS_BASE_DOC_STATICATTRS(WooTestClassStatic,Object,"Class for testing static attributes access.",
                 ((int,namedEnum,-1,AttrTrait<Attr::namedEnum>().namedEnum({{-1,{"minus one"}},{0,{"zero","NULL"}},{1,{"one"}}}),"Test named enumeration"))
                 ((int,readonly,2,AttrTrait<Attr::readonly>(),"Test readonly access"))
                 ((int,hidden,0,AttrTrait<Attr::hidden>(),"Test hidden"))

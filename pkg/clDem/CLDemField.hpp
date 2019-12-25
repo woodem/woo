@@ -15,7 +15,7 @@ public:
 	const char* getterName() const override { return "clDem"; }
 	void setDataOnNode(Node& n) override { n.setData(static_pointer_cast<CLDemData>(shared_from_this())); }
 	
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemData,NodeData,"Dynamic state of node.",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemData,NodeData,"Dynamic state of node.",
 		((long,clIx,,,"Index of object belonging to this node within clDem arrays (particle/contact)"))
 		, /* ctor */
 		, /* py */ .def_static("_getDataOnNode",&Node::pyGetData<CLDemData>).def_static("_setDataOnNode",&Node::pySetData<CLDemData>);
@@ -40,7 +40,7 @@ struct CLDemField: public Field{
 	static shared_ptr<clDem::Simulation> wooToClDem(const shared_ptr< ::Scene>& scene, int stepPeriod=-1, Real relTol=-1);
 	// returns clDem::Simulation within current scene
 	static shared_ptr<clDem::Simulation> getSimulation();
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemField,Field,"Field referencing clDem simulation; it contains reference pointer clDem::Simulation. GL functions and proxy engine is defined on this field.",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemField,Field,"Field referencing clDem simulation; it contains reference pointer clDem::Simulation. GL functions and proxy engine is defined on this field.",
 			((shared_ptr<clDem::Simulation>,sim,,,"The OpenCL simulation in question."))
 		, /* ctor */ createIndex();
 		, /* py */ // .def_readwrite("sim",&CLDemField::sim,"Simulation field to operate on")
@@ -66,7 +66,7 @@ struct CLDemRun: public PeriodicEngine {
 	void doCompare();
 	void compareParticleNodeDyn(const string& pId, const clDem::Particle& cp, const shared_ptr<Node>& yn, const Real kgU, const Real mU, const Real sU);
 	//void pyHandleCustomCtorArgs(py::tuple& args, py::dict& kw);
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemRun,PeriodicEngine,"Engine which runs some number of steps of the clDem simulation synchronously.",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_PY(CLDemRun,PeriodicEngine,"Engine which runs some number of steps of the clDem simulation synchronously.",
 		((long,steps,-1,,"How many steps to run each time the engine runs. If negative, the value of *stepPeriod* is used."))
 		((Real,relTol,-1e-5,,"Tolerance for float comparisons; if it is exceeded, error message is shown, but the simulation is not interrupted. If negative, no comparison is done."))
 		((Real,raiseLimit,100.,,"When relative error exceeds relTol*raiseLimit, an exception will be raised. (>=1)"))
@@ -91,7 +91,7 @@ struct Gl1_CLDemField: public GlFieldFunctor{
 	void renderPar();
 	void renderCon();
 	void renderPot();
-	WOO_CLASS_BASE_DOC_ATTRS(Gl1_CLDemField,GlFieldFunctor,"Render clDemField.",
+	WO0_CLASS_BASE_DOC_ATTRS(Gl1_CLDemField,GlFieldFunctor,"Render clDemField.",
 		((bool,parWire,false,,"Whether particles are rendered with wirte only"))
 		((Real,quality,.2,,"Adjust number of slices/stacks for spheres &c"))
 		((Vector2r,quality_range,Vector2r(0,1),AttrTrait<>().noGui(),"Range for quality"))

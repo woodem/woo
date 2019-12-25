@@ -1,44 +1,39 @@
 language: python
-# we need different executable name for 2.7 and 3.4, specify matrix explicitly: 
-# see http://docs.travis-ci.com/user/customizing-the-build/
-##python:
-#   - 3.4
-###   - 2.7
-matrix:
-   include:
-      - python: "2.7"
-        env: WOO_EXEC=woo-travis
-# disabled for now, since packaged boost::python only links against python 3.2, which is not sufficient
-#      - python: "3.4"
-#        env: WOO_EXEC=woo-travis-py3
-install:
-   # use APT only to install c-dev things, virtualenv cannot use system-installed python modules w/ py3k at travis
-   # ipython>=6.0 does not support python <= 3.2
-   - pip install xlrd xlwt-future numpy colorama genshi psutil minieigen pillow h5py lockfile 'ipython<6.0' colour_runner xlsxwriter prettytable setuptools matplotlib
-   # see what's there really
-   - dpkg -l 
-   # use non-default version of gcc (ubuntu 14.04)
-   - WOO_FLAVOR=travis CC=clang CXX=clang++ python setup.py install 
-script:
-   - timeout 60 $WOO_EXEC --test # py3 stalls?!
-## container-based infrastructure (http://docs.travis-ci.com/user/migrating-from-legacy/)
-## add libvtk5-dev and libgts-dev when those are approved
-## https://github.com/travis-ci/apt-package-whitelist/issues/779
-## https://github.com/travis-ci/apt-package-whitelist/issues/526 
-sudo: false
+python: 3.6
+dist: bionic
+compiler: clang
+sudo: required
 addons:
    apt:
-      sources:
-         - ubuntu-toolchain-r-test
-         - boost-latest
       packages:
-         - python-all
-         - python-all-dev
          - python3-all
          - python3-all-dev
+         - python3-numpy
          - libeigen3-dev
          - libhdf5-serial-dev
-         - binutils-gold
-         - libboost1.55-all-dev
-         - clang
-
+         - libboost-all-dev
+         - libgts-dev
+         - pybind11-dev
+         - cmake
+         - cmake-data
+         - ninja-build
+         - libvtk6-dev
+         - libdouble-conversion-dev # for building minieigen11
+         - clang-7
+         - libomp-7-dev
+before_install:
+    - sudo add-apt-repository -y ppa:nschloe/pybind11-backports
+    - sudo apt-get -q update
+    - sudo apt-get -y install pybind11-dev
+install:
+   - pip3 install future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
+script:
+   - mkdir -p build
+   - cd build
+   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF -DWOO_CLANG=ON ..
+   # build some (big) objects separately so that we don't exceed Travis timeout for one command
+   - ninja CMakeFiles/_cxxInternal.dir/pkg/dem/{Inlet,VtkExport,Particle,Ellipsoid}.cpp.o
+   - ninja CMakeFiles/_cxxInternal.dir/core/{Scene,Test,Engine,EnergyTracker}.cpp.o
+   - ninja CMakeFiles/_cxxInternal.dir/pkg/fem/{Membrane,Tetra}.cpp.o
+   - sudo ninja install
+   - timeout 60 woo --test

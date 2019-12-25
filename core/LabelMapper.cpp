@@ -1,7 +1,7 @@
 #include<woo/core/LabelMapper.hpp>
 #include<woo/lib/pyutil/except.hpp>
 #include<woo/core/Master.hpp>
-#include<boost/regex.hpp>
+#include<regex>
 #include<boost/algorithm/string.hpp>
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_core_LabelMapper__CLASS_BASE_DOC_ATTRS_PY);
@@ -58,20 +58,20 @@ void LabelMapper::ensureUsedModsOk(const string& label){
 }
 
 int LabelMapper::labelType(const string& label, string& lab0, int& index) const {
-	boost::smatch match;
+	std::smatch match;
 	// catch leading _
-	if(boost::regex_match(label,match,boost::regex("_.*"))) woo::NameError("LabelMapper: labels may not start with underscore (those are reserved to access the underlying LabelMapper object itself).");
+	if(std::regex_match(label,match,std::regex("_.*"))) woo::NameError("LabelMapper: labels may not start with underscore (those are reserved to access the underlying LabelMapper object itself).");
 	// catch leading dot, two consecutive dots or .[]
-	if(boost::regex_match(label,match,boost::regex("^\\.")) || boost::regex_match(label,match,boost::regex(".*\\.\\..* ")) || boost::regex_match(label,match,boost::regex(".*\\.\\[.*"))) woo::NameError("LabelMapper: label '"+label+"' is not a valid python identifier name.");
+	if(std::regex_match(label,match,std::regex("^\\.")) || std::regex_match(label,match,std::regex(".*\\.\\..* ")) || std::regex_match(label,match,std::regex(".*\\.\\[.*"))) woo::NameError("LabelMapper: label '"+label+"' is not a valid python identifier name.");
 	// sequence
-	if(boost::regex_match(label,match,boost::regex("([a-zA-Z0-9_\\.]+)\\s*\\[([0-9]+)\\]"))){
+	if(std::regex_match(label,match,std::regex("([a-zA-Z0-9_\\.]+)\\s*\\[([0-9]+)\\]"))){
 		lab0=match[1];
-		index=lexical_cast<long>(match[2]);
+		index=std::stol(match[2]);
 		if(index<0) woo::ValueError("LabelMapper: label '"+lab0+"' specifies non-positive index "+to_string(index));
 		return LABEL_SEQ;
 	}
 	// one object
-	if(boost::regex_match(label,match,boost::regex("[a-zA-Z_][.a-zA-Z0-9_]*[a-zA-Z0-9_]*"))){
+	if(std::regex_match(label,match,std::regex("[a-zA-Z_][.a-zA-Z0-9_]*[a-zA-Z0-9_]*"))){
 		return LABEL_PLAIN;
 	}
 	woo::NameError("LabelMapper: label '"+label+"' is not a valid python identifier name.");
@@ -298,11 +298,11 @@ void LabelMapper::__setitem__py(const string& label, py::object o){
 }
 
 py::object LabelMapper::__getitem__(const string& label){
-	boost::smatch match;
+	std::smatch match;
 	// hack to be able to do getattr(S.lab,'something[1]')
-	if(boost::regex_match(label,match,boost::regex("^(.*)\\[([0-9]+)\\]$"))){
+	if(std::regex_match(label,match,std::regex("^(.*)\\[([0-9]+)\\]$"))){
 		string l0=match[1];
-		long index=lexical_cast<long>(match[2]);
+		long index=std::stol(match[2]);
 		#ifdef WOO_PYBIND11
 			return this->__getitem__(l0).attr("__getitem__")(py::cast(index));
 		#else

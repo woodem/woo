@@ -1,4 +1,3 @@
-#include<boost/filesystem/convenience.hpp>
 #include<woo/pkg/dem/Hdf5Export.hpp>
 #include<boost/format.hpp>
 
@@ -29,7 +28,7 @@ void ForcesToHdf5::run(){
 	try{
 		H5::H5File h5file;
 		// open existing or create new file
-		if(boost::filesystem::exists(out)) h5file=H5::H5File(out,H5F_ACC_RDWR);
+		if(filesystem::exists(out)) h5file=H5::H5File(out,H5F_ACC_RDWR);
 		else h5file=H5::H5File(out,H5F_ACC_TRUNC);
 		
 		// open/create root group for this entire simulation

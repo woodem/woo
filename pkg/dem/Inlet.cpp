@@ -307,7 +307,7 @@ void RandomInlet::run(){
 					goto stepDone;
 				}
 				switch(atMaxAttempts){
-					case MAXATT_ERROR: throw std::runtime_error("RandomInlet.maxAttempts reached ("+lexical_cast<string>(maxAttempts)+")"); break;
+					case MAXATT_ERROR: throw std::runtime_error("RandomInlet.maxAttempts reached ("+to_string(maxAttempts)+")"); break;
 					case MAXATT_DEAD:{
 						LOG_INFO("maxAttempts={} reached, making myself dead.",maxAttempts);
 						this->dead=true;
@@ -460,7 +460,7 @@ void RandomInlet::run(){
 			}
 			ClumpData::applyToMembers(clump,/*reset*/false); // apply velocity
 			#ifdef WOO_OPENGL
-				boost::mutex::scoped_lock lock(dem->nodesMutex);
+				std::scoped_lock lock(dem->nodesMutex);
 			#endif
 			dyn.linIx=dem->nodes.size();
 			dem->nodes.push_back(clump);
@@ -486,7 +486,7 @@ void RandomInlet::run(){
 			assert(node0->hasData<DemData>());
 			dem->particles->insert(p);
 			#ifdef WOO_OPENGL
-				boost::mutex::scoped_lock lock(dem->nodesMutex);
+				std::scoped_lock lock(dem->nodesMutex);
 			#endif
 			dyn.linIx=dem->nodes.size();
 			dem->nodes.push_back(node0);

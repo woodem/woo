@@ -6,14 +6,14 @@
 
 // namespace py=boost::python;
 
-#include<boost/thread/thread.hpp>
+#include<thread>
 
 struct Scene;
 
 struct Node;
 
 struct NodeData: public Object{
-	boost::mutex lock; // used by applyForceTorque
+	std::mutex lock; // used by applyForceTorque
 
 	// template to be specialized by derived classes
 	template<typename Derived> struct Index; // { BOOST_STATIC_ASSERT(false); /* template must be specialized for derived NodeData types */ };

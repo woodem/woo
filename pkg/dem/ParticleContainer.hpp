@@ -12,12 +12,12 @@
 			const int _numSubdomains=particles->numSubdomains(); \
 			_Pragma("omp parallel for schedule(static,1)") \
 			for(int _subDomain=0; _subDomain<_numSubdomains; _subDomain++) \
-			FOREACH(b, particles->getSubdomain(_subDomain)){
+			for(b: particles->getSubdomain(_subDomain)){
 		#define WOO_PARALLEL_FOREACH_PARTICLE_END() }
 	#else
 		#define WOO_PARALLEL_FOREACH_PARTICLE_BEGIN(b,particles) \
 			assert(particles->numSubdomains()==1); assert(particles->getSubdomain(0).size()==particles->size()); \
-			FOREACH(b,*(particles)){
+			for(b:*(particles)){
 		#define WOO_PARALLEL_FOREACH_PARTICLE_END() }
 	#endif
 #else
@@ -42,7 +42,7 @@ struct ParticleContainer: public Object{
 	DemField* dem; // backptr to DemField, set by DemField::postLoad; do not modify!
 	typedef int id_t;
 
-	boost::mutex manipMutex; // to synchronize with rendering, and between threads
+	std::mutex manipMutex; // to synchronize with rendering, and between threads
 
 	private:
 		typedef std::vector<shared_ptr<Particle> > ContainerT;
@@ -99,7 +99,7 @@ struct ParticleContainer: public Object{
 					#pragma omp parallel for schedule(static)
 				#endif
 				for(int subDom=0; subDom<scene->particles->numSubdomains(); subDom++){
-					FOREACH(const shared_ptr<Particle>& b, scene->particles->getSubdomain(subDom)){
+					for(const shared_ptr<Particle>& b: scene->particles->getSubdomain(subDom)){
 						if(!b) continue;
 					}
 				}

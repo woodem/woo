@@ -70,7 +70,7 @@ void Law2_L6Geom_LudingPhys::commitWork(const shared_ptr<Contact>& C) {
 	const Particle* pB(C->leakPB());
 	for(const Particle* p: {pA,pB}){
 		if(!p->matState) continue;
-		boost::mutex::scoped_lock l(p->matState->lock);
+		std::scoped_lock l(p->matState->lock);
 		assert(p->matState->isA<LudingMatState>());
 		auto& lms=p->matState->cast<LudingMatState>();
 		// each particle gets only half

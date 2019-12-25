@@ -59,7 +59,7 @@ struct SparcField: public Field{
 
 	WOO_DECL_LOGGER;
 
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_DTOR_PY(SparcField,Field,"Field for SPARC meshfree method",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_DTOR_PY(SparcField,Field,"Field for SPARC meshfree method",
 		// ((Real,maxRadius,-1,,"Maximum radius for neighbour search (required for periodic simulations)"))
 		((bool,locDirty,true,AttrTrait<Attr::readonly>(),"Flag whether the locator is updated."))
 		((Vector2r,neighAdjFact,Vector2r(.5,2.),,"Factors for adjusting neighbor search range."))
@@ -94,7 +94,7 @@ struct SparcData: public NodeData{
 	void catchCrap1(int nid, const shared_ptr<Node>&);
 	void catchCrap2(int nid, const shared_ptr<Node>&);
 	// Real getDirVel(size_t i) const { return i<dirVels.size()?dirVels[i]:0.; }
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(SparcData,NodeData,"Nodal data needed for SPARC; everything is in global coordinates, except for constraints (fixedV, fixedT)",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_PY(SparcData,NodeData,"Nodal data needed for SPARC; everything is in global coordinates, except for constraints (fixedV, fixedT)",
 		// informational
 		((Real,color,Mathr::UnitRandom(),AttrTrait<>().noGui(),"Set node color, so that rendering is more readable"))
 		((int,nid,-1,,"Node id (to locate coordinates in solution matrix)"))
@@ -193,7 +193,7 @@ struct ExplicitNodeIntegrator: public Engine {
 
 	enum {WEIGHT_DIST=0,WEIGHT_GAUSS,WEIGHT_SENTINEL};
 	enum {WLS_EMPTY=0,WLS_QUAD_X,WLS_CUBIC_X,WLS_LIN_XY,WLS_QUAD_XY,WLS_LIN_XYZ,WLS_QUAD_XYZ};
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(ExplicitNodeIntegrator,Engine,"Monolithic engine for explicit integration of motion of nodes in SparcField.",
+	WO0_CLASS_BASE_DOC_ATTRS_CTOR_PY(ExplicitNodeIntegrator,Engine,"Monolithic engine for explicit integration of motion of nodes in SparcField.",
 		((Real,E,1e6,AttrTrait<Attr::triggerPostLoad>(),"Young's modulus, for the linear elastic constitutive law"))
 		((Real,nu,0,AttrTrait<Attr::triggerPostLoad>(),"Poisson's ratio for the linear elastic constitutive law"))
 		((vector<Real>,barodesyC,vector<Real>({-1.7637,-1.0249,-0.5517,-1174.,-4175.,2218}),AttrTrait<Attr::triggerPostLoad>(),"Material constants for barodesy"))
@@ -397,7 +397,7 @@ struct StaticEquilibriumSolver: public ExplicitNodeIntegrator{
 	enum {SOLVER_NONE=0,SOLVER_POWELL,SOLVER_LM,SOLVER_NEWTON};
 	enum {PROGRESS_DONE=0,PROGRESS_RUNNING,PROGRESS_ERROR};
 
-	WOO_CLASS_BASE_DOC_ATTRS_INIT_CTOR_PY(StaticEquilibriumSolver,ExplicitNodeIntegrator,"Find global static equilibrium of a Sparc system.",
+	WO0_CLASS_BASE_DOC_ATTRS_INIT_CTOR_PY(StaticEquilibriumSolver,ExplicitNodeIntegrator,"Find global static equilibrium of a Sparc system.",
 		((int,solver,SOLVER_POWELL,,"Solver type: 2: Newton-Raphson (finds zero), 0: Powell (minimization) 1: Levenberg-Marquardt."))
 		((bool,substep,false,,"Whether the solver tries to find solution within one step, or does just one iteration towards the solution"))
 		((Real,dt,NaN,AttrTrait<Attr::readonly>(),"Save Scene.dt here, so that it can be se to 0 during substeps. Other engines should test if S.dt!=0 before running."))
@@ -482,7 +482,7 @@ WOO_REGISTER_OBJECT(Gl1_SparcField);
 struct SparcConstraintGlRep: public NodeVisRep{
 	void render(const shared_ptr<Node>&, const GLViewInfo*);
 	void renderLabeledArrow(const Vector3r& pos, const Vector3r& vec, const Vector3r& color, Real num, bool posIsA, bool doubleHead=false);
-	WOO_CLASS_BASE_DOC_ATTRS(SparcConstraintGlRep,NodeVisRep,"Render static and kinematic constraints on Sparc nodes",
+	WO0_CLASS_BASE_DOC_ATTRS(SparcConstraintGlRep,NodeVisRep,"Render static and kinematic constraints on Sparc nodes",
 		((Vector3r,fixedV,Vector3r(NaN,NaN,NaN),,"Prescribed velocity value in local coords (nan if not prescribed)"))
 		((Vector3r,fixedT,Vector3r(NaN,NaN,NaN),,"Prescribed traction value in local coords (nan if not prescribed)"))
 		((Vector2r,vColor,Vector2r(0,.3),,"Color for rendering kinematic constraint."))

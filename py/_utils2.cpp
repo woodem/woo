@@ -42,7 +42,7 @@ py::object boxPsd(const AlignedBox3r& box, bool mass, int num, int mask, Vector2
 
 vector<shared_ptr<Contact> > createContacts(const vector<Particle::id_t>& ids1, const vector<Particle::id_t>& ids2, const vector<shared_ptr<CGeomFunctor> >& cgff, const vector<shared_ptr<CPhysFunctor> >& cpff, bool force){
 	if(ids1.size()!=ids2.size()) woo::ValueError("id1 and id2 arguments must have same length.");
-	if(cgff.size()+cpff.size()>0 && cgff.size()*cpff.size()==0) woo::ValueError("Either both CGeomFunctors and CPhysFunctors must be specified, or neither of them (now: "+lexical_cast<string>(cgff.size())+", "+lexical_cast<string>(cpff.size())+")");
+	if(cgff.size()+cpff.size()>0 && cgff.size()*cpff.size()==0) woo::ValueError("Either both CGeomFunctors and CPhysFunctors must be specified, or neither of them (now: "+to_string(cgff.size())+", "+to_string(cpff.size())+")");
 	Scene* scene=Master::instance().getScene().get(); shared_ptr<DemField> dem=DemFuncs::getDemField(scene);
 	shared_ptr<CGeomDispatcher> gDisp; shared_ptr<CPhysDispatcher> pDisp;
 	if(cgff.empty()){ // find dispatchers in current engines
@@ -65,7 +65,7 @@ vector<shared_ptr<Contact> > createContacts(const vector<Particle::id_t>& ids1, 
 	for(int k=0; k<(int)ids1.size(); k++){
 		Particle::id_t id1=ids1[k], id2=ids2[k];
 		const shared_ptr<Particle>& b1=dem->particles->safeGet(id1); const shared_ptr<Particle>& b2=dem->particles->safeGet(id2);
-		if(b1->contacts.find(id2)!=b1->contacts.end()) woo::ValueError("Contact ##"+lexical_cast<string>(id1)+"+"+lexical_cast<string>(id2)+" already exists.");
+		if(b1->contacts.find(id2)!=b1->contacts.end()) woo::ValueError("Contact ##"+to_string(id1)+"+"+to_string(id2)+" already exists.");
 		shared_ptr<Contact> C=gDisp->explicitAction(scene,b1,b2,/*force*/force);
 		if(force && !C) throw std::logic_error("CGeomFunctor did not create contact, although force==true");
 		if(!C) continue;
@@ -123,7 +123,7 @@ Real muStiffnessScaling(Real piHat=M_PI, bool skipFloaters=false, Real V=-1){
 	}
 	int N=0;
 	Real Rr2=0; // r'*r^2
-	FOREACH(const shared_ptr<Contact>& c, *dem->contacts){
+	for(const shared_ptr<Contact>& c: *dem->contacts){
 		const Particle *pA=c->leakPA(), *pB=c->leakPB();
 		if(!(dynamic_pointer_cast<Sphere>(pA->shape) && dynamic_pointer_cast<Sphere>(pB->shape))) continue;
 		if(skipFloaters && (
@@ -147,7 +147,7 @@ Matrix6r bestFitCompliance(){
 	// stuff data in here first
 	struct ContData{ Real hn,hs; Vector3r l,n,s,t; };
 	vector<ContData> CC;
-	FOREACH(const shared_ptr<Contact>& c, *dem->contacts){
+	for(const shared_ptr<Contact>& c: *dem->contacts){
 		const Particle *pA=c->leakPA(), *pB=c->leakPB();
 		if(!(dynamic_pointer_cast<Sphere>(pA->shape) && dynamic_pointer_cast<Sphere>(pB->shape))) continue;
 		const Matrix3r& trsf=c->geom->cast<L6Geom>().trsf;
@@ -155,11 +155,11 @@ Matrix6r bestFitCompliance(){
 		CC.push_back(cd);
 	}
 	Matrix3r AA(Matrix3r::Zero());
-	FOREACH(const ContData& c, CC){ for(int j:{0,1,2}) for(int n:{0,1,2}) AA(j,n)+=c.l[j]*c.l[n]; }
+	for(const ContData& c: CC){ for(int j:{0,1,2}) for(int n:{0,1,2}) AA(j,n)+=c.l[j]*c.l[n]; }
 	AA*=1/V;
 	AA=(Matrix3r::Ones().array()/AA.array()).matrix(); // componentwise reciprocal
 	Matrix6r H(Matrix6r::Zero());
-	FOREACH(const ContData& c, CC){
+	for(const ContData& c: CC){
 		for(int p=0; p<6; p++) for(int q=p;q<6;q++){
 			int i=voigtMap[p][q][0], j=voigtMap[p][q][1], k=voigtMap[p][q][2], l=voigtMap[p][q][3];
 			const Vector3r& n(c.n); const Vector3r& s(c.s);	const Vector3r& t(c.t);

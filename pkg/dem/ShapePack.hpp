@@ -9,7 +9,7 @@ struct SphereClumpGeom;
 struct RawShape: public Object{
 	// extra ctor straight from shape
 	RawShape(const shared_ptr<Shape>& sh);
-	string pyStr() const override {	return "<"+getClassName()+" @ "+boost::lexical_cast<string>(this)+": "+className+">"; }
+	string pyStr() const override {	return "<"+getClassName()+" @ "+ptr_to_string(this)+": "+className+">"; }
 	// if density is given, create DemData (and GlData) so that it is ready to be inserted into the simulation
 	shared_ptr<Shape> toShape(Real density=NaN, Real scale=1.) const;
 	void translate(const Vector3r& offset);

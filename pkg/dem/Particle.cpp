@@ -36,10 +36,10 @@ py::list Particle::pyCon()const{ py::list ret; for(const auto& i: contacts){ if(
 py::list Particle::pyTacts()const{	py::list ret; for(const auto& i: contacts){ if(i.second->isReal()) ret.append(i.second); } return ret;}
 
 void Particle::checkNodes(bool dyn, bool checkOne) const {
-	if(!shape || (checkOne  && shape->nodes.size()!=1) || (dyn && !shape->nodes[0]->hasData<DemData>())) woo::AttributeError("Particle #"+lexical_cast<string>(id)+" has no Shape"+(checkOne?string(", or the shape has no/multiple nodes")+string(!dyn?".":", or node.dem is None."):string(".")));
+	if(!shape || (checkOne  && shape->nodes.size()!=1) || (dyn && !shape->nodes[0]->hasData<DemData>())) woo::AttributeError("Particle #"+to_string(id)+" has no Shape"+(checkOne?string(", or the shape has no/multiple nodes")+string(!dyn?".":", or node.dem is None."):string(".")));
 }
 
-string Particle::pyStr() const { return "<Particle #"+to_string(id)+" ["+(shape?shape->getClassName():"no-shape")+"] @ "+lexical_cast<string>(this)+">"; }
+string Particle::pyStr() const { return "<Particle #"+to_string(id)+" ["+(shape?shape->getClassName():"no-shape")+"] @ "+ptr_to_string(this)+">"; }
 
 
 void Particle::selfTest(){
@@ -239,7 +239,7 @@ void DemData::blocked_vec_set(const std::string& dofs){
 		#define _GET_DOF(DOF_ANY,ch) if(c==ch) { flags|=DemData::DOF_ANY; continue; }
 		_GET_DOF(DOF_X,'x'); _GET_DOF(DOF_Y,'y'); _GET_DOF(DOF_Z,'z'); _GET_DOF(DOF_RX,'X'); _GET_DOF(DOF_RY,'Y'); _GET_DOF(DOF_RZ,'Z');
 		#undef _GET_DOF
-		throw std::invalid_argument("Invalid  DOF specification `"+lexical_cast<string>(c)+"' in '"+dofs+"', characters must be ∈{x,y,z,X,Y,Z}.");
+		throw std::invalid_argument("Invalid  DOF specification `"+to_string(c)+"' in '"+dofs+"', characters must be ∈{x,y,z,X,Y,Z}.");
 	}
 }
 
@@ -509,7 +509,7 @@ void DemField::removeParticle(Particle::id_t id){
 			if(dyn.linIx<0) continue; // node not in DemField.nodes
 			if(dyn.linIx>(int)nodes.size() || nodes[dyn.linIx].get()!=n.get()) throw std::runtime_error("Node in #"+to_string(id)+" has invalid linIx entry!");
 			LOG_DEBUG("Removing #{} / DemField::nodes[{}] (not used anymore)",id,dyn.linIx);
-			boost::mutex::scoped_lock lock(nodesMutex);
+			std::scoped_lock lock(nodesMutex);
 			if(saveDead) deadNodes.push_back(n);
 			(*nodes.rbegin())->getData<DemData>().linIx=dyn.linIx;
 			nodes[dyn.linIx]=*nodes.rbegin(); // move the last node to the current position
@@ -543,7 +543,7 @@ void DemField::removeClump(size_t linIx){
 			assert(p && p->shape && p->shape->nodes.size()>0);
 			for(auto& n: p->shape->nodes){
 				#ifdef WOO_DEBUG
-					if(std::find_if(cd.nodes.begin(),cd.nodes.end(),[&n](const shared_ptr<Node>& a)->bool{ return(a.get()==n.get()); })==cd.nodes.end()) throw std::runtime_error("#"+to_string(p->id)+" should contain node at "+lexical_cast<string>(n->pos.transpose()));
+					if(std::find_if(cd.nodes.begin(),cd.nodes.end(),[&n](const shared_ptr<Node>& a)->bool{ return(a.get()==n.get()); })==cd.nodes.end()) throw std::runtime_error("#"+to_string(p->id)+" should contain node at "+to_string(n->pos[0])+" "+to_string(n->pos[1])+" "+to_string(n->pos[2]));
 				#endif
 				n->getData<DemData>().setNoClump(); // fool the test in removeParticle
 			}
@@ -557,7 +557,7 @@ void DemField::removeClump(size_t linIx){
 	}
 	if(saveDead) deadNodes.push_back(node);
 	// remove the clump node here
-	boost::mutex::scoped_lock lock(nodesMutex);
+	std::scoped_lock lock(nodesMutex);
 	(*nodes.rbegin())->getData<DemData>().linIx=cd.linIx;
 	nodes[cd.linIx]=*nodes.rbegin();
 	nodes.resize(nodes.size()-1);

@@ -7,8 +7,9 @@
 #else
 	#include<pybind11/pybind11.h>
 #endif
-#include<boost/chrono/chrono.hpp>
-#include<boost/thread/mutex.hpp>
+#include<chrono>
+#include<thread>
+#include<mutex>
 
 #include<woo/lib/base/Types.hpp>
 #include<woo/lib/base/openmp-accu.hpp>
@@ -23,8 +24,8 @@ struct TimingInfo{
 	static delta getNow(bool evenIfDisabled=false)
 	{
 		if(!enabled && !evenIfDisabled) return 0L;
-		auto now=boost::chrono::steady_clock::now();
-		return delta(boost::chrono::duration_cast<boost::chrono::nanoseconds>(now.time_since_epoch()).count());
+		auto now=std::chrono::steady_clock::now();
+		return delta(std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count());
 	}
 	static bool enabled;
 };
@@ -42,7 +43,7 @@ struct TimingDeltas{
 		#ifdef WOO_OPENMP
 			// last time point, separate for each thread
 			vector<TimingInfo::delta> last;
-			boost::mutex mapMutex;
+			std::mutex mapMutex;
 			struct LabelCountTime{ string label; long nExec; TimingInfo::delta nsec; LabelCountTime(): nExec(0), nsec(0){}; };
 			std::map<int,LabelCountTime> timingMap;
 			vector<int> nThreads;

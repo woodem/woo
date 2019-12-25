@@ -2,39 +2,45 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 PROJECT(woo VERSION 1.2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 OPTION(WOO_DEBUG "Include debugging information" OFF)
 OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
-OPTION(WOO_VTK "Use VTK, enable related functionality" OFF)
-OPTION(WOO_HDF5 "Use HDF5, enable related functionality" OFF)
-# OPTION(WOO_OPENGL "Use OpenGL (requires QT5)" OFF)
+OPTION(WOO_VTK "Use VTK, enable related functionality" ON)
+OPTION(WOO_HDF5 "Use HDF5, enable related functionality" ON)
 OPTION(WOO_GTS "Use GTS (and build internal pygts), enable related functionality" ON)
-OPTION(WOO_QT5 "Build Qt5-based user interface" OFF)
+OPTION(WOO_QT5 "Build Qt5-based user interface (implies also OpenGL)" ON)
 OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
-OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" ON)
+OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" OFF)
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
-
+OPTION(WOO_CCACHE "Use ccache when compiling" ON)
+OPTION(WOO_CEREAL "Use cereal instead of boost::serialization (experimental!)" OFF)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
+
+if(DEFINED ENV{VIRTUAL_ENV})
+	if("${WOO_INSTALL_SCHEME}" STREQUAL "posix_user")
+		message(STATUS "Setting WOO_INSTALL_SCHEME to posix_prefix (in virtual environment)")
+		set(WOO_INSTALL_SCHEME "posix_prefix")
+	endif()
+endif()
 
 
 if(WOO_CLANG)
 	set(CMAKE_C_COMPILER clang-7)
 	set(CMAKE_CXX_COMPILER clang++-7)
-	#set(CMAKE_EXE_LINKER_FLAGS "-lz -fuse-ld=lld")
-	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-lambda-capture")
+	# https://github.com/pybind/pybind11/issues/1604#issuecomment-459796241
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
 else()
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
 endif(WOO_CLANG)
 
 # https://stackoverflow.com/a/24305849/761090
-find_program(CCACHE_FOUND "ccache")
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    # set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
+if(WOO_CCACHE)
+	find_program(CCACHE_FOUND "ccache" REQUIRED)
+	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+	# set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(WOO_CCACHE)
 
 # https://medium.com/@alasher/colored-c-compiler-output-with-ninja-clang-gcc-10bfe7f2b949
 option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
@@ -50,7 +56,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INSTALL_MESSAGE LAZY)
 
 find_package(Eigen3 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system serialization thread iostreams filesystem)
+find_package(Boost REQUIRED COMPONENTS serialization iostreams system)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 #include(FindPython3)
@@ -61,8 +67,10 @@ find_package(PythonLibs REQUIRED)
 set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
 find_package(Backward REQUIRED)
 
-find_package(VTK REQUIRED)
-add_definitions(-DWOO_VTK)
+if(WOO_VTK)
+	find_package(VTK REQUIRED)
+	add_definitions(-DWOO_VTK)
+endif()
 
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)
@@ -76,6 +84,11 @@ if(WOO_PYBIND11)
 	find_package(pybind11 REQUIRED)
 else()
 	find_package(Boost REQUIRED COMPONENTS python)
+endif()
+if(WOO_CEREAL)
+	# requires -DWOO_NOXML but that is set by default already
+	add_definitions(-DWOO_CEREAL)
+	# TODO: check headers and version
 endif()
 if(WOO_OPENMP)
 	add_definitions(-DWOO_OPENMP)
@@ -157,6 +170,9 @@ if(WOO_OPENMP)
 	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
+# don't compile XML serialization, binary works better
+add_definitions(-DWOO_NOXML)
+
 execute_process(COMMAND git log -1 --format=%h
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	OUTPUT_VARIABLE WOO_GIT_REVISION_HASH
@@ -207,8 +223,8 @@ add_definitions(-DWOO_SPDLOG)
 
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
 	set(WOO_MAIN_SCRIPT "woo-${WOO_FLAVOR}")
-	string(REGEX REPLACE "([^a-zA-Z0-9_])" "_" WOO_CXX_FLAVOR "${WOO_FLAVOR}")
-	set(CXX_INTERNAL "_cxxInternal_${WOO_CXX_FLAVOR}")
+	string(REGEX REPLACE "([^a-zA-Z0-9_])" "_" WOO_CXX_FLAVOR "_${WOO_FLAVOR}")
+	set(CXX_INTERNAL "_cxxInternal${WOO_CXX_FLAVOR}")
 else()
 	set(WOO_MAIN_SCRIPT "woo")
 	set(WOO_CXX_FLAVOR "")
@@ -383,11 +399,10 @@ target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local Backward::Backward)
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
 	Boost::serialization
-	Boost::system
-	Boost::thread
 	Boost::iostreams
 	Boost::boost
-	Boost::filesystem
+	Boost::system
+	stdc++fs
 	${VTK_LIBRARIES}
 )
 target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})
@@ -397,11 +412,11 @@ install(TARGETS ${CXX_INTERNAL}
 
 
 FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-file(WRITE "bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
-file(WRITE "bin/${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
+file(WRITE "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")
+file(WRITE "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}-batch" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.batch())\n")
 
 
-install(PROGRAMS "bin/${WOO_MAIN_SCRIPT}" "bin/${WOO_MAIN_SCRIPT}-batch"
+install(PROGRAMS "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}-batch"
 	DESTINATION ${WOO_BIN_DIR}
 )
 
@@ -462,7 +477,6 @@ install(FILES
 	py/pre/horse.py
 	py/pre/__init__.py
 	py/pre/psdrender.py
-	py/pre/staticmixer.py
 	py/pre/toys.py
 	py/pre/triax.py
 	DESTINATION ${WOO_MODULEDIR}/pre

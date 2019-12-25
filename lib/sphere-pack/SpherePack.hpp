@@ -3,7 +3,7 @@
 #pragma once
 
 #include<vector>
-#include<string>	
+#include<string>
 #include<limits>
 
 #include<woo/lib/base/Types.hpp>
@@ -136,7 +136,7 @@ public:
 
 	// iteration 
 	size_t len() const{ return pack.size(); }
-	py::tuple getitem(size_t idx){ if(/*idx<0||*/idx>=pack.size()) throw runtime_error("Index "+lexical_cast<string>(idx)+" out of range 0.."+lexical_cast<string>(pack.size()-1)); return pack[idx].asTuple(); }
+	py::tuple getitem(size_t idx){ if(/*idx<0||*/idx>=pack.size()) throw runtime_error("Index "+to_string(idx)+" out of range 0.."+to_string(pack.size()-1)); return pack[idx].asTuple(); }
 	struct _iterator{
 		const SpherePack& sPack; size_t pos;
 		_iterator(const SpherePack& _sPack): sPack(_sPack), pos(0){}

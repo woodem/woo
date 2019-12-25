@@ -18,7 +18,7 @@ struct ContactContainer: public Object{
 	/* internal data */
 		// created in the ctor
 		#if defined(WOO_OPENMP) || defined(WOO_OPENGL)
-			boost::mutex manipMutex; // to synchronize with rendering, and between threads
+			std::mutex manipMutex; // to synchronize with rendering, and between threads
 		#endif
 		DemField* dem; // backptr to DemField, set by DemField::postLoad; do not modify!
 		ParticleContainer* particles;

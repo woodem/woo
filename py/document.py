@@ -34,6 +34,8 @@ def fixDocstring(s):
     s=s.replace(':ref:',':obj:')
     s=re.sub(r'(?<!\\)\$([^\$]+)(?<!\\)\$',r'\ :math:`\1`\ ',s)
     s=re.sub(r'\\\$',r'$',s)
+    if 'Overloaded function.' in s:
+        print(100*'#\n\n'+s)
     return s
 
 allWooClasses,allWooMods=set(),set()
@@ -271,15 +273,18 @@ def classSrcHyperlink(klass):
 
         
     if not klass._classTrait: return None
-    f=klass._classTrait.file
-    if f.startswith(woo.config.sourceRoot): commonRoot=woo.config.sourceRoot
-    elif f.startswith(woo.config.buildRoot): commonRoot=woo.config.buildRoot
-    elif not f.startswith('/'): commonRoot=''
-    else:
-        print('File where class is defined (%s) does not start with source root (%s) or build root (%s)'%(f,woo.config.sourceRoot,woo.config.buildRoot))
-        return None
-    # +1 removes underscore in woo/...
-    f2=f[len(commonRoot)+(1 if commonRoot else 0):] 
+    f=os.path.abspath(woo.config.buildRoot+'/'+klass._classTrait.file)
+    src=os.path.abspath(woo.config.sourceRoot)
+    if not f.startswith(src): print('Absolute source path %s does not start with absolute source dir %s!'%(f,src))
+    f2=f[len(src)] 
+    if 0:
+        if f.startswith(woo.config.sourceRoot): commonRoot=woo.config.sourceRoot
+        elif f.startswith(woo.config.buildRoot): commonRoot=woo.config.buildRoot
+        elif not f.startswith('/'): commonRoot=''
+        else:
+            print('File where class is defined (%s) does not start with source root (%s) or build root (%s)'%(f,woo.config.sourceRoot,woo.config.buildRoot))
+            return None
+        # +1 removes underscore in woo/...
     # if this header was copied into include/, get rid of that now
     m=re.match('include/woo/(.*)',f2)
     if m: f2=m.group(1)
@@ -363,9 +368,12 @@ def oneModuleWithSubmodules(mod,out,exclude=None,level=0,importedInto=None):
         kOut.write('   :members:\n')
         # those will be documented explicitly
         ex=[t.name for t in k._attrTraits]
-        # exclude __init__ which would be shown by special-members, but is really useless for Object (always the same)
-        # if issubclass(k,woo.core.Object):
-        ex.append('__init__')
+        if issubclass(k,woo.core.Object):
+            # this does not seem to work really...
+            # exclude __init__ which would be shown by special-members, but is really useless for Object (always the same)
+            ex.append('__init__')
+            ex.append('__getstate__')
+            ex.append('__setstate__')
         if ex: kOut.write('   :exclude-members: %s\n'%(', '.join(ex)))
         kOut.write('   :special-members:\n')
 

@@ -6,6 +6,7 @@
 #include<boost/range/algorithm/set_algorithm.hpp>
 
 WOO_PLUGIN(dem,(GridStore));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_GridStore__CLASS_BASE_DOC_ATTRS_PY);
 
 WOO_IMPL_LOGGER(GridStore);
 
@@ -30,7 +31,7 @@ void GridStore::postLoad(GridStore&,void* I){
 	if(denseLock) nMutexes+=gridSize.prod();
 	mutexes.reserve(nMutexes);
 	// mutexes will be deleted automatically when the container is freed
-	for(size_t i=0; i<nMutexes; i++) mutexes.push_back(new boost::mutex);
+	for(size_t i=0; i<nMutexes; i++) mutexes.push_back(new std::mutex);
 	LOG_TRACE("{} mutexes, {} cells, {} extension maps",mutexes.size(),gridSize.prod(),exNumMaps);
 	assert(mutexes.size()==(size_t)(exNumMaps+(denseLock?gridSize.prod():0)));
 }
@@ -123,7 +124,7 @@ GridStore::gridExT& GridStore::getGridEx(const Vector3i& ijk) {
 void GridStore::protected_append(const Vector3i& ijk, const GridStore::id_t& id){
 	checkIndices(ijk);
 	assert(denseLock);
-	boost::mutex::scoped_lock lock(*getMutex</*mutexEx*/false>(ijk));
+	std::scoped_lock lock(*getMutex</*mutexEx*/false>(ijk));
 	append(ijk,id);
 }
 
@@ -143,7 +144,8 @@ void GridStore::append(const Vector3i& ijk, const GridStore::id_t& id, bool noSi
 	} else {
 		assert(exIniSize>0);
 		auto& gridEx=getGridEx(ijk);
-		boost::mutex::scoped_lock lock(*getMutex</*mutexEx*/true>(ijk));
+		auto* ijkMutex=getMutex</*mutexEx*/true>(ijk);
+		ijkMutex->lock();
 		if(oldCellSz==denseSz){ 
 			// thread oldCellSz==denseSz, but extension vector was created in the meantime by another thread - try again
 			if(gridEx.find(ijk)!=gridEx.end()){
@@ -155,7 +157,7 @@ void GridStore::append(const Vector3i& ijk, const GridStore::id_t& id, bool noSi
 				#ifdef WOO_OPENMP
 					assert(omp_in_parallel());
 				#endif
-				lock.unlock();
+				ijkMutex->unlock();
 				append(ijk,id,/*noSizeInc*/true); // try again
 				return;
 			}
@@ -171,7 +173,7 @@ void GridStore::append(const Vector3i& ijk, const GridStore::id_t& id, bool noSi
 				#ifdef WOO_OPENMP
 					assert(omp_in_parallel());
 				#endif
-				lock.unlock();
+				ijkMutex->unlock();
 				append(ijk,id,/*noSizeInc*/true); // try again
 				return;
 			}
@@ -183,6 +185,7 @@ void GridStore::append(const Vector3i& ijk, const GridStore::id_t& id, bool noSi
 			assert(exIx<=ex.size());
 			ex[exIx]=id;
 		}
+		ijkMutex->unlock();
 	}
 }
 
@@ -197,9 +200,9 @@ void GridStore::pyAppend(const Vector3i& ijk, GridStore::id_t id) {
 }
 
 void GridStore::pyDelItem(const Vector3i& ijk){
-	if(denseLock){ boost::mutex::scoped_lock(*getMutex</*mutexEx*/false>(ijk)); clear_dense(ijk); }
+	if(denseLock){ std::scoped_lock(*getMutex</*mutexEx*/false>(ijk)); clear_dense(ijk); }
 	else clear_dense(ijk);
-	boost::mutex::scoped_lock(*getMutex</*mutexEx*/true>(ijk));
+	std::scoped_lock(*getMutex</*mutexEx*/true>(ijk));
 	auto& gridEx=getGridEx(ijk);
 	gridEx.erase(ijk);
 }

@@ -6,8 +6,9 @@
 #include<woo/lib/pyutil/gil.hpp>
 
 #include<woo/lib/base/Math.hpp>
-#include<boost/date_time/posix_time/posix_time.hpp>
 #include<boost/algorithm/string.hpp>
+//#include<boost/function.hpp>
+//#include<boost/bind.hpp>
 
 #ifndef __MINGW64__
 	#include<unistd.h> // getpid
@@ -35,23 +36,24 @@ void Scene::pyRun(long steps, bool wait, Real time_){
 	except.reset();
 	if(running()) throw std::runtime_error("Scene.run: already running");
 	{
-		boost::mutex::scoped_lock l(runMutex);
+		std::scoped_lock l(runMutex);
 		if(steps>0) stopAtStep=step+steps;
 		if(time_>0) stopAtTime=time+time_;
 		/* run really */
 		runningFlag=true;
 		stopFlag=false;
-		boost::function0<void> loop(boost::bind(&Scene::backgroundLoop,this));
-		boost::thread th(loop);
+		// boost::function0<void> loop(boost::bind(&Scene::backgroundLoop,this));
+		std::thread th([this](){ this->backgroundLoop(); });
 		/* runs in separate thread now */
 		bgThreadId=th.get_id();
+		th.detach();
 	}
 	if(wait) pyWait();
 }
 
 void Scene::pyStop(){
 	if(!running()) return;
-	{boost::mutex::scoped_lock l(runMutex); stopFlag=true; }
+	{std::scoped_lock l(runMutex); stopFlag=true; }
 }
 
 void Scene::pyOne(){
@@ -63,7 +65,7 @@ void Scene::pyOne(){
 void Scene::pyWait(){
 	if(!running()) return;
 	Py_BEGIN_ALLOW_THREADS;
-		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) boost::this_thread::sleep(boost::posix_time::milliseconds(40));
+		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	Py_END_ALLOW_THREADS;
 	// handle possible exception: reset it and rethrow
 	if(!except) return;
@@ -72,7 +74,7 @@ void Scene::pyWait(){
 	throw e;
 }
 
-bool Scene::running(){ boost::mutex::scoped_lock l(runMutex); return runningFlag; }
+bool Scene::running(){ std::scoped_lock l(runMutex); return runningFlag; }
 
 // this function runs in background thread
 // exception and threads don't work well, so any exception caught is
@@ -81,19 +83,20 @@ void Scene::backgroundLoop(){
 	bool runAtHook=false; // set to true if stopping because of stopAtStep/stopAtTime
 	try{
 		while(true){
-			boost::this_thread::interruption_point();
+			// FIXME: what is the equivalent now?
+			// FIXME: boost::this_thread::interruption_point();
 			if(subStepping){ LOG_INFO("Scene.run: sub-stepping disabled."); subStepping=false; }
 			doOneStep();
 			// check stopAtStep, stopAtTime
 			if((stopAtStep>0 && step==stopAtStep) || (stopAtTime>0 && time>=stopAtTime && time<stopAtTime+dt)){
-				boost::mutex::scoped_lock l(runMutex); stopFlag=true; runAtHook=true;
+				std::scoped_lock<std::mutex> l(runMutex); stopFlag=true; runAtHook=true;
 			}
 			// stop if requested
 			if(stopFlagSet()){
 				if(runAtHook && !stopAtHook.empty()){ LOG_INFO("Running Scene.stopAtHook."); Engine::runPy_generic("Scene.stopAtHook",stopAtHook,/*scene*/this); }
-				boost::mutex::scoped_lock l(runMutex); runningFlag=false; return;
+				std::scoped_lock l(runMutex); runningFlag=false; return;
 			}
-			if(throttle>0){ boost::this_thread::sleep(boost::posix_time::milliseconds(int(1000*throttle))); }
+			if(throttle>0){ std::this_thread::sleep_for(std::chrono::milliseconds(int(1000*throttle))); }
 		}
 	} catch(std::exception& e){
 		LOG_ERROR("Exception: {}",e.what());
@@ -103,7 +106,7 @@ void Scene::backgroundLoop(){
 		#else
 			except=boost::make_shared<std::exception>(e);
 		#endif
-		{ boost::mutex::scoped_lock l(runMutex); runningFlag=false; }
+		{ std::scoped_lock l(runMutex); runningFlag=false; }
 		return;
 	}
 }
@@ -115,16 +118,16 @@ void Scene::PausedContextManager::__enter__(){
 	// not release the lock, and we would get deadlocked.
 
 	// this fails to detect when called from within engine with S.step() rather than S.run()
-	if(boost::this_thread::get_id()==scene->bgThreadId){
+	if(std::this_thread::get_id()==scene->bgThreadId){
 		if(allowBg){ locked=false; return; }
 		throw std::runtime_error("Scene.paused() may not be called from the engine thread!");
 	}
 	#ifdef WOO_LOOP_MUTEX_HELP
 		engineLoopMutexWaiting=true;
 	#endif
-	// boost::timed_mutex::scoped_lock lock(scene->engineLoopMutex,boost::defer_lock());
+	// std::timed_mutex::scoped_lock lock(scene->engineLoopMutex,boost::defer_lock());
 	Py_BEGIN_ALLOW_THREADS;
-		while(!scene->engineLoopMutex.timed_lock(boost::posix_time::seconds(10))){
+		while(!scene->engineLoopMutex.try_lock_for(std::chrono::seconds(10))){
 			LOG_WARN("Waiting for lock for 10 seconds; deadlocked? (Scene.paused() must not be called from within the engine loop, through PyRunner or otherwise.");
 		}
 	Py_END_ALLOW_THREADS;
@@ -169,8 +172,12 @@ void Scene::fillDefaultTags(){
 		tags["user"]=(user?user:"[unknown user]")+string("@")+string(ret!=0?hostname:"[hostname lookup failed]");
 	#endif
 		
-	tags["isoTime"]=boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
-	string id=boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time())+"p"+lexical_cast<string>(
+	char tstr[100];
+	std::time_t t=std::time(nullptr);
+	std::strftime(tstr,sizeof(tstr),"%FT%T",std::localtime(&t));
+
+	tags["isoTime"]=string(tstr);
+	string id=string(tstr)+"p"+to_string(
 	#ifndef __MINGW64__
 		getpid()
 	#else
@@ -275,7 +282,7 @@ void Scene::saveTmp(const string& slot, bool quiet){
 
 void Scene::postLoad(Scene&,void*){
 	if(!clock0adjusted){
-		clock0-=boost::posix_time::seconds(preSaveDuration);
+		clock0-=std::chrono::seconds(preSaveDuration);
 		clock0adjusted=true;
 	}
 	#ifdef WOO_OPENCL
@@ -347,10 +354,10 @@ void Scene::doOneStep(){
 	#ifdef WOO_LOOP_MUTEX_HELP
 		// add some daly to help the other thread locking the mutex; will be removed once 
 		if(engineLoopMutexWaiting){
-				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
 	#endif
-	boost::timed_mutex::scoped_lock lock(engineLoopMutex);
+	std::scoped_lock<std::timed_mutex> lock(engineLoopMutex);
 
 	if(runInternalConsistencyChecks){
 		runInternalConsistencyChecks=false;

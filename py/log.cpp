@@ -17,7 +17,7 @@ enum{ll_TRACE,ll_DEBUG,ll_INFO,ll_WARN,ll_ERROR,ll_FATAL};
 				case ll_WARN:  newLevel=spdlog::level::level_enum::warn; break;
 				case ll_ERROR: newLevel=spdlog::level::level_enum::err; break;
 				case ll_FATAL: newLevel=spdlog::level::level_enum::critical; break;
-			default: throw std::invalid_argument("Unrecognized logging level "+lexical_cast<std::string>(level));
+			default: throw std::invalid_argument("Unrecognized logging level "+to_string(level));
 		}
 		std::shared_ptr<spdlog::logger> log;
 		// apply to all loggers (TODO: match wildcard)

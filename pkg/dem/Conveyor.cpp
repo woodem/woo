@@ -387,7 +387,7 @@ void ConveyorInlet::run(){
 			}
 
 			#ifdef WOO_OPENGL
-				boost::mutex::scoped_lock lock(dem->nodesMutex);
+				std::scoped_lock lock(dem->nodesMutex);
 			#endif
 			dyn.linIx=dem->nodes.size();
 			dem->nodes.push_back(n);

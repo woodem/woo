@@ -142,7 +142,7 @@ void InterpolatedMotion::velocity(const Scene* scene, const shared_ptr<Node>& n)
 
 void ReadForce::readForce(const Scene* scene, const shared_ptr<Node>& n){
 	{
-		boost::mutex::scoped_lock l(lock);
+		std::scoped_lock l(lock);
 		// first comes, first resets for this step
 		if(stepLast!=scene->step){ stepLast=scene->step; F.reset(); T.reset(); }
 	}
@@ -170,7 +170,7 @@ void VelocityAndReadForce::velocity(const Scene* scene, const shared_ptr<Node>& 
 
 void VelocityAndReadForce::readForce(const Scene* scene, const shared_ptr<Node>& n){
 	{
-		boost::mutex::scoped_lock l(lock);
+		std::scoped_lock l(lock);
 		// first comes, first resets for this step
 		if(stepLast!=scene->step){
 			stepLast=scene->step;

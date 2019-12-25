@@ -10,7 +10,6 @@
 #include<string>
 #include<stdexcept>
 
-#include<boost/filesystem/convenience.hpp>
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>
 
@@ -121,7 +120,7 @@ void wooInitialize(){
 	#if defined(WOO_DEBUG) && !defined(__MINGW64__)
 		std::ofstream gdbBatch;
 		master.gdbCrashBatch=master.tmpFilename();
-		gdbBatch.open(master.gdbCrashBatch.c_str()); gdbBatch<<"attach "<<lexical_cast<string>(getpid())<<"\nset pagination off\nthread info\nthread apply all backtrace\ndetach\nquit\n"; gdbBatch.close();
+		gdbBatch.open(master.gdbCrashBatch.c_str()); gdbBatch<<"attach "<<to_string(getpid())<<"\nset pagination off\nthread info\nthread apply all backtrace\ndetach\nquit\n"; gdbBatch.close();
 		// XXX DISABLED for now
 		#if 0
 			signal(SIGABRT,crashHandler);

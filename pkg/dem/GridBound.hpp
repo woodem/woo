@@ -16,14 +16,18 @@ struct GridBound: public Bound{
 	void setNodePlay_box0(const shared_ptr<Shape>& s, const AlignedBox3r& box);
 	// check if all nodes are inside their respective nodePlay boxes
 	bool insideNodePlay(const shared_ptr<Shape>& s) const;
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR(GridBound,Bound,"Bound defined via grid cell indices (used with :obj:`GridCollider`)",/*attrs*/
-		#ifdef WOO_GRID_BOUND_DEBUG
-			((vector<Vector3i>,cells,,AttrTrait<>().noGui(),"Cells touched by this particle"))
-		#endif
-		((vector<AlignedBox3r>,nodePlay,,AttrTrait<>().readonly(),"Space in which respective nodes of the shapes may be without triggering new contact detection"))
-		,
-		/*ctor*/createIndex();
-	);
+	#ifdef WOO_GRID_BOUND_DEBUG
+		#define woo_dem_GridBound__GRID_BOUND_DEBUG_ATTRS ((vector<Vector3i>,cells,,AttrTrait<>().noGui(),"Cells touched by this particle"))
+	#else
+		#define woo_dem_GridBound__GRID_BOUND_DEBUG_ATTRS
+	#endif
+
+	#define woo_dem_GridBound__CLASS_BASE_DOC_ATTRS_CTOR \
+		GridBound,Bound,"Bound defined via grid cell indices (used with :obj:`GridCollider`)", \
+		((vector<AlignedBox3r>,nodePlay,,AttrTrait<>().readonly(),"Space in which respective nodes of the shapes may be without triggering new contact detection")) \
+		woo_dem_GridBound__GRID_BOUND_DEBUG_ATTRS \
+		, /*ctor*/createIndex();
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_GridBound__CLASS_BASE_DOC_ATTRS_CTOR);
 	REGISTER_CLASS_INDEX(GridBound,Bound);
 };
 WOO_REGISTER_OBJECT(GridBound);
@@ -32,7 +36,9 @@ WOO_REGISTER_OBJECT(GridBound);
 struct Gl1_GridBound: public GlBoundFunctor{
 	void go(const shared_ptr<Bound>&) override {}
 	RENDERS(GridBound);
-	WOO_CLASS_BASE_DOC(Gl1_GridBound,GlBoundFunctor,"Render :obj:`GridBound` objects).");
+	#define woo_gl_Gl1_GridBound__CLASS_BASE_DOC \
+		Gl1_GridBound,GlBoundFunctor,"Render :obj:`GridBound` objects)."
+	WOO_DECL__CLASS_BASE_DOC(woo_gl_Gl1_GridBound__CLASS_BASE_DOC);
 };
 WOO_REGISTER_OBJECT(Gl1_GridBound);
 #endif
@@ -68,9 +74,10 @@ WOO_REGISTER_OBJECT(Grid1_Sphere);
 struct Grid1_Wall: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Wall);
-	WOO_CLASS_BASE_DOC_ATTRS(Grid1_Wall,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Wall`, used with :obj:`GridCollider`.",
+	#define woo_dem_Grid1_Wall__CLASS_BASE_DOC_ATTRS \
+		Grid1_Wall,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Wall`, used with :obj:`GridCollider`.", \
 		((bool,movable,false,,"Set to allow movable walls (with grid enlarged by :obj:`GridCollider.verletDist`. If false and a movable wall is encountered, an exception is raised."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Wall__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Grid1_Wall);
 
@@ -78,9 +85,10 @@ WOO_REGISTER_OBJECT(Grid1_Wall);
 struct Grid1_InfCylinder: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(InfCylinder);
-	WOO_CLASS_BASE_DOC_ATTRS(Grid1_InfCylinder,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`InfCylinder`, used with :obj:`GridCollider`.",
+	#define woo_dem_Grid1_InfCylinder__CLASS_BASE_DOC_ATTRS \
+		Grid1_InfCylinder,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`InfCylinder`, used with :obj:`GridCollider`.", \
 		((bool,movable,false,,"Set to allow movable cylinders (with grid enlarged by :obj:`GridCollider.verletDist`. If false and a moving cylinder is encountered, an exception is raised."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_InfCylinder__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Grid1_InfCylinder);
 
@@ -89,8 +97,9 @@ WOO_REGISTER_OBJECT(Grid1_InfCylinder);
 struct Grid1_Facet: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Facet);
-	WOO_CLASS_BASE_DOC_ATTRS(Grid1_Facet,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Facet`, used with :obj:`GridCollider`.",
+	#define woo_dem_Grid1_Facet__CLASS_BASE_DOC_ATTRS \
+	Grid1_Facet,GridBoundFunctor,"Functor filling :obj:`GridStore` from :obj:`Facet`, used with :obj:`GridCollider`.", \
 		((bool,movable,false,,"Set to allow movable facets (with grid enlarged by :obj:`GridCollider.verletDist`. If false and a moving facet is encountered, an exception is raised."))
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Grid1_Facet__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Grid1_Facet);

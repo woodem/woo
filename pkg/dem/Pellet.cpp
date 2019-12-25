@@ -32,7 +32,7 @@ void Law2_L6Geom_PelletPhys_Pellet::tryAddDissipState(int what, Real E, const sh
 	for(const Particle* p: {C->leakPA(), C->leakPB()}){
 		if(!p->matState) continue;
 		assert(dynamic_cast<PelletMatState*>(p->matState.get()));
-		boost::mutex::scoped_lock l(p->matState->lock);
+		std::scoped_lock l(p->matState->lock);
 		auto& pms=p->matState->cast<PelletMatState>();
 		switch(what){
 			case DISSIP_NORM_PLAST: pms.normPlast+=E/2.; break; 
@@ -95,7 +95,7 @@ bool Law2_L6Geom_PelletPhys_Pellet::go(const shared_ptr<CGeom>& cg, const shared
 						Real r01=(s.radius-rMin)/(r0-rMin);
 						if(thinExp>0) dRad*=pow(r01,thinExp);
 						if(thinRefRad>0.) dRad*=pow(r0/thinRefRad,thinRateExp);
-						boost::mutex::scoped_lock lock(s.nodes[0]->getData<DemData>().lock);
+						std::scoped_lock lock(s.nodes[0]->getData<DemData>().lock);
 						// cerr<<"#"<<p->id<<": radius "<<s.radius<<" -> "<<s.radius-dRad<<endl;
 						s.radius=max(rMin,s.radius-dRad*r01);
 						s.color=CompUtils::clamped(1-(s.radius-rMin)/(r0-rMin),0,1);
@@ -164,7 +164,7 @@ void PelletAgglomerator::run(){
 			if(lambda>0){
 				other->shape->nodes[0]->getData<DemData>().angVel*=(1-lambda*scene->dt);
 			}
-			boost::mutex::scoped_lock l(pms.lock);
+			std::scoped_lock l(pms.lock);
 			pms.cumAgglomMass+=dMass;
 			pms.cumAgglomAngle+=c->geom->cast<L6Geom>().angVel.tail<2>().norm()*scene->dt;
 		}

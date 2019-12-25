@@ -14,7 +14,6 @@
 
 #include<QMouseEvent>
 
-#include<boost/date_time/posix_time/posix_time.hpp>
 #include<set>
 
 
@@ -123,11 +122,10 @@ class GLViewer : public QGLViewer
 		int manipulatedClipPlane;
 		set<int> boundClipPlanes;
 		shared_ptr<qglviewer::LocalConstraint> xyPlaneConstraint;
-		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+lexical_cast<string>(i+1);return ret;}
+		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+to_string(i+1); return ret;}
 
 		// set initial view as specified by Renderer::iniViewDir and friends
 		void setInitialView();
-		// boost::posix_time::ptime last_user_event;
 
      public:
 		//virtual void updateGL(void);
@@ -194,7 +192,6 @@ class GLViewer : public QGLViewer
 		string nextSnapFile;
 		bool nextSnapMsg; // whether there will be message informing where the snapshot was saved; disabled from SnapshotEngine, and recovered after every snapshot
 
-		// boost::posix_time::ptime getLastUserEvent();
 
 		// called from the init routine
 		// http://stackoverflow.com/a/20425778/761090
@@ -229,7 +226,7 @@ Use if you need to manipulate GL context in some way.
 The ctor doesn't return until the lock has been acquired
 and the lock is released when the GLLock object is desctructed;
 */
-class GLLock: public boost::try_mutex::scoped_lock{
+class GLLock: public std::scoped_lock<std::mutex>{
 	GLViewer* glv;
 	public:
 		GLLock(GLViewer* _glv);

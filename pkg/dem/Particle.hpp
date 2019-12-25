@@ -152,14 +152,14 @@ struct Impose: public Object{
 	bool isFirstStepRun(const Scene* scene, Real* _timeLast=nullptr){
 		// this does not need to be locked (hopefully)
 		if(stepLast==scene->step) return false;
-		boost::mutex::scoped_lock l(lock);
+		std::scoped_lock l(lock);
 		if(stepLast==scene->step) return false; // test again under the lock, in case it changed meanwhile
 		stepLast=scene->step;
         if(_timeLast) *_timeLast=timeLast;
         timeLast=scene->time;
 		return true;
 	}
-	boost::mutex lock;
+	std::mutex lock;
 	// INIT_VELOCITY is used in LawTesterStage, but not by Impose classes
 	enum{ NONE=0, VELOCITY=1, FORCE=2, INIT_VELOCITY=4, READ_FORCE=8 };
 
@@ -183,7 +183,7 @@ WOO_REGISTER_OBJECT(Impose);
 
 
 struct MatState: public Object{
-	boost::mutex lock;
+	std::mutex lock;
 	// returns scalar for rendering purposes 
 	virtual size_t getNumScalars() const { return 0; }
 	virtual Real getScalar(int index, const Real& time, const long& step, const Real& smooth=0){ return NaN; }
@@ -262,8 +262,8 @@ public:
 	void setDampingSkip(bool skip) { if(!skip) flags&=~DAMPING_SKIP; else flags|=DAMPING_SKIP; }
 
 	void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override;
-	void addForceTorque(const Vector3r& f, const Vector3r& t=Vector3r::Zero()){ boost::mutex::scoped_lock l(lock); force+=f; torque+=t; }
-	void addForce(const Vector3r& f){ boost::mutex::scoped_lock l(lock); force+=f; }
+	void addForceTorque(const Vector3r& f, const Vector3r& t=Vector3r::Zero()){ std::scoped_lock l(lock); force+=f; torque+=t; }
+	void addForce(const Vector3r& f){ std::scoped_lock l(lock); force+=f; }
 
 	// get kinetic energy of given node
 	static Real getEk_any(const shared_ptr<Node>& n, bool trans, bool rot, Scene* scene);
@@ -331,7 +331,7 @@ struct DemField: public Field{
 	void removeClump(size_t id);
 	vector<shared_ptr<Node>> splitNode(const shared_ptr<Node>&, const vector<shared_ptr<Particle>>& pp, const Real massMult=NaN, const Real inertiaMult=NaN);
 	AlignedBox3r renderingBbox() const override; // overrides Field::renderingBbox
-	boost::mutex nodesMutex; // sync adding nodes with the renderer, which might otherwise crash
+	std::mutex nodesMutex; // sync adding nodes with the renderer, which might otherwise crash
 
 	void selfTest() override;
 
@@ -494,7 +494,6 @@ struct Shape: public Object, public Indexable{
 WOO_REGISTER_OBJECT(Shape);
 
 struct Material: public Object, public Indexable{
-	// XXX: is createIndex() called here at all??
 	#define woo_dem_Material__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		Material,Object,ClassTrait().doc("Particle material").section("Material properties","TODO",{"MatState"}), \
 		((Real,density,1000,AttrTrait<>().densityUnit(),"Density")) \

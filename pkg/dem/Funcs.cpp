@@ -37,7 +37,7 @@ WOO_IMPL_LOGGER(DemFuncs);
 // to be used in Python wrappers, to get the DEM field
 shared_ptr<DemField> DemFuncs::getDemField(const Scene* scene){
 	shared_ptr<DemField> ret;
-	FOREACH(const shared_ptr<Field>& f, scene->fields){
+	for(const shared_ptr<Field>& f: scene->fields){
 		if(dynamic_pointer_cast<DemField>(f)){
 			if(ret) throw std::runtime_error("Ambiguous: more than one DemField in Scene.fields.");
 			ret=static_pointer_cast<DemField>(f);
@@ -193,7 +193,7 @@ std::tuple</*stress*/Matrix3r,/*stiffness*/Matrix6r> DemFuncs::stressStiffness(c
 		Vector3r posA=pA->shape->nodes[0]->pos-(scene->isPeriodic?scene->cell->intrShiftPos(C->cellDist):Vector3r::Zero());
 		if(pA->shape->nodes.size()!=1 || pB->shape->nodes.size()!=1){
 			if(skipMultinodal) continue;
-			//else woo::ValueError("Particle "+lexical_cast<string>(pA->shape->nodes.size()!=1? pA->id : pB->id)+" has more than one node; to skip contacts with such particles, say skipMultinodal=True");
+			//else woo::ValueError("Particle "+to_string(pA->shape->nodes.size()!=1? pA->id : pB->id)+" has more than one node; to skip contacts with such particles, say skipMultinodal=True");
 			if(pA->shape->nodes.size()!=1) posA=C->geom->node->pos;
 			if(pB->shape->nodes.size()!=1) posB=C->geom->node->pos;
 		}
@@ -250,7 +250,7 @@ Real DemFuncs::unbalancedForce(const Scene* scene, const DemField* dem, bool use
 	Real meanF=sumF/nb;
 	// get mean force on interactions
 	sumF=0; nb=0;
-	FOREACH(const shared_ptr<Contact>& C, *dem->contacts){
+	for(const shared_ptr<Contact>& C: *dem->contacts){
 		sumF+=C->phys->force.norm(); nb++;
 	}
 	sumF/=nb;

@@ -25,11 +25,15 @@
 /*
  * use Eigen http://eigen.tuxfamily.org, version at least 3
  */
-#ifndef WOO_ALIGN
-	// IMPORTANT!!
-	#define EIGEN_DONT_ALIGN
+#ifndef WOO_PYBIND11
+	#ifndef WOO_ALIGN
+		// IMPORTANT!!
+		#define EIGEN_DONT_ALIGN
+	#else
+		#error Building with WOO_ALIGN is currently broken and unsupported.
+	#endif
 #else
-	#error Building with WOO_ALIGN is currently broken and unsupported.
+	// alignment should work with pybind11
 #endif
 
 

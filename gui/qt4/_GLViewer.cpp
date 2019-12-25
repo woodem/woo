@@ -12,6 +12,7 @@
 #include<boost/algorithm/string.hpp>
 using boost::algorithm::iends_with;
 
+#include<iomanip>
 
 #ifdef WOO_SPDLOG
 	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");
@@ -35,13 +36,13 @@ void restoreGLViewerState_num(int dispStateNo){
 #endif
 
 
-qglviewer::Vec tuple2vec(py::tuple t){ qglviewer::Vec ret; for(int i=0;i<3;i++){py::extract<Real> e(t[i]); if(!e.check()) throw invalid_argument("Element #"+lexical_cast<string>(i)+" is not a number"); ret[i]=e();} return ret;};
+qglviewer::Vec tuple2vec(py::tuple t){ qglviewer::Vec ret; for(int i=0;i<3;i++){py::extract<Real> e(t[i]); if(!e.check()) throw invalid_argument("Element #"+to_string(i)+" is not a number"); ret[i]=e();} return ret;};
 py::tuple vec2tuple(qglviewer::Vec v){return py::make_tuple(v[0],v[1],v[2]);};
 
 class pyGLViewer{
 	const size_t viewNo;
 	public:
-		#define GLV if((OpenGLManager::self->views.size()<=viewNo) || !(OpenGLManager::self->views[viewNo])) throw runtime_error("No view #"+lexical_cast<string>(viewNo)); GLViewer* glv=OpenGLManager::self->views[viewNo].get();
+		#define GLV if((OpenGLManager::self->views.size()<=viewNo) || !(OpenGLManager::self->views[viewNo])) throw runtime_error("No view #"+to_string(viewNo)); GLViewer* glv=OpenGLManager::self->views[viewNo].get();
 		pyGLViewer(size_t _viewNo=0): viewNo(_viewNo){}
 		void close(){ GLV; QCloseEvent* e(new QCloseEvent); QApplication::postEvent(glv,e); }
 		#define VEC_GET_SET(property,getter,setter) Vector3r get_##property(){GLV; qglviewer::Vec v=getter(); return Vector3r(v[0],v[1],v[2]); } void set_##property(const Vector3r& t){GLV;  setter(qglviewer::Vec(t[0],t[1],t[2]));}
@@ -65,7 +66,7 @@ class pyGLViewer{
 		void center(bool median){GLV;  if(median)glv->centerMedianQuartile(); else glv->centerScene();}
 		Vector2i get_screenSize(){GLV;  return Vector2i(glv->width(),glv->height());}
 		void set_screenSize(Vector2i t){ /*GLV;*/ OpenGLManager::self->emitResizeView(viewNo,t[0],t[1]);}
-		string pyStr(){return string("<GLViewer for view #")+lexical_cast<string>(viewNo)+">";}
+		string pyStr(){return string("<GLViewer for view #")+to_string(viewNo)+">";}
 		void saveDisplayParameters(size_t n){GLV;  glv->saveDisplayParameters(n);}
 		void useDisplayParameters(size_t n){GLV;  glv->useDisplayParameters(n);}
 		void screenshot(const string& out){

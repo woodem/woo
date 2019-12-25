@@ -27,7 +27,7 @@ struct GridContainer{
 	Vector2i xy2cell(Vector2r xy, bool* inGrid=NULL) const {
 		Vector2i ret((int)(floor((xy[0]-lo[0])/cellSizes[0])),(int)(floor((xy[1]-lo[1])/cellSizes[1])));
 		if(ret[0]<0 || ret[0]>=nCells[0] || ret[1]<0 || ret[1]>=nCells[1]){
-			if(inGrid) *inGrid=false; else throw std::invalid_argument("Cell coordinates outside grid (xy="+lexical_cast<string>(xy[0])+","+lexical_cast<string>(xy[1])+", computed cell coordinates "+lexical_cast<string>(ret[0])+","+lexical_cast<string>(ret[1])+").");
+			if(inGrid) *inGrid=false; else throw std::invalid_argument("Cell coordinates outside grid (xy="+to_string(xy[0])+","+to_string(xy[1])+", computed cell coordinates "+to_string(ret[0])+","+to_string(ret[1])+").");
 		} else {if(inGrid) *inGrid=true;}
 		return ret;
 	}
@@ -48,7 +48,7 @@ struct GridContainer{
 		vector<Vector2i> rectangle=rectangleFilter(Vector2r(xy0[0]-radii[0],xy0[1]-radii[1]),Vector2r(xy0[0]+radii[0],xy0[1]+radii[1]));
 		vector<Vector2i> ret; bool inGrid;
 		Vector2i cxy=xy2cell(xy0,&inGrid);
-		FOREACH(Vector2i mid, rectangle){
+		for(Vector2i mid: rectangle){
 			// if we are in the cell where the middle is also, this cell passes the filter
 			if(inGrid && mid[0]==cxy[0] && mid[1]==cxy[1]){ret.push_back(mid); continue;}
 			Vector2r xyMid=cell2xyMid(mid);
@@ -64,7 +64,7 @@ struct GridContainer{
 
 	// graphical representation of a set of filtered cells
 	string dumpGrid(vector<Vector2i> v){
-		vector<vector<bool> > vvb; string ret; vvb.resize(nCells[0]); for(size_t i=0; i<(size_t)nCells[0]; i++) vvb[i].resize(nCells[1],false); FOREACH(Vector2i& vv, v) vvb[vv[0]][vv[1]]=true;
+		vector<vector<bool> > vvb; string ret; vvb.resize(nCells[0]); for(size_t i=0; i<(size_t)nCells[0]; i++) vvb[i].resize(nCells[1],false); for(Vector2i& vv: v) vvb[vv[0]][vv[1]]=true;
 		for(int cy=nCells[1]-1; cy>=0; cy--){ ret+="|"; for(int cx=0; cx<nCells[0]; cx++){ ret+=vvb[cx][cy]?"@":"."; }	ret+="|\n";	}
 		return ret;
 	}
@@ -97,8 +97,8 @@ struct WeightedAverage{
 	void sumValuesWeights(const Vector2r& refPt, Real& sumValues, Real& sumWeights){
 		vector<Vector2i> filtered=filterCells(refPt);
 		sumValues=sumWeights=0;
-		FOREACH(Vector2i cell, filtered){
-			FOREACH(const T& element, grid->grid[cell[0]][cell[1]]){
+		for(Vector2i cell: filtered){
+			for(const T& element: grid->grid[cell[0]][cell[1]]){
 				Real weight=getWeight(refPt,element);
 				sumValues+=weight*getValue(element); sumWeights+=weight;
 			}
@@ -166,7 +166,7 @@ class pyGaussAverage{
 	}
 	bool pointInsidePolygon(const Vector2r&,const vector<Vector2r>&);
 	bool ptIsClipped(const Vector2r& pt){
-		FOREACH(const Poly2d& poly, clips){
+		for(const Poly2d& poly: clips){
 			bool inside=pointInsidePolygon(pt,poly.vertices);
 			if((inside && !poly.inclusive) || (!inside && poly.inclusive)) return true;
 		}
@@ -180,9 +180,9 @@ class pyGaussAverage{
 	py::tuple aabb_get(){return py::make_tuple(sgda->grid->getLo(),sgda->grid->getHi());}
 	py::list clips_get(){
 		py::list ret;
-		FOREACH(const Poly2d& poly, clips){
+		for(const Poly2d& poly: clips){
 			py::list vertices;
-			FOREACH(const Vector2r& v, poly.vertices) vertices.append(py::make_tuple(v[0],v[1]));
+			for(const Vector2r& v: poly.vertices) vertices.append(py::make_tuple(v[0],v[1]));
 			ret.append(py::make_tuple(vertices,poly.inclusive));
 		}
 		return ret;
@@ -205,7 +205,7 @@ class pyGaussAverage{
 		const Vector2i& dim=sgda->grid->getSize();
 		for(int i=0; i<dim[0]; i++){
 			for(int j=0; j<dim[1]; j++){
-				FOREACH(const Scalar2d& element, sgda->grid->grid[i][j]){
+				for(const Scalar2d& element: sgda->grid->grid[i][j]){
 					x.append(element.pos[0]); y.append(element.pos[1]); val.append(element.val);
 				}
 			}
@@ -214,7 +214,7 @@ class pyGaussAverage{
 	}
 	Vector2i nCells_get(){ return sgda->grid->getSize(); }
 	int cellNum(const Vector2i& cell){ return sgda->grid->grid[cell[0]][cell[1]].size(); }
-	Real cellSum(const Vector2i& cell){ Real sum=0; FOREACH(const Scalar2d& v, sgda->grid->grid[cell[0]][cell[1]]) sum+=v.val; return sum; }
+	Real cellSum(const Vector2i& cell){ Real sum=0; for(const Scalar2d& v: sgda->grid->grid[cell[0]][cell[1]]) sum+=v.val; return sum; }
 	Real cellAvg(const Vector2i& cell){ return cellSum(cell)/cellNum(cell); }
 	Real cellArea(){ Vector2r sz=sgda->grid->getCellSize(); return sz[0]*sz[1]; }
 	Vector2r cellDim(){ return sgda->grid->getCellSize(); }

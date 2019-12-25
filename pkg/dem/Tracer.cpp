@@ -220,7 +220,7 @@ void TraceVisRep::consolidate(){
 
 void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 	auto& dem=field->cast<DemField>();
-	boost::mutex::scoped_lock lock(dem.nodesMutex);
+	std::scoped_lock lock(dem.nodesMutex);
 	for(const auto& n: dem.nodes){
 			/*
 				FIXME: there is some bug in boost::python's shared_ptr allocator, so if a node has GlRep
@@ -304,7 +304,7 @@ void Tracer::run(){
 		if(dyn.isTracerSkip()) continue;
 		// node added
 		if(!n->rep || !n->rep->isA<TraceVisRep>()){
-			boost::mutex::scoped_lock lock(dem.nodesMutex);
+			std::scoped_lock lock(dem.nodesMutex);
 			n->rep=make_shared<TraceVisRep>();
 			auto& tr=n->rep->cast<TraceVisRep>();
 			tr.resize(num,saveTime);

@@ -3,6 +3,7 @@
 #include<woo/pkg/dem/MeshVolume.hpp>
 
 WOO_PLUGIN(dem,(MeshVolume));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_MeshVolume__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL_LOGGER(MeshVolume);
 
 void MeshVolume::init(){
@@ -18,7 +19,7 @@ void MeshVolume::init(){
 	// the pair of pointers is ordered: smaller is always the first one!
 	std::map<std::pair<Node*,Node*>,size_t> edgeIx;
 	surface=std::unique_ptr<GtsSurface>(gts_surface_new(gts_surface_class(),gts_face_class(),gts_edge_class(),gts_vertex_class()));
-	FOREACH(const shared_ptr<Particle>& p, *(field->cast<DemField>().particles)){
+	for(const shared_ptr<Particle>& p: *(field->cast<DemField>().particles)){
 		assert(p);
 		if(mask!=0 && (p->mask & mask)==0) continue;
 		if(!p->shape) throw std::runtime_error("MeshVolume: #"+to_string(p->id)+": shape==None.");

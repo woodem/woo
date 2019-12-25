@@ -322,7 +322,8 @@ template<> struct _SerializeMaybe<false>{
 
 
 
-#define _REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec)  _WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) public: \
+#define _REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec) \
+	_WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) public: \
 	void pySetAttr(const std::string& key, const py::object& value) override {BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR,thisClass,attrs); BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC,thisClass,deprec); baseClass::pySetAttr(key,value); } \
 	/* return dictionary of all acttributes and values; deprecated attributes omitted */ py::dict pyDict(bool all=true) const override { py::dict ret; BOOST_PP_SEQ_FOR_EACH(_PYDICT_ATTR,thisClass,attrs); WOO_PY_DICT_UPDATE(baseClass::pyDict(all),ret); return ret; } \
 	void callPostLoad(void* addr) override { baseClass::callPostLoad(addr); postLoad(*this,addr); }
@@ -557,7 +558,7 @@ struct Object: public boost::noncopyable, public enable_shared_from_this<Object>
 		virtual void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){ return; }
 		
 		//! string representation of this object
-		virtual std::string pyStr() const { return "<"+getClassName()+" @ "+boost::lexical_cast<string>(this)+">"; }
+		virtual std::string pyStr() const { return "<"+getClassName()+" @ "+ptr_to_string(this)+">"; }
 	
 	// overridden by REGISTER_CLASS_BASE_BASE in derived classes
 	virtual string getClassName() const { return "Object"; }
@@ -589,3 +590,8 @@ shared_ptr<T> Object__setstate__(py::dict state){
 // #endif
 
 }; /* namespace woo */
+
+#ifdef WOO_CEREAL
+	CEREAL_FORCE_DYNAMIC_INIT(Object);
+#endif
+

@@ -26,7 +26,7 @@ struct GridStore: public Object{
 	struct Vector3iComparator{ bool operator()(const Vector3i& a, const Vector3i& b) const { return (a[0]<b[0] || (a[0]==b[0] && (a[1]<b[1] || (a[1]==b[1] && a[2]<b[2])))); };	};
 	typedef boost::multi_array<id_t,4> gridT;
 	typedef std::map<Vector3i,vector<id_t>,Vector3iComparator> gridExT;
-	typedef boost::ptr_vector<boost::mutex> mutexesT;
+	typedef boost::ptr_vector<std::mutex> mutexesT;
 	std::unique_ptr<gridT> grid;
 	vector<gridExT> gridExx;
 	mutexesT mutexes;
@@ -100,7 +100,7 @@ struct GridStore: public Object{
 
 	// return lock pointer for given cell
 	template<bool mutexEx>
-	boost::mutex* getMutex(const Vector3i& ijk){
+	std::mutex* getMutex(const Vector3i& ijk){
 		checkIndices(ijk); size_t ix=ijk2lin(ijk);
 		if(!mutexEx){ assert(denseLock); assert(ix<(size_t)gridSize.prod()); assert(gridSize.prod()+exNumMaps==(int)mutexes.size()); return &mutexes[exNumMaps+ix];
 		} else { assert(exNumMaps>0); int mIx=ix%exNumMaps; assert(mIx<(int)mutexes.size() && mIx>=0); return &mutexes[mIx]; }
@@ -180,34 +180,32 @@ struct GridStore: public Object{
 	py::tuple pyRawData(const Vector3i& ijk);
 	vector<int> pyCounts() const;
 
-	WOO_CLASS_BASE_DOC_ATTRS_CTOR_PY(GridStore,Object,"3d grid storing scalar (particles ids) in partially dense array; the grid is actually 4d (gridSize×cellLen), and each cell may contain additional items in separate mapped storage, if the cellLen is not big enough to accomodate required number of items. Appending to cells is guarded via mutexes (with :obj:`denseLock`) optionally, appending to extra storage is mutex-protected always. Write acces from python should be used for testing exclusively.",
-		((Vector3i,gridSize,Vector3i(1,1,1),AttrTrait<>().readonly(),"Dimension of the grid."))
-		((int,cellLen,4,AttrTrait<>().readonly(),"Size of the dense storage in each cell"))
-		((bool,denseLock,true,AttrTrait<>().readonly(),"Whether this grid supports per-cell dense storage locking for appending (must use protected_append)"))
-		((int,exIniSize,4,AttrTrait<>().readonly(),"Initial size of extension vectors, and step of their growth if needed."))
-		((int,exNumMaps,10,AttrTrait<>().readonly(),"Number of maps for extra items not fitting the dense storage (it affects how fine-grained is locking for those extra elements)"))
-		((Vector3r,lo,Vector3r(NaN,NaN,NaN),,"Lower corner of the domain."))
-		((Vector3r,cellSize,Vector3r(NaN,NaN,NaN),,"Spatial size of the grid cell."))
-		, /*ctor*/
-		, /*py*/
-			.def("__getitem__",&GridStore::pyGetItem)
-			.def("__setitem__",&GridStore::pySetItem)
-			.def("__delitem__",&GridStore::pyDelItem)
-			.def("size",&GridStore::size)
-			.def("append",&GridStore::pyAppend,WOO_PY_ARGS(py::arg("ijk"),py::arg("id")),"Append new element; uses mutexes with :obj:`denseLock`")
-			.def("countEx",&GridStore::pyCountEx,"Return dictionary mapping ijk to number of items in the extra storage.")
-			.def("_rawData",&GridStore::pyRawData,"Return raw data, as tuple of dense store and extra store.")
-			.def("complements",&GridStore::pyComplements,WOO_PY_ARGS(py::arg("B"),py::arg("setMinSize")=-1))
-			.def("counts",&GridStore::pyCounts,"Return array with number of cells with given number of elements: [number of cells with 0 elements, number of cells with 1 elements, ...]")
-			// .def("clear",&GridStore::pyClear,py::arg("ijk"),"Clear both dense and map storage for given cell; uses mutexes if the instance is :obj:`locking`.")
-			.def("lin2ijk",&GridStore::lin2ijk)
-			.def("ijk2lin",&GridStore::ijk2lin)
-			.def("xyz2ijk",&GridStore::xyz2ijk,"Convert spatial coordinates to cell coordinate (no bound checking is done)")
-			.def("xyzNearXyz",&GridStore::xyzNearXyz,WOO_PY_ARGS(py::arg("from"),py::arg("ijk")),"Return point nearest to *from*(given in spatial coords) in cell *ijk* (corner, at a face, on an edge, inside)")
-			.def("xyzNearIjk",&GridStore::xyzNearIjk,WOO_PY_ARGS(py::arg("from"),py::arg("ijk")),"Return point nearest to *from* (given in cell coords) in cell *ijk*")
+	#define woo_dem_GridStore__CLASS_BASE_DOC_ATTRS_PY \
+		GridStore,Object,"3d grid storing scalar (particles ids) in partially dense array; the grid is actually 4d (gridSize×cellLen), and each cell may contain additional items in separate mapped storage, if the cellLen is not big enough to accomodate required number of items. Appending to cells is guarded via mutexes (with :obj:`denseLock`) optionally, appending to extra storage is mutex-protected always. Write acces from python should be used for testing exclusively.", \
+		((Vector3i,gridSize,Vector3i(1,1,1),AttrTrait<>().readonly(),"Dimension of the grid.")) \
+		((int,cellLen,4,AttrTrait<>().readonly(),"Size of the dense storage in each cell")) \
+		((bool,denseLock,true,AttrTrait<>().readonly(),"Whether this grid supports per-cell dense storage locking for appending (must use protected_append)")) \
+		((int,exIniSize,4,AttrTrait<>().readonly(),"Initial size of extension vectors, and step of their growth if needed.")) \
+		((int,exNumMaps,10,AttrTrait<>().readonly(),"Number of maps for extra items not fitting the dense storage (it affects how fine-grained is locking for those extra elements)")) \
+		((Vector3r,lo,Vector3r(NaN,NaN,NaN),,"Lower corner of the domain.")) \
+		((Vector3r,cellSize,Vector3r(NaN,NaN,NaN),,"Spatial size of the grid cell.")) \
+		, /*py*/ \
+			.def("__getitem__",&GridStore::pyGetItem) \
+			.def("__setitem__",&GridStore::pySetItem) \
+			.def("__delitem__",&GridStore::pyDelItem) \
+			.def("size",&GridStore::size) \
+			.def("append",&GridStore::pyAppend,WOO_PY_ARGS(py::arg("ijk"),py::arg("id")),"Append new element; uses mutexes with :obj:`denseLock`") \
+			.def("countEx",&GridStore::pyCountEx,"Return dictionary mapping ijk to number of items in the extra storage.") \
+			.def("_rawData",&GridStore::pyRawData,"Return raw data, as tuple of dense store and extra store.") \
+			.def("complements",&GridStore::pyComplements,WOO_PY_ARGS(py::arg("B"),py::arg("setMinSize")=-1)) \
+			.def("counts",&GridStore::pyCounts,"Return array with number of cells with given number of elements: [number of cells with 0 elements, number of cells with 1 elements, ...]") \
+			/* .def("clear",&GridStore::pyClear,py::arg("ijk"),"Clear both dense and map storage for given cell; uses mutexes if the instance is :obj:`locking`.") */ \
+			.def("lin2ijk",&GridStore::lin2ijk) \
+			.def("ijk2lin",&GridStore::ijk2lin) \
+			.def("xyz2ijk",&GridStore::xyz2ijk,"Convert spatial coordinates to cell coordinate (no bound checking is done)") \
+			.def("xyzNearXyz",&GridStore::xyzNearXyz,WOO_PY_ARGS(py::arg("from"),py::arg("ijk")),"Return point nearest to *from*(given in spatial coords) in cell *ijk* (corner, at a face, on an edge, inside)") \
+			.def("xyzNearIjk",&GridStore::xyzNearIjk,WOO_PY_ARGS(py::arg("from"),py::arg("ijk")),"Return point nearest to *from* (given in cell coords) in cell *ijk*") \
 			.def("ijk2box",&GridStore::ijk2box,WOO_PY_ARGS(py::arg("ijk")),"Box for given cell")
-			// .def("makeCompatible")
-			;
-	);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_GridStore__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(GridStore);

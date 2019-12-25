@@ -48,22 +48,3 @@ struct Cg2_Any_Any_L6Geom__Base: public CGeomFunctor{
 WOO_REGISTER_OBJECT(Cg2_Any_Any_L6Geom__Base);
 
 
-
-#if 0
-#ifdef WOO_OPENGL
-struct Gl1_L6Geom: public GlCGeomFunctor{
-	RENDERS(L6Geom);
-	void go(const shared_ptr<CGeom>&, const shared_ptr<Contact>&, bool);
-	WOO_CLASS_BASE_DOC_STATICATTRS(Gl1_L3Geom,GlCGeomFunctor,"Render :obj:`L3Geom` geometry.",
-		((bool,axesLabels,false,,"Whether to display labels for local axes (x,y,z)"))
-		((Real,axesScale,1.,,"Scale local axes, their reference length being half of the minimum radius."))
-		((int,axesWd,1,,"Width of axes lines, in pixels; not drawn if non-positive"))
-		((Vector2i,axesWd_range,Vector2i(0,10),AttrTrait<>().noGui(),"Range for axesWd."))
-		//((int,uPhiWd,2,,"Width of lines for drawing displacements (and rotations for :obj:`L6Geom`); not drawn if non-positive."))
-		//((Vector2i,uPhiWd_range,Vector2i(0,10),AttrTrait<>().noGui(),"Range for uPhiWd."))
-		//((Real,uScale,1.,,"Scale local displacements (:obj:`u <L3Geom.u>` - :obj:`u0 <L3Geom.u0>`); 1 means the true scale, 0 disables drawing local displacements; negative values are permissible."))
-	);
-};
-WOO_REGISTER_OBJECT(Gl1_L6Geom);
-#endif
-#endif

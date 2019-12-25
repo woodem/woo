@@ -12,7 +12,6 @@
 #include<boost/iostreams/filter/gzip.hpp>
 #include<boost/iostreams/device/file.hpp>
 #include<boost/algorithm/string.hpp>
-#include<boost/filesystem/operations.hpp>
 #include<boost/version.hpp>
 
 namespace woo{
@@ -76,7 +75,7 @@ struct ObjectIO{
 		else save<T,cereal::BinaryOutputArchive>(out,objectTag,object);
 		// rename to the file requested;
 		// see http://stackoverflow.com/questions/7054844/is-rename-atomic
-		boost::filesystem::rename(tmp,fileName);
+		filesystem::rename(tmp,fileName);
 	}
 	// load from given file, guessing compression and XML/binary from extension
 	template<class T>

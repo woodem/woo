@@ -5,6 +5,9 @@ WOO_PLUGIN(dem,(Rod)(Truss)(Bo1_Rod_Aabb)(In2_Truss_ElastMat)(Cg2_Rod_Sphere_L6G
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Rod__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Truss__CLASS_BASE_DOC_ATTRS_CTOR);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Rod_Sphere_L6Geom__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Rod_Aabb__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_In2_Truss_ElastMat__CLASS_BASE_DOC_ATTRS);
+
 
 void Rod::lumpMassInertia(const shared_ptr<Node>&, Real density, Real& mass, Matrix3r& I, bool& rotateOk){
 	throw std::runtime_error("Rod::lumpMassInertia: not yet implemented.");
@@ -46,7 +49,7 @@ void In2_Truss_ElastMat::go(const shared_ptr<Shape>& shape, const shared_ptr<Mat
 	const Vector3r axUnit=AB/len;
 	if(isnan(t.l0)){
 		if(setL0) t.l0=len;
-		else woo::ValueError(("#"+lexical_cast<string>(particle->id)+": Truss.l0==NaN (set In2_Truss_ElastMat.setL0=True to initialize this value automatically."));
+		else woo::ValueError(("#"+to_string(particle->id)+": Truss.l0==NaN (set In2_Truss_ElastMat.setL0=True to initialize this value automatically."));
 	}
 	if(true){
 		for(const auto& pC: particle->contacts){

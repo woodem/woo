@@ -99,7 +99,7 @@ void Gl1_DemField::postLoad(Gl1_DemField&, void* attr){
 
 void Gl1_DemField::doBound(){
 	boundDispatcher->scene=scene; boundDispatcher->updateScenePtr();
-	boost::mutex::scoped_lock lock(dem->particles->manipMutex);
+	std::scoped_lock lock(dem->particles->manipMutex);
 	for(const shared_ptr<Particle>& b: *dem->particles){
 		// PROCESS_GUI_EVENTS_SOMETIMES; // rendering bounds is usually fast
 		if(!b->shape || !b->shape->bound) continue;
@@ -143,7 +143,7 @@ Vector3r Gl1_DemField::getNodeAngVel(const shared_ptr<Node>& n) const{
 void Gl1_DemField::doShape(){
 	const auto& renderer=viewInfo->renderer;
 	shapeDispatcher->scene=scene; shapeDispatcher->updateScenePtr();
-	boost::mutex::scoped_lock lock(dem->particles->manipMutex);
+	std::scoped_lock lock(dem->particles->manipMutex);
 
 	// experimental
 	glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST);
@@ -321,7 +321,7 @@ void Gl1_DemField::doShape(){
 }
 
 void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
-	boost::mutex::scoped_lock lock(dem->nodesMutex);
+	std::scoped_lock lock(dem->nodesMutex);
 	// not sure if this is right...?
 	glDisable(GL_LIGHTING);
 
@@ -368,7 +368,7 @@ void Gl1_DemField::doNodes(const vector<shared_ptr<Node>>& nodeContainer){
 void Gl1_DemField::doContactNodes(){
 	// if(cNode==CNODE_NONE) return;
 	viewInfo->renderer->nodeDispatcher.scene=scene; viewInfo->renderer->nodeDispatcher.updateScenePtr();
-	boost::mutex::scoped_lock lock(dem->contacts->manipMutex);
+	std::scoped_lock lock(dem->contacts->manipMutex);
 	for(size_t i=0; i<dem->contacts->size(); i++){
 		PROCESS_GUI_EVENTS_SOMETIMES;
 		const shared_ptr<Contact>& C((*dem->contacts)[i]);
@@ -423,8 +423,8 @@ void Gl1_DemField::doContactNodes(){
 void Gl1_DemField::doCPhys(){
 	glEnable(GL_LIGHTING);
 	cPhysDispatcher->scene=scene; cPhysDispatcher->updateScenePtr();
-	boost::mutex::scoped_lock lock(dem->contacts->manipMutex);
-	FOREACH(const shared_ptr<Contact>& C, *dem->contacts){
+	std::scoped_lock lock(dem->contacts->manipMutex);
+	for(const shared_ptr<Contact>& C: *dem->contacts){
 		PROCESS_GUI_EVENTS_SOMETIMES;
 		#if 1
 			shared_ptr<CGeom> geom(C->geom);

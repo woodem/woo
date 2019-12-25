@@ -6,10 +6,11 @@
 // #include<boost/regex.hpp>
 
 WOO_PLUGIN(dem,(AxialGravity) /* (CentralGravityEngine)(AxialGravityEngine)(HdapsGravityEngine)*/ );
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialGravity__CLASS_BASE_DOC_ATTRS);
 
 void AxialGravity::run(){
 	axisDir.normalize();
-	FOREACH(const shared_ptr<Node>& n, field->nodes){
+	for(const shared_ptr<Node>& n: field->nodes){
 		/* http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html */
 		const Vector3r& x0=n->pos;
 		const Vector3r& x1=axisPt;
@@ -26,7 +27,7 @@ void AxialGravity::run(){
 #if 0
 void CentralGravityEngine::run(){
 	const Vector3r& centralPos=Body::byId(centralBody)->state->pos;
-	FOREACH(const shared_ptr<Body>& b, *scene->bodies){
+	for(const shared_ptr<Body>& b: *scene->bodies){
 		if(!b || b->isClump() || b->getId()==centralBody) continue; // skip clumps and central body
 		if(mask!=0 && (b->groupMask & mask)==0) continue;
 		Real F=accel*b->state->mass;
