@@ -23,10 +23,12 @@ addons:
          - libomp-7-dev
 before_install:
     - sudo add-apt-repository -y ppa:nschloe/pybind11-backports
+    # - sudo add-apt-repository -y ppa:eudoxos/minieigen
     - sudo apt-get -q update
     - sudo apt-get -y install pybind11-dev
 install:
-   - pip3 install future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
+   - pip install future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
+   - python -c 'import past; print(past.__file__)'
 script:
    - mkdir -p build
    - cd build
