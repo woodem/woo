@@ -132,11 +132,13 @@ if PY3K: warnings.simplefilter('ignore',ResourceWarning)
 # import both if possible
 # we will check build features after the binary import
 # and based on that use one or another
-try: import minieigen
-except ImportError:
-    try: import minieigen11
-    except ImportError:
-        raise RuntimeError('minieigen is not importable (and minieigen11 is not, either).')
+
+#try: import minieigen
+#except ImportError: pass
+
+#try: import minieigen11
+#except ImportError:
+#raise RuntimeError('minieigen is not importable (and minieigen11 is not, either).')
 
 
 # c++ initialization code
@@ -198,6 +200,7 @@ if PY3K:
     # will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
     allSubmodules=set()
     import imp
+    print(80*'#'+'\n'+str(master.compiledPyModules))
     for mod in master.compiledPyModules:
         if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
         # this inserts the module to sys.modules automatically
@@ -269,13 +272,10 @@ if 'gts' in config.features:
     sys.modules['gts']=gts
 
 if 'pybind11' in config.features:
-    print('WARN: pybind11 support is experimental.')
-    import minieigen11
-    # if 'minieigen' in sys.m
-    print('WARN: hijacking minieigen module, points to minieigen11.')
+    print('WARN: hijacking minieigen module, points to woo.eigen.')
     if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
-    sys.modules['minieigen']=sys.modules['minieigen11']
-    assert(minieigen11.Vector3.__class__.__name__=='pybind11_type')
+    sys.modules['minieigen']=sys.modules['woo.eigen']
+    assert(woo.eigen.Vector3.__class__.__name__=='pybind11_type')
 else:
     import minieigen
 

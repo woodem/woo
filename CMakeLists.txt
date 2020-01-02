@@ -27,8 +27,8 @@ endif()
 
 
 if(WOO_CLANG)
-	set(CMAKE_C_COMPILER clang-7)
-	set(CMAKE_CXX_COMPILER clang++-7)
+	set(CMAKE_C_COMPILER clang-9)
+	set(CMAKE_CXX_COMPILER clang++-9)
 	# https://github.com/pybind/pybind11/issues/1604#issuecomment-459796241
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
 else()
@@ -82,6 +82,16 @@ endif()
 if(WOO_PYBIND11)
 	add_definitions(-DWOO_PYBIND11)
 	find_package(pybind11 REQUIRED)
+	find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
+	find_library(DOUBLECONVERSION_LIB NAMES double-conversion)
+	if(DOUBLECONVERSION_INCLUDE_DIR AND DOUBLECONVERSION_LIB)
+		# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
+		add_library(DOUBLECONVERSION INTERFACE)
+		target_include_directories(DOUBLECONVERSION INTERFACE ${GLE_INCLUDE_DIR})
+		target_link_libraries(DOUBLECONVERSION INTERFACE ${GLE_LIB})
+	else()
+		message(FATAL_ERROR "double-conversion library/headers not found.")
+	endif()
 else()
 	find_package(Boost REQUIRED COMPONENTS python)
 endif()
@@ -275,6 +285,7 @@ set(WOO_CXX_SOURCES
 	lib/multimethods/Indexable.cpp
 	lib/object/Object.cpp
 	lib/opengl/GLUtils.cpp
+	lib/pyutil/eigen-wrap.cpp
 	lib/pyutil/except.cpp
 	lib/pyutil/gil.cpp
 	lib/pyutil/pickle.cpp
@@ -372,7 +383,7 @@ else()
 		${WOO_CXX_GTS_SOURCES}
 	)
 	set_target_properties(${CXX_INTERNAL} PROPERTIES PREFIX "")
-	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python DOUBLECONVERSION)
 endif(WOO_PYBIND11)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
@@ -409,7 +420,6 @@ target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})
 install(TARGETS ${CXX_INTERNAL}
 	LIBRARY DESTINATION ${WOO_MODULEDIR}
 )
-
 
 FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 file(WRITE "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "\#!${PYTHON_EXECUTABLE}\nimport wooMain,sys; sys.exit(wooMain.main())\n")

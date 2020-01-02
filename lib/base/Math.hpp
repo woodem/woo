@@ -79,38 +79,64 @@
 #define WOO_LIKELY(x) __builtin_expect(!!(x),1)
 #define WOO_UNLIKELY(x) __builtin_expect(!!(x),0)
 
-// templates of those types with single parameter are not possible, use macros for now
-#define VECTOR2_TEMPLATE(Scalar) Eigen::Matrix<Scalar,2,1>
-#define VECTOR3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,1>
-#define VECTOR4_TEMPLATE(Scalar) Eigen::Matrix<Scalar,4,1>
-#define VECTOR6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,1>
-#define MATRIX3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,3>
-#define MATRIX6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,6>
 
-// this would be the proper way, but only works in c++-0x (not yet supported by gcc (4.5))
-#if 0
-	template<typename Scalar> using Vector2=Eigen::Matrix<Scalar,2,1>;
-	template<typename Scalar> using Vector3=Eigen::Matrix<Scalar,3,1>;
-	template<typename Scalar> using Matrix3=Eigen::Matrix<Scalar,3,3>;
-	typedef Vector2<int> Vector2i;
-	typedef Vector2<Real> Vector2r;
-	// etc
-#endif
-
-typedef VECTOR2_TEMPLATE(int) Vector2i;
-typedef VECTOR2_TEMPLATE(Real) Vector2r;
-typedef VECTOR3_TEMPLATE(int) Vector3i;
-#ifndef WOO_ALIGN
-	typedef VECTOR3_TEMPLATE(Real) Vector3r;
+#if 1
+	template<typename Scalar> using Vector2_=Eigen::Matrix<Scalar,2,1>;
+	template<typename Scalar> using Vector3_=Eigen::Matrix<Scalar,3,1>;
+	template<typename Scalar> using Vector4_=Eigen::Matrix<Scalar,4,1>;
+	template<typename Scalar> using Vector6_=Eigen::Matrix<Scalar,6,1>;
+	template<typename Scalar> using Matrix3_=Eigen::Matrix<Scalar,3,3>;
+	template<typename Scalar> using Matrix6_=Eigen::Matrix<Scalar,6,6>;
+	typedef Vector2_<int> Vector2i;
+	typedef Vector2_<Real> Vector2r;
+	typedef Vector3_<int> Vector3i;
+	#ifdef WOO_ALIGN
+		typedef Eigen::AlignedVector3<Real> Vector3r;
+	#else
+		typedef Vector3_<Real> Vector3r;
+	#endif
+	typedef Vector4_<Real> Vector4r; // never used
+	typedef Vector6_<int> Vector6i;
+	typedef Vector6_<Real> Vector6r;
+	typedef Vector3_<Real> Vector3r;
+	typedef Matrix3_<Real> Matrix3r;
+	typedef Matrix3_<int> Matrix3i;
+	typedef Matrix6_<Real> Matrix6r;
+	// remove later, after replacements
+	#define VECTOR2_TEMPLATE(Scalar) Vector2_<Scalar>
+	#define VECTOR3_TEMPLATE(Scalar) Vector3_<Scalar>
+	#define VECTOR4_TEMPLATE(Scalar) Vector4_<Scalar>
+	#define VECTOR6_TEMPLATE(Scalar) Vector6_<Scalar>
+	#define MATRIX3_TEMPLATE(Scalar) Matrix3_<Scalar>
+	#define MATRIX6_TEMPLATE(Scalar) Matrix6_<Scalar>
 #else
-	typedef Eigen::AlignedVector3<Real> Vector3r;
+	// templates of those types with single parameter are not possible, use macros for now
+	#define VECTOR2_TEMPLATE(Scalar) Eigen::Matrix<Scalar,2,1>
+	#define VECTOR3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,1>
+	#define VECTOR4_TEMPLATE(Scalar) Eigen::Matrix<Scalar,4,1>
+	#define VECTOR6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,1>
+	#define MATRIX3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,3>
+	#define MATRIX6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,6>
+
+	#if 0
+		// etc
+	#endif
+
+	typedef VECTOR2_TEMPLATE(int) Vector2i;
+	typedef VECTOR2_TEMPLATE(Real) Vector2r;
+	typedef VECTOR3_TEMPLATE(int) Vector3i;
+	#ifndef WOO_ALIGN
+		typedef VECTOR3_TEMPLATE(Real) Vector3r;
+	#else
+		typedef Eigen::AlignedVector3<Real> Vector3r;
+	#endif
+	typedef VECTOR4_TEMPLATE(Real) Vector4r;
+	typedef VECTOR6_TEMPLATE(Real) Vector6r;
+	typedef VECTOR6_TEMPLATE(int) Vector6i;
+	typedef MATRIX3_TEMPLATE(Real) Matrix3r;
+	typedef MATRIX3_TEMPLATE(int) Matrix3i;
+	typedef MATRIX6_TEMPLATE(Real) Matrix6r;
 #endif
-typedef VECTOR4_TEMPLATE(Real) Vector4r;
-typedef VECTOR6_TEMPLATE(Real) Vector6r;
-typedef VECTOR6_TEMPLATE(int) Vector6i;
-typedef MATRIX3_TEMPLATE(Real) Matrix3r;
-typedef MATRIX3_TEMPLATE(int) Matrix3i;
-typedef MATRIX6_TEMPLATE(Real) Matrix6r;
 
 typedef Eigen::Matrix<Real,Eigen::Dynamic,Eigen::Dynamic> MatrixXr;
 typedef Eigen::Matrix<Real,Eigen::Dynamic,1> VectorXr;

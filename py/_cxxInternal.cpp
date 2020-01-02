@@ -2,6 +2,7 @@
 #include<woo/core/Timing.hpp>
 #include<woo/lib/object/Object.hpp>
 #include<woo/lib/base/Logging.hpp>
+#include<woo/lib/pyutil/eigen-wrap.hpp>
 
 #include<signal.h>
 #include<cstdlib>
@@ -26,7 +27,7 @@
 	void initSpdlog(){
 		spdlog::set_pattern("%H:%M:%S [%-8n] %s:%# %^[%l] %v%$");
 		if(!logger){ std::cerr<<"Logger not yet constructed...?"<<std::endl; return; }
-		auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::debug:spdlog::level::warn);
+		auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::trace:spdlog::level::warn);
 		spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l){
 			l->set_level(defaultLevel);
 			l->flush_on(spdlog::level::err);
@@ -73,29 +74,28 @@ void wooInitialize(){
 	#endif
 
 	PyEval_InitThreads();
-
-	// early check that minieigen is importable
-	// (this is probably too late already)
 	#ifdef WOO_PYBIND11
-		const string meig="minieigen11";
+		py::module m("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.");
+		woo::registerEigenClassesInPybind11(m);
+		auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
+		if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
+		sysModules["_wooEigen11"]=m;
+		sysModules["minieigen"]=m;
+		LOG_DEBUG_EARLY("sys.modules['minieigen'] is alias for _wooEigen11.")
 	#else
+		// early check that minieigen is importable
+		// (this is probably too late already)
 		const string meig="minieigen"; 
-	#endif
-	try{
-		if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
-		#ifdef WOO_PYBIND11
-			auto minieigen=py::module::import(meig.c_str());
-		#else
+		try{
+			if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
 			auto minieigen=py::import(meig.c_str());
-		#endif
-		LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
-	} catch(py::error_already_set& e){
-			throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
-	} catch(...){
-		throw std::runtime_error("Error importing "+meig+" (details not reported).");
-	}
-
-
+			LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
+		} catch(py::error_already_set& e){
+				throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
+		} catch(...){
+			throw std::runtime_error("Error importing "+meig+" (details not reported).");
+		}
+	#endif
 
 	Master& master(Master::instance());
 	
