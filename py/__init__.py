@@ -271,7 +271,7 @@ if 'gts' in config.features:
     # so that it does not get imported twice
     sys.modules['gts']=gts
 
-if 'pybind11' in config.features:
+if False:
     #print('WARN: hijacking minieigen module, points to woo.eigen.')
     #if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
     #sys.modules['minieigen']=sys.modules['woo.eigen']
@@ -290,6 +290,13 @@ if 'pybind11' in config.features:
     from minieigen import *
     print(minieigen.Vector3)
 
+if 'pybind11' in config.features:
+    assert(id(sys.modules['minieigen'])==id(sys.modules['_wooEigen11']))
+    import _wooEigen11
+    assert(_wooEigen11.Vector3.__class__.__name__=='pybind11_type')
+    import minieigen
+    assert(minieigen.Vector3.__class__.__name__=='pybind11_type')
+    from minieigen import *
 else:
     import minieigen
 

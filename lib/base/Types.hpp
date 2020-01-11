@@ -114,7 +114,7 @@ std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(
 	#include<pybind11/eval.h>
 	#include<pybind11/operators.h>
 	#include<pybind11/stl.h>
-	#include<pybind11/eigen.h>
+	// #include<pybind11/eigen.h>
 	#include<woo/lib/pyutil/compat.hpp>
 	namespace py=pybind11;
 #endif

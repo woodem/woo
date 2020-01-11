@@ -479,7 +479,7 @@ class TestArrayAccu(unittest.TestCase):
         self.N=woo.master.numThreads
     def testResize(self):
         'OpenMP array accu: resizing'
-        self.assertTrue(len(self.t.aaccuRaw)==0) # initial zero size
+        self.assertEqual(len(self.t.aaccuRaw),0) # initial zero size
         for sz in (4,8,16,32,33):
             self.t.aaccuRaw=[i for i in range(0,sz)]
             r=self.t.aaccuRaw
@@ -490,13 +490,13 @@ class TestArrayAccu(unittest.TestCase):
         'OpenMP array accu: preserve old data on resize'
         self.t.aaccuRaw=(0,1)
         self.t.aaccuWriteThreads(2,[2]) # write whatever to index 2: resizes, but should preserve 0,1
-        self.assertTrue(self.t.aaccuRaw[0][0]==0)
-        self.assertTrue(self.t.aaccuRaw[1][0]==1)
+        self.assertEqual(self.t.aaccuRaw[0][0],0)
+        self.assertEqual(self.t.aaccuRaw[1][0],1)
     def testThreadWrite(self):
         'OpenMP array accu: concurrent writes'
-        self.t.aaccuWriteThreads(0,[i for i in range(0,self.N)])
+        self.t.aaccuWriteThreads(0,list(range(0,self.N)))
         for i in range(0,self.N):
-            self.assertTrue(self.t.aaccuRaw[0][i]==i) # each thread has written its own index
+            self.assertEqual(self.t.aaccuRaw[0][i],i) # each thread has written its own index
 
 class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
     'Sample pure-python class integrated into woo (mainly used with preprocessors), for use with :obj:`TestPyDerived`.'

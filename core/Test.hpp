@@ -5,6 +5,7 @@
 
 namespace woo{
 	struct WooTestClass: public woo::Object{
+		WOO_DECL_LOGGER;
 		// must be #defined in the .cpp file as well as the macro gets expanded there
 		// so, don't #undef it below
 		#define _WOO_UNIT_ATTR(unitName) ((Real,unitName,0.,AttrTrait<>().unitName ## Unit(),"Variable with " #unitName " unit."))

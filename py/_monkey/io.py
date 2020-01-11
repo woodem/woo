@@ -250,9 +250,8 @@ class SerializerToExpr(object):
     Represent given object as python expression.
     Do not use this class directly, say ``object.dump(format="expr")`` instead.
     '''
-    
-    if 'pybind11' in woo.config.features: unbreakableTypes=(Vector3,)
-    else: unbreakableTypes=(Vector2i,Vector2,Vector3i,Vector3)
+    # if 'pybind11' in woo.config.features: unbreakableTypes=(Vector3,)
+    unbreakableTypes=(Vector2i,Vector2,Vector3i,Vector3)
     def __init__(self,indent='\t',maxWd=120,noMagic=True):
         self.indent=indent
         self.indentLen=len(indent.replace('\t',3*' '))
@@ -316,7 +315,7 @@ class WooJSONEncoder(json.JSONEncoder):
             if hasattr(obj,'__len__'): return list(obj)
             else: raise TypeError("Unhandled type for JSON: "+obj.__class__.__module__+'.'+obj.__class__.__name__)
         # minieigen objects
-        elif obj.__class__.__module__ in ('minieigen','minieigen11'):
+        elif obj.__class__.__module__ in ('minieigen','minieigen11','_wooEigen11'):
             if isinstance(obj,minieigen.Quaternion): return obj.toAxisAngle()
             else: return tuple(obj[i] for i in range(len(obj)))
         # numpy arrays

@@ -4,6 +4,7 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_WooTestClass__CLASS_BASE_DOC_ATT
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_core_WooTestPeriodicEngine__CLASS_BASE_DOC_ATTRS);
 
 WOO_PLUGIN(core,(WooTestClass)(WooTestPeriodicEngine));
+WOO_IMPL_LOGGER(WooTestClass);
 
 #ifdef WOO_STATIC_ATTRIBUTES
     WOO_PLUGIN(core,(WooTestClassStatic));
@@ -42,10 +43,13 @@ void WooTestClass::aaccuWriteThreads(size_t ix, const vector<Real>& cycleData){
 	aaccu.set(ix,0); // zero the whole line
 	size_t i=0;
 	#ifdef WOO_OPENMP
-		#pragma omp parallel for
+		#pragma omp parallel for num_threads(omp_get_num_threads()) schedule(static,1)
 		for(i=0; i<(size_t)omp_get_num_threads(); i++)
 	#endif
-		{ aaccu.add(ix,cycleData[i%cycleData.size()]); }
+		{
+			LOG_ERROR("Writing: i={}, value={}, thread {}/{}",i,cycleData[i%cycleData.size()],omp_get_thread_num(),omp_get_num_threads());	
+			aaccu.add(ix,cycleData[i%cycleData.size()]);
+		}
 }
 
 py::object WooTestClass::arr3d_py_get(){
