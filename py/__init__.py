@@ -272,10 +272,24 @@ if 'gts' in config.features:
     sys.modules['gts']=gts
 
 if 'pybind11' in config.features:
-    print('WARN: hijacking minieigen module, points to woo.eigen.')
-    if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
-    sys.modules['minieigen']=sys.modules['woo.eigen']
-    assert(woo.eigen.Vector3.__class__.__name__=='pybind11_type')
+    #print('WARN: hijacking minieigen module, points to woo.eigen.')
+    #if 'minieigen' in sys.modules: del sys.modules['minieigen'] # 'unimport'
+    #sys.modules['minieigen']=sys.modules['woo.eigen']
+    #assert(woo.eigen.Vector3.__class__.__name__=='pybind11_type')
+    assert(id(sys.modules['minieigen'])==id(sys.modules['_wooEigen11']))
+    import _wooEigen11
+    assert(_wooEigen11.Vector3.__class__.__name__=='pybind11_type')
+    import numpy as np
+    from typing import NewType
+    class NpArrayWrap(np.ndarray):
+        def __new__(cls,*args): return np.array(args)
+    for t in ('Vector2','Vector2i','Vector3i','Vector6','Vector6i','VectorX','Matrix6','MatrixX'):
+        setattr(_wooEigen11,t,NpArrayWrap) # NewType(t,np.array))
+    import minieigen
+    assert(minieigen.Vector3.__class__.__name__=='pybind11_type')
+    from minieigen import *
+    print(minieigen.Vector3)
+
 else:
     import minieigen
 

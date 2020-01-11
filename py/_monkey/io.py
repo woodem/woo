@@ -251,7 +251,8 @@ class SerializerToExpr(object):
     Do not use this class directly, say ``object.dump(format="expr")`` instead.
     '''
     
-    unbreakableTypes=(Vector2i,Vector2,Vector3i,Vector3)
+    if 'pybind11' in woo.config.features: unbreakableTypes=(Vector3,)
+    else: unbreakableTypes=(Vector2i,Vector2,Vector3i,Vector3)
     def __init__(self,indent='\t',maxWd=120,noMagic=True):
         self.indent=indent
         self.indentLen=len(indent.replace('\t',3*' '))

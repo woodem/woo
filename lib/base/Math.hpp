@@ -102,21 +102,14 @@
 	typedef Matrix3_<Real> Matrix3r;
 	typedef Matrix3_<int> Matrix3i;
 	typedef Matrix6_<Real> Matrix6r;
-	// remove later, after replacements
-	#define VECTOR2_TEMPLATE(Scalar) Vector2_<Scalar>
-	#define VECTOR3_TEMPLATE(Scalar) Vector3_<Scalar>
-	#define VECTOR4_TEMPLATE(Scalar) Vector4_<Scalar>
-	#define VECTOR6_TEMPLATE(Scalar) Vector6_<Scalar>
-	#define MATRIX3_TEMPLATE(Scalar) Matrix3_<Scalar>
-	#define MATRIX6_TEMPLATE(Scalar) Matrix6_<Scalar>
 #else
 	// templates of those types with single parameter are not possible, use macros for now
-	#define VECTOR2_TEMPLATE(Scalar) Eigen::Matrix<Scalar,2,1>
-	#define VECTOR3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,1>
-	#define VECTOR4_TEMPLATE(Scalar) Eigen::Matrix<Scalar,4,1>
-	#define VECTOR6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,1>
-	#define MATRIX3_TEMPLATE(Scalar) Eigen::Matrix<Scalar,3,3>
-	#define MATRIX6_TEMPLATE(Scalar) Eigen::Matrix<Scalar,6,6>
+	#define Vector2_<Scalar> Eigen::Matrix<Scalar,2,1>
+	#define Vector3_<Scalar> Eigen::Matrix<Scalar,3,1>
+	#define Vector4_<Scalar> Eigen::Matrix<Scalar,4,1>
+	#define Vector6_<Scalar> Eigen::Matrix<Scalar,6,1>
+	#define Matrix3_<Scalar> Eigen::Matrix<Scalar,3,3>
+	#define Matrix6_<Scalar> Eigen::Matrix<Scalar,6,6>
 
 	#if 0
 		// etc
@@ -159,32 +152,32 @@ template<> Real ZeroInitializer<Real>();
 
 
 // io
-template<class Scalar> std::ostream & operator<<(std::ostream &os, const VECTOR2_TEMPLATE(Scalar)& v){ os << v.x()<<" "<<v.y(); return os; };
-template<class Scalar> std::ostream & operator<<(std::ostream &os, const VECTOR3_TEMPLATE(Scalar)& v){ os << v.x()<<" "<<v.y()<<" "<<v.z(); return os; };
-template<class Scalar> std::ostream & operator<<(std::ostream &os, const VECTOR4_TEMPLATE(Scalar)& v){ os << v.x()<<" "<<v.y()<<" "<<v.z(); return os; };
-template<class Scalar> std::ostream & operator<<(std::ostream &os, const VECTOR6_TEMPLATE(Scalar)& v){ os << v[0]<<" "<<v[1]<<" "<<v[2]<<" "<<v[3]<<" "<<v[4]<<" "<<v[5]; return os; };
+template<class Scalar> std::ostream & operator<<(std::ostream &os, const Vector2_<Scalar>& v){ os << v.x()<<" "<<v.y(); return os; };
+template<class Scalar> std::ostream & operator<<(std::ostream &os, const Vector3_<Scalar>& v){ os << v.x()<<" "<<v.y()<<" "<<v.z(); return os; };
+template<class Scalar> std::ostream & operator<<(std::ostream &os, const Vector4_<Scalar>& v){ os << v.x()<<" "<<v.y()<<" "<<v.z(); return os; };
+template<class Scalar> std::ostream & operator<<(std::ostream &os, const Vector6_<Scalar>& v){ os << v[0]<<" "<<v[1]<<" "<<v[2]<<" "<<v[3]<<" "<<v[4]<<" "<<v[5]; return os; };
 template<class Scalar> std::ostream & operator<<(std::ostream &os, const Eigen::Quaternion<Scalar>& q){ os<<q.w()<<" "<<q.x()<<" "<<q.y()<<" "<<q.z(); return os; };
 // operators
-//template<class Scalar> VECTOR3_TEMPLATE(Scalar) operator*(Scalar s, const VECTOR3_TEMPLATE(Scalar)& v) {return v*s;}
-//template<class Scalar> MATRIX3_TEMPLATE(Scalar) operator*(Scalar s, const MATRIX3_TEMPLATE(Scalar)& m) { return m*s; }
+//template<class Scalar> Vector3_<Scalar> operator*(Scalar s, const Vector3_<Scalar>& v) {return v*s;}
+//template<class Scalar> Matrix3_<Scalar> operator*(Scalar s, const Matrix3_<Scalar>& m) { return m*s; }
 //template<class Scalar> Quaternion<Scalar> operator*(Scalar s, const Quaternion<Scalar>& q) { return q*s; }
-template<typename Scalar> void matrixEigenDecomposition(const MATRIX3_TEMPLATE(Scalar) m, MATRIX3_TEMPLATE(Scalar)& mRot, MATRIX3_TEMPLATE(Scalar)& mDiag){ Eigen::SelfAdjointEigenSolver<MATRIX3_TEMPLATE(Scalar)> a(m); mRot=a.eigenvectors(); mDiag=a.eigenvalues().asDiagonal(); }
+template<typename Scalar> void matrixEigenDecomposition(const Matrix3_<Scalar> m, Matrix3_<Scalar>& mRot, Matrix3_<Scalar>& mDiag){ Eigen::SelfAdjointEigenSolver<Matrix3_<Scalar>> a(m); mRot=a.eigenvectors(); mDiag=a.eigenvalues().asDiagonal(); }
 // http://eigen.tuxfamily.org/dox/TutorialGeometry.html
-template<typename Scalar> MATRIX3_TEMPLATE(Scalar) matrixFromEulerAnglesXYZ(Scalar x, Scalar y, Scalar z){ MATRIX3_TEMPLATE(Scalar) m; m=AngleAxis<Scalar>(x,VECTOR3_TEMPLATE(Scalar)::UnitX())*AngleAxis<Scalar>(y,VECTOR3_TEMPLATE(Scalar)::UnitY())*AngleAxis<Scalar>(z,VECTOR3_TEMPLATE(Scalar)::UnitZ()); return m;}
+template<typename Scalar> Matrix3_<Scalar> matrixFromEulerAnglesXYZ(Scalar x, Scalar y, Scalar z){ Matrix3_<Scalar> m; m=AngleAxis<Scalar>(x,Vector3_<Scalar>::UnitX())*AngleAxis<Scalar>(y,Vector3_<Scalar>::UnitY())*AngleAxis<Scalar>(z,Vector3_<Scalar>::UnitZ()); return m;}
 template<typename Scalar> bool operator==(const Quaternion<Scalar>& u, const Quaternion<Scalar>& v){ return u.x()==v.x() && u.y()==v.y() && u.z()==v.z() && u.w()==v.w(); }
 template<typename Scalar> bool operator!=(const Quaternion<Scalar>& u, const Quaternion<Scalar>& v){ return !(u==v); }
-template<typename Scalar> bool operator==(const MATRIX3_TEMPLATE(Scalar)& m, const MATRIX3_TEMPLATE(Scalar)& n){ for(int i=0;i<3;i++)for(int j=0;j<3;j++)if(m(i,j)!=n(i,j)) return false; return true; }
-template<typename Scalar> bool operator!=(const MATRIX3_TEMPLATE(Scalar)& m, const MATRIX3_TEMPLATE(Scalar)& n){ return !(m==n); }
-template<typename Scalar> bool operator==(const MATRIX6_TEMPLATE(Scalar)& m, const MATRIX6_TEMPLATE(Scalar)& n){ for(int i=0;i<6;i++)for(int j=0;j<6;j++)if(m(i,j)!=n(i,j)) return false; return true; }
-template<typename Scalar> bool operator!=(const MATRIX6_TEMPLATE(Scalar)& m, const MATRIX6_TEMPLATE(Scalar)& n){ return !(m==n); }
-template<typename Scalar> bool operator==(const VECTOR6_TEMPLATE(Scalar)& u, const VECTOR6_TEMPLATE(Scalar)& v){ return u[0]==v[0] && u[1]==v[1] && u[2]==v[2] && u[3]==v[3] && u[4]==v[4] && u[5]==v[5]; }
-template<typename Scalar> bool operator!=(const VECTOR6_TEMPLATE(Scalar)& u, const VECTOR6_TEMPLATE(Scalar)& v){ return !(u==v); }
-template<typename Scalar> bool operator==(const VECTOR4_TEMPLATE(Scalar)& u, const VECTOR4_TEMPLATE(Scalar)& v){ return u[0]==v[0] && u[1]==v[1] && u[2]==v[2] && u[3]=v[3]; }
-template<typename Scalar> bool operator!=(const VECTOR4_TEMPLATE(Scalar)& u, const VECTOR4_TEMPLATE(Scalar)& v){ return !(u==v); }
-template<typename Scalar> bool operator==(const VECTOR3_TEMPLATE(Scalar)& u, const VECTOR3_TEMPLATE(Scalar)& v){ return u.x()==v.x() && u.y()==v.y() && u.z()==v.z(); }
-template<typename Scalar> bool operator!=(const VECTOR3_TEMPLATE(Scalar)& u, const VECTOR3_TEMPLATE(Scalar)& v){ return !(u==v); }
-template<typename Scalar> bool operator==(const VECTOR2_TEMPLATE(Scalar)& u, const VECTOR2_TEMPLATE(Scalar)& v){ return u.x()==v.x() && u.y()==v.y(); }
-template<typename Scalar> bool operator!=(const VECTOR2_TEMPLATE(Scalar)& u, const VECTOR2_TEMPLATE(Scalar)& v){ return !(u==v); }
+template<typename Scalar> bool operator==(const Matrix3_<Scalar>& m, const Matrix3_<Scalar>& n){ for(int i=0;i<3;i++)for(int j=0;j<3;j++)if(m(i,j)!=n(i,j)) return false; return true; }
+template<typename Scalar> bool operator!=(const Matrix3_<Scalar>& m, const Matrix3_<Scalar>& n){ return !(m==n); }
+template<typename Scalar> bool operator==(const Matrix6_<Scalar>& m, const Matrix6_<Scalar>& n){ for(int i=0;i<6;i++)for(int j=0;j<6;j++)if(m(i,j)!=n(i,j)) return false; return true; }
+template<typename Scalar> bool operator!=(const Matrix6_<Scalar>& m, const Matrix6_<Scalar>& n){ return !(m==n); }
+template<typename Scalar> bool operator==(const Vector6_<Scalar>& u, const Vector6_<Scalar>& v){ return u[0]==v[0] && u[1]==v[1] && u[2]==v[2] && u[3]==v[3] && u[4]==v[4] && u[5]==v[5]; }
+template<typename Scalar> bool operator!=(const Vector6_<Scalar>& u, const Vector6_<Scalar>& v){ return !(u==v); }
+template<typename Scalar> bool operator==(const Vector4_<Scalar>& u, const Vector4_<Scalar>& v){ return u[0]==v[0] && u[1]==v[1] && u[2]==v[2] && u[3]=v[3]; }
+template<typename Scalar> bool operator!=(const Vector4_<Scalar>& u, const Vector4_<Scalar>& v){ return !(u==v); }
+template<typename Scalar> bool operator==(const Vector3_<Scalar>& u, const Vector3_<Scalar>& v){ return u.x()==v.x() && u.y()==v.y() && u.z()==v.z(); }
+template<typename Scalar> bool operator!=(const Vector3_<Scalar>& u, const Vector3_<Scalar>& v){ return !(u==v); }
+template<typename Scalar> bool operator==(const Vector2_<Scalar>& u, const Vector2_<Scalar>& v){ return u.x()==v.x() && u.y()==v.y(); }
+template<typename Scalar> bool operator!=(const Vector2_<Scalar>& u, const Vector2_<Scalar>& v){ return !(u==v); }
 template<typename Scalar> Quaternion<Scalar> operator*(Scalar f, const Quaternion<Scalar>& q){ return Quaternion<Scalar>(q.coeffs()*f); }
 template<typename Scalar> Quaternion<Scalar> operator+(Quaternion<Scalar> q1, const Quaternion<Scalar>& q2){ return Quaternion<Scalar>(q1.coeffs()+q2.coeffs()); }	/* replace all those by standard math functions
 	this is a non-templated version, to avoid compilation because of static constants;
@@ -252,24 +245,24 @@ bool MatrixXr_pseudoInverse(const MatrixXr &a, MatrixXr &a_pinv, double epsilon=
 	if strain is true, then multiply non-diagonal parts by .5
 */
 template<typename Scalar>
-MATRIX3_TEMPLATE(Scalar) voigt_toSymmTensor(const VECTOR6_TEMPLATE(Scalar)& v, bool strain=false){
+Matrix3_<Scalar> voigt_toSymmTensor(const Vector6_<Scalar>& v, bool strain=false){
 	Real k=(strain?.5:1.);
-	MATRIX3_TEMPLATE(Scalar) ret; ret<<v[0],k*v[5],k*v[4], k*v[5],v[1],k*v[3], k*v[4],k*v[3],v[2]; return ret;
+	Matrix3_<Scalar> ret; ret<<v[0],k*v[5],k*v[4], k*v[5],v[1],k*v[3], k*v[4],k*v[3],v[2]; return ret;
 }
 /* convert 2nd order tensor to 6-vector (Voigt notation), symmetrizing the tensor;
 	if strain is true, multiply non-diagonal compoennts by 2.
 */
 template<typename Scalar>
-VECTOR6_TEMPLATE(Scalar) tensor_toVoigt(const MATRIX3_TEMPLATE(Scalar)& m, bool strain=false){
+Vector6_<Scalar> tensor_toVoigt(const Matrix3_<Scalar>& m, bool strain=false){
 	int k=(strain?2:1);
-	VECTOR6_TEMPLATE(Scalar) ret; ret<<m(0,0),m(1,1),m(2,2),k*.5*(m(1,2)+m(2,1)),k*.5*(m(2,0)+m(0,2)),k*.5*(m(0,1)+m(1,0)); return ret;
+	Vector6_<Scalar> ret; ret<<m(0,0),m(1,1),m(2,2),k*.5*(m(1,2)+m(2,1)),k*.5*(m(2,0)+m(0,2)),k*.5*(m(0,1)+m(1,0)); return ret;
 }
 
 /* Apply Levi-Civita permutation tensor on m
 	http://en.wikipedia.org/wiki/Levi-Civita_symbol
 */
 template<typename Scalar>
-VECTOR3_TEMPLATE(Scalar) leviCivita(const MATRIX3_TEMPLATE(Scalar)& m){
+Vector3_<Scalar> leviCivita(const Matrix3_<Scalar>& m){
 	// i,j,k: v_i=ε_ijk W_j,k
 	// +: 1,2,3; 3,1,2; 2,3,1
 	// -: 1,3,2; 3,2,1; 2,1,3
