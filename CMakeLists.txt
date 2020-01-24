@@ -61,8 +61,12 @@ find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 #include(FindPython3)
 #find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+# set(Python_ADDITIONAL_VERSIONS 3.6 3.7 3.8)
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
+if("${PYTHON_VERSION_MAJOR}" STREQUAL "2")
+	message(FATAL_ERROR "Python 2.x is not supported.")
+endif()
 
 set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
 find_package(Backward REQUIRED)
@@ -82,19 +86,25 @@ endif()
 if(WOO_PYBIND11)
 	add_definitions(-DWOO_PYBIND11)
 	find_package(pybind11 REQUIRED)
-	find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
-	find_library(DOUBLECONVERSION_LIB NAMES double-conversion)
-	if(DOUBLECONVERSION_INCLUDE_DIR AND DOUBLECONVERSION_LIB)
-		# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
-		add_library(DOUBLECONVERSION INTERFACE)
-		target_include_directories(DOUBLECONVERSION INTERFACE ${GLE_INCLUDE_DIR})
-		target_link_libraries(DOUBLECONVERSION INTERFACE ${GLE_LIB})
-	else()
-		message(FATAL_ERROR "double-conversion library/headers not found.")
-	endif()
 else()
-	find_package(Boost REQUIRED COMPONENTS python)
+	set(BP_VERSION_SUFFIX "${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
+	# set(BP_VERSION_SUFFIX "")
+	find_package(Boost REQUIRED COMPONENTS "python${BP_VERSION_SUFFIX}")
+	# otherwise boost::python would happily include version 2.7 headers?!
+	include_directories(${PYTHON_INCLUDE_DIRS})
 endif()
+
+find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
+find_library(DOUBLECONVERSION_LIB NAMES double-conversion)
+if(DOUBLECONVERSION_INCLUDE_DIR AND DOUBLECONVERSION_LIB)
+	# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
+	add_library(DOUBLECONVERSION INTERFACE)
+	target_include_directories(DOUBLECONVERSION INTERFACE ${GLE_INCLUDE_DIR})
+	target_link_libraries(DOUBLECONVERSION INTERFACE ${GLE_LIB})
+else()
+	message(FATAL_ERROR "double-conversion library/headers not found.")
+endif()
+
 if(WOO_CEREAL)
 	# requires -DWOO_NOXML but that is set by default already
 	add_definitions(-DWOO_CEREAL)
@@ -168,8 +178,8 @@ if(WOO_QT5)
 		message(FATAL_ERROR "QGLViewer library/headers not found (headers: ${QGLVIEWER_INCLUDE_DIR}, lib: ${QGLVIEWER_LIBS}).")
 	endif()
 	set(WOO_CXX_GUI_SOURCES
-		gui/qt4/GLViewer.cpp
 		gui/qt4/GLViewer.qrc
+		gui/qt4/GLViewer.cpp
 		gui/qt4/_GLViewer.cpp
 		gui/qt4/OpenGLManager.cpp
 	)
@@ -204,8 +214,9 @@ message(STATUS "Executables to be installed in ${WOO_BIN_DIR} (scheme: ${WOO_INS
 
 ## prepare header directories (symlink)
 macro(create_symlink target linkname)
+	message(STATUS "Symlinking ${linkname} → ${target}")
 	execute_process(
-		COMMAND ln -sf "${target}" "${linkname}" 
+		COMMAND ln -sf "${target}" "${linkname}"
 		RESULT_VARIABLE HEADER_LINK_STATUS
 		ERROR_VARIABLE HEADER_LINK_ERROR
 	)
@@ -215,9 +226,9 @@ macro(create_symlink target linkname)
 endmacro()
 MESSAGE(STATUS "Symlinking headers …")
 FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/include/woo")
-create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo/pkg")
-create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo/lib")
-create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo/core")
+create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo")
+create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo")
+create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo")
 
 add_library(spdlog_local STATIC
 	lib/spdlog/src/async.cpp
@@ -244,6 +255,20 @@ endif()
 add_definitions(-DWOO_CXX_FLAVOR=${WOO_CXX_FLAVOR})
 if(WOO_DEBUG)
 	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
+endif()
+
+if(WOO_PYBIND11)
+	set(WOO_EIGEN_WRAPPER_SRCS lib/eigen/pybind11/register.cpp)
+else()
+	set(WOO_EIGEN_WRAPPER_SRCS
+		lib/eigen/boost-python/expose-boxes.cpp
+		lib/eigen/boost-python/expose-complex.cpp
+		lib/eigen/boost-python/expose-converters.cpp
+		lib/eigen/boost-python/expose-matrices.cpp
+		lib/eigen/boost-python/expose-quaternion.cpp
+		lib/eigen/boost-python/expose-vectors.cpp
+		lib/eigen/boost-python/minieigen.cpp
+	)
 endif()
 
 
@@ -285,7 +310,6 @@ set(WOO_CXX_SOURCES
 	lib/multimethods/Indexable.cpp
 	lib/object/Object.cpp
 	lib/opengl/GLUtils.cpp
-	lib/pyutil/eigen-wrap.cpp
 	lib/pyutil/except.cpp
 	lib/pyutil/gil.cpp
 	lib/pyutil/pickle.cpp
@@ -297,6 +321,7 @@ set(WOO_CXX_SOURCES
 	lib/spdlog/src/stdout_sinks.cpp
 	lib/sphere-pack/SpherePack.cpp
 	lib/voro++/voro++.cc
+	${WOO_EIGEN_WRAPPER_SRCS}
 	# pkg
 	pkg/clDem/CLDemField.cpp
 	pkg/dem/Buoyancy.cpp
@@ -370,20 +395,32 @@ set(WOO_CXX_SOURCES
 	pkg/voro/VoroField.cpp
 )
 
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+
+message(STATUS "All sources are ${WOO_CXX_SOURCES};;")
+INCLUDE(wooCombineSources)
+COMBINE_SOURCES("${CMAKE_BINARY_DIR}/srcs";
+	"${WOO_CXX_SOURCES}";
+	1;
+	WOO_CXX_SOURCES_COMBINED
+)
+message(STATUS "Combined sources are ${WOO_INTERNAL_SOURCES}")
+
 if(WOO_PYBIND11)
 	pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
-		${WOO_CXX_SOURCES}
+		${WOO_CXX_SOURCES_COMBINED}
 		${WOO_CXX_GUI_SOURCES}
 		${WOO_CXX_GTS_SOURCES}
 	)
 else()
 	add_library(${CXX_INTERNAL} SHARED
-		${WOO_CXX_SOURCES}
+		${WOO_CXX_SOURCES_COMBINED}
 		${WOO_CXX_GUI_SOURCES}
 		${WOO_CXX_GTS_SOURCES}
 	)
 	set_target_properties(${CXX_INTERNAL} PROPERTIES PREFIX "")
-	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python DOUBLECONVERSION)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python${BP_VERSION_SUFFIX} DOUBLECONVERSION)
 endif(WOO_PYBIND11)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
@@ -563,4 +600,3 @@ endif()
 ##
 configure_file(wooExtra.cmake ${CMAKE_BINARY_DIR}/wooExtra.cmake @ONLY)
 install(SCRIPT ${CMAKE_BINARY_DIR}/wooExtra.cmake)
-
