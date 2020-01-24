@@ -68,14 +68,20 @@ if 'qt' not in woo.config.features: woo.runtime.hasDisplay=False
 
 if woo.runtime.hasDisplay==None: # not yet set
     raise RuntimeError('woo.plot imported before woo.runtime.hasDisplay is set. This should not really happen, please report.')
-if not woo.runtime.hasDisplay:
-    #from matplotlib.backends.backend_agg import FigureCanvasAgg as WooFigureCanvas
-    matplotlib.use('Agg') ## pylab API
-else:
-    if 'qt4' in woo.config.features: matplotlib.use('Qt4Agg') # pylab API
-    elif 'qt5' in woo.config.features: matplotlib.use('Qt5Agg')
-    else: raise RuntimeError("woo.runtime.hasDisplay set, but neither qt4 nor qt5 is in features.")
-    #from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as WooFigureCanvas
+
+mplb=matplotlib.get_backend()
+if 'ipykernel' in mplb:
+    # if running inside jupyter or similar, don't set backend here
+    pass
+else :
+    if not woo.runtime.hasDisplay:
+        #from matplotlib.backends.backend_agg import FigureCanvasAgg as WooFigureCanvas
+        matplotlib.use('Agg') ## pylab API
+    else:
+        if 'qt4' in woo.config.features: matplotlib.use('Qt4Agg') # pylab API
+        elif 'qt5' in woo.config.features: matplotlib.use('Qt5Agg')
+        else: raise RuntimeError("woo.runtime.hasDisplay set, but neither qt4 nor qt5 is in features.")
+        #from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as WooFigureCanvas
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as _HeadlessFigureCanvas
 from minieigen import *
