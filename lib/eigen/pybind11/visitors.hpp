@@ -6,7 +6,7 @@
 #include<iostream>
 #include<set>
 
-#include<woo/lib/pyutil/eigen-common.hpp>
+#include<woo/lib/eigen/pybind11/common.hpp>
 // classes dealing with exposing actual types, with many switches inside depending on template arguments
 
 // methods common for vectors and matrices
@@ -44,7 +44,7 @@ class MatrixBaseVisitor{
 		;
 		// reductions only meaningful for non-complex matrices (e.g. maxCoeff, minCoeff)
 		visit_reductions_noncomplex<Scalar,PyClass>(cl);
-		
+
 	};
 	template<class PyClass> static string name(PyClass& cl){ return py::cast<string>(cl.attr("__name__")); }
 	private:
@@ -129,7 +129,7 @@ class MatrixBaseVisitor{
 	// hence two versions
 	template<typename Scalar> static bool prune_element(const Scalar& num, RealScalar absTol, typename boost::disable_if_c<Eigen::NumTraits<Scalar>::IsComplex >::type* dummy=0){using namespace std; return abs(num)<=absTol || num!=-0; }
 	template<typename Scalar> static bool prune_element(const Scalar& num, RealScalar absTol, typename boost::enable_if_c<Eigen::NumTraits<Scalar>::IsComplex >::type* dummy=0){using namespace std; return abs(num)<=absTol; }
-	
+
 	static MatrixBaseT pruned(const MatrixBaseT& a, double absTol=1e-6){ // typename MatrixBaseT::Scalar absTol=1e-6){
 		MatrixBaseT ret(MatrixBaseT::Zero(a.rows(),a.cols()));
 		for(Index c=0;c<a.cols();c++){ for(Index r=0;r<a.rows();r++){ if(!prune_element(a(c,r),absTol)) ret(c,r)=a(c,r); } }
@@ -242,7 +242,7 @@ class VectorVisitor {
 	static CompatVec2 Vec3_zx(const CompatVec3& v){ return CompatVec2(v[2],v[0]); }
 	static CompatVec2 Vec3_yz(const CompatVec3& v){ return CompatVec2(v[1],v[2]); }
 	static CompatVec2 Vec3_zy(const CompatVec3& v){ return CompatVec2(v[2],v[1]); }
-	
+
 	// 4-vector
 	template<typename VectorT2, class PyClass> static void visit_special_sizes(PyClass& cl, typename boost::enable_if_c<VectorT2::RowsAtCompileTime==4>::type* dummy=0){
 		cl
@@ -627,7 +627,7 @@ class AabbVisitor{
 		.def("contains",&AabbVisitor::containsPt)
 		.def("contains",&AabbVisitor::containsBox)
 		// for the "in" operator
-		.def("__contains__",&AabbVisitor::containsPt) 
+		.def("__contains__",&AabbVisitor::containsPt)
 		.def("__contains__",&AabbVisitor::containsBox)
 		.def("extend",&AabbVisitor::extendPt)
 		.def("extend",&AabbVisitor::extendBox)
@@ -649,7 +649,7 @@ class AabbVisitor{
 		py::implicitly_convertible<py::tuple,Box>();
 		py::implicitly_convertible<py::list,Box>();
 	};
-	
+
 	static Box from_list(py::list l){ return from_tuple(py::tuple(l)); }
 	static Box from_tuple(py::tuple t){
 		if(py::len(t)!=2) throw py::type_error("Can only be constructed from a 2-tuple (not "+std::to_string(py::len(t))+"-tuple).");
@@ -668,7 +668,7 @@ class AabbVisitor{
 	static VectorType center(const Box& self){ return self.center(); }
 	static VectorType sizes(const Box& self){ return self.sizes(); }
 	static Index len(){ return 2; }
-	// getters and setters 
+	// getters and setters
 	static Scalar get_item(const Box& self, py::tuple _idx){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) return self.min()[idx[1]]; return self.max()[idx[1]]; }
 	static void set_item(Box& self, py::tuple _idx, Scalar value){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) self.min()[idx[1]]=value; else self.max()[idx[1]]=value; }
 	static VectorType get_minmax(const Box& self, Index idx){ IDX_CHECK(idx,2); if(idx==0) return self.min(); return self.max(); }
@@ -724,7 +724,7 @@ class QuaternionVisitor{
 		// .def("random",&QuaternionVisitor::random,"Assign random orientation to the quaternion.")
 		// operators
 #if 1
-		// the explicit one crashes just the same 
+		// the explicit one crashes just the same
 		// copy to work around alignment issues...?
 		.def("__mul__",[](const QuaternionT& a, const QuaternionT& b){ QuaternionT a_(a); QuaternionT b_(b); return a_*b_; },py::is_operator())
 		// .def(py::self * py::self)
@@ -784,4 +784,3 @@ class QuaternionVisitor{
 	}
 	static Index __len__(){return 4;}
 };
-
