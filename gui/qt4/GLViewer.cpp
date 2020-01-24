@@ -112,7 +112,11 @@ GLLock::GLLock(GLViewer* _glv): std::scoped_lock<std::mutex>(Master::instance().
 GLLock::~GLLock(){ glv->doneCurrent(); }
 
 
-GLViewer::~GLViewer(){ /* get the GL mutex when closing */ GLLock lock(this); /* cerr<<"Destructing view #"<<viewId<<endl;*/ }
+GLViewer::~GLViewer(){
+	/* get the GL mutex when closing */
+	GLLock lock(this);
+	/* cerr<<"Destructing view #"<<viewId<<endl;*/
+}
 
 void GLViewer::closeEvent(QCloseEvent *e){
 	// if there is an active SnapshotEngine, 

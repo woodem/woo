@@ -2,7 +2,12 @@
 #include<woo/core/Timing.hpp>
 #include<woo/lib/object/Object.hpp>
 #include<woo/lib/base/Logging.hpp>
-#include<woo/lib/pyutil/eigen-wrap.hpp>
+
+#ifdef WOO_PYBIND11
+	#include<woo/lib/eigen/pybind11/register.hpp>
+#else
+	// #include<woo/lib/eigen/boost-python/register.hpp>
+#endif
 
 #include<signal.h>
 #include<cstdlib>
@@ -21,10 +26,11 @@
 	bool termios_saved=false;
 #endif
 
+struct Boot{
+	static std::shared_ptr<spdlog::logger> logger;
 
 #ifdef WOO_SPDLOG
-	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.boot");
-	void initSpdlog(){
+	static void initSpdlog(){
 		spdlog::set_pattern("%H:%M:%S [%-8n] %s:%# %^[%l] %v%$");
 		if(!logger){ std::cerr<<"Logger not yet constructed...?"<<std::endl; return; }
 		auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::trace:spdlog::level::warn);
@@ -37,7 +43,7 @@
 #endif
 
 #if defined(WOO_DEBUG) && !defined(__MINGW64__)
-	void crashHandler(int sig){
+	static void crashHandler(int sig){
 	switch(sig){
 		case SIGABRT:
 		case SIGSEGV:
@@ -48,11 +54,11 @@
 			raise(sig); // reemit signal after exiting gdb
 			break;
 		}
-	}		
+	}
 #endif
 
 #ifndef __MING64__
-	void quitHandler(int sig){
+	static void quitHandler(int sig){
 		if(sig!=SIGQUIT and sig!=SIGTERM and sig!=SIGINT) return;
 		cerr<<"woo._cxxInternal: QUIT/TERM/INT handler called."<<endl;
 		if(termios_saved){
@@ -67,7 +73,7 @@
 
 
 /* Initialize woo - load config files, register python classes, set signal handlers */
-void wooInitialize(){
+static void wooInitialize(){
 
 	#ifdef WOO_SPDLOG
 		initSpdlog();
@@ -83,22 +89,27 @@ void wooInitialize(){
 		sysModules["minieigen"]=m;
 		LOG_DEBUG_EARLY("sys.modules['minieigen'] is alias for _wooEigen11.")
 	#else
-		// early check that minieigen is importable
-		// (this is probably too late already)
-		const string meig="minieigen"; 
-		try{
-			if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
-			auto minieigen=py::import(meig.c_str());
-			LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
-		} catch(py::error_already_set& e){
-				throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked());
-		} catch(...){
-			throw std::runtime_error("Error importing "+meig+" (details not reported).");
-		}
+		// woo::registerEigenClassesInBoostPython();
+		// module is called: minieigen
+		#if 0
+			// WOO_PYTHON_MODULE(_gts);
+			// early check that minieigen is importable
+			// (this is probably too late already)
+			const string meig="minieigen";
+			try{
+				if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
+				auto minieigen=py::import(meig.c_str());
+				LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
+			} catch(py::error_already_set& e){
+					throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked(e));
+			} catch(...){
+				throw std::runtime_error("Error importing "+meig+" (details not reported).");
+			}
+		#endif
 	#endif
 
 	Master& master(Master::instance());
-	
+
 	string confDir;
 	if(getenv("XDG_CONFIG_HOME")){
 		confDir=getenv("XDG_CONFIG_HOME");
@@ -123,18 +134,18 @@ void wooInitialize(){
 		gdbBatch.open(master.gdbCrashBatch.c_str()); gdbBatch<<"attach "<<to_string(getpid())<<"\nset pagination off\nthread info\nthread apply all backtrace\ndetach\nquit\n"; gdbBatch.close();
 		// XXX DISABLED for now
 		#if 0
-			signal(SIGABRT,crashHandler);
-			signal(SIGSEGV,crashHandler);
+			signal(SIGABRT,&Boot::crashHandler);
+			signal(SIGSEGV,&Boot::crashHandler);
 		#endif
 	#endif
-	
+
 	#ifndef __MINGW64__ // posix
 		if(getenv("TERM")){
 			tcgetattr(STDIN_FILENO,&termios_attrs);
 			termios_saved=true;
-			signal(SIGQUIT,quitHandler);
-			signal(SIGTERM,quitHandler);
-			signal(SIGINT,quitHandler);
+			signal(SIGQUIT,&Boot::quitHandler);
+			signal(SIGTERM,&Boot::quitHandler);
+			signal(SIGINT,&Boot::quitHandler);
 			// cerr<<"woo._cxxInternal: QUIT/TERM/INT handler registered."<<endl;
 		}
 	#endif
@@ -147,6 +158,10 @@ void wooInitialize(){
 	master.pyRegisterAllClasses();
 }
 
+};
+
+std::shared_ptr<spdlog::logger> Boot::logger=spdlog::stdout_color_mt("woo.boot");
+
 #ifdef WOO_GTS
 	// this module is compiled from separate sources (in py/3rd-party/pygts)
 	// but we will register it here
@@ -155,7 +170,10 @@ void wooInitialize(){
 
 // NB: this module does NOT use WOO_PYTHON_MODULE, since the file is really called _cxxInternal[_flavor][_debug].so
 // and is a real real python module
-// 
+//
+#if PY_MAJOR_VERSION==2
+	#error Building with Python 2.x is no longer supported.
+#endif
 
 #ifdef WOO_PYBIND11
 	#ifdef WOO_DEBUG
@@ -165,8 +183,8 @@ void wooInitialize(){
 	#endif
 		LOG_DEBUG_EARLY("Initializing the _cxxInternal" BOOST_PP_STRINGIZE(WOO_CXX_FLAVOR) " module.");
 		mod.doc()="This module's binary contains all compiled Woo modules (such as :obj:`woo.core`), which are created dynamically when this module is imported for the first time. In itself, it is empty and only to be used internally.";
-		
-		wooInitialize();
+
+		Boot::wooInitialize();
 	};
 #else
 	#ifdef WOO_DEBUG
@@ -178,6 +196,6 @@ void wooInitialize(){
 		LOG_DEBUG_EARLY("Initializing the _cxxInternal" BOOST_PP_STRINGIZE(WOO_CXX_FLAVOR) " module.");
 		py::scope().attr("__doc__")="This module's binary contains all compiled Woo modules (such as :obj:`woo.core`), which are created dynamically when this module is imported for the first time. In itself, it is empty and only to be used internally.";
 		// call automatically at module import time
-		wooInitialize();
+		Boot::wooInitialize();
 	}
 #endif

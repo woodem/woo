@@ -6,9 +6,6 @@
 #include<woo/lib/sphere-pack/SpherePack.hpp>
 #include<woo/core/Master.hpp>
 
-#ifdef WOO_SPDLOG
-	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.pack.predicates");
-#endif
 /*
 This file contains various predicates that say whether a given point is within the solid,
 or, not closer than "pad" to its boundary, if pad is nonzero

@@ -6,7 +6,7 @@
 enum{ll_TRACE,ll_DEBUG,ll_INFO,ll_WARN,ll_ERROR,ll_FATAL};
 
 #ifdef WOO_SPDLOG
-	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.log");
+	static std::shared_ptr<spdlog::logger> logLogger=spdlog::stdout_color_mt("woo.log");
 	void logSetLevel(std::string loggerName, int level){
 		// std::string fullName(loggerName.empty()?"woo":("woo."+loggerName));
 		spdlog::level::level_enum newLevel;
@@ -27,7 +27,7 @@ enum{ll_TRACE,ll_DEBUG,ll_INFO,ll_WARN,ll_ERROR,ll_FATAL};
 			});
 		} else {
 			log=spdlog::get(loggerName);
-			if(!log){ LOG_WARN("No logger named '{}', ignoring level setting.",loggerName); return; }
+			if(!log){ SPDLOG_LOGGER_WARN(logLogger,"No logger named '{}', ignoring level setting.",loggerName); return; }
 			log->set_level(newLevel);
 		}
 	}

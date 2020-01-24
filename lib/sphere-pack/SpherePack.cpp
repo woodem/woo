@@ -24,6 +24,7 @@
 #include<time.h>
 
 WOO_IMPL_LOGGER(SpherePack);
+WOO_IMPL_LOGGER(Predicate);
 
 using std::string;
 using std::invalid_argument;

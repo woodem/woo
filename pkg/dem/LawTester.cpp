@@ -47,7 +47,7 @@ void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 		#ifdef WOO_PYBIND11
 			kw.attr("pop")(kwitem.first);
 		#else
-			kw[key].del();		
+			kw[key].del();
 		#endif
 	}
 };
@@ -85,7 +85,7 @@ void LawTester::run(){
 	if(s2) rads[1]=s2->radius;
 	Node* nodes[2]={pA->shape->nodes[0].get(),pB->shape->nodes[0].get()};
 	DemData* dyns[2]={nodes[0]->getDataPtr<DemData>().get(),nodes[1]->getDataPtr<DemData>().get()};
-	
+
 	for(auto dyn: dyns){
 		if(!dyn->impose) dyn->impose=make_shared<Local6Dofs>();
 		else if(!dyn->impose->isA<Local6Dofs>()) throw std::runtime_error("LawTester: DemData.impose is set, but it is not a Local6Dofs.");
@@ -166,7 +166,7 @@ void LawTester::run(){
 						impose->values[ix]=0.;
 						break;
 					}
-					default:	
+					default:
 						LOG_FATAL("?!?"); abort();
 				}
 			}
@@ -240,7 +240,7 @@ void LawTester::run(){
 
 	GilLock lock; // lock the interpreter for this block
 	string* errCmd=nullptr; // to know where the error happened (traceback does not show that)
-	/* check the result of stg->until */ 
+	/* check the result of stg->until */
 	try{
 		py::object main=py::import("__main__");
 		py::object globals=main.attr("__dict__");
@@ -275,6 +275,6 @@ void LawTester::run(){
 			/* ... */
 		}
 	} catch (py::error_already_set& e){
-		throw std::runtime_error("LawTester exception"+(errCmd?(" in '"+*errCmd+"'"):string(" "))+":\n"+parsePythonException_gilLocked());
+		throw std::runtime_error("LawTester exception"+(errCmd?(" in '"+*errCmd+"'"):string(" "))+":\n"+parsePythonException_gilLocked(e));
 	}
 };

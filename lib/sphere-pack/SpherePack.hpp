@@ -14,6 +14,7 @@
 
 /* base class for filtering predicates */
 struct Predicate{
+	WOO_DECL_LOGGER;
 	public:
 		virtual bool operator() (const Vector3r& pt,Real pad=0.) const = 0;
 		virtual AlignedBox3r aabb() const = 0;
