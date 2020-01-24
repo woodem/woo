@@ -15,7 +15,7 @@ WOO_PLUGIN(core,(Engine)(ParallelEngine)(PeriodicEngine)(PyRunner));
 
 WOO_IMPL_LOGGER(Engine);
 
-void Engine::run(){ throw std::logic_error((getClassName()+" did not override Engine::run()").c_str()); } 
+void Engine::run(){ throw std::logic_error((getClassName()+" did not override Engine::run()").c_str()); }
 
 void Engine::explicitRun(const shared_ptr<Scene>& scene_, const shared_ptr<Field>& field_){
 	if(!scene_) throw std::runtime_error("Engine.__call__: scene must not be None.");
@@ -42,9 +42,9 @@ void Engine::setField(){
 		string err="Engine "+pyStr()+" accepted "+to_string(accepted.size())+" fields to run on:";
 		for(const shared_ptr<Field>& f: accepted) err+=" "+f->pyStr();
 		err+=". Only one field is allowed; this ambiguity can be resolved by setting the field attribute.";
-		throw std::runtime_error(err); 
+		throw std::runtime_error(err);
 	}
-	if(accepted.empty()) throw std::runtime_error("Engine "+pyStr()+" accepted no field to run on; remove it from engines."); 
+	if(accepted.empty()) throw std::runtime_error("Engine "+pyStr()+" accepted no field to run on; remove it from engines.");
 	this->field=accepted[0];
 }
 
@@ -85,7 +85,7 @@ void Engine::runPy_generic(const string& callerId, const string& command, Scene*
 		// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
 		py::exec(command.c_str(),global,local);
 	} catch (py::error_already_set& e){
-		throw std::runtime_error(callerId+": exception in '"+command+"':\n"+parsePythonException_gilLocked());
+		throw std::runtime_error(callerId+": exception in '"+command+"':\n"+parsePythonException_gilLocked(e));
 	};
 }
 
@@ -172,7 +172,7 @@ bool PeriodicEngine::isActivated(){
 	const long& stepNow=scene->step;
 	// we run for the very first time here, initialize counters
 	bool initNow=(stepLast<0);
-	if(initNow){ 
+	if(initNow){
 		realLast=realNow; virtLast=virtNow; stepLast=stepNow;
 	}
 	if(
@@ -204,7 +204,7 @@ void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 			else throw std::invalid_argument(("PyRunner.command was already specified (extra unnamed string argument, at position "+to_string(i)+")").c_str());
 			cmdDone=true;
 			continue;
-		} 
+		}
 		if(exInt.check()){
 			if(!stepDone) stepPeriod=exInt();
 			else throw std::invalid_argument(("PyRunner.stepPeriod was already specified (extra unnamed int argument, at position "+to_string(i)+")").c_str());
