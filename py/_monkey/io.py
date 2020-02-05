@@ -506,6 +506,10 @@ def Object_deepcopy(obj,**kw):
     'Make object deepcopy by serializing to memory and deserializing.'
     return woo.master.deepcopy(obj,**kw)
 
+def Object_sha1(obj):
+    import hashlib
+    return hashlib.sha1(obj.dumps(format='expr',width=0,noMagic=True).encode('utf-8')).hexdigest()
+
 Object._getAllTraits=Object_getAllTraits
 Object._getAllTraitsWithClasses=Object_getAllTraitsWithClasses
 Object.dump=Object_dump
@@ -515,6 +519,7 @@ Object.deepcopy=Object_deepcopy
 Object.load=classmethod(Object_load)
 Object.loads=classmethod(Object_loads)
 Object.loadTmp=classmethod(Object_loadTmp)
+Object.sha1=Object_sha1
 
 
 def Master_save(o,*args,**kw):
