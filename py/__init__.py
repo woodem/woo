@@ -200,7 +200,7 @@ if PY3K:
     # will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
     allSubmodules=set()
     import imp
-    print(80*'#'+'\n'+str(master.compiledPyModules))
+    # print(80*'#'+'\n'+str(master.compiledPyModules))
     for mod in master.compiledPyModules:
         if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
         # this inserts the module to sys.modules automatically
