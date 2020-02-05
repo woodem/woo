@@ -57,7 +57,7 @@ if dist in ('Ubuntu','Debian'):
         if linver=='18.04':
             aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
-            pipCore='xlwt colour-runner git+https://github.com/eudoxos/minieigen11'.split()
+            pipCore='xlwt colour-runner'.split()
             pipUI=[]
             if venv:
                 pipCore+='numpy matplotlib future xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
