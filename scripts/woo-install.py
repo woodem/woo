@@ -52,8 +52,8 @@ def gitprep(url,src,depth=-1):
 
 
 if dist in ('Ubuntu','Debian'):
-    if not args.aptNoUpdate: call(['apt','update'],sudo=True)
-    call(['apt','install','--yes','eatmydata'],sudo=True)
+    if not args.aptNoUpdate: call(['apt-get','update'],sudo=True)
+    call(['apt-get','install','--yes','eatmydata'],sudo=True)
     if dist=='Ubuntu':
         if linver=='18.04':
             aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev'.split()
@@ -82,7 +82,7 @@ if dist in ('Ubuntu','Debian'):
         else: raise RuntimeError('Unsupported Ubuntu version %s.'%linver)
         if args.ccache: aptCore+=['ccache']
     else: raise RuntimeError('Unsupported distribution %s'%dist)
-    call(['eatmydata','apt','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
+    call(['eatmydata','apt-get','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
 
 # install what is not packaged -- distribution-agnostic
 call(['pip3','install','--upgrade']+pipCore+([] if args.headless else pipUI),sudo=True if not venv else False)
@@ -113,4 +113,4 @@ if args.clean:
     import shutil
     shutils.rmtree(args.build_prefix)
     if args.clean>1: shutils.rmtree(args.src)
-    if dist in ('Ubuntu','Debian'): call(['apt','clean'],sudo=True) 
+    if dist in ('Ubuntu','Debian'): call(['apt-get','clean'],sudo=True) 
