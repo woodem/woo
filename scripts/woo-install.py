@@ -1,15 +1,16 @@
 #!/usr/bin/python3
-import platform, os, sys, argparse, multiprocessing, os.path
+import platform, os, sys, argparse, multiprocessing, os.path, subprocess
 
 if sys.version_info.major!=3: raise RuntimeError('This script should be run with python 3.x.')
 if platform.system()!='Linux': raise RuntimeError('This script only runs under Linux.')
 root=(os.getuid()==0)
 
-dist,linver,codename=platform.linux_distribution()
+# dist,linver,codename=platform.linux_distribution()
+dist,linver=[l.decode('utf-8') for l in subprocess.check_output([b'lsb_release',b'-sir']).split(b'\n')[:2]]
 if dist=='Ubuntu':
-    # linver='16.04'
-    if linver=='16.04': pass
-    elif linver=='18.04': pass
+    if linver=='18.04':
+        print('WARNING: while Ubuntu 18.04 is supported, consider upgrading to 20.04 for better future maintenance.')
+    elif linver=='20.04': pass
     else: raise RuntimeError('Ubuntu version %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%linver)
 else:
     raise RuntimeError('Linux distribution %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%dist)
@@ -58,6 +59,18 @@ if dist in ('Ubuntu','Debian'):
             aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='xlwt colour-runner'.split()
+            pipUI=[]
+            if venv:
+                pipCore+='numpy matplotlib future xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
+                pipUI+='vext.pyqt5 XLib'.split()
+                aptUI+=['python3-pyqt5']
+            else:
+                aptCore+='python3-setuptools python3-pip python3-future python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-future ipython3'.split()
+                aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
+        elif linver=='20.04':
+            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev '.split()
+            aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
+            pipCore='colour-runner xlwt'.split()
             pipUI=[]
             if venv:
                 pipCore+='numpy matplotlib future xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
