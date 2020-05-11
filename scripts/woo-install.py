@@ -71,7 +71,7 @@ if dist in ('Ubuntu','Debian'):
                 aptCore+='python3-setuptools python3-pip python3-future python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-future ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
         elif linver=='20.04':
-            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev pybind11-dev'.split()
+            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev libtbb-dev pybind11-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='colour-runner xlwt'.split()
             pipUI=[]
