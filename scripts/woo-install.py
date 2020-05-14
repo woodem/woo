@@ -27,7 +27,7 @@ parser.add_argument('--src',help='Directory where to put woo sources.',default=o
 parser.add_argument('--git',help='Upstream git repository.',default='https://github.com/woodem/woo.git')
 parser.add_argument('--build-prefix',help='Prefix for build files',default=os.path.expanduser('~/woo-build'))
 parser.add_argument('--clean',help='Clean build files and caches after running; on Debian/Ubuntu also cleans APT cache. If given twice, all source files are also removed.',action='count')
-parser.add_argument('--apt-no-update',help='Do not call apt update (for debugging)',default=False,action='store_true',dest='aptNoUpdate')
+parser.add_argument('--no-apt-update',help='Do not call apt update (for debugging)',default=False,action='store_true',dest='aptNoUpdate')
 args=parser.parse_args()
 
 if args.ccache and args.clean: print('WARN: --ccache and --clean do not make much sense together.')

@@ -22,7 +22,10 @@ from wooMain import options as wooOptions
 import warnings,traceback
 import sys,os,os.path,re,string
 
-WIN=sys.platform=='win32'
+
+# this would be true even when running under WSL (Linux)
+# so just disable Windows completely; never worked well, anyway
+WIN=False # sys.platform=='win32'
 PY3K=(sys.version_info[0]==3)
 
 if not PY3K:
@@ -45,7 +48,7 @@ if WIN:
         def __getitem__(self,name): return os.environ[name]
     wooOsEnviron=WooOsEnviron()
     # this was set in wooMain (with -D, -vv etc), set again so that c++ sees it
-    if 'WOO_DEBUG' is os.environ: wooOsEnviron['WOO_DEBUG']=os.environ['WOO_DEBUG']
+    if 'WOO_DEBUG' in os.environ: wooOsEnviron['WOO_DEBUG']=os.environ['WOO_DEBUG']
 else:
     wooOsEnviron=os.environ
     
