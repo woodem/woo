@@ -16,7 +16,7 @@
 #include<boost/algorithm/string/predicate.hpp>
 #include<boost/range/algorithm/count_if.hpp>
 #include<boost/range/algorithm/sort.hpp>
-#include<boost/detail/endian.hpp>
+#include<boost/predef/other/endian.h>
 
 #ifdef WOO_VTK
 	#include<vtkSmartPointer.h>
@@ -405,7 +405,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 		}
 	} else { // binary format
 		/* make sure we're on little-endian machine, because that's what STL uses */
-		#ifdef BOOST_LITTLE_ENDIAN
+		#ifdef BOOST_ENDIAN_LITTLE_BYTE
 			LOG_TRACE("STL: binary format detected");
 			char header[80];
 			in.read(header,80);
