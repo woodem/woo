@@ -426,7 +426,7 @@ endif(WOO_PYBIND11)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
 if(WOO_QT5)
-	target_link_libraries(${CXX_INTERNAL} PUBLIC Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml OpenGL::OpenGL GLUT::GLUT GLEW::GLEW QGLViewer GLE)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml OpenGL::GL GLUT::GLUT GLEW::GLEW QGLViewer GLE)
 endif(WOO_QT5)
 if(WOO_OPENMP)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC OpenMP::OpenMP_CXX)
