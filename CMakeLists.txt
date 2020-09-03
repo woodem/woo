@@ -586,11 +586,9 @@ if(WOO_QT5)
 		${CMAKE_BINARY_DIR}/ui_controller.py
 		gui/qt4/DisplayProfiles.py
 		gui/qt4/ExceptionDialog.py
-		gui/qt4/img_rc.py
 		gui/qt4/__init__.py
 		gui/qt4/Inspector.py
 		gui/qt4/ObjectEditor.py
-		gui/qt4/ui_controller.py
 		DESTINATION ${WOO_MODULEDIR}/qt
 	)
 endif()

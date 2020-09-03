@@ -348,6 +348,7 @@ def main(sysArgv=None):
         else: gui='qt5'
     except ImportError:
         gui=None
+        if woo.runtime.hasDisplay is None: woo.runtime.hasDisplay=False
 
     # run remote access things, before actually starting the user session
     from woo import remote, batch
