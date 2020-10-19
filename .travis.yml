@@ -47,7 +47,7 @@ install:
 script:
    - mkdir -p build
    - cd build
-   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF -DWOO_CLANG=ON ..
+   - cmake -GNinja -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
    # build some (big) objects separately so that we don't exceed Travis timeout for one command
    - ninja CMakeFiles/_cxxInternal.dir/pkg/dem/{Inlet,VtkExport,Particle,Ellipsoid}.cpp.o
    - ninja CMakeFiles/_cxxInternal.dir/core/{Scene,Test,Engine,EnergyTracker}.cpp.o
