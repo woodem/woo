@@ -20,7 +20,6 @@ PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Object>>)
 WOO_PYTHON_MODULE(_customConverters);
 PYBIND11_MODULE(_customConverters,mod){
 	mod.attr("__name__")="woo._customConverters";
-	std::cerr<<"WARN: importing stub woo._customConverters (not yet implemented in pybind11)."<<std::endl;
 
 	#define _OPAQUE_LIST_EXPOSE(Type) py::class_<vector<shared_ptr<Type>>>(mod, #Type "List").def(py::init<>());
 		_OPAQUE_LIST_EXPOSE(Node);
@@ -31,18 +30,6 @@ PYBIND11_MODULE(_customConverters,mod){
 
 #else
 
-// this is not currently used, but can be enabled if needed
-// probably breaks compilation for older (like <=1.35 or so)
-// boost::python
-#if 0
-	#include<indexing_suite/container_suite.hpp>
-	// #include<indexing_suite/container_proxy.hpp>
-	#include<indexing_suite/vector.hpp>
-#endif
-
-#if 0
-	#include<woo/lib/pyutil/numpy.hpp>
-#endif
 
 
 #include<cmath> // workaround for http://boost.2283326.n4.nabble.com/Boost-Python-Compile-Error-s-GCC-via-MinGW-w64-tp3165793p3166760.html
