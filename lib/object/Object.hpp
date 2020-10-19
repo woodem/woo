@@ -109,16 +109,18 @@ namespace woo{
 template<class C, typename T, T C::*A>
 void make_setter_postLoad(C& instance, const T& val){ instance.*A=val; /* cerr<<"make_setter_postLoad called"<<endl; */ instance.callPostLoad((void*)&(instance.*A)); /* postLoad(instance,(void*)&(instance.*A)); */ }
 
-template<bool integral> struct _register_bit_accessors_if_integral;
+template<bool integral> struct _bit_accessors_if_integral;
 // do-nothing variant
-template<> struct _register_bit_accessors_if_integral<false> {
+template<> struct _bit_accessors_if_integral<false> {
 	template<typename classObjT, typename classT, typename attrT, attrT classT::*A>
-	static void call(classObjT& _classObj, const vector<string>& bits, bool ro){ };
+	static void doRegister(classObjT& _classObj, const vector<string>& bits, bool ro){ };
+	template<typename IntegralT>
+	static bool trySetNamedBit(const string& name, bool ro, const vector<string>& bits, IntegralT& flags, const py::object& v){ return false; }
 };
 // register bits variant
-template<> struct _register_bit_accessors_if_integral<true> {
+template<> struct _bit_accessors_if_integral<true> {
 	template<typename classObjT, typename classT, typename attrT, attrT classT::*A>
-	static void call(classObjT& _classObj, const vector<string>& bits, bool ro){
+	static void doRegister(classObjT& _classObj, const vector<string>& bits, bool ro){
 		for(size_t i=0; i<bits.size(); i++){
 			#ifdef WOO_PYBIND11
 				auto getter=[i](const classT& obj){ return bool(obj.*A & (1<<i)); };
@@ -130,6 +132,20 @@ template<> struct _register_bit_accessors_if_integral<true> {
 			if(ro) _classObj.add_property_readonly(bits[i].c_str(),getter);
 			else   _classObj.add_property(bits[i].c_str(),getter,setter);
 		}
+	}
+	template<typename IntegralT>
+	static bool trySetNamedBit(const string& name, bool ro, const vector<string>& bits, IntegralT& flags, const py::object& val){
+		if(bits.empty()) return false;
+		for(size_t i=0; i<bits.size(); i++){
+			if(name!=bits[i]) continue;
+			if(ro) throw std::runtime_error("Flags accessed via bit accessor "+name+" are read-only.");
+			py::extract<bool> ex(val);
+			if(!ex.check()) throw std::runtime_error("Failed bool conversion when setting named bit "+name+".");
+			if(ex()) flags|=(1<<i);
+			else flags&=~(1<<i);
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -171,7 +187,7 @@ template<> struct _def_woo_attr__namedEnum<false>{
 			else if (!_ref &&  _ro)           _classObj.add_property_readonly(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()),docStr);
 		#endif
 		if(_ro && _post) cerr<<"WARN: "<<className<<"::"<<attrName<<" with the woo::Attr::readonly flag also uselessly sets woo::Attr::triggerPostLoad."<<endl;
-		if(!trait._bits.empty()) _register_bit_accessors_if_integral<std::is_integral<attrT>::value>::template call<classObjT,classT,attrT,A>(_classObj,trait._bits,_ro && (!trait._bitsRw));
+		if(!trait._bits.empty()) _bit_accessors_if_integral<std::is_integral<attrT>::value>::template doRegister<classObjT,classT,attrT,A>(_classObj,trait._bits,_ro && (!trait._bitsRw));
 	}
 };
 
@@ -243,8 +259,10 @@ template<> struct _setAttrMaybe</*hidden*/false,/*namedEnum*/true>{
 #endif
 
 // loop bodies for attribute access
-#define _PYGET_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return py::object(_ATTR_NAM(z));
-#define _PYSET_ATTR(x,klass,z) if(key==_ATTR_NAM_STR(z)) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; _setAttrMaybe<!!(traitT::compileFlags & woo::Attr::hidden),!!(traitT::compileFlags & woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; }
+// _PYGET_ATTR is unused
+// #define _PYGET_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return py::object(_ATTR_NAM(z));
+#define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!(traitT::compileFlags & woo::Attr::hidden),!!(traitT::compileFlags & woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::template trySetNamedBit(key,(traitT::compileFlags&woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
+
 #define _PYHASKEY_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return true;
 #ifdef WOO_PYBIND11
 	#define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::cast(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
