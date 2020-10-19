@@ -716,7 +716,7 @@ class ControllerClass(QWidget,Ui_Controller):
         #
         if not self.throttleControl.isSliderDown():
             v=self.throttleExp2Lin(S.throttle)
-            if self.throttleControl.value!=v: self.throttleControl.setValue(v)
+            if self.throttleControl.value!=v: self.throttleControl.setValue(int(v))
         ##
         if self.lastScene!=S:
             self.lastScene=S
