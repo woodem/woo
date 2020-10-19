@@ -217,15 +217,35 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 		"#include \"colors.inc\"\n"
 		"#include \"metals.inc\"\n"
 		"#include \"textures.inc\"\n"
-		"global_settings{ assumed_gamma 2.2 }\n"
+	;
+
+	if(showLogo){
+		"#include \"screen.inc\"\n"
+		"Set_Camera(/*location*/<15,0,0>,/*look_at*/<5,-1.5,-2>,/*angle*/15)\n"
+		"Set_Camera_Aspect(-image_width,image_height)\n"
+		"Set_Camera_Sky(z)\n"
 		"camera{\n"
-		"   location<25,25,15>\n"
-		"   sky z\n"
-		"   right x*image_width/image_height // right-handed coordinate system\n"
-		"   up z\n"
-		"   look_at <0,0,0>\n"
-		"   angle 45\n"
-		"}\n"
+		"	/* this was done by screen.inc already, but we need to repeat because of adding focal blur*/\n"
+		"	direction CamD*Camera_Zoom\n"
+		"	right CamR*Camera_Aspect_Ratio\n"
+		"	up CamU\n"
+		"	sky Camera_Sky\n"
+		"	location CamL\n"
+		"}\n";
+	} else {
+		os<<
+			"camera{\n"
+			"   location<25,25,15>\n"
+			"   sky z\n"
+			"   right x*image_width/image_height // right-handed coordinate system\n"
+			"   up z\n"
+			"   look_at <0,0,0>\n"
+			"   angle 45\n"
+			"}\n";
+	}
+
+	os<<
+		"global_settings{ assumed_gamma 2.2 }\n"
 		"background{rgb .2}\n"
 		"light_source{<-8,-20,30> color rgb .75}\n"
 		"light_source{<25,-12,12> color rgb .44}\n"
@@ -261,6 +281,15 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 		"#end\n\n";
 	os<<"#include \""<<staticInc<<"\"\n";
 	os<<"#include concat(concat(\""<<frameIncBase<<"\",str(frame_number,-5,0)),\".inc\")\n\n\n";
+
+	if(showLogo){
+		os<<
+			"#if (file_exists(\"woo-logo.inc\"))\n"
+			"	#include \"woo-logo.inc\"\n"
+			"	Screen_Object(object{woo_logo() rotate<0,180,0> scale .1},/*uv-position*/<.19,1.2>,/*spacing*/<.1,.1>,/*confine*/true,/*scaling*/.3)\n"
+			"#end"
+		;
+	}
 
 	os.close();
 }
@@ -420,7 +449,7 @@ void POVRayExport::writeFacetsMeshInc(std::ofstream& os, bool doStatic){
 				//os<<"   uv_mapping\n";
 				os<<"   /* uv_mapping can be used in the texture function */\n";
 			}
-			os<<"   "<<makeTexture(pp0,"mesh")<<"\n";
+			os<<"   "<<makeTexture(pp0)<<"\n"; // will use name based on particle mask
 			os<<"}\n";
 		}
 	}

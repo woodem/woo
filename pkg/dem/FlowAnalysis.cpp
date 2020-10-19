@@ -102,7 +102,10 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 		msScalar=par->matState->getScalar(matStateScalar,scene->time,scene->step);
 		if(matStateName.empty()){
 			matStateName=par->matState->getScalarName(matStateScalar);
-			if(matStateName.empty()) LOG_WARN("#{}: matState scalar no. {} has empty name?",par->id,matStateScalar);
+			if(matStateName.empty()){
+				matStateName=par->matState->getClassName()+"::scalar_"+to_string(matStateScalar);
+				LOG_WARN("#{}: using {} instead of empty result from MatState::getScalarName({}).",par->id,matStateScalar);
+			}
 		}
 	}
 
@@ -205,7 +208,7 @@ string FlowAnalysis::vtkExportFractions(const string& out, /*copy, since we may 
 	auto diam=vtkMakeArray(grid,"avg. diameter",1);
 	auto solid=vtkMakeArray(grid,"avg. solid ratio",1);
 	auto vel=vtkMakeArray(grid,"avg. velocity",3);
-	auto msScalar=vtkMakeArray(grid,matStateName,1);
+	auto msScalar=vtkMakeArray(grid,matStateName.empty()?string("[missing-name]"):matStateName,1);
 	// no fractions given, export all of them together
 	if(fractions.empty()){ for(size_t i=0; i<(size_t)nFractions; i++) fractions.push_back(i); }
 
@@ -391,6 +394,7 @@ string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>&
 #include<woo/lib/opengl/GLUtils.hpp>
 #include<woo/pkg/gl/Renderer.hpp>
 	void FlowAnalysis::render(const GLViewInfo& glInfo){
+		if(std::isnan(color[0])) return;
 		glPushMatrix();
 			if(node) GLUtils::setLocalCoords(node->pos,node->ori);
 			if(glInfo.renderer->fastDraw) GLUtils::AlignedBox(box,color);
