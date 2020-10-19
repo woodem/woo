@@ -1,10 +1,11 @@
 from builtins import str, range, super
 from minieigen import *
-import woo.pack
+import woo.pack, woo.utils
 import numpy
 import math
 
 from woo._triangulated import *
+log=woo.utils.makeLog(__name__)
 
 _docInlineModules=(woo._triangulated,)
 
@@ -273,6 +274,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(Vector3,'fakeVel',Vector3.Zero,unit='m/s',doc=':obj:`Fake surface velocity <woo.dem.Facet.fakeVel>` set (as-is) on all imported facets; if ``(0,0,0)`` (default), nothing is set.'),
         _PAT(float,'tessMaxBox',0,unit='mm',doc='Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.'),
         _PAT(bool,'tagged',False,doc='Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)'),
+        _PAT(float,'color',float('nan'),'Pass resulting particle color (scalar) when importing; only effective for formats which support it (STL). *nan* disables'),
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
@@ -300,7 +302,10 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
             # extract recognized values from **kw
             for ex in ['color']:
                 if ex in kw: kw2[ex]=kw[ex]
-            tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox,thickness=2*self.halfThick,**kw)
+            if not math.isnan(self.color):
+                log.warn('Using user-defined color %g for STL import'%self.color)
+                kw2['color']=self.color
+            tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox,thickness=2*self.halfThick,**kw2)
             applyFakeVel(tri)
             return tri
         elif fmt=='nastran':
@@ -315,7 +320,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                             # if l[45]=='-': l=l[:45]+'   '
                             tag,x,y,z=int(l[8:16]),self.preScale*float(l[24:32]),self.preScale*float(l[32:40]),self.preScale*float(l[40:48])
                         except:
-                            print('%s:%d: Error reading line'%(self.file,lineno+1))
+                            log.error('%s:%d: Error reading line'%(self.file,lineno+1))
                             raise
                         dta=woo.dem.DemDataTagged(tag=tag) if self.tagged else woo.dem.DemData()
                         nodeMap[tag]=woo.core.Node(dem=dta,pos=(self.node.loc2glob((x,y,z)) if self.node else (x,y,z)))
@@ -324,7 +329,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                         tri.append(woo.dem.Facet.make([nodeMap[a],nodeMap[b],nodeMap[c]],mat=mat,halfThick=self.halfThick,**kw))
                     # lines we know to ignore
                     elif l.startswith('BEGIN BULK') or l.startswith('PSHELL') or l.startswith('MAT') or l.startswith('ENDDATA') or len(l.strip())==0: continue
-                    else: print('%s:%d: unparsed line skipped: %s'%self.file,lineno+1,l)
+                    else: log.error('%s:%d: unparsed line skipped: %s'%self.file,lineno+1,l)
             applyFakeVel(tri)
             return tri
         else: raise RuntimeError('Programming error: unhandled value fmt=="%s".'%(str(fmt)))

@@ -456,7 +456,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     if renameNotOverwrite and os.path.exists(out):
         i=0
         while(os.path.exists(out+"~%d"%i)): i+=1
-        os.rename(out,out+"~%d"%i); print("Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i))
+        os.rename(out,out+"~%d"%i); log.warn("Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i))
     if holdLast<0: holdLast*=-fps
     if isinstance(frameSpec,list) or isinstance(frameSpec,tuple):
         if holdLast>0: frameSpec=list(frameSpec)+int(holdLast)*[frameSpec[-1]]
@@ -481,7 +481,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
 
     if IMG:
         cmd=[conv,'-delay',str(int(.5+(1./fps)/100.)),'-loop','0']+frameSpecAvconv+[out]
-        print('Animated image: ',' '.join(cmd))
+        log.info('Animated image: ',' '.join(cmd))
         ret=subprocess.call(cmd)
         if ret!=0: raise RuntimeError("Error running %s."%encExec)
 
@@ -498,7 +498,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
                 # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
                 inputs=['-i',symPattern]
                 cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
-            print('Pass %d:'%passNo,' '.join(cmd))
+            log.info('Pass %d:'%passNo,' '.join(cmd))
             ret=subprocess.call(cmd)
             if ret!=0: raise RuntimeError("Error running %s."%encExec)
     
@@ -648,7 +648,7 @@ def htmlReport(S,repFmt,headline,afterHead='',figures=[],dialect=None,figFmt=Non
         figFmt='png'
     repName=str(repFmt).format(S=S,**(dict(S.tags)))
     rep=codecs.open(repName,'w','utf-8','replace')
-    print('Writing report to file://'+os.path.abspath(repName))
+    log.info('Writing report to file://'+os.path.abspath(repName))
     repBase=re.sub(r'\.x?html$','',repName)
     s=htmlReportHead(S,headline,dialect=dialect,repBase=repBase,hideWooExtra=hideWooExtra)
     s+=afterHead
@@ -717,7 +717,7 @@ def ensureWriteableDir(d):
         print('Created directory:',d)
     except OSError as e:
         if e.errno!=errno.EEXISTS:
-            print('ERROR: failed to create directory '+d)
+            log.error('failed to create directory '+d)
             raise
     if not os.access(d,os.W_OK): raise IOError('Directory %s not writeable.'%d)
 
