@@ -19,7 +19,6 @@ addons:
          - ninja-build
          - libvtk7-dev
          - libdouble-conversion-dev
-         - clang-7
          - libomp-7-dev
          # for before_install
          - python3-pip
@@ -54,4 +53,4 @@ script:
    - ninja CMakeFiles/_cxxInternal.dir/core/{Scene,Test,Engine,EnergyTracker}.cpp.o
    - ninja CMakeFiles/_cxxInternal.dir/pkg/fem/{Membrane,Tetra}.cpp.o
    - sudo ninja install
-   - timeout 60 woo --test
+   - OMP_NUM_THREADS=2 timeout 60 woo --test

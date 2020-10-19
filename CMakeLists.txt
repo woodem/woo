@@ -25,15 +25,18 @@ if(DEFINED ENV{VIRTUAL_ENV})
 	endif()
 endif()
 
-
 if(WOO_CLANG)
-	set(CMAKE_C_COMPILER clang-9)
+	message(WARNING "WOO_CLANG is deprecated (but not yet ignored). Set CXX environment variable instead.")
 	set(CMAKE_CXX_COMPILER clang++-9)
+	set(CMAKE_C_COMPILER clang++-9)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	# https://github.com/pybind/pybind11/issues/1604#issuecomment-459796241
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
-else()
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
-endif(WOO_CLANG)
+endif()
 
 # https://stackoverflow.com/a/24305849/761090
 if(WOO_CCACHE)
@@ -400,9 +403,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
 message(STATUS "All sources are ${WOO_CXX_SOURCES};;")
 INCLUDE(wooCombineSources)
-COMBINE_SOURCES("${CMAKE_BINARY_DIR}/srcs";
-	"${WOO_CXX_SOURCES}";
-	1;
+COMBINE_SOURCES("${CMAKE_BINARY_DIR}/srcs" ;
+	"${WOO_CXX_SOURCES}" ;
+	1 ;
 	WOO_CXX_SOURCES_COMBINED
 )
 message(STATUS "Combined sources are ${WOO_INTERNAL_SOURCES}")
