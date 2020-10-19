@@ -1,6 +1,6 @@
 language: python
 python: 3.6
-dist: bionic
+dist: focal
 compiler: clang
 sudo: required
 addons:
@@ -17,18 +17,34 @@ addons:
          - cmake
          - cmake-data
          - ninja-build
-         - libvtk6-dev
-         - libdouble-conversion-dev # for building minieigen11
+         - libvtk7-dev
+         - libdouble-conversion-dev
          - clang-7
          - libomp-7-dev
+         # for before_install
+         - python3-pip
+         # runtime depends
+         - python3-future
+         - python3-prettytable
+         - python3-xlrd
+         - python3-xlsxwriter
+         - python3-matplotlib
+         - python3-colorama
+         - python3-genshi
+         - python3-psutil
+         - python3-pil
+         - python3-h5py
+         - python3-lockfile
+         - ipython3
+ 
 before_install:
-    - sudo add-apt-repository -y ppa:nschloe/pybind11-backports
+    # - sudo add-apt-repository -y ppa:nschloe/pybind11-backports
     # - sudo add-apt-repository -y ppa:eudoxos/minieigen
-    - sudo apt-get -q update
-    - sudo apt-get -y install pybind11-dev
+    # - sudo apt-get -q update
+    # - sudo apt-get -y install pybind11-dev
 install:
-   - pip install future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib git+https://github.com/eudoxos/minieigen11
-   - python -c 'import past; print(past.__file__)'
+   - pip3 install colour_runner xlwt
+   #future xlrd xlwt-future numpy colorama genshi psutil pillow h5py lockfile ipython colour_runner xlsxwriter prettytable setuptools matplotlib
 script:
    - mkdir -p build
    - cd build
