@@ -353,13 +353,23 @@ template<> struct _SerializeMaybe<false>{
 #define _ATTR_NAM(s) BOOST_PP_TUPLE_ELEM(5,1,s)
 #define _ATTR_INI(s) BOOST_PP_TUPLE_ELEM(5,2,s)
 #define _ATTR_TRAIT(klass,s) makeAttrTrait(BOOST_PP_TUPLE_ELEM(5,3,s)).doc(_ATTR_DOC(s)).className(BOOST_PP_STRINGIZE(klass)).name(_ATTR_NAM_STR(s)).cxxType(_ATTR_TYP_STR(s)).ini(_ATTR_TYP(s)(_ATTR_INI(s)))
-#define _ATTR_TRAIT_TYPE(klass,s) BOOST_PP_CAT(klass,BOOST_PP_CAT(_TraitType_,_ATTR_NAM(s)))
-#define _ATTR_TRAIT_GET(klass,s) BOOST_PP_CAT(klass,BOOST_PP_CAT(_getTrait_,_ATTR_NAM(s)))
+// trait type name within the _Traits container
+#define _ATTR_TRAIT_TYPE__INTERNAL(s) BOOST_PP_CAT(_ATTR_NAM(s),_T)
+// trait type witin the klass itself
+#define _ATTR_TRAIT_TYPE(klass,s) _ATTR_TRAITS_STRUCT_NAME(klass)::_ATTR_TRAIT_TYPE__INTERNAL(s)
+#define _ATTR_TRAIT_GET(klass,s) _ATTR_TRAITS_STRUCT_NAME(klass)::_ATTR_NAM(s)
 #define _ATTR_DOC(s) BOOST_PP_TUPLE_ELEM(5,4,s)
 // stringized getters
 #define _ATTR_TYP_STR(s) BOOST_PP_STRINGIZE(_ATTR_TYP(s))
 #define _ATTR_NAM_STR(s) BOOST_PP_STRINGIZE(_ATTR_NAM(s))
 #define _ATTR_INI_STR(s) BOOST_PP_STRINGIZE(_ATTR_INI(s))
+
+// each class klass contains struct klass::klass_Traits;
+// it is usually only incompletely declared in the header and defined in the implementation file
+#define _ATTR_TRAITS_STRUCT_NAME(klass) BOOST_PP_CAT(klass,_Traits)
+#define _ATTR_TRAITS_CONTAINER_DECL(klass) struct _ATTR_TRAITS_STRUCT_NAME(klass)
+#define _ATTR_TRAITS_CONTAINER_IMPL(klass,attrs) struct klass::_ATTR_TRAITS_STRUCT_NAME(klass){ BOOST_PP_SEQ_FOR_EACH(_WOO_TRAIT_DECL,klass,attrs) };
+#define _ATTR_TRAITS_CONTAINER_HEADERONLY(klass,attrs) struct _ATTR_TRAITS_STRUCT_NAME(klass){ BOOST_PP_SEQ_FOR_EACH(_WOO_TRAIT_DECL,klass,attrs) };
 
 // deprecated specification getters
 #define _DEPREC_OLDNAME(x) BOOST_PP_TUPLE_ELEM(2,0,x)
@@ -409,13 +419,13 @@ template<> struct _SerializeMaybe<false>{
 
 // attribute declaration
 #define _WOO_ATTR_DECL(x,thisClass,z) _ATTR_TYP(z) _ATTR_NAM(z);
-// trait definition - can go both in hpp or cpp (inside or outside the class body)
-#define _WOO_TRAIT_DEF(x,thisClass,z) \
-	typedef std::remove_reference<decltype(_ATTR_TRAIT(thisClass,z))>::type _ATTR_TRAIT_TYPE(thisClass,z); \
-	static _ATTR_TRAIT_TYPE(thisClass,z)& _ATTR_TRAIT_GET(thisClass,z)(){ static _ATTR_TRAIT_TYPE(thisClass,z) _tmp=_ATTR_TRAIT(thisClass,z); return _tmp; }
+// trait declaration (inside the Traits struct body)
+#define _WOO_TRAIT_DECL(x,thisClass,z) \
+	static auto& _ATTR_NAM(z)(){ static auto _tmp=_ATTR_TRAIT(thisClass,z); return _tmp; } \
+	typedef std::remove_reference<decltype(_ATTR_TRAIT(thisClass,z))>::type _ATTR_TRAIT_TYPE__INTERNAL(z);
 
 // return "type name;", define trait type and getter
-#define _ATTR_DECL_AND_TRAIT(x,thisClass,z) _WOO_ATTR_DECL(x,thisClass,z) _WOO_TRAIT_DEF(x,thisClass,z)
+// #define _ATTR_DECL_AND_TRAIT(x,thisClass,z) _WOO_ATTR_DECL(x,thisClass,z) _WOO_TRAIT_DECL(x,thisClass,z)
 
 
 // return name(default), (for initializers list); TRICKY: last one must not have the comma
@@ -441,7 +451,7 @@ template<> struct _SerializeMaybe<false>{
 
 // the most general
 #define WOO_CLASS_BASE_DOC_ATTRS_DEPREC_INIT_CTOR_DTOR_PY(thisClass,baseClass,classTraitSpec,attrs,deprec,inits,ctor,dtor,extras) \
-	public: BOOST_PP_SEQ_FOR_EACH(_ATTR_DECL_AND_TRAIT,thisClass,attrs) /* attribute declarations */ \
+	public: BOOST_PP_SEQ_FOR_EACH(_WOO_ATTR_DECL,thisClass,attrs) _ATTR_TRAITS_CONTAINER_HEADERONLY(thisClass,attrs) \
 	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrs),:,) BOOST_PP_SEQ_FOR_EACH_I(_ATTR_MAKE_INITIALIZER,BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrs)), inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE,~,attrs)) { ctor ; } /* ctor, with initialization of defaults */ \
 	virtual ~thisClass(){ dtor ; }; /* virtual dtor, since classes are polymorphic*/ \
 	_WOO_CLASS_BASE_DOC_ATTRS_DEPREC_PY(thisClass,baseClass,makeClassTrait(classTraitSpec),attrs,deprec,extras)
@@ -501,18 +511,19 @@ template<> struct _SerializeMaybe<false>{
 #define _WOO_CLASS_DECLARATION(thisClass,baseClass,classTraitSpec,attrs,deprec,inits,ctor,dtor,pyExtras) \
 	/* class itself */	REGISTER_CLASS_AND_BASE(thisClass,baseClass) \
 	/* attribute declarations */ BOOST_PP_SEQ_FOR_EACH(_WOO_ATTR_DECL,thisClass,attrs) \
-	/* trait definitions*/ BOOST_PP_SEQ_FOR_EACH(_WOO_TRAIT_DEF,thisClass,attrs) \
+	/* trait definitions*/ /* BOOST_PP_SEQ_FOR_EACH(_WOO_TRAIT_DECL,thisClass,attrs) */ \
 	/* later: call postLoad via ADL*/ public: void callPostLoad(void* addr) override { baseClass::callPostLoad(addr); postLoad(*this,addr); } \
 	/* accessors for deprecated attributes, with warnings */ BOOST_PP_SEQ_FOR_EACH(_ACCESS_DEPREC,thisClass,deprec) \
 	/**follow pure declarations of which implementation is handled sparately**/ \
 	/*1. ctor declaration */ thisClass(); \
 	/*2. dtor declaration */ virtual ~thisClass(); \
-	/*3. boost::serialization declarations */ _WOO_BOOST_SERIALIZE_DECL(thisClass,baseClass,attrs) \
-	/*4. set attributes from kw ctor */ protected: void pySetAttr(const std::string& key, const py::object& value) override; \
-	/*5. for pickling*/ py::dict pyDict(bool all=true) const override; \
-	/*6. python class registration*/ std::function<void()> pyRegisterClass(py::module_& mod) override; \
-	/*7. ensures v-table; will be removed later*/ void must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(); \
-	/*8.*/ void must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(); \
+	/*3. traits container*/ _ATTR_TRAITS_CONTAINER_DECL(thisClass); \
+	/*4. boost::serialization declarations */ _WOO_BOOST_SERIALIZE_DECL(thisClass,baseClass,attrs) \
+	/*5. set attributes from kw ctor */ protected: void pySetAttr(const std::string& key, const py::object& value) override; \
+	/*6. for pickling*/ py::dict pyDict(bool all=true) const override; \
+	/*7. python class registration*/ std::function<void()> pyRegisterClass(py::module_& mod) override; \
+	/*8. ensures v-table; will be removed later*/ void must_use_both_WOO_CLASS_BASE_DOC_ATTRS_and_WOO_PLUGIN(); \
+	/*9.*/ void must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(); \
 	public: /* make the rest public by default again */
 
 #define WOO_CLASS_IMPLEMENTATION(allArgsTogether) _WOO_CLASS_IMPLEMENTATION(allArgsTogether)
@@ -520,12 +531,13 @@ template<> struct _SerializeMaybe<false>{
 #define _WOO_CLASS_IMPLEMENTATION(thisClass,baseClass,classTraitSpec,attrs,deprec,init,ctor,dtor,pyExtras) \
 	/*1.*/ thisClass::thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(attrs init),:,) BOOST_PP_SEQ_FOR_EACH_I(_ATTR_MAKE_INITIALIZER,BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(attrs init)), BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE,~,attrs) init) { ctor; } \
 	/*2.*/ thisClass::~thisClass(){ dtor; } \
-	/*3.*/ _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,attrs) \
-	/*4.*/ void thisClass::pySetAttr(const std::string& key, const py::object& value){ BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR,thisClass,attrs); BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC,thisClass,deprec); baseClass::pySetAttr(key,value); } \
-	/*5.*/ py::dict thisClass::pyDict(bool all) const { py::dict ret; BOOST_PP_SEQ_FOR_EACH(_PYDICT_ATTR,~,attrs); WOO_PY_DICT_UPDATE(baseClass::pyDict(all),ret); return ret; } \
-	/*6.*/ std::function<void()> thisClass::pyRegisterClass(py::module_& mod) { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,makeClassTrait(classTraitSpec),attrs,deprec,pyExtras); } \
-	/*7. -- handled by WOO_PLUGIN */ \
-	/*8.*/ void thisClass::must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(){};
+	/*3.*/ _ATTR_TRAITS_CONTAINER_IMPL(thisClass,attrs)  \
+	/*4.*/ _WOO_BOOST_SERIALIZE_IMPL(thisClass,baseClass,attrs) \
+	/*5.*/ void thisClass::pySetAttr(const std::string& key, const py::object& value){ BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR,thisClass,attrs); BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC,thisClass,deprec); baseClass::pySetAttr(key,value); } \
+	/*6.*/ py::dict thisClass::pyDict(bool all) const { py::dict ret; BOOST_PP_SEQ_FOR_EACH(_PYDICT_ATTR,~,attrs); WOO_PY_DICT_UPDATE(baseClass::pyDict(all),ret); return ret; } \
+	/*7.*/ std::function<void()> thisClass::pyRegisterClass(py::module_& mod) { _PY_REGISTER_CLASS_BODY(thisClass,baseClass,makeClassTrait(classTraitSpec),attrs,deprec,pyExtras); } \
+	/*8. -- handled by WOO_PLUGIN */ \
+	/*9.*/ void thisClass::must_use_both_WOO_CLASS_DECLARATION_and_WOO_CLASS_IMPLEMENTATION(){};
 
 	
 
