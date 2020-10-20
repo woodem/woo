@@ -387,7 +387,7 @@ Matrix3r ExplicitNodeIntegrator::computeStressRate(const Matrix3r& inT, const Ma
 		}
 		case MAT_VISCOUS: throw std::runtime_error("Viscous material not yet implemented.");
 	}
-	throw std::logic_error((boost::format("Unknown material model number %d (this should have been caught much earlier!)")%matModel).str());
+	throw std::logic_error(fmt::format("Unknown material model number {} (this should have been caught much earlier!)",matModel));
 };
 
 void ExplicitNodeIntegrator::applyKinematicConstraints(const shared_ptr<Node>& n, bool permitFixedDivT) const {
@@ -399,7 +399,7 @@ void ExplicitNodeIntegrator::applyKinematicConstraints(const shared_ptr<Node>& n
 	}
 	dta.v=n->ori.conjugate()*locVel;
 	if(!permitFixedDivT && !eig_all_isnan(dta.fixedT)){
-		throw std::invalid_argument((boost::format("Nid %d: fixedT not allowed (is %s)")%dta.nid%dta.fixedT.transpose()).str());
+		throw std::invalid_argument(fmt::format("Nid {}: fixedT not allowed (is {})",dta.nid,dta.fixedT.transpose()));
 	}
 };
 
@@ -408,14 +408,14 @@ void ExplicitNodeIntegrator::postLoad(ExplicitNodeIntegrator&,void*){
 	// update stiffness matrix
 	C<<(Matrix3r()<<1-nu,nu,nu, nu,1-nu,nu, nu,nu,1-nu).finished(),Matrix3r::Zero(),Matrix3r::Zero(),Matrix3r(((1-2*nu)/2.)*Matrix3r::Identity());
 	C*=E/((1+nu)*(1-2*nu));
-	if(matModel<0 || matModel>MAT_SENTINEL) woo::ValueError(boost::format("matModel must be in range 0..%d")%(MAT_SENTINEL-1));
-	if(weightFunc<0 || weightFunc>=WEIGHT_SENTINEL) woo::ValueError(boost::format("weightFunc must be in range 0..%d")%(WEIGHT_SENTINEL-1));
-	if(barodesyC.size()!=6) woo::ValueError(boost::format("barodesyC must have exactly 6 values (%d given)")%barodesyC.size());
+	if(matModel<0 || matModel>MAT_SENTINEL) woo::ValueError("matModel must be in range 0..{}",MAT_SENTINEL-1);
+	if(weightFunc<0 || weightFunc>=WEIGHT_SENTINEL) woo::ValueError("weightFunc must be in range 0..{}",WEIGHT_SENTINEL-1);
+	if(barodesyC.size()!=6) woo::ValueError("barodesyC must have exactly 6 values ({} given)",barodesyC.size());
 	if(rPow>0) LOG_WARN("Positive value of ExplicitNodeIntegrator.rPow: makes weight increasing with distance, ARE YOU NUTS?!");
 	setWlsBasisFuncs();
 }
 
-#define _CATCH_CRAP(x,y,z) if(eig_isnan(z)){ throw std::runtime_error((boost::format("NaN in O.sparc.nodes[%d], attribute %s: %s\n")%nid%BOOST_PP_STRINGIZE(z)%z).str().c_str()); }
+#define _CATCH_CRAP(x,y,z) if(eig_isnan(z)){ throw std::runtime_error(fmt::format("NaN in O.sparc.nodes[{}], attribute {}: {}\n",nid,BOOST_PP_STRINGIZE(z),z)); }
 
 void SparcData::catchCrap1(int nid, const shared_ptr<Node>& node){
 	BOOST_PP_SEQ_FOR_EACH(_CATCH_CRAP,~,(gradV)(nextT)(accel)
@@ -718,7 +718,7 @@ template<bool useNext>
 void StaticEquilibriumSolver::computeConstraintErrors(const shared_ptr<Node>& n, const Vector3r& divT, VectorXr& resid){
 	SparcData& dta(n->getData<SparcData>());
 	#ifdef WOO_DEBUG
-		for(int i=0;i<3;i++) if(!isnan(dta.fixedV[i])&&!isnan(dta.fixedT[i])) throw std::invalid_argument((boost::format("Nid %d: both velocity and stress prescribed along local axis %d (axis %s in global space)") %dta.nid %i %(n->ori.conjugate()*(i==0?Vector3r::UnitX():(i==1?Vector3r::UnitY():Vector3r::UnitZ()))).transpose()).str());
+		for(int i=0;i<3;i++) if(!isnan(dta.fixedV[i])&&!isnan(dta.fixedT[i])) throw std::invalid_argument(fmt::format("Nid {}: both velocity and stress prescribed along local axis {} (axis {} in global space)",dta.nid,i,(n->ori.conjugate()*(i==0?Vector3r::UnitX():(i==1?Vector3r::UnitY():Vector3r::UnitZ()))).transpose()));
 	#endif
 	#define _WATCH_NID(aaa) SPARC_TRACE_OUT("           "<<aaa<<endl); if(dta.nid==watch) cerr<<aaa<<endl;
 	#ifdef SPARC_INSPECT
@@ -1025,7 +1025,7 @@ void StaticEquilibriumSolver::run(){
 			case SOLVER_NEWTON: msg=solverStatus2str<SolverNewton>(status); break;
 		}
 		progress=PROGRESS_ERROR;
-		throw std::runtime_error((boost::format("Solver did not find an acceptable solution, returned %s (%d).")%msg%status).str());
+		throw std::runtime_error(fmt::format("Solver did not find an acceptable solution, returned {} ({}).",msg,status));
 	}
 	substepDone:
 		assert(substep);
@@ -1085,7 +1085,7 @@ void Gl1_SparcField::go(const shared_ptr<Field>& sparcField, GLViewInfo* _viewIn
 		_viewInfo->renderer->setNodeGlData(n); // assures that GlData is defined
 		if(nodes) viewInfo->renderer->renderRawNode(n);
 		if(n->rep){ n->rep->render(n,viewInfo); }
-		// GLUtils::GLDrawText((boost::format("%d")%n->getData<SparcData>().nid).str(),n->pos,/*color*/Vector3r(1,1,1), /*center*/true,/*font*/NULL);
+		// GLUtils::GLDrawText((fmt::format("{}",n->getData<SparcData>().nid),n->pos,/*color*/Vector3r(1,1,1), /*center*/true,/*font*/NULL);
 		int nnid=n->getData<SparcData>().nid;
 		const Vector3r& pos=n->pos+n->getData<GlData>().dGlPos;
 		if(nid && nnid>=0) GLUtils::GLDrawNum(nnid,pos);

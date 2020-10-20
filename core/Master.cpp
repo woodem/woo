@@ -480,7 +480,7 @@ void Master::pySetCmap(py::object obj){
 	py::extract<py::tuple> exTuple(obj);
 	if(exInt.check()){
 		int i=exInt();
-		if(i<0 || i>=(int)CompUtils::colormaps.size()) woo::IndexError(boost::format("Colormap index out of range 0…%d")%(CompUtils::colormaps.size()));
+		if(i<0 || i>=(int)CompUtils::colormaps.size()) woo::IndexError("Colormap index out of range 0…{}",CompUtils::colormaps.size());
 		CompUtils::defaultCmap=i;
 		return;
 	}
@@ -491,7 +491,7 @@ void Master::pySetCmap(py::object obj){
 	}
 	if(exTuple.check() && py::extract<int>(exTuple()[0]).check() && py::extract<string>(exTuple()[1]).check()){
 		int i=py::extract<int>(exTuple()[0]); string s=py::extract<string>(exTuple()[1]);
-		if(i<0 || i>=(int)CompUtils::colormaps.size()) woo::IndexError(boost::format("Colormap index out of range 0…%d")%(CompUtils::colormaps.size()));
+		if(i<0 || i>=(int)CompUtils::colormaps.size()) woo::IndexError("Colormap index out of range 0…{}",CompUtils::colormaps.size());
 		CompUtils::defaultCmap=i;
 		if(CompUtils::colormaps[i].name!=s) LOG_WARN("Given colormap name ignored, does not match index");
 		return;

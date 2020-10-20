@@ -24,7 +24,7 @@ Real AnisoPorosityAnalyzer::relSolid(Real theta, Real phi, Vector3r pt0, bool vi
 	for(size_t i=0; i<sz; i++){
 		const Vector3r A(endPts[2*i]), B(endPts[2*i+1]);
 		#ifdef WOO_DEBUG
-			for(int j:{0,1,2}) if(A[j]<0 || A[j]>scene->cell->getSize()[j] || B[j]<0 || B[j]>scene->cell->getSize()[j]) throw std::logic_error((boost::format("Points outside periodic cell after splitting? %s %s (cell size %s)")%A.transpose()%B.transpose()%scene->cell->getSize().transpose()).str());
+			for(int j:{0,1,2}) if(A[j]<0 || A[j]>scene->cell->getSize()[j] || B[j]<0 || B[j]>scene->cell->getSize()[j]) throw std::logic_error(fmt::format("Points outside periodic cell after splitting? {} {} (cell size {})",A.transpose(),B.transpose(),scene->cell->getSize().transpose()));
 		#endif
 		solid+=computeOneRay(A,B,vis);
 		total+=(B-A).norm();
@@ -81,7 +81,7 @@ Real AnisoPorosityAnalyzer::computeOneRay_angles_check(Real theta, Real phi, boo
 	initialize();
 
 	// theta=azimuth, phi=elevation
-	if(theta<0 || theta>M_PI/2. || phi<0 || phi>M_PI/2.) throw std::invalid_argument((boost::format("AnisoPorosityAnalyzer.oneRay: value out of valid range: theta=%d (0…π/2), phi=%d (0…π/2)")%theta%phi).str());
+	if(theta<0 || theta>M_PI/2. || phi<0 || phi>M_PI/2.) throw std::invalid_argument(fmt::format("AnisoPorosityAnalyzer.oneRay: value out of valid range: theta={} (0…π/2), phi={} (0…π/2)",theta,phi));
 	// find boundary points of the cell which has given polar coords
 	const Vector3r& csz=scene->cell->getSize();
 	Real y_x=csz[1]/csz[0], tt=tan(theta);

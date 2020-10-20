@@ -57,7 +57,7 @@ struct Boot{
 	}
 #endif
 
-#ifndef __MING64__
+#ifndef __MINGW64__
 	static void quitHandler(int sig){
 		if(sig!=SIGQUIT and sig!=SIGTERM and sig!=SIGINT) return;
 		cerr<<"woo._cxxInternal: QUIT/TERM/INT handler called."<<endl;

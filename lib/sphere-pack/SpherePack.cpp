@@ -341,14 +341,14 @@ int SpherePack::addShadows(){
 	size_t sz0=pack.size();
 	if(cellSize==Vector3r::Zero()) throw std::runtime_error("SpherePack.addShadows is not meaningful on aperiodic packing.");
 	// check there are no shadows yet
-	for(size_t i=0; i<sz0; i++){ if (pack[i].shadowOf>=0) throw std::runtime_error((boost::format("SpherePack.addShadows: %d is a shadow of %d; remove shadows (SpherePack.removeShadows) before calling addShadows.")%i%pack[i].shadowOf).str()); }
+	for(size_t i=0; i<sz0; i++){ if (pack[i].shadowOf>=0) throw std::runtime_error(fmt::format("SpherePack.addShadows: {} is a shadow of {}; remove shadows (SpherePack.removeShadows) before calling addShadows.",i,pack[i].shadowOf)); }
 	int ret=0;
 	for(size_t i=0; i<sz0; i++){
 		Sph& s=pack[i];
 		// check that points are in canonical positions
 		for(int j=0;j<3;j++){
 			if(s.c[j]<0 || s.c[j]>cellSize[j]){
-				if(s.clumpId>=0) throw std::runtime_error((boost::format("SpherePack.addShadows: %d in non-canonical position %s, but cannot be canonicalized as it is member of clump %d")%i%s.c%s.clumpId).str());
+				if(s.clumpId>=0) throw std::runtime_error(fmt::format("SpherePack.addShadows: {} in non-canonical position {}, but cannot be canonicalized as it is member of clump {}",i,s.c,s.clumpId));
 				Real norm=s.c[j]/cellSize[j]; s.c[j]=(norm-floor(norm))*cellSize[j];
 			}
 		}

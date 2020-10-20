@@ -33,6 +33,8 @@
  	namespace cereal { template <class T> inline BinaryData<T> make_array(T && data, size_t size ){ return {std::forward<T>(data), size}; } }
 	#define BOOST_SERIALIZATION_NVP CEREAL_NVP
 #else
+	// silence boost internal warnings about deprecated headers
+	#define BOOST_DISABLE_PRAGMA_MESSAGE
 	template<class A> constexpr bool archive_is_loading(){ return A::is_loading::value; }
 	#include<boost/archive/binary_oarchive.hpp>
 	#include<boost/archive/binary_iarchive.hpp>

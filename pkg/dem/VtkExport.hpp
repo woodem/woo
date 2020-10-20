@@ -11,7 +11,9 @@ struct Rod; // for triangulateRod decl
 	// avoid warnings in VTK headers for using sstream
 	#pragma GCC diagnostic ignored "-Wdeprecated"
 	// work around error in vtkMath.h?
-	__attribute__((unused))	static bool _isnan(double x){ return std::isnan(x); }
+	#ifndef __MINGW32__
+		__attribute__((unused))	static bool _isnan(double x){ return std::isnan(x); }
+	#endif
 	#include<vtkCellArray.h>
 	#include<vtkPoints.h>
 	#include<vtkPointData.h>

@@ -56,7 +56,7 @@ void POVRayExport::run(){
 	// overwrite static mesh when run the first time always
 	if(nDone==1 || !filesystem::exists(staticInc)) writeParticleInc(staticInc,/*doStatic*/true);
 
-	string frameInc=out+(boost::format("_frame_%05d.inc")%frameCounter).str();
+	string frameInc=fmt::format("{}_frame_{:05d}.inc",out,frameCounter);
 	writeParticleInc(frameInc,/*doStatic*/false);
 	frameCounter++;
 }

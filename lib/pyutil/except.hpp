@@ -2,7 +2,7 @@
 
 #include<string>
 #include<boost/preprocessor.hpp>
-#include<boost/format.hpp>
+#include<woo/lib/base/Logging.hpp> // for fmt (possibly bundled with spdlog)
 
 #ifdef WOO_PYBIND11
 	#include<pybind11/pybind11.h>
@@ -15,7 +15,8 @@
 namespace woo{
 	void StopIteration();
 	#define WOO_PYUTIL_ERRORS (ArithmeticError)(AttributeError)(IndexError)(KeyError)(NameError)(NotImplementedError)(RuntimeError)(TypeError)(ValueError)
-	#define _DECLARE_WOO_PY_ERROR(x,y,err) void err(const std::string&); void err(const boost::format& f);
+	#define _DECLARE_WOO_PY_ERROR(x,y,err) void err(const std::string&); \
+		template<typename... Args> void err(const std::string& format, Args&&... args){ err(fmt::format(format,args...)); }
 	BOOST_PP_SEQ_FOR_EACH(_DECLARE_WOO_PY_ERROR,~,WOO_PYUTIL_ERRORS)
 	#undef _DECLARE_WOO_PY_ERROR
 

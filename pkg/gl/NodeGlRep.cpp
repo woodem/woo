@@ -33,7 +33,7 @@ void ScalarGlRep::render(const shared_ptr<Node>& node, const GLViewInfo* viewInf
 	Vector3r pos=node->pos+(node->hasData<GlData>()?node->getData<GlData>().dGlPos:Vector3r::Zero());
 	switch(how){
 		case 0: {
-			GLUtils::GLDrawText((boost::format("%03g")%val).str(),pos,color); // ,/*center*/true,/*font*/NULL,/*bgColor*/Vector3r::Zero());
+			GLUtils::GLDrawText(fmt::format("{:03g}",val),pos,color); // ,/*center*/true,/*font*/NULL,/*bgColor*/Vector3r::Zero());
 			break;
 		}
 		case 1: {

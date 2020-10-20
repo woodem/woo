@@ -130,11 +130,17 @@ WOO_REGISTER_OBJECT(ParallelEngine);
 
 class PeriodicEngine: public Engine{
 	public:
-		static Real getClock(){ timeval tp; gettimeofday(&tp,NULL); return tp.tv_sec+tp.tv_usec/1e6; }
+		static Real getClock(){
+			#ifndef __MINGW32__
+				timeval tp; gettimeofday(&tp,NULL); return tp.tv_sec+tp.tv_usec/1e6;
+			#else
+				return std::chrono::duration<float>(std::chrono::steady_clock::now().time_since_epoch()).count();
+			#endif
+		}
 		virtual bool isActivated() override;
 		// set virtLast, realLast, stepLast as if we run now; don't modify nDo/nDone, though
 		void fakeRun();
-	#define woo_core_PeriodicEngine__CLASS_BASE_DOC_ATTRS_CTOR \
+	#define woo_core_PeriodicEngine__CLASS_BASE_DOC_ATTRS_CTOR_PY \
 		PeriodicEngine,Engine, "Run Engine::run with given fixed periodicity real time (=wall clock time, computation time), virtual time (simulation time), step number), by setting any of those criteria (virtPeriod, realPeriod, stepPeriod) to a positive value. They are all negative (inactive) by default.\n\nThe number of times this engine is activated can be limited by setting nDo>0. If the number of activations will have been already reached, no action will be called even if an active period has elapsed.\n\nIf initRun is set (true by default), the engine will run when called for the first time; otherwise it will only  start counting period (realLast etc interal variables) from that point, but without actually running, and will run only once a period has elapsed since the initial run.\n\nThis class should not be used directly; rather, derive your own engine which you want to be run periodically.\n\nDerived engines should override Engine::action(), which will be called periodically. If the derived Engine overrides also Engine::isActivated, it should also take in account return value from PeriodicEngine::isActivated, otherwise the periodicity will not be functional.\n\nExample with PyRnner, which derives from PeriodicEngine; likely to be encountered in python scripts)::\n\n\
 		\
 			PyRunner(realPeriod=5,stepPeriod=10000,command='print O.step')	\n\n\
@@ -153,8 +159,9 @@ class PeriodicEngine: public Engine{
 		((long,stepPrev,-1,AttrTrait<>().noGui(),"Number of step when we run previously (stepLast is the current step when the engine runs)")) \
 		((Real,virtPrev,-1,AttrTrait<>().noGui(),"Simulation time when run previously")) \
 		((Real,realPrev,-1,AttrTrait<>().noGui(),"Real time when run previously")) \
-		,/*ctor*/ realLast=getClock();
-	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR(woo_core_PeriodicEngine__CLASS_BASE_DOC_ATTRS_CTOR);
+		,/*ctor*/ realLast=getClock(); \
+		,/*py*/ .def("getClock",&PeriodicEngine::getClock)
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_PeriodicEngine__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(PeriodicEngine);
 

@@ -39,7 +39,7 @@ void ForcesToHdf5::run(){
 		// create subgroup for this step
 		// we allow the group to be already there, for the case two engines
 		// run in one step, but with different settings (nodal/contact force, global/local CS)
-		string grpName("step_"+(boost::format("%|06|")%scene->step).str());
+		string grpName=fmt::format("step_{:06d}",scene->step);
 		try{ grp=grp0.createGroup(grpName); }
 		catch(H5::Exception& e){ grp=grp0.openGroup(grpName); }
 

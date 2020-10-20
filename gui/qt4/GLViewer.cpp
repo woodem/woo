@@ -1178,7 +1178,7 @@ void GLViewer::renderRange(ScalarRange& range, int i){
 			Real yy=y0+((!range.landscape?nNum-j:j)*ht*1./nNum);
 			Vector3r pos=!range.landscape?Vector3r(x,yy-6/*lower baseline*/,0):Vector3r(yy,x-5/*lower baseline*/,0);
 			//cerr<<"RG "<<i<<": num "<<j<<": "<<Vector2r(pos[0],pos[1])<<endl;
-			GLUtils::GLDrawText((boost::format("%.2g")%range.normInv(j*1./nNum)).str(),pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/(j>0&&j<nNum)?NULL:GLUT_BITMAP_9_BY_15,/*bgColor*/Vector3r::Zero(),/*shiftIfNeg*/true);
+			GLUtils::GLDrawText(fmt::format("{:.2g}",range.normInv(j*1./nNum)),pos,/*color*/Vector3r::Ones(),/*center*/true,/*font*/(j>0&&j<nNum)?NULL:GLUT_BITMAP_9_BY_15,/*bgColor*/Vector3r::Zero(),/*shiftIfNeg*/true);
 		stopScreenCoordinatesSystem();
 	}
 	// show label, if any
