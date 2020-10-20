@@ -36,13 +36,16 @@ addons:
          - python3-h5py
          - python3-lockfile
          - ipython3
- 
+
 install:
    - pip3 install colour_runner xlwt-future 
+before_script:
+   # workaround for https://github.com/travis-ci/travis-ci/issues/8613
+   if [[ $CC == "clang" ]]; then export LD_LIBRARY_PATH='/usr/local/clang/lib'; fi;
 script:
    - mkdir -p build
    - cd build
    - CXX=clang++ CC=clang cmake -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
-   - travis_wait 50 make
+   - travis_wait 60 make
    - sudo make install
    - OMP_NUM_THREADS=2 timeout 60 woo --test
