@@ -8,8 +8,6 @@
 namespace bfs=filesystem;
 
 
-using boost::format;
-
 WOO_PLUGIN(sparc,(SparcField)(SparcData)(ExplicitNodeIntegrator)(StaticEquilibriumSolver));
 
 WOO_IMPL_LOGGER(SparcField);
@@ -176,7 +174,7 @@ void ExplicitNodeIntegrator::updateLocalInterp(const shared_ptr<Node>& n) const 
 		cerr<<"=== Relative positions for nid "<<dta.nid<<":\n"<<relPos<<endl;
 		throw std::runtime_error("NaN's in relative positions in O.sparc.nodes["+to_string(dta.nid)+"].sparc."+string(useNext?"nextRelPos":"relPos")+") .");
 	}
-	if(relPos.rows()<(int)wlsPhi.size()) throw std::runtime_error((format("Node #%d at %s has only %d neighbors (%d is minimum, including itself)")%dta.nid%n->pos.transpose()%sz%(wlsPhi.size()-1)).str());
+	if(relPos.rows()<(int)wlsPhi.size()) throw std::runtime_error(fmt::format("Node #{} at {} has only {} neighbors ({} is minimum, including itself)",dta.nid,n->pos.transpose(),sz,(wlsPhi.size()-1)));
 	// evaluate basis functions (in wlsPhi) at all points
 	MatrixXr Phi(sz,wlsPhi.size());
 	// evaluate all basis funcs in all points
@@ -371,7 +369,7 @@ Matrix3r ExplicitNodeIntegrator::computeStressRate(const Matrix3r& inT, const Ma
 			Matrix3r T(barodesyConvertPaToKPa?(inT/1e3).eval():inT);
 			#define CC(i) barodesyC[i-1]
 				// barodesy from the Theoretical Soil Mechanics course
-				// if(e<0 || e>1) throw std::invalid_argument((boost::format("Porosity %g out of 0..1 range (D=%s)\n")%e%D).str());
+				// if(e<0 || e>1) throw std::invalid_argument(fmt::format("Porosity {} out of 0..1 range (D={})\n",e,D));
 				Real Tnorm=T.norm(), Dnorm=D.norm();
 				if(Dnorm==0 || Tnorm==0) return Matrix3r::Zero();
 				Matrix3r D0=D/Dnorm, T0=T/Tnorm;

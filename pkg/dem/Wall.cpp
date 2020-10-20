@@ -70,7 +70,7 @@ bool Cg2_Wall_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<S
 	#if 0
 		// check that the normal did not change orientation (would be abrupt here)
 		if(C->geom && C->geom->cast<L6Geom>().trsf.col(0)!=normal.transpose()){
-			throw std::logic_error((boost::format("Cg2_Wall_Sphere_L6Geom: normal changed from %s to %s in Wall+Sphere ##%d+%d (with Wall.sense=0, a particle might cross the Wall plane if Δt is too high, repulsive force to small or velocity too high.")%C->geom->cast<L6Geom>().trsf.col(0)%normal.transpose()%C->leakPA()->id%C->leakPB()->id).str());
+			throw std::logic_error(fmt::format("Cg2_Wall_Sphere_L6Geom: normal changed from {} to {} in Wall+Sphere ##{}+{} (with Wall.sense=0, a particle might cross the Wall plane if Δt is too high, repulsive force to small or velocity too high).",C->geom->cast<L6Geom>().trsf.col(0),normal.transpose(),C->leakPA()->id,C->leakPB()->id));
 		}
 	#endif
 
