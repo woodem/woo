@@ -180,7 +180,8 @@ long SpherePack::makeCloud(Vector3r mn, Vector3r mx, Real rMean, Real rRelFuzz, 
 				//if target number will not fit in (1-poro)*volume, scale down particles size
 				if (psdCumm2[psdSizes.size()-1]<num){
 					appliedPsdScaling=cbrt(psdCumm2[psdSizes.size()-1]/num);
-					for(size_t i=0; i<psdSizes.size(); i++) psdRadii[i]*=appliedPsdScaling;}
+					for(size_t i=0; i<psdSizes.size(); i++) psdRadii[i]*=appliedPsdScaling;
+				}
 			}
 			//Normalize psdCumm2 so it's between 0 and 1
 			for(size_t i=1; i<psdSizes.size(); i++) psdCumm2[i]/=psdCumm2[psdSizes.size()-1];

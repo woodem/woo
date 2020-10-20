@@ -43,11 +43,11 @@ void WooTestClass::aaccuWriteThreads(size_t ix, const vector<Real>& cycleData){
 	aaccu.set(ix,0); // zero the whole line
 	size_t i=0;
 	#ifdef WOO_OPENMP
-		#pragma omp parallel for num_threads(omp_get_num_threads()) schedule(static,1)
-		for(i=0; i<(size_t)omp_get_num_threads(); i++)
+		#pragma omp parallel for num_threads(omp_get_max_threads()) schedule(static,1)
+		for(i=0; i<(size_t)omp_get_max_threads(); i++)
 	#endif
 		{
-			LOG_ERROR("Writing: i={}, value={}, thread {}/{}",i,cycleData[i%cycleData.size()],omp_get_thread_num(),omp_get_num_threads());	
+			LOG_ERROR("Writing: i={}, value={}, thread {}/{}",i,cycleData[i%cycleData.size()],omp_get_thread_num(),omp_get_max_threads());	
 			aaccu.add(ix,cycleData[i%cycleData.size()]);
 		}
 }

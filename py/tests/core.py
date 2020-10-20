@@ -494,7 +494,7 @@ class TestArrayAccu(unittest.TestCase):
         self.assertEqual(self.t.aaccuRaw[1][0],1)
     def testThreadWrite(self):
         'OpenMP array accu: concurrent writes'
-        self.t.aaccuWriteThreads(0,list(range(0,self.N)))
+        self.t.aaccuWriteThreads(0,list(range(self.N)))
         for i in range(0,self.N):
             self.assertEqual(self.t.aaccuRaw[0][i],i) # each thread has written its own index
 

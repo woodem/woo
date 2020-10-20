@@ -41,7 +41,7 @@ install:
    - pip3 install colour_runner xlwt-future 
 before_script:
    # workaround for https://github.com/travis-ci/travis-ci/issues/8613
-   if [[ $CC == "clang" ]]; then export LD_LIBRARY_PATH='/usr/local/clang/lib'; fi;
+   export LD_LIBRARY_PATH=/usr/local/clang/lib
 script:
    - mkdir -p build
    - cd build

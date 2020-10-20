@@ -51,6 +51,7 @@
 
 	#define WOO_DECL_LOGGER public: static std::shared_ptr<spdlog::logger> logger;
 	#define WOO_IMPL_LOGGER(classname) std::shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
+	#define WOO_LOCAL_LOGGER(name) static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt(#name)
 #else
 	#error WOO_SPDLOG should be defined automatically
 #endif
