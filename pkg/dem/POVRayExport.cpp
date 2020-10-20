@@ -199,7 +199,8 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 	os.open(masterPov);
 	string staticInc=filesystem::path(out+"_static.inc").filename().string();
 	string masterBase=filesystem::path(masterPov).filename().string();
-	string texturesInc=filesystem::path(out+"_textures.inc").filename().string();
+	// string texturesInc=filesystem::path(out+"_textures.inc").filename().string();
+	if(texturesInc.empty()) texturesInc=filesystem::path(out+"_textures.inc").filename().string();
 	string frameIncBase=filesystem::path(out+"_frame_").filename().string();
 
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+masterPov+"'.");
@@ -219,29 +220,32 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 		"#include \"textures.inc\"\n"
 	;
 
-	if(showLogo){
-		"#include \"screen.inc\"\n"
-		"Set_Camera(/*location*/<15,0,0>,/*look_at*/<5,-1.5,-2>,/*angle*/15)\n"
-		"Set_Camera_Aspect(-image_width,image_height)\n"
-		"Set_Camera_Sky(z)\n"
-		"camera{\n"
-		"	/* this was done by screen.inc already, but we need to repeat because of adding focal blur*/\n"
-		"	direction CamD*Camera_Zoom\n"
-		"	right CamR*Camera_Aspect_Ratio\n"
-		"	up CamU\n"
-		"	sky Camera_Sky\n"
-		"	location CamL\n"
-		"}\n";
+	if(true){
+		os<<fmt::format(
+			"#include \"screen.inc\"\n"
+			"Set_Camera(/*location*/<{},{},{}>,/*look_at*/<{},{},{}>,/*angle*/{})\n"
+			"Set_Camera_Aspect(-image_width,image_height)\n"
+			"Set_Camera_Sky(z)\n"
+			"camera{{\n" // doubled {{ to escape fmt::format
+			"	/* this was done by screen.inc already, but we need to repeat because of adding focal blur*/\n"
+			"	direction CamD*Camera_Zoom\n"
+			"	right CamR*Camera_Aspect_Ratio\n"
+			"	up CamU\n"
+			"	sky Camera_Sky\n"
+			"	location CamL\n"
+			"}}\n", // doubled }} to escape fmt::format
+			camLocation[0],camLocation[1],camLocation[2],camLookAt[0],camLookAt[1],camLookAt[2],camAngle);
 	} else {
-		os<<
-			"camera{\n"
-			"   location<25,25,15>\n"
+		os<<fmt::format(
+			"camera{{\n"
+			"   location<{},{},{}>\n"
 			"   sky z\n"
 			"   right x*image_width/image_height // right-handed coordinate system\n"
 			"   up z\n"
-			"   look_at <0,0,0>\n"
-			"   angle 45\n"
-			"}\n";
+			"   look_at <{},{},{}>\n"
+			"   angle {}\n"
+			"}}\n",
+			camLocation[0],camLocation[1],camLocation[2],camLookAt[0],camLookAt[1],camLookAt[2],camAngle);
 	}
 
 	os<<
@@ -282,12 +286,11 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 	os<<"#include \""<<staticInc<<"\"\n";
 	os<<"#include concat(concat(\""<<frameIncBase<<"\",str(frame_number,-5,0)),\".inc\")\n\n\n";
 
-	if(showLogo){
+	for(const auto& einc: extraInc){
 		os<<
-			"#if (file_exists(\"woo-logo.inc\"))\n"
-			"	#include \"woo-logo.inc\"\n"
-			"	Screen_Object(object{woo_logo() rotate<0,180,0> scale .1},/*uv-position*/<.19,1.2>,/*spacing*/<.1,.1>,/*confine*/true,/*scaling*/.3)\n"
-			"#end"
+			"#if (file_exists(\""<<einc<<"\"))\n"
+			"	#include \""<<einc<<"\"\n"
+			"#end\n\n"
 		;
 	}
 

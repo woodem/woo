@@ -34,7 +34,11 @@ struct POVRayExport: public PeriodicEngine{
 		((vector<string>,textures,vector<string>({"static","outlet","movable"}),,"Texture names applied to particles matching :obj:`masks` -- the first matching mask counts, textures are named ``woo_tex_*`` and must be modified in the master file by the user (only an example definition is written by Woo). Particles not matching any mask will be assigned texture ``default`` (``woo_tex_default``). Each texture receives two rgb arguments which are colormapped from :obj:`woo.dem.Shape.color` using :obj:`colorRange` and :obj:`colorFuzz`. ")) \
 		((string,cylCapTexture,"",,"If non-empty, :obj:`InfCylinder` objects will be drawn as several objects, with caps having this separate texture type.")) \
 		((string,wallTexture,"",,"If non-empty, :obj:`Wall` objects will have this texture applied, regardless of their mask. Meant for easily assigning checkerboard texture to wall objects.")) \
-		((bool,showLogo,true,,"If set, includes woo-logo.inc (if present) and also uses screen.inc for screen-object positioning rather than plain camera settings.")) \
+		((string,texturesInc,"",,"Better textures, conditionally included in every step; if not provided, default filename will be generated.")) \
+		((vector<string>,extraInc,vector<string>({"woo-logo.inc"}),,"If set, these files will be conditionally included at the end of every step.")) \
+		((Vector3r,camLocation,Vector3r(15,10,0),,"Default location of the camera")) \
+		((Vector3r,camLookAt,Vector3r(0,0,0),,"Default look direction of the camera")) \
+		((float,camAngle,45,,"Default camera angle (in degrees)")) \
 		((int,connMesh,CONN_MESH_STATIC_ONLY,AttrTrait<Attr::namedEnum>().namedEnum({{CONN_MESH_NONE,{"none","","never"}},{CONN_MESH_STATIC_ONLY,{"static","stat","static only"}},{CONN_MESH_ALWAYS,{"always","yes"}}}),"Whether to export facets (:obj:`Facet` and derived classes) as connected meshes, and in what cases. This entails building topology and determining connected components of the topology graph, which can demand non-negligible computation; the default is to do it for static mesh only, which is done only once, but not at every simulations steps. It is however necessary to set to ``always`` if non-static mesh is moving and should be exported.\n\n.. note:: Facets are normally exported one-by-one. Mesh allows for more efficient processing in POV-Ray and for things like texture covering more facets."))
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_POVRayExport__CLASS_BASE_DOC_ATTRS);
