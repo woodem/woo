@@ -13,6 +13,7 @@ addons:
          - libhdf5-serial-dev
          - libboost-all-dev
          - libgts-dev
+         - libtbb-dev # for parallel std::sort
          - pybind11-dev
          - cmake
          - cmake-data
