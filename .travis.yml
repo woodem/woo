@@ -27,6 +27,7 @@ addons:
          - python3-future
          - python3-prettytable
          - python3-xlrd
+         - python3-xlwt
          - python3-xlsxwriter
          - python3-matplotlib
          - python3-colorama
@@ -38,7 +39,7 @@ addons:
          - ipython3
 
 install:
-   - pip3 install colour_runner xlwt-future 
+   - pip3 install colour_runner
 before_script:
    # workaround for https://github.com/travis-ci/travis-ci/issues/8613
    export LD_LIBRARY_PATH=/usr/local/clang/lib
