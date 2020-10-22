@@ -12,20 +12,45 @@
 
 // #include<pybind11/eigen.h>
 #include<pybind11/stl.h>
+#include<pybind11/stl_bind.h>
 
-PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
-PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
-PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Object>>)
+template<typename Type>
+struct opaque_vector{
+	static void wrap(py::module& mod, const string& strT){
+		py::bind_vector<std::vector<shared_ptr<Type>>>(mod,strT+"List",py::module_local(false))
+		.def(py::pickle(
+			// __getstate__ 
+			[](const vector<shared_ptr<Type>>& self){
+				py::list ret; for(const auto& item: self) ret.append(item);
+				return ret;
+			},
+			// __setstate__
+			[](py::list lst){
+				vector<shared_ptr<Type>> ret(py::len(lst));
+				for(int i=0; i<py::len(lst); i++) ret[i]=lst[i].cast<shared_ptr<Type>>();
+				return ret;
+			}
+		));
+		// allow assignment from python list: https://stackoverflow.com/a/60744217/761090
+		py::implicitly_convertible<py::list,std::vector<shared_ptr<Type>>>();
+	}
+};
+
 
 WOO_PYTHON_MODULE(_customConverters);
 PYBIND11_MODULE(_customConverters,mod){
 	mod.attr("__name__")="woo._customConverters";
 
-	#define _OPAQUE_LIST_EXPOSE(Type) py::class_<vector<shared_ptr<Type>>>(mod, #Type "List").def(py::init<>());
+	opaque_vector<Node>::wrap(mod,"Node");
+	opaque_vector<Particle>::wrap(mod,"Particle");
+	opaque_vector<Object>::wrap(mod,"Object");
+#if 0
+	#define _OPAQUE_LIST_EXPOSE(Type)  
 		_OPAQUE_LIST_EXPOSE(Node);
 		_OPAQUE_LIST_EXPOSE(Particle);
 		_OPAQUE_LIST_EXPOSE(Object);
 	#undef _OPAQUE_LIST_EXPOSE
+#endif
 };
 
 #else

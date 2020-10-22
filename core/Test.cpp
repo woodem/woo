@@ -47,7 +47,7 @@ void WooTestClass::aaccuWriteThreads(size_t ix, const vector<Real>& cycleData){
 		for(i=0; i<(size_t)omp_get_max_threads(); i++)
 	#endif
 		{
-			LOG_ERROR("Writing: i={}, value={}, thread {}/{}",i,cycleData[i%cycleData.size()],omp_get_thread_num(),omp_get_max_threads());	
+			// LOG_ERROR("Writing: i={}, value={}, thread {}/{}",i,cycleData[i%cycleData.size()],omp_get_thread_num(),omp_get_max_threads());	
 			aaccu.add(ix,cycleData[i%cycleData.size()]);
 		}
 }

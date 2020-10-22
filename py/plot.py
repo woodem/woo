@@ -114,7 +114,7 @@ current=-1
 "Point that is being tracked with a scatter point. -1 is for the last point, set to *nan* to disable."
 afterCurrentAlpha=.2
 "Color alpha value for part of lines after :obj:`woo.plot.current`, between 0 (invisible) to 1 (full color)"
-scatterMarkerKw=dict(verts=[(0.,0.),(-30.,10.),(-25,0),(-30.,-10.)],marker=None)
+scatterMarkerKw=dict(marker=[(0.,0.),(-30.,10.),(-25,0),(-30.,-10.)])
 "Parameters for the current position marker"
 annotateKw=dict(horizontalalignment='left',verticalalignment='baseline',fontsize=9)
 "Parameters for annotation (current value) display"

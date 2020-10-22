@@ -6,6 +6,7 @@
 
 #ifdef WOO_PYBIND11
 	#include<pybind11/stl.h>
+	// no-op with pybind11
 	namespace woo{
 		template<typename T> void converters_cxxVector_pyList_2way(){ };
 	};

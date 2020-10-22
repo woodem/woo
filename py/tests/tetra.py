@@ -13,7 +13,7 @@ from woo.dem import *
 
 class TestTet4(unittest.TestCase):
     'Test :obj:`woo.fem.Tet4`.'
-    @unittest.skipIf(True,"Crashes currently perhaps due to Eigen/boost::python.")
+    @unittest.skipIf('pybind11' not in woo.config.features,"Crashes currently perhaps due to Eigen/boost::python.")
     def testStiffnessMatrix(self):
         'Tet4: stiffness matrix'
         # check values against:

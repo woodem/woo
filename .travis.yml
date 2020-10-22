@@ -46,6 +46,7 @@ before_script:
 script:
    - mkdir -p build
    - cd build
+   # without debugging, casts via pybind11 are somehow broken...
    - CXX=clang++ CC=clang cmake -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
    - travis_wait 60 make
    - sudo make install

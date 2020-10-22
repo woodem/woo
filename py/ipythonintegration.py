@@ -54,7 +54,7 @@ def create_inputhook_qt4(mgr, app=None):
     if app is None:
         app = QtCore.QCoreApplication.instance()
         if app is None:
-            app = QtGui.QApplication([" "])
+            app = QtGui.QApplication(["woo.qt"])
 
     # Re-use previously created inputhook if any
     ip = InteractiveShell.instance()

@@ -62,11 +62,11 @@ class TestFormatsAndDetection(unittest.TestCase):
         'IO: pickle dump/load & format detection (file+string)'
         self.tryDumpLoad(fmt='pickle')
         self.tryDumpLoadStr(fmt='pickle',load=True)
-    @unittest.skipIf('noxml' in woo.config.features,"Compiled with the 'noxml' feature")
+    @unittest.skipIf('noxml' in woo.config.features,"Built without the 'xml' feature")
     def testXml(self):
         'IO: XML save/load & format detection'
         self.tryDumpLoad(ext='.xml')
-    @unittest.skipIf('noxml' in woo.config.features,"Compiled with the 'noxml' feature")
+    @unittest.skipIf('noxml' in woo.config.features,"Built without the 'xml' feature")
     def testXmlBz2(self):
         'IO: XML save/load (bzip2 compressed) & format detection'
         self.tryDumpLoad(ext='.xml.bz2')
@@ -133,24 +133,18 @@ class TestSpecialDumpMethods(unittest.TestCase):
         self.assertTrue(woo.master.scene.lastSave==self.out)
 
 class TestArraySerialization(unittest.TestCase):
-    @unittest.skipIf(True,'Temporarily disabled due to crashes Eigen/boost::python.')
+    @unittest.skipIf('pybind11' not in woo.config.features,'Temporarily disabled due to crashes Eigen/boost::python.')
     def testMatrixX(self):
         'IO: serialization of arrays'
         import sys
-        sys.stderr.write('A\n')
         t0=woo.core.WooTestClass()
-        sys.stderr.write('B\n')
         t0.matX=MatrixX([[0,1,2],[3,4,5]])
-        sys.stderr.write('C\n')
         out=woo.master.tmpFilename()
         t0.save(out)
-        sys.stderr.write('D\n')
         t1=woo.core.Object.load(out)
-        sys.stderr.write('E\n')
         self.assertTrue(t1.matX.rows()==2)
         self.assertTrue(t1.matX.cols()==3)
         self.assertTrue(t1.matX.sum()==15)
-        sys.stderr.write('F\n')
     def testBoostMultiArray(self):
         'IO: serialization of boost::multi_array'
         t0=woo.core.WooTestClass()

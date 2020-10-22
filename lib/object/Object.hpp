@@ -545,6 +545,14 @@ template<> struct _SerializeMaybe<false>{
 /* this used to be in lib/factory/Factorable.hpp */
 #define REGISTER_CLASS_AND_BASE(cn,bcn) public: EIGEN_MAKE_ALIGNED_OPERATOR_NEW ; virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
 
+
+#ifdef WOO_PYBIND11
+	// this disabled exposing the vector as python list
+	// it must come before pybind11 kicks in, and outside of any namespaces
+	// definition of a special container type is in py/_customConverters.cpp
+	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<woo::Object>>)
+#endif
+
 namespace woo{
 
 struct Object: public boost::noncopyable, public enable_shared_from_this<Object> {

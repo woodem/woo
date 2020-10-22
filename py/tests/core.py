@@ -406,7 +406,8 @@ class TestIO(unittest.TestCase):
                 traceback.print_exc()
                 failed.add(c.__name__)
         failed=list(failed); failed.sort()
-        print(80*'#'+'\nFailed classes were: '+' '.join(failed))
+        if failed:
+            print(80*'#'+'\nFailed classes were: '+' '.join(failed))
         self.assertTrue(len(failed)==0,'Failed classes were: '+' '.join(failed)+'\n'+80*'#')
 
 

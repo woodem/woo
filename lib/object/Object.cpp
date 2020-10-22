@@ -44,24 +44,10 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
 		.def("updateAttrs",&Object::pyUpdateAttrs,"Update object attributes from given dictionary")
 		#ifdef WOO_PYBIND11
-			#warning pybind11: pickling not yet properly tested
 			.def(py::pickle([](const shared_ptr<Object>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<Object>))
-			//.def("__getstate__",Object_pyDict_pickleable)
-			//.def("__setstate__",Object__setstate__<Object>)
-			//.def(py::pickle(
-			//	Object_pyDict_pickleable,
-			//	&Object::pyUpdateAttrs
-			//))
-			//.def("__getstate__",Object_pyDict_pickleable,"Dump state to dictionary")
-			//.def("__setstate__",&Object::pyUpdateAttrs,"Restore state from dictionary passed")
-			// .def("__setstate__",[](py::dict d){ self->pyUpdateAttrs(d); })
-			//.add_property_readonly("__safe_for_unpickling__",[](py::object){ return true; },"just define the attr, return some bogus data")
-			// .add_property_readonly("__getstate_manages_dict__",[](py::object){ return true; },"just define the attr, return some bogus data")
 		#else
 			/* boost::python pickling support, as per http://www.boost.org/doc/libs/1_42_0/libs/python/doc/v2/pickle.html */ 
 			.def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object::pyUpdateAttrs)
-			// try to make the same as in pybind11
-			// .def("__getstate__",Object_pyDict_pickleable).def("__setstate__",&Object__setstate__<Object>)
 			.add_property_readonly("__safe_for_unpickling__",&Object::getClassName,"just define the attr, return some bogus data")
 			.add_property_readonly("__getstate_manages_dict__",&Object::getClassName,"just define the attr, return some bogus data")
 		#endif

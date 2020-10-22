@@ -11,6 +11,13 @@
 struct Scene;
 
 struct Node;
+#ifdef WOO_PYBIND11
+	// this disabled exposing the vector as python list
+	// it must come before pybind11 kicks in, and outside of any namespaces
+	// definition of a special container type is in py/_customConverters.cpp
+	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
+#endif
+
 
 struct NodeData: public Object{
 	std::mutex lock; // used by applyForceTorque

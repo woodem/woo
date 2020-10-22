@@ -21,8 +21,15 @@ struct Bound;
 struct Shape;
 struct Impose;
 struct DemData;
-
 struct ScalarRange;
+
+#ifdef WOO_PYBIND11
+	// this disables exposing the vector as python list
+	// it must come before pybind11 kicks in, and outside of any namespaces
+	// definition of a special container type is in py/_customConverters.cpp
+	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
+#endif
+
 
 struct Particle: public Object{
 	shared_ptr<Contact> findContactWith(const shared_ptr<Particle>& other);

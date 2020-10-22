@@ -117,7 +117,7 @@ else:
             # the resolution not being very clear yet
             import woo.runtime
             if woo.runtime.ipython_version()>=500:
-                wooQApp=QApplication([''])
+                wooQApp=QApplication(['woo.qt'])
                 # the rest is done in wooMain, once the ipshell object is instantiated
                 # -- ipshell.enable_gui('qt5')
                 
