@@ -197,73 +197,24 @@ from . import apiversion
 #
 # create compiled python modules
 #
-if PY3K:
-    if sys.version_info<(3,4): 
-        print('WARNING: in Python 3.x, importing only works in Python >= 3.4 properly. Your version %s will most likely break right here.'%(sys.version))
-    # will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
-    allSubmodules=set()
-    import imp
-    # print(80*'#'+'\n'+str(master.compiledPyModules))
-    for mod in master.compiledPyModules:
-        if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
-        # this inserts the module to sys.modules automatically
-        m=imp.load_dynamic(mod,cxxInternalFile)
-        # now put the module where it belongs
-        mm=mod.split('.')
-        if mm[0]!='woo': print('ERROR: non-woo module %s imported from the shared lib? Expect troubles.'%mod)
-        elif len(mm)==2:
-            allSubmodules.add(mm[1])
-            globals()[mm[1]]=m
-        else: setattr(eval('.'.join(mm[1:-1])),mm[-1],mm)
+if sys.version_info<(3,4): 
+    print('WARNING: in Python 3.x, importing only works in Python >= 3.4 properly. Your version %s will most likely break right here.'%(sys.version))
+# will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
+allSubmodules=set()
+import imp
+# print(80*'#'+'\n'+str(master.compiledPyModules))
+for mod in master.compiledPyModules:
+    if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
+    # this inserts the module to sys.modules automatically
+    m=imp.load_dynamic(mod,cxxInternalFile)
+    # now put the module where it belongs
+    mm=mod.split('.')
+    if mm[0]!='woo': print('ERROR: non-woo module %s imported from the shared lib? Expect troubles.'%mod)
+    elif len(mm)==2:
+        allSubmodules.add(mm[1])
+        globals()[mm[1]]=m
+    else: setattr(eval('.'.join(mm[1:-1])),mm[-1],mm)
 
-else:
-    # WORKAROUND: create temporary symlinks
-    def hack_loadCompiledModulesViaLinks(compiledModDir,tryInAnotherTempdir=True):
-        allSubmodules=set()
-        import os,sys
-        if not os.path.exists(compiledModDir): os.mkdir(compiledModDir)
-        sys.path=[compiledModDir]+sys.path
-        # move _customConverters to the start, so that imports reyling on respective converters don't fail
-        # remove woo._cxxInternal since it is imported already
-        cpm=master.compiledPyModules
-        cc='woo._customConverters'
-        #assert cc in cpm # FIXME: temporarily disabled
-        ## HACK: import _gts this way until it gets separated
-        cpm=[cc]+[m for m in cpm if m!=cc and m!='woo._cxxInternal']
-        # run imports now
-        for iMod,mod in enumerate(cpm):
-            modpath=mod.split('.') 
-            linkName=os.path.join(compiledModDir,modpath[-1])+soSuffix # use just the last part to avoid hierarchy
-            if WIN:
-                try:
-                    win_hardlink(os.path.abspath(cxxInternalFile),linkName)
-                except IOError:
-                    sys.stderr.write('Creating hardlink failed - on Windows, _cxxInternal.pyd is copied to tempdir before being imported, so that hardlinks should be on the same partition. What\'s happening here? If you are using FAT filesystem, you are out of luck. With NTFS, hardlinks should work. Please report this error so that it can be fixed or worked around.\n')
-                    raise
-            else: os.symlink(os.path.abspath(cxxInternalFile),linkName)
-            if 'WOO_DEBUG' in os.environ:
-                print('Loading compiled module',mod,'from symlink',linkName)
-                print('modpath =',modpath)
-            sys.stdout.flush()
-            try: sys.modules[mod]=__import__(modpath[-1])
-            except ImportError:
-                # compiled without GTS
-                if mod=='_gts' and False:
-                    if 'WOO_DEBUG' in os.environ: print('Loading compiled module _gts: _gts module probably not compiled-in (ImportError)')
-                    pass 
-                else: raise # otherwise it is serious
-            if len(modpath)==1: pass # nothing to do, adding to sys.modules is enough
-            if len(modpath)>=2: # subdmodule must be added to module
-                globals()[modpath[1]]=sys.modules['.'.join(modpath[:2])]
-                allSubmodules.add(modpath[1])
-            if len(modpath)>=3: # must be added to module and submodule
-                setattr(globals()[modpath[1]],modpath[2],sys.modules[mod])
-            if len(modpath)>=4:
-                raise RuntimeError('Module %s does not have 2 or 3 path items and will not be imported properly.'%mod)
-        sys.path=sys.path[1:] # remove temp dir from the path again
-        return allSubmodules
-        
-    allSubmodules=hack_loadCompiledModulesViaLinks(master.tmpFilename()) # this will be a directory
 
 # from . import config # does not work in PY3K??
 # import woo.config
@@ -359,9 +310,6 @@ if wooOptions.clDev:
             master.defaultClDev=clDev
     else: warnings.warn("--cl-dev ignored, since compiled without OpenCL.")
 
-# this import will fail with PY3K??
-if not PY3K:
-    from . import _customConverters
 
 __all__=['master']+list(allSubmodules)
 

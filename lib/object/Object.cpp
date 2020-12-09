@@ -1,4 +1,5 @@
 #include<woo/lib/object/Object.hpp>
+#include<woo/lib/pyutil/converters.hpp>
 
 
 #if 0
@@ -32,7 +33,7 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 	#else
 		py::class_<Object, shared_ptr<Object>, boost::noncopyable > classObj("Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.");
 	#endif
-	return [classObj]() mutable {
+	return [classObj,mod]() mutable {
 		classObj
 		#ifdef WOO_PYBIND11
 			.def(py::init<>())
@@ -69,13 +70,17 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		// comparison operators
 		.def(py::self == py::self)
 		.def(py::self != py::self)
-	;
-	classObj.attr("_attrTraits")=py::list();
-	// repeat the docstring here
 
-	shared_ptr<ClassTrait> traitPtr=make_shared<ClassTrait>();
-	traitPtr->name("Object").doc(py::extract<string>(classObj.attr("__doc__"))()).file(__FILE__).line(__LINE__);
-	classObj.attr("_classTrait")=traitPtr;
+
+		;
+		classObj.attr("_attrTraits")=py::list();
+		// repeat the docstring here
+
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Object>>(mod);
+
+		shared_ptr<ClassTrait> traitPtr=make_shared<ClassTrait>();
+		traitPtr->name("Object").doc(py::extract<string>(classObj.attr("__doc__"))()).file(__FILE__).line(__LINE__);
+		classObj.attr("_classTrait")=traitPtr;
 	};
 	//classObj.attr("_derivedCxxClasses")=Object::derivedCxxClasses;
 }

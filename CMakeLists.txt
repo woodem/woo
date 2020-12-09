@@ -90,6 +90,7 @@ if(WOO_PYBIND11)
 	add_definitions(-DWOO_PYBIND11)
 	find_package(pybind11 2.4 REQUIRED)
 else()
+	message(FATAL_ERROR "Building with boost::python (WOO_PYBIND11=OFF) is no longer supported.")
 	set(BP_VERSION_SUFFIX "${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
 	# set(BP_VERSION_SUFFIX "")
 	find_package(Boost REQUIRED COMPONENTS "python${BP_VERSION_SUFFIX}")
@@ -282,7 +283,6 @@ set(WOO_CXX_SOURCES
 	# python
 	py/config.cxx
 	py/comp.cpp
-	py/_customConverters.cpp
 	py/_cxxInternal.cpp
 	py/log.cpp
 	py/_packObb.cpp
