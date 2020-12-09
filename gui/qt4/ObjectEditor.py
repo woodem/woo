@@ -15,7 +15,7 @@ from minieigen import *
 from woo.core import Object
 
 import re,itertools,math
-import woo._customConverters, woo.core, woo.utils
+import woo.core, woo.utils
 log=woo.utils.makeLog('ObjectEditor')
 import woo.qt
 import woo.document
@@ -649,7 +649,7 @@ class Se3FakeType: pass
 _fundamentalEditorMap={bool:AttrEditor_Bool,past.builtins.str:AttrEditor_Str,str:AttrEditor_Str,int:AttrEditor_Int,float:AttrEditor_Float,Quaternion:AttrEditor_Quaternion,Vector2:AttrEditor_Vector2,Vector3:AttrEditor_Vector3,Vector6:AttrEditor_Vector6,Matrix3:AttrEditor_Matrix3,Vector6i:AttrEditor_Vector6i,Vector3i:AttrEditor_Vector3i,Vector2i:AttrEditor_Vector2i,MatrixX:AttrEditor_MatrixXX,VectorX:AttrEditor_VectorX,Se3FakeType:AttrEditor_Se3,AlignedBox3:AttrEditor_AlignedBox3,AlignedBox2:AttrEditor_AlignedBox2}
 _fundamentalInitValues={bool:True,str:'',int:0,float:0.0,Quaternion:Quaternion.Identity,Vector3:Vector3.Zero,Matrix3:Matrix3.Zero,Vector6:Vector6.Zero,Vector6i:Vector6i.Zero,Vector3i:Vector3i.Zero,Vector2i:Vector2i.Zero,Vector2:Vector2.Zero,Se3FakeType:(Vector3.Zero,Quaternion.Identity),AlignedBox3:(Vector3.Zero,Vector3.Zero),AlignedBox2:(Vector2.Zero,Vector2.Zero),MatrixX:MatrixX(),VectorX:VectorX()}
 
-_attributeGuessedTypeMap={woo._customConverters.NodeList:(woo.core.Node,),woo._customConverters.ObjectList:(woo.core.Object,) }
+_attributeGuessedTypeMap={} # FIXME: woo._customConverters.NodeList:(woo.core.Node,),woo._customConverters.ObjectList:(woo.core.Object,) }
 
 def hasActiveLabel(s):
     if not hasattr(s,'label') or not  s.label: return False
