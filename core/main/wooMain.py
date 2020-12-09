@@ -134,7 +134,7 @@ def main(sysArgv=None):
     par.add_argument('--in-lldb',help='Run Woo inside lldb (must be in $PATH; executables tried are lldb, lldb-7, lldb-8, lddb-9 in this order).',dest='inLldb',action='store_true')
     par.add_argument('--in-pdb',help='Run Woo inside pdb',dest='inPdb',action='store_true')
     par.add_argument('--in-valgrind',help='Run inside valgrind (must be in $PATH); automatically adds python ignore files',dest='inValgrind',action='store_true')
-    par.add_argument('--fake-display',help='Allow importing the woo.qt4 module without initializing Qt4. This is only useful for generating documentation and should not be used otherwise.',dest='fakeDisplay',action='store_true')
+    par.add_argument('--fake-display',help='Allow importing the woo.qt module without initializing Qt. This is only useful for generating documentation and should not be used otherwise.',dest='fakeDisplay',action='store_true')
     par.add_argument('simulation',nargs=argparse.REMAINDER)
     opts=par.parse_args()
     if WIN: opts.rebuild=False # make sure it is defined

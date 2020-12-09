@@ -8,7 +8,6 @@ Test some parts of energy conservation in DEM simulations.
 import unittest
 from minieigen import *
 from math import *
-from woo._customConverters import *
 from woo import utils
 from woo.core import *
 from woo.dem import *

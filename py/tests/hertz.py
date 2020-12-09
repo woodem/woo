@@ -3,7 +3,6 @@
 
 import unittest
 from minieigen import *
-import woo._customConverters
 import woo.core
 import woo.dem
 import woo.utils

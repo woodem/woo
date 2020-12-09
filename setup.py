@@ -1,6 +1,4 @@
 # encoding: utf-8
-# py3k support
-from __future__ import print_function
 
 #import setuptools # for bdist_egg and console_scripts entry point
 from setuptools import setup,Extension

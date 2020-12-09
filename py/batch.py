@@ -89,11 +89,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
         else: raise ValueError("Unable to determine database format from '"+db+"' (extension '"+ext+"'): must be *.h5, *.hdf5, *.he5, *.hdf, *.sqlite, *.db.")
 
     # make sure keys are unicode objects (which is what json converts to!)
-    if py3k: unicodeTags=dict(S.tags)
-    else:
-        # but preserve values using a 8-bit encoding)
-        # this sort-of sucks, hopefully there is a better solution soon
-        unicodeTags=dict([(key,val.decode('iso-8859-1')) for key,val in S.tags.items()])
+    unicodeTags=dict(S.tags)
     # make sure series are 1d arrays
     if series==None:
         series={}; series.update([('plot/'+k,v) for k,v in S.plot.data.items()])
@@ -174,9 +170,9 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
 
     if syncXls:
         import re
-        xls=db+('.xlsx' if py3k else '.xls')
+        xls=db+'.xlsx'
         if not quiet: print('Converting %s to file://%s'%(db,os.path.abspath(xls)))
-        dbToSpread(db,out=xls,dialect=('xlsx' if py3k else 'xls'))
+        dbToSpread(db,out=xls,dialect='xlsx')
     for ph in postHooks: ph(db)
 
 def _checkHdf5sim(sim):
@@ -196,7 +192,7 @@ def dbReadResults(db,basicTypes=False):
     import numpy, sqlite3, json, woo.core
     try:
         import h5py, h5py.h5f
-        if not h5py.h5f.is_hdf5(bytes(db,'utf-8') if py3k else db): raise IOError('Not a HDF5 file.')
+        if not h5py.h5f.is_hdf5(bytes(db,'utf-8')): raise IOError('Not a HDF5 file.')
         hdf=h5py.File(db,'r',libver='latest')
     except (ImportError,IOError):
         # connect always succeeds, as it seems, even if the type is not sqlite3 db
@@ -331,7 +327,7 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
     # open db and get rows
     try:
         import h5py, h5py.h5f
-        if py3k and isinstance(db,str): dbBytes=bytes(db,'utf-8')
+        if isinstance(db,str): dbBytes=bytes(db,'utf-8')
         else: dbBytes=db
         # check first, to avoid warning from h5py.File in stderr
         if not h5py.h5f.is_hdf5(dbBytes): raise IOError('Not a HDF5 file.')

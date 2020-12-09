@@ -355,7 +355,6 @@ class ControllerClass(QWidget,Ui_Controller):
                 extras.append(ExInfo(name=exName,mod=mod,version=ver,distributor=distributor))
         except ImportError: pass # no wooExtra modules installed
         user=woo.master.scene.tags['user']
-        if not PY3K: user=user.decode('utf-8')
         self.aboutGeneralLabel.setText('''<h4>System data</h4><table cellpadding='2px' rules='all' width='100%'>
             <tr><td>user</td><td>{user}</td></tr>
             <tr><td>cores</td><td>{nCores}</td></tr>

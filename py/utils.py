@@ -413,14 +413,7 @@ def ensureDir(d,msg='Creating directory %s'):
     if d=='': return # current dir
     # this checks only if something will be created; may not see it in some corner cases... doesn't matter, just diagnostics
     if not os.path.exists(d) and msg: print(msg%d)
-    # http://stackoverflow.com/a/14364249/761090
-    if py3k:
-        os.makedirs(d,exist_ok=True)
-    else:
-        try:
-            os.makedirs(d)
-        except OSError:
-            if not os.path.isdir(d): raise
+    os.makedirs(d,exist_ok=True)
 
 
 def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5,open=False):
@@ -500,7 +493,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
                 #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
                 # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
                 inputs=['-i',symPattern]
-                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+                cmd=[encExec]+inputs+['-r',str(int(fps)),'-c:v','libvpx','-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
             log.info('Pass %d: %s'%(passNo,' '.join(cmd)))
             ret=subprocess.call(cmd)
             if ret!=0: raise RuntimeError("Error running %s."%encExec)
@@ -569,13 +562,13 @@ def htmlReportHead(S,headline,dialect='xhtml',repBase='',hideWooExtra=False):
         In order to obtain a well-formed XHTML document, don't forget to add '</body></html>'.
     '''
     import time, platform, pkg_resources, shutil
-    if py3k: import base64
+    import base64
     headers=dict(xhtml='''<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n''',html5='<!DOCTYPE html><html lang="en">',html4='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html>')
     logoSrc=pkg_resources.resource_filename('woo','data/woo-icon.128.png')
     logoExtern='%s_wooLogo.png'%(repBase)
-    logoBase64='<img src="data:image/png;base64,'+(str(base64.b64encode(open(logoSrc,'rb').read())) if py3k else  open(logoSrc).read().encode('base64'))+'" alt="Woo logo"/>'
+    logoBase64='<img src="data:image/png;base64,'+(str(base64.b64encode(open(logoSrc,'rb').read())))+'" alt="Woo logo"/>'
     logoImgExtern='<img src="%s_wooLogo.png" alt="Woo logo"/>'%(repBase)
     svgLogos=dict(
         # embedded svg
@@ -607,7 +600,7 @@ def htmlReportHead(S,headline,dialect='xhtml',repBase='',hideWooExtra=False):
             <tr><td>compiled with</td><td align="right">{compiledWith}</td></tr>
             <tr><td>platform</td><td align="right">{platform}</td></tr>
         </table>
-        '''.format(headline=headline,title=(S.tags['title'] if S.tags['title'] else '<i>[none]</i>'),id=S.tags['id'],user=(S.tags['user'] if py3k else S.tags['user'].decode('utf-8')),started=time.ctime(time.time()-woo.master.realtime),step=S.step,duration=woo.master.realtime,nCores=woo.master.numThreads,stepsPerSec=S.step/woo.master.realtime,engine='wooDem '+woo.config.version+'/'+woo.config.revision+(' (debug)' if woo.config.debug else ''),compiledWith=','.join(woo.config.features),platform=platform.platform().replace('-',' '),svgLogo=svgLogos[dialect])
+        '''.format(headline=headline,title=(S.tags['title'] if S.tags['title'] else '<i>[none]</i>'),id=S.tags['id'],user=(S.tags['user']),started=time.ctime(time.time()-woo.master.realtime),step=S.step,duration=woo.master.realtime,nCores=woo.master.numThreads,stepsPerSec=S.step/woo.master.realtime,engine='wooDem '+woo.config.version+'/'+woo.config.revision+(' (debug)' if woo.config.debug else ''),compiledWith=','.join(woo.config.features),platform=platform.platform().replace('-',' '),svgLogo=svgLogos[dialect])
         +'<h2>Input data</h2>'+S.pre.dumps(format='html',fragment=True,showDoc=False,hideWooExtra=hideWooExtra)
     )
     return headers[dialect]+html

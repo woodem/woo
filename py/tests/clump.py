@@ -7,7 +7,6 @@ from builtins import range
 import unittest
 import random
 from minieigen import *
-from woo._customConverters import *
 from woo import utils
 from woo.dem import *
 from woo.core import *

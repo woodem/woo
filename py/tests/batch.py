@@ -3,7 +3,6 @@
 
 import unittest
 from minieigen import *
-import woo._customConverters
 import woo.dem, woo.core, woo.pre, woo.batch
 import sys, math, numpy
 
@@ -36,7 +35,7 @@ class TestBatchResults(unittest.TestCase):
         db=woo.master.tmpFilename()+'.sqlite'
         self._writeDb(db)
         self._checkDbContents(db)
-        self._writeXls(db,db+('.xlsx' if PY3K else '.xls'))
+        self._writeXls(db,db+'.xlsx')
         self._writeCsv(db,db+'.csv')
     @unittest.skipIf(sys.platform=='win32','HDF5 not supported under Windows yet.')    
     def testHdf5(self):
@@ -44,6 +43,6 @@ class TestBatchResults(unittest.TestCase):
         db=woo.master.tmpFilename()+'.hdf5'
         self._writeDb(db)
         self._checkDbContents(db)
-        self._writeXls(db,db+('.xlsx' if PY3K else '.xls'))
+        self._writeXls(db,db+'.xlsx')
         self._writeCsv(db,db+'.csv')
 

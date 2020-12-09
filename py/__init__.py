@@ -28,10 +28,6 @@ import sys,os,os.path,re,string
 WIN=False # sys.platform=='win32'
 PY3K=(sys.version_info[0]==3)
 
-if not PY3K:
-    print(80*'*'+'\n'+80*'*'+'\n\n WOO WILL NO LONGER SUPPORT PYTHON 2.x IN NEAR FUTURE \n\n    YOU ARE STILL RUNNING ON PYTHON 2.x\n\n         DO NOT WAIT WITH UPGRADE ANYMORE\n\n'+80*'*'+'\n'+80*'*')
-    warnings.warn('Python 2.x is deprecated (you are running %d.%d), Woo will remove its support in a short time.'%(sys.version_info[0],sys.version_info[1]),DeprecationWarning)
-
 if WIN:
     class WooOsEnviron(object):
         '''Class setting env vars via both CRT and win32 API, so that values can be read back
@@ -130,7 +126,7 @@ if WIN:
 # enable warnings which are normally invisible, such as DeprecationWarning
 warnings.simplefilter('default')
 # disable warning for unclosed files/sockets
-if PY3K: warnings.simplefilter('ignore',ResourceWarning)
+warnings.simplefilter('ignore',ResourceWarning)
 
 # import both if possible
 # we will check build features after the binary import

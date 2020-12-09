@@ -11,7 +11,6 @@ import random
 from minieigen import *
 from math import *
 import woo
-from woo._customConverters import *
 from woo import utils
 from woo.core import *
 from woo.dem import *

@@ -19,7 +19,7 @@ struct GlExtraDrawer: public Object{
 	#define woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY \
 		GlExtraDrawer,Object,"Performing arbitrary OpenGL drawing commands; called from :obj:`Renderer` (see :obj:`Renderer.extraDrawers`) once regular rendering routines will have finished.\n\nThis class itself does not render anything, derived classes should override the *render* method.", \
 		((bool,dead,false,,"Deactivate the object (on error/exception).")) \
-		,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<GlExtraDrawer>>();
+		,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<GlExtraDrawer>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlExtraDrawer__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(GlExtraDrawer);

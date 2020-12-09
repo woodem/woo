@@ -14,10 +14,8 @@ import woo.config
 #import woo.dem
 from minieigen import * # for recognizing the types
 
-if py3k: from io import StringIO
-else: import StringIO # cStringIO does not handle unicode, so stick with the slower one
+from io import StringIO
 from woo.core import Object
-import woo._customConverters # to make sure they are loaded already
 
 
 import codecs
@@ -311,7 +309,7 @@ class WooJSONEncoder(json.JSONEncoder):
             d.update(dict([(trait.name,getattr(obj,trait.name)) for trait in obj._getAllTraits() if not (trait.hidden or trait.noDump or (trait.hideIf and eval(trait.hideIf,globals(),{'self':obj})))]))
             return d
         # vectors, matrices: those can be assigned from tuples
-        elif obj.__class__.__module__=='woo._customConverters' or obj.__class__.__module__=='_customConverters':
+        elif obj.__class__.__name__.endswith('List'):
             if hasattr(obj,'__len__'): return list(obj)
             else: raise TypeError("Unhandled type for JSON: "+obj.__class__.__module__+'.'+obj.__class__.__name__)
         # minieigen objects
@@ -363,8 +361,7 @@ class WooJSONDecoder(json.JSONDecoder):
             m=__import__(mname,level=0) # absolute imports only
             if i==0: localns[mname]=m
         try:
-            if py3k: return eval(klass,globals(),localns)(**d)
-            else: return eval(klass,globals(),localns)(**dict((key.encode('ascii'),(value.encode('ascii') if isinstance(value,str) else value)) for key,value in d.items()))
+            return eval(klass,globals(),localns)(**d)
         except Exception as e:
             if self.onError=='error': raise
             elif self.onError=='warn':
@@ -422,7 +419,7 @@ def Object_loads(typ,data,format='auto',overrideHashPercent={}):
         else:
             # try pickle
             try:
-                if py3k and type(data)==str: return typeChecked(pickle.loads(bytes(data,'utf-8')),typ)
+                if type(data)==str: return typeChecked(pickle.loads(bytes(data,'utf-8')),typ)
                 else: return typeChecked(pickle.loads(data),typ)
             except (IOError,KeyError,pickle.UnpicklingError,EOFError): pass
             # try json
@@ -476,7 +473,7 @@ def Object_load(typ,inFile,format='auto',overrideHashPercent={}):
             except (IOError,KeyError,pickle.UnpicklingError,EOFError): pass
             try: return typeChecked(WooJSONDecoder().decode(codecs.open(inFile,'rb','utf-8').read()),typ)
             except (IOError,ValueError): pass
-        if not format:    raise RuntimeError('File format detection failed on %s (head: %s, bin: %s)'%(inFile,''.join(["\\x%02x"%(x if py3k else ord(x)) for x in head]),str(head))) # in py3k, bytes contain integers rather than chars
+        if not format:    raise RuntimeError('File format detection failed on %s (head: %s, bin: %s)'%(inFile,''.join(["\\x%02x"%x for x in head]),str(head))) # in py3k, bytes contain integers rather than chars
     if format not in validFormats: raise RuntimeError("format='%s'??"%format)
     assert format in validFormats
     if overrideHashPercent and format!='expr': raise ValueError("overrideHashPercent only applicable with the 'expr' format (not '%s')"%format)

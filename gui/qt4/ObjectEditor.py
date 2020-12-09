@@ -2,14 +2,9 @@
 from __future__ import print_function, absolute_import, division
 from builtins import zip, str, range, object
 import past.builtins, future.utils
-PY3K=future.utils.PY3
 
 import woo.config
-if 'qt4' in woo.config.features:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4 import QtGui
-else:
+if 'qt5' in woo.config.features:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
     from PyQt5.QtWidgets import *
@@ -956,7 +951,6 @@ class ObjectEditor(QFrame):
         if attr==None:
             if self.oneObject.__class__.__doc__!=None:
                 doc=self.oneObject.__class__.__doc__
-                if not PY3K: doc=_ensureUnicode(doc)
             else:
                 logging.error('Class %s __doc__ is None?'%self.ser.__class__.__name__)
                 return None
@@ -1101,8 +1095,7 @@ class ObjectEditor(QFrame):
             ini=''
         toolTip=entry.containingClass.__name__+u'.<b><i>'+entry.name+u'</i></b><br>'+_ensureUnicode(entry.doc)+u'<br><small>default: %s</small>'%ini
         if self.labelIsVar: return woo.document.makeObjectHref(entry.obj,entry.name,text=entry.label),toolTip
-        if PY3K: return entry.doc,toolTip
-        else: return _ensureUnicode(entry.doc),toolTip
+        return entry.doc,toolTip
     def toggleLabelIsVar(self,val=None):
         self.labelIsVar=(not self.labelIsVar if val==None else val)
         for entry in self.entries:

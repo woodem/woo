@@ -9,7 +9,6 @@ from builtins import range
 import unittest
 import random,math
 from minieigen import *
-from woo._customConverters import *
 from woo import utils
 import woo
 from woo.core import *

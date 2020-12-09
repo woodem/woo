@@ -28,11 +28,7 @@ except ImportError: pass
 if not pilOk: print('WARN: PIL/Image module (python-imaging) not importable, embedding images into plots will give errors.')
 
 
-# PY3K
-if PY3K:
-    def _bytes(s): return bytes(s,'ascii')
-else:
-    def _bytes(s): return s
+def _bytes(s): return bytes(s,'ascii')
 
 
 def _my_get_axes(artist):

@@ -35,7 +35,7 @@ struct GLViewInfo{
 	virtual void initgl(){/*WARNING: it must deal with static members, because it is called from another instance!*/};\
 	/* API check only */ void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override { if(!py::len(kw)) { string keys; _WOO_DICT_KEYS_COMMA_SEP(kw,keys); Master().instance().checkApi(10102,"Constructing "+getClassName()+" with keywords ("+keys+") will have no effect unless passed to GlSetup/S.gl.",/*pyWarn*/true); } Object::pyHandleCustomCtorArgs(args,kw); } \
 	virtual void setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr){} \
-	WOO_CLASS_BASE_DOC_ATTRS_PY(Klass,Functor,"Abstract functor for rendering :obj:`" #renderedType "` objects.",/*attrs*/,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<Klass>>();); \
+	WOO_CLASS_BASE_DOC_ATTRS_PY(Klass,Functor,"Abstract functor for rendering :obj:`" #renderedType "` objects.",/*attrs*/,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<Klass>>(mod);); \
 	}; WOO_REGISTER_OBJECT(Klass); 
 #define GL_DISPATCHER(Klass,Functor) class Klass: public Dispatcher1D<Functor>{public:\
 	virtual void setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr){ for(const auto& f: ff) if(f && f->isA<Functor>()){ this->add(static_pointer_cast<Functor>(f)); f->cast<Functor>().setFunctors_getRanges(ff,rr); }} \
