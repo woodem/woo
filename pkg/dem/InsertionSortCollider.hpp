@@ -127,6 +127,7 @@ struct InsertionSortCollider: public Collider {
 		int period;
 		//! is it the minimum (true) or maximum (false) bound?
 		struct{ unsigned hasBB:1; unsigned isMin:1; unsigned isInf:1; } flags;
+		explicit Bounds(){}
 		Bounds(Real coord_, Particle::id_t id_, bool isMin): coord(coord_), id(id_), period(0){ flags.isMin=isMin; }
 		bool operator<(const Bounds& b) const {
 			/* handle special case of zero-width bodies, which could otherwise get min/max swapped in the unstable std::sort */

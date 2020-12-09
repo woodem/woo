@@ -31,7 +31,7 @@ struct LawTesterStage: public Object{
 		.def("reset",&LawTesterStage::reset,"Reset this stage to its initial stage such that it can be used again as if new. This is called automatically from :obj:`LawTester.restart`.") \
 		.def_property_readonly("cTime",&LawTesterStage::pyCTime,"Time since creation of the last contact (NaN if there has never been one). Useful for testing collision time after the condition ``until='stage.rebound'`` has been satisfied. Equivalent to ``stage.time-stage.timeC0``.") \
 		; \
-		woo::converters_cxxVector_pyList_2way<shared_ptr<LawTesterStage>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<LawTesterStage>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_LawTesterStage__CLASS_BASE_DOC_ATTRS_PY);
 };

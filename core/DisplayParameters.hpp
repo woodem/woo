@@ -26,7 +26,7 @@ class DisplayParameters: public Object{
 		DisplayParameters,Object,"Store display parameters.", \
 		((vector<string>,values,,AttrTrait<Attr::readonly>(),"")) \
 		((vector<string>,displayTypes,,AttrTrait<Attr::readonly>(),"")) \
-		,/*py*/;	woo::converters_cxxVector_pyList_2way<shared_ptr<DisplayParameters>>();
+		,/*py*/;	woo::converters_cxxVector_pyList_2way<shared_ptr<DisplayParameters>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS_PY);
 };

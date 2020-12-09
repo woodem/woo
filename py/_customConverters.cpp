@@ -15,7 +15,7 @@
 #include<pybind11/stl_bind.h>
 
 template<typename Type>
-struct opaque_vector{
+struct woo_opaque_vector{
 	static void wrap(py::module& mod, const string& strT){
 		py::bind_vector<std::vector<shared_ptr<Type>>>(mod,strT+"List",py::module_local(false))
 		.def(py::pickle(
@@ -41,9 +41,9 @@ WOO_PYTHON_MODULE(_customConverters);
 PYBIND11_MODULE(_customConverters,mod){
 	mod.attr("__name__")="woo._customConverters";
 
-	opaque_vector<Node>::wrap(mod,"Node");
-	opaque_vector<Particle>::wrap(mod,"Particle");
-	opaque_vector<Object>::wrap(mod,"Object");
+	woo_opaque_vector<Node>::wrap(mod,"Node");
+	woo_opaque_vector<Particle>::wrap(mod,"Particle");
+	woo_opaque_vector<Object>::wrap(mod,"Object");
 #if 0
 	#define _OPAQUE_LIST_EXPOSE(Type)  
 		_OPAQUE_LIST_EXPOSE(Node);
@@ -235,27 +235,28 @@ BOOST_PYTHON_MODULE(_customConverters){
 
 	//	py::class_<vector<shared_ptr<Node> > >("NodeList").def(py::vector_indexing_suite<vector<shared_ptr<Node> >, /*NoProxy, shared_ptr provides proxy semantics already */true>()).def_pickle(VectorPickle<vector<shared_ptr<Node>>>());
 
+	auto mod=py::scope();
 	// register 2-way conversion between c++ vector and python homogeneous sequence (list/tuple) of corresponding type
-		woo::converters_cxxVector_pyList_2way<int>();
-		woo::converters_cxxVector_pyList_2way<size_t>();
-		woo::converters_cxxVector_pyList_2way<bool>();
-		woo::converters_cxxVector_pyList_2way<Real>();
+		woo::converters_cxxVector_pyList_2way<int>(mod);
+		woo::converters_cxxVector_pyList_2way<size_t>(mod);
+		woo::converters_cxxVector_pyList_2way<bool>(mod);
+		woo::converters_cxxVector_pyList_2way<Real>(mod);
 
-		woo::converters_cxxVector_pyList_2way<Vector2r>();
-		woo::converters_cxxVector_pyList_2way<Vector2i>();
-		woo::converters_cxxVector_pyList_2way<Vector3r>();
-		woo::converters_cxxVector_pyList_2way<Vector3i>();
-		woo::converters_cxxVector_pyList_2way<Vector6r>();
-		woo::converters_cxxVector_pyList_2way<Vector6i>();
-		woo::converters_cxxVector_pyList_2way<VectorXr>();
-		woo::converters_cxxVector_pyList_2way<Matrix3r>();
-		woo::converters_cxxVector_pyList_2way<AlignedBox3r>();
-		woo::converters_cxxVector_pyList_2way<AlignedBox2r>();
-		woo::converters_cxxVector_pyList_2way<Quaternionr>();
-		woo::converters_cxxVector_pyList_2way<string>();
-		woo::converters_cxxVector_pyList_2way<std::pair<int,string>>();
-		woo::converters_cxxVector_pyList_2way<std::pair<string,Real>>();
-		woo::converters_cxxVector_pyList_2way<std::vector<std::pair<string,Real>>>();
+		woo::converters_cxxVector_pyList_2way<Vector2r>(mod);
+		woo::converters_cxxVector_pyList_2way<Vector2i>(mod);
+		woo::converters_cxxVector_pyList_2way<Vector3r>(mod);
+		woo::converters_cxxVector_pyList_2way<Vector3i>(mod);
+		woo::converters_cxxVector_pyList_2way<Vector6r>(mod);
+		woo::converters_cxxVector_pyList_2way<Vector6i>(mod);
+		woo::converters_cxxVector_pyList_2way<VectorXr>(mod);
+		woo::converters_cxxVector_pyList_2way<Matrix3r>(mod);
+		woo::converters_cxxVector_pyList_2way<AlignedBox3r>(mod);
+		woo::converters_cxxVector_pyList_2way<AlignedBox2r>(mod);
+		woo::converters_cxxVector_pyList_2way<Quaternionr>(mod);
+		woo::converters_cxxVector_pyList_2way<string>(mod);
+		woo::converters_cxxVector_pyList_2way<std::pair<int,string>>(mod);
+		woo::converters_cxxVector_pyList_2way<std::pair<string,Real>>(mod);
+		woo::converters_cxxVector_pyList_2way<std::vector<std::pair<string,Real>>>(mod);
 
 		VECTOR_INDEXING_SUITE_EXPOSE(Node);
 		VECTOR_INDEXING_SUITE_EXPOSE(Particle);

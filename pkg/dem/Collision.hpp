@@ -35,7 +35,7 @@ WOO_REGISTER_OBJECT(Gl1_Aabb);
 
 
 struct BoundFunctor: public Functor1D</*dispatch types*/ Shape,/*return type*/ void, /*argument types*/ TYPELIST_1(const shared_ptr<Shape>&)>{
-	#define woo_dem_BoundFunctor__CLASS_BASE_DOC_PY BoundFunctor,Functor,"Functor for creating/updating :obj:`woo.dem.Bound`.",/*py*/; woo::converters_cxxVector_pyList_2way<shared_ptr<BoundFunctor>>();
+	#define woo_dem_BoundFunctor__CLASS_BASE_DOC_PY BoundFunctor,Functor,"Functor for creating/updating :obj:`woo.dem.Bound`.",/*py*/; woo::converters_cxxVector_pyList_2way<shared_ptr<BoundFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_BoundFunctor__CLASS_BASE_DOC_PY);
 };
 WOO_REGISTER_OBJECT(BoundFunctor);

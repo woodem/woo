@@ -15,12 +15,12 @@ WOO_IMPL_LOGGER(LawTester);
 void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// go through the dict, find just values we need
 	#ifdef WOO_PYBIND11
-	for(auto kwitem: kw){
-		string key=py::cast<string>(kwitem.first);
-		if(key!="whats") continue;
-		py::extract<string> isStr(py::cast<py::object>(kwitem.second));
-		if(!isStr.check()) continue;
+	{
+		if(!kw.contains("whats")) return;
+		py::extract<string> isStr(py::cast<py::object>(kw["whats"]));
+		if(!isStr.check()) return;
 		string whatStr=isStr();
+		kw.attr("pop")("whats"); // remove from kw
 	#else
 	py::list kwl=kw.items();
 	for(int i=0; i<py::len(kwl); i++){
@@ -30,6 +30,7 @@ void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 		py::extract<string> isStr(item[1]);
 		if(!isStr.check()) continue;
 		string whatStr=isStr();
+		kw[key].del(); // remove from kw
 	#endif
 		if(whatStr.size()!=6) woo::ValueError("LawTesterStage.whats, if given as string, must have length 6, not "+to_string(whatStr.size())+".");
 		for(int i=0;i<6;i++){
@@ -43,12 +44,6 @@ void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 				default: LOG_FATAL("?!?"); abort();
 			}
 		}
-		// remove from the original dict
-		#ifdef WOO_PYBIND11
-			kw.attr("pop")(kwitem.first);
-		#else
-			kw[key].del();
-		#endif
 	}
 };
 

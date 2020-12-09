@@ -21,7 +21,7 @@ struct RawShape: public Object{
 		((Vector3r,center,Vector3r::Zero(),,"Center of the bounding sphere.")) \
 		((Real,radius,0.,,"Radius of the bounding sphere.")) \
 		((vector<Real>,raw,,,"Raw data for shape reconstruction; the size of the array is shape-specific.")) \
-		,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<RawShape>>();
+		,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<RawShape>>(mod);
 
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_RawShape__CLASS_BASE_DOC_ATTRS_PY);
@@ -55,7 +55,7 @@ struct ShapeClump: public Object{
 		, /* py */ \
 		.def("recompute",&ShapeClump::recompute,WOO_PY_ARGS(py::arg("div")=5,py::arg("failOk")=false,py::arg("fastOnly")=false),"Recompute principal axes of the clump, using *div* for subdivision (see :obj:`div` for the semantics). *failOk* (silently return in case of invalid data) and *fastOnly* (return if there is lots of cells in subdivision) are only to be used internally.") \
 		.def("makeParticles",&ShapeClump::pyMakeParticles,WOO_PY_ARGS(py::arg("mat"),py::arg("pos"),py::arg("ori")=Quaternionr::Identity(),py::arg("scale")=1.,py::arg("mask")=(int)DemField::defaultMovableMask),"Create particle(s) as described by this geometry, positioned in *pos* and rotated with *ori*. Geometry will be scaled by *scale*. Returns tuple ([Node,...],[Particle,..]).") \
-		; woo::converters_cxxVector_pyList_2way<shared_ptr<ShapeClump>>();
+		; woo::converters_cxxVector_pyList_2way<shared_ptr<ShapeClump>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ShapeClump__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(ShapeClump);

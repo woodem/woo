@@ -108,6 +108,9 @@ else()
 	message(FATAL_ERROR "double-conversion library/headers not found.")
 endif()
 
+# for parallel STL algotithms
+find_library(TBB_LIB NAMES tbb)
+
 if(WOO_CEREAL)
 	# requires -DWOO_NOXML but that is set by default already
 	add_definitions(-DWOO_CEREAL)
@@ -416,7 +419,7 @@ if(WOO_PYBIND11)
 		${WOO_CXX_GUI_SOURCES}
 		${WOO_CXX_GTS_SOURCES}
 	)
-	target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
 else()
 	add_library(${CXX_INTERNAL} SHARED
 		${WOO_CXX_SOURCES_COMBINED}
@@ -424,7 +427,7 @@ else()
 		${WOO_CXX_GTS_SOURCES}
 	)
 	set_target_properties(${CXX_INTERNAL} PROPERTIES PREFIX "")
-	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python${BP_VERSION_SUFFIX} DOUBLECONVERSION)
+	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python${BP_VERSION_SUFFIX} DOUBLECONVERSION tbb)
 endif(WOO_PYBIND11)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)

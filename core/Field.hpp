@@ -31,7 +31,7 @@ struct NodeData: public Object{
 	#define woo_core_NodeData__CLASS_BASE_DOC_ATTRS_PY \
 		NodeData,Object,"Data associated with some node.",/*attrs*/ \
 		,/*py*/ .add_property_readonly("getterName",&NodeData::getterName); \
-			woo::converters_cxxVector_pyList_2way<shared_ptr<NodeData>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<NodeData>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_NodeData__CLASS_BASE_DOC_ATTRS_PY);
 };
@@ -136,7 +136,7 @@ struct Field: public Object, public Indexable{
 			.def("critDt",&Field::critDt,"Return critical (maximum numerically stable) timestep for this field. By default returns infinity (no critical timestep) but derived fields may override this function.") \
 			WOO_PY_TOPINDEXABLE(Field) \
 			; \
-			woo::converters_cxxVector_pyList_2way<shared_ptr<Field>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<Field>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Field__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Field);

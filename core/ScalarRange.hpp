@@ -56,7 +56,7 @@ struct ScalarRange: public Object{
 		, /* py */ \
 			.def("norm",&ScalarRange::norm,WOO_PY_ARGS(py::arg("val"),py::arg("clamp")=true),"Return value of the argument normalized to 0..1 range; the value is not clamped to 0..1 however: if autoAdjust is false, it can fall outside.") \
 			.def("reset",&ScalarRange::reset); \
-			woo::converters_cxxVector_pyList_2way<shared_ptr<ScalarRange>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<ScalarRange>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_ScalarRange__CLASS_BASE_DOC_ATTRS_PY);
 };

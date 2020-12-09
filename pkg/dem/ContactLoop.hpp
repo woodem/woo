@@ -16,7 +16,7 @@ struct CGeomFunctor: public Functor2D<
 >{
 	// sets minimum nodes[0] -- nodes[0] distance (only used for Sphere+Sphere)
 	virtual void setMinDist00Sq(const shared_ptr<Shape>&, const shared_ptr<Shape>&, const shared_ptr<Contact>& C){ C->minDist00Sq=-1; }
-	#define woo_dem_CGeomFunctor__CLASS_BASE_DOC_PY CGeomFunctor,Functor,"Functor for creating/updating :obj:`Contact.geom` objects.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<CGeomFunctor>>();
+	#define woo_dem_CGeomFunctor__CLASS_BASE_DOC_PY CGeomFunctor,Functor,"Functor for creating/updating :obj:`Contact.geom` objects.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<CGeomFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_CGeomFunctor__CLASS_BASE_DOC_PY);
 };
 WOO_REGISTER_OBJECT(CGeomFunctor);
@@ -26,7 +26,7 @@ class CPhysFunctor: public Functor2D<
 	/*retrun type*/    void,
 	/*argument types*/ TYPELIST_3(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&)
 >{
-	#define woo_dem_CPhysFunctor__CLASS_BASE_DOC_PY CPhysFunctor,Functor,"Functor for creating/updating :obj:`Contact.phys` objects.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<CPhysFunctor>>();
+	#define woo_dem_CPhysFunctor__CLASS_BASE_DOC_PY CPhysFunctor,Functor,"Functor for creating/updating :obj:`Contact.phys` objects.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<CPhysFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_CPhysFunctor__CLASS_BASE_DOC_PY);
 };
 WOO_REGISTER_OBJECT(CPhysFunctor);
@@ -37,7 +37,7 @@ class LawFunctor: public Functor2D<
 	/*return type*/    bool,
 	/*argument types*/ TYPELIST_3(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&)
 >{
-	#define woo_dem_LawFunctor__CLASS_BASE_DOC_PY LawFunctor,Functor,"Functor for applying constitutive laws on :obj:`contact <Contact>`.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<LawFunctor>>();
+	#define woo_dem_LawFunctor__CLASS_BASE_DOC_PY LawFunctor,Functor,"Functor for applying constitutive laws on :obj:`contact <Contact>`.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<LawFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_LawFunctor__CLASS_BASE_DOC_PY);
 };
 WOO_REGISTER_OBJECT(LawFunctor);

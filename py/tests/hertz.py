@@ -23,7 +23,10 @@ class TestHertz(unittest.TestCase):
         S.dtSafety=0.4
         S.engines=woo.utils.defaultEngines(damping=.0,cp2=Cp2_HertzMat_HertzPhys(en=0,label='cp2',poisson=.2),law=Law2_L6Geom_HertzPhys_DMT(),dynDtPeriod=10)+[
             # -123 is replaced by v0 before actually used
-            LawTester(ids=(0,1),abWeight=.5,stages=[LawTesterStage(values=(-123,0,0,0,0,0),whats='ivv...',until='stage.rebound',done='S.stop(); tester.dead=True')],label='tester')
+            LawTester(ids=(0,1),abWeight=.5,stages=[
+                LawTesterStage(values=(-123,0,0,0,0,0),whats='ivv...',until='stage.rebound',done='S.stop(); S.lab.tester.dead=True')]
+            ,label='tester'
+            )
         ]
     def testElasticCollisionTime(self):
         'Hertz: elastic collision time for different impact velocities (simulation/analytic)'

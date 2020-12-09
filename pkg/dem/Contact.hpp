@@ -114,7 +114,7 @@ struct Contact: public Object{
 		.def("forceSign",&Contact::pyForceSign,WOO_PY_ARGS(py::arg("p")),"Return sign of :obj:`CPhys.force` as it appies on the particle passed, i.e. +1 if ``p==C.pA`` and -1 if ``p==C.pB``. Raise an exception if ``p`` is neither ``pA`` or ``pB``.") \
 		.def("forceSign",&Contact::pyForceSignId,WOO_PY_ARGS(py::arg("id")),"Return sign of :obj:`CPhys.force` as it appies on the particle with id ``id``, i.e. ``id==C.id1`` and -1 if ``id==id2``. Raise an exception if ``id`` is neither ``id1`` or ``id2``.") \
 		; \
-		woo::converters_cxxVector_pyList_2way<shared_ptr<Contact>>();
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Contact>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Contact__CLASS_BASE_DOC_ATTRS_PY);
 };

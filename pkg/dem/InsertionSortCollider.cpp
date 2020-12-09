@@ -615,7 +615,7 @@ void InsertionSortCollider::run(){
 				LOG_DEBUG("Initial std::sort over all axes");
 				for(int i:{0,1,2}) {
 					#ifdef __cpp_lib_execution
-						std::sort(std::execution_par,BB[i].vec.begin(),BB[i].vec.end());
+						std::sort(std::execution::par,BB[i].vec.begin(),BB[i].vec.end());
 					#else
 						#if defined(WOO_OPENMP) && defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
 							__gnu_parallel::sort(BB[i].vec.begin(),BB[i].vec.end());

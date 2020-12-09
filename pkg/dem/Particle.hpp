@@ -143,7 +143,7 @@ struct Particle: public Object{
 		.def_static("make",&Particle::make,WOO_PY_ARGS(py::arg("shape"),py::arg("mat"),py::arg("fixed")=false),"Return Particle instance created from given shape and material; nodes with DemData are automatically added to the shape, mass and inertia is recomuted.") \
 		; \
 		/* vector<Particle> is now exposed in py/_customConverters as ParticleList to avoid copying */ \
-		/* woo::converters_cxxVector_pyList_2way<shared_ptr<Particle>>();*/
+		/* woo::converters_cxxVector_pyList_2way<shared_ptr<Particle>>(mod);*/
 
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Particle__CLASS_BASE_DOC_ATTRS_PY);
@@ -183,7 +183,7 @@ struct Impose: public Object{
 			_classObj.attr("force")=(int)FORCE; \
 			_classObj.attr("initVelocity")=(int)INIT_VELOCITY; \
 			_classObj.attr("readForce")=(int)READ_FORCE; \
-			woo::converters_cxxVector_pyList_2way<shared_ptr<Impose>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<Impose>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Impose__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Impose);
@@ -202,7 +202,7 @@ struct MatState: public Object{
 		.def("getNumScalars",&MatState::getNumScalars,"Return number of scalars (index to :obj:`getScalar` and :obj:`getScalarName` should be lower than this number).") \
 		.def("getScalar",&MatState::getScalar,WOO_PY_ARGS(py::arg("index"),py::arg("time")=0,py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
 		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)") ;\
-		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>();
+		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_MatState__CLASS_BASE_DOC_ATTRS_PY);
 };
@@ -493,7 +493,7 @@ struct Shape: public Object, public Indexable{
 			.def("lumpMassInertia",&Shape::pyLumpMassInertia) \
 			WOO_PY_TOPINDEXABLE(Shape) \
 			; \
-			woo::converters_cxxVector_pyList_2way<shared_ptr<Shape>>();
+			woo::converters_cxxVector_pyList_2way<shared_ptr<Shape>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Shape__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Shape);
@@ -507,7 +507,7 @@ struct Material: public Object, public Indexable{
 		((int,id,-1,AttrTrait<>().noGui(),"Some number identifying this material; used with MatchMaker objects, useless otherwise")) \
 		,/*ctor*/createIndex(); \
 		,/*py*/ WOO_PY_TOPINDEXABLE(Material); \
-		woo::converters_cxxVector_pyList_2way<shared_ptr<Material>>();
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Material>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Material__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Material);
 };

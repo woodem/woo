@@ -26,7 +26,7 @@ struct SphereClumpGeom: public ShapeClump {
 		((vector<Real>,radii,,AttrTrait<Attr::triggerPostLoad>(),"Radii of constituent spheres")) \
 		, /* py */ \
 		.def_static("fromSpherePack",&SphereClumpGeom::fromSpherePack,WOO_PY_ARGS(py::arg("pack"),py::arg("div")=5),"Return [ :obj:`SphereClumpGeom` ] which contain all clumps and spheres from given :obj:`SpherePack`.") \
-		; woo::converters_cxxVector_pyList_2way<shared_ptr<SphereClumpGeom>>();
+		; woo::converters_cxxVector_pyList_2way<shared_ptr<SphereClumpGeom>>(mod);
 
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_SphereClumpGeom__CLASS_BASE_DOC_ATTRS_PY);

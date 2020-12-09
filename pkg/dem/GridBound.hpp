@@ -44,7 +44,7 @@ WOO_REGISTER_OBJECT(Gl1_GridBound);
 #endif
 
 struct GridBoundFunctor: public Functor1D</*dispatch types*/ Shape,/*return type*/ void, /*argument types*/ TYPELIST_4(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&)>{
-	#define woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY GridBoundFunctor,Functor,"Functor for creating/updating :obj:`woo.dem.GridBound`.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<GridBoundFunctor>>();
+	#define woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY GridBoundFunctor,Functor,"Functor for creating/updating :obj:`woo.dem.GridBound`.", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<GridBoundFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_GridBoundFunctor__CLASS_BASE_DOC_PY);
 
 };

@@ -6,9 +6,16 @@
 
 #ifdef WOO_PYBIND11
 	#include<pybind11/stl.h>
+	#include<pybind11/stl_bind.h>
 	// no-op with pybind11
 	namespace woo{
-		template<typename T> void converters_cxxVector_pyList_2way(){ };
+		template<typename T> void converters_cxxVector_pyList_2way(py::module& mod){
+			// PYBIND11_MAKE_OPAQUE(std::vector<T>)
+			//std::cerr<<"Binding vec_"<<typeid(T).name()<<"..."<<std::endl;
+			py::bind_vector<std::vector<T>>(mod,"vec_"+string(typeid(T).name()),py::module_local(false));
+			//std::cerr<<"Declaring py::list → vec_"<<typeid(T).name()<<" implicit convertibility..."<<std::endl;
+			py::implicitly_convertible<py::list,std::vector<T>>();
+		};
 	};
 #else
 
@@ -86,7 +93,7 @@ namespace woo{
 	};
 
 	template<typename T>
-	void converters_cxxVector_pyList_2way(){
+	void converters_cxxVector_pyList_2way(py::scope& mod){
 		custom_vector_from_seq<T>(); py::to_python_converter<vector<T>,custom_vector_to_list<T>>();
 	};
 

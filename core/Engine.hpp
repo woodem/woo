@@ -18,6 +18,12 @@ struct ScalarRange;
 
 // namespace py=boost::python;
 
+//#ifdef WOO_PYBIND11
+//	struct Engine;
+//	PYBIND11_MAKE_OPAQUE(std::vector<std::shared_ptr<Engine>>)
+//#endif
+
+
 class Engine: public Object {
 	public:
 		// pointer to the simulation and field, set by Scene::moveToNextTimeStep
@@ -100,7 +106,7 @@ class Engine: public Object {
 		.add_property_readonly("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
 		.def("critDt",&Engine::critDt,"Return critical (maximum numerically stable) timestep for this engine. By default returns infinity (no critical timestep) but derived engines may override this function.") \
 		; \
-		woo::converters_cxxVector_pyList_2way<shared_ptr<Engine>>();
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Engine>>(mod);
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Engine__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };

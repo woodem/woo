@@ -13,7 +13,7 @@ struct IntraFunctor: public Functor2D<
 	// called from IntraForce::critDt
 	virtual void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const;
 	
-	#define woo_dem_IntraFunctor__CLASS_BASE_DOC_PY IntraFunctor,Functor,"Functor appying internal forces", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<IntraFunctor>>();
+	#define woo_dem_IntraFunctor__CLASS_BASE_DOC_PY IntraFunctor,Functor,"Functor appying internal forces", /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<IntraFunctor>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_PY(woo_dem_IntraFunctor__CLASS_BASE_DOC_PY);
 };
 WOO_REGISTER_OBJECT(IntraFunctor);
