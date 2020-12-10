@@ -76,7 +76,7 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		classObj.attr("_attrTraits")=py::list();
 		// repeat the docstring here
 
-		woo::converters_cxxVector_pyList_2way<shared_ptr<Object>>(mod);
+		woo::converters_cxxVector_pyList_2way<shared_ptr<Object>>(mod,"ObjectList");
 
 		shared_ptr<ClassTrait> traitPtr=make_shared<ClassTrait>();
 		traitPtr->name("Object").doc(py::extract<string>(classObj.attr("__doc__"))()).file(__FILE__).line(__LINE__);

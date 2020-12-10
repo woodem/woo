@@ -4,15 +4,13 @@
 #include<woo/core/Master.hpp>
 #include<woo/lib/pyutil/converters.hpp>
 
-// namespace py=boost::python;
-
 #include<thread>
 
 struct Scene;
 
 struct Node;
 #ifdef WOO_PYBIND11
-	// this disabled exposing the vector as python list
+	// this disables exposing the vector as python list
 	// it must come before pybind11 kicks in, and outside of any namespaces
 	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
 #endif
@@ -112,7 +110,7 @@ struct Node: public Object, public Indexable{
 			.def("loc2glob",&Node::loc2glob,WOO_PY_ARGS(py::arg("p")),"Transform point :math:`p_l` from node-local to global coordinates as :math:`q\\cdot p_l\\cdot q^*+O`, in code ``q*p+O``.") \
 			.def("glob2loc_rank2",&Node::glob2loc_rank2,WOO_PY_ARGS(py::arg("g")),"Rotate rank-2 tensor (such as stress) from local to global coordinates, computed as :math:`\\mat{R}^T\\mat{g}\\mat{R}`.") \
 			.def("loc2glob_rank2",&Node::loc2glob_rank2,WOO_PY_ARGS(py::arg("l")),"Rotate rank-2 tensor (such as stress), represented as 3×3 matrix, from local to global coordinates; computed as :math:`\\mat{R}\\mat{l}\\mat{R}^T`, where :math:`\\mat{R}` is rotation matrix equivalent to rotation by quaternion :obj:`ori`."); \
-				woo::converters_cxxVector_pyList_2way<shared_ptr<Node>>(mod)
+				woo::converters_cxxVector_pyList_2way<shared_ptr<Node>>(mod,"NodeList")
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Node__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	REGISTER_INDEX_COUNTER(Node);

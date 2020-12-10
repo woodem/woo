@@ -111,9 +111,9 @@ struct ContactContainer: public Object{
 	#endif
 
 	#ifdef WOO_PYBIND11
-		#define woo_dem_ContactContainer__iterator_PY py::class_<ContactContainer::pyIterator>(_classObj,"ContactContainer_iterator").def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+		#define woo_dem_ContactContainer__iterator_PY py::class_<ContactContainer::pyIterator>(_classObj,"ContactContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 	#else
-		#define woo_dem_ContactContainer__iterator_PY py::scope foo(_classObj); py::class_<ContactContainer::pyIterator>("ContactContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+		#define woo_dem_ContactContainer__iterator_PY py::scope foo(_classObj); py::class_<ContactContainer::pyIterator>("ContactContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 	#endif
 	
 	#define woo_dem_ContactContainer__CLASS_BASE_DOC_ATTRS_PY \

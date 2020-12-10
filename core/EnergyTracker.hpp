@@ -83,9 +83,9 @@ class EnergyTracker: public Object{
 	string gridToVTK(const string& out);
 
 	#ifdef WOO_PYBIND11
-		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>(mod,"EnergyTracker_iterator").def("__iter__",&EnergyTracker::pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next); 
+		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>(mod,"EnergyTracker_iterator").def("__iter__",&EnergyTracker::pyIterator::iter).def("__next__",&pyIterator::next);
 	#else
-		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>("EnergyTracker_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next); 
+		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>("EnergyTracker_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 	#endif
 
 	#define woo_core_EnergyTracker__CLASS_BASE_DOC_ATTRS_PY \

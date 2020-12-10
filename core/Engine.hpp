@@ -16,8 +16,6 @@ struct Scene;
 struct Field;
 struct ScalarRange;
 
-// namespace py=boost::python;
-
 //#ifdef WOO_PYBIND11
 //	struct Engine;
 //	PYBIND11_MAKE_OPAQUE(std::vector<std::shared_ptr<Engine>>)

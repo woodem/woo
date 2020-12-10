@@ -34,11 +34,7 @@ BOOST_PYTHON_MODULE(_packSpheres){
 		.def("reset",&SpherePack::reset,"Re-inialize this object (clear all spheres and reset periodic cell size.")
 		.def("save",&SpherePack::toFile,WOO_PY_ARGS(py::arg("fileName")),"Save packing to external text file (will be overwritten).").def("saveTxt",&SpherePack::toFile,"Identical to :obj:`save:`, with newer name for ShapePack compatibility.")
 		.def("filtered",&SpherePack::filtered,WOO_PY_ARGS(py::arg("predicate"),py::arg("recenter")=true),"Return new :obj:`SpherePack` object, without any spheres which don't match *predicate*. Clumps are handled gracefully, i.e. if any of clump's spheres does not satisfy the predicate, the whole clump is taken away. If *recenter* is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.")
-	#if PY_MAJOR_VERSION==2
-		.def("makeCloud",&SpherePack::makeCloud,WOO_PY_ARGS(py::arg("minCorner")=Vector3r(Vector3r::Zero()),py::arg("maxCorner")=Vector3r(Vector3r::Zero()),py::arg("rMean")=-1,py::arg("rRelFuzz")=0,py::arg("num")=-1,py::arg("periodic")=false,py::arg("porosity")=0.5,py::arg("psdSizes")=vector<Real>(),py::arg("psdCumm")=vector<Real>(),py::arg("distributeMass")=false,py::arg("seed")=0,py::arg("hSize")=Matrix3r(Matrix3r::Zero())),
-	#else
 		.def("makeCloud",&SpherePack::makeCloud_simple,WOO_PY_ARGS(py::arg("minCorner")=Vector3r(Vector3r::Zero()),py::arg("maxCorner")=Vector3r(Vector3r::Zero()),py::arg("rMean")=-1,py::arg("rRelFuzz")=0,py::arg("num")=-1,py::arg("periodic")=false),
-	#endif
 		"Create random loose packing enclosed in a parallelepiped."
 		"\nSphere radius distribution can be specified using one of the following ways:\n\n#. *rMean*, *rRelFuzz* and *num* gives uniform radius distribution in *rMean* (1 ± *rRelFuzz* ). Less than *num* spheres can be generated if it is too high.\n#. *rRelFuzz*, *num* and (optional) *porosity*, which estimates mean radius so that *porosity* is attained at the end.  *rMean* must be less than 0 (default). *porosity* is only an initial guess for the generation algorithm, which will retry with higher porosity until the prescibed *num* is obtained.\n#. *psdSizes* and *psdCumm*, two arrays specifying points of the `particle size distribution <http://en.wikipedia.org/wiki/Particle_size_distribution>`__ function. As many spheres as possible are generated.\n#. *psdSizes*, *psdCumm*, *num*, and (optional) *porosity*, like above but if *num* is not obtained, *psdSizes* will be scaled down uniformly, until *num* is obtained (see :obj:`appliedPsdScaling <woo._packSpheres.SpherePack.appliedPsdScaling>`).\n\nBy default (with ``distributeMass==False``), the distribution is applied to particle radii. The usual sense of \"particle size distribution\" is the distribution of *mass fraction* (rather than particle count); this can be achieved with ``distributeMass=True``."
 		"\n\nIf *num* is defined, then sizes generation is deterministic, giving the best fit of target distribution. It enables spheres placement in descending size order, thus giving lower porosity than the random generation."
@@ -79,7 +75,7 @@ BOOST_PYTHON_MODULE(_packSpheres){
 	py::class_<SpherePack::_iterator>("SpherePackIterator",py::init<SpherePack::_iterator&>())
 #endif
 		.def("__iter__",&SpherePack::_iterator::iter)
-		.def(WOO_next_OR__next__,&SpherePack::_iterator::next)
+		.def("__next__",&SpherePack::_iterator::next)
 	;
 }
 

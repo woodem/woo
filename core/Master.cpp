@@ -86,7 +86,6 @@ Master::Master(){
 		auto random_string=[](const int len){ std::string ret(len,'_'); constexpr char alphanum[]="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; for(int i=0;i<len;++i) ret[i]=alphanum[rand()%(sizeof(alphanum)-1)]; return ret; };
 		fs::path tmpRoot=fs::temp_directory_path();
 		LOG_DEBUG_EARLY("fs::temp_directory_path(): "<<tmpRoot.string());
-		fs::path tmp;
 		while(tmp=(tmpRoot/("woo-tmp-"+random_string(8))),fs::exists(tmp));
 		tmpFileDir=tmp.string();
 		LOG_DEBUG_EARLY("Creating temp dir "<<tmpFileDir);

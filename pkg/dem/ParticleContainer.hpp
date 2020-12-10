@@ -174,10 +174,10 @@ struct ParticleContainer: public Object{
 		#endif
 
 	#ifdef WOO_PYBIND11
-		#define woo_dem_ParticleContainer__iterator_PY py::class_<ParticleContainer::pyIterator>(_classObj,"ParticleContainer_iterator").def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+		#define woo_dem_ParticleContainer__iterator_PY py::class_<ParticleContainer::pyIterator>(_classObj,"ParticleContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 	#else
 		#define woo_dem_ParticleContainer__iterator_PY \
-		py::scope foo(_classObj); /*this does not seem to work?? */ py::class_<ParticleContainer::pyIterator>("ParticleContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def(WOO_next_OR__next__,&pyIterator::next);
+		py::scope foo(_classObj); /*this does not seem to work?? */ py::class_<ParticleContainer::pyIterator>("ParticleContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 	#endif
 
 

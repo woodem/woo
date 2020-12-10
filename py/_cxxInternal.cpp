@@ -170,10 +170,6 @@ std::shared_ptr<spdlog::logger> Boot::logger=spdlog::stdout_color_mt("woo.boot")
 
 // NB: this module does NOT use WOO_PYTHON_MODULE, since the file is really called _cxxInternal[_flavor][_debug].so
 // and is a real real python module
-//
-#if PY_MAJOR_VERSION==2
-	#error Building with Python 2.x is no longer supported.
-#endif
 
 #ifdef WOO_PYBIND11
 	#ifdef WOO_DEBUG

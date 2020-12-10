@@ -9,9 +9,10 @@
 	#include<pybind11/stl_bind.h>
 	// no-op with pybind11
 	namespace woo{
-		template<typename T> void converters_cxxVector_pyList_2way(py::module& mod){
+		template<typename T> void converters_cxxVector_pyList_2way(py::module& mod, const string& name=""){
 			//std::cerr<<"Binding vec_"<<typeid(T).name()<<"..."<<std::endl;
-			auto vec=py::bind_vector<std::vector<T>>(mod,string(typeid(T).name())+"List",py::module_local(false));
+			string name2=name.empty()?(string("_")+(typeid(typename T::element_type).name())+"List"):name;
+			auto vec=py::bind_vector<std::vector<T>>(mod,name2,py::module_local(false));
 			// pickling will be used **only** for types which were declared opaque
 			// but we declare it for all types anyway
 			vec.def(py::pickle(
@@ -29,6 +30,7 @@
 			));
 			//std::cerr<<"Declaring py::list → vec_"<<typeid(T).name()<<" implicit convertibility..."<<std::endl;
 			py::implicitly_convertible<py::list,std::vector<T>>();
+			py::implicitly_convertible<py::tuple,std::vector<T>>();
 		};
 	};
 #else

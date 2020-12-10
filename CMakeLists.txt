@@ -4,14 +4,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 OPTION(WOO_DEBUG "Include debugging information" OFF)
-OPTION(WOO_PYBIND11 "Use pybind11 instead of boost::python" ON)
 OPTION(WOO_VTK "Use VTK, enable related functionality" ON)
 OPTION(WOO_HDF5 "Use HDF5, enable related functionality" ON)
 OPTION(WOO_GTS "Use GTS (and build internal pygts), enable related functionality" ON)
 OPTION(WOO_QT5 "Build Qt5-based user interface (implies also OpenGL)" ON)
 OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
-OPTION(WOO_CLANG "Use clang instead of the system-default compiler (usually gcc)" OFF)
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
 OPTION(WOO_CCACHE "Use ccache when compiling" ON)
@@ -25,12 +23,6 @@ if(DEFINED ENV{VIRTUAL_ENV})
 	endif()
 endif()
 
-if(WOO_CLANG)
-	message(WARNING "WOO_CLANG is deprecated (but not yet ignored). Set CXX environment variable instead.")
-	set(CMAKE_CXX_COMPILER clang++-9)
-	set(CMAKE_C_COMPILER clang++-9)
-endif()
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -42,7 +34,6 @@ endif()
 if(WOO_CCACHE)
 	find_program(CCACHE_FOUND "ccache" REQUIRED)
 	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-	# set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(WOO_CCACHE)
 
 # https://medium.com/@alasher/colored-c-compiler-output-with-ninja-clang-gcc-10bfe7f2b949
@@ -74,11 +65,6 @@ endif()
 set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
 find_package(Backward REQUIRED)
 
-if(WOO_VTK)
-	find_package(VTK REQUIRED)
-	add_definitions(-DWOO_VTK)
-endif()
-
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)
 	set(CMAKE_BUILD_TYPE Debug)
@@ -86,17 +72,9 @@ else()
 	add_definitions(-DNDEBUG)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
-if(WOO_PYBIND11)
-	add_definitions(-DWOO_PYBIND11)
-	find_package(pybind11 2.4 REQUIRED)
-else()
-	message(FATAL_ERROR "Building with boost::python (WOO_PYBIND11=OFF) is no longer supported.")
-	set(BP_VERSION_SUFFIX "${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
-	# set(BP_VERSION_SUFFIX "")
-	find_package(Boost REQUIRED COMPONENTS "python${BP_VERSION_SUFFIX}")
-	# otherwise boost::python would happily include version 2.7 headers?!
-	include_directories(${PYTHON_INCLUDE_DIRS})
-endif()
+
+add_definitions(-DWOO_PYBIND11)
+find_package(pybind11 2.4 REQUIRED)
 
 find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
 find_library(DOUBLECONVERSION_LIB NAMES double-conversion)
@@ -110,17 +88,20 @@ else()
 endif()
 
 # for parallel STL algotithms
-find_library(TBB_LIB NAMES tbb)
+find_package(TBB REQUIRED)
 
 if(WOO_CEREAL)
 	# requires -DWOO_NOXML but that is set by default already
 	add_definitions(-DWOO_CEREAL)
 	# TODO: check headers and version
 endif()
+
 if(WOO_OPENMP)
 	add_definitions(-DWOO_OPENMP)
 	find_package(OpenMP REQUIRED)
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
+
 if(WOO_GTS)
 	add_definitions(-DWOO_GTS)
 	find_package(PkgConfig REQUIRED)
@@ -143,16 +124,19 @@ if(WOO_GTS)
 	)
 	add_definitions(-DPYGTS_HAS_NUMPY)
 endif()
+
 if(WOO_VTK)
 	find_package(VTK REQUIRED)
 	add_definitions(-DWOO_VTK)
 endif()
+
 if(WOO_HDF5)
 	find_package(HDF5 REQUIRED COMPONENTS CXX HL)
 	add_definitions(-DWOO_HDF5)
 	set(HDF5_PREFER_PARALLEL false)
 	include_directories(SYSTEM PUBLIC ${HDF5_CXX_INCLUDE_DIRS})
 endif()
+
 if(WOO_QT5)
 	find_package(Qt5 COMPONENTS Widgets Core OpenGL Xml REQUIRED)
 	add_definitions(-DWOO_QT5 -DWOO_OPENGL)
@@ -191,11 +175,7 @@ if(WOO_QT5)
 		gui/qt4/OpenGLManager.cpp
 	)
 endif(WOO_QT5)
-if(WOO_OPENMP)
-	find_package(OpenMP REQUIRED)
-	add_definitions(-DWOO_OPENMP)
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()
+
 
 # don't compile XML serialization, binary works better
 add_definitions(-DWOO_NOXML)
@@ -264,19 +244,7 @@ if(WOO_DEBUG)
 	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
 endif()
 
-if(WOO_PYBIND11)
-	set(WOO_EIGEN_WRAPPER_SRCS lib/eigen/pybind11/register.cpp)
-else()
-	set(WOO_EIGEN_WRAPPER_SRCS
-		lib/eigen/boost-python/expose-boxes.cpp
-		lib/eigen/boost-python/expose-complex.cpp
-		lib/eigen/boost-python/expose-converters.cpp
-		lib/eigen/boost-python/expose-matrices.cpp
-		lib/eigen/boost-python/expose-quaternion.cpp
-		lib/eigen/boost-python/expose-vectors.cpp
-		lib/eigen/boost-python/minieigen.cpp
-	)
-endif()
+set(WOO_EIGEN_WRAPPER_SRCS lib/eigen/pybind11/register.cpp)
 
 
 set(WOO_CXX_SOURCES
@@ -411,24 +379,14 @@ COMBINE_SOURCES("${CMAKE_BINARY_DIR}/srcs" ;
 	1 ;
 	WOO_CXX_SOURCES_COMBINED
 )
-message(STATUS "Combined sources are ${WOO_INTERNAL_SOURCES}")
+message(STATUS "Combined sources are ${WOO_CXX_SOURCES_COMBINED}")
 
-if(WOO_PYBIND11)
-	pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
-		${WOO_CXX_SOURCES_COMBINED}
-		${WOO_CXX_GUI_SOURCES}
-		${WOO_CXX_GTS_SOURCES}
-	)
-	target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
-else()
-	add_library(${CXX_INTERNAL} SHARED
-		${WOO_CXX_SOURCES_COMBINED}
-		${WOO_CXX_GUI_SOURCES}
-		${WOO_CXX_GTS_SOURCES}
-	)
-	set_target_properties(${CXX_INTERNAL} PROPERTIES PREFIX "")
-	target_link_libraries(${CXX_INTERNAL} PUBLIC Boost::python${BP_VERSION_SUFFIX} DOUBLECONVERSION tbb)
-endif(WOO_PYBIND11)
+pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
+	${WOO_CXX_SOURCES_COMBINED}
+	${WOO_CXX_GUI_SOURCES}
+	${WOO_CXX_GTS_SOURCES}
+)
+target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
 if(WOO_QT5)
@@ -598,7 +556,6 @@ if(WOO_QT5)
 		DESTINATION ${WOO_MODULEDIR}/qt
 	)
 endif()
-
 
 ##
 ## run setup.py for wooExtra modules

@@ -72,11 +72,11 @@ class TestSceneLabels(unittest.TestCase):
         try: self.S.lab.nn=[231,None]
         except: self.fail("[python-object,None] rejected by LabelMapper as mixed.")
         self.assertTrue(self.S.labels._whereIs('nn')==woo.core.LabelMapper.inPy)
-    @unittest.skipIf('pybind11' in woo.config.features,'_customConverters (ObjectList, NodeList, ...) not yet properly working with pybind11.')
+    @unittest.skipIf('pybind11' in woo.config.features,'core.(ObjectList, NodeList, ...) not yet properly working with pybind11.')
     def testOpaqueSeqWithWooObjs(self):
         'LabelMapper: opaque sequence types with Woo objects are rejected'
         # this should be rejected
-        ll=woo._customConverters.ObjectList()
+        ll=woo.core.ObjectList()
         ll.append(woo.core.Object())
         self.assertRaises(ValueError,lambda: setattr(self.S.lab,'aa',ll))
     def testShared(self):

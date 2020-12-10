@@ -17,20 +17,9 @@ namespace woo{
 		GilLock pyLock;
 		//cerr<<"[Pickler::ensureInitialized:gil]";
 		#ifndef WOO_PYBIND11
-			#if PY_MAJOR_VERSION >= 3
 				py::object cPickle=py::import("pickle");
-			#else
-				py::object cPickle=py::import("cPickle");
-			#endif
 		#else
-			#if PY_MAJOR_VERSION >= 3
 				py::object cPickle=py::module::import("pickle");
-			#else
-				py::object cPickle=py::module::import("cPickle");
-			#endif
-		#endif
-		#ifdef WOO_PYBIND11
-
 		#endif
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");
@@ -51,17 +40,13 @@ namespace woo{
 			assert(PyBytes_Check(b));
 			return std::string(py::reinterpret_steal<py::bytes>(b));
 		#else
-			#if (PY_MAJOR_VERSION >= 3)
-				// destructed at the end of the scope, when std::string copied the content already
-				py::object s(cPickle_dumps(o,-1)); // -1: use binary protocol
-				PyObject* b=s.ptr();
-				assert(PyBytes_Check(b));
-				//cerr<<"[dumps:gil:length="<<PyBytes_Size(b)<<"]";
-				// bytes may contain 0 (only in py3k apparently), make sure size is passed explicitly
-				return std::string(PyBytes_AsString(b),PyBytes_Size(b)); 
-			#else
-				return py::extract<string>(cPickle_dumps(o,-1))(); // -1: use binary protocol
-			#endif
+			// destructed at the end of the scope, when std::string copied the content already
+			py::object s(cPickle_dumps(o,-1)); // -1: use binary protocol
+			PyObject* b=s.ptr();
+			assert(PyBytes_Check(b));
+			//cerr<<"[dumps:gil:length="<<PyBytes_Size(b)<<"]";
+			// bytes may contain 0 (only in py3k apparently), make sure size is passed explicitly
+			return std::string(PyBytes_AsString(b),PyBytes_Size(b)); 
 		#endif
 		;
 	}
@@ -70,11 +55,7 @@ namespace woo{
 		GilLock pyLock;
 		//cerr<<"[loads:gil]";
 		#ifndef WOO_PYBIND11
-			#if PY_MAJOR_VERSION >= 3
-				return cPickle_loads(py::handle<>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
-			#else
-				return cPickle_loads(s);
-			#endif
+			return cPickle_loads(py::handle<>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
 		#else
 			// return cPickle_loads(py::reinterpret_borrow<py::object>(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
 			return cPickle_loads(py::handle(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));

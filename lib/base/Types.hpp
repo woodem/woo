@@ -119,13 +119,6 @@ std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(
 	namespace py=pybind11;
 #endif
 
-// py 2x: iterator.next, py3k: iterator.__next__
-#if PY_MAJOR_VERSION >= 3
-	#define WOO_next_OR__next__ "__next__"
-#else
-	#define WOO_next_OR__next__ "next"
-#endif
-
 typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
