@@ -56,11 +56,7 @@ void Node::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 		auto d=py::extract<shared_ptr<NodeData>>(kw[name])();
 		if(d->getterName()!=string(name)) throw std::runtime_error("Node: mismatch passing "+string(name)+"="+d->pyStr()+": shorthand for this type should be "+d->getterName()+" (not "+string(name)+").");
 		d->setDataOnNode(*this);
-		#ifdef WOO_PYBIND11
-			kw.attr("pop")(name);
-		#else
-			py::api::delitem(kw,name);
-		#endif
+		kw.attr("pop")(name);
 	}
 }
 

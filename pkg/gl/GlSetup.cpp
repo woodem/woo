@@ -43,16 +43,6 @@ void GlSetup::postLoad(GlSetup&,void* attr){
 	dirty=true;
 }
 
-
-#ifndef WOO_PYBIND11
-	py::object GlSetup::pyCallStatic(py::args_ args, py::kwargs kw){
-		if(py::len(kw)>0) woo::RuntimeError("Keyword arguments not accepted.");
-		//pb11: py::extract<GlSetup&>(args[0])().pyCall(args.attr("__getitem__")(py::slice(1,-1,1)));
-		py::extract<GlSetup&>(args[0])().pyCall(py::tuple(args.slice(1,py::len(args))));
-		return py::none();
-	}
-#endif
-
 void GlSetup::ensureObjs(){
 	if(objs.size()!=objTypeIndices.size()){
 		objs=makeObjs();
@@ -83,26 +73,17 @@ void GlSetup::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	args=py::tuple();
 	ensureObjs();
 	// not sure this is really useful
-	#ifdef WOO_PYBIND11
 	for(auto item: kw){
+		// FIXME: this does not seem to work??
 		string key=py::cast<string>(item.first);
-	#else
-	py::list kwl=kw.items();
-	for(int i=0; i<py::len(kwl); i++){
-		py::tuple item=py::extract<py::tuple>(kwl[i]);
-		string key=py::extract<string>(item[0]);
-	#endif
+
 		auto I=std::find(objAccessorNames.begin(),objAccessorNames.end(),key);
 		// we don't consume unknown keys, Object's business to use them or error out
 		if(I==objAccessorNames.end()) continue; 
 		size_t index=I-objAccessorNames.begin();
 		//	if(!py::isinstance<shared_ptr<Object>>(item.second)) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
 		//	auto o=py::cast<shared_ptr<Object>>(item.second);
-		#if WOO_PYBIND11
-			py::extract<shared_ptr<Object>> ex(py::cast<py::object>(item.second));
-		#else
-			py::extract<shared_ptr<Object>> ex(item[1]);
-		#endif
+		py::extract<shared_ptr<Object>> ex(py::cast<py::object>(item.second));
 		if(!ex.check()) woo::TypeError(key+" must be a "+objTypeNames[index]+".");
 		const auto o(ex());
 		const auto oPtr=o.get();

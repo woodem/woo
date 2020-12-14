@@ -82,12 +82,6 @@ class EnergyTracker: public Object{
 	void gridOff();
 	string gridToVTK(const string& out);
 
-	#ifdef WOO_PYBIND11
-		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>(mod,"EnergyTracker_iterator").def("__iter__",&EnergyTracker::pyIterator::iter).def("__next__",&pyIterator::next);
-	#else
-		#define _WOO_EnergyTracker_Iterator_expose py::class_<EnergyTracker::pyIterator>("EnergyTracker_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
-	#endif
-
 	#define woo_core_EnergyTracker__CLASS_BASE_DOC_ATTRS_PY \
 		EnergyTracker,Object,"Storage for tracing energies. Only to be used if O.traceEnergy is True.", \
 		((OpenMPArrayAccumulator<Real>,energies,,,"Energy values, in linear array")) \
@@ -112,8 +106,7 @@ class EnergyTracker: public Object{
 			.def("gridOff",&EnergyTracker::gridOff,"Disable :obj:`grid` so that energy location is not recorded anymore. The :obj:`grid` object is discarded, including any data it might have contained.") \
 			.def("gridToVTK",&EnergyTracker::gridToVTK,WOO_PY_ARGS(py::arg("out")),"Write grid data to VTK file *out* (``.vti`` will be appended); returns output file name.") \
 			; /* define nested class */ \
-			/*py::scope foo(_classObj);*/ \
-			_WOO_EnergyTracker_Iterator_expose
+			py::class_<EnergyTracker::pyIterator>(mod,"EnergyTracker_iterator").def("__iter__",&EnergyTracker::pyIterator::iter).def("__next__",&pyIterator::next);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_EnergyTracker__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(EnergyTracker);

@@ -14,35 +14,22 @@ WOO_IMPL_LOGGER(LawTester);
 
 void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// go through the dict, find just values we need
-	#ifdef WOO_PYBIND11
-	{
-		if(!kw.contains("whats")) return;
-		py::extract<string> isStr(py::cast<py::object>(kw["whats"]));
-		if(!isStr.check()) return;
-		string whatStr=isStr();
-		kw.attr("pop")("whats"); // remove from kw
-	#else
-	py::list kwl=kw.items();
-	for(int i=0; i<py::len(kwl); i++){
-		py::tuple item=py::extract<py::tuple>(kwl[i]);
-		string key=py::extract<string>(item[0]);
-		if(key!="whats") continue;
-		py::extract<string> isStr(item[1]);
-		if(!isStr.check()) continue;
-		string whatStr=isStr();
-		kw[key].del(); // remove from kw
-	#endif
-		if(whatStr.size()!=6) woo::ValueError("LawTesterStage.whats, if given as string, must have length 6, not "+to_string(whatStr.size())+".");
-		for(int i=0;i<6;i++){
-			char w=whatStr[i];
-			if(w!='f' && w!='v' && w!='.' && w!='i') woo::ValueError("LawTesterStage.whats["+to_string(i)+"]: must be 'f' (force) or 'v' (velocity) or 'i' (initial velocity) or '.' (nothing prescribed). not '"+w+"'.");
-			switch(w){
-				case '.': whats[i]=Impose::NONE; break;
-				case 'v': whats[i]=Impose::VELOCITY; break;
-				case 'f': whats[i]=Impose::FORCE; break;
-				case 'i': whats[i]=Impose::INIT_VELOCITY; break;
-				default: LOG_FATAL("?!?"); abort();
-			}
+	if(!kw.contains("whats")) return;
+	py::extract<string> isStr(py::cast<py::object>(kw["whats"]));
+	if(!isStr.check()) return;
+
+	string whatStr=isStr();
+	kw.attr("pop")("whats"); // remove from kw
+	if(whatStr.size()!=6) woo::ValueError("LawTesterStage.whats, if given as string, must have length 6, not "+to_string(whatStr.size())+".");
+	for(int i=0;i<6;i++){
+		char w=whatStr[i];
+		if(w!='f' && w!='v' && w!='.' && w!='i') woo::ValueError("LawTesterStage.whats["+to_string(i)+"]: must be 'f' (force) or 'v' (velocity) or 'i' (initial velocity) or '.' (nothing prescribed). not '"+w+"'.");
+		switch(w){
+			case '.': whats[i]=Impose::NONE; break;
+			case 'v': whats[i]=Impose::VELOCITY; break;
+			case 'f': whats[i]=Impose::FORCE; break;
+			case 'i': whats[i]=Impose::INIT_VELOCITY; break;
+			default: LOG_FATAL("?!?"); abort();
 		}
 	}
 };

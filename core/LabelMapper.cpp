@@ -137,11 +137,7 @@ void LabelMapper::opaque_sequence_with_woo_objects_error(py::object oo){
 	if(!PySequence_Check(o)) return; // ok
 	if(PySequence_Size(o)<=0) return; // ok
 	for(int i=0; i<PySequence_Size(o); i++){
-		#if WOO_PYBIND11
-			if(!py::extract<shared_ptr<Object>>(py::cast<py::object>(py::handle(PySequence_GetItem(o,i)))).check()) continue;
-		#else
-			if(!py::extract<Object>(py::object(py::handle<>(PySequence_GetItem(o,i)))).check()) continue;
-		#endif
+		if(!py::extract<shared_ptr<Object>>(py::cast<py::object>(py::handle(PySequence_GetItem(o,i)))).check()) continue;
 		woo::ValueError("Opaque sequence type contains woo.Object's (you have to pass list/tuple so that saving/loading of shared_ptr works properly).");
 	}
 	return; // probably okay
@@ -303,11 +299,7 @@ py::object LabelMapper::__getitem__(const string& label){
 	if(std::regex_match(label,match,std::regex("^(.*)\\[([0-9]+)\\]$"))){
 		string l0=match[1];
 		long index=std::stol(match[2]);
-		#ifdef WOO_PYBIND11
-			return this->__getitem__(l0).attr("__getitem__")(py::cast(index));
-		#else
-			return this->__getitem__(l0)[index];
-		#endif
+		return this->__getitem__(l0).attr("__getitem__")(py::cast(index));
 	}
 	int where=whereIs(label);
 	switch(where){

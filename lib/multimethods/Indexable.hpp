@@ -12,10 +12,6 @@
 
 #include<boost/scoped_ptr.hpp>
 #include<woo/lib/base/Types.hpp>
-#ifndef WOO_PYBIND11
-	#include<cmath> // workaround for http://boost.2283326.n4.nabble.com/Boost-Python-Compile-Error-s-GCC-via-MinGW-w64-tp3165793p3166760.html
-	#include<boost/python.hpp>
-#endif
 #include<stdexcept>
 #include<string>
 

@@ -22,21 +22,6 @@
 
 #include<woo/lib/base/Types.hpp>
 
-/*
- * use Eigen http://eigen.tuxfamily.org, version at least 3
- */
-#ifndef WOO_PYBIND11
-	#ifndef WOO_ALIGN
-		// IMPORTANT!!
-		#define EIGEN_DONT_ALIGN
-	#else
-		#error Building with WOO_ALIGN is currently broken and unsupported.
-	#endif
-#else
-	// alignment should work with pybind11
-#endif
-
-
 
 // BEGIN workaround for
 // * http://eigen.tuxfamily.org/bz/show_bug.cgi?id=528

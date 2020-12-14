@@ -219,13 +219,8 @@ void Renderer::setLighting(){
 
 void Renderer::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	if(py::len(kw)>0){
-		#ifdef WOO_PYBIND11
-			string keys;
-			for(auto kv: kw) keys+=(keys.empty()?"":", ")+py::cast<string>(kv.first);
-		#else
-			string keys; py::list k(kw.keys());
-			for(int i=0; i<py::len(k); i++) keys+=(i>0?", ":"")+py::extract<string>(k[i])();
-		#endif
+		string keys;
+		for(auto kv: kw) keys+=(keys.empty()?"":", ")+py::cast<string>(kv.first);
 		Master().instance().checkApi(10102,"Constructing Renderer with keywords ("+keys+") will have no effect unless passed to GlSetup/S.gl.",/*pyWarn*/true);
 	}
 }

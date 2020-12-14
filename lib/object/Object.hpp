@@ -7,7 +7,6 @@
 #include<boost/type_traits.hpp>
 #include<boost/preprocessor.hpp>
 #include<boost/type_traits/integral_constant.hpp>
-#include<woo/lib/pyutil/raw_constructor.hpp>
 #include<woo/lib/pyutil/doc_opts.hpp>
 #include<woo/lib/pyutil/except.hpp>
 #include<woo/lib/pyutil/pickle.hpp>
@@ -122,13 +121,8 @@ template<> struct _bit_accessors_if_integral<true> {
 	template<typename classObjT, typename classT, typename attrT, attrT classT::*A>
 	static void doRegister(classObjT& _classObj, const vector<string>& bits, bool ro){
 		for(size_t i=0; i<bits.size(); i++){
-			#ifdef WOO_PYBIND11
-				auto getter=[i](const classT& obj){ return bool(obj.*A & (1<<i)); };
-				auto setter=[i](classT& obj, bool val){ if(val) obj.*A|=(1<<i); else obj.*A&=~(1<<i); };
-			#else
-				auto getter=py::detail::make_function_aux([i](const classT& obj){ return bool(obj.*A & (1<<i)); },py::default_call_policies(),boost::mpl::vector<bool,classT>());
-				auto setter=py::detail::make_function_aux([i](classT& obj, bool val){ if(val) obj.*A|=(1<<i); else obj.*A&=~(1<<i); },py::default_call_policies(),boost::mpl::vector<void,classT,bool>());
-			#endif
+			auto getter=[i](const classT& obj){ return bool(obj.*A & (1<<i)); };
+			auto setter=[i](classT& obj, bool val){ if(val) obj.*A|=(1<<i); else obj.*A&=~(1<<i); };
 			if(ro) _classObj.add_property_readonly(bits[i].c_str(),getter);
 			else   _classObj.add_property(bits[i].c_str(),getter,setter);
 		}
@@ -152,14 +146,11 @@ template<> struct _bit_accessors_if_integral<true> {
 // define accessors raising InvalidArugment at every access
 template<typename classObjT, typename traitT>
 void _wooDef_deprecatedProperty(classObjT& _classObj, traitT& trait){
-	#ifdef WOO_PYBIND11
-		auto errorGetter=[trait](py::object self)->void{ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); };
-		auto errorSetter=[trait](py::object self, py::object val){ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); };
-	#else
-		auto errorGetter=py::detail::make_function_aux([trait](py::object self)->void{ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },py::default_call_policies(),boost::mpl::vector<void,py::object>());
-		auto errorSetter=py::detail::make_function_aux([trait](py::object self, py::object val){ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },py::default_call_policies(),boost::mpl::vector<void,py::object,py::object>());
-	#endif
-	_classObj.add_property(trait._name.c_str(),errorGetter,errorSetter,trait._doc.c_str());
+	_classObj.add_property(trait._name.c_str(),
+		[trait](py::object self)->void{ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },
+		[trait](py::object self, py::object val){ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },
+		trait._doc.c_str())
+	;
 };
 
 #pragma GCC visibility push(hidden)
@@ -171,21 +162,12 @@ template<> struct _def_woo_attr__namedEnum<false>{
 		if(trait.isDeprecated()){ _wooDef_deprecatedProperty(_classObj,trait); return; }
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad(), _ref(!_ro && (woo::py_wrap_ref<attrT>::value || trait.isPyByRef()));
 		const char* docStr(trait._doc.c_str());
-		#ifdef WOO_PYBIND11
-			if      ( _ref && !_ro && !_post) _classObj.def_readwrite(attrName,A,docStr);
-			else if ( _ref && !_ro &&  _post) _classObj.add_property(attrName,[](const classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,docStr);
-			else if ( _ref &&  _ro)           _classObj.def_readonly(attrName,A,docStr);
-			else if (!_ref && !_ro && !_post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },[](classT& o, const attrT& val){ o.*A=val; },py::return_value_policy::copy,docStr);
-			else if (!_ref && !_ro &&  _post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,py::return_value_policy::copy,docStr);
-			else if (!_ref &&  _ro)           _classObj.add_property_readonly(attrName,[](const classT& o){ return o.*A; },py::return_value_policy::copy,docStr);
-		#else
-			if      ( _ref && !_ro && !_post) _classObj.def_readwrite(attrName,A,docStr);
-			else if ( _ref && !_ro &&  _post) _classObj.add_property(attrName,py::make_getter(A),make_setter_postLoad<classT,attrT,A>,docStr);
-			else if ( _ref &&  _ro)           _classObj.def_readonly(attrName,A,docStr);
-			else if (!_ref && !_ro && !_post) _classObj.add_property(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()),py::make_setter(A,py::return_value_policy<py::return_by_value>()),docStr);
-			else if (!_ref && !_ro &&  _post) _classObj.add_property(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()),make_setter_postLoad<classT,attrT,A>,docStr);
-			else if (!_ref &&  _ro)           _classObj.add_property_readonly(attrName,py::make_getter(A,py::return_value_policy<py::return_by_value>()),docStr);
-		#endif
+		if      ( _ref && !_ro && !_post) _classObj.def_readwrite(attrName,A,docStr);
+		else if ( _ref && !_ro &&  _post) _classObj.add_property(attrName,[](const classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,docStr);
+		else if ( _ref &&  _ro)           _classObj.def_readonly(attrName,A,docStr);
+		else if (!_ref && !_ro && !_post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },[](classT& o, const attrT& val){ o.*A=val; },py::return_value_policy::copy,docStr);
+		else if (!_ref && !_ro &&  _post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,py::return_value_policy::copy,docStr);
+		else if (!_ref &&  _ro)           _classObj.add_property_readonly(attrName,[](const classT& o){ return o.*A; },py::return_value_policy::copy,docStr);
 		if(_ro && _post) cerr<<"WARN: "<<className<<"::"<<attrName<<" with the woo::Attr::readonly flag also uselessly sets woo::Attr::triggerPostLoad."<<endl;
 		if(!trait._bits.empty()) _bit_accessors_if_integral<std::is_integral<attrT>::value>::template doRegister<classObjT,classT,attrT,A>(_classObj,trait._bits,_ro && (!trait._bitsRw));
 	}
@@ -202,15 +184,9 @@ template<> struct _def_woo_attr__namedEnum<true>{
 		if(trait.isDeprecated()){ _wooDef_deprecatedProperty(_classObj,trait); return; }
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad();
 		const char* docStr(trait._doc.c_str());
-		#ifdef WOO_PYBIND11
-			auto getter=[trait](const classT& obj){ return trait.namedEnum_num2name(obj.*A); };
-			auto setter=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val);};
-			auto setterPostLoad=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val); obj.callPostLoad((void*)&(obj.*A)); };
-		#else
-			auto getter=py::detail::make_function_aux([trait](const classT& obj){ return trait.namedEnum_num2name(obj.*A); },py::default_call_policies(),boost::mpl::vector<string,classT>());
-			auto setter=py::detail::make_function_aux([trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val);},py::default_call_policies(),boost::mpl::vector<void,classT,py::object>());
-			auto setterPostLoad=py::detail::make_function_aux([trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val); obj.callPostLoad((void*)&(obj.*A)); },py::default_call_policies(),boost::mpl::vector<void,classT,py::object>());
-		#endif
+		auto getter=[trait](const classT& obj){ return trait.namedEnum_num2name(obj.*A); };
+		auto setter=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val);};
+		auto setterPostLoad=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val); obj.callPostLoad((void*)&(obj.*A)); };
 		if (_ro)                _classObj.add_property_readonly(attrName,getter,docStr);
 		else if(!_ro && !_post) _classObj.add_property(attrName,getter,setter,docStr);
 		else if(!_ro &&  _post) _classObj.add_property(attrName,getter,setterPostLoad,docStr);
@@ -249,14 +225,8 @@ template<> struct _setAttrMaybe</*hidden*/false,/*namedEnum*/true>{
 	static void set(traitT& trait, const string& name, const Tsrc& src, Tdst& dst){ dst=trait.namedEnum_name2num(src); }
 };
 
-#ifdef WOO_PYBIND11
-	template<typename T,typename std::enable_if<std::is_base_of<py::handle,T>::value>::type* =nullptr> py::object _asPyObject(const T& o){ return py::object(o); }
-	template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::value>::type* =nullptr> py::object _asPyObject(const T& o){ return py::cast(o); }
-#else
-	// boost::python: easy
-	template<typename T>
-	py::object _asPyObject(const T& o){ return py::object(o); }
-#endif
+template<typename T,typename std::enable_if<std::is_base_of<py::handle,T>::value>::type* =nullptr> py::object _asPyObject(const T& o){ return py::object(o); }
+template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::value>::type* =nullptr> py::object _asPyObject(const T& o){ return py::cast(o); }
 
 // loop bodies for attribute access
 // _PYGET_ATTR is unused
@@ -264,13 +234,8 @@ template<> struct _setAttrMaybe</*hidden*/false,/*namedEnum*/true>{
 #define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!(traitT::compileFlags & woo::Attr::hidden),!!(traitT::compileFlags & woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::template trySetNamedBit(key,(traitT::compileFlags&woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
 
 #define _PYHASKEY_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return true;
-#ifdef WOO_PYBIND11
-	#define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::cast(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
-	#define _PYDICT_ATTR(x,y,z) if(!(_ATTR_TRAIT(klass,z).isHidden()) && (all || !(_ATTR_TRAIT(klass,z).isNoSave())) && (all || !(_ATTR_TRAIT(klass,z).isNoDump()))){ /*if(_ATTR_TRAIT(klass,z) & woo::Attr::pyByRef) ret[_ATTR_NAM_STR(z)]=py::object(boost::ref(_ATTR_NAM(z))); else */  ret[_ATTR_NAM_STR(z)]=_asPyObject(_ATTR_NAM(z)); }
-#else
-	#define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::ptr(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
-	#define _PYDICT_ATTR(x,y,z) if(!(_ATTR_TRAIT(klass,z).isHidden()) && (all || !(_ATTR_TRAIT(klass,z).isNoSave())) && (all || !(_ATTR_TRAIT(klass,z).isNoDump()))){ /*if(_ATTR_TRAIT(klass,z) & woo::Attr::pyByRef) ret[_ATTR_NAM_STR(z)]=py::object(boost::ref(_ATTR_NAM(z))); else */  ret[_ATTR_NAM_STR(z)]=py::object(_ATTR_NAM(z)); }
-#endif
+#define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::cast(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
+#define _PYDICT_ATTR(x,y,z) if(!(_ATTR_TRAIT(klass,z).isHidden()) && (all || !(_ATTR_TRAIT(klass,z).isNoSave())) && (all || !(_ATTR_TRAIT(klass,z).isNoDump()))){ /*if(_ATTR_TRAIT(klass,z) & woo::Attr::pyByRef) ret[_ATTR_NAM_STR(z)]=py::object(boost::ref(_ATTR_NAM(z))); else */  ret[_ATTR_NAM_STR(z)]=_asPyObject(_ATTR_NAM(z)); }
 
 
 // static switch for noSave attributes via templates
@@ -375,40 +340,22 @@ template<> struct _SerializeMaybe<false>{
 #define _DEPREC_OLDNAME(x) BOOST_PP_TUPLE_ELEM(2,0,x)
 #define _DEPREC_COMMENT(x) BOOST_PP_TUPLE_ELEM(2,1,x)
 
-#ifdef WOO_PYBIND11
-	#define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
-		checkPyClassRegistersItself(#thisClass); \
-		WOO_SET_DOCSTRING_OPTS; \
-		auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
-		py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
-		return [traitPtr,_classObj,mod]() mutable { \
-			_classObj.def(py::init<>([](){ shared_ptr<thisClass> instance=make_shared<thisClass>(); instance->callPostLoad(NULL); return instance; })); \
-			_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);})); \
-			_classObj.def(py::pickle([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>)); \
-			_classObj.attr("_classTrait")=traitPtr; \
-			BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
-			(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
-			(void) _classObj extras ; \
-			py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
-			Object::derivedCxxClasses.push_back(py::object(_classObj)); \
-		}
-#else
-	#define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
-		checkPyClassRegistersItself(#thisClass); \
-		WOO_SET_DOCSTRING_OPTS; \
-		auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
-		py::class_<thisClass,shared_ptr<thisClass>,py::bases<baseClass>,boost::noncopyable> _classObj(#thisClass,traitPtr->getDoc().c_str(),/*call raw ctor even for parameterless construction*/py::no_init); \
-		return [traitPtr,_classObj,mod]() mutable { \
-			_classObj.def("__init__",py::raw_constructor(Object_ctor_kwAttrs<thisClass>)); \
-			_classObj.attr("_classTrait")=traitPtr; \
-			BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
-			(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
-			(void) _classObj extras ; \
-			py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
-			Object::derivedCxxClasses.push_back(py::object(_classObj)); \
-			WOO_PY_DERIVED_BASE_SHAREDPTR_CONVERTIBLE(thisClass,baseClass); /*needed for std::shared_ptr only*/ \
-		};
-#endif
+#define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
+	checkPyClassRegistersItself(#thisClass); \
+	WOO_SET_DOCSTRING_OPTS; \
+	auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
+	py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
+	return [traitPtr,_classObj,mod]() mutable { \
+		_classObj.def(py::init<>([](){ shared_ptr<thisClass> instance=make_shared<thisClass>(); instance->callPostLoad(NULL); return instance; })); \
+		_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);})); \
+		_classObj.def(py::pickle([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>)); \
+		_classObj.attr("_classTrait")=traitPtr; \
+		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
+		(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
+		(void) _classObj extras ; \
+		py::list traitList; BOOST_PP_SEQ_FOR_EACH(_PYATTR_TRAIT,thisClass,attrs); _classObj.attr("_attrTraits")=traitList;\
+		Object::derivedCxxClasses.push_back(py::object(_classObj)); \
+	}
 
 #define _WOO_CLASS_BASE_DOC_ATTRS_DEPREC_PY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
 	_REGISTER_ATTRIBUTES_DEPREC(thisClass,baseClass,attrs,deprec) \
@@ -546,12 +493,10 @@ template<> struct _SerializeMaybe<false>{
 #define REGISTER_CLASS_AND_BASE(cn,bcn) public: EIGEN_MAKE_ALIGNED_OPERATOR_NEW ; virtual string getClassName() const override { return #cn; }; public: virtual vector<string> getBaseClassNames() const override { return {#bcn}; }
 
 
-#ifdef WOO_PYBIND11
-	// this disabled exposing the vector as python list
-	// it must come before pybind11 kicks in, and outside of any namespaces
-	// definition of a special container type is in py/_customConverters.cpp
-	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<woo::Object>>)
-#endif
+// this disabled exposing the vector as python list
+// it must come before pybind11 kicks in, and outside of any namespaces
+// definition of a special container type is in lib/pyutil/converters.hpp
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<woo::Object>>)
 
 namespace woo{
 
@@ -617,7 +562,6 @@ shared_ptr<T> Object_ctor_kwAttrs(py::args_& t, py::kwargs& d){
 	return instance;
 }
 
-// #ifdef WOO_PYBIND11
 template<typename T>
 shared_ptr<T> Object__setstate__(py::dict state){
 	shared_ptr<T> instance=make_shared<T>();

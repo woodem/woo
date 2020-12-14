@@ -10,13 +10,8 @@
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>
 
-#ifndef WOO_PYBIND11
-	#include<boost/python.hpp>
-	namespace py=boost::python;
-#else
-	#include<pybind11/pybind11.h>
-	namespace py=pybind11;
-#endif
+#include<pybind11/pybind11.h>
+namespace py=pybind11;
 
 
 #include<woo/lib/base/Math.hpp>
@@ -109,10 +104,6 @@ class Master{
 
 		/* temporary storage */
 		shared_ptr<woo::Object> deepcopy(shared_ptr<woo::Object> obj);
-		#ifndef WOO_PYBIND11
-			// static, first arg ist Master instance (http://stackoverflow.com/questions/27488096/boost-python-raw-function-method)
-			static py::object pyDeepcopy(py::args_ args, py::kwargs kw);
-		#endif
 
 		shared_ptr<woo::Object> loadTmp(const string& name);
 		void saveTmp(shared_ptr<woo::Object> s, const string& name, bool quiet=false);
@@ -131,13 +122,7 @@ class Master{
 		int numThreads_get();
 		void numThreads_set(int i);
 		
-		void pyExitNoBacktrace(py::object arg0=
-			#ifdef WOO_PYBIND11
-				py::cast(0)
-			#else
-				py::object(0)
-			#endif
-		);
+		void pyExitNoBacktrace(py::object arg0=py::cast(0));
 		void pyDisableGdb(){
 			// disable for native Windows builds
 			#ifndef __MINGW64__ 

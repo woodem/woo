@@ -173,13 +173,6 @@ struct ParticleContainer: public Object{
 			#error WOO_SUBDOMAINS: subdomains support is broken and should not be used
 		#endif
 
-	#ifdef WOO_PYBIND11
-		#define woo_dem_ParticleContainer__iterator_PY py::class_<ParticleContainer::pyIterator>(_classObj,"ParticleContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
-	#else
-		#define woo_dem_ParticleContainer__iterator_PY \
-		py::scope foo(_classObj); /*this does not seem to work?? */ py::class_<ParticleContainer::pyIterator>("ParticleContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
-	#endif
-
 
 		#define woo_dem_ParticleContainer__CLASS_BASE_DOC_ATTRS_PY\
 			ParticleContainer,Object,"Storage for DEM particles", \
@@ -202,7 +195,8 @@ struct ParticleContainer: public Object{
 			.def("disappear",&ParticleContainer::pyDisappear,WOO_PY_ARGS(py::arg("ids"),py::arg("mask")),"Remask particle (so that it does not have contacts with other particles), remove contacts, which would no longer exist and make it invisible. Shorthand for calling ``remask(ids,mask,visible=False,removeContacts=True)``") \
 			.def("reappear",&ParticleContainer::pyReappear,WOO_PY_ARGS(py::arg("ids"),py::arg("mask"),py::arg("removeOverlapping")=false),"Remask particle, remove particles, which would overlap with newly-appeared particle (if ``removeOverlapping`` is ``True``), make it visible again. Shorthand for ``remask(ids,mask,visible=True,removeContacts=False)``") \
 			/* define nested iterator class here; ugly: abuses _classObj from the macro definition (implementation detail) */ \
-			; woo_dem_ParticleContainer__iterator_PY
+			; \
+			py::class_<ParticleContainer::pyIterator>(_classObj,"ParticleContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
 
 
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ParticleContainer__CLASS_BASE_DOC_ATTRS_PY);

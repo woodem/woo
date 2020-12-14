@@ -244,9 +244,6 @@ if(WOO_DEBUG)
 	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
 endif()
 
-set(WOO_EIGEN_WRAPPER_SRCS lib/eigen/pybind11/register.cpp)
-
-
 set(WOO_CXX_SOURCES
 	# python
 	py/config.cxx
@@ -295,7 +292,7 @@ set(WOO_CXX_SOURCES
 	lib/spdlog/src/stdout_sinks.cpp
 	lib/sphere-pack/SpherePack.cpp
 	lib/voro++/voro++.cc
-	${WOO_EIGEN_WRAPPER_SRCS}
+	lib/eigen/pybind11/register.cpp
 	# pkg
 	pkg/clDem/CLDemField.cpp
 	pkg/dem/Buoyancy.cpp

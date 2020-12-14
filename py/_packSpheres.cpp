@@ -12,18 +12,11 @@ vector<Particle::id_t> SpherePack_toSimulation_fast(const shared_ptr<SpherePack>
 }
 
 WOO_PYTHON_MODULE(_packSpheres);
-#ifdef WOO_PYBIND11
 PYBIND11_MODULE(_packSpheres,mod){
 	mod.doc()="Creation, manipulation, IO for generic sphere packings.";
 	WOO_SET_DOCSTRING_OPTS;
 	py::class_<SpherePack,shared_ptr<SpherePack>>(mod,"SpherePack","Set of spheres represented as centers and radii. This class is returned by :obj:`woo.pack.randomDensePack`, :obj:`woo.pack.randomPeriPack` and others. The object supports iteration over spheres, as in \n\n\t>>> sp=SpherePack()\n\t>>> for center,radius in sp: print center,radius\n\n\t>>> for sphere in sp: print sphere[0],sphere[1]   ## same, but without unpacking the tuple automatically\n\n\t>>> for i in range(0,len(sp)): print sp[i][0], sp[i][1]   ## same, but accessing spheres by index\n\nClumps are supported, by using the *clumpId* parameter to :obj:`add`.\n\n\n.. admonition:: Special constructors\n\n\tConstruct from list of ``[(c1,r1),(c2,r2),…]``. To convert two same-length lists of ``centers`` and ``radii``, construct with ``zip(centers,radii)``.\n")
 		.def(py::init<py::list>(),py::arg("list")=py::list(),"Empty constructor, optionally taking list [ ((cx,cy,cz),r), … ] for initial data.")
-#else
-BOOST_PYTHON_MODULE(_packSpheres){
-	py::scope().attr("__doc__")="Creation, manipulation, IO for generic sphere packings.";
-	WOO_SET_DOCSTRING_OPTS;
-	py::class_<SpherePack,shared_ptr<SpherePack>,boost::noncopyable>("SpherePack","Set of spheres represented as centers and radii. This class is returned by :obj:`woo.pack.randomDensePack`, :obj:`woo.pack.randomPeriPack` and others. The object supports iteration over spheres, as in \n\n\t>>> sp=SpherePack()\n\t>>> for center,radius in sp: print center,radius\n\n\t>>> for sphere in sp: print sphere[0],sphere[1]   ## same, but without unpacking the tuple automatically\n\n\t>>> for i in range(0,len(sp)): print sp[i][0], sp[i][1]   ## same, but accessing spheres by index\n\nClumps are supported, by using the *clumpId* parameter to :obj:`add`.\n\n\n.. admonition:: Special constructors\n\n\tConstruct from list of ``[(c1,r1),(c2,r2),…]``. To convert two same-length lists of ``centers`` and ``radii``, construct with ``zip(centers,radii)``.\n",py::init<py::optional<py::list> >(py::args("list"),"Empty constructor, optionally taking list [ ((cx,cy,cz),r), … ] for initial data." ))
-#endif
 		.def("toSimulation_fast",SpherePack_toSimulation_fast,WOO_PY_ARGS(py::arg("scene"),py::arg("mat"),py::arg("mask")=1,py::arg("color")=NaN),"Create spheres from this pack in the simulation; unlike :obj:`SpherePack.toSimulation`, this method is implemented in c++ (hence rather fast) but lacks some flexibility")
 		.def("add",&SpherePack::add,WOO_PY_ARGS(py::arg("center"),py::arg("radius"),py::arg("clumpId")=-1),"Add single sphere to packing, given center as 3-tuple and radius")
 		.def("toList",&SpherePack::toList,"Return packing data as [(c,r),(c,r),...].")
@@ -68,12 +61,8 @@ BOOST_PYTHON_MODULE(_packSpheres){
 		.def("__iter__",&SpherePack::getIterator,"Return iterator over spheres.")
 		.def_readonly("appliedPsdScaling",&SpherePack::appliedPsdScaling,"A factor between 0 and 1, uniformly applied on all sizes of the PSD.")
 		;
-#ifdef WOO_PYBIND11
 	py::class_<SpherePack::_iterator>(mod,"SpherePackIterator")
 		.def(py::init<SpherePack::_iterator&>())
-#else
-	py::class_<SpherePack::_iterator>("SpherePackIterator",py::init<SpherePack::_iterator&>())
-#endif
 		.def("__iter__",&SpherePack::_iterator::iter)
 		.def("__next__",&SpherePack::_iterator::next)
 	;

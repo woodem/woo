@@ -23,12 +23,10 @@ struct Impose;
 struct DemData;
 struct ScalarRange;
 
-#ifdef WOO_PYBIND11
-	// this disables exposing the vector as python list
-	// it must come before pybind11 kicks in, and outside of any namespaces
-	// definition of a special container type is in py/_customConverters.cpp
-	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
-#endif
+// this disables exposing the vector as python list
+// it must come before pybind11 kicks in, and outside of any namespaces
+// definition of a special container type is in lib/pyutil/converters.hpp
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Particle>>)
 
 
 struct Particle: public Object{
@@ -82,34 +80,10 @@ struct Particle: public Object{
 	// return internal reference for refPos with OpenGL
 	// without OpenGL, there is nothing like that
 	// we need to branch here since we can't use #ifdef inside macro definition
-	#ifdef WOO_PYBIND11
-		#ifdef WOO_OPENGL
-			#define woo_dem_Particle__OPENGL__return_internal_reference ,py::return_value_policy::reference
-		#else
-			#define woo_dem_Particle__OPENGL__return_internal_reference
-		#endif
+	#ifdef WOO_OPENGL
+		#define woo_dem_Particle__OPENGL__return_internal_reference ,py::return_value_policy::reference
 	#else
-		#ifdef WOO_OPENGL
-			#define woo_dem_Particle__OPENGL__return_internal_reference ,py::return_internal_reference<>()
-		#else
-			#define woo_dem_Particle__OPENGL__return_internal_reference
-		#endif
-	#endif
-
-	#ifdef WOO_PYBIND11
-		#define woo_dem_Particle__shorthands_PY \
-		.add_property("pos",&Particle::getPos,&Particle::setPos,py::return_value_policy::reference,"Particle position; shorthand for ``p.shape.nodes[0].pos`` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("ori",&Particle::getOri,&Particle::setOri,py::return_value_policy::reference,"Particle orientation; shorthand for ``p.shape.nodes[0].ori`` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("refPos",&Particle::getRefPos,&Particle::setRefPos woo_dem_Particle__OPENGL__return_internal_reference ,"Reference particle position; shorthand for :obj:`p.shape.nodes[0].gl.refPos <woo.gl.GlData.refPos>`, and ``Vector3(nan,nan,nan)`` if :obj:`gl <GlData>` is not defined on the node.") \
-		.add_property("vel",&Particle::getVel,&Particle::setVel,py::return_value_policy::reference,"Particle velocity; shorthand for :obj:`p.shape.nodes[0].dem.vel <DemData.vel>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("angVel",&Particle::getAngVel,&Particle::setAngVel,py::return_value_policy::reference,"Particle angular velocity; shorthand for :obj:`p.shape.nodes[0].dem.angVel <DemData.angVel>` -- uninodal particles only (raises exception otherwise).")
-	#else
-		#define woo_dem_Particle__shorthands_PY \
-		.add_property("pos",py::make_function(&Particle::getPos,py::return_internal_reference<>()),py::make_function(&Particle::setPos),"Particle position; shorthand for ``p.shape.nodes[0].pos`` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("ori",py::make_function(&Particle::getOri,py::return_internal_reference<>()),py::make_function(&Particle::setOri),"Particle orientation; shorthand for ``p.shape.nodes[0].ori`` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("refPos",py::make_function(&Particle::getRefPos woo_dem_Particle__OPENGL__return_internal_reference ),py::make_function(&Particle::setRefPos),"Reference particle position; shorthand for :obj:`p.shape.nodes[0].gl.refPos <woo.gl.GlData.refPos>`, and ``Vector3(nan,nan,nan)`` if :obj:`gl <GlData>` is not defined on the node.") \
-		.add_property("vel",py::make_function(&Particle::getVel,py::return_internal_reference<>()),py::make_function(&Particle::setVel),"Particle velocity; shorthand for :obj:`p.shape.nodes[0].dem.vel <DemData.vel>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("angVel",py::make_function(&Particle::getAngVel,py::return_internal_reference<>()),py::make_function(&Particle::setAngVel),"Particle angular velocity; shorthand for :obj:`p.shape.nodes[0].dem.angVel <DemData.angVel>` -- uninodal particles only (raises exception otherwise).")
+		#define woo_dem_Particle__OPENGL__return_internal_reference
 	#endif
 
 	#define woo_dem_Particle__CLASS_BASE_DOC_ATTRS_PY \
@@ -123,7 +97,11 @@ struct Particle: public Object{
 		((MapParticleContact,contacts,,AttrTrait<Attr::noSave|Attr::hidden>(),"Contacts of this particle, indexed by id of the other particle.")) \
 		/* ((int,flags,0,AttrTrait<Attr::hidden>(),"Various flags, only individually accesible from Python")) */ \
 		, /*py*/ \
-			 woo_dem_Particle__shorthands_PY \
+			.add_property("pos",&Particle::getPos,&Particle::setPos,py::return_value_policy::reference,"Particle position; shorthand for ``p.shape.nodes[0].pos`` -- uninodal particles only (raises exception otherwise).") \
+			.add_property("ori",&Particle::getOri,&Particle::setOri,py::return_value_policy::reference,"Particle orientation; shorthand for ``p.shape.nodes[0].ori`` -- uninodal particles only (raises exception otherwise).") \
+			.add_property("refPos",&Particle::getRefPos,&Particle::setRefPos woo_dem_Particle__OPENGL__return_internal_reference ,"Reference particle position; shorthand for :obj:`p.shape.nodes[0].gl.refPos <woo.gl.GlData.refPos>`, and ``Vector3(nan,nan,nan)`` if :obj:`gl <GlData>` is not defined on the node.") \
+			.add_property("vel",&Particle::getVel,&Particle::setVel,py::return_value_policy::reference,"Particle velocity; shorthand for :obj:`p.shape.nodes[0].dem.vel <DemData.vel>` -- uninodal particles only (raises exception otherwise).") \
+			.add_property("angVel",&Particle::getAngVel,&Particle::setAngVel,py::return_value_policy::reference,"Particle angular velocity; shorthand for :obj:`p.shape.nodes[0].dem.angVel <DemData.angVel>` -- uninodal particles only (raises exception otherwise).") \
 			.def("updateMassInertia",&Particle::updateMassInertia,"Internal use only. Recompute mass and inertia of all particle's nodes; this function is usually called by particle construction routines; interally calls ``Shape::updateMassInertia`` and only works for particles without shared nodes.") \
 			.add_property_readonly("contacts",&Particle::pyContacts,"Return all :obj:`real <Contact.real>` particle's contacts as dictionary mapping :obj:`other particles' IDs <Particle.id>` and obj:`Contact` objects.") \
 			.add_property_readonly("con",&Particle::pyCon,"Return list of :obj:`IDs <Particle.id>` of contacting particles (:obj:`~Contact.real` contacts only); shorthand for ``p.contacts.keys()``.") \

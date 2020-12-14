@@ -4,13 +4,8 @@
 #include<boost/preprocessor.hpp>
 #include<woo/lib/base/Logging.hpp> // for fmt (possibly bundled with spdlog)
 
-#ifdef WOO_PYBIND11
-	#include<pybind11/pybind11.h>
-	namespace py=pybind11;
-#else
-	#include<boost/python.hpp>
-	namespace py=boost::python;
-#endif
+#include<pybind11/pybind11.h>
+namespace py=pybind11;
 
 namespace woo{
 	void StopIteration();

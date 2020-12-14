@@ -3,11 +3,7 @@
 namespace woo{
 
 	void TimingDeltas::pyRegisterClass(py::module_& mod){
-		#ifdef WOO_PYBIND11	
-			py::class_<TimingDeltas,shared_ptr<TimingDeltas>>(mod,"TimingDeltas")
-		#else
-			py::class_<TimingDeltas, shared_ptr<TimingDeltas>, boost::noncopyable>("TimingDeltas")
-		#endif
+		py::class_<TimingDeltas,shared_ptr<TimingDeltas>>(mod,"TimingDeltas")
 			.add_property_readonly("data",&TimingDeltas::pyData,"Get timing data as list of tuples (label, execTime[nsec], execCount) (one tuple per checkpoint)")
 			.def("reset",&TimingDeltas::reset,"Reset timing information")
 		;

@@ -101,11 +101,7 @@ void Scene::backgroundLoop(){
 	} catch(std::exception& e){
 		LOG_ERROR("Exception: {}",e.what());
 		// some compilers report ambiguity here...
-		#ifdef WOO_STD_SHAREDPTR
-			except=std::make_shared<std::exception>(e);
-		#else
-			except=boost::make_shared<std::exception>(e);
-		#endif
+		except=std::make_shared<std::exception>(e);
 		{ std::scoped_lock l(runMutex); runningFlag=false; }
 		return;
 	}
@@ -365,27 +361,23 @@ void Scene::doOneStep(){
 	}
 	// check and automatically set timestep
 	if(isnan(dt)||isinf(dt)||dt<0){
-		#if 0
-			throw std::runtime_error("Scene::dt is NaN, Inf or negative");
-		#else
-			dt=Inf;
-			for(const auto& e: engines){
-				e->scene=this;
-				if(!e->field && e->needsField())  throw std::runtime_error(e->pyStr()+" has no field to run on, but requires one.");
-				if(e->dead) continue; // skip completely dead engines, but not those who are not isActivated()
-				Real crDt=e->critDt();
-				LOG_INFO("Critical dt from "+e->pyStr()+": {}",crDt);
-				dt=min(dt,crDt);
-			}
-			for(const auto& f: fields){
-				f->scene=this;
-				Real crDt=f->critDt();
-				LOG_INFO("Critical dt from "+f->pyStr()+": {}",crDt);
-				dt=min(dt,crDt);
-			}
-			if(isinf(dt)) throw std::runtime_error("Failed to obtain meaningful dt from engines and fields automatically.");
-			dt=dtSafety*dt;
-		#endif
+		dt=Inf;
+		for(const auto& e: engines){
+			e->scene=this;
+			if(!e->field && e->needsField())  throw std::runtime_error(e->pyStr()+" has no field to run on, but requires one.");
+			if(e->dead) continue; // skip completely dead engines, but not those who are not isActivated()
+			Real crDt=e->critDt();
+			LOG_INFO("Critical dt from "+e->pyStr()+": {}",crDt);
+			dt=min(dt,crDt);
+		}
+		for(const auto& f: fields){
+			f->scene=this;
+			Real crDt=f->critDt();
+			LOG_INFO("Critical dt from "+f->pyStr()+": {}",crDt);
+			dt=min(dt,crDt);
+		}
+		if(isinf(dt)) throw std::runtime_error("Failed to obtain meaningful dt from engines and fields automatically.");
+		dt=dtSafety*dt;
 	}
 	// substepping or not, update engines from _nextEngines, if defined, at the beginning of step
 	// subStep can be 0, which happens if simulations is saved in the middle of step (without substepping)

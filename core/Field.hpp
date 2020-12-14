@@ -9,11 +9,10 @@
 struct Scene;
 
 struct Node;
-#ifdef WOO_PYBIND11
-	// this disables exposing the vector as python list
-	// it must come before pybind11 kicks in, and outside of any namespaces
-	PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
-#endif
+
+// this disables exposing the vector as python list
+// it must come before pybind11 kicks in, and outside of any namespaces
+PYBIND11_MAKE_OPAQUE(std::vector<shared_ptr<Node>>)
 
 
 struct NodeData: public Object{

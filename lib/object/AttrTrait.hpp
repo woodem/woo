@@ -145,11 +145,7 @@ namespace woo{
 		}
 
 		static void pyRegisterClass(py::module_ mod){
-				#ifndef WOO_PYBIND11
-					py::class_<AttrTraitBase,boost::noncopyable>("AttrTrait",py::no_init) // this is intentional; no need for templates in python
-				#else
-					py::class_<AttrTraitBase>(mod,"AttrTrait")
-				#endif
+			py::class_<AttrTraitBase>(mod,"AttrTrait")
 				.def_property_readonly("noSave",&AttrTraitBase::isNoSave)
 				.def_property_readonly("readonly",&AttrTraitBase::isReadonly)
 				.def_property_readonly("triggerPostLoad",&AttrTraitBase::isTriggerPostLoad)
@@ -179,11 +175,7 @@ namespace woo{
 				.def_property_readonly("prefUnit",&AttrTraitBase::pyPrefUnit)
 				.def_property_readonly("altUnits",&AttrTraitBase::pyAltUnits)
 				.def_readonly("startGroup",&AttrTraitBase::_startGroup)
-				#ifdef WOO_PYBIND11
-					.def_readonly("hideIf",&AttrTraitBase::_hideIf)
-				#else
-					.def_property_readonly("hideIf",&AttrTraitBase::_hideIf)
-				#endif
+				.def_readonly("hideIf",&AttrTraitBase::_hideIf)
 				.def_property_readonly("ini",&AttrTraitBase::pyGetIni)
 				.def_property_readonly("range",&AttrTraitBase::pyGetRange)
 				.def_property_readonly("choice",&AttrTraitBase::pyGetChoice)
@@ -276,13 +268,9 @@ namespace woo{
 		AttrTrait& startGroup(const string& s){ _startGroup=s; return *this; }
 		AttrTrait& hideIf(const string& h){ _hideIf=h; return *this; }
 
-		#ifndef WOO_PYBIND11
-			template<typename T> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::cast(t); }); return *this; }
-		#else
-			// https://stackoverflow.com/a/17201138/761090
-			template<typename T,typename std::enable_if<std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return t; }); return *this; }
-			template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::cast(t); }); return *this; }
-		#endif
+		// https://stackoverflow.com/a/17201138/761090
+		template<typename T,typename std::enable_if<std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return t; }); return *this; }
+		template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::value>::type* =nullptr> AttrTrait& ini(const T t){ _ini=std::function<py::object()>([=]()->py::object{ return py::cast(t); }); return *this; }
 		AttrTrait& ini(){ _ini=std::function<py::object()>([]()->py::object{ return py::object(); }); return *this; }
 
 		template<typename Scalar>
@@ -368,22 +356,12 @@ namespace woo{
 		ClassTrait& name(const string& __name){ _name=__name; return *this; }
 		ClassTrait& section(const string& _title, const string& _intro, const vector<string>& _docOther){ title=_title; intro=_intro; docOther=_docOther; return *this; }
 		static void pyRegisterClass(py::module_ mod){
-			#ifdef WOO_PYBIND11
-				py::class_<ClassTrait,shared_ptr<ClassTrait>>(mod,"ClassTrait")
-			#else
-				py::class_<ClassTrait,shared_ptr<ClassTrait>>("ClassTrait",py::no_init)
-			#endif
-
+			py::class_<ClassTrait,shared_ptr<ClassTrait>>(mod,"ClassTrait")
 				.def_readonly("title",&ClassTrait::title)
 				.def_readonly("intro",&ClassTrait::intro)
 				.def_readonly("file",&ClassTrait::_file)
 				.def_readonly("line",&ClassTrait::_line)
-				// custom converters are needed for vector<string>
-				#ifdef WOO_PYBIND11
-					.add_property_readonly("docOther",[](const shared_ptr<ClassTrait>& c){return c->docOther; })
-				#else
-					.add_property("docOther",py::make_getter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())/*,py::make_setter(&ClassTrait::docOther,py::return_value_policy<py::return_by_value>())*/)
-				#endif
+				.add_property_readonly("docOther",[](const shared_ptr<ClassTrait>& c){return c->docOther; })
 				.def_readonly("doc",&ClassTrait::_doc)
 				.def_readonly("name",&ClassTrait::_name)
 				.def("__str__",&ClassTrait::pyStr)

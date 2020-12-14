@@ -101,32 +101,17 @@ py::list getAllViews(){ py::list ret; for(const shared_ptr<GLViewer>& v: OpenGLM
 void centerViews(void){ OpenGLManager::self->centerAllViews(); }
 
 WOO_PYTHON_MODULE(_GLViewer);
-#ifdef WOO_PYBIND11
-	PYBIND11_MODULE(_GLViewer,mod){
-#else
-	BOOST_PYTHON_MODULE(_GLViewer){
-		py::object mod=py::scope();
-#endif
+PYBIND11_MODULE(_GLViewer,mod){
 	
 	WOO_SET_DOCSTRING_OPTS;
 	OpenGLManager* glm=new OpenGLManager(); // keep this singleton object forever
 	glm->emitStartTimer();
 
-	#ifdef WOO_PYBIND11
-		mod.def("View",createView,"Create a new 3d view.");
-		mod.def("center",centerViews,"Center all views.");
-		mod.def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
-	#else
-		py::def("View",createView,"Create a new 3d view.");
-		py::def("center",centerViews,"Center all views.");
-		py::def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
-	#endif
+	mod.def("View",createView,"Create a new 3d view.");
+	mod.def("center",centerViews,"Center all views.");
+	mod.def("views",getAllViews,"Return list of all open :obj:`woo.qt.GLViewer` objects");
 	
-	#ifdef WOO_PYBIND11
-		py::class_<pyGLViewer>(mod,"GLViewer")
-	#else
-		py::class_<pyGLViewer>("GLViewer",py::no_init)
-	#endif
+	py::class_<pyGLViewer>(mod,"GLViewer")
 		.add_property("upVector",&pyGLViewer::get_upVector,&pyGLViewer::set_upVector,"Vector that will be shown oriented up on the screen.")
 		.add_property("lookAt",&pyGLViewer::get_lookAt,&pyGLViewer::set_lookAt,"Point at which camera is directed.")
 		.add_property("viewDir",&pyGLViewer::get_viewDir,&pyGLViewer::set_viewDir,"Camera orientation (as vector).")

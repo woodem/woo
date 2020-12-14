@@ -16,19 +16,11 @@ bool pyGaussAverage::pointInsidePolygon(const Vector2r& pt, const vector<Vector2
 }
 
 WOO_PYTHON_MODULE(WeightedAverage2d);
-#ifdef WOO_PYBIND11
 	PYBIND11_MODULE(WeightedAverage2d,mod){
 		mod.attr("__name__")="woo.WeightedAverage2d";
 		mod.doc()="Smoothing (2d gauss-weighted average) for postprocessing scalars in 2d.";
 		py::class_<pyGaussAverage>(mod,"GaussAverage")
 			.def(py::init<py::tuple,py::tuple,py::tuple,Real,Real>(),py::arg("min"),py::arg("max"),py::arg("nCells"),py::arg("stDev"),py::arg("relThreshold")=3.,"Create empty container for data, which can be added using add and later retrieved using avg.")
-#else
-BOOST_PYTHON_MODULE(WeightedAverage2d)
-{
-	py::scope().attr("__name__")="woo.WeightedAverage2d";
-	py::scope().attr("__doc__")="Smoothing (2d gauss-weighted average) for postprocessing scalars in 2d.";
-	py::class_<pyGaussAverage>("GaussAverage",py::init<py::tuple,py::tuple,py::tuple,Real,py::optional<Real> >(py::args("min","max","nCells","stDev","relThreshold"),"Create empty container for data, which can be added using add and later retrieved using avg."))
-#endif
 		.def("add",&pyGaussAverage::addPt)
 		.def("avg",&pyGaussAverage::avg)
 		.def("avgPerUnitArea",&pyGaussAverage::avgPerUnitArea)

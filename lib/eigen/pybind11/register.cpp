@@ -1,4 +1,3 @@
-#ifdef WOO_PYBIND11
 #include<woo/lib/pyutil/doc_opts.hpp>
 #include<woo/lib/eigen/pybind11/visitors.hpp>
 // #include<pybind11/eigen.h>
@@ -66,4 +65,3 @@ namespace woo{
 
 	};
 };
-#endif

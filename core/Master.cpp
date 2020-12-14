@@ -133,19 +133,11 @@ Master::~Master(){ }
 
 
 void Master::pyRegisterClass(py::module_& mod){
-	#ifdef WOO_PYBIND11
-		py::class_<Master>(mod,"Master")
-	#else
-		py::class_<Master,boost::noncopyable>("Master",py::no_init)
-	#endif
+	py::class_<Master>(mod,"Master")
 		.add_property_readonly("realtime",&Master::getRealTime,"Return clock (human world) time the simulation has been running.")
 		// tmp storage
 		.def("loadTmpAny",&Master::loadTmp,WOO_PY_ARGS(py::arg("name")=""),"Load any object from named temporary store.")
-		#ifdef WOO_PYBIND11
-			.def_static("deepcopy",[](const shared_ptr<Object>& obj, py::kwargs kw){ shared_ptr<Object> copy=instance().deepcopy(obj); copy->pyUpdateAttrs(kw); return copy; },
-		#else
-			.def("deepcopy",py::raw_function(&Master::pyDeepcopy,/*Master, Object*/2),
-		#endif
+		.def_static("deepcopy",[](const shared_ptr<Object>& obj, py::kwargs kw){ shared_ptr<Object> copy=instance().deepcopy(obj); copy->pyUpdateAttrs(kw); return copy; },
 			"Return a deep-copy of given object; this performs serialization+deserialization using temporary (RAM) storage; all objects are therefore created anew. ``**kw`` can be used to pass additional attributes which will be changed on the copy before it is returned; this allows one-liners like ``m2=m1.deepcopy(tanPhi=0)``."
 		)
 		.def("saveTmpAny",&Master::saveTmp,WOO_PY_ARGS(py::arg("obj"),py::arg("name")="",py::arg("quiet")=false),"Save any object to named temporary store; *quiet* will supress warning if the name is already used.")
@@ -195,11 +187,7 @@ void Master::pyRegisterClass(py::module_& mod){
 		.def("disableGdb",&Master::pyDisableGdb,"Revert SEGV and ABRT handlers to system defaults.")
 		.def("tmpFilename",&Master::tmpFilename,"Return unique name of file in temporary directory which will be deleted when woo exits.")
 		.add_property_readonly("tmpFileDir",&Master::getTmpFileDir,"Directory for temporary files; created automatically at startup.")
-		#ifdef WOO_PYBIND11
-			.def_property_readonly_static("instance",[](py::object){ return &Master::instance(); },py::return_value_policy::reference)
-		#else
-			.add_static_property("instance",py::make_function(&Master::instance,py::return_value_policy<py::reference_existing_object>()))
-		#endif
+		.def_property_readonly_static("instance",[](py::object){ return &Master::instance(); },py::return_value_policy::reference)
 	;
 }
 
@@ -235,17 +223,6 @@ bool Master::isInheritingFrom_recursive(const string& className, const string& b
 	}
 	return false;
 }
-
-#ifndef WOO_PYBIND11
-py::object Master::pyDeepcopy(py::args_ args, py::kwargs kw){
-	if(py::len(args)>2) woo::RuntimeError("Master.deepcopy takes no extra unnamed arguments (besides the implicit Master instance, and the Object).");
-	// not necessary to extract this, just ignore it
-	// py::extract<shared_ptr<Master>> m(args[0]);
-	shared_ptr<Object> copy=instance().deepcopy(py::extract<shared_ptr<Object>>(args[1])());
-	copy->pyUpdateAttrs(kw);
-	return py::cast(copy);
-}
-#endif
 
 shared_ptr<Object> Master::deepcopy(shared_ptr<Object> obj){
 	std::stringstream ss;
@@ -318,17 +295,9 @@ void Master::pyRegisterAllClasses(){
 	// py::object wooScope=py::import("woo");
 
 	auto synthesizePyModule=[&](const string& modName){
-		#ifdef WOO_PYBIND11
-			py::module m=py::reinterpret_borrow<py::module>(PyModule_New(("woo."+modName).c_str()));
-		#else
-			py::object m(py::handle<>(PyModule_New(("woo."+modName).c_str())));
-		#endif
+		py::module m=py::reinterpret_borrow<py::module>(PyModule_New(("woo."+modName).c_str()));
 		m.attr("__file__")="<synthetic>";
-		#ifdef WOO_PYBIND11
-			py::module::import("woo").attr(modName.c_str())=m;
-		#else
-			py::import("woo").attr(modName.c_str())=m;
-		#endif
+		py::module::import("woo").attr(modName.c_str())=m;
 		pyModules[modName.c_str()]=m;
 		// http://stackoverflow.com/questions/11063243/synethsized-submodule-from-a-import-b-ok-vs-import-a-b-error/11063494
 		py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))()[("woo."+modName).c_str()]=m;
@@ -338,11 +307,7 @@ void Master::pyRegisterAllClasses(){
 
 	// this module is synthesized for core.Master; other synthetic modules are created on-demand in the loop below
 	synthesizePyModule("core");
-	#ifdef WOO_PYBIND11
-		py::module_ core=py::module::import("woo.core");
-	#else
-		py::scope core(py::import("woo.core"));
-	#endif
+	py::module_ core=py::module::import("woo.core");
 
 	this->pyRegisterClass(core);
 	woo::ClassTrait::pyRegisterClass(core);

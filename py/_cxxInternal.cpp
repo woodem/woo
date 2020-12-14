@@ -3,11 +3,7 @@
 #include<woo/lib/object/Object.hpp>
 #include<woo/lib/base/Logging.hpp>
 
-#ifdef WOO_PYBIND11
-	#include<woo/lib/eigen/pybind11/register.hpp>
-#else
-	// #include<woo/lib/eigen/boost-python/register.hpp>
-#endif
+#include<woo/lib/eigen/pybind11/register.hpp>
 
 #include<signal.h>
 #include<cstdlib>
@@ -80,33 +76,14 @@ static void wooInitialize(){
 	#endif
 
 	PyEval_InitThreads();
-	#ifdef WOO_PYBIND11
-		py::module m("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.");
-		woo::registerEigenClassesInPybind11(m);
-		auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
-		if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
-		sysModules["_wooEigen11"]=m;
-		sysModules["minieigen"]=m;
-		LOG_DEBUG_EARLY("sys.modules['minieigen'] is alias for _wooEigen11.")
-	#else
-		// woo::registerEigenClassesInBoostPython();
-		// module is called: minieigen
-		#if 0
-			// WOO_PYTHON_MODULE(_gts);
-			// early check that minieigen is importable
-			// (this is probably too late already)
-			const string meig="minieigen";
-			try{
-				if(getenv("WOO_DEBUG")) LOG_DEBUG_EARLY("Attemting "<<meig<<" import...");
-				auto minieigen=py::import(meig.c_str());
-				LOG_DEBUG_EARLY(meig<<" module @ "<<minieigen.ptr());
-			} catch(py::error_already_set& e){
-					throw std::runtime_error("Error importing "+meig+":\n"+parsePythonException_gilLocked(e));
-			} catch(...){
-				throw std::runtime_error("Error importing "+meig+" (details not reported).");
-			}
-		#endif
-	#endif
+
+	py::module m("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.");
+	woo::registerEigenClassesInPybind11(m);
+	auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
+	if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
+	sysModules["_wooEigen11"]=m;
+	sysModules["minieigen"]=m;
+	LOG_DEBUG_EARLY("sys.modules['minieigen'] is alias for _wooEigen11.")
 
 	Master& master(Master::instance());
 
@@ -171,7 +148,6 @@ std::shared_ptr<spdlog::logger> Boot::logger=spdlog::stdout_color_mt("woo.boot")
 // NB: this module does NOT use WOO_PYTHON_MODULE, since the file is really called _cxxInternal[_flavor][_debug].so
 // and is a real real python module
 
-#ifdef WOO_PYBIND11
 	#ifdef WOO_DEBUG
 		PYBIND11_MODULE(BOOST_PP_CAT(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR),_debug),mod){
 	#else
@@ -182,16 +158,3 @@ std::shared_ptr<spdlog::logger> Boot::logger=spdlog::stdout_color_mt("woo.boot")
 
 		Boot::wooInitialize();
 	};
-#else
-	#ifdef WOO_DEBUG
-		BOOST_PYTHON_MODULE(BOOST_PP_CAT(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR),_debug))
-	#else
-		BOOST_PYTHON_MODULE(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR))
-	#endif
-	{
-		LOG_DEBUG_EARLY("Initializing the _cxxInternal" BOOST_PP_STRINGIZE(WOO_CXX_FLAVOR) " module.");
-		py::scope().attr("__doc__")="This module's binary contains all compiled Woo modules (such as :obj:`woo.core`), which are created dynamically when this module is imported for the first time. In itself, it is empty and only to be used internally.";
-		// call automatically at module import time
-		Boot::wooInitialize();
-	}
-#endif

@@ -38,7 +38,6 @@ enum{ll_TRACE,ll_DEBUG,ll_INFO,ll_WARN,ll_ERROR,ll_FATAL};
 #endif
 
 WOO_PYTHON_MODULE(log);
-#ifdef WOO_PYBIND11
 PYBIND11_MODULE(log,mod){
 	mod.doc() = "Access and manipulation of log4cxx loggers.";
 	WOO_SET_DOCSTRING_OPTS;
@@ -52,19 +51,3 @@ PYBIND11_MODULE(log,mod){
 	mod.attr("ERROR")=(int)ll_ERROR;
 	mod.attr("FATAL")=(int)ll_FATAL;
 }
-#else
-BOOST_PYTHON_MODULE(log){
-	py::scope().attr("__doc__") = "Access and manipulation of log4cxx loggers.";
-
-	WOO_SET_DOCSTRING_OPTS;
-
-	py::def("setLevel",logSetLevel,WOO_PY_ARGS(py::arg("logger"),py::arg("level")),"Set minimum severity *level* (constants ``TRACE``, ``DEBUG``, ``INFO``, ``WARN``, ``ERROR``, ``FATAL``) for given logger. \nLeading 'woo.' will be appended automatically to the logger name; if logger is '', the root logger 'woo' will be operated on.");
-	py::def("loadConfig",logLoadConfig,WOO_PY_ARGS(py::arg("fileName")),"Load configuration from file (log4cxx::PropertyConfigurator::configure)");
-	py::scope().attr("TRACE")=(int)ll_TRACE;
-	py::scope().attr("DEBUG")=(int)ll_DEBUG;
-	py::scope().attr("INFO")= (int)ll_INFO;
-	py::scope().attr("WARN")= (int)ll_WARN;
-	py::scope().attr("ERROR")=(int)ll_ERROR;
-	py::scope().attr("FATAL")=(int)ll_FATAL;
-}
-#endif

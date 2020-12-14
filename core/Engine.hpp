@@ -16,12 +16,6 @@ struct Scene;
 struct Field;
 struct ScalarRange;
 
-//#ifdef WOO_PYBIND11
-//	struct Engine;
-//	PYBIND11_MAKE_OPAQUE(std::vector<std::shared_ptr<Engine>>)
-//#endif
-
-
 class Engine: public Object {
 	public:
 		// pointer to the simulation and field, set by Scene::moveToNextTimeStep

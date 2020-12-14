@@ -110,12 +110,6 @@ struct ContactContainer: public Object{
 		#define woo_dem_ContactContainer__threadsPending__OPENMP ((std::vector<PendingContact>,pending,,AttrTrait<Attr::hidden>(),"Contact which might be deleted by the collider in the next step."))
 	#endif
 
-	#ifdef WOO_PYBIND11
-		#define woo_dem_ContactContainer__iterator_PY py::class_<ContactContainer::pyIterator>(_classObj,"ContactContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
-	#else
-		#define woo_dem_ContactContainer__iterator_PY py::scope foo(_classObj); py::class_<ContactContainer::pyIterator>("ContactContainer_iterator",py::init<pyIterator>()).def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
-	#endif
-	
 	#define woo_dem_ContactContainer__CLASS_BASE_DOC_ATTRS_PY \
 		ContactContainer,Object,"Linear view on all contacts in the DEM field", \
 		((ContainerT,linView,,AttrTrait<Attr::hidden>(),"Linear storage of references; managed by accessor methods, do not modify directly!")) \
@@ -136,7 +130,9 @@ struct ContactContainer: public Object{
 		/* .def("__contains__",&ContactContainer::pyContains,"Equivalent to :obj:`existsReal`, but taking tuple as argument.") */ \
 		.def("__iter__",&ContactContainer::pyIter) \
 		/* define nested iterator class here; ugly, same as in ParticleContainer */ \
-		; woo_dem_ContactContainer__iterator_PY
+		; \
+		py::class_<ContactContainer::pyIterator>(_classObj,"ContactContainer_iterator").def("__iter__",&pyIterator::iter).def("__next__",&pyIterator::next);
+
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ContactContainer__CLASS_BASE_DOC_ATTRS_PY);
 
