@@ -112,8 +112,7 @@ class PythonConsoleSocketEmulator(socketserver.BaseRequestHandler):
 def _runInBackground(func):
     if useQThread:
         import woo.config
-        if 'qt4' in woo.config.features: from PyQt4.QtCore import QThread
-        else: from PyQt5.QtCore import QThread
+        from PyQt5.QtCore import QThread
         class WorkerThread(QThread):
             def __init__(self,func_): QThread.__init__(self); self.func=func_
             def run(self): self.func()

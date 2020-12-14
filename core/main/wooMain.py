@@ -465,15 +465,10 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
 
     ipython_version=woo.runtime.ipython_version()
     # show python console
-    import woo.ipythonintegration
-    woo.ipythonintegration.replaceInputHookIfNeeded()
     if qtConsole:
         qapp.start()
     else:
-        #XXX: # IPython>=1.0
         from IPython.terminal.embed import InteractiveShellEmbed 
-        #XXX: # only IPython<1.0
-        #XXX: except ImportError: from IPython.frontend.terminal.embed import InteractiveShellEmbed 
         # use the dict to set attributes
         for k in ipconfig: setattr(InteractiveShellEmbed,k,ipconfig[k])
         ipshell=InteractiveShellEmbed()

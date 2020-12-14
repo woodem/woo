@@ -442,7 +442,6 @@ install(FILES
 	py/document.py
 	py/eudoxos.py
 	py/__init__.py
-	py/ipythonintegration.py
 	py/linterpolation.py
 	py/manpage.py
 	py/models.py

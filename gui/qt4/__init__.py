@@ -69,19 +69,6 @@ else:
                     print("WARNING: connection to $DISPLAY failed; since you are running under Microsoft Windows in WSL (probably), you need to export $DISPLAY with localhost: prefix. Currently, $DISPLAY is '%s', should be therefore 'localhost%s'."%(os.environ['DISPLAY'],os.environ['DISPLAY']))
                 raise ImportError("Connecting to $DISPLAY failed, unable to activate the woo.qt4 interface.")
                 
-    # not necessary for qt5
-    if 'qt4' in woo.config.features:
-        # API compatibility for PySide vs. PyQt
-        # must be called before PyQt4 is ever imported
-        # don't do that if someone imported PyQt4/PySide already
-        # it would lead to crash
-        import sys
-        if woo.runtime.hasDisplay and ('PyQt4' not in sys.modules) and ('PySide' not in sys.modules):
-            if 11<woo.runtime.ipython_version()<120:
-                try:
-                    import IPython.external.qt # in later IPython version, the import itself does everything already
-                    IPython.external.qt.prepare_pyqt4()
-                except AttributeError: pass
 
     if 1: # initialize QApplication
         # disable all IPython warnings (sometimes imported for the first time here, not in woo's __init__.py or wooMain)
@@ -120,19 +107,12 @@ else:
                 wooQApp=QApplication(['woo.qt'])
                 # the rest is done in wooMain, once the ipshell object is instantiated
                 # -- ipshell.enable_gui('qt5')
-                
-            #    import IPython.terminal.pt_inputhooks
-            #    IPython.terminal.pt_inputhooks.get_inputhook_func('gt4' if 'qt4' in woo.config.features else 'qt5')
             else:
                 # this is deprecated in IPython >= 5.x
                 import IPython.lib.inputhook #guisupport
                 wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
-
-            #from IPython.lib.guisupport import start_event_loop_qt4
-            #start_event_loop_qt4(wooQApp)
-        #try:
-        #    wooQApp.setStyleSheet(open(woo.config.resourceDir+'/qmc2-black-0.10.qss').read())
-        #except IOError: pass # stylesheet not readable or whatever
+        # try: wooQApp.setStyleSheet(open(woo.config.resourceDir+'/qmc2-black-0.10.qss').read())
+        # except IOError: pass # stylesheet not readable or whatever
         if sys.platform=='win32': 
             # don't use ugly windows theme, try something else
             for style in QtGui.QStyleFactory.keys():
