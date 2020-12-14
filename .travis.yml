@@ -21,6 +21,7 @@ addons:
          - libvtk7-dev
          - libdouble-conversion-dev
          - libomp-7-dev
+         - libspdlog-dev
          # for before_install
          - python3-pip
          # runtime depends
