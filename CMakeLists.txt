@@ -215,9 +215,6 @@ create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo")
 create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo")
 create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo")
 
-
-add_definitions(-DWOO_SPDLOG)
-
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
 	set(WOO_MAIN_SCRIPT "woo-${WOO_FLAVOR}")
 	string(REGEX REPLACE "([^a-zA-Z0-9_])" "_" WOO_CXX_FLAVOR "_${WOO_FLAVOR}")
