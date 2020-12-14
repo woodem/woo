@@ -106,7 +106,12 @@ void InsertionSortCollider::handleBoundInversion(Particle::id_t id1, Particle::i
 }
 
 void InsertionSortCollider::throwTooManyPasses(){
-	throw std::runtime_error("InsertionSortCollider: sort not done after maxSortPass ("+to_string(maxSortPass)+") partial sort passes. If motion is out-of-control, increasing Scene.dtSafety might help next time.");
+	string m=
+		maxSortPass>0
+		?fmt::format("maxSortPass={} partial sort passes",maxSortPass)
+		:fmt::format("{} partial sort passes (maxSortPass={} with {} OpenMP threads)",-maxSortPass*omp_get_max_threads(),maxSortPass,omp_get_max_threads())
+	;
+	throw std::runtime_error("InsertionSortCollider: sort not done after "+m+". If motion is out-of-control, increasing Scene.dtSafety might help next time.");
 }
 
 void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
@@ -150,8 +155,9 @@ void InsertionSortCollider::insertionSort(VecBounds& v, bool doCollide, int ax){
 		for(size_t i=0; i<chunks; i++){ splits0[i]=i*chunkSize; splits1[i]=i*chunkSize+chunkSize/2; }
 		splits0[chunks]=v.size;
 		bool isOk=false; size_t pass;
+		size_t maxPass=maxSortPass>0?maxSortPass:(-maxSortPass*omp_get_max_threads());
 		for(pass=0; !isOk; pass++){
-			if(pass==(size_t)maxSortPass) throwTooManyPasses();
+			if(pass==maxPass) throwTooManyPasses();
 			bool even=((pass%2)==0);
 			const vector<size_t>& s(even?splits0:splits1);
 			#pragma omp parallel for schedule(static)
@@ -743,9 +749,11 @@ void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int 
 		//cerr<<"splits0:"; for(auto s: splits0) cerr<<" "<<s; cerr<<endl;
 		//cerr<<"splits1:"; for(auto s: splits1) cerr<<" "<<s; cerr<<endl;
 		
+		size_t maxPass=maxSortPass>0?maxSortPass:(-maxSortPass*omp_get_max_threads());
+
 		bool isOk=false; size_t pass;
 		for(pass=0; !isOk; pass++){
-			if(pass==(size_t)maxSortPass) throwTooManyPasses();
+			if(pass==maxPass) throwTooManyPasses();
 			bool even=((pass%2)==0);
 			const vector<size_t>& s(even?splits0:splits1);
 			#ifdef WOO_OPENMP
