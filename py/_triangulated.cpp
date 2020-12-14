@@ -21,9 +21,8 @@
 
 
 struct Triangulated{
-#ifdef WOO_SPDLOG
-	static std::shared_ptr<spdlog::logger> logger;
-#endif
+static std::shared_ptr<spdlog::logger> logger;
+
 static int facetsToSTL(const string& out, const shared_ptr<DemField>& dem, const string& solid, int mask, bool append){
 	auto particleOk=[&](const shared_ptr<Particle>&p){ return (mask==0 || (p->mask & mask)) && (p->shape->isA<Facet>()); };
 	std::ofstream stl(out,append?(std::ofstream::app|std::ofstream::binary):std::ofstream::binary); // binary better, anyway
@@ -438,9 +437,7 @@ static py::dict surfParticleIdNormals(shared_ptr<DemField>& dem, const AlignedBo
 
 };
 
-#ifdef WOO_SPDLOG
-	std::shared_ptr<spdlog::logger> Triangulated::logger=spdlog::stdout_color_mt("woo.triangulated");
-#endif
+std::shared_ptr<spdlog::logger> Triangulated::logger=spdlog::stdout_color_mt("woo.triangulated");
 
 WOO_PYTHON_MODULE(_triangulated);
 PYBIND11_MODULE(_triangulated,mod){

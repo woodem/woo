@@ -14,26 +14,7 @@ using boost::algorithm::iends_with;
 
 #include<iomanip>
 
-#ifdef WOO_SPDLOG
-	static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");
-#endif
-
-
-
-//#define POST_SYNTH_EVENT(EVT,checker) void evt##EVT(){QApplication::postEvent(OpenGLManager::self,new QCustomEvent(YadeQtMainWindow::EVENT_##EVT)); bool wait=true; if(wait){while(!(bool)(OpenGLManager::self->checker)) usleep(50000);} }
-//POST_SYNTH_EVENT(CONTROLLER,controller);
-//POST_SYNTH_EVENT(GENERATOR,generator);
-//#undef POST_SYNT_EVENT
-
-#if 0
-// event associated data will be deleted in the event handler
-void restoreGLViewerState_str(string str){string* s=new string(str); QApplication::postEvent(OpenGLManager::self,new 
-	QCustomEvent((QEvent::Type)YadeQtMainWindow::EVENT_RESTORE_GLVIEWER_STR,(void*)s));}
-void restoreGLViewerState_num(int dispStateNo){
-		int* i=new int(dispStateNo);
-		QApplication::postEvent(OpenGLManager::self,new QCustomEvent((QEvent::Type)YadeQtMainWindow::EVENT_RESTORE_GLVIEWER_NUM,(void*)i));
-}
-#endif
+static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt("woo.qt");
 
 
 qglviewer::Vec tuple2vec(py::tuple t){ qglviewer::Vec ret; for(int i=0;i<3;i++){py::extract<Real> e(t[i]); if(!e.check()) throw invalid_argument("Element #"+to_string(i)+" is not a number"); ret[i]=e();} return ret;};

@@ -31,30 +31,26 @@
 #define LOG_DEBUG_EARLY_FRAGMENT(msg) { if(getenv("WOO_DEBUG")) std::cerr<<msg; }
 
 
-#ifdef WOO_SPDLOG
-	#ifdef WOO_DEBUG
-		#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-	#else
-		#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
-	#endif
-	#include<woo/lib/spdlog/spdlog.h>
-	#include<woo/lib/spdlog/async_logger.h>
-	#include<woo/lib/spdlog/sinks/stdout_color_sinks.h>
-	#include<woo/lib/spdlog/fmt/ostr.h>
-
-	#define LOG_TRACE(...) SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__)
-	#define LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__)
-	#define LOG_INFO(...) SPDLOG_LOGGER_INFO(logger,__VA_ARGS__)
-	#define LOG_WARN(...) SPDLOG_LOGGER_WARN(logger,__VA_ARGS__)
-	#define LOG_ERROR(...) SPDLOG_LOGGER_ERROR(logger,__VA_ARGS__)
-	#define LOG_FATAL(...) SPDLOG_LOGGER_CRITICAL(logger,__VA_ARGS__)
-
-	#define WOO_DECL_LOGGER public: static std::shared_ptr<spdlog::logger> logger;
-	#define WOO_IMPL_LOGGER(classname) std::shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
-	#define WOO_LOCAL_LOGGER(name) static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt(#name)
+#ifdef WOO_DEBUG
+	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #else
-	#error WOO_SPDLOG should be defined automatically
+	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #endif
+#include<woo/lib/spdlog/spdlog.h>
+#include<woo/lib/spdlog/async_logger.h>
+#include<woo/lib/spdlog/sinks/stdout_color_sinks.h>
+#include<woo/lib/spdlog/fmt/ostr.h>
+
+#define LOG_TRACE(...) SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__)
+#define LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__)
+#define LOG_INFO(...) SPDLOG_LOGGER_INFO(logger,__VA_ARGS__)
+#define LOG_WARN(...) SPDLOG_LOGGER_WARN(logger,__VA_ARGS__)
+#define LOG_ERROR(...) SPDLOG_LOGGER_ERROR(logger,__VA_ARGS__)
+#define LOG_FATAL(...) SPDLOG_LOGGER_CRITICAL(logger,__VA_ARGS__)
+
+#define WOO_DECL_LOGGER public: static std::shared_ptr<spdlog::logger> logger;
+#define WOO_IMPL_LOGGER(classname) std::shared_ptr<spdlog::logger> classname::logger=spdlog::stdout_color_mt(#classname)
+#define WOO_LOCAL_LOGGER(name) static std::shared_ptr<spdlog::logger> logger=spdlog::stdout_color_mt(#name)
 
 // these macros are temporary
 #define TRACE LOG_TRACE("Been here")

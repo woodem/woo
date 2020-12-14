@@ -9,7 +9,7 @@ root=(os.getuid()==0)
 dist,linver=[l.decode('utf-8') for l in subprocess.check_output([b'lsb_release',b'-sir']).split(b'\n')[:2]]
 if dist=='Ubuntu':
     if linver=='18.04':
-        print('WARNING: while Ubuntu 18.04 is supported, consider upgrading to 20.04 for better future maintenance.')
+        print('WARNING: while Ubuntu 18.04 is still somewhat supported, you might need higher version of pybind11-dev. Consider upgrading to 20.04 for better future maintenance.')
     elif linver=='20.04': pass
     else: raise RuntimeError('Ubuntu version %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%linver)
 else:
@@ -50,16 +50,15 @@ def gitprep(url,src,depth=-1):
     else:
         call(['git','clone']+([] if depth<1 else ['--depth',str(depth)])+[url,src])
 
-# this is the default
-usePybind11=True
+spdlogLocal=False
 
 if dist in ('Ubuntu','Debian'):
     if not args.aptNoUpdate: call(['apt-get','update'],sudo=True)
     call(['apt-get','install','--yes','eatmydata'],sudo=True)
     if dist=='Ubuntu':
         if linver=='18.04':
-            usePybind11=False
-            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev'.split()
+            spdlogLocal=True
+            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk6-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev pybind11-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='xlwt colour-runner'.split()
             pipUI=[]
@@ -71,7 +70,7 @@ if dist in ('Ubuntu','Debian'):
                 aptCore+='python3-setuptools python3-pip python3-future python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-future ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
         elif linver=='20.04':
-            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev libtbb-dev pybind11-dev'.split()
+            aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev libspdlog-dev libtbb-dev pybind11-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='colour-runner xlwt'.split()
             pipUI=[]
@@ -103,7 +102,7 @@ if args.ccache: call(['ccache','-M50G','-F10000'])
 features=['gts','openmp','vtk','hdf5']+([] if args.headless else ['qt5'])
 
 os.makedirs(args.build_prefix,exist_ok=True)
-call(['cmake','-DWOO_PYBIND11='+('ON' if usePybind11 else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),'-DWOO_BUILD_JOBS=%d'%args.jobs,'-DPYTHON_EXECUTABLE='+sys.executable]+['-DWOO_%s=ON'%f.upper() for f in features]+[args.src],cwd=args.build_prefix)
+call(['cmake','-DSPDLOG_LOCAL='+('ON' if spdlogLocal else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),'-DWOO_BUILD_JOBS=%d'%args.jobs,'-DPYTHON_EXECUTABLE='+sys.executable]+['-DWOO_%s=ON'%f.upper() for f in features]+[args.src],cwd=args.build_prefix)
 call(['cmake','--build',args.build_prefix,'-j%d'%args.jobs,'-t','install'],cwd=args.build_prefix)
 # call(['scons','-C',args.src,'flavor=','features='+','.join(features),'jobs=%d'%args.jobs,'buildPrefix='+args.build_prefix,'CPPPATH='+cpppath,'CXX='+('ccache g++' if args.ccache else 'g++'),'brief=1','debug=0','PYTHON='+sys.executable])
 call(['woo','-j%d'%args.jobs,'--test'],failOk=True)

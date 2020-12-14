@@ -14,15 +14,8 @@ static string prettyVersion(bool lead=true){
 }
 
 WOO_PYTHON_MODULE(config)
-#ifdef WOO_PYBIND11
-	PYBIND11_MODULE(config,mod){
-#else
-	BOOST_PYTHON_MODULE(config){
-#endif
+PYBIND11_MODULE(config,mod){
 	py::list features;
-		#ifdef WOO_LOG4CXX
-			features.append("log4cxx");
-		#endif
 		#ifdef WOO_OPENMP
 			features.append("openmp");
 		#endif
@@ -44,16 +37,9 @@ WOO_PYTHON_MODULE(config)
 		#ifdef WOO_GL2PS
 			features.append("gl2ps");
 		#endif
-		#ifdef WOO_QT4
-			features.append("qt4");
-			features.append("qt");
-		#endif
 		#ifdef WOO_QT5
 			features.append("qt5");
 			features.append("qt");
-		#endif
-		#ifdef WOO_CLDEM
-			features.append("cldem");
 		#endif
 		#ifdef WOO_NOXML
 			features.append("noxml");
@@ -64,16 +50,9 @@ WOO_PYTHON_MODULE(config)
 		#ifdef WOO_HDF5
 			features.append("hdf5");
 		#endif
-		#ifdef WOO_PYBIND11
-			features.append("pybind11");
-		#endif
-		#ifdef WOO_SPDLOG
-			features.append("spdlog");
-		#endif
+		features.append("pybind11");
+		features.append("spdlog");
 
-	#ifndef WOO_PYBIND11
-		auto mod=py::scope();
-	#endif
 
 	mod.attr("features")=features;
 
@@ -103,12 +82,7 @@ WOO_PYTHON_MODULE(config)
 
 	mod.attr("revision")=BOOST_PP_STRINGIZE(WOO_REVISION);
 	mod.attr("version")=BOOST_PP_STRINGIZE(WOO_VERSION);
-	#ifdef WOO_PYBIND11
-		mod.
-	#else
-	py::
-	#endif
-		def("prettyVersion",&prettyVersion,(py::arg("lead")=true));
+	mod.def("prettyVersion",&prettyVersion,(py::arg("lead")=true));
 
 	mod.attr("sourceRoot")=BOOST_PP_STRINGIZE(WOO_SOURCE_ROOT);
 	mod.attr("buildRoot")=BOOST_PP_STRINGIZE(WOO_BUILD_ROOT);
@@ -116,9 +90,6 @@ WOO_PYTHON_MODULE(config)
 		mod.attr("buildProgram")=BOOST_PP_STRINGIZE(WOO_BUILD_PROGRAM);
 	#endif
 	mod.attr("flavor")=BOOST_PP_STRINGIZE(WOO_FLAVOR);
-	#ifdef WOO_SCONS_PATH
-		mod.attr("sconsPath")=BOOST_PP_STRINGIZE(WOO_SCONS_PATH);
-	#endif
 	mod.attr("buildDate")=__DATE__;
 
 };

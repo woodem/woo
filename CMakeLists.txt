@@ -73,7 +73,6 @@ else()
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-add_definitions(-DWOO_PYBIND11)
 find_package(pybind11 2.4 REQUIRED)
 
 find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
@@ -176,7 +175,6 @@ if(WOO_QT5)
 	)
 endif(WOO_QT5)
 
-
 # don't compile XML serialization, binary works better
 add_definitions(-DWOO_NOXML)
 
@@ -217,16 +215,7 @@ create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo")
 create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo")
 create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo")
 
-add_library(spdlog_local STATIC
-	lib/spdlog/src/async.cpp
-	lib/spdlog/src/color_sinks.cpp
-	lib/spdlog/src/file_sinks.cpp
-	lib/spdlog/src/fmt.cpp
-	lib/spdlog/src/spdlog.cpp
-	lib/spdlog/src/stdout_sinks.cpp
-)
-target_include_directories(spdlog_local PUBLIC lib/)
-target_compile_definitions(spdlog_local PUBLIC SPDLOG_COMPILED_LIB)
+
 add_definitions(-DWOO_SPDLOG)
 
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
@@ -284,12 +273,6 @@ set(WOO_CXX_SOURCES
 	lib/pyutil/except.cpp
 	lib/pyutil/gil.cpp
 	lib/pyutil/pickle.cpp
-	lib/spdlog/src/async.cpp
-	lib/spdlog/src/color_sinks.cpp
-	lib/spdlog/src/file_sinks.cpp
-	lib/spdlog/src/fmt.cpp
-	lib/spdlog/src/spdlog.cpp
-	lib/spdlog/src/stdout_sinks.cpp
 	lib/sphere-pack/SpherePack.cpp
 	lib/voro++/voro++.cc
 	lib/eigen/pybind11/register.cpp
@@ -405,7 +388,27 @@ set_source_files_properties(py/config.cxx
 	PROPERTIES
 	COMPILE_DEFINITIONS "WOO_REVISION=${WOO_GIT_REVISION_HASH};WOO_VERSION=${PROJECT_VERSION};WOO_SOURCE_ROOT=${CMAKE_SOURCE_DIR};WOO_BUILD_ROOT=${CMAKE_BINARY_DIR};WOO_FLAVOR=${WOO_FLAVOR};WOO_BUILD_PROGRAM=${CMAKE_MAKE_PROGRAM};WOO_BUILD_JOBS=${WOO_BUILD_JOBS}"
 )
-target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local Backward::Backward)
+target_link_libraries(${CXX_INTERNAL} PRIVATE Backward::Backward)
+
+
+OPTION(SPDLOG_LOCAL "build using local spdlog version" OFF)
+if(SPDLOG_LOCAL)
+	add_library(spdlog_local STATIC
+		lib/spdlog/src/async.cpp
+		lib/spdlog/src/color_sinks.cpp
+		lib/spdlog/src/file_sinks.cpp
+		lib/spdlog/src/fmt.cpp
+		lib/spdlog/src/spdlog.cpp
+		lib/spdlog/src/stdout_sinks.cpp
+	)
+	target_include_directories(spdlog_local PUBLIC lib/)
+	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
+else()
+	find_package(spdlog REQUIRED 1.5)
+	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog::spdlog)
+endif()
+
+
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
 	Boost::serialization

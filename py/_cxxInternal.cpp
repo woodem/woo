@@ -25,18 +25,16 @@
 struct Boot{
 	static std::shared_ptr<spdlog::logger> logger;
 
-#ifdef WOO_SPDLOG
-	static void initSpdlog(){
-		spdlog::set_pattern("%H:%M:%S [%-8n] %s:%# %^[%l] %v%$");
-		if(!logger){ std::cerr<<"Logger not yet constructed...?"<<std::endl; return; }
-		auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::trace:spdlog::level::warn);
-		spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l){
-			l->set_level(defaultLevel);
-			l->flush_on(spdlog::level::err);
-		});
-		LOG_DEBUG("SpdLog initialized.");
-	};
-#endif
+static void initSpdlog(){
+	spdlog::set_pattern("%H:%M:%S [%-8n] %s:%# %^[%l] %v%$");
+	if(!logger){ std::cerr<<"Logger not yet constructed...?"<<std::endl; return; }
+	auto defaultLevel=(getenv("WOO_DEBUG")?spdlog::level::trace:spdlog::level::warn);
+	spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l){
+		l->set_level(defaultLevel);
+		l->flush_on(spdlog::level::err);
+	});
+	LOG_DEBUG("SpdLog initialized.");
+};
 
 #if defined(WOO_DEBUG) && !defined(__MINGW64__)
 	static void crashHandler(int sig){
@@ -71,9 +69,7 @@ struct Boot{
 /* Initialize woo - load config files, register python classes, set signal handlers */
 static void wooInitialize(){
 
-	#ifdef WOO_SPDLOG
-		initSpdlog();
-	#endif
+	initSpdlog();
 
 	PyEval_InitThreads();
 
