@@ -26,7 +26,7 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	# https://github.com/pybind/pybind11/issues/1604#issuecomment-459796241
+	# https://github.com/pybind/pybind11/issues/1604#issuecomment-443385783
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
 endif()
 

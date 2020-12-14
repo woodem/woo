@@ -37,6 +37,8 @@ addons:
          - python3-h5py
          - python3-lockfile
          - ipython3
+         # use latest clang if possible (default 7.0 fails with the ParallelEngine test?)
+         - clang-10
 
 install:
    - pip3 install colour_runner
@@ -47,7 +49,7 @@ script:
    - mkdir -p build
    - cd build
    # without debugging, casts via pybind11 are somehow broken...
-   - CXX=clang++ CC=clang cmake -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
+   - CXX=clang++-10 CC=clang-10 cmake -DWOO_FLAVOR="" -DWOO_DEBUG=OFF -DWOO_PYBIND11=ON -DWOO_VTK=ON -DWOO_HDF5=ON -DWOO_GTS=ON -DWOO_QT5=OFF -DWOO_OPENMP=ON -DWOO_CCACHE=OFF ..
    - travis_wait 60 make
    - sudo make install
    - OMP_NUM_THREADS=2 timeout 60 woo --test
