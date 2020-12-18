@@ -1,7 +1,6 @@
 '''
 Test particle generator, that the resulting PSD curve matches the one on input.
 '''
-from builtins import range
 import unittest
 from woo.core import *
 from woo.dem import *

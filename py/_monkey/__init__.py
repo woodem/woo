@@ -4,7 +4,6 @@ This approach is called `monkey patching <http://en.wikipedia.org/wiki/Monkey_pa
 
 This module is imported automatically by Woo at startup and should not be used directly.
 '''
-from __future__ import print_function
 from . import io
 from . import gts
 from . import compat

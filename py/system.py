@@ -4,7 +4,6 @@
 """
 Functions for accessing woo's internals; only used internally.
 """
-from __future__ import print_function
 import sys
 from woo import config
 from woo import runtime

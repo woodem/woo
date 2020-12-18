@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 """Update docstrings which are not practical to be written in the c++ source code, such as :obj:`woo.dem.Cg2_Sphere_Sphere_L6Geom`.
 
 Don't forget to

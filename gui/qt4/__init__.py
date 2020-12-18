@@ -1,16 +1,11 @@
 # encoding: utf-8
 
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import str, super
-import future.utils
 import math
 useQtConsole=False # does not work yet
 wooQApp=None
 
 import wooMain
 import sys, os
-PY3K=future.utils.PY3
 
 import woo
 if 'qt4' in woo.config.features:
@@ -717,7 +712,7 @@ class ControllerClass(QWidget,Ui_Controller):
             if S.uiBuild:
                 import __main__
                 glob=globals(); glob.update(__main__.__dict__)
-                future.utils.exec_(S.uiBuild, glob, {'S':S,'area':self.customArea})
+                exec(S.uiBuild, glob, {'S':S,'area':self.customArea})
         ## renderer change
         if self.lastGl!=S.gl:
             self.displayComboSlot(self.displayCombo.currentText())

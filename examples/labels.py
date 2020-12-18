@@ -1,4 +1,3 @@
-from __future__ import print_function
 import woo.core, woo.dem
 from minieigen import *
 S=woo.core.Scene()

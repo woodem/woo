@@ -1,11 +1,6 @@
 # encoding: utf-8
 
 # for use with globals() when reading table
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import bytes, zip, range, object, str
-import past.builtins, future.utils
 
 nan=float('nan')
 from math import * 
@@ -15,8 +10,6 @@ import sys
 
 from wooMain import options as wooOptions
 
-
-py3k=(sys.version_info[0]==3)
 
 try:
     from lockfile import FileLock
@@ -142,29 +135,24 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
                 sceneId=S.tags['id']+('' if i==0 else '~%d'%i)
                 if sceneId not in hdf: break
                 i+=1
-            # for older h5py version: encode unicode to str
-            # no-op for py3
-            def _encoded(x):
-                if not future.utils.PY3 and isinstance(x,past.builtins.unicode): return x.encode('utf-8')
-                return x
             # group for our Scene
             G=hdf.create_group(sceneId)
             G.attrs['formatVersion']=dbFormatVersion
             G.attrs['finished']=datetime.datetime.now().replace(microsecond=0).isoformat('_')
-            G.attrs['batchTable']=_encoded(table)
+            G.attrs['batchTable']=table
             G.attrs['batchTableLine']=line
             G.attrs['sceneId']=S.tags['id']
             G.attrs['title']=S.tags['title']
             G.attrs['duration']=S.duration
-            G.attrs['pre']=_encoded(S.pre.dumps(format='json') if S.pre else '')
-            G.attrs['tags']=_encoded(json.dumps(unicodeTags))
-            G.attrs['plots']=_encoded(json.dumps(S.plot.plots))
+            G.attrs['pre']=S.pre.dumps(format='json') if S.pre else ''
+            G.attrs['tags']=json.dumps(unicodeTags)
+            G.attrs['plots']=json.dumps(S.plot.plots)
             G_misc=G.create_group('misc')
-            for k,v in kw.items(): G_misc.attrs[k]=_encoded(woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v))
+            for k,v in kw.items(): G_misc.attrs[k]=woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v)
             G_series=G.create_group('series')
             for k,v in series.items():
                 # hdf5 is smart enough to create sub-groups automatically if the name contains slashes
-                G_series[k]=_encoded(v)
+                G_series[k]=v
             hdf.close()
     else: raise ValueError('*fmt* must be one of "sqlite", "hdf5", None (autodetect based on suffix)')
 
@@ -295,7 +283,7 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
             for i,item in enumerate(obj): flatten(item,(path+sep if path else '')+str(i),ret=ret)
         elif isinstance(obj,dict):
             for key,value in list(obj.items()): flatten(value,(path+sep if path else '')+str(key),ret=ret)
-        elif isinstance(obj,(past.builtins.str,str)):
+        elif isinstance(obj,str):
             ret[path]=str(obj)
         else:
             # other values passed as they are
@@ -576,7 +564,7 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
             #print 'ASSIGN',col,vv[col]
             tagsParams+=['%s=%s'%(col,vv[col])];
             # when reading from XLS, data might be numbers; use eval only for strings, otherwise use the thing itself
-            dictParams[col]=eval(vv[col],dict(woo=woo,**math.__dict__)) if isinstance(vv[col],(str,past.builtins.str)) else vv[col]
+            dictParams[col]=eval(vv[col],dict(woo=woo,**math.__dict__)) if isinstance(vv[col],str) else vv[col]
     # assign remaining (default) keys to python vars
     defaults=[]
     for k in kw.keys():
@@ -626,7 +614,7 @@ def runPreprocessor(pre,preFile=None):
             for v in list(vv.keys()): # copy list so that dictionary does not change while iterating over it
                 if not v.startswith('%'): continue
                 val=vv[v]
-                if isinstance(val,(str,past.builtins.str)): val=eval(val,dict(woo=woo,**math.__dict__))
+                if isinstance(val,str): val=eval(val,dict(woo=woo,**math.__dict__))
                 overrideHashPercent[v[1:]]=val
                 print('Re-assigning #%% variable %s=%s'%(str(v[1:]),str(val)))
                 vv.pop(v)
@@ -638,8 +626,8 @@ def runPreprocessor(pre,preFile=None):
             if name=='title': continue
             if val in ('*','-',''): continue # postponed, computed later
             # postpone evaluation of parameters starting with = so that they can use other params
-            if isinstance(val,(str,past.builtins.str)) and val.startswith('='): evalParams.append((name,val[1:]))
-            elif isinstance(val,(str,past.builtins.str)) and val.startswith("'="): evalParams.append((name,val[2:]))
+            if isinstance(val,str) and val.startswith('='): evalParams.append((name,val[1:]))
+            elif isinstance(val,str) and val.startswith("'="): evalParams.append((name,val[2:]))
             else:
                 print('OVERRIDING FROM TABLE:',name,'=',val)
                 nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
@@ -834,7 +822,6 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     # merge adjacent cols contents
                     for i,l in enumerate(lines):
                         vv=values[l]
-                        # strType=(str if (str in (type(vv[iv-1]),type(vv[iv]))) else past.builtins.str)
                         collapsed=str(vv[iv-1])+str(vv[iv])
                         values[l]=vv[:iv-1]+[collapsed]+vv[iv+1:]
             headings=[h for h in headings if h not in ('...',u'...',u'…')]
@@ -859,7 +846,7 @@ This class is used by :obj:`woo.utils.readParamsFromTable`.
                     for col,head in enumerate(rawHeadings):
                         if hasBangs and head[-1]!='!': continue
                         val=values[l][col]
-                        if isinstance(val,(str,past.builtins.str)) and val.strip() in ('','-','*'): continue # default value used
+                        if isinstance(val,str) and val.strip() in ('','-','*'): continue # default value used
                         ddd.append(head.replace('!','')+'='+('%g'%val if isinstance(val,float) else str(val)))
                     dd=','.join(ddd).replace("'",'').replace('"','')
                     #dd=','.join(head.replace('!','')+'='+('%g'%values[head] if isinstance(values[l][head],float) else str(values[l][head])) for head in bangHeads if (values[l][head].strip()!='-').replace("'",'').replace('"','')
@@ -997,11 +984,8 @@ def cartProdParamTable(params,out,same=''):
 
 
 
-# fix docstrings in py3
-import future.utils
-if future.utils.PY3:
-    TableParamReader.__doc__=TableParamReader.__doc__.replace("u'","'")
-    cartProdParamTable.__doc__=cartProdParamTable.__doc__.replace("u'","'")
+TableParamReader.__doc__=TableParamReader.__doc__.replace("u'","'")
+cartProdParamTable.__doc__=cartProdParamTable.__doc__.replace("u'","'")
 
 
 if __name__=="__main__":

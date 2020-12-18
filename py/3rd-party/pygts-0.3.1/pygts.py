@@ -1,4 +1,3 @@
-from builtins import zip
 # pygts - python package for the manipulation of triangulated surfaces
 #
 #   Copyright (C) 2009 Thomas J. Duck

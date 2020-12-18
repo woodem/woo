@@ -1,4 +1,3 @@
-from builtins import range
 # -*- coding: utf-8
 
 # Testing facet-sphere interaction in periodic case.

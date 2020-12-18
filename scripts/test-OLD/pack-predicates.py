@@ -1,4 +1,3 @@
-from __future__ import print_function
 from woo.pack import *
 s1=inSphere((0,0,0),1)
 s2=inSphere((0,0,1),1)

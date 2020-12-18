@@ -1,10 +1,8 @@
 from minieigen import *
 from woo.dem import *
 import woo.core, woo.models
-from builtins import super
 from math import *
 import numpy
-from builtins import super
 
 
 class PourFeliciter(woo.core.Preprocessor,woo.pyderived.PyWooObject):

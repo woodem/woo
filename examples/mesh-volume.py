@@ -1,4 +1,3 @@
-from __future__ import print_function
 import gts
 import woo.pack,woo.dem,woo.log,woo.core
 from minieigen import *

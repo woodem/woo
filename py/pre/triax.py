@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-from __future__ import print_function
-from builtins import super
 from woo.dem import *
 import woo.core
 import woo.dem
@@ -10,7 +8,6 @@ import woo.triangulated
 import math
 from minieigen import *
 import woo.models
-from builtins import super
 
 
 

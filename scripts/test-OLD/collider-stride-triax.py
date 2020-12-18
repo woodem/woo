@@ -1,6 +1,4 @@
 """ Playground for tuning collider strides depending on maximum velocity. """
-from __future__ import print_function
-from builtins import range
 
 from woo import timing,log
 import os.path

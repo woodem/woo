@@ -1,11 +1,5 @@
 # encoding: utf-8
 '''Define IO routines for arbitrary objects.'''
-from __future__ import print_function
-import future.utils
-from builtins import str
-from past.builtins import unicode
-import past.builtins
-py3k=future.utils.PY3
 # various monkey-patches for wrapped c++ classes
 import woo.core
 import woo.system
@@ -82,8 +76,8 @@ def Object_dumps(obj,format,fragment=False,width=80,noMagic=False,stream=True,sh
         return SerializerToHtmlTable()(obj,dontRender=True,showDoc=showDoc,hideWooExtra=hideWooExtra)
 
 def Object_dump(obj,out,format='auto',fallbackFormat=None,overwrite=True,fragment=False,width=80,noMagic=False,showDoc=False,hideWooExtra=False):
-    '''Dump an object in specified *format*; *out* can be a str/unicode (filename) or a *file* object. Supported formats are: `auto` (auto-detected from *out* extension; raises exception when *out* is an object), `html`, `expr`.'''
-    hasFilename=isinstance(out,(str,past.builtins.str))
+    '''Dump an object in specified *format*; *out* can be a str (filename) or a *file* object. Supported formats are: `auto` (auto-detected from *out* extension; raises exception when *out* is an object), `html`, `expr`.'''
+    hasFilename=isinstance(out,str)
     if hasFilename:
         import os.path
         if os.path.exists(out) and not overwrite: raise IOError("File '%s' exists (use overwrite=True)"%out)
@@ -139,7 +133,7 @@ class SerializerToHtmlTableGenshi(object):
     def htmlSeq(self,s,insideTable):
         from genshi.builder import tag
         table=tag.table(frame='box',rules='all',width='100%',**self.padding)
-        if hasattr(s[0],'__len__') and not isinstance(s[0],(str,unicode,bytes)): # 2d array
+        if hasattr(s[0],'__len__') and not isinstance(s[0],(str,bytes)): # 2d array
             # disregard insideTable in this case
             for r in range(len(s) if type(s)!=AlignedBox3 else 2): # len(s) is sufficient, but some version of minieigen report erroneously that AlignedBox3 has length of 3
                 tr=tag.tr()
@@ -150,7 +144,7 @@ class SerializerToHtmlTableGenshi(object):
         splitLen=0
         if len(s)>1:
             if isinstance(s[0],int): splitLen=self.splitIntSeq
-            elif isinstance(s[0],(str,unicode)): splitLen=self.splitStrSeq
+            elif isinstance(s[0],str): splitLen=self.splitStrSeq
             elif isinstance(s[0],float): splitLen=self.splitFloatSeq
         # 1d array
         if splitLen==0 or len(s)<splitLen:
@@ -225,7 +219,7 @@ class SerializerToHtmlTableGenshi(object):
                     if not wasList: attr=attr[0]
                     unit=', '.join(unit)
                 # sequence type, or something similar                
-                if hasattr(attr,'__len__') and not isinstance(attr,(str,unicode,bytes)):
+                if hasattr(attr,'__len__') and not isinstance(attr,(str,bytes)):
                     if len(attr)>0:
                         tr.append(tag.td(self.htmlSeq(attr,insideTable=False),align='right'))
                     else:
@@ -397,12 +391,12 @@ def wooExprEval(__e,__f,__overrideHashPercent={}):
     __codePercent=textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#%')]))
     __codeHash   =textwrap.dedent('\n'.join([l[2:] for l in __e.split('\n') if l.startswith('#:')]))
     #print('EXECUTING #: CODE:\n'+__code)
-    future.utils.exec_(__codePercent,locals()) # pass locals() here
+    exec(__codePercent,locals()) # pass locals() here
     for __var,__val in __overrideHashPercent.items():
        if __var not in locals(): raise NameError("Local (defined in #%%) variable '%s' does not exist, unable to override its value '%s' from __overrideHashPercent."%(__var,str(__val)))
        locals()[__var]=__val
     # re-evaluate the block with locals from overrideHashPercent
-    future.utils.exec_(__codeHash,locals()) # pass locals() here
+    exec(__codeHash,locals()) # pass locals() here
     # return the expression
     return eval(compile(__e,__f,'eval'),locals(),globals())
 
@@ -415,7 +409,7 @@ def Object_loads(typ,data,format='auto',overrideHashPercent={}):
     if format not in ('auto','pickle','expr','json'): raise ValueError('Invalid format %s'%format)
     elif format=='auto':
         if type(data)==bytes and data.startswith(b'##woo-expression##'): format='expr'
-        elif type(data) in (str,past.builtins.str) and data.startswith('##woo-expression##'): format='expr'
+        elif type(data) in (str,) and data.startswith('##woo-expression##'): format='expr'
         else:
             # try pickle
             try:

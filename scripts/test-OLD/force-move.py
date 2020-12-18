@@ -1,5 +1,3 @@
-from __future__ import print_function
-from builtins import range
 O.bodies.append(utils.sphere([0,0,0],1,dynamic=True))
 O.engines=[
     ForceResetter(),

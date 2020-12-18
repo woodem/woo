@@ -1,5 +1,4 @@
 '''Module for manipulating locally-stored object library'''
-from __future__ import print_function
 
 import os, os.path
 from os.path import join

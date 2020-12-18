@@ -1,4 +1,3 @@
-from __future__ import print_function
 import woo, woo.batch, woo.core
 S=woo.master.scene
 woo.batch.readParamsFromTable(unknownOk=True,

@@ -1,4 +1,3 @@
-from builtins import range
 # -*- coding: utf-8
 
 from woo import utils,pack,export,qt

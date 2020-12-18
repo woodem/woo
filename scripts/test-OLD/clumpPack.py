@@ -1,4 +1,3 @@
-from __future__ import print_function
 # create a few clump configurations by hand
 from woo import pack
 c1=pack.SpherePack([((0,0,0),.5),((.5,0,0),.5),((0,.5,0),.3)])

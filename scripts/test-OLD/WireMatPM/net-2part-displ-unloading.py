@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # encoding: utf-8
-from __future__ import print_function
-from builtins import input
 from woo import utils, ymport, qt, plot
 
 from woo import log

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # encoding: utf-8
-from __future__ import print_function
 from woo import utils, ymport, qt, plot
 
 ## definition of some colors for colored text output in terminal

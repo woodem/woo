@@ -1,4 +1,3 @@
-from builtins import range
 import woo
 from woo.dem import *
 from woo.fem import *

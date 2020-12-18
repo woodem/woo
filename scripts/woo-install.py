@@ -63,11 +63,11 @@ if dist in ('Ubuntu','Debian'):
             pipCore='xlwt colour-runner'.split()
             pipUI=[]
             if venv:
-                pipCore+='numpy matplotlib future xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
+                pipCore+='numpy matplotlib xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
                 pipUI+='vext.pyqt5 XLib'.split()
                 aptUI+=['python3-pyqt5']
             else:
-                aptCore+='python3-setuptools python3-pip python3-future python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-future ipython3'.split()
+                aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
         elif linver=='20.04':
             aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev libspdlog-dev libtbb-dev pybind11-dev'.split()
@@ -75,11 +75,11 @@ if dist in ('Ubuntu','Debian'):
             pipCore='colour-runner xlwt'.split()
             pipUI=[]
             if venv:
-                pipCore+='numpy matplotlib future xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
+                pipCore+='numpy matplotlib xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
                 pipUI+='vext.pyqt5 XLib'.split()
                 aptUI+=['python3-pyqt5']
             else:
-                aptCore+='python3-setuptools python3-pip python3-future python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-future ipython3'.split()
+                aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
         else: raise RuntimeError('Unsupported Ubuntu version %s.'%linver)
         if args.ccache: aptCore+=['ccache']

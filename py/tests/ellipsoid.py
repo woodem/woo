@@ -1,7 +1,6 @@
 # encoding: utf-8
 # 2013 © Václav Šmilauer <eu@doxos.eu>
 
-from __future__ import print_function
 import unittest
 from minieigen import *
 import woo.core

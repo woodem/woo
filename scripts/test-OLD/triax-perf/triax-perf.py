@@ -1,4 +1,3 @@
-from __future__ import print_function
 # Performance test for running
 #
 #  1. Regular TriaxialTest with 3 independent dispatchers (geom, phys, constitutive law)

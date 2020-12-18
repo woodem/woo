@@ -12,12 +12,7 @@ It loads woo plugins and injects c++ class constructors to the __builtins__
 (that might change in the future, though) namespace, making them available
 everywhere.
 """
-from __future__ import print_function
-from builtins import zip
-from builtins import str
-from builtins import object
 
-# FIXME: rename once tested
 from wooMain import options as wooOptions
 import warnings,traceback
 import sys,os,os.path,re,string

@@ -1,11 +1,5 @@
 # encoding: utf-8
 
-from __future__ import print_function
-from past.builtins import execfile
-from future import standard_library
-standard_library.install_aliases()
-from builtins import input, str, range, object
-import future.utils # for exec_
 __all__=['main','batch','options','WooOptions']
 
 
@@ -390,7 +384,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             def runScript(script):
                 sys.stderr.write("Running script "+arg0+'\n')
                 try:
-                    execfile(script,globals())
+                    exec(open(script,'r').read(),globals())
                 except SystemExit: raise
                 except: # all other exceptions
                     traceback.print_exc()
@@ -438,7 +432,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             woo.master.scene.run()
             if woo.runtime.opts.exitAfter: woo.master.waitForScenes()
     if woo.runtime.opts.commands:
-        future.utils.exec_(woo.runtime.opts.commands,globals(),locals())
+        exec(woo.runtime.opts.commands,globals(),locals())
     if woo.runtime.opts.exitAfter:
         sys.stdout.write('Woo: normal exit.\n') # fake normal exit (so that batch looks fine if we crash at shutdown)
         sys.exit(0)

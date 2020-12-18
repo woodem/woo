@@ -3,17 +3,12 @@
 """
 Module containing utility functions for plotting inside woo. Most functionality is exposed through :obj:`woo.core.Plot`, however.
 """
-from __future__ import print_function
-from builtins import bytes, str, range, object
-import past.builtins
-
 ## all exported names
 __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMarkerKw']
 
 
 import sys
 import collections
-PY3K=sys.version_info[0]==3
 
 pilOk=False
 try:
@@ -482,7 +477,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             d0=d[0]
             if d0==None:
                 y1=False; continue
-            if not isinstance(d0,(past.builtins.str,str)): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
+            if not isinstance(d0,str): raise ValueError('Plots specifiers must be strings (not %s)'%(type(d[0]).__name__))
             if '=' in d0: d0=d0.split('=',1)[0]
             if y1: plots_p_y1.append((d0,d[1]))
             else: plots_p_y2.append((d0,d[1]))
@@ -517,7 +512,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             yNames=set()
             ySpecs2=[]
             for ys in ySpecs:
-                if not isinstance(ys[0],(past.builtins.str,str)): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
+                if not isinstance(ys[0],str): raise ValueError('Plot specifications must be strings (not a %s).'%type(ys[0]))
                 if ys[0].startswith('**') or ys[0].startswith('*'):
                     evEx=eval(ys[0][(2 if ys[0].startswith('**') else 1):],{'S':P.scene})
                     yNameFuncs.add(evEx)  # add callable or dictionary

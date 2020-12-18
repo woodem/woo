@@ -1,4 +1,3 @@
-from __future__ import print_function
 from woo.pack import SpherePack
 
 sp=SpherePack()

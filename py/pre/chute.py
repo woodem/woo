@@ -1,7 +1,6 @@
 import woo.dem, woo.core, woo.pyderived, woo.models, woo.triangulated
 from minieigen import *
 import numpy, math
-from builtins import super
 
 
 class DissipChute(woo.core.Preprocessor,woo.pyderived.PyWooObject):

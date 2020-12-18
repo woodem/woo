@@ -1,4 +1,3 @@
-from __future__ import print_function
 from woo.core import *
 from woo.dem import *
 from woo import timing

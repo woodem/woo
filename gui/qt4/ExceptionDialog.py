@@ -1,4 +1,3 @@
-from builtins import str
 # encoding: utf-8
 import woo.config
 if 'qt4' in woo.config.features:

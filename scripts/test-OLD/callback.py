@@ -1,4 +1,3 @@
-from __future__ import print_function
 O.materials.append(FrictMat(young=30e9,poisson=.2,density=4000,frictionAngle=.5))
 O.bodies.append([
     utils.sphere((0,0,0),1,dynamic=False),

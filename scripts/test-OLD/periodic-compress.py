@@ -1,4 +1,3 @@
-from __future__ import print_function
 O.periodic=True
 O.cell.refSize=(20,20,10)
 from woo import pack,log,timing

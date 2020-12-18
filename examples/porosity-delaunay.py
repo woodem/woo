@@ -1,4 +1,3 @@
-from __future__ import print_function
 import woo.dem, woo.core, woo.log, woo.triangulated, woo.gl, woo.qt
 woo.master.usesApi=10102
 from minieigen import *

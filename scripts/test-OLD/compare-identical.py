@@ -8,8 +8,6 @@ there will be noise differences coming from non-deterministic order of interacti
 in the container (although they are the same). You can use OMP_NUM_THREADS=2 to see
 what happens if the simulations get different.
 """
-from __future__ import print_function
-from builtins import range
 # this is to provide some default simulation to test on
 # comment it out and provide your own simulation XML in init
 TriaxialTest().generate('/tmp/TriaxialTest.xml')

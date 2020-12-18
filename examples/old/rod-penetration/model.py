@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from builtins import range
 from woo import utils
 import random
 from woo import ymport

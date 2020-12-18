@@ -1,7 +1,5 @@
 #encoding: utf-8
 'Support subclassing c++ objects in python, with some limitations. Useful primarily for pure-python preprocessors.'
-from builtins import str, object
-import past.builtins
 
 from woo.core import *
 from minieigen import *
@@ -91,7 +89,7 @@ class PyAttrTrait(object):
     #        
     # fake cxxType
     #
-    primitiveTypes={int:'int',past.builtins.str:'string',str:'string',float:'Real',bool:'bool',
+    primitiveTypes={int:'int',str:'string',float:'Real',bool:'bool',
         Vector2:'Vector2r',Vector3:'Vector3r',Vector6:'Vector6r',Matrix3:'Matrix3r',Matrix6:'Matrix6r',
         Quaternion:'Quaternionr',Vector2i:'Vector2i',Vector3i:'Vector3i',Vector6i:'Vector6i',
 	AlignedBox3:'AlignedBox3r',
@@ -171,7 +169,7 @@ class PyAttrTrait(object):
         self.noSave=self.hidden=self.pyByRef=self.static=self.activeLabel=self.namedEnum=False
         #
         self.validator=None
-        if self.choice and isinstance(self.choice[0],(past.builtins.str,str)):
+        if self.choice and isinstance(self.choice[0],str):
             #print '%s: Choice of strings (%s)!!!!'%(self.name,str(self.choice))
             # choice from strings
             def validateStrChoice(self,val):
@@ -191,10 +189,9 @@ class PyAttrTrait(object):
         baseUnit=woo._units.baseUnit
         def _unicodeUnit(u):
             if isinstance(u,str): return u
-            elif isinstance(u,past.builtins.str): return str(u,'utf-8')
             elif isinstance(u,tuple): return (_unicodeUnit(u[0]),u[1])
             raise ValueError(u"Unknown unit type %sfor %s"%(str(type(u)),u))
-        if isinstance(unit,(past.builtins.str,str)):
+        if isinstance(unit,str):
             unit=[_unicodeUnit(unit)]
             if altUnits: altUnits=[[_unicodeUnit(a) for a in altUnits]]
         if not unit:
@@ -239,7 +236,7 @@ class PyAttrTrait(object):
             if T in self.primitiveTypes: # check convertibility
                 for i,v in enumerate(val):
                     try:
-                        if type(v) in (past.builtins.str,str) and T in (float,int): raise TypeError("Don't allow conversions from strings to numbers, since that will fail if used without conversion")
+                        if isinstance(v,str) and T in (float,int): raise TypeError("Don't allow conversions from strings to numbers, since that will fail if used without conversion")
                         ret.append(T(v))
                     except: raise TypeError("Attribute {self.name} declared as sequence of {T}, but {i}'th item {v!s} of type {itemType} is not convertible to {T}.".format(self=self,i=i,v=v,itemType=tName(type(v)),T=tName(T)))
             else:
@@ -252,7 +249,7 @@ class PyAttrTrait(object):
             T=self.pyType
             if T in self.primitiveTypes:
                 try:
-                    if type(val) in (past.builtins.str,str) and T in (float,int): raise TypeError("Don't allow conversions from strings to numbers, since that will fail if used without conversion")
+                    if isinstance(val,str) and T in (float,int): raise TypeError("Don't allow conversions from strings to numbers, since that will fail if used without conversion")
                     ret=T(val)
                 except: raise TypeError("Attribute {self.name} declared as {T}, but value {val!s} of type {valType} is not convertible to {T}".format(self=self,val=val,valType=tName(type(val)),T=tName(T)))
             else:

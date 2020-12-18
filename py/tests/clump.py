@@ -2,7 +2,6 @@
 '''
 Various computations affected by the periodic boundary conditions.
 '''
-from builtins import range
 
 import unittest
 import random

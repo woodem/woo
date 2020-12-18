@@ -5,8 +5,6 @@
 See `timing section <https://yade-dem.org/doc/current/prog.html#timing>`_ of the Yade manual, `wiki page <http://yade-dem.org/index.php/Speed_profiling_using_TimingInfo_and_TimingDeltas_classes>`_ for some examples.
 
 """
-from __future__ import print_function
-from builtins import str
 
 from woo.core import *
 from woo.dem import *

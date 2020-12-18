@@ -1,5 +1,4 @@
 #encoding: utf-8
-from __future__ import print_function
 dta={'QS':{},'IS':{},'ISS':{}}
 import sys
 for f in sys.argv[1:]:

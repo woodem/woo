@@ -1,4 +1,3 @@
-from __future__ import print_function
 import woo, woo.core, woo.utils, woo.dem, woo.gl
 from minieigen import *
 from math import *

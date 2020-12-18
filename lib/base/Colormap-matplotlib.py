@@ -1,4 +1,3 @@
-from __future__ import print_function
 from pylab import *
 maps=[m for m in cm.datad if not m.endswith("_r")]
 maps.sort()

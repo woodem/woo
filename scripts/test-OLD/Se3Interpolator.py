@@ -1,4 +1,3 @@
-from __future__ import print_function
 # default parameters or from table
 # encoding: utf-8
 O.bodies.append([

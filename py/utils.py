@@ -6,12 +6,6 @@
 
 """Heap of functions that don't (yet) fit anywhere else.
 """
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import range
-
 import math,random,doctest
 import woo, woo.dem, woo.core
 import sys,os,warnings
@@ -33,7 +27,6 @@ from woo._utils2 import *
 _docInlineModules=(woo._utils2,)
 
 inf=float('inf')
-py3k=(sys.version_info[0]==3)
 
 # try at import time, this is expensive
 hasGL=True
@@ -493,7 +486,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
                 #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
                 # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
                 inputs=['-i',symPattern]
-                cmd=[encExec]+inputs+['-r',str(int(fps)),'-c:v','libvpx','-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
             log.info('Pass %d: %s'%(passNo,' '.join(cmd)))
             ret=subprocess.call(cmd)
             if ret!=0: raise RuntimeError("Error running %s."%encExec)

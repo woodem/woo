@@ -1,4 +1,3 @@
-from builtins import range
 import woo.core, woo.utils, woo
 from woo.dem import *
 from woo.gl import *

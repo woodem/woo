@@ -1,4 +1,3 @@
-from builtins import range
 from woo.core import *
 from woo.dem import *
 from woo import log

@@ -1,7 +1,5 @@
 # -*- coding: utf-8
 
-from __future__ import print_function
-from builtins import range
 from woo import utils,pack,export,qt
 import gts,os,random,itertools
 from numpy import *

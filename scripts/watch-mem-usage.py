@@ -1,4 +1,3 @@
-from __future__ import print_function
 # collect data about max memory usage of processes matching some patterns
 import psutil, re, operator, time, sys
 sampleTime=.5 # seconds

@@ -1,13 +1,10 @@
 # encoding: utf-8
 
-from __future__ import print_function
-from builtins import super
 from woo.dem import *
 from woo.fem import *
 import woo.core, woo.dem, woo.pyderived, woo.models, woo.config
 import math
 from minieigen import *
-from builtins import super
 
 
 class CylDepot(woo.core.Preprocessor,woo.pyderived.PyWooObject):

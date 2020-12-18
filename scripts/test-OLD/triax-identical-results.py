@@ -1,4 +1,3 @@
-from __future__ import print_function
 # Test if different algorithm version give same results for TriaxialTest.
 #
 # The first run creates initial sphere packing, and saves resulting positions

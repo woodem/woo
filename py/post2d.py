@@ -58,9 +58,6 @@ This example can be found in examples/concrete/uniax-post.py ::
  pylab.show()
 
 """
-from builtins import zip
-from builtins import range
-from builtins import object
 from minieigen import *
 
 from woo.dem import Particle,Sphere

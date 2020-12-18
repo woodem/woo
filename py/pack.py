@@ -19,11 +19,6 @@ For examples, see
 * :woosrc:`examples/WireMatPM/wirepackings.py`
 """
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-import future.utils
-from builtins import map, str, zip, range
 
 import itertools,warnings,os
 from numpy import arange
@@ -415,8 +410,7 @@ def _memoizePacking(memoizeDb,sp,radius,rRelFuzz,wantPeri,fullDim):
         c.execute('create table packings (radius real, rRelFuzz real, dimx real, dimy real, dimz real, N integer, timestamp real, periodic integer, pack blob)')
     c=conn.cursor()
     # use protocol=2 so that we are compatible between py2/py3
-    if future.utils.PY3: packBlob=memoryview(pickle.dumps(sp.toList(),protocol=2))
-    else: packBlob=buffer(pickle.dumps(sp.toList(),protocol=2))
+    packBlob=memoryview(pickle.dumps(sp.toList(),protocol=2))
     packDim=sp.cellSize if wantPeri else fullDim
     c.execute('insert into packings values (?,?,?,?,?,?,?,?,?)',(radius,rRelFuzz,packDim[0],packDim[1],packDim[2],len(sp),time.time(),wantPeri,packBlob,))
     c.close()

@@ -1,7 +1,6 @@
 # coding: utf-8
 # 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 "Test and demonstrate use of PeriTriaxController."
-from __future__ import print_function
 from woo import *
 from woo import pack,log,qt
 log.setLevel('PeriTriaxController',log.TRACE)

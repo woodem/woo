@@ -1,4 +1,3 @@
-from __future__ import division
 import woo.utils, woo.dem, woo.core, woo.pack, woo.plot
 import numpy
 woo.master.usesApi=10101

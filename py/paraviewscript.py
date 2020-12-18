@@ -1,10 +1,6 @@
 '''
 Convenience module for setting up visualization pipelines for Paraview through python scripts.
 '''
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import range
 import woo
 import woo.dem
 import logging
@@ -209,7 +205,6 @@ def write(out,sphereFiles=[],meshFiles=[],conFiles=[],triFiles=[],staticFile='',
     
 
 _paraviewScriptTemplate=r'''#!/usr/bin/env python
-from __future__ import print_function
 import sys, os.path
 
 # input parameters

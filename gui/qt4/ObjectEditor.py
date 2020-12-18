@@ -1,7 +1,4 @@
 # encoding: utf-8
-from __future__ import print_function, absolute_import, division
-from builtins import zip, str, range, object
-import past.builtins, future.utils
 
 import woo.config
 if 'qt5' in woo.config.features:
@@ -646,7 +643,7 @@ class AttrEditor_AlignedBox2(AttrEditor_MatrixX):
 
 class Se3FakeType: pass
 
-_fundamentalEditorMap={bool:AttrEditor_Bool,past.builtins.str:AttrEditor_Str,str:AttrEditor_Str,int:AttrEditor_Int,float:AttrEditor_Float,Quaternion:AttrEditor_Quaternion,Vector2:AttrEditor_Vector2,Vector3:AttrEditor_Vector3,Vector6:AttrEditor_Vector6,Matrix3:AttrEditor_Matrix3,Vector6i:AttrEditor_Vector6i,Vector3i:AttrEditor_Vector3i,Vector2i:AttrEditor_Vector2i,MatrixX:AttrEditor_MatrixXX,VectorX:AttrEditor_VectorX,Se3FakeType:AttrEditor_Se3,AlignedBox3:AttrEditor_AlignedBox3,AlignedBox2:AttrEditor_AlignedBox2}
+_fundamentalEditorMap={bool:AttrEditor_Bool,str:AttrEditor_Str,int:AttrEditor_Int,float:AttrEditor_Float,Quaternion:AttrEditor_Quaternion,Vector2:AttrEditor_Vector2,Vector3:AttrEditor_Vector3,Vector6:AttrEditor_Vector6,Matrix3:AttrEditor_Matrix3,Vector6i:AttrEditor_Vector6i,Vector3i:AttrEditor_Vector3i,Vector2i:AttrEditor_Vector2i,MatrixX:AttrEditor_MatrixXX,VectorX:AttrEditor_VectorX,Se3FakeType:AttrEditor_Se3,AlignedBox3:AttrEditor_AlignedBox3,AlignedBox2:AttrEditor_AlignedBox2}
 _fundamentalInitValues={bool:True,str:'',int:0,float:0.0,Quaternion:Quaternion.Identity,Vector3:Vector3.Zero,Matrix3:Matrix3.Zero,Vector6:Vector6.Zero,Vector6i:Vector6i.Zero,Vector3i:Vector3i.Zero,Vector2i:Vector2i.Zero,Vector2:Vector2.Zero,Se3FakeType:(Vector3.Zero,Quaternion.Identity),AlignedBox3:(Vector3.Zero,Vector3.Zero),AlignedBox2:(Vector2.Zero,Vector2.Zero),MatrixX:MatrixX(),VectorX:VectorX()}
 
 _attributeGuessedTypeMap={woo.core.NodeList:(woo.core.Node,),woo.core.ObjectList:(woo.core.Object,) }
@@ -1294,7 +1291,7 @@ class ObjectEditor(QFrame):
                     b.setFocusPolicy(Qt.NoFocus)
                     l.setToolTip(bb[i+2])
                     def callButton(cmd):
-                        future.utils.exec_(cmd, globals(),dict(self=entry.obj,S=woo.master.scene))
+                        exec(cmd, globals(),dict(self=entry.obj,S=woo.master.scene))
                     # first arg (foo) used by the dispatch
                     # cmd=bb[i+1] binds the current value bb[i+1]
                     b.clicked.connect(lambda foo,cmd=bb[i+1]: callButton(cmd)) 

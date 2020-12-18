@@ -1,7 +1,6 @@
 # encoding: utf-8
 # 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 """All defined functionality tests for woo."""
-from __future__ import print_function
 import unittest, types
 
 # import all test suites so that they can be picked up by testAll

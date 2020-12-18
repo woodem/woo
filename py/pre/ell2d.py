@@ -1,5 +1,4 @@
 # encoding: utf-8
-from builtins import super
 from woo.dem import *
 import woo.core
 import woo.dem
@@ -7,7 +6,6 @@ import woo.pyderived
 import woo.models
 import math
 from minieigen import *
-from builtins import super
 nan=float('nan')
 
 try:

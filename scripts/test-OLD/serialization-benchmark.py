@@ -1,4 +1,3 @@
-from __future__ import print_function
 import time
 # change this line to load your reference simulation
 O.load2('ref.boost.bin.gz')

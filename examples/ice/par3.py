@@ -1,4 +1,3 @@
-from __future__ import print_function
 from woo.dem import *
 from woo.core import *
 from minieigen import *

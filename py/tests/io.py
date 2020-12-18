@@ -1,7 +1,6 @@
 '''
 Test loading and saving woo objects in various formats
 '''
-from builtins import str
 import woo
 import unittest
 from woo.core import *

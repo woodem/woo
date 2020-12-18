@@ -1,4 +1,3 @@
-from builtins import str, range, super
 from minieigen import *
 import woo.pack, woo.utils
 import numpy

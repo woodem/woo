@@ -1,6 +1,5 @@
 # this module is populated at initialization from the c++ part of PythonUI
 """Runtime variables, populated at woo startup."""
-from __future__ import print_function
 # default value
 import wooMain
 hasDisplay=None
