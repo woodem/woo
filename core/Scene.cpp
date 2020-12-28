@@ -144,7 +144,14 @@ void Scene::PausedContextManager::__exit__(py::object exc_type, py::object exc_v
 //}
 
 std::string Scene::pyTagsProxy::getItem(const std::string& key){ return scene->tags[key]; }
-void Scene::pyTagsProxy::setItem(const std::string& key, const string& val){ scene->tags[key]=val;
+void Scene::pyTagsProxy::setItem(const std::string& key, const string& val){
+	scene->tags[key]=val;
+	if(key=="title"){
+		string t2=val;
+		boost::algorithm::replace_all(t2,"/","_");
+		scene->tags["tid"]=t2+"."+scene->tags["id"];
+		scene->tags["idt"]=scene->tags["id"]+"."+t2;
+	}
 }
 void Scene::pyTagsProxy::delItem(const std::string& key){ size_t i=scene->tags.erase(key); if(i==0) woo::KeyError(key); }
 py::list Scene::pyTagsProxy::keys(){ py::list ret; for(const auto& kv: scene->tags) ret.append(kv.first); return ret; }
