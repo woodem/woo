@@ -3,6 +3,8 @@
 #include<woo/lib/object/Object.hpp>
 #include<woo/lib/base/Logging.hpp>
 
+#include<woo/lib/backward/backward.hpp>
+
 #include<woo/lib/eigen/pybind11/register.hpp>
 
 #include<signal.h>
@@ -70,6 +72,13 @@ static void initSpdlog(){
 static void wooInitialize(){
 
 	initSpdlog();
+
+	if(getenv("WOO_NO_BACKWARD")){ LOG_WARN("Backward stack trace disabled via WOO_NO_BACKWARD env var."); }
+	else {
+		backward::SignalHandling sh;
+		if(sh.loaded()) LOG_DEBUG("backward signal handlers installed.");
+		else LOG_WARN("backward signal handlers not installed correctly (proceeding).");
+	}
 
 	PyEval_InitThreads();
 
@@ -141,14 +150,10 @@ std::shared_ptr<spdlog::logger> Boot::logger=spdlog::stdout_color_mt("woo.boot")
 	WOO_PYTHON_MODULE(_gts);
 #endif
 
-// NB: this module does NOT use WOO_PYTHON_MODULE, since the file is really called _cxxInternal[_flavor][_debug].so
+// NB: this module does NOT use WOO_PYTHON_MODULE, since the file is really called _cxxInternal[_flavor].so
 // and is a real real python module
 
-	#ifdef WOO_DEBUG
-		PYBIND11_MODULE(BOOST_PP_CAT(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR),_debug),mod){
-	#else
-		PYBIND11_MODULE(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR),mod){
-	#endif
+	PYBIND11_MODULE(BOOST_PP_CAT(_cxxInternal,WOO_CXX_FLAVOR),mod){
 		LOG_DEBUG_EARLY("Initializing the _cxxInternal" BOOST_PP_STRINGIZE(WOO_CXX_FLAVOR) " module.");
 		mod.doc()="This module's binary contains all compiled Woo modules (such as :obj:`woo.core`), which are created dynamically when this module is imported for the first time. In itself, it is empty and only to be used internally.";
 

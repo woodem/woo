@@ -226,9 +226,9 @@ else()
 endif()
 
 add_definitions(-DWOO_CXX_FLAVOR=${WOO_CXX_FLAVOR})
-if(WOO_DEBUG)
-	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
-endif()
+#if(WOO_DEBUG)
+#	set(CXX_INTERNAL "${CXX_INTERNAL}_debug")
+#endif()
 
 set(WOO_CXX_SOURCES
 	# python
@@ -260,7 +260,7 @@ set(WOO_CXX_SOURCES
 	core/Test.cpp
 	core/Timing.cpp
 	# lib
-	lib/backward/backward.cpp
+	# lib/backward/backward.cpp
 	lib/base/CompUtils.cpp
 	lib/base/Math.cpp
 	lib/base/Volumetric.cpp

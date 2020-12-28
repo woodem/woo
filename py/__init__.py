@@ -138,7 +138,7 @@ warnings.simplefilter('ignore',ResourceWarning)
 # c++ initialization code
 cxxInternalName='_cxxInternal'
 if wooOptions.flavor: cxxInternalName+='_'+re.sub('[^a-zA-Z0-9_]','_',wooOptions.flavor)
-if wooOptions.debug: cxxInternalName+='_debug'
+# if wooOptions.debug: cxxInternalName+='_debug'
 try:
     if not WIN:
         _cxxInternal=__import__('woo.'+cxxInternalName,fromlist='woo')
