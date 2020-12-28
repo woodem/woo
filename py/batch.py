@@ -91,34 +91,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
             if dbFmt=='sqlite': series[k]=v.tolist() # sqlite needs lists, hdf5 is fine with numpy arrays
         elif not hasattr(v,'__len__'): raise ValueError('series["%s"] not a sequence (__len__ not defined).'%k)
     if dbFmt=='sqlite':
-        import sqlite3
-        conn=sqlite3.connect(db,timeout=sqliteTimeout,detect_types=sqlite3.PARSE_DECLTYPES)
-        if newDb:
-            c=conn.cursor()
-            c.execute('create table batch (formatVersion integer, finished timestamp, batchtable text, batchTableLine integer, sceneId text, title text, duration integer, pre text, tags text, plots text, misc text, series text)')
-        else:    
-            conn.row_factory=sqlite3.Row
-            conn.execute('select * from batch')
-            row=conn.cursor().fetchone()
-            # row can be None if the db is empty
-            if row and row['formatVersion']!=dbFormatVersion:
-                raise RuntimeError('database format mismatch: %s/batch/formatVersion==%s, but should be %s'%(db,row['formatVersion'],dbFormatVersion))
-        with conn:
-            values=(    
-                dbFormatVersion, # formatVersion
-                datetime.datetime.now(), # finished
-                table, # batchTable
-                line, # batchTableLine
-                S.tags['id'], # sceneId
-                S.tags['title'], # title
-                S.duration,
-                (S.pre.dumps(format='json') if S.pre else None), # pre
-                json.dumps(unicodeTags), # tags
-                json.dumps(S.plot.plots), # plots
-                woo.core.WooJSONEncoder(indent=None,oneway=True).encode(kw), # misc
-                json.dumps(series) # series
-            )
-            conn.execute('insert into batch values (?,?,?,?,?, ?,?,?,?,?, ?,?)',values)
+        raise RuntimeError('SQLite is no longer supported.')
     elif dbFmt=='hdf5':
         import h5py
         try:
@@ -147,6 +120,8 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
             G.attrs['pre']=S.pre.dumps(format='json') if S.pre else ''
             G.attrs['tags']=json.dumps(unicodeTags)
             G.attrs['plots']=json.dumps(S.plot.plots)
+            G.attrs['labels']=json.dumps(dict(S.labels))
+            G.attrs['engines']=json.dumps(list(S.engines))
             G_misc=G.create_group('misc')
             for k,v in kw.items(): G_misc.attrs[k]=woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v)
             G_series=G.create_group('series')
@@ -551,8 +526,8 @@ def readParamsFromTable(scene,under='table',noTableOk=True,unknownOk=False,**kw)
         vv=allTab[tableLine]
         S.tags['line']='l%d'%tableLine
         S.tags['title']=str(vv['title'])
-        S.tags['idt']=S.tags['id']+'.'+S.tags['title'];
-        S.tags['tid']=S.tags['title']+'.'+S.tags['id']
+        #S.tags['idt']=S.tags['id']+'.'+S.tags['title'];
+        #S.tags['tid']=S.tags['title']+'.'+S.tags['id']
         # assign values specified in the table to python vars
         # !something cols are skipped, those are env vars we don't treat at all (they are contained in title, though)
         for col in vv.keys():
@@ -596,8 +571,12 @@ def runPreprocessor(pre,preFile=None):
         if not hasattr(obj,attrs[-1]): raise AttributeError('%s: no such attribute: %s.'%(obj.__module__+'.'+type(obj).__name__,attrs[-1]))
         setattr(obj,attrs[-1],val)
 
-    # just run preprocessor in this case
-    if not inBatch(): return pre()
+    # just run preprocessor in this case, plus set title, if given in Preprocessor
+    if not inBatch():
+        S=pre()
+        if pre.title:
+            S.tags['title']=pre.title
+        return S
 
     import os
     import woo,math,numpy
@@ -638,6 +617,7 @@ def runPreprocessor(pre,preFile=None):
     # check types, if this is a python preprocessor
     if hasattr(pre,'checkAttrTypes'): pre.checkAttrTypes()
     # run preprocessor
+    if wooOptions.batchTable: pre.title=str(vv['title'])
     S=pre()
     # set tags from batch
     if wooOptions.batchTable:
@@ -646,8 +626,8 @@ def runPreprocessor(pre,preFile=None):
     else:
         S.tags['line']='default'
         S.tags['title']=str(preFile if preFile else '[no file]')
-    S.tags['idt']=(S.tags['id']+'.'+S.tags['title']).replace('/','_')
-    S.tags['tid']=(S.tags['title']+'.'+S.tags['id']).replace('/','_')
+    #S.tags['idt']=(S.tags['id']+'.'+S.tags['title']).replace('/','_')
+    #S.tags['tid']=(S.tags['title']+'.'+S.tags['id']).replace('/','_')
     return S
 
 class TableParamReader(object):
