@@ -556,7 +556,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             l=axes.legend(loc=labelLoc)
             if l:
                 l.get_frame().set_alpha(legendAlpha)
-                if hasattr(l,'draggable'): l.draggable(True)
+                if hasattr(l,'set_draggable'): l.set_draggable(True)
             if scientific:
                 axes.ticklabel_format(style='sci',scilimits=(0,0),axis='both')
                 # fixes scientific exponent placement for y2: https://sourceforge.net/mailarchive/forum.php?thread_name=20101223174750.GD28779%40ykcyc&forum_name=matplotlib-users
