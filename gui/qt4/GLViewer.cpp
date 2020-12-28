@@ -114,11 +114,12 @@ GLLock::~GLLock(){ glv->doneCurrent(); }
 
 GLViewer::~GLViewer(){
 	/* get the GL mutex when closing */
-	GLLock lock(this);
+	// GLLock lock(this);
 	/* cerr<<"Destructing view #"<<viewId<<endl;*/
 }
 
 void GLViewer::closeEvent(QCloseEvent *e){
+#if 1
 	// if there is an active SnapshotEngine, 
 	bool snapshot=false;
 	for(const auto& e: Master::instance().scene->engines){ if(!e->dead && dynamic_pointer_cast<SnapshotEngine>(e)) snapshot=true; }
@@ -126,6 +127,7 @@ void GLViewer::closeEvent(QCloseEvent *e){
 		auto confirm=QMessageBox::warning(this,"Confirmation","There is an active SnapshotEngine in the simulation, closing the 3d view may cause errors. Really close?",QMessageBox::Yes|QMessageBox::No);
 	 	if (confirm==QMessageBox::No){ e->ignore(); return; }
 	}
+#endif
 	LOG_DEBUG("Will emit closeView for view #{}",viewId);
 	OpenGLManager::self->emitCloseView(viewId);
 	e->accept();

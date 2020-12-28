@@ -24,7 +24,8 @@ OpenGLManager::OpenGLManager(QObject* parent): QObject(parent){
 	frameSaveState=0;
 	connect(this,SIGNAL(createView()),this,SLOT(createViewSlot()));
 	connect(this,SIGNAL(resizeView(int,int,int)),this,SLOT(resizeViewSlot(int,int,int)));
-	connect(this,SIGNAL(closeView(int)),this,SLOT(closeViewSlot(int)));
+	// important: deferred
+	QObject::connect(this,&OpenGLManager::closeView,this,&OpenGLManager::closeViewSlot,Qt::QueuedConnection);
 	connect(this,SIGNAL(startTimerSignal()),this,SLOT(startTimerSlot()),Qt::QueuedConnection);
 }
 
