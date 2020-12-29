@@ -7,6 +7,9 @@ from math import *
 from minieigen import *
 import warnings
 import sys
+from . import utils
+
+log=utils.makeLog(__name__)
 
 from wooMain import options as wooOptions
 
@@ -74,7 +77,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
     else: table,line,db='',-1,(defaultDb if not wooOptions.batchResults else wooOptions.batchResults)
     if not db: raise ValueError('No database to write results to (forgot to pass --batch-results?).')
     newDb=not os.path.exists(db)
-    if not quiet: print('Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing'))
+    if not quiet: log.info('Writing results to the database %s (%s)'%(db,'new' if newDb else 'existing'))
     if dbFmt==None:
         ext=os.path.splitext(db)[-1]
         if ext in ('.sqlite','.db',b'.sqlite',b'.db',u'.sqlite',u'.db'): dbFmt='sqlite'
@@ -103,6 +106,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
             shutil.move(db,db+'~~corrupt')
             hdf=h5py.File(db,'a',libver='latest')
         with FileLock(db):
+            wooJSON=woo.core.WooJSONEncoder(indent=None,oneway=True)
             i=0
             while True:
                 sceneId=S.tags['id']+('' if i==0 else '~%d'%i)
@@ -120,10 +124,10 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
             G.attrs['pre']=S.pre.dumps(format='json') if S.pre else ''
             G.attrs['tags']=json.dumps(unicodeTags)
             G.attrs['plots']=json.dumps(S.plot.plots)
-            G.attrs['labels']=json.dumps(dict(S.labels))
-            G.attrs['engines']=json.dumps(list(S.engines))
+            G.attrs['labels']=wooJSON.encode(dict(S.labels))
+            G.attrs['engines']=wooJSON.encode(list(S.engines))
             G_misc=G.create_group('misc')
-            for k,v in kw.items(): G_misc.attrs[k]=woo.core.WooJSONEncoder(indent=None,oneway=True).encode(v)
+            for k,v in kw.items(): G_misc.attrs[k]=wooJSON.encode(v)
             G_series=G.create_group('series')
             for k,v in series.items():
                 # hdf5 is smart enough to create sub-groups automatically if the name contains slashes
@@ -134,7 +138,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
     if syncXls:
         import re
         xls=db+'.xlsx'
-        if not quiet: print('Converting %s to file://%s'%(db,os.path.abspath(xls)))
+        if not quiet: log.info('Converting %s to file://%s'%(db,os.path.abspath(xls)))
         dbToSpread(db,out=xls,dialect='xlsx')
     for ph in postHooks: ph(db)
 
@@ -171,7 +175,7 @@ def dbReadResults(db,basicTypes=False):
                 _checkHdf5sim(sim)
                 rowDict={}
                 for att in sim.attrs:
-                    if att in ('pre','tags','plots'):
+                    if att in ('pre','tags','plots','engines','labels'):
                         val=sim.attrs[att]
                         if hasattr(val,'__len__') and len(val)==0: continue
                         rowDict[att]=woo.core.WooJSONDecoder(onError='warn').decode(val)
@@ -450,13 +454,13 @@ def dbToSpread(db,out=None,dialect='xls',rows=False,series=True,ignored=('plotDa
                 # perhaps write some header here
                 for col,colName in enumerate(sorted(dic.keys())):
                     if xls and col>255:
-                        print('WARNING: the data being converted to XLS (%s) contain %d columns, which is more than 255, the limit of the XLS format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic)))
+                        log.warning('Rhe data being converted to XLS (%s) contain %d columns, which is more than 255, the limit of the XLS format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic)))
                         break
                     sheet.write(0,col,colName,headStyle)
                     rowOffset=1 # length of header
                     for row in range(0,len(dic[colName])):
                         if xls and row+rowOffset>65535:
-                            print('WARNING: the data being converted to XLS (%s) contain %d rows (with %d header rows), which is more than 65535, the limit of the XLS file format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic[colName]),rowOffset))
+                            log.warning('the data being converted to XLS (%s) contain %d rows (with %d header rows), which is more than 65535, the limit of the XLS file format. Extra data will be discarded from the XLS output. Use .xlsx to overcome this limitation.'%(out,len(dic[colName]),rowOffset))
                             break
                         val=dic[colName][row]
                         if xlsx and (isnan(val) or isinf(val)): val=str(val)
@@ -595,7 +599,7 @@ def runPreprocessor(pre,preFile=None):
                 val=vv[v]
                 if isinstance(val,str): val=eval(val,dict(woo=woo,**math.__dict__))
                 overrideHashPercent[v[1:]]=val
-                print('Re-assigning #%% variable %s=%s'%(str(v[1:]),str(val)))
+                log.info('Re-assigning #%% variable %s = %s'%(str(v[1:]),str(val)))
                 vv.pop(v)
             # print(vv)
             pre=woo.core.Object.load(preFile,overrideHashPercent=overrideHashPercent)
@@ -608,11 +612,11 @@ def runPreprocessor(pre,preFile=None):
             if isinstance(val,str) and val.startswith('='): evalParams.append((name,val[1:]))
             elif isinstance(val,str) and val.startswith("'="): evalParams.append((name,val[2:]))
             else:
-                print('OVERRIDING FROM TABLE:',name,'=',val)
+                log.info('OVERRIDING FROM TABLE: %s = %s'%(name,val))
                 nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy))) # woo.unit
     # postponed evaluation of computable params
     for name,val in evalParams:
-        print('OVERRIDING FROM TABLE (delayed):',name,'=',val)
+        log.info('OVERRIDING FROM TABLE (delayed): %s = %s'%(name,val))
         nestedSetattr(pre,name,eval(val,globals(),dict(woo=woo,math=math,numpy=numpy,self=pre)))
     # check types, if this is a python preprocessor
     if hasattr(pre,'checkAttrTypes'): pre.checkAttrTypes()
