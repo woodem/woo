@@ -183,12 +183,12 @@ def makeTraitInfo(obj,klass,trait):
 
     ret=[]
     if trait.static: ret.append('static')
+    tt=None
     if hasattr(trait,'pyType'):
-        if isinstance(trait.pyType,(list,tuple)): ret.append('type: ['+trait.pyType[0].__name__+", …]")
-        elif trait.pyType is not None: ret.append('type: '+trait.pyType.__name__)
-        else: ret.append('type: None') # ??
-    else:
-        tt=None
+        if isinstance(trait.pyType,(list,tuple)): tt='['+trait.pyType[0].__name__+", …]"
+        elif trait.pyType is not None: tt=trait.pyType.__name__
+        # else: ret.append('type: None?') # ??
+    if tt is None:
         if hasVal and not isinstance(val,woo.core.Object) and val!=None:
             if val.__class__.__module__=='minieigen': tt=':obj:`%s <minieigen:minieigen.%s>`'%(val.__class__.__name__,val.__class__.__name__)
             else: tt=trait.cxxType
@@ -201,7 +201,7 @@ def makeTraitInfo(obj,klass,trait):
             t=guessInstanceTypeFromCxxType(klass,trait,noneOnFail=True)
             if t and t.__module__!='__builtin__': tt=trait.cxxType.replace(t.__name__,':obj:`%s <%s.%s>`'%(t.__name__,t.__module__,t.__name__))
         if not tt: tt=trait.cxxType
-        ret.append('type: '+tt)
+    ret.append('type: '+tt)
     if trait.unit:
         if len(trait.unit)==1: ret.append('unit: '+maybe_decode(trait.unit[0]))
         else: ret.append(u'units: ['+u','.join(maybe_decode(u) for u in trait.unit)+u']')

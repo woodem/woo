@@ -168,10 +168,10 @@ if(WOO_QT5)
 		message(FATAL_ERROR "QGLViewer library/headers not found (headers: ${QGLVIEWER_INCLUDE_DIR}, lib: ${QGLVIEWER_LIBS}).")
 	endif()
 	set(WOO_CXX_GUI_SOURCES
-		gui/qt4/GLViewer.qrc
-		gui/qt4/GLViewer.cpp
-		gui/qt4/_GLViewer.cpp
-		gui/qt4/OpenGLManager.cpp
+		gui/qt/GLViewer.qrc
+		gui/qt/GLViewer.cpp
+		gui/qt/_GLViewer.cpp
+		gui/qt/OpenGLManager.cpp
 	)
 endif(WOO_QT5)
 
@@ -534,21 +534,21 @@ if(WOO_QT5)
 			VERBATIM
 		)
 	endmacro()
-	PYQT_QRC(${CMAKE_SOURCE_DIR}/gui/qt4/img.qrc img_rc.py)
-	PYQT_UI(${CMAKE_SOURCE_DIR}/gui/qt4/controller.ui ui_controller.py)
+	PYQT_QRC(${CMAKE_SOURCE_DIR}/gui/qt/img.qrc img_rc.py)
+	PYQT_UI(${CMAKE_SOURCE_DIR}/gui/qt/controller.ui ui_controller.py)
 	#add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/ui_controller.py
-	#	COMMAND pyuic5 --from-imports -o ${CMAKE_BINARY_DIR}/ui_controller.py gui/qt4/controller.ui
-	#	DEPENDS gui/qt4/controller.ui
+	#	COMMAND pyuic5 --from-imports -o ${CMAKE_BINARY_DIR}/ui_controller.py gui/qt/controller.ui
+	#	DEPENDS gui/qt/controller.ui
 	#	VERBATIM
 	#)
 	install(FILES
 		${CMAKE_BINARY_DIR}/img_rc.py
 		${CMAKE_BINARY_DIR}/ui_controller.py
-		gui/qt4/DisplayProfiles.py
-		gui/qt4/ExceptionDialog.py
-		gui/qt4/__init__.py
-		gui/qt4/Inspector.py
-		gui/qt4/ObjectEditor.py
+		gui/qt/DisplayProfiles.py
+		gui/qt/ExceptionDialog.py
+		gui/qt/__init__.py
+		gui/qt/Inspector.py
+		gui/qt/ObjectEditor.py
 		DESTINATION ${WOO_MODULEDIR}/qt
 	)
 endif()

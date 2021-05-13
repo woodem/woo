@@ -73,7 +73,7 @@ def prepareHorse(pre):
     if pre.pattern=='hexa': packer=woo.pack.regularHexa
     elif pre.pattern=='ortho': packer=woo.pack.regularOrtho
     else: raise ValueError('FallingHorse.pattern must be one of hexa, ortho (not %s)'%pre.pattern)
-    S.dem.par.add(packer(pred,radius=pre.radius,gap=pre.relGap*pre.radius,mat=mat))
+    S.dem.par.add(packer(pred,radius=pre.radius,gap=pre.relGap*pre.radius,mat=mat,retSpherePack=False))
     # meshed horse below
     xSpan,ySpan,zSpan=aabb.sizes() # aabb[1][0]-aabb[0][0],aabb[1][1]-aabb[0][1],aabb[1][2]-aabb[0][2]
     if pre.dir.squaredNorm()>0.:
@@ -167,7 +167,7 @@ def plotBatchResults(db):
 
     import re,math,woo.batch,os
     results=woo.batch.dbReadResults(db)
-    out='%s.pdf'%re.sub(r'\.sqlite$','',db)
+    out='%s.pdf'%re.sub(r'\.hdf5$','',db)
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     fig=Figure();
@@ -198,7 +198,7 @@ def finished(S):
     import os,re,woo.batch,woo.utils,codecs
     S.stop()
     repName=(os.path.abspath(S.pre.reportFmt.format(S=S,**(dict(S.tags)))) if S.pre.reportFmt else None)
-    woo.batch.writeResults(S,defaultDb='horse.sqlite',series=S.plot.data,postHooks=[plotBatchResults],simulationName='horse',report=(('file://'+repName) if repName else None))
+    woo.batch.writeResults(S,defaultDb='horse.hdf5',series=S.plot.data,postHooks=[plotBatchResults],simulationName='horse',report=(('file://'+repName) if repName else None))
 
     # energy plot, to show how to add plot to the report
     # instead of doing pylab stuff here, just get plot object from woo

@@ -329,7 +329,7 @@ def revolutionSurfaceMeridians(sects,angles,node=woo.core.Node(),origin=None,ori
 ########
 
 
-def regularOrtho(predicate,radius,gap,**kw):
+def regularOrtho(predicate,radius,gap,retSpherePack=True,**kw):
     """Return set of spheres in regular orthogonal grid, clipped inside solid given by predicate.
     Created spheres will have given radius and will be separated by gap space."""
     ret=[]
@@ -337,10 +337,13 @@ def regularOrtho(predicate,radius,gap,**kw):
     if(max([mx[i]-mn[i] for i in (0,1,2)])==float('inf')): raise ValueError("Aabb of the predicate must not be infinite (didn't you use union | instead of intersection & for unbounded predicate such as notInNotch?");
     xx,yy,zz=[arange(mn[i]+radius,mx[i]-radius,2*radius+gap) for i in (0,1,2)]
     for xyz in itertools.product(xx,yy,zz):
-        if predicate(xyz,radius): ret+=[utils.sphere(xyz,radius=radius,**kw)]
+        if predicate(xyz,radius):
+            if retSpherePack: ret.append((xyz,radius))
+            else: ret+=[utils.sphere(xyz,radius=radius,**kw)]
+    if retSpherePack: return woo.pack.SpherePack(list=ret)
     return ret
 
-def regularHexa(predicate,radius,gap,**kw):
+def regularHexa(predicate,radius,gap,retSpherePack=True,**kw):
     """Return set of spheres in regular hexagonal grid, clipped inside solid given by predicate.
     Created spheres will have given radius and will be separated by gap space."""
     ret=[]
@@ -356,8 +359,11 @@ def regularHexa(predicate,radius,gap,**kw):
         x,y,z=mn[0]+radius+i*a,mn[1]+radius+j*hy,mn[2]+radius+k*hz
         if j%2==0: x+= a/2. if k%2==0 else -a/2.
         if k%2!=0: x+=a/2.; y+=hy/2.
-        if predicate((x,y,z),radius): ret+=[utils.sphere((x,y,z),radius=radius,**kw)]
-    return ret
+        if predicate((x,y,z),radius):
+            if retSpherePack: ret.append(((x,y,z),radius))
+            else: ret+=[utils.sphere((x,y,z),radius=radius,**kw)]
+    if retSpherePack: return woo.pack.SpherePack(list=ret)
+    else: return ret
 
 def randomLoosePsd(predicate,psd,mass=True,discrete=False,maxAttempts=5000,clumps=[],returnSpherePack=False,**kw):
     '''Return loose packing based on given PSD.'''
