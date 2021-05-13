@@ -27,7 +27,7 @@ class FallingHorse(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         _PAT(bool,'deformable',False,startGroup='Deformability',doc='Whether the meshed horse is deformable. Note that deformable horse does not track energy and disables plotting.'),
         _PAT(bool,'stand',False,doc='Whether the bottoms of the legs should be fixed (applicable with :obj:`deformable` only)'),
         _PAT(float,'meshDamping',.03,doc='Damping for mesh nodes; only used when then contact :obj:`model` sets zero :obj:`~woo.dem.Leapfrog.damping`. In that case, :obj:`Leapfrog.damping <woo.dem.Leapfrog.damping>` is set to :obj:`meshDamping` and all other nodes set :obj:`woo.dem.DemData.dampingSkip`.'),
-        _PAT(float,'dtSafety',.7,startGroup='Tunables',doc='Safety factor for :obj:`woo.utils.pWaveDt` and :obj:`woo.dem.DynDt`.'),
+        _PAT(float,'dtSafety',.3,startGroup='Tunables',doc='Safety factor for :obj:`woo.utils.pWaveDt` and :obj:`woo.dem.DynDt`.'),
         _PAT(str,'reportFmt',"/tmp/{tid}.xhtml",filename=True,startGroup="Outputs",doc="Report output format; :obj:`Scene.tags <woo.core.Scene.tags>` can be used."),
         _PAT(int,'vtkStep',40,"How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export."),
         _PAT(int,'vtkFlowStep',40,"How often should :obj:`VtkFlowExport` run. If non-positive, never run."),

@@ -82,7 +82,7 @@ struct Law2_L6Geom_HertzPhys_DMT: public LawFunctor{
 		Real pyAvgIter(){ avgIter=nCallsIters[1]*1./nCallsIters[0]; return avgIter; }
 		void pyResetCounters(){ nCallsIters.resetAll(); }
 		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_ATTRS \
-			((OpenMPArrayAccumulator<int>,nCallsIters,,AttrTrait<>().noGui(),"Count number of calls of the functor and of iterations in the Halley solver (if used).")) \
+			((OpenMPArrayAccumulator<int>,nCallsIters,,AttrTrait<>().noGui().noDump(),"Count number of calls of the functor and of iterations in the Halley solver (if used).")) \
 			((Real,avgIter,NaN,AttrTrait<>().buttons({"reset counters","self.resetCounters()",""},/*showBefore*/true).readonly(),"Average number of Halley iterations per contact when using the Schwarz model (updated on-demand)."))
 		#define woo_dem_Law2_L6Geom_HertzPhys_DMT__SCHWARZ_COUNTERS_PY \
 			.add_property_readonly("avgIter",&Law2_L6Geom_HertzPhys_DMT::pyAvgIter,"Override the variable so that it shows up in the UI, being always up-to-date.") \

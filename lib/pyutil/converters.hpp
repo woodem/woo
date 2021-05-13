@@ -3,6 +3,8 @@
 #include<vector>
 #include<list>
 
+#include<woo/lib/base/openmp-accu.hpp>
+
 #include<pybind11/stl.h>
 #include<pybind11/stl_bind.h>
 // no-op with pybind11
@@ -31,3 +33,25 @@ namespace woo{
 		py::implicitly_convertible<py::tuple,std::vector<T>>();
 	};
 };
+
+#if 0
+namespace pybind11::detail {
+	#if 0
+	template<typename T> struct type_caster<OpenMPAccumulator<T>>{
+		PYBIND11_TYPE_CASTER(OpenMPArrayAccumulator<T>,"OpenMPArrayAccumulator");
+		static handle cast(OpenMPArrayAccumulator<T> src, return_value_policy policy, handle parent){
+			return py::cast(src.i);
+		}
+	};
+	#endif
+	template<typename T> struct type_caster<OpenMPArrayAccumulator<T>>{
+		PYBIND11_TYPE_CASTER(OpenMPArrayAccumulator<T>,"OpenMPArrayAccumulator");
+		static handle cast(OpenMPArrayAccumulator<T> src, return_value_policy policy, handle parent){
+			std::vector<T> ret(src.size());
+			for(size_t i=0; i<src.size(); i++) ret[i]=src[i];
+			return py::cast(ret);
+		}
+	};
+}
+#endif
+

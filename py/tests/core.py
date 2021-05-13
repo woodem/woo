@@ -477,6 +477,9 @@ class TestArrayAccu(unittest.TestCase):
     def setUp(self):
         self.t=woo.core.WooTestClass()
         self.N=woo.master.numThreads
+    #def testRead(self):
+    #    'OpenMP array accu: implicit conversion to python list'
+    #    print(self.t.aaccu)
     def testResize(self):
         'OpenMP array accu: resizing'
         self.assertEqual(len(self.t.aaccuRaw),0) # initial zero size

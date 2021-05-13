@@ -436,7 +436,7 @@ def Object_load(typ,inFile,format='auto',overrideHashPercent={}):
         if type==None: return obj
         if not isinstance(obj,typ): raise TypeError('Loaded object of type '+obj.__class__.__name__+' is not a '+typ.__name__)
         return obj
-    validFormats=('auto','boost::serialization','expr','pickle','json')
+    validFormats=('auto','boost::serialization','cereal','expr','pickle','json')
     if format not in validFormats: raise ValueError('format must be one of '+', '.join(validFormats)+'.')
     if format=='auto':
         format=None
@@ -459,6 +459,8 @@ def Object_load(typ,inFile,format='auto',overrideHashPercent={}):
             format='boost::serialization'
         elif head.startswith(b'<?xml version="1.0"'):
             format='boost::serialization'
+        elif head.startswith(b'\x01\x00\x00\x80\x08\x00\x00\x00\x00\x00\x00\x00'):
+            format='cereal'
         elif head.startswith(b'##woo-expression##'):
             format='expr'
         else:
@@ -473,7 +475,9 @@ def Object_load(typ,inFile,format='auto',overrideHashPercent={}):
     if overrideHashPercent and format!='expr': raise ValueError("overrideHashPercent only applicable with the 'expr' format (not '%s')"%format)
     if format==None:
         raise IOError('Input file format not detected')
-    elif format=='boost::serialization':
+    # loading boost::serialization with cereal or vice versa will fail
+    # we can check that later (based on woo.features)
+    elif format in ('boost::serialization','cereal'):
         # ObjectIO takes care of detecting binary, xml, compression independently
         return typeChecked(Object._boostLoad(str(inFile)),typ) # convert unicode to str, if necessary, as the c++ type is std::string
     elif format=='expr':
