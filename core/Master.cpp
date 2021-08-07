@@ -548,11 +548,12 @@ void Master::usesApi_set(py::object o){
 int Master::usesApi_get() const { return usesApi; }
 
 
-bool Master::checkApi(int minApi, const string& msg, bool pyWarn) const{
-	if(usesApi==0){
+bool Master::checkApi(int minApi, const string& msg, bool pyWarn) {
+	if(usesApi==0 && !noApiSetWarned){
 		const char* m="Script did not set woo.master.usesApi, all functions with changed APIs will pessimistically warn about possible functionality changes. See https://woodem.org/api.html for details.";
 		if(pyWarn){ PyErr_WarnEx(PyExc_FutureWarning,m,/*stacklevel*/1); }
 		else{ LOG_WARN("{}",m); }
+		noApiSetWarned=true;
 		return false;
 	}
 	if(usesApi<minApi){

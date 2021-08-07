@@ -71,7 +71,8 @@ class Master{
 	int usesApi_get() const; void usesApi_set(py::object o); 
 	vector<string> usesApi_locations; // store where usesApi was set, and to which value
 
-	bool checkApi(int minApi, const string& msg, bool pyWarn) const;
+	bool checkApi(int minApi, const string& msg, bool pyWarn);
+	bool noApiSetWarned=false;
 
 	std::chrono::system_clock::time_point startupLocalTime;
 
