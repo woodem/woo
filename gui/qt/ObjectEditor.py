@@ -690,7 +690,7 @@ class ObjQLabel(QFrame):
             if elide:
                 # label is the text description; elide it at some fixed width
                 #self.minWd=100
-                label=self.fontMetrics().elidedText(label,Qt.ElideRight,1.5*self.width())
+                label=self.fontMetrics().elidedText(label,Qt.ElideRight,int(1.5*self.width()))
             else:
                 pass
                 #self.minWd=60
