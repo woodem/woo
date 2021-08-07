@@ -76,7 +76,7 @@ static void wooInitialize(){
 	if(getenv("WOO_NO_BACKWARD")){ LOG_WARN("Backward stack trace disabled via WOO_NO_BACKWARD env var."); }
 	else {
 		backward::SignalHandling sh;
-		if(sh.loaded()) LOG_DEBUG("backward signal handlers installed.");
+		if(sh.loaded()) { LOG_DEBUG("backward signal handlers installed."); }
 		else LOG_WARN("backward signal handlers not installed correctly (proceeding).");
 	}
 

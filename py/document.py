@@ -269,7 +269,8 @@ def classSrcHyperlink(klass):
 
         
     if not klass._classTrait: return None
-    f=os.path.abspath(woo.config.buildRoot+'/'+klass._classTrait.file)
+    # woo.config.buildRoot
+    f=os.path.abspath(klass._classTrait.file)
     src=os.path.abspath(woo.config.sourceRoot)
     if not f.startswith(src): print('Absolute source path %s does not start with absolute source dir %s!'%(f,src))
     f2=f[len(src)] 
