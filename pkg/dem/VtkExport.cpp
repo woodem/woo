@@ -7,6 +7,7 @@
 #include<woo/pkg/dem/Ellipsoid.hpp>
 #include<woo/pkg/dem/Wall.hpp>
 #include<woo/pkg/dem/Capsule.hpp>
+#include<woo/pkg/dem/Cone.hpp>
 #include<woo/pkg/fem/Tetra.hpp>
 #include<woo/pkg/dem/Clump.hpp>
 #include<woo/pkg/dem/Funcs.hpp>
@@ -97,6 +98,7 @@ VtkExport::triangulateRod(const shared_ptr<Rod>& rod, int subdiv){
 	return triangulateCapsuleLikeObject(n,rod->radius,(B-A).norm(),subdiv);
 }
 
+
 std::tuple<vector<Vector3r>,vector<Vector3i>>
 VtkExport::triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real& rad, const Real& shaft, int subdiv){
 	vector<Vector3r> vert; vector<Vector3i> tri;
@@ -138,6 +140,53 @@ VtkExport::triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real
 
 	return std::make_tuple(vert,tri);
 }
+
+
+std::tuple<vector<Vector3r>,vector<Vector3i>>
+VtkExport::triangulateCylinderLikeObject(const Vector3r& cA, const Vector3r& cB, const Quaternionr& ori, const Vector2r& radii, int subdiv){
+	vector<Vector3r> vert; vector<Vector3i> tri;
+	// unit axis vector
+	Vector3r unAxis=(cB-cA).normalized();
+	// unit perpendicular direction vector; use minimum axis of axis in global coords
+	int axMin;
+	unAxis.array().abs().minCoeff(&axMin);
+	Vector3r unPerp=Vector3r::Unit(axMin);
+	unPerp-=unAxis*unAxis.dot(unPerp);
+
+	AngleAxisr aa(ori);
+	Real phi0=(aa.axis()*aa.angle()).dot(unAxis); // current rotation around axis
+	bool capA(radii[0]>0), capB(radii[1]>0);
+	Eigen::Array2d absRad=radii.array().abs();
+	vert.reserve(2*subdiv+/*caps*/2); tri.reserve(3*subdiv); /* would be 2*subdiv w/o caps */
+	// centers have indices after points at circumference, and are added after the loop
+	int centA=2*subdiv, centB=2*subdiv+1;
+	for(int i=0;i<subdiv;i++){
+		// triangle strip around cylinder
+		//
+		//           J   K    
+		// ax    1---3---5...
+		// ^     | / | / |...
+		// |     0---2---4...
+		// |     L   M
+		// |      i=^^^  
+		// +------> φ (i)
+		int J=2*i+1, K=(i==(subdiv-1))?1:2*i+3, L=(i==0)?2*(subdiv-1):2*i-2, M=2*i;
+		tri.push_back(Vector3i(M,J,L));
+		tri.push_back(Vector3i(J,M,K));
+		if(radii[0]>0) tri.push_back(Vector3i(M,L,centA));
+		if(radii[1]>0) tri.push_back(Vector3i(J,K,centB));
+		Real phi=phi0+i*2*M_PI/subdiv;
+		Quaternionr phiRot(AngleAxisr(/*angle*/phi,/*normalized axis*/unAxis));
+		vert.push_back(cA+phiRot*(unPerp*abs(radii[0])));
+		vert.push_back(cB+phiRot*(unPerp*abs(radii[1])));
+	}
+	if(radii[0]>0) vert.push_back(cA);
+	if(radii[1]>0) vert.push_back(cB);
+
+	return std::make_tuple(vert,tri);
+}
+
+
 
 
 py::dict VtkExport::pyOutFiles() const {
@@ -370,6 +419,7 @@ void VtkExport::run(){
 		const auto tetra=dynamic_cast<Tetra*>(p->shape.get());
 		const auto tet4=dynamic_cast<Tet4*>(p->shape.get());
 		const auto infCyl=dynamic_cast<InfCylinder*>(p->shape.get());
+		const auto cone=dynamic_cast<Cone*>(p->shape.get());
 		const auto rod=dynamic_cast<Rod*>(p->shape.get());
 		const auto ellipsoid=dynamic_cast<Ellipsoid*>(p->shape.get());
 		const auto capsule=dynamic_cast<Capsule*>(p->shape.get());
@@ -403,7 +453,7 @@ void VtkExport::run(){
 		int smCellNum=0;
 		int tCellNum=0;
 		// static mesh particle?
-		bool isStatic=((staticMeshBit!=0) && (p->mask&staticMeshBit) && (facet||wall||infCyl||rod));
+		bool isStatic=((staticMeshBit!=0) && (p->mask&staticMeshBit) && (facet||wall||infCyl||rod||cone));
 		if(isStatic && staticMeshDone) continue; // nothing to do
 		
 		// this unifies code for static/nonstatic meshes
@@ -493,15 +543,15 @@ void VtkExport::run(){
 		else if(capsule){
 			vector<Vector3r> vert; vector<Vector3i> tri;
 			std::tie(vert,tri)=triangulateCapsule(static_pointer_cast<Capsule>(p->shape),subdiv);
-			tCellNum=addTriangulatedObject(vert,tri,tPos,tCells,tCellTypes);
+			_mCellNum=addTriangulatedObject(vert,tri,tPos,tCells,tCellTypes);
 		}
 		else if(rod){
 			if(rodSurf){
 				vector<Vector3r> vert; vector<Vector3i> tri;
 				std::tie(vert,tri)=triangulateRod(static_pointer_cast<Rod>(p->shape),subdiv);
-				mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
+				_mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
 			} else {
-				mCellNum=addLineObject({rod->nodes[0]->pos,rod->nodes[1]->pos},{Vector2i(0,1)},_mPos,_mCells,_mCellTypes);
+				_mCellNum=addLineObject({rod->nodes[0]->pos,rod->nodes[1]->pos},{Vector2i(0,1)},_mPos,_mCells,_mCellTypes);
 			}
 		}
 		else if(wall){
@@ -530,47 +580,59 @@ void VtkExport::run(){
 				if(infError) throw std::runtime_error("InfCylinder #"+to_string(p->id)+" does not have InfCylinder.glAB set and cannot be exported to VTK with VtkExport.infError=True.");
 				else continue; // skip the particles otherwise
 			}
-			int ax0=infCyl->axis,ax1=(infCyl->axis+1)%3,ax2=(infCyl->axis+2)%3;
-			//Vector cA,cB; cA=cB=p->shape->nodes[0]->pos;
-			//cA[ax0]=infCyl->glAB[0]; cB[ax0]=infCyl->glAB[1];
 			const Vector3r& p0(infCyl->nodes[0]->pos);
-			Vector2r c2(p0[ax1],p0[ax2]);
-			AngleAxisr aa(infCyl->nodes[0]->ori);
-			Real phi0=(aa.axis()*aa.angle()).dot(Vector3r::Unit(ax0)); // current rotation
-			vector<Vector3r> pts; vector<Vector3i> tri;
-			pts.reserve(2*subdiv+(cylCaps?2:0)); tri.reserve((cylCaps?3:2)*subdiv);
-			// centers have indices after points at circumference, and are added after the loop
-			int centA=2*subdiv, centB=2*subdiv+1;
-			for(int i=0;i<subdiv;i++){
-				// triangle strip around cylinder
-				//
-				//           J   K    
-				// ax    1---3---5...
-				// ^     | / | / |...
-				// |     0---2---4...
-				// |     L   M
-				// |      i=^^^  
-				// +------> φ (i)
-				int J=2*i+1, K=(i==(subdiv-1))?1:2*i+3, L=(i==0)?2*(subdiv-1):2*i-2, M=2*i;
-				tri.push_back(Vector3i(M,J,L));
-				tri.push_back(Vector3i(J,M,K));
-				if(cylCaps){ tri.push_back(Vector3i(M,L,centA)); tri.push_back(Vector3i(J,K,centB)); }
-				Real phi=phi0+i*2*M_PI/subdiv;
-				Vector2r c=c2+infCyl->radius*Vector2r(sin(phi),cos(phi));
-				Vector3r A,B;
-				A[ax0]=p0[ax0]+infCyl->glAB[0]; B[ax0]=p0[ax0]+infCyl->glAB[1];
-				A[ax1]=B[ax1]=c[0];
-				A[ax2]=B[ax2]=c[1];
-				pts.push_back(A); pts.push_back(B);
-			}
-			if(cylCaps){
-				Vector3r cA, cB;
-				cA[ax0]=p0[ax0]+infCyl->glAB[0]; cB[ax0]=p0[ax0]+infCyl->glAB[1];
-				cA[ax1]=cB[ax1]=c2[0];
-				cA[ax2]=cB[ax2]=c2[1];
-				pts.push_back(cA); pts.push_back(cB);
-			}
-			_mCellNum=addTriangulatedObject(pts,tri,_mPos,_mCells,_mCellTypes);
+			int ax0=infCyl->axis;
+			Vector3r cA(p0+Vector3r::Unit(ax0)*infCyl->glAB[0]), cB(p0+Vector3r::Unit(ax0)*infCyl->glAB[1]);
+			vector<Vector3r> vert; vector<Vector3i> tri;
+			std::tie(vert,tri)=triangulateCylinderLikeObject(cA,cB,infCyl->nodes[0]->ori,Vector2r(infCyl->radius,infCyl->radius),subdiv);
+			#if 0
+				int ax0=infCyl->axis,ax1=(infCyl->axis+1)%3,ax2=(infCyl->axis+2)%3;
+				//Vector cA,cB; cA=cB=p->shape->nodes[0]->pos;
+				//cA[ax0]=infCyl->glAB[0]; cB[ax0]=infCyl->glAB[1];
+				const Vector3r& p0(infCyl->nodes[0]->pos);
+
+				Vector2r c2(p0[ax1],p0[ax2]);
+				AngleAxisr aa(infCyl->nodes[0]->ori);
+				Real phi0=(aa.axis()*aa.angle()).dot(Vector3r::Unit(ax0)); // current rotation
+				vector<Vector3r> vert; vector<Vector3i> tri;
+				vert.reserve(2*subdiv+(cylCaps?2:0)); tri.reserve((cylCaps?3:2)*subdiv);
+				// centers have indices after points at circumference, and are added after the loop
+				int centA=2*subdiv, centB=2*subdiv+1;
+				for(int i=0;i<subdiv;i++){
+					// triangle strip around cylinder
+					//
+					//           J   K    
+					// ax    1---3---5...
+					// ^     | / | / |...
+					// |     0---2---4...
+					// |     L   M
+					// |      i=^^^  
+					// +------> φ (i)
+					int J=2*i+1, K=(i==(subdiv-1))?1:2*i+3, L=(i==0)?2*(subdiv-1):2*i-2, M=2*i;
+					tri.push_back(Vector3i(M,J,L));
+					tri.push_back(Vector3i(J,M,K));
+					if(cylCaps){ tri.push_back(Vector3i(M,L,centA)); tri.push_back(Vector3i(J,K,centB)); }
+					Real phi=phi0+i*2*M_PI/subdiv;
+					Vector2r c=c2+infCyl->radius*Vector2r(sin(phi),cos(phi));
+					Vector3r A,B;
+					A[ax0]=p0[ax0]+infCyl->glAB[0]; B[ax0]=p0[ax0]+infCyl->glAB[1];
+					A[ax1]=B[ax1]=c[0];
+					A[ax2]=B[ax2]=c[1];
+					vert.push_back(A); vert.push_back(B);
+				}
+				if(cylCaps){
+					Vector3r cA, cB;
+					cA[ax0]=p0[ax0]+infCyl->glAB[0]; cB[ax0]=p0[ax0]+infCyl->glAB[1];
+					cA[ax1]=cB[ax1]=c2[0];
+					cA[ax2]=cB[ax2]=c2[1];
+					vert.push_back(cA); vert.push_back(cB);
+				}
+			#endif
+			_mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
+		} else if(cone){
+			vector<Vector3r> vert; vector<Vector3i> tri;
+			std::tie(vert,tri)=triangulateCylinderLikeObject(cone->nodes[0]->pos,cone->nodes[1]->pos,cone->nodes[0]->ori,cone->radii,subdiv);
+			_mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
 		}
 		else if(ellipsoid){
 			const Vector3r& semiAxes(ellipsoid->semiAxes);

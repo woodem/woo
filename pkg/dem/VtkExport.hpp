@@ -61,6 +61,8 @@ struct VtkExport: public PeriodicEngine{
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCapsule(const shared_ptr<Capsule>& capsule, int subdiv);
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateRod(const shared_ptr<Rod>& rod, int subdiv);
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCapsuleLikeObject(const shared_ptr<Node>& node, const Real& rad, const Real& shaft, int subdiv);
+	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCylinderLikeObject(const Vector3r& cA, const Vector3r& cB, const Quaternionr& ori, const Vector2r& radii, int subdiv);
+
 
 
 	void postLoad(VtkExport&,void*){

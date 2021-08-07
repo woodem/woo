@@ -16,6 +16,7 @@
 #include<woo/pkg/dem/Sphere.hpp>
 #include<woo/pkg/dem/Facet.hpp>
 #include<woo/pkg/dem/InfCylinder.hpp>
+#include<woo/pkg/dem/Cone.hpp>
 #include<woo/pkg/dem/Truss.hpp>
 #include<woo/pkg/dem/Ellipsoid.hpp>
 #include<woo/pkg/dem/Wall.hpp>
@@ -129,6 +130,7 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 	const auto ellipsoid=dynamic_cast<Ellipsoid*>(p->shape.get());
 	const auto wall=dynamic_cast<Wall*>(p->shape.get());
 	const auto infCyl=dynamic_cast<InfCylinder*>(p->shape.get());
+	const auto cone=dynamic_cast<Cone*>(p->shape.get());
 	const auto facet=dynamic_cast<Facet*>(p->shape.get());
 	// convenience
 	const auto& n0(p->shape->nodes[0]);
@@ -155,8 +157,6 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 			Vector3r abc=Vector3r::Ones(); abc[infCyl->axis]=0;
 			os<<"quadric{ "<<vec2pov(abc)<<", <0,0,0>, <0,0,0>, -1 "<<makeTexture(p)<<" "<<node2pov(n0)<<" }";
 		} else {
-			#if 0
-			#endif
 			// base point (global coords), first center
 			Vector3r pBase(n0->pos); pBase[infCyl->axis]+=infCyl->glAB[0];
 			// axis vector (global coords), pBase+pAxis is the second center
@@ -172,7 +172,7 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 					os<<"disc{ o, "<<vec2pov(i*normal)<<", "<<infCyl->radius<<" "<<makeTexture(p,cylCapTexture)<<" rotate "<<vec2pov(axRotVecDeg)<<" translate "<<vec2pov(i<0?pBase:(pBase+pAxis).eval());
 					os<<" }";
 				}
-			}
+			} else { os<<"/*uncapped cylinder*/"; }
 			// length of the cylinder
 			Real cylLen=(infCyl->glAB[1]-infCyl->glAB[0]);
 			// non-axial rotation, from +x cyl to infCyl->axis (case-by-case)
@@ -180,6 +180,23 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 			// cylinder spans +x*cylLen from origin, then rotated, so that the texture is rotated as well
 			os<<"cylinder{ o, <"<<cylLen<<",0,0>, "<<infCyl->radius<<(open?" open ":" ")<<" "<<makeTexture(p)<<" rotate "<<vec2pov(nonAxRotVec)<<" rotate "<<vec2pov(axRotVecDeg)<<" translate "<<vec2pov(pBase)<<" }";
 		}
+	}
+	else if(cone){
+		const Vector3r& A(cone->nodes[0]->pos); const Vector3r& B(cone->nodes[1]->pos);
+		Vector3r AB1=(B-A).normalized();
+		AngleAxisr aa(n0->ori);
+		Real axRot=(aa.axis()*aa.angle()).dot(AB1);
+		Real axRotDeg=axRot*180./M_PI;
+		//if(aa.angle()>1e-6 && abs(aa.axis()[infCyl->axis])<.999999) LOG_WARN("#{}: InfCylinder rotation not aligned with its axis (cylinder axis {}; rotation axis {}, angle {})",p->id,infCyl->axis,aa.axis(),aa.angle());
+		bool open=!cylCapTexture.empty();
+		if(open){
+			os<<"/*capped cone*/";
+			for(short ix:{0,1}){
+				if(cone->radii[ix]<=0) continue;
+				os<<"disc{ "<<vec2pov(ix==0?A:B)<<", "<<vec2pov((ix==0?-1:1)*AB1)<<", "<<cone->radii[ix]<<" "<<makeTexture(p,cylCapTexture)<<" rotate "<<vec2pov(AB1*axRotDeg)<<" }";
+			};
+		} else { os<<"/*uncapped cone*/"; }
+		os<<"cone{ "<<vec2pov(A)<<", "<<cone->radii[0]<<" "<<vec2pov(B)<<", "<<cone->radii[1]<<(open?" open ":" ")<<makeTexture(p)<<" rotate "<<vec2pov(axRotDeg*AB1)<<" }";
 	}
 	else if(facet){
 		// halfThick ignored for now, as well as connectivity

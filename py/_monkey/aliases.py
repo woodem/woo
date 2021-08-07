@@ -107,6 +107,7 @@ try:
     dem.Wall.make=staticmethod(woo.utils.wall)
     dem.Wall.makeBox=staticmethod(woo.utils.wallBox)
     dem.InfCylinder.make=staticmethod(woo.utils.infCylinder)
+    dem.Cone.make=staticmethod(woo.utils.cone)
     dem.Facet.make=staticmethod(woo.utils.facet)
     dem.Rod.make=staticmethod(woo.utils.rod)
     dem.Truss.make=staticmethod(woo.utils.truss)
