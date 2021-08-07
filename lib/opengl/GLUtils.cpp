@@ -127,7 +127,7 @@ void GLUtils::Cylinder(const Vector3r& a, const Vector3r& b, Real rad1, const Ve
 		if(caps){
 			gluQuadricDrawStyle(gluDiskQuadric,wire?GLU_LINE:GLU_FILL);
 			if(rad1>0) gluDisk(gluDiskQuadric,/*inner*/0,/*outer*/rad1,/*slices*/slices,/*loops*/3);
-			if(rad2>0){ /* along local z axis*/ glTranslatev(Vector3r(0,0,(b-a).norm())); gluDisk(gluDiskQuadric,/*inner*/0,/*outer*/rad1,/*slices*/slices,/*loops*/3); }
+			if(rad2>0){ /* along local z axis*/ glTranslatev(Vector3r(0,0,(b-a).norm())); gluDisk(gluDiskQuadric,/*inner*/0,/*outer*/rad2,/*slices*/slices,/*loops*/3); }
 		}
 	glPopMatrix();
 }
