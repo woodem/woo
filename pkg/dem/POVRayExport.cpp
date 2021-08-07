@@ -183,20 +183,23 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 	}
 	else if(cone){
 		const Vector3r& A(cone->nodes[0]->pos); const Vector3r& B(cone->nodes[1]->pos);
-		Vector3r AB1=(B-A).normalized();
+		Real lAB=(B-A).norm();
+		Vector3r AB1=(B-A)/lAB;
 		AngleAxisr aa(n0->ori);
 		Real axRot=(aa.axis()*aa.angle()).dot(AB1);
 		Real axRotDeg=axRot*180./M_PI;
+		AngleAxisr nonAxRotAA(Quaternionr::FromTwoVectors(Vector3r::UnitX(),AB1));
+		Vector3r nonAxRotDeg(nonAxRotAA.axis()*nonAxRotAA.angle()*180./M_PI);
 		//if(aa.angle()>1e-6 && abs(aa.axis()[infCyl->axis])<.999999) LOG_WARN("#{}: InfCylinder rotation not aligned with its axis (cylinder axis {}; rotation axis {}, angle {})",p->id,infCyl->axis,aa.axis(),aa.angle());
 		bool open=!cylCapTexture.empty();
 		if(open){
 			os<<"/*capped cone*/";
 			for(short ix:{0,1}){
 				if(cone->radii[ix]<=0) continue;
-				os<<"disc{ "<<vec2pov(ix==0?A:B)<<", "<<vec2pov((ix==0?-1:1)*AB1)<<", "<<cone->radii[ix]<<" "<<makeTexture(p,cylCapTexture)<<" rotate "<<vec2pov(AB1*axRotDeg)<<" }";
+				os<<"disc{ o, "<<vec2pov(Vector3r::UnitX())<<", "<<cone->radii[ix]<<" "<<makeTexture(p,cylCapTexture)<<" rotate "<<vec2pov(Vector3r(axRotDeg,0,0))<<" rotate "<<vec2pov(nonAxRotDeg)<<" translate "<<vec2pov(ix==0?A:B)<<" }";
 			};
 		} else { os<<"/*uncapped cone*/"; }
-		os<<"cone{ "<<vec2pov(A)<<", "<<cone->radii[0]<<" "<<vec2pov(B)<<", "<<cone->radii[1]<<(open?" open ":" ")<<makeTexture(p)<<" rotate "<<vec2pov(axRotDeg*AB1)<<" }";
+		os<<"cone{ o, "<<cone->radii[0]<<" <"<<lAB<<",0,0>, "<<cone->radii[1]<<(open?" open ":" ")<<makeTexture(p)<<" rotate "<<vec2pov(Vector3r(axRotDeg,0,0))<<" rotate "<<vec2pov(nonAxRotDeg)<<" translate "<<vec2pov(A)<<" }";
 	}
 	else if(facet){
 		// halfThick ignored for now, as well as connectivity

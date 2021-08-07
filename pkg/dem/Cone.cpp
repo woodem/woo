@@ -119,26 +119,22 @@ void Gl1_Cone::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wi
 			for(int i:{0,1}) shifts[i]+=scene->cell->intrShiftPos(g[i]->dCellDist-dCell);
 		}
 	}
-	#if 0
-		Vector3r AB[]={
-			shifts[0]+c.nodes[0]->pos+(c.nodes[0]->hasData<GlData>()?c.nodes[0]->getData<GlData>().dGlPos:Vector3r::Zero()),
-			shifts[1]+c.nodes[1]->pos+(c.nodes[1]->hasData<GlData>()?c.nodes[1]->getData<GlData>().dGlPos:Vector3r::Zero())
-		};
-	#endif
-	const Vector3r& A(c.nodes[0]->pos);
-	const Vector3r& B(c.nodes[1]->pos);
-	Vector3r AB=(B-A);
-	Real lAB=AB.norm();
-	Vector3r AB1=AB/lAB;
+	// draw endpoints with displacement scaled (glA,glB), but compute rotation from the real endpoints
+	Vector3r glA=shifts[0]+c.nodes[0]->pos+(c.nodes[0]->hasData<GlData>()?c.nodes[0]->getData<GlData>().dGlPos:Vector3r::Zero());
+	Vector3r glB=shifts[1]+c.nodes[1]->pos+(c.nodes[1]->hasData<GlData>()?c.nodes[1]->getData<GlData>().dGlPos:Vector3r::Zero());
+
+	// real positions
+	const Vector3r& A(c.nodes[0]->pos); const Vector3r& B(c.nodes[1]->pos);
+	Vector3r AB=(B-A); Real lAB=AB.norm(); Vector3r AB1=AB/lAB;
 
 	// axial orientation from node positions
-	Quaternionr ori=Quaternionr::FromTwoVectors(Vector3r::UnitX(),AB);
+	Quaternionr ori=Quaternionr::FromTwoVectors(Vector3r::UnitX(),glB-glA);
 	// axis rotation from node 0 rotation, but just the part along the axis
 	AngleAxisr aa(c.nodes[0]->ori);
 	Real a2=aa.angle()*(aa.axis().dot(AB1));
-	GLUtils::setLocalCoords(A,AngleAxis(a2,Vector3r::UnitX())*ori);
+	GLUtils::setLocalCoords(A,ori*AngleAxis(a2,Vector3r::UnitX()));
 
-	GLUtils::Cylinder(Vector3r::Zero(),Vector3r(lAB,0,0),c.radii[0],/*color: keep current*/Vector3r(-1,-1,-1),c.getWire()||wire||wire2,/*caps*/true,c.radii[1],slices,stacks);
+	GLUtils::Cylinder(Vector3r::Zero(),Vector3r((glB-glA).norm(),0,0),c.radii[0],/*color: keep current*/Vector3r(-1,-1,-1),c.getWire()||wire||wire2,/*caps*/true,c.radii[1],slices,stacks);
 }
 #endif
 

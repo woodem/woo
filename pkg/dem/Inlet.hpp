@@ -247,11 +247,7 @@ struct BoxInlet: public RandomInlet{
 	#endif
 
 	#ifdef WOO_OPENGL
-		void render(const GLViewInfo&) override {
-			if(isnan(glColor)) return;
-			GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
-			renderMassAndRate(box.center());
-		}
+		void render(const GLViewInfo&) override;
 	#endif
 
 	#ifdef BOX_FACTORY_PERI
@@ -263,6 +259,7 @@ struct BoxInlet: public RandomInlet{
 	#define woo_dem_BoxInlet__CLASS_BASE_DOC_ATTRS \
 		BoxInlet,RandomInlet,"Generate particle inside axis-aligned box volume.", \
 		((AlignedBox3r,box,AlignedBox3r(Vector3r(NaN,NaN,NaN),Vector3r(NaN,NaN,NaN)),,"Box volume specification (lower and upper corners)")) \
+		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinate system (optional; if not given, global coordinates are used).")) \
 		woo_dem_BoxInlet__periSpanMask__BOX_FACTORY_PERI 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxInlet__CLASS_BASE_DOC_ATTRS);
 };

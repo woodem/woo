@@ -514,10 +514,25 @@ void RandomInlet::run(){
 
 Vector3r BoxInlet::randomPosition(const Real& rad, const Real& padDist){
 	AlignedBox3r box2(box.min()+padDist*Vector3r::Ones(),box.max()-padDist*Vector3r::Ones());
-	if(!spatialBias) return box2.sample();
-	else return box2.min()+spatialBias->unitPos(rad).cwiseProduct(box2.sizes());
+	Vector3r pos;
+	if(!spatialBias) pos=box2.sample();
+	else pos=box2.min()+spatialBias->unitPos(rad).cwiseProduct(box2.sizes());
+	if(!node) return pos;
+	return node->loc2glob(pos);
 }
 
+
+
+#ifdef WOO_OPENGL
+	void BoxInlet::render(const GLViewInfo&) {
+		if(isnan(glColor)) return;
+		glPushMatrix();
+			if(node) GLUtils::setLocalCoords(node->pos,node->ori);
+			GLUtils::AlignedBox(box,CompUtils::mapColor(glColor));
+			renderMassAndRate(box.center());
+		glPopMatrix();
+	}
+#endif
 
 
 #ifdef BOX_FACTORY_PERI
