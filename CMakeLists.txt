@@ -24,7 +24,9 @@ if(DEFINED ENV{VIRTUAL_ENV})
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKED_FLAGS} -fuse-ld=gold")
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold")
+	#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fuse-ld=gold")
+	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fuse-ld=gold")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	# https://github.com/pybind/pybind11/issues/1604#issuecomment-443385783
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
@@ -68,6 +70,10 @@ find_package(Backward REQUIRED)
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)
 	set(CMAKE_BUILD_TYPE Debug)
+	set(CMAKE_INTERPROCEDURAL_OPTIMIZATION OFF)
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fno-lto -fgarbage-exe")
+	#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fno-lto -fgarbage-shared")
+	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fno-lto")
 else()
 	add_definitions(-DNDEBUG)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
@@ -281,6 +287,7 @@ set(WOO_CXX_SOURCES
 	pkg/dem/Clustering.cpp
 	pkg/dem/Collision.cpp
 	pkg/dem/Concrete.cpp
+	pkg/dem/Cone.cpp
 	pkg/dem/ContactContainer.cpp
 	pkg/dem/Contact.cpp
 	pkg/dem/ContactHook.cpp
