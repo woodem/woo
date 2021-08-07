@@ -110,14 +110,14 @@ def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCo
     cp2[0].updateAttrs(cpKw)
     law[0].updateAttrs(lawKw)
 
-    if not grid: collider=InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb(),Bo1_Capsule_Aabb()],label='collider',verletDist=verletDist)
+    if not grid: collider=InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb(),Bo1_Capsule_Aabb(),Bo1_Cone_Aabb()],label='collider',verletDist=verletDist)
     else: collider=GridCollider([Grid1_Sphere(),Grid1_Facet(),Grid1_Wall(),Grid1_InfCylinder()],label='collider',verletDist=verletDist)
 
     return [
         Leapfrog(damping=damping,reset=True,kinSplit=kinSplit,dontCollect=dontCollect,label='leapfrog'),
         collider,
         ContactLoop(
-            [Cg2_Sphere_Sphere_L6Geom(),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom(),Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Sphere_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Wall_Facet_L6Geom(),Cg2_Rod_Sphere_L6Geom(),Cg2_Wall_Capsule_L6Geom(),Cg2_Capsule_Capsule_L6Geom(),Cg2_InfCylinder_Capsule_L6Geom(),Cg2_Facet_Capsule_L6Geom(),Cg2_Sphere_Capsule_L6Geom(),Cg2_Facet_Facet_L6Geom(),Cg2_Facet_InfCylinder_L6Geom()],
+            [Cg2_Sphere_Sphere_L6Geom(),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom(),Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Sphere_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Wall_Facet_L6Geom(),Cg2_Rod_Sphere_L6Geom(),Cg2_Wall_Capsule_L6Geom(),Cg2_Capsule_Capsule_L6Geom(),Cg2_InfCylinder_Capsule_L6Geom(),Cg2_Facet_Capsule_L6Geom(),Cg2_Sphere_Capsule_L6Geom(),Cg2_Facet_Facet_L6Geom(),Cg2_Facet_InfCylinder_L6Geom(),Cg2_Cone_Sphere_L6Geom()],
             cp2,law,applyForces=True,label='contactLoop'
         ),
     ]+([woo.dem.DynDt(stepPeriod=dynDtPeriod,label='dynDt')] if dynDtPeriod>0 else [])
@@ -212,6 +212,25 @@ def capsule(center,radius,shaft,ori=Quaternion.Identity,fixed=False,color=None,w
     p.shape.wire=wire
     #p.aspherical=True
     p.mask=mask
+    return p
+
+def cone(vertices,radii,*,fixed=True,wire=False,color=None,angVel=None,mat=defaultMaterial,visible=True,mask=DemField.defaultBoundaryMask):
+    '''
+    Create cone with given parameters.
+    '''
+    assert len(vertices)==2
+    nodes=[]
+    for i in (0,1):
+        if isinstance(vertices[i],Node): nodes.append(vertices[i])
+        else: nodes.append(_mkDemNode(pos=vertices[i]))
+        if not nodes[-1].dem: nodes[-1].dem=DemData()
+    p=Particle()
+    p.shape=Cone(radii=radii,color=color if color else random.random())
+    p.shape.wire=wire
+    _commonBodySetup(p,nodes,mat=mat,fixed=fixed)
+    p.mask=mask
+    p.shape.visible=visible
+    if angVel is not None: p.nodes[0].dem.angVel=angVel
     return p
 
 
