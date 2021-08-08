@@ -230,7 +230,9 @@ def cone(vertices,radii,*,fixed=True,wire=False,color=None,angVel=None,mat=defau
     _commonBodySetup(p,nodes,mat=mat,fixed=fixed)
     p.mask=mask
     p.shape.visible=visible
-    if angVel is not None: p.nodes[0].dem.angVel=angVel
+    if angVel is not None:
+        if isinstance(angVel,(float,int)): angVel=(p.nodes[1].pos-p.nodes[0].pos).normalized()*angVel
+        p.nodes[0].dem.angVel=angVel
     return p
 
 

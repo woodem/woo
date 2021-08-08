@@ -240,6 +240,7 @@ void ConveyorInlet::run(){
 	if(radii.empty() || radii.size()!=centers.size()) ValueError("ConveyorInlet: radii and centers must be same-length and non-empty (if shapePack is given, radii and centers should have been populated automatically)");
 	if(isnan(vel) || isnan(massRate) || !material) ValueError("ConveyorInlet: vel, massRate, material must be given.");
 	if(clipX.size()!=clipZ.size()) ValueError("ConveyorInlet: clipX and clipZ must have the same size ("+to_string(clipX.size())+"!="+to_string(clipZ.size()));
+	if(!node) ValueError("ConveyorInlet.node is None (must be given)");
 	if(barrierLayer<0){
 		Real maxRad=-Inf;
 		for(const Real& r:radii) maxRad=max(r,maxRad);
