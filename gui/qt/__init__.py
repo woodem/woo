@@ -8,120 +8,66 @@ import wooMain
 import sys, os
 
 import woo
-if 'qt4' in woo.config.features:
-    print(40*'#'+'\n\nWOO IS DEPRECATING QT4, PLEASE MOVE TO QT5 (re-compile with qt5 feature).\n\n'+40*'#') 
+if 'qt4' in woo.config.features: raise RuntimeError('Qt4 GUI is no longer supported.') 
 
 if wooMain.options.fakeDisplay:
     # do nothing, let all the imports happen without error
     # running anything Qt-related will fail/crash later, this should be used only when generating docs
     pass
 else:
-    # signal import error witout display
-    if 1:
+    # signal import error without display
+    if not woo.runtime.hasDisplay: raise ImportError(woo.runtime.hasDisplayError)
 
-        import woo.runtime, wooMain, woo.config
-        if ('qt4' not in woo.config.features) and ('qt5' not in woo.config.features):
-            raise ImportError("Woo was compiled without GUI support (qt4 or qt5 feature).")
-        if wooMain.options.forceNoGui:
-            woo.runtime.hasDisplay=False
-            raise ImportError("Woo was started with the -n switch; woo.qt interface will not be enabled.")
-        # ignore some warnings from Xlib
-        import warnings
-        warnings.filterwarnings('ignore',category=DeprecationWarning,module='Xlib')
+    # disable all IPython warnings (sometimes imported for the first time here, not in woo's __init__.py or wooMain)
+    import warnings
+    warnings.filterwarnings('ignore',category=DeprecationWarning,module='.*IPython.*')
 
-        import sys
-        if sys.platform=='win32':
-            # assume display is always available at Windows
-            woo.runtime.hasDisplay=True
+    if 'qt5' in woo.config.features:
+        from PyQt5 import QtGui
+        from PyQt5.QtWidgets import QApplication
+
+    if useQtConsole:
+        from IPython.frontend.qt.console.qtconsoleapp import IPythonQtConsoleApp
+        wooQApp=IPythonQtConsoleApp()
+        wooQApp.initialize()
+    else:
+        # create an instance of InteractiveShell before the inputhook is created
+        # see http://stackoverflow.com/questions/9872517/how-to-embed-ipython-0-12-so-that-it-inherits-namespace-of-the-caller for details
+        # fixes http://gpu.doxos.eu/trac/ticket/40
+        from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
+        try: from traitlets.config.configurable import MultipleInstanceError
+        except: from IPython.config.configurable import MultipleInstanceError # produces ShimWarning
+        try: ipshell=InteractiveShellEmbed.instance()
+        except MultipleInstanceError:
+            print('Already running inside ipython, not embedding new instance.')
+        # keep the qapp object referenced, otherwise 0.11 will die with "QWidget: Must construct QApplication before a QPaintDevice
+        # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
+
+        import IPython
+        # see https://github.com/ipython/ipython/issues/9784 for discussion
+        # the resolution not being very clear yet
+        import woo.runtime
+        if woo.runtime.ipython_version()>=500:
+            wooQApp=QApplication(['woo.qt'])
+            # the rest is done in wooMain, once the ipshell object is instantiated
+            # -- ipshell.enable_gui('qt5')
         else:
-            try: DISPLAY=os.environ['DISPLAY']
-            except KeyError: raise ImportError("$DISPLAY is not defined.")
-            if DISPLAY=='': raise ImportError("$DISPLAY is empty.")
-            try:
-                import Xlib.display
-            except ImportError:
-                # raise something elase than ImportError, since that signals that a display is not available
-                raise RuntimeError("The python Xlib module could not be imported.")
-            # PyQt4's QApplication does exit(1) if it is unable to connect to the display
-            # we however want to handle this gracefully, therefore
-            # we test the connection with bare xlib first, which merely raises DisplayError
-            try:
-                # contrary to display.Display, _BaseDisplay does not check for extensions and that avoids spurious message "Xlib.protocol.request.QueryExtension" (bug?)
-                import platform
-                # for WSL, UNIX-domain socket will not work, thus hostname must be prepended to force IP connection
-                # https://github.com/python-xlib/python-xlib/issues/99
-                # this is not necessary for Qt below (it has that logic built-in already), only for testing the display via Xlib
-                if 'Microsoft' in platform.release(): Xlib.display._BaseDisplay(('localhost:' if DISPLAY.startswith(':') else '')+DISPLAY)
-                else: Xlib.display._BaseDisplay() # just use $DISPLAY
-                woo.runtime.hasDisplay=True
-            except:
-                # usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
-                # let's just pretend any exception means the display would not work
-                woo.runtime.hasDisplay=False
-                # warning with WSL
-                import platform
-                if 'Microsoft' in platform.release() and platform.system()=='Linux' and os.environ['DISPLAY'].startswith(':'):
-                    print("WARNING: connection to $DISPLAY failed; since you are running under Microsoft Windows in WSL (probably), you need to export $DISPLAY with localhost: prefix. Currently, $DISPLAY is '%s', should be therefore 'localhost%s'."%(os.environ['DISPLAY'],os.environ['DISPLAY']))
-                raise ImportError("Connecting to $DISPLAY failed, unable to activate the woo.qt4 interface.")
-                
+            # this is deprecated in IPython >= 5.x
+            import IPython.lib.inputhook #guisupport
+            wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
+    # try: wooQApp.setStyleSheet(open(woo.config.resourceDir+'/qmc2-black-0.10.qss').read())
+    # except IOError: pass # stylesheet not readable or whatever
+    if sys.platform=='win32': 
+        # don't use ugly windows theme, try something else
+        for style in QtGui.QStyleFactory.keys():
+            # the first one will be used
+            if  style in ('Cleanlooks','Plastique'):
+                QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(style))
+                QtGui.QApplication.setPalette(QtGui.QApplication.style().standardPalette())
+                break
 
-    if 1: # initialize QApplication
-        # disable all IPython warnings (sometimes imported for the first time here, not in woo's __init__.py or wooMain)
-        import warnings
-        warnings.filterwarnings('ignore',category=DeprecationWarning,module='.*IPython.*')
-
-        if 'qt4' in woo.config.features:
-            from PyQt4 import QtGui
-            from PyQt4.QtGui import QApplication
-        else:
-            from PyQt5 import QtGui
-            from PyQt5.QtWidgets import QApplication
-
-        if useQtConsole:
-            from IPython.frontend.qt.console.qtconsoleapp import IPythonQtConsoleApp
-            wooQApp=IPythonQtConsoleApp()
-            wooQApp.initialize()
-        else:
-            # create an instance of InteractiveShell before the inputhook is created
-            # see http://stackoverflow.com/questions/9872517/how-to-embed-ipython-0-12-so-that-it-inherits-namespace-of-the-caller for details
-            # fixes http://gpu.doxos.eu/trac/ticket/40
-            from IPython.terminal.embed import InteractiveShellEmbed # IPython>=1.0
-            try: from traitlets.config.configurable import MultipleInstanceError
-            except: from IPython.config.configurable import MultipleInstanceError # produces ShimWarning
-            try: ipshell=InteractiveShellEmbed.instance()
-            except MultipleInstanceError:
-                print('Already running inside ipython, not embedding new instance.')
-            # keep the qapp object referenced, otherwise 0.11 will die with "QWidget: Must construct QApplication before a QPaintDevice
-            # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
-
-            import IPython
-            # see https://github.com/ipython/ipython/issues/9784 for discussion
-            # the resolution not being very clear yet
-            import woo.runtime
-            if woo.runtime.ipython_version()>=500:
-                wooQApp=QApplication(['woo.qt'])
-                # the rest is done in wooMain, once the ipshell object is instantiated
-                # -- ipshell.enable_gui('qt5')
-            else:
-                # this is deprecated in IPython >= 5.x
-                import IPython.lib.inputhook #guisupport
-                wooQApp=IPython.lib.inputhook.enable_gui(gui='qt4' if 'qt4' in woo.config.features else 'qt5')
-        # try: wooQApp.setStyleSheet(open(woo.config.resourceDir+'/qmc2-black-0.10.qss').read())
-        # except IOError: pass # stylesheet not readable or whatever
-        if sys.platform=='win32': 
-            # don't use ugly windows theme, try something else
-            for style in QtGui.QStyleFactory.keys():
-                # the first one will be used
-                if  style in ('Cleanlooks','Plastique'):
-                    QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(style))
-                    QtGui.QApplication.setPalette(QtGui.QApplication.style().standardPalette())
-                    break
-
-import woo.config           
-if 'qt4' in woo.config.features:
-    from PyQt4.QtGui import *
-    from PyQt4 import QtCore
-else:
+import woo.config
+if 'qt5' in woo.config.features:
     from PyQt5.QtGui import *
     from PyQt5.QtWidgets import *
     from PyQt5 import QtCore

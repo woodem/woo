@@ -184,7 +184,6 @@ master=core.Master.instance
 
 from . import apiversion
 
-
 #
 # create compiled python modules
 #
@@ -245,6 +244,8 @@ if 'pybind11' in config.features:
 else:
     import minieigen
 
+
+from . import runtime
 
 ##
 ## temps cleanup at exit
@@ -321,39 +322,41 @@ unit=_units.unit # allow woo.unit['mm']
 from . import pyderived
 from . import apiversion
 
-# recursive import of everything under wooExtra
-try:
-    # don't import at all if rebuilding (rebuild might fail)
-    if wooOptions.rebuilding: raise ImportError
-    import wooExtra
-    import pkgutil, zipimport
-    extrasLoaded=[]
-    for importer, modname, ispkg in pkgutil.iter_modules(wooExtra.__path__,'wooExtra.'):
-        try:
+
+if 0:
+    # recursive import of everything under wooExtra
+    try:
+        # don't import at all if rebuilding (rebuild might fail)
+        if wooOptions.rebuilding: raise ImportError
+        import wooExtra
+        import pkgutil, zipimport
+        extrasLoaded=[]
+        for importer, modname, ispkg in pkgutil.iter_modules(wooExtra.__path__,'wooExtra.'):
             try:
-                m=__import__(modname,fromlist='wooExtra')
-            except:
-                print(50*'#')
-                import traceback
-                traceback.print_exc()
-                print(50*'#')
+                try:
+                    m=__import__(modname,fromlist='wooExtra')
+                except:
+                    print(50*'#')
+                    import traceback
+                    traceback.print_exc()
+                    print(50*'#')
+                    raise
+                extrasLoaded.append(modname)
+                if hasattr(sys,'frozen') and not hasattr(m,'__loader__') and len(m.__path__)==1:
+                    zip=m.__path__[0].split('/wooExtra/')[0].split('\\wooExtra\\')[0]
+                    if not (zip.endswith('.zip') or zip.endswith('.egg')):
+                        print('wooExtra.%s: not a .zip or .egg, no __loader__ set (%s)'%(modname,zip))
+                    else:
+                        print('wooExtra.%s: setting __loader__ and __file__'%modname)
+                        m.__loader__=zipimport.zipimporter(zip)
+                        m.__file__=os.path.join(m.__path__[0],os.path.basename(m.__file__))
+            except ImportError:
+                sys.stderr.write('ERROR importing %s:'%modname)
                 raise
-            extrasLoaded.append(modname)
-            if hasattr(sys,'frozen') and not hasattr(m,'__loader__') and len(m.__path__)==1:
-                zip=m.__path__[0].split('/wooExtra/')[0].split('\\wooExtra\\')[0]
-                if not (zip.endswith('.zip') or zip.endswith('.egg')):
-                    print('wooExtra.%s: not a .zip or .egg, no __loader__ set (%s)'%(modname,zip))
-                else:
-                    print('wooExtra.%s: setting __loader__ and __file__'%modname)
-                    m.__loader__=zipimport.zipimporter(zip)
-                    m.__file__=os.path.join(m.__path__[0],os.path.basename(m.__file__))
-        except ImportError:
-            sys.stderr.write('ERROR importing %s:'%modname)
-            raise
-    # disable informative message if plain import into python script
-    if sys.argv[0].split('/')[-1].startswith('woo'): sys.stderr.write('wooExtra modules loaded: %s.\n'%(', '.join(extrasLoaded)))
-    
-except ImportError:
-    # no wooExtra packages are installed
-    pass
+        # disable informative message if plain import into python script
+        if sys.argv[0].split('/')[-1].startswith('woo'): sys.stderr.write('wooExtra modules loaded: %s.\n'%(', '.join(extrasLoaded)))
+        
+    except ImportError:
+        # no wooExtra packages are installed
+        pass
 

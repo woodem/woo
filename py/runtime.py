@@ -2,8 +2,43 @@
 """Runtime variables, populated at woo startup."""
 # default value
 import wooMain
-hasDisplay=None
-if wooMain.options.fakeDisplay: hasDisplay=False # we would crash really
+import woo.config
+
+def _detectDisplay():
+    import warnings,sys,os,platform
+    import woo.config
+    warnings.filterwarnings('ignore',category=DeprecationWarning,module='Xlib')
+
+    if ('qt5' not in woo.config.features): return False,"compiled without GUI support (qt5 feature)."
+    if wooMain.options.fakeDisplay: return False,'started with --fake-display'
+    if wooMain.options.forceNoGui: return False,'started with the -n/--headless switch'
+    if sys.platform=='win32': return True,'display always available under win32'
+    if 'DISPLAY' not in os.environ: return False,'$DISPLAY env var is undefined'
+    DISPLAY=os.environ['DISPLAY']
+    if len(os.environ['DISPLAY'])==0: return False,'$DISPLAY env var is empty.'
+    try: import Xlib.display
+    except ImportError: raise RuntimeError("The python Xlib module could not be imported.")
+    try:
+        # for WSL, UNIX-domain socket will not work, thus hostname must be prepended to force IP connection
+        # https://github.com/python-xlib/python-xlib/issues/99
+        # this is not necessary for Qt below (it has that logic built-in already), only for testing the display via Xlib
+        if 'Microsoft' in platform.release(): Xlib.display._BaseDisplay(('localhost:' if DISPLAY.startswith(':') else '')+DISPLAY)
+        else: Xlib.display._BaseDisplay() # just use $DISPLAY
+    except:
+        # usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
+        # let's just pretend any exception means the display would not work
+        # warning with WSL
+        if 'Microsoft' in platform.release() and platform.system()=='Linux' and os.environ['DISPLAY'].startswith(':'):
+            print("WARNING: connection to $DISPLAY failed; since you are running under Microsoft Windows in WSL (probably), you need to export $DISPLAY with localhost: prefix. Currently, $DISPLAY is '%s', should be therefore 'localhost%s'."%(os.environ['DISPLAY'],os.environ['DISPLAY']))
+        return False,'Connection to $DISPLAY failed.'
+    return True,None
+
+
+#
+# if wooMain.options.fakeDisplay: hasDisplay=False # we would crash really
+#
+hasDisplay,hasDisplayError=_detectDisplay()
+
 
 # cache the value returned
 _ipython_version=None
