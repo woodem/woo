@@ -283,20 +283,12 @@ def main(sysArgv=None):
     # other parts we will need soon
     import woo.config
     import woo.runtime
-    sys.stderr.write(green('Welcome to Woo '+woo.config.prettyVersion()+'%s%s'%(' (debug build)' if woo.config.debug else '',(', flavor '+woo.config.flavor if woo.config.flavor else '')))+', API %d\n'%woo.master.api)
+    sys.stderr.write(green('Welcome to '+bright('Woo '+woo.config.prettyVersion())+'%s%s'%(' (debug build)' if woo.config.debug else '',(', flavor '+woo.config.flavor if woo.config.flavor else '')))+', API %d\n'%woo.master.api)
+    if ex:=set([e.split('.')[1] for e in sys.modules.keys() if e.startswith('wooExtra.')]): sys.stderr.write(yellow('wooExtra modules loaded: '+bright(', '.join(ex))+'\n'))
     import woo.log
     import woo.system
 
     # continue option processing
-
-    #if opts.updateScripts:
-    #    woo.system.updateScripts(args)
-    #    sys.exit(0)
-    #if opts.manpage:
-    #    import woo.manpage
-    # woo.manpage.generate_manpage(par,woo.config.metadata,opts.manpage,section=1,seealso='woo%s-batch (1)'%suffix)
-    #    print 'Manual page %s generated.'%opts.manpage
-    #    sys.exit(0)
     if opts.nice:
         if WIN:
             try:

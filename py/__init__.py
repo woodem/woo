@@ -65,12 +65,6 @@ elif 'OMP_NUM_THREADS' not in os.environ:
     
 import sysconfig
 soSuffix=sysconfig.get_config_vars()['SO']
-#if WIN and 'TERM' in os.environ:
-#    # unbuffered output on windows, in case we're in a real terminal
-#    # http://stackoverflow.com/a/881751
-#    import msvcrt
-#    msvcrt.setmode(sys.stdout.fileno(),os.O_BINARY)
-    
 
 #
 # QUIRKS
@@ -91,77 +85,27 @@ if not WIN and (wooOptions.quirks & wooOptions.quirkIntel) and 'DISPLAY' in os.e
             except subprocess.CalledProcessError: pass # failed glxinfo call, such as when not installed
     except subprocess.CalledProcessError: pass # failed lspci call...?!
 
-if WIN:
-    # http://stackoverflow.com/questions/1447575/symlinks-on-windows/4388195#4388195
-    #
-    # unfortunately symlinks are something dangerous under windows, it is a priviledge which must be granted
-    # BUT the user must NOT be in the Administrators group?!
-    # http://superuser.com/questions/124679/how-do-i-create-an-mklink-in-windows-7-home-premium-as-a-regular-user
-    # 
-    # for that reason, we use hardlinks (below), which are allowed to everybody
-    # Since this would break if files were not on the same partition, we copy _cxxInternal*.pyd
-    # to a tempdir first (see below). It will still fail on filesystems not supporting hardlinks
-    # (FAT probably)
-    def win_symlink(source,link_name):
-        import ctypes, os.path
-        csl=ctypes.windll.kernel32.CreateSymbolicLinkW
-        csl.argtypes=(ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
-        csl.restype=ctypes.c_ubyte
-        flags=0
-        if source is not None and os.path.isdir(source): flags=1
-        if csl(link_name,source,flags)==0: raise ctypes.WinError()
-    def win_hardlink(source,link_name):
-        import ctypes
-        csl=ctypes.windll.kernel32.CreateHardLinkW
-        csl.argtypes=(ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_void_p)
-        csl.restype=ctypes.c_ubyte
-        if csl(link_name,source,None)==0: raise IOError('Hardlinking failed (files not on the same partition?)')
-            
 
 # enable warnings which are normally invisible, such as DeprecationWarning
 warnings.simplefilter('default')
 # disable warning for unclosed files/sockets
 warnings.simplefilter('ignore',ResourceWarning)
+warnings.filterwarnings(action='ignore',category=DeprecationWarning,module='unittest2')
+warnings.filterwarnings(action='ignore',category=DeprecationWarning,module=r'matplotlib\..*')
 
-# import both if possible
-# we will check build features after the binary import
-# and based on that use one or another
 
-#try: import minieigen
-#except ImportError: pass
-
-#try: import minieigen11
-#except ImportError:
-#raise RuntimeError('minieigen is not importable (and minieigen11 is not, either).')
+import importlib,importlib.machinery,importlib.util
+def imp_load_dynamic(name,path):
+    loader=importlib.machinery.ExtensionFileLoader(name,path)
+    spec=importlib.machinery.ModuleSpec(name=name,loader=loader,origin=path)
+    return importlib.util.module_from_spec(spec)
 
 
 # c++ initialization code
 cxxInternalName='_cxxInternal'
 if wooOptions.flavor: cxxInternalName+='_'+re.sub('[^a-zA-Z0-9_]','_',wooOptions.flavor)
 # if wooOptions.debug: cxxInternalName+='_debug'
-try:
-    if not WIN:
-        _cxxInternal=__import__('woo.'+cxxInternalName,fromlist='woo')
-    else:
-        ## on windows, copy _cxxInternal*.pyd to the tempdir first, so that we can hardlink to it later
-        ## symlinks are unusable, as they require elevated process (??)
-        ## it must be copied before it gets imported, so we create tempdir ourselves
-        ## and pass it via WOO_TEMP to woo::Master ctor, which will just use it
-        import tempfile, pkgutil, imp, shutil
-        tmpdir=wooOsEnviron['WOO_TEMP']=tempfile.mkdtemp(prefix='woo-tmp-')
-        if not hasattr(sys,'frozen'):
-            loader=pkgutil.get_loader('woo.'+cxxInternalName)
-            if not loader: raise ImportError("Unable to get loader for module woo.%s"%cxxInternalName)
-            pydFile=loader.filename
-        else:
-            # frozen install should have full path in sys.argv[0]
-            pydFile=os.path.dirname(sys.argv[0])+'/woo.'+cxxInternalName+soSuffix
-            if not os.path.exists(pydFile): raise ImportError("Unable to locate loadable module for woo._cxxInternal in frozen installation: the file %s does not exist"%pydFile)
-        f=tmpdir+'/'+cxxInternalName+soSuffix
-        shutil.copy2(pydFile,f)
-        _cxxInternal=imp.load_dynamic('woo._cxxInternal',f)
-        pidfile=tmpdir+'/'+'pid'
-                    
+try: _cxxInternal=importlib.import_module('woo.'+cxxInternalName)
 except ImportError:
     print('Error importing woo.%s (--flavor=%s).'%(cxxInternalName,wooOptions.flavor if wooOptions.flavor else ' '))
     traceback.print_exc()
@@ -181,7 +125,6 @@ cxxInternalFile=_cxxInternal.__file__
 
 from . import core
 master=core.Master.instance
-
 from . import apiversion
 
 #
@@ -191,12 +134,11 @@ if sys.version_info<(3,4):
     print('WARNING: in Python 3.x, importing only works in Python >= 3.4 properly. Your version %s will most likely break right here.'%(sys.version))
 # will only work when http://bugs.python.org/issue16421 is fixed (python 3.4??)
 allSubmodules=set()
-import imp
 # print(80*'#'+'\n'+str(master.compiledPyModules))
 for mod in master.compiledPyModules:
     if 'WOO_DEBUG' in os.environ: print('Loading compiled module',mod,'from',cxxInternalFile)
     # this inserts the module to sys.modules automatically
-    m=imp.load_dynamic(mod,cxxInternalFile)
+    m=imp_load_dynamic(mod,cxxInternalFile)
     # now put the module where it belongs
     mm=mod.split('.')
     if mm[0]!='woo': print('ERROR: non-woo module %s imported from the shared lib? Expect troubles.'%mod)
@@ -315,15 +257,14 @@ from minieigen import *
 
 # monkey-patches
 from . import _monkey
-
-from . import _units 
+from . import _units
 unit=_units.unit # allow woo.unit['mm']
 # hint fo pyinstaller to freeze this module
 from . import pyderived
 from . import apiversion
 
 
-if 0:
+if 1:
     # recursive import of everything under wooExtra
     try:
         # don't import at all if rebuilding (rebuild might fail)
@@ -354,8 +295,7 @@ if 0:
                 sys.stderr.write('ERROR importing %s:'%modname)
                 raise
         # disable informative message if plain import into python script
-        if sys.argv[0].split('/')[-1].startswith('woo'): sys.stderr.write('wooExtra modules loaded: %s.\n'%(', '.join(extrasLoaded)))
-        
+        # if sys.argv[0].split('/')[-1].startswith('woo'): sys.stderr.write('wooExtra modules loaded: %s.\n'%(', '.join(extrasLoaded)))
     except ImportError:
         # no wooExtra packages are installed
         pass
