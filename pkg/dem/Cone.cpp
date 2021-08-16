@@ -8,7 +8,7 @@ WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Cone_Aabb__CLASS_BASE_DOC);
 
 void Bo1_Cone_Aabb::go(const shared_ptr<Shape>& sh){
 	assert(sh->numNodesOk());
-	if(scene->isPeriodic) throw std::runtime_error("Bo1_Cone_Aabb::go: periodic boundaries for Cone not implemented.");
+	if(scene->isPeriodic && scene->cell->hasShear()) throw std::runtime_error("Bo1_Cone_Aabb::go: sheared periodic boundaries for Cone not (yet) implemented.");
 	Cone& c=sh->cast<Cone>();
 	if(!c.bound){ c.bound=make_shared<Aabb>(); /* ignore node rotation*/ c.bound->cast<Aabb>().maxRot=-1; }
 	Aabb& aabb=sh->bound->cast<Aabb>();

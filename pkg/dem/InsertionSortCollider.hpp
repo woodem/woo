@@ -162,6 +162,7 @@ struct InsertionSortCollider: public Collider {
 			assert(axis>=0 && axis <=2);
 			cellDim=scene->cell->getSize()[axis];
 		}
+		void clear(){ vec.clear(); size=loIdx=0; }
 		// normalize given index to the right range (wraps around)
 		long norm(long i) const { if(i<0) i+=size; long ret=i%size; assert(ret>=0 && ret<size); return ret;}
 		VecBounds(): axis(-1), size(0), loIdx(0){}

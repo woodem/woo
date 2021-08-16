@@ -445,29 +445,29 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 }
 
 bool InsertionSortCollider::prologue_doFullRun(){
-dem=dynamic_cast<DemField*>(field.get());
-assert(dem);
-particles=dem->particles.get();
+	dem=dynamic_cast<DemField*>(field.get());
+	assert(dem);
+	particles=dem->particles.get();
 
-// scene->interactions->iterColliderLastRun=-1;
+	// scene->interactions->iterColliderLastRun=-1;
 
-// conditions when we need to run a full pass
-bool fullRun=false;
+	// conditions when we need to run a full pass
+	bool fullRun=false;
 
-// contacts are dirty and must be detected anew
-if(dem->contacts->dirty || forceInitSort){ fullRun=true; dem->contacts->dirty=false; }
+	// contacts are dirty and must be detected anew
+	if(dem->contacts->dirty || forceInitSort){ fullRun=true; dem->contacts->dirty=false; }
 
-// number of particles changed
-if((size_t)BB[0].size!=2*particles->size()) fullRun=true;
-//redundant: if(minima.size()!=3*nPar || maxima.size()!=3*nPar) fullRun=true;
+	// number of particles changed
+	if((size_t)BB[0].size!=2*particles->size()) fullRun=true;
+	//redundant: if(minima.size()!=3*nPar || maxima.size()!=3*nPar) fullRun=true;
 
-// periodicity changed
-if(scene->isPeriodic != periodic){
-	for(int i=0; i<3; i++) BB[i].vec.clear();
-	periodic=scene->isPeriodic;
-	fullRun=true;
-}
-return fullRun;
+	// periodicity changed
+	if(scene->isPeriodic != periodic){
+		for(int i=0; i<3; i++) BB[i].clear();
+		periodic=scene->isPeriodic;
+		fullRun=true;
+	}
+	return fullRun;
 }
 
 void InsertionSortCollider::run(){
@@ -504,7 +504,7 @@ void InsertionSortCollider::run(){
 			LOG_DEBUG("Resize bounds containers from {} to {}, will std::sort.",BB[0].size,nPar*2);
 			// bodies deleted; clear the container completely, and do as if all bodies were added (rather slow…)
 			// future possibility: insertion sort with such operator that deleted bodies would all go to the end, then just trim bounds
-			if(2*nPar<BB[0].size){ for(int i: {0,1,2}){ BB[i].vec.clear(); BB[i].size=0; }}
+			if(2*nPar<BB[0].size){ for(int i: {0,1,2}){ BB[i].clear(); }}
 			// more than 100 bodies was added, do initial sort again
 			// maybe: should rather depend on ratio of added bodies to those already present...?
 			else if(2*nPar-BB[0].size>200 || BB[0].size==0) doInitSort=true;
@@ -787,6 +787,7 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 	assert(0<=iEnd);
 	assert(iStart<iEnd);
 	long &loIdx=v.loIdx;
+	assert(loIdx<v.size);
 	#ifdef WOO_OPENMP
 		const bool earlyStop=(iBegin!=iStart);
 		const bool partial=(v.norm(iBegin)!=v.norm(iEnd));
@@ -818,8 +819,10 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 		}
 		// vi is the copy that will travel down the list, while other elts go up
 		// if will be placed in the list only at the end, to avoid extra copying
+		long iter=0;
 		int j=i_1; Bounds vi=v[i];  const bool viHasBB=vi.flags.hasBB; const bool viIsMin=vi.flags.isMin; const bool viIsInf=vi.flags.isInf;
 		while((!partial || j>=iBegin) && v[j].coord>vi.coord + /* wrap for elt just below split */ (v.norm(j+1)==loIdx ? v.cellDim : 0)){
+			j=v.norm(j);
 			long j1=v.norm(j+1);
 			// OK, now if many bodies move at the same pace through the cell and at one point, there is inversion,
 			// this can happen without any side-effects
@@ -831,6 +834,7 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 					throw runtime_error(__FILE__ ": particle moving too fast (skipped 1 cell).");
 				}
 			#endif
+
 			Bounds& vNew(v[j1]); // elt at j+1 being overwritten by the one at j and adjusted
 			vNew=v[j];
 			// inversions close the the split need special care
@@ -849,7 +853,12 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 				#endif
 				{ stepInvs[ax]++; numInvs[ax]++; }
 			#endif
-			j=v.norm(j-1);
+			j=v.norm(j-1); // should allow j==-1 so that j<=iBegin works in the conditional ??!
+			#if 1
+				if(iter++==10000 || iter>100000){
+					LOG_ERROR("partial={}, iBegin={}, i={}, i_1={}, j={}, vi.coord={}, v[v.norm(j)].coord={}, v.norm(j+1)={}, loIdx={}, v.cellDim={}",partial,iBegin,i,i_1,j,vi.coord,v[v.norm(j)].coord,v.norm(j+1),loIdx,v.cellDim);
+				}
+			#endif
 		}
 		v[v.norm(j+1)]=vi;
 	}

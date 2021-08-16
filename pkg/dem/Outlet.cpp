@@ -16,10 +16,11 @@ void Outlet::run(){
 	std::set<std::tuple<Particle::id_t,int>> delParIdLoc;
 	std::set<Particle::id_t> delClumpIxs;
 	bool deleting=(markMask==0);
+	auto canonPt=[this](const Vector3r& p)->Vector3r{ return scene->isPeriodic?scene->cell->canonicalizePt(p):p; };
 	for(size_t i=0; i<dem->nodes.size(); i++){
 		const auto& n=dem->nodes[i];
 		int loc=-1, loc2=-1; // loc2 is for other nodes and ignored
-		if(inside!=isInside(n->pos,loc)) continue; // node inside, do nothing
+		if(inside!=isInside(canonPt(n->pos),loc)) continue; // node inside, do nothing
 		if(!n->hasData<DemData>()) continue;
 		const auto& dyn=n->getData<DemData>();
 		// check all particles attached to this node
@@ -33,7 +34,7 @@ void Outlet::run(){
 			bool otherOk=true;
 			for(const auto& nn: p->shape->nodes){
 				// useless to check n again
-				if(nn.get()!=n.get() && !(inside!=isInside(nn->pos,loc2))){ otherOk=false; break; }
+				if(nn.get()!=n.get() && !(inside!=isInside(canonPt(nn->pos),loc2))){ otherOk=false; break; }
 			}
 			if(!otherOk) continue;
 			LOG_TRACE("DemField.par[{}] marked for deletion.",i);
@@ -44,7 +45,7 @@ void Outlet::run(){
 			assert(dynamic_pointer_cast<ClumpData>(n->getDataPtr<DemData>()));
 			const auto& cd=n->getDataPtr<DemData>()->cast<ClumpData>();
 			for(const auto& nn: cd.nodes){
-				if(inside!=isInside(nn->pos,loc2)) goto otherNotOk;
+				if(inside!=isInside(canonPt(nn->pos),loc2)) goto otherNotOk;
 				for(const Particle* p: nn->getData<DemData>().parRef){
 					assert(p);
 					if(mask && !(mask & p->mask)) goto otherNotOk;
@@ -90,7 +91,7 @@ void Outlet::run(){
 	}
 	for(const auto& ix: delClumpIxs){
 		const shared_ptr<Node>& n(dem->nodes[ix]);
-		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(n,true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,n->pos);
+		if(deleting && scene->trackEnergy) scene->energy->add(DemData::getEk_any(n,true,true,scene),"kinOutlet",kinEnergyIx,EnergyTracker::ZeroDontCreate|EnergyTracker::IsIncrement,canonPt(n->pos));
 		Real m=n->getData<DemData>().mass;
 		num++;
 		mass+=m;
