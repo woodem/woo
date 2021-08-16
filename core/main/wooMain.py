@@ -181,13 +181,10 @@ def main(sysArgv=None):
                 print('Running: '+' '.join(cmd))
                 if subprocess.call(cmd): raise RuntimeError('Error updating %s from repository.'%(dd))
         # rebuild
-        if not hasattr(woo.config,'sconsPath'):
-            # cmake
-            if hasattr(woo.config,'buildJobs') and woo.config.buildJobs>0: jobs=['-j',str(woo.config.buildJobs)]
-            else: jobs=[]
-            cmd=([woo.config.buildProgram]+jobs+['-C',woo.config.buildRoot,'install'])
-        else:
-            cmd=(['scons'] if not hasattr(woo.config,'sconsPath') else [woo.config.sconsPath])+['-Q','-C',woo.config.sourceRoot,'flavor=%s!'%woo.config.flavor,'debug=%d'%(1 if opts.debug else 0),'execCheck=%s'%(os.path.abspath(sys.argv[0]))]
+        # cmake
+        if hasattr(woo.config,'buildJobs') and woo.config.buildJobs>0: jobs=['-j',str(woo.config.buildJobs)]
+        else: jobs=[]
+        cmd=([woo.config.buildProgram]+jobs+['-C',woo.config.buildRoot,'install'])
         print('Rebuilding Woo using',' '.join(cmd))
         if subprocess.call(cmd): raise RuntimeError('Error rebuilding Woo (--rebuild).')
         # run ourselves
