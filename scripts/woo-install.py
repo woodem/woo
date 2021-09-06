@@ -102,7 +102,7 @@ if args.ccache: call(['ccache','-M50G','-F10000'])
 features=['gts','openmp','vtk','hdf5']+([] if args.headless else ['qt5'])
 
 os.makedirs(args.build_prefix,exist_ok=True)
-call(['cmake','-DSPDLOG_LOCAL='+('ON' if spdlogLocal else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),'-DWOO_BUILD_JOBS=%d'%args.jobs,'-DPYTHON_EXECUTABLE='+sys.executable]+['-DWOO_%s=ON'%f.upper() for f in features]+[args.src],cwd=args.build_prefix)
+call(['cmake','-DWOO_SPDLOG_LOCAL='+('ON' if spdlogLocal else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),'-DWOO_BUILD_JOBS=%d'%args.jobs,'-DPYTHON_EXECUTABLE='+sys.executable]+['-DWOO_%s=ON'%f.upper() for f in features]+[args.src],cwd=args.build_prefix)
 call(['cmake','--build',args.build_prefix,'-j%d'%args.jobs,'-t','install'],cwd=args.build_prefix)
 # call(['scons','-C',args.src,'flavor=','features='+','.join(features),'jobs=%d'%args.jobs,'buildPrefix='+args.build_prefix,'CPPPATH='+cpppath,'CXX='+('ccache g++' if args.ccache else 'g++'),'brief=1','debug=0','PYTHON='+sys.executable])
 call(['woo','-j%d'%args.jobs,'--test'],failOk=True)
