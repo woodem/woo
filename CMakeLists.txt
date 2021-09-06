@@ -162,7 +162,7 @@ if(WOO_QT5)
 		target_include_directories(GLE INTERFACE ${GLE_INCLUDE_DIR})
 		target_link_libraries(GLE INTERFACE ${GLE_LIB})
 	else()
-		message(FATAL_ERROR "GLE library/headers not found.")
+		message(FATAL_ERROR "GLE library/headers not found (GLE Tubing and Extrusions Library, https://www.linas.org/gle/).")
 	endif()
 	# QGLViewer
 	find_path(QGLVIEWER_INCLUDE_DIR NAMES qglviewer.h PATHS /usr/include/QGLViewer /usr/local/include/QGLViewer /usr/include/qglviewer /usr/local/include/qglviewer)
@@ -395,8 +395,8 @@ set_source_files_properties(py/config.cxx
 target_link_libraries(${CXX_INTERNAL} PRIVATE Backward::Backward)
 
 
-OPTION(SPDLOG_LOCAL "build using local spdlog version" OFF)
-if(SPDLOG_LOCAL)
+OPTION(WOO_SPDLOG_LOCAL "build using local spdlog version" ON)
+if(WOO_SPDLOG_LOCAL)
 	add_library(spdlog_local STATIC
 		lib/spdlog/src/async.cpp
 		lib/spdlog/src/color_sinks.cpp
@@ -406,6 +406,7 @@ if(SPDLOG_LOCAL)
 		lib/spdlog/src/stdout_sinks.cpp
 	)
 	target_include_directories(spdlog_local PUBLIC lib/)
+    add_definitions(-DSPDLOG_COMPILED_LIB)
 	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
 else()
 	find_package(spdlog REQUIRED 1.5)
