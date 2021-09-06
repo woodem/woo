@@ -51,13 +51,13 @@ endif ()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INSTALL_MESSAGE LAZY)
 
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization iostreams system)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
-#include(FindPython3)
-#find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-# set(Python_ADDITIONAL_VERSIONS 3.6 3.7 3.8)
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
 if("${PYTHON_VERSION_MAJOR}" STREQUAL "2")
@@ -148,6 +148,7 @@ if(WOO_QT5)
 	set(CMAKE_AUTOMOC ON)
 	set(CMAKE_AUTOUIC ON)
 	set(CMAKE_AUTORCC ON)
+    cmake_policy(SET CMP0100 NEW) # avoid AUTOMOC warning about .hh files
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
 	find_package(GLUT REQUIRED)
@@ -354,7 +355,6 @@ set(WOO_CXX_SOURCES
 )
 
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
 message(STATUS "All sources are ${WOO_CXX_SOURCES};;")
 INCLUDE(wooCombineSources)
@@ -563,5 +563,5 @@ endif()
 ##
 ## run setup.py for wooExtra modules
 ##
-configure_file(wooExtra.cmake ${CMAKE_BINARY_DIR}/wooExtra.cmake @ONLY)
+configure_file(cmake/wooExtra.cmake ${CMAKE_BINARY_DIR}/wooExtra.cmake @ONLY)
 install(SCRIPT ${CMAKE_BINARY_DIR}/wooExtra.cmake)
