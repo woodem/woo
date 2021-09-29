@@ -20,7 +20,8 @@ def cylinder(A,B,radius,div=20,axDiv=1,capA=False,capB=False,masks=None,wallCaps
     '''
     cylLen=(B-A).norm()
     ax=(B-A)/cylLen
-    axOri=Quaternion(); axOri.setFromTwoVectors(Vector3.UnitX,ax)
+    print('Ax is',ax)
+    axOri=Quaternion([1,0,0,0]); axOri.setFromTwoVectors(Vector3.UnitX,ax)
 
     thetas=numpy.linspace(0,2*math.pi,num=div,endpoint=True)
     yyzz=[Vector2(radius*math.cos(th),radius*math.sin(th)) for th in thetas]
