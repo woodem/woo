@@ -148,7 +148,9 @@ if(WOO_QT5)
 	set(CMAKE_AUTOMOC ON)
 	set(CMAKE_AUTOUIC ON)
 	set(CMAKE_AUTORCC ON)
-    cmake_policy(SET CMP0100 NEW) # avoid AUTOMOC warning about .hh files
+    if (${CMAKE_VERSION} VERSION_GREATER "3.17")
+        cmake_policy(SET CMP0100 NEW) # avoid AUTOMOC warning about .hh files
+    endif()
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
 	find_package(GLUT REQUIRED)
