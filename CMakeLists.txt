@@ -512,7 +512,6 @@ install(FILES
 install(FILES
 	py/pre/chute.py
 	py/pre/cylTriax.py
-	py/pre/depot.py
 	py/pre/ell2d.py
 	py/pre/horse.py
 	py/pre/__init__.py
