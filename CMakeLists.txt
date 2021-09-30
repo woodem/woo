@@ -79,6 +79,21 @@ else()
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
+# pybind11 can be installed via pip, in which case it self-reports its own cmake directory
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} "-cimport pybind11; print(pybind11.get_cmake_dir())"
+    RESULT_VARIABLE PYBIND11_AS_PY_PACKAGE
+    OUTPUT_VARIABLE pybind11_DIR
+    OUTPUT_QUIET
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+# invocation failed, discard the result (if any)
+if(PYBIND11_AS_PY_PACKAGE AND NOT PYBIND11_AS_PY_PACKAGE EQUAL 0)
+    message(STATUS "pybind11 not importable as python module, using standard paths only")
+    unset(pybind11_DIR)
+endif()
+# this will use pybind11_DIR automatically, if defined
 find_package(pybind11 2.4 REQUIRED)
 
 find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
@@ -389,6 +404,13 @@ endif(WOO_GTS)
 if(WOO_HDF5)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC ${HDF5_CXX_LIBRARIES} ${HDF5_HL_LIBRARIES})
 endif(WOO_HDF5)
+
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} "-cimport numpy; print(numpy.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+target_include_directories(${CXX_INTERNAL} PRIVATE ${NUMPY_INCLUDE_DIR})
 
 set_source_files_properties(py/config.cxx
 	PROPERTIES
