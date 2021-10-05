@@ -8,15 +8,10 @@ import math
 from minieigen import *
 nan=float('nan')
 
-try:
-    if 'qt4' in woo.config.features:
-        from PyQt4.QtGui import *
-        from PyQt4.QtCore import *
-    if 'qt5' in woo.config.features:
-        from PyQt5.QtGui import *
-        from PyQt5.QtCore import *
-except ImportError: pass
-
+if 'qt5' in woo.config.features:
+    from PyQt5.QtGui import *
+    from PyQt5.QtCore import *
+    from PyQt5.QtWidgets import *
 
 
 class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
@@ -89,13 +84,14 @@ class EllGroup(woo.core.Preprocessor,woo.pyderived.PyWooObject):
         S.periodic=True
         S.cell.setBox((pre.boxSize[0],pre.boxSize[1],2*ZZ))
 
-        S.engines=woo.dem.DemField.minimalEngines(model=pre.model,dynDtPeriod=10)+[
+        S.engines=[
+            woo.dem.WeirdTriaxControl(goal=(-0,-0,0),stressMask=0,maxStrainRate=(.1,.1,0),mass=1.,label='triax'),
+        ]+woo.dem.DemField.minimalEngines(model=pre.model,dynDtPeriod=10)+[
             # trace particles and color by z-angVel
             woo.dem.Tracer(num=100,compress=4,compSkip=1,glSmooth=True,glWidth=2,scalar=woo.dem.Tracer.scalarAngVel,vecAxis=2,stepPeriod=40,minDist=pre.rRange[0]),
             woo.core.PyRunner(100,'S.plot.addData(i=S.step,t=S.time,total=S.energy.total(),relErr=(S.energy.relErr() if S.step>100 else 0),**S.energy)'),
             woo.dem.VtkExport(stepPeriod=pre.vtkStep,out=pre.exportFmt,ellLev=pre.vtkEllLev,dead=(pre.vtkStep<=0)),
             woo.core.PyRunner(pre.ell2Step,'import woo.pre.ell2d; mx=woo.pre.ell2d.ell2plot(out="%s-%05d.png"%(S.expandTags(S.pre.exportFmt),engine.nDone),S=S,colorRange=(0,S.lab.maxEll2Color),bbox=((0,0),S.pre.boxSize)); S.lab.maxEll2Color=max(mx,S.lab.maxEll2Color)',dead=(pre.ell2Step<=0)),
-            woo.dem.WeirdTriaxControl(goal=(-0,-0,0),stressMask=0,maxStrainRate=(.1,.1,0),mass=1.,label='triax'),
         ]
 
         S.lab.leapfrog.kinSplit=True
@@ -155,7 +151,7 @@ def ell2plot(out,S,bbox,colorRange,colorBy='angVel',**kw):
     return max(colors)
 
 def ellGroupUiBuild(S,area):
-    grid=QGridLayout(area); grid.setSpacing(0); grid.setMargin(0)
+    grid=QGridLayout(area); grid.setSpacing(0); # grid.setMargin(0)
     bHalf=QPushButton('Halve Ek')
     bDouble=QPushButton('Double Ek')
     boxEps=QDoubleSpinBox()

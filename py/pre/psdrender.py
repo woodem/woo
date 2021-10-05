@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from woo.dem import *
 from woo.fem import *
 import woo.core
@@ -139,7 +137,7 @@ background{rgb .2}
         if ratio>1: px=(S.pre.imgDim,int(S.pre.imgDim/ratio))
         else: px=(int(S.pre.imgDim*ratio),S.pre.imgDim)
         cmd=['povray','+W%d'%px[0],'+H%d'%px[1],'+A','-kff0',outMaster]
-        print('Running: cd '+os.path.dirname(out2)+'; povray '.join(cmd))
+        print('Running: cd "'+os.path.dirname(out2)+'"; povray '.join(cmd))
         subprocess.call(cmd,cwd=os.path.dirname(out2))
     
 

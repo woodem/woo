@@ -5,22 +5,22 @@ from math import *
 import numpy
 
 
-class PourFeliciter(woo.core.Preprocessor,woo.pyderived.PyWooObject):
-    '''Showcase for custom packing predicates, and importing surfaces from STL.'''
-    _classTraits=None
-    _PAT=woo.pyderived.PyAttrTrait # less typing
-    _attrTraits=[
-    ]
-    def __new__(klass,**kw):
-        self=super().__new__(klass)
-        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
-        return self
-    def __init__(self,**kw):
-        woo.core.Preprocessor.__init__(self)
-        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
-    def __call__(self):
-        # preprocessor builds the simulation when called
-        pass
+#class PourFeliciter(woo.core.Preprocessor,woo.pyderived.PyWooObject):
+#    '''Showcase for custom packing predicates, and importing surfaces from STL.'''
+#    _classTraits=None
+#    _PAT=woo.pyderived.PyAttrTrait # less typing
+#    _attrTraits=[
+#    ]
+#    def __new__(klass,**kw):
+#        self=super().__new__(klass)
+#        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
+#        return self
+#    def __init__(self,**kw):
+#        woo.core.Preprocessor.__init__(self)
+#        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)
+#    def __call__(self):
+#        # preprocessor builds the simulation when called
+#        pass
 
 class NewtonsCradle(woo.core.Preprocessor,woo.pyderived.PyWooObject):
     '''Showcase for custom packing predicates, and importing surfaces from STL.'''
@@ -61,10 +61,10 @@ class NewtonsCradle(woo.core.Preprocessor,woo.pyderived.PyWooObject):
             n=s.shape.nodes[0]
             S.dem.par.add(s)
             # sphere's node is integrated
-            S.dem.nodesAppend(n)
+            # S.dem.nodesAppend(n)
             for p in [Vector3(x,-pre.cabHtWd[1]/2,pre.cabHtWd[0]),Vector3(x,pre.cabHtWd[1]/2,pre.cabHtWd[0])]:
                 t=Truss.make([n,p],radius=pre.cabRad,wire=False,color=color,mat=cabMat,fixed=None)
-                t.shape.nodes[1].blocked='xyzXYZ'
+                t.shape.nodes[1].dem.blocked='xyzXYZ'
                 S.dem.par.add(t)
         S.engines=DemField.minimalEngines(model=pre.model,dynDtPeriod=20)+[
             IntraForce([In2_Truss_ElastMat()]),
