@@ -79,7 +79,7 @@ if dist in ('Ubuntu','Debian'):
                 pipUI+='vext.pyqt5 XLib'.split()
                 aptUI+=['python3-pyqt5']
             else:
-                aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile ipython3'.split()
+                aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-coloredlogs ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
         else: raise RuntimeError('Unsupported Ubuntu version %s.'%linver)
         if args.ccache: aptCore+=['ccache']

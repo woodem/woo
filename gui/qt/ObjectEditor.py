@@ -86,7 +86,7 @@ class AttrEditor():
     Holds exacly one attribute which is updated whenever it changes."""
     def __init__(self,getter=None,setter=None):
         self.getter,self.setter=getter,setter
-        self.hot,self.focused=False,False
+        self.hot=False
         self.multiplier=None
         self.widget=None
         self.readonly=False
@@ -102,10 +102,30 @@ class AttrEditor():
     def trySetter(self,val):
         if not self.readonly:
             try: self.setter(val)
-            except AttributeError: self.setEnabled(False)
-        self.isHot(False)
+            except BaseException as e:
+                log.warning(f'(A) Error setting value {val}: {e}')
+                # self.setEnabled(False)
+                # log.exception(f'Error setting value {val}:')
+        # self.isHot(False)
     def multiplierChanged(self,convSpec):
         raise RuntimeError("This widget %s has no multiplierChanged method defined."%self.__class__.__name__)
+    def focusInEvent(self,event):
+        log.info(f'AttrEditor.focusInEvent {self}')
+        self.doFocusIn()
+        super().focusInEvent(event)
+    def focusOutEvent(self,event):
+        log.info(f'AttrEditor.focusOutEvent {self}')
+        self.doFocusOut()
+        super().focusOutEvent(event)
+    def doFocusIn(self):
+        log.info(f'AttrEditor.doFocusIn {self}')
+        self.refresh()
+        self.isHot(True)
+    def doFocusOut(self):
+        log.info(f'AttrEditor.doFocusOut {self}')
+        self.update()
+        self.isHot(False)
+        #super().focusOutEvent(event)
 
 class AttrEditor_Bool(AttrEditor,QFrame):
     def __init__(self,parent,getter,setter):
@@ -134,9 +154,9 @@ class AttrEditor_Str(AttrEditor,QLineEdit):
     def __init__(self,parent,getter,setter):
         AttrEditor.__init__(self,getter,setter)
         QLineEdit.__init__(self,parent)
-        self.textEdited.connect(self.isHot)
-        self.selectionChanged.connect(self.isHot)
-        self.editingFinished.connect(self.update)
+        # self.textEdited.connect(self.isHot)
+        #self.selectionChanged.connect(self.isHot)
+        #self.editingFinished.connect(self.update)
     def refresh(self):
         assert(not self.multiplier)
         self.setTextStable(self.getter())
@@ -146,9 +166,9 @@ class AttrEditor_Float(AttrEditor,QLineEdit):
     def __init__(self,parent,getter,setter):
         AttrEditor.__init__(self,getter,setter)
         QLineEdit.__init__(self,parent)
-        self.textEdited.connect(self.isHot)
-        self.selectionChanged.connect(self.isHot)
-        self.editingFinished.connect(self.update)
+        #self.textEdited.connect(self.isHot)
+        #self.selectionChanged.connect(self.isHot)
+        #self.editingFinished.connect(self.update)
     def refresh(self):
         v=self.getter()
         if self.multiplier: v*=self.multiplier
@@ -520,32 +540,37 @@ class AttrEditor_Se3(AttrEditor,QFrame):
     def setFocus(self): self.grid.itemAtPosition(0,0).widget().setFocus()
 
 
-class AttrEditor_MatrixX(AttrEditor,QFrame):
+class QLineEdit_subattr(QLineEdit):
+    def __init__(self,parent):
+        if not isinstance(parent,AttrEditor): raise TypeError(f"Parent of QLineEdit_subattr must be AttrEditor (not {type(parent).__qualname__}).")
+        super().__init__('',parent=parent)
+        self._parent=parent
+        self.returnPressed.connect(parent.update)
+    def focusInEvent(self,event):
+        log.warning('QLineEdit_subattr.focusInEvent')
+        self._parent.doFocusIn()
+        QLineEdit.focusInEvent(self,event) # show cursors etc
+    def focusOutEvent(self,event):
+        log.warning('QLineEdit_subattr.focusOutEvent')
+        self._parent.doFocusOut()
+        QLineEdit.focusOutEvent(self,event) # hides cursor etc
+
+
+class AttrEditor_MatrixX(AttrEditor,QWidget):
     def __init__(self,parent,getter,setter,rows,cols,idxConverter):
         'idxConverter converts row,col tuple to either (row,col), (col) etc depending on what access is used for []'
         AttrEditor.__init__(self,getter,setter)
-        QFrame.__init__(self,parent)
+        QWidget.__init__(self,parent)
         self.rows,self.cols=rows,cols
         self.idxConverter=idxConverter
         self.setContentsMargins(0,0,0,0)
         val=self.getter()
         self.grid=QGridLayout(self); self.grid.setSpacing(0); self.grid.setContentsMargins(0,0,0,0)
         for row,col in itertools.product(range(self.rows),range(self.cols)):
-            w=QLineEdit('')
-            self.grid.addWidget(w,row,col);
-            w.textEdited.connect(self.isHot)
-            w.selectionChanged.connect(self.isHot)
-            w.editingFinished.connect(self.update)
+            w=QLineEdit_subattr(parent=self)
+            self.grid.addWidget(w,row,col)
     def refresh(self):
         val=self.getter()
-        #if (hasattr(val,'cols') and self.cols!=val.cols()) or (hasattr(val,'rows') and self.rows!=val.rows()):
-        #    # matrix size changed, reinitialize the widget completely
-        #    for row,col in itertools.product(range(self.rows),range(self.cols)):
-        #        w=self.grid.itemAtPosition(row,col).widget()
-        #        self.grid.removeWidget(w)
-        #        w.setParent(None)
-        #    self.grid.setParent(None)
-        #    self.__init__(self.parent,self.getter,self.setter,self.rows,self.cols,self.idxConverter)
         for row,col in itertools.product(range(self.rows),range(self.cols)):
             w=self.grid.itemAtPosition(row,col).widget()
             v=val[self.idxConverter(row,col)]
@@ -1554,7 +1579,7 @@ class SeqObjectComboBox(QFrame):
         ser=dialog.result()
         ix=self.combo.currentIndex()
         currSeq=list(self.getter()); currSeq.insert(ix,ser); self.setter(currSeq)
-        log.debug('%s new item created at index %d'%(self.getItemType().__name__,ix))
+        log.warning('%s new item created at index %d'%(self.getItemType().__name__,ix))
         self.refreshEvent(forceIx=ix)
     def loadSlot(self):
         f=QFileDialog.getOpenFileName(self,msg,'.')
@@ -1661,7 +1686,10 @@ class NewObjectDialog(QDialog):
 class SeqFundamentalEditor(QFrame):
     # maximum length of the sequence; show ellipsis in the middle if longer
     # this should avoid freezes in the UI due to unexpectedly long data
-    maxShowLen=30
+    maxShowLen=60
+
+    #def focusInEvent(self,event):
+    #    log.warning('SeqFundamentalEditor: focusInEvent')
 
     def __init__(self,parent,getter,setter,itemType):
         QFrame.__init__(self,parent)
@@ -1698,24 +1726,15 @@ class SeqFundamentalEditor(QFrame):
         if index==0: actUp.setEnabled(False)
         # disable until we figure out how to cancel when the no item in the menu is chosen
         #if field: field.setStyleSheet('QWidget { background: green }')
-        if 1:
-            menu.popup(self.mapToGlobal(event.pos()))
-            actNew.triggered.connect(lambda: self.newSlot(index))
-            actKill.triggered.connect(lambda: self.killSlot(index))
-            actUp.triggered.connect(lambda: self.upSlot(index))
-            actDown.triggered.connect(lambda: self.downSlot(index))
-            actFromClip.triggered.connect(lambda: self.fromClipSlot(index))
-            # this does not work...?!
-            #menu.destroyed.connect(lambda: field.setStyleSheet('QWidget { background : none }'))
-        else: # this is the old code which returns immediately; don't use it anymore
-            act=menu.exec_(self.mapToGlobal(event.pos()))
-            if field: field.setStyleSheet('QWidget { background: none }')
-            if not act:
-                return
-            if act==actNew: self.newSlot(aindex)
-            elif act==actKill: self.killSlot(index)
-            elif act==actUp: self.upSlot(index)
-            elif act==actDown: self.downSlot(index)
+
+        menu.popup(self.mapToGlobal(event.pos()))
+        actNew.triggered.connect(lambda: self.newSlot(index))
+        actKill.triggered.connect(lambda: self.killSlot(index))
+        actUp.triggered.connect(lambda: self.upSlot(index))
+        actDown.triggered.connect(lambda: self.downSlot(index))
+        actFromClip.triggered.connect(lambda: self.fromClipSlot(index))
+        # this does not work...?!
+        #menu.destroyed.connect(lambda: field.setStyleSheet('QWidget { background : none }'))
     def localPositionToIndex(self,pos,isGlobal=False):
         gp=self.mapToGlobal(pos) if not isGlobal else pos
         for row in range(self.form.rowCount()):
@@ -1740,20 +1759,21 @@ class SeqFundamentalEditor(QFrame):
         if ev.key()==Qt.Key_Up:
             self.upSlot(self.keyFocusIndex()); ev.accept()
         elif ev.key()==Qt.Key_Down: self.downSlot(self.keyFocusIndex())
-        elif ev.key()==Qt.Key_Delete:
+        elif ev.key()==Qt.Key_Delete or ev.key()==Qt.Key_Minus:
             self.killSlot(self.keyFocusIndex())
             ev.accept()
         elif ev.key()==Qt.Key_Backspace:
             self.killSlot(self.keyFocusIndex()-1)
             ev.accept()
-        elif ev.key()==Qt.Key_Enter or ev.key()==Qt.Key_Return:
+        elif ev.key()==Qt.Key_Enter or ev.key()==Qt.Key_Return or ev.key()==Qt.Key_Plus:
             # insert after the current row
             self.newSlot(self.keyFocusIndex())
             ev.accept();
     def newSlot(self,i): # i is the index AFTER which the new row is inserted
         seq=self.getter();
         seq.insert(i+1,_fundamentalInitValues.get(self.itemType,self.itemType()))
-        self.setter(seq)
+        try: self.setter(seq)
+        except BaseException as e: log.warning(f'Error setting new value {seq}: {e}')
         self.rebuild()
         if len(seq)>0:
             item=self.form.itemAt(i+1,QFormLayout.FieldRole)
@@ -1839,19 +1859,22 @@ class SeqFundamentalEditor(QFrame):
         self.splitLen=currLen
 
     def rebuild(self):
+        log.debug('rebuild...')
         currSeq=self.getter()
-        #print 'aaa',len(currSeq)
         # clear everything
         for row in range(self.form.rowCount()):
-            log.trace('counts',self.form.rowCount(),self.form.count())
+            log.debug(f'counts {self.form.rowCount()} {self.form.count()}')
             for wi in self.form.itemAt(row,QFormLayout.FieldRole),self.form.itemAt(row,QFormLayout.LabelRole):
                 self.form.removeItem(wi)
                 if not wi or not wi.widget(): continue
-                log.trace('deleting widget',wi.widget())
+                wi.focusOutEvent=None
+                log.trace('deleting widget {wi.widget()}')
                 # for some reason, deleting does not make the thing disappear visually; hiding does, however
                 # FIXME: this might be the reason why ever-resizing sequences eat up RAM!!
                 widget=wi.widget(); widget.hide(); del widget 
-            log.trace('counts after ',self.form.rowCount(),self.form.count())
+            log.trace(f'counts after {self.form.rowCount()} {self.form.count()}')
+        while self.form.rowCount()>0: self.form.removeRow(0)
+        #for row in range(self.form.rowCount()): row.
         log.debug('cleared')
         # add everything
         Klass=_fundamentalEditorMap.get(self.itemType,None)
@@ -1885,6 +1908,7 @@ class SeqFundamentalEditor(QFrame):
             # print 'item #%d mapped to field %d'%(i,li)
             if li<0: continue # in the split, do not show anything
             widget=Klass(self,ItemGetter(self.getter,i),ItemSetter(self.getter,self.setter,i))
+            # self.hijackWidgetEvents(widget)
             self.form.insertRow(i,'%d. '%li,widget)
             log.debug('added item %d %s'%(i,str(widget)))
             # set units correctly
@@ -1894,11 +1918,14 @@ class SeqFundamentalEditor(QFrame):
         if len(currSeq)==0: self.form.insertRow(0,'<i>empty</i>',QLabel('<i>(right-click for menu)</i>'))
         log.debug('rebuilt, will refresh now')
         self.refreshEvent(dontRebuild=True) # avoid infinite recursion it the length would change meanwhile
+
     def refreshEvent(self,dontRebuild=False,forceIx=-1):
+        # log.warning('refreshEvent...')
         currSeq=self.getter()
         #print 'bbb',len(currSeq)
         if not self.split and len(currSeq)!=self.form.rowCount():
             if dontRebuild: return # length changed behind our back, just pretend nothing happened and update next time instead
+            log.warning(f'Sequence length not matching (data: {len(currSeq)}, form: {self.form.rowCount()}), rebuilding')
             self.rebuild()
             currSeq=self.getter()
         elif self.split and len(currSeq)!=self.splitLen: self.renumber(len(currSeq))
