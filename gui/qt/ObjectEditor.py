@@ -1703,6 +1703,7 @@ class SeqFundamentalEditor(QFrame):
         self.formFrame=QFrame(self); self.formFrame.setLayout(self.form)
         self.layout.addWidget(self.formFrame)
         self.setLayout(self.layout)
+        self.emptySeq=False
         self.convSpec=None # cache value of unit conversions, for rows being added
         self.multiplier=None
         # ObjectEditor API compat
@@ -1915,7 +1916,10 @@ class SeqFundamentalEditor(QFrame):
             if self.multiplier:
                 widget.multiplier=self.multiplier
                 widget.multiplierChanged(self.convSpec)
-        if len(currSeq)==0: self.form.insertRow(0,'<i>empty</i>',QLabel('<i>(right-click for menu)</i>'))
+        if len(currSeq)==0:
+            self.emptySeq=True
+            self.form.insertRow(0,'<i>empty</i>',QLabel('<i>(right-click for menu)</i>'))
+        else: self.emptySeq=False
         log.debug('rebuilt, will refresh now')
         self.refreshEvent(dontRebuild=True) # avoid infinite recursion it the length would change meanwhile
 
@@ -1923,7 +1927,7 @@ class SeqFundamentalEditor(QFrame):
         # log.warning('refreshEvent...')
         currSeq=self.getter()
         #print 'bbb',len(currSeq)
-        if not self.split and len(currSeq)!=self.form.rowCount():
+        if not self.split and (len(currSeq)!=(self.form.rowCount() if not self.emptySeq else 0)):
             if dontRebuild: return # length changed behind our back, just pretend nothing happened and update next time instead
             log.warning(f'Sequence length not matching (data: {len(currSeq)}, form: {self.form.rowCount()}), rebuilding')
             self.rebuild()
