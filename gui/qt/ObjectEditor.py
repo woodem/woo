@@ -103,7 +103,7 @@ class AttrEditor():
         if not self.readonly:
             try: self.setter(val)
             except BaseException as e:
-                log.warning(f'(A) Error setting value {val}: {e}')
+                log.warning(f'Error setting value {val}: {type(e)} {e}')
                 # self.setEnabled(False)
                 # log.exception(f'Error setting value {val}:')
         # self.isHot(False)

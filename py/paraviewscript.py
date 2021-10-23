@@ -483,8 +483,7 @@ if conFiles:
     rep=Show()
     rep.Visibility=0
 
-
-
+GetAnimationScene().PlayMode='Snap To TimeSteps'
 
 GetRenderView().CenterAxesVisibility=0
 Render()
