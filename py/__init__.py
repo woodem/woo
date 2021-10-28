@@ -61,8 +61,11 @@ elif wooOptions.ompThreads:
     wooOsEnviron['OMP_NUM_THREADS']=str(wooOptions.ompThreads)
 elif 'OMP_NUM_THREADS' not in os.environ:
     import multiprocessing
-    wooOsEnviron['OMP_NUM_THREADS']=str(multiprocessing.cpu_count())
-    
+    # only set for the when running for real, otherwise the subprocess will report the env var which is confusing
+    if not wooOptions.rebuilding: wooOsEnviron['OMP_NUM_THREADS']=str(multiprocessing.cpu_count())
+elif 'OMP_NUM_THREADS' in os.environ:
+    print(f'Honoring environment variable OMP_NUM_THREADS={os.environ["OMP_NUM_THREADS"]}.')
+
 import sysconfig
 soSuffix=sysconfig.get_config_vars()['SO']
 
@@ -107,7 +110,7 @@ if wooOptions.flavor: cxxInternalName+='_'+re.sub('[^a-zA-Z0-9_]','_',wooOptions
 # if wooOptions.debug: cxxInternalName+='_debug'
 try: _cxxInternal=importlib.import_module('woo.'+cxxInternalName)
 except ImportError:
-    print('Error importing woo.%s (--flavor=%s).'%(cxxInternalName,wooOptions.flavor if wooOptions.flavor else ' '))
+    print(f'Error importing woo.{cxxInternalName} (--flavor={wooOptions.flavor if wooOptions.flavor else " "}).')
     traceback.print_exc()
     import glob
     sos=glob.glob(re.sub('__init__.py$','',__file__)+'/_cxxInternal_*'+soSuffix)
@@ -221,16 +224,17 @@ threading.Thread(target=cleanOldTemps,args=(os.path.dirname(master.tmpFileDir),m
 ##
 ## Warn if OpenMP threads are not what is probably expected by the user
 ##
-if wooOptions.ompThreads>1 or wooOptions.ompCores:
-    if 'openmp' not in config.features:
-        warnings.warn('--threads and --cores ignored, since compiled without OpenMP.')
-    elif master.numThreads!=wooOptions.ompThreads:
-        warnings.warn('--threads/--cores did not set number of OpenMP threads correctly (requested %d, current %d). Was OpenMP initialized in this process already?'%(wooOptions.ompThreads,master.numThreads))
-elif master.numThreads>1:
-    if 'OMP_NUM_THREADS' in os.environ:
-        if master.numThreads!=int(os.environ['OMP_NUM_THREADS']): warnings.warn('OMP_NUM_THREADS==%s, but woo.master.numThreads==%d'%(os.environ['OMP_NUM_THREADS'],master.numThreads))
-    else:
-        warnings.warn('OpenMP is using %d cores without --threads/--cores being used - the default should be 1'%master.numThreads)
+if not wooOptions.rebuilding:
+    if wooOptions.ompThreads>1 or wooOptions.ompCores:
+        if 'openmp' not in config.features:
+            warnings.warn('--threads and --cores ignored, since compiled without OpenMP.')
+        elif master.numThreads!=wooOptions.ompThreads:
+            warnings.warn('--threads/--cores did not set number of OpenMP threads correctly (requested %d, current %d). Was OpenMP initialized in this process already?'%(wooOptions.ompThreads,master.numThreads))
+    elif master.numThreads>1:
+        if 'OMP_NUM_THREADS' in os.environ:
+            if master.numThreads!=int(os.environ['OMP_NUM_THREADS']): warnings.warn('OMP_NUM_THREADS==%s, but woo.master.numThreads==%d'%(os.environ['OMP_NUM_THREADS'],master.numThreads))
+        else:
+            warnings.warn('OpenMP is using %d cores without --threads/--cores being used - the default should be 1'%master.numThreads)
 
 if wooOptions.clDev:
     if 'opencl' in config.features:
