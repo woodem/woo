@@ -294,7 +294,7 @@ struct InsertionSortCollider: public Collider {
 		((int,sortChunks,-1,AttrTrait<Attr::readonly>(),"Number of threads that were actually used during the last parallelized insertion sort.")) \
 		((bool,paraPeri,false,,"(debugging only): enable/disable(default) parallel sort with periodic boundaries.")) \
 		((bool,periDbgNew,false,,"Compute periodic overlaps and periods twice (with the original and the new algorithm) compare the results and report discrepancies.")) \
-		((int,maxSortPass,-20,,"If partial sort is not done after this many passes, give up. Usually more than a few passes (with non-parallelized insertion sort) already means a particle went crazy or the whole simulation is exploding. Negative value is relative to the number of cores as parallel insertion sort is done per chunks and more chunks mean more passes might be necessary.")) \
+		((int,maxSortPass,-100,,"If partial sort is not done after this many passes, give up. Usually more than a few passes (with non-parallelized insertion sort) already means a particle went crazy or the whole simulation is exploding. Negative value is relative to the number of cores as parallel insertion sort is done per chunks and more chunks mean more passes might be necessary.")) \
 		((bool,periodic,false,AttrTrait<Attr::readonly|Attr::noSave>(),"Whether the collider is in periodic mode (read-only; for debugging)")) \
 		((bool,strideActive,false,AttrTrait<Attr::readonly|Attr::noSave>(),"Whether striding is active (read-only; for debugging)")) \
 		, /* ctor */ \
