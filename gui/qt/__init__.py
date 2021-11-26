@@ -8,6 +8,9 @@ import wooMain
 import sys, os
 
 import woo
+import woo.utils
+log=woo.utils.makeLog('woo.qt')
+
 if 'qt4' in woo.config.features: raise RuntimeError('Qt4 GUI is no longer supported.') 
 
 if wooMain.options.fakeDisplay:
@@ -39,7 +42,7 @@ else:
         except: from IPython.config.configurable import MultipleInstanceError # produces ShimWarning
         try: ipshell=InteractiveShellEmbed.instance()
         except MultipleInstanceError:
-            print('Already running inside ipython, not embedding new instance.')
+            log.warning('Already running inside ipython, not embedding new instance.')
         # keep the qapp object referenced, otherwise 0.11 will die with "QWidget: Must construct QApplication before a QPaintDevice
         # see also http://ipython.org/ipython-doc/dev/interactive/qtconsole.html#qt-and-the-qtconsole
 
