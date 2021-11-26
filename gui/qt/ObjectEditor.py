@@ -110,19 +110,19 @@ class AttrEditor():
     def multiplierChanged(self,convSpec):
         raise RuntimeError("This widget %s has no multiplierChanged method defined."%self.__class__.__name__)
     def focusInEvent(self,event):
-        log.info(f'AttrEditor.focusInEvent {self}')
+        # log.info(f'AttrEditor.focusInEvent {self}')
         self.doFocusIn()
         super().focusInEvent(event)
     def focusOutEvent(self,event):
-        log.info(f'AttrEditor.focusOutEvent {self}')
+        # log.info(f'AttrEditor.focusOutEvent {self}')
         self.doFocusOut()
         super().focusOutEvent(event)
     def doFocusIn(self):
-        log.info(f'AttrEditor.doFocusIn {self}')
+        # log.info(f'AttrEditor.doFocusIn {self}')
         self.refresh()
         self.isHot(True)
     def doFocusOut(self):
-        log.info(f'AttrEditor.doFocusOut {self}')
+        # log.info(f'AttrEditor.doFocusOut {self}')
         self.update()
         self.isHot(False)
         #super().focusOutEvent(event)
