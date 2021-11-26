@@ -567,13 +567,15 @@ def runPreprocessor(pre,preFile=None):
     def nestedSetattr(obj,attr,val):
         import re
         attrs=attr.split(".")
+        indexRE=r'([a-zA-Z_0-9]+)\s*\[\s*(-?[0-9]+)\s*\]'
         for i in attrs[:-1]:
             #if i.strip().endswith(']')
-            m=re.match(r'([a-zA-Z_0-9]+)\s*\[\s*(-?[0-9]+)\s*\]',i.strip())
-            if m: obj=getattr(obj,m.group(1))[int(m.group(2))]
+            if m:=re.match(indexRE,i.strip()): obj=getattr(obj,m.group(1))[int(m.group(2))]
             else: obj=getattr(obj,i)
-        if not hasattr(obj,attrs[-1]): raise AttributeError('%s: no such attribute: %s.'%(obj.__module__+'.'+type(obj).__name__,attrs[-1]))
-        setattr(obj,attrs[-1],val)
+        if m:=re.match(indexRE,attrs[-1].strip()): getattr(obj,m.group(1))[int(m.group(2))]=val
+        else: setattr(obj,attrs[-1],val)
+        #if not hasattr(obj,attrs[-1]): raise AttributeError('%s: no such attribute: %s.'%(obj.__module__+'.'+type(obj).__name__,attrs[-1]))
+        #setattr(obj,attrs[-1],val)
 
     # just run preprocessor in this case, plus set title, if given in Preprocessor
     if not inBatch():
