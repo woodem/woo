@@ -80,10 +80,10 @@ class Master{
 
 	// to avoid accessing simulation when it is being loaded (should avoid crashes with the UI)
 	std::mutex loadingSimulationMutex;
-	std::mutex tmpFileCounterMutex;
-	long tmpFileCounter;
+	std::atomic<long> tmpFileCounter;
 	bool termFlag;
 	std::string tmpFileDir;
+	std::string tmpFilePrefix;
 	
 	public:
 		bool terminateAll(){ return termFlag; }

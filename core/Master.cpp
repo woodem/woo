@@ -73,34 +73,16 @@ Master::Master(){
 	
 	fs::path tmp; // assigned in each block
 	if(getenv("WOO_TEMP")){
-		// use WOO_TEMP_PREFIX if defined
-		// this is used on Windows, where _cxxInternal.pyd must be copied to the temp directory
-		// since it is hardlinked (not symlinked) from individual modules, hence must be on the same
-		// therefore, the tempdir must be created before _cxxInternal is imported, in python
-		// but picked up here
 		tmpFileDir=getenv("WOO_TEMP");
 		tmp=fs::path(tmpFileDir);
-		if(!fs::exists(tmp)) throw std::runtime_error("Provided temp directory WOO_TEMP="+tmpFileDir+" does not exist.");
-		LOG_DEBUG_EARLY("Using temp dir"<<getenv("WOO_TEMP"));
+		LOG_DEBUG_EARLY("Using WOO_TEMP temp dir"<<getenv("WOO_TEMP"));
 	} else {
-		auto random_string=[](const int len){ std::string ret(len,'_'); constexpr char alphanum[]="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; for(int i=0;i<len;++i) ret[i]=alphanum[rand()%(sizeof(alphanum)-1)]; return ret; };
-		fs::path tmpRoot=fs::temp_directory_path();
-		LOG_DEBUG_EARLY("fs::temp_directory_path(): "<<tmpRoot.string());
-		while(tmp=(tmpRoot/("woo-tmp-"+random_string(8))),fs::exists(tmp));
-		tmpFileDir=tmp.string();
-		LOG_DEBUG_EARLY("Creating temp dir "<<tmpFileDir);
-		if(!fs::create_directory(tmp)) throw std::runtime_error("Creating temporary directory "+tmpFileDir+" failed.");
+		tmpFileDir=fs::temp_directory_path().string();
+		LOG_DEBUG_EARLY("Using system temp dir "<<tmpFileDir);
 	}
+	if(!fs::exists(tmpFileDir)) throw std::runtime_error("Temp directory "+tmpFileDir+" does not exist ("+(getenv("WOO_TEMP")?"specified by WOO_TEMP":"system temp dir")+")");
 
-	// write pid file
-	// this checks, as side-effect, that we have write permissions for the temporary directory
-	std::ofstream pidfile;
-	pidfile.open((tmp/"pid").string().c_str());
-	if(!pidfile.is_open()) throw std::runtime_error("Error opening pidfile "+(tmp/"pid").string()+" for writing.");
-	pidfile<<getpid()<<endl;
-	if(pidfile.bad()) throw std::runtime_error("Error writing to pidfile "+(tmp/"pid").string()+".");
-	pidfile.close();
-
+	tmpFilePrefix=tmpFileDir+"/~woo-tmp_p"+std::to_string(getpid())+"_";
 	tmpFileCounter=0;
 
 	defaultClDev=Vector2i(-1,-1);
@@ -200,9 +182,8 @@ std::chrono::duration<float> Master::getRealTime_duration(){return std::chrono::
 string Master::getTmpFileDir(){ return tmpFileDir; }
 
 std::string Master::tmpFilename(){
-	assert(!tmpFileDir.empty());
-	std::scoped_lock<std::mutex> lock(tmpFileCounterMutex);
-	return tmpFileDir+"/tmp-"+to_string(tmpFileCounter++);
+	assert(!tmpFilePrefix.empty());
+	return tmpFilePrefix+to_string(tmpFileCounter++);
 }
 
 const shared_ptr<Scene>& Master::getScene(){return scene;}

@@ -196,29 +196,33 @@ from . import runtime
 ## temps cleanup at exit
 ##
 import atexit, shutil, threading, glob
-def exitCleanup(path):
-    #print 'Purging',path
-    shutil.rmtree(path)
-# this would fail under windows anyway
-if not WIN:
-    atexit.register(exitCleanup,master.tmpFileDir)
 ## clean old temps in bg thread
-def cleanOldTemps(prefix,keep):
+def cleanTemps(tmpDir,what='old'):
+    assert what in ('old','my')
     try: import psutil
     except ImportError:
-        sys.stderr.write('Not cleaning old temps, since the psutil module is missing.\n')
+        sys.stderr.write('** Not cleaning old temps, since the psutil module is missing.\n')
         return
-    for d in glob.glob(prefix+'/woo-tmp-*'):
-        if d==keep: continue
-        pidfile=d+'/pid'
-        if not os.path.exists(pidfile): continue
-        try:
-            with open(pidfile) as f: pid=int(f.readlines()[0][:-1])
-            if not psutil.pid_exists(pid):
-                sys.stderr.write('Purging old %s (pid=%d)\n'%(d,pid))
-                shutil.rmtree(d)
-        except: pass
-threading.Thread(target=cleanOldTemps,args=(os.path.dirname(master.tmpFileDir),master.tmpFileDir)).start()
+    # sys.stderr.write(f'Pattern is {tmpDir}/~woo-tmp_p*_*\n')
+    ddel=[]
+    for d in glob.glob(tmpDir+'/~woo-tmp_p*_*'):
+        # sys.stderr.write(f'## {d}\n')
+        m=re.match('~woo-tmp_p([0-9]+)_.*',os.path.basename(d))
+        if not m:
+            sys.stderr.write('** Unparseable temporary file name: {%d}\n')
+            continue
+        # sys.stderr.write(str(m.group(1))+'\n')
+        pid=int(m.group(1))
+        if what=='old' and psutil.pid_exists(pid): continue
+        if what=='my' and pid!=os.getpid(): continue
+        if os.path.isdir(d): shutil.rmtree(d)
+        else: os.remove(d)
+        ddel.append(d)
+    if ddel and 'WOO_DEBUG' in wooOsEnviron: sys.stderr.write(f'Purged {what} temps: {" ".join(ddel)}\n')
+threading.Thread(target=cleanTemps,args=(master.tmpFileDir,'old')).start()
+# this would not work under windows, probably (?)
+if not WIN:
+    atexit.register(cleanTemps,master.tmpFileDir,what='my')
 
 
 ##
