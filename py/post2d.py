@@ -276,7 +276,7 @@ def plot(data,axes=None,clabel=True,cbar=False,rawVecColorRadius=True,bbox=None,
 
     For vector data (raw or smooth), plot quiver (vector field), with arrows colored by the magnitude.
 
-    :param axes: matplotlib.axes\ instance where the figure will be plotted; if None, will be created from scratch.
+    :param axes: matplotlib.axes instance where the figure will be plotted; if None, will be created from scratch.
     :param data: value returned by :obj:`woo.post2d.data`
     :param bool clabel: show contour labels (smooth mode only), or annotate cells with numbers inside (with perArea==2)
     :param bool cbar: show colorbar (equivalent to calling pylab.colorbar(mappable) on the returned mappable)
