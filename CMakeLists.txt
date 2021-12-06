@@ -84,7 +84,7 @@ execute_process(
     COMMAND ${PYTHON_EXECUTABLE} "-cimport pybind11; print(pybind11.get_cmake_dir())"
     RESULT_VARIABLE PYBIND11_AS_PY_PACKAGE
     OUTPUT_VARIABLE pybind11_DIR
-    OUTPUT_QUIET
+    # OUTPUT_QUIET # this would discard the result we need
     ERROR_QUIET
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
