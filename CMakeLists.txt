@@ -13,6 +13,7 @@ SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be insta
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
 OPTION(WOO_CCACHE "Use ccache when compiling" ON)
+OPTION(WOO_DISTCC "Use disctt when compiling (only active if ccache is also active)" OFF)
 OPTION(WOO_CEREAL "Use cereal instead of boost::serialization (experimental!)" OFF)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
 
@@ -35,11 +36,17 @@ endif()
 # https://stackoverflow.com/a/24305849/761090
 if(WOO_CCACHE)
 	find_program(CCACHE_FOUND "ccache" REQUIRED)
-	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+	if(WOO_DISTCC)
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "ccache distcc")
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK "ccache distcc")
+	else()
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "ccache")
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK "ccache")
+	endif()
 endif(WOO_CCACHE)
 
 # https://medium.com/@alasher/colored-c-compiler-output-with-ninja-clang-gcc-10bfe7f2b949
-option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." OFF)
 if (${FORCE_COLORED_OUTPUT})
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
        add_compile_options (-fdiagnostics-color=always)
