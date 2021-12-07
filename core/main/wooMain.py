@@ -281,7 +281,8 @@ def main(sysArgv=None):
     import woo.config
     import woo.runtime
     sys.stderr.write(green('Welcome to '+bright('Woo '+woo.config.prettyVersion())+'%s%s'%(' (debug build)' if woo.config.debug else '',(', flavor '+woo.config.flavor if woo.config.flavor else '')))+', API %d\n'%woo.master.api)
-    if ex:=set([e.split('.')[1] for e in sys.modules.keys() if e.startswith('wooExtra.')]): sys.stderr.write(yellow('wooExtra modules loaded: '+bright(', '.join(ex))+'\n'))
+    ex=set([e.split('.')[1] for e in sys.modules.keys() if e.startswith('wooExtra.')])
+    if ex: sys.stderr.write(yellow('wooExtra modules loaded: '+bright(', '.join(ex))+'\n'))
     import woo.log
     import woo.system
 
