@@ -470,12 +470,13 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             class WooPrompt(Prompts):
                 def in_prompt_tokens(self,cli=None): return [(Token.Prompt,'Woo ['),(Token.PromptNum,str(self.shell.execution_count)),(Token.Prompt,']: '),(Token.Generic,'')]
                 def out_prompt_tokens(self): return [(Token.OutPrompt,'--> ['),(Token.OutPromptNum,str(self.shell.execution_count)),(Token.OutPrompt,']: '),(Token.Generic,'')]
-            # IPython<7.0
-            if hasattr(ipshell,'pt_cli'): registry=ipshell.pt_cli.application.key_bindings_registry
-            # IPython 7.x
-            elif hasattr(ipshell,'pt_app'): registry=ipshell.pt_app.key_bindings
-            # something else
-            else: registry=None
+            try:
+                # IPython<7.0
+                if hasattr(ipshell,'pt_cli'): registry=ipshell.pt_cli.application.key_bindings_registry
+                # IPython 7.x
+                elif hasattr(ipshell,'pt_app'): registry=ipshell.pt_app.key_bindings
+                else: registry=None
+            except: registry=None
             if registry:
                 # shortcuts setup
                 # tersely documented at http://ipython.readthedocs.io/en/latest/config/details.html#keyboard-shortcuts
