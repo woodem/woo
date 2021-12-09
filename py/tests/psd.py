@@ -98,6 +98,15 @@ class PsdSphereGeneratorTest(unittest.TestCase):
         # 3% tolerance here
         self.assertAlmostEqual(dMin,oPsd[0][0],delta=relDeltaD*dMin)
         self.assertAlmostEqual(dMax,oPsd[0][-1],delta=relDeltaD*dMax)
+    def testNoDumpAttrs(self):
+        'PSD: ParticleGenerator.genDiamMassTime not dumped into expr/json'
+        for i in range(100): self.gen(self.mat)
+        self.assertEqual(len(self.gen.genDiamMassTime),100)
+        for fmt in ('expr','json'):
+            g2=Object.loads(self.gen.dumps(format=fmt))
+            self.assertEqual(len(g2.genDiamMassTime),0)
+
+
 
 class BiasedPositionTest(unittest.TestCase):
     def testAxialBias(self):

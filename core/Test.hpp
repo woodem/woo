@@ -42,9 +42,13 @@ namespace woo{
 			_WOO_UNIT_ATTR(density) \
 			_WOO_UNIT_ATTR(fraction) \
 			_WOO_UNIT_ATTR(surfEnergy) \
-			((OpenMPArrayAccumulator<Real>,aaccu,,AttrTrait<>().noGui(),"Test openmp array accumulator")) \
+			((OpenMPArrayAccumulator<Real>,aaccu,,AttrTrait<Attr::noDump>().noGui(),"Test openmp array accumulator")) \
 			((int,noSaveAttr,0,AttrTrait<Attr::noSave>(),"Attribute which is not saved")) \
 			((int,hiddenAttr,0,AttrTrait<Attr::hidden>(),"Hidden data member (not accessible from python)")) \
+			((int,noDumpAttr,0,AttrTrait<Attr::noDump>(),"Attribute with dumping disabled (trait template parameter)")) \
+			((int,noDumpAttr2,0,AttrTrait<>().noDump(),"Attribute with dumping disabled (trait method modifier)")) \
+			((int,noDumpMaybe,0,AttrTrait<>().hideIf("self.noDumpCondition"),"Attribute with dumping disabled (but saving enabled) depending on the value of :obj:`noDumpCondition`.")) \
+			((bool,noDumpCondition,true,,"Attribute influencing whether :obj:`noDumpMaybe` will be dumped (when false) or not (when true)")) \
 			((int,meaning42,42,AttrTrait<Attr::readonly>(),"Read-only data member")) \
 			((int,foo_incBaz,0,AttrTrait<Attr::triggerPostLoad>(),"Change this attribute to have baz incremented")) \
 			((int,bar_zeroBaz,0,AttrTrait<Attr::triggerPostLoad>(),"Change this attribute to have baz incremented")) \
@@ -76,24 +80,6 @@ namespace woo{
 		WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_WooTestClass__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 	};
 
-    #ifdef WOO_STATIC_ATTRIBUTES
-        struct WooTestClassStatic: public woo::Object {
-            static void postLoadStatic(void* attr){
-                if(attr==&trigger) numTriggered++;
-            }
-            WO0_CLASS_BASE_DOC_STATICATTRS(WooTestClassStatic,Object,"Class for testing static attributes access.",
-                ((int,namedEnum,-1,AttrTrait<Attr::namedEnum>().namedEnum({{-1,{"minus one"}},{0,{"zero","NULL"}},{1,{"one"}}}),"Test named enumeration"))
-                ((int,readonly,2,AttrTrait<Attr::readonly>(),"Test readonly access"))
-                ((int,hidden,0,AttrTrait<Attr::hidden>(),"Test hidden"))
-                ((int,noSave,0,AttrTrait<Attr::noSave>(),"test noSave"))
-                ((int,numTriggered,0,,"Counter for testing :obj:`trigger`."))
-                ((int,trigger,0,AttrTrait<Attr::triggerPostLoad>(),"Test triggerPostLoad"))
-            );
-        };
-    #endif
-
-
-
 	struct WooTestPeriodicEngine: public PeriodicEngine{
 		void notifyDead() override { deadCounter++; }
 		#define woo_core_WooTestPeriodicEngine__CLASS_BASE_DOC_ATTRS \
@@ -106,8 +92,3 @@ using woo::WooTestClass;
 using woo::WooTestPeriodicEngine;
 WOO_REGISTER_OBJECT(WooTestClass);
 WOO_REGISTER_OBJECT(WooTestPeriodicEngine);
-
-#ifdef WOO_STATIC_ATTRIBUTES
-    using woo::WooTestClassStatic;
-    WOO_REGISTER_OBJECT(WooTestClassStatic);
-#endif

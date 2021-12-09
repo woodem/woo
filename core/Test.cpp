@@ -6,16 +6,6 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_core_WooTestPeriodicEngine__CLASS_BASE_DOC_AT
 WOO_PLUGIN(core,(WooTestClass)(WooTestPeriodicEngine));
 WOO_IMPL_LOGGER(WooTestClass);
 
-#ifdef WOO_STATIC_ATTRIBUTES
-    WOO_PLUGIN(core,(WooTestClassStatic));
-    int WooTestClassStatic::namedEnum;
-    int WooTestClassStatic::readonly;
-    int WooTestClassStatic::hidden;
-    int WooTestClassStatic::noSave;
-    int WooTestClassStatic::numTriggered;
-    int WooTestClassStatic::trigger;
-#endif
-
 
 void WooTestClass::postLoad(WooTestClass&, void* addr){
 	if(addr==NULL){ postLoadStage=POSTLOAD_CTOR; return; }

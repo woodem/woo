@@ -98,7 +98,7 @@ class TestFormatsAndDetection(unittest.TestCase):
         'IO: special comments #: inside expr dumps'
         expr='''
 #: import os
-#: g=[]        
+#: g=[]
 #: for i in range(3):
 #:   g.append((i+1)*os.getpid())
 woo.dem.DemField(
@@ -130,6 +130,32 @@ class TestSpecialDumpMethods(unittest.TestCase):
         'IO: Scene.lastSave set (Object._boostSave overridden)'
         woo.master.scene.save(self.out)
         self.assertTrue(woo.master.scene.lastSave==self.out)
+
+class TestNoDumpAttributes(unittest.TestCase):
+    def setUp(self):
+        self.t=woo.core.WooTestClass()
+        self.noDumpMaybe_T=[t for t in self.t._getAllTraits() if t.name=='noDumpMaybe'][0]
+        self.noDumpAttr_T=[t for t in self.t._getAllTraits() if t.name=='noDumpAttr'][0]
+        self.noDumpAttr2_T=[t for t in self.t._getAllTraits() if t.name=='noDumpAttr2'][0]
+    def _test_cond(self,fmt,noDump):
+        self.t.noDumpCondition=noDump
+        self.t.noDumpMaybe=self.noDumpMaybe_T.ini+1
+        t2=woo.core.Object.loads(self.t.dumps(format=fmt))
+        self.assertEqual(t2.noDumpMaybe,self.noDumpMaybe_T.ini+(0 if noDump else 1))
+    def testCond(self):
+        'IO: conditional dumping to expr and JSON'
+        for fmt in ['expr','json']:
+            for noDump in (True,False):
+                self._test_cond(fmt=fmt,noDump=noDump)
+    def testUncond(self):
+        'IO: unconditional noDump attribute (template param)'
+        for fmt in ('expr','json'):
+            self.t.noDumpAttr=self.noDumpAttr_T.ini+1
+            self.t.noDumpAttr2=self.noDumpAttr2_T.ini+1
+            t2=woo.core.Object.loads(self.t.dumps(format=fmt))
+            self.assertEqual(t2.noDumpAttr,self.noDumpAttr_T.ini)
+            self.assertEqual(t2.noDumpAttr2,self.noDumpAttr2_T.ini)
+
 
 class TestArraySerialization(unittest.TestCase):
     @unittest.skipIf('pybind11' not in woo.config.features,'Temporarily disabled due to crashes Eigen/boost::python.')
