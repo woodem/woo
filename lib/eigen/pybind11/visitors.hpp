@@ -372,7 +372,11 @@ class MatrixVisitor{
 	static MatrixT from_list(py::list l){ return from_tuple(py::tuple(l)); }
 	static MatrixT from_tuple(py::tuple t){
 		int sz=py::len(t);
-		if(sz==0) throw py::value_error("unable to construct matrix from empty tuple.");
+		if(sz==0){
+			if(MatrixT::RowsAtCompileTime!=Eigen::Dynamic) throw py::value_error("unable to construct matrix from empty tuple.");
+			// return empty dynamic matrix
+			return MatrixT();
+		}
 		bool isFlat=!PySequence_Check(t[0].ptr());
 		// mixed static/dynamic not handled (also not needed)
 		static_assert(
