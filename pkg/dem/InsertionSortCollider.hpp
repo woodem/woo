@@ -83,7 +83,7 @@ Possible performance improvements & bugs
 
 struct ParticleContainer;
 
-struct InsertionSortCollider: public Collider {
+struct InsertionSortCollider: public AabbCollider {
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
 
 	private:
@@ -230,8 +230,10 @@ struct InsertionSortCollider: public Collider {
 
 	vector<Particle::id_t> probeAabb(const Vector3r& mn, const Vector3r& mx) override;
 
-	void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
-	void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
+	#ifdef NO_ABSTRACT_AABB_COLLIDER
+		void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
+		void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
+	#endif
 
 	virtual void run() override;
 	#ifdef ISC_TIMING
@@ -260,7 +262,7 @@ struct InsertionSortCollider: public Collider {
 
 
 	#define woo_dem_InsertionSortCollider__CLASS_BASE_DOC_ATTRS_CTOR_PY \
-		InsertionSortCollider,Collider,"\
+		InsertionSortCollider,AabbCollider,"\
 		Collider with O(n log(n)) complexity, using :obj:`Aabb` for bounds.\
 		\n\n\
 		At the initial step, Bodies' bounds (along sortAxis) are first std::sort'ed along one axis (sortAxis), then collided. The initial sort has :math:`O(n^2)` complexity, see `Colliders' performance <https://yade-dem.org/index.php/Colliders_performace>`_ for some information (There are scripts in examples/collider-perf for measurements). \
@@ -280,23 +282,18 @@ struct InsertionSortCollider: public Collider {
 		If you wish to use strides, set ``verletDist`` (length by which bounds will be enlarged in all directions) to some value, e.g. 0.05 × typical particle radius. This parameter expresses the tradeoff between many potential interactions (running collider rarely, but with longer exact interaction resolution phase) and few potential interactions (running collider more frequently, but with less exact resolutions of interactions); it depends mainly on packing density and particle radius distribution.\
 	", \
 		((bool,forceInitSort,false,,"When set to true, full sort will be run regardless of other conditions. This flag is then reset automatically to false")) \
-		((bool,noBoundOk,false,,"Allow particles without bounding box. This is currently only useful for testing :obj:`woo.fem.Tetra` which don't undergo any collisions.")) \
 		((int,sortAxis,0,,"Axis for the initial contact detection.")) \
 		((bool,sortThenCollide,false,,"Separate sorting and colliding phase; it is MUCH slower, but all interactions are processed at every step; this effectively makes the collider non-persistent, not remembering last state. (The default behavior relies on the fact that inversions during insertion sort are overlaps of bounding boxes that just started/ceased to exist, and only processes those; this makes the collider much more efficient.)")) \
-		((Real,verletDist,((void)"Automatically initialized",-.05),,"Length by which to enlarge particle bounds, to avoid running collider at every step. Stride disabled if zero, and bounding boxes are updated at every step. Negative value will trigger automatic computation, so that the real value will be ``|verletDist|`` × minimum spherical particle radius and minimum :obj:`Inlet` radius (for particles which don't exist yet); if there is no minimum radius found, it will be set to 0.0 (with a warning) and disabled.")) \
 		((Real,maxVel2,0,AttrTrait<Attr::readonly>(),"Maximum encountered velocity of a particle, to compute bounding box shift.")) \
-		((int,nFullRuns,0,,"Number of full runs, when collision detection is needed; only informative.")) \
 		((int,numReinit,0,AttrTrait<Attr::readonly>(),"Cumulative number of bound array re-initialization.")) \
 		((Vector3i,stepInvs,Vector3i::Zero(),,"Number of inversions in insertion sort in the last step; always zero in the non-debug builds")) \
 		((Vector3i,numInvs,Vector3i::Zero(),,"Cumulative number of inversions in insertion sort; always zero in the non-debug builds")) \
-		((shared_ptr<BoundDispatcher>,boundDispatcher,make_shared<BoundDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.")) \
 		((Vector3i,ompTuneSort,Vector3i(1,1000,0),,"Fine-tuning for the OpenMP-parallellized partial insertion sort. The first number is the number of chunks per CPU (2 means each core will process 2 chunks sequentially, on average). The second number (if positive) is the lower bound on number of particles per chunk; the third number (if positive) is the limit of bounds per one chunk (15000 means that if there are e.g. 300k particles, bounds will be processed in 20 chunks, even if the number of chunks from the first number is smaller).")) \
 		((int,sortChunks,-1,AttrTrait<Attr::readonly>(),"Number of threads that were actually used during the last parallelized insertion sort.")) \
 		((bool,paraPeri,false,,"(debugging only): enable/disable(default) parallel sort with periodic boundaries.")) \
 		((bool,periDbgNew,false,,"Compute periodic overlaps and periods twice (with the original and the new algorithm) compare the results and report discrepancies.")) \
 		((int,maxSortPass,-100,,"If partial sort is not done after this many passes, give up. Usually more than a few passes (with non-parallelized insertion sort) already means a particle went crazy or the whole simulation is exploding. Negative value is relative to the number of cores as parallel insertion sort is done per chunks and more chunks mean more passes might be necessary.")) \
 		((bool,periodic,false,AttrTrait<Attr::readonly|Attr::noSave>(),"Whether the collider is in periodic mode (read-only; for debugging)")) \
-		((bool,strideActive,false,AttrTrait<Attr::readonly|Attr::noSave>(),"Whether striding is active (read-only; for debugging)")) \
 		, /* ctor */ \
 			woo_dem_InsertionSortCollider__ISC_TIMING_CTOR \
 			woo_dem_InsertionSortCollider__PISC_DEBUG_CTOR \

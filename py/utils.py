@@ -91,8 +91,11 @@ def defaultMaterial():
     import math
     return FrictMat(density=1e3,young=1e7,ktDivKn=.2,tanPhi=math.tan(.5))
 
-def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCollect=False,noSlip=False,noBreak=False,cp2=None,law=None,model=None,grid=False,dynDtPeriod=100,cpKw={},lawKw={}):
+def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCollect=False,noSlip=False,noBreak=False,cp2=None,law=None,model=None,collider='sap',grid=None,dynDtPeriod=100,cpKw={},lawKw={}):
     """Return default set of engines, suitable for basic simulations during testing."""
+    if (grid is not None) and grid:
+        log.warning('*grid* argument is deprecated, use collider="grid" instead.')
+        collider='grid'
     if gravity: raise ValueError("gravity MUST NOT be specified anymore, set DemField.gravity=... instead.")
     if model:
         if cp2 or law: warnings.warn("cp2 and law args are ignored when model is provided.")
@@ -110,12 +113,15 @@ def defaultEngines(damping=0.,gravity=None,verletDist=-.05,kinSplit=False,dontCo
     cp2[0].updateAttrs(cpKw)
     law[0].updateAttrs(lawKw)
 
-    if not grid: collider=InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb(),Bo1_Capsule_Aabb(),Bo1_Cone_Aabb()],label='collider',verletDist=verletDist)
-    else: collider=GridCollider([Grid1_Sphere(),Grid1_Facet(),Grid1_Wall(),Grid1_InfCylinder()],label='collider',verletDist=verletDist)
+    bo1_aabb=[Bo1_Sphere_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb(),Bo1_InfCylinder_Aabb(),Bo1_Ellipsoid_Aabb(),Bo1_Rod_Aabb(),Bo1_Capsule_Aabb(),Bo1_Cone_Aabb()]
+
+    if collider=='sap': coll=InsertionSortCollider(bo1_aabb,label='collider',verletDist=verletDist)
+    elif collider=='tree': coll=AabbTreeCollider(bo1_aabb,label='collider',verletDist=verletDist)
+    elif collider=='grid': coll=GridCollider([Grid1_Sphere(),Grid1_Facet(),Grid1_Wall(),Grid1_InfCylinder()],label='collider',verletDist=verletDist)
 
     return [
         Leapfrog(damping=damping,reset=True,kinSplit=kinSplit,dontCollect=dontCollect,label='leapfrog'),
-        collider,
+        coll,
         ContactLoop(
             [Cg2_Sphere_Sphere_L6Geom(),Cg2_Facet_Sphere_L6Geom(),Cg2_Wall_Sphere_L6Geom(),Cg2_InfCylinder_Sphere_L6Geom(),Cg2_Ellipsoid_Ellipsoid_L6Geom(),Cg2_Sphere_Ellipsoid_L6Geom(),Cg2_Wall_Ellipsoid_L6Geom(),Cg2_Wall_Facet_L6Geom(),Cg2_Rod_Sphere_L6Geom(),Cg2_Wall_Capsule_L6Geom(),Cg2_Capsule_Capsule_L6Geom(),Cg2_InfCylinder_Capsule_L6Geom(),Cg2_Facet_Capsule_L6Geom(),Cg2_Sphere_Capsule_L6Geom(),Cg2_Facet_Facet_L6Geom(),Cg2_Facet_InfCylinder_L6Geom(),Cg2_Cone_Sphere_L6Geom()],
             cp2,law,applyForces=True,label='contactLoop'

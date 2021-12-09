@@ -291,6 +291,7 @@ set(WOO_CXX_SOURCES
 	core/Test.cpp
 	core/Timing.cpp
 	# lib
+	lib/aabbcc/AABB.cc
 	# lib/backward/backward.cpp
 	lib/base/CompUtils.cpp
 	lib/base/Math.cpp
@@ -306,6 +307,7 @@ set(WOO_CXX_SOURCES
 	lib/eigen/pybind11/register.cpp
 	# pkg
 	pkg/clDem/CLDemField.cpp
+	pkg/dem/AabbTreeCollider.cpp
 	pkg/dem/Buoyancy.cpp
 	pkg/dem/Capsule.cpp
 	pkg/dem/Clump.cpp

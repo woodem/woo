@@ -73,7 +73,6 @@ struct GridCollider: public Collider{
 		((int,exNumMaps,100,,":obj:`GridStore.exNumMaps` for new grids.")) \
 		((Real,verletDist,0,AttrTrait<>().lenUnit(),"Length by which particle size is enalrged, to avoid running the collider at every timestep.")) \
 		((int,verletSteps,0,,"If positive, enlarge boxes of some particle nodes (currently only spheres are supported) so that they will still be inside the box after *verletSteps* with their current velocity; :obj:`verletDist` is still used when velocity is too small.")) \
-		((int,nFullRuns,0,AttrTrait<>(),"Cumulative number of full runs, when collision detection is needed.")) \
 		((int,complSetMinSize,-1,,"The value of *setMinSize* when calling :obj:`GridStore.computeRelativeComplements`.")) \
 		((bool,useDiff,true,,"Create new contacts based on set complement of :obj:`gridPrev` with respect to :obj:`gridCurr` if both contain meaningful data and are compatible; if false, always traverse *gridCurr* and try adding all possible contacts (this should be much slower)")) \
 		((bool,around,false,AttrTrait<Attr::triggerPostLoad>(),"If frue, particle in every cell is checked with particles in all cells around; this makes the grid storage substantially less loaded, as all particles can be shrunk by one half of the cell size.\n\n.. warning:: this feature is broken and will raise exception if enabled; the trade-off is not good, since many more cells need to be checked around every cell, and many more potential contacts are created.")) \

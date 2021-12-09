@@ -1,6 +1,7 @@
 #pragma once
 #include<woo/core/Dispatcher.hpp>
 #include<woo/pkg/dem/Particle.hpp>
+#include<woo/pkg/dem/Inlet.hpp>
 #include<woo/lib/pyutil/converters.hpp>
 
 
@@ -70,10 +71,30 @@ struct Collider: public Engine{
 	#define woo_dem_Collider__CLASS_BASE_DOC_ATTRS_PY \
 		Collider,Engine,ClassTrait().doc("Abstract class for finding spatial collisions between bodies.").section("Collision detection","TODO",{"Bound","BoundFunctor","GridBoundFunctor","BoundDispatcher","GridBoundDispatcher"}) \
 		,/*attrs*/ \
+			((int,nFullRuns,0,AttrTrait<>(),"Cumulative number of full runs, when collision detection is needed.")) \
 		,/*py*/ .def("probeAabb",&Collider::probeAabb,WOO_PY_ARGS(py::arg("mn"),py::arg("mx")),"Return list of particles intersected by axis-aligned box with given corners") \
 		.def_static("mayCollide",&Collider::mayCollide,WOO_PY_ARGS(py::arg("dem"),py::arg("pA"),py::arg("pB")),"Predicate whether two particles in question may collide or not")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Collider__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(Collider);
+
+struct AabbCollider: public Collider{
+	WOO_DECL_LOGGER;
+	void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override;
+	void getLabeledObjects(const shared_ptr<LabelMapper>&) override;
+	void setVerletDist(Scene* scene, DemField* dem);
+	bool aabbIsDirty(const shared_ptr<Particle>& p);
+	void updateAabb(const shared_ptr<Particle>& p);
+	void initBoundDispatcher();
+	#define woo_dem_AabbCollider__CLASS_BASE_DOC_ATTRS \
+		AabbCollider,Collider,ClassTrait().doc("Abstract class for colliders based on axis-aligned bounding boxes.")\
+		,/*attrs*/ \
+		((shared_ptr<BoundDispatcher>,boundDispatcher,make_shared<BoundDispatcher>(),AttrTrait<Attr::readonly>(),":obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.")) \
+		((Real,verletDist,((void)"Automatically initialized",-.05),,"Length by which to enlarge particle bounds, to avoid running collider at every step. Stride disabled if zero, and bounding boxes are updated at every step. Negative value will trigger automatic computation, so that the real value will be ``|verletDist|`` × minimum spherical particle radius and minimum :obj:`Inlet` radius (for particles which don't exist yet); if there is no minimum radius found, it will be set to 0.0 (with a warning) and disabled.")) \
+		((bool,noBoundOk,false,,"Allow particles without bounding box. This is currently only useful for testing :obj:`woo.fem.Tetra` which don't undergo any collisions.")) \
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_AabbCollider__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(AabbCollider);
 

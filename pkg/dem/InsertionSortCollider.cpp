@@ -2,8 +2,6 @@
 
 #include<woo/pkg/dem/InsertionSortCollider.hpp>
 #include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Inlet.hpp>
 #include<woo/core/Scene.hpp>
 
 #include<algorithm>
@@ -301,29 +299,10 @@ bool InsertionSortCollider::isActivated(){
 bool InsertionSortCollider::updateBboxes_doFullRun(){
 	ISC_CHECKPOINT("bounds: start");
 	// update bounds via boundDispatcher
-	boundDispatcher->scene=scene;
-	boundDispatcher->field=field;
-	boundDispatcher->updateScenePtr();
-	// boundDispatcher->run();
-
-	// automatically initialize from min sphere size; if no spheres, disable stride
-	if(verletDist<0){
-		Real minR=Inf;
-		for(const shared_ptr<Particle>& p: *dem->particles){
-			if(!p || !p->shape) continue;
-			Real r=p->shape->equivRadius();
-			if(!isnan(r)) minR=min(r,minR);
-		}
-		for(const shared_ptr<Engine>& e: scene->engines){
-			if(!e->isA<Inlet>()) continue;
-			Real dMin=e->cast<Inlet>().minMaxDiam()[0];
-			if(!isnan(dMin)) minR=min(.5*dMin,minR);
-		}
-		if(isinf(minR)){
-			LOG_WARN("\n  Negative verletDist={} was about to be set from minimum particle radius, but not Particle/Inlet with valid radius was found.\n  SETTING InsertionSortCollider.verletDist=0.0\n  THIS CAN SERIOUSLY DEGRADE PERFORMANCE.\n  Set verletDist=0.0 yourself to get rid of this warning.",verletDist);
-			verletDist=0.0;
-		} else verletDist=abs(verletDist)*minR;
-	}
+	AabbCollider::initBoundDispatcher();
+	
+	AabbCollider::setVerletDist(scene,dem);
+	assert(verletDist>=0);
 
 	bool recomputeBounds=false;
 	if(verletDist==0){
@@ -332,51 +311,10 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 		// first loop only checks if there something is our
 		for(const shared_ptr<Particle>& p: *dem->particles){
 			if(!p->shape) continue;
-			const int nNodes=p->shape->nodes.size();
-			// below we throw exception for particle that has no functor afer the dispatcher has been called
-			// that would prevent mistakenly boundless particless triggering collisions every time
-			if(!p->shape->bound){
-				LOG_TRACE("recomputeBounds because of #{} without bound",p->id);
+			if(AabbCollider::aabbIsDirty(p)){
 				recomputeBounds=true;
 				break;
 			}
-			// existing bound, do we need to update it?
-			const Aabb& aabb=p->shape->bound->cast<Aabb>();
-			assert(aabb.nodeLastPos.size()==p->shape->nodes.size());
-			if(isnan(aabb.min.maxCoeff())||isnan(aabb.max.maxCoeff())) { recomputeBounds=true; break; } 
-			// check rotation difference, for particles where it matters
-			Real moveDueToRot2=0.;
-			if(aabb.maxRot>=0.){
-				assert(!isnan(aabb.maxRot));
-				Real maxRot=0.;
-				for(int i=0; i<nNodes; i++){
-					AngleAxisr aa(aabb.nodeLastOri[i].conjugate()*p->shape->nodes[i]->ori);
-					// moving will decrease the angle, it is taken in account here, with the asymptote
-					// it is perhaps not totally correct... :|
-					maxRot=max(maxRot,abs(aa.angle())); // abs perhaps not needed?
-					//cerr<<"#"<<p->id<<": rot="<<aa.angle()<<" (max "<<aabb.maxRot<<")"<<endl;
-				}
-				if(maxRot>aabb.maxRot){
-					LOG_TRACE("recomputeBounds because of #{} rotating too much",p->id);
-					recomputeBounds=true;
-					break;
-				}
-				// linearize here, but don't subtract verletDist
-				moveDueToRot2=pow2(.5*(aabb.max-aabb.min).maxCoeff()*maxRot);
-			}
-			// check movement
-			Real d2=0; 
-			for(int i=0; i<nNodes; i++){
-				d2=max(d2,(aabb.nodeLastPos[i]-p->shape->nodes[i]->pos).squaredNorm());
-				//cerr<<"#"<<p->id<<": move2="<<d2<<" (+"<<moveDueToRot2<<"; max "<<aabb.maxD2<<")"<<endl;
-				// maxVel2b=max(maxVel2b,p->shape->nodes[i]->getData<DemData>().vel.squaredNorm());
-			}
-			if(d2+moveDueToRot2>aabb.maxD2){
-				LOG_TRACE("recomputeBounds because of #{} moved too far",p->id);
-				recomputeBounds=true;
-				break;
-			}
-			// fine, particle doesn't need to be updated
 		}
 	}
 	ISC_CHECKPOINT("bounds: check");
@@ -404,41 +342,7 @@ bool InsertionSortCollider::updateBboxes_doFullRun(){
 	for(size_t i=0; i<size; i++){
 		const shared_ptr<Particle>& p((*particles)[i]);
 		if(!p || !p->shape) continue;
-		// call dispatcher now
-		// cerr<<"["<<p->id<<"]";
-		boundDispatcher->operator()(p->shape);
-		if(!p->shape->bound){
-			if(noBoundOk) continue;
-			throw std::runtime_error("InsertionSortCollider: No bound was created for #"+to_string(p->id)+", provide a Bo1_*_Aabb functor for it. (Particle without Aabb are not supported yet, and perhaps will never be (what is such a particle good for?!)");
-		}
-		Aabb& aabb=p->shape->bound->cast<Aabb>();
-		const int nNodes=p->shape->nodes.size();
-		// save reference node positions
-		aabb.nodeLastPos.resize(nNodes);
-		aabb.nodeLastOri.resize(nNodes);
-		for(int i=0; i<nNodes; i++){
-			aabb.nodeLastPos[i]=p->shape->nodes[i]->pos;
-			aabb.nodeLastOri[i]=p->shape->nodes[i]->ori;
-		}
-		aabb.maxD2=pow2(verletDist);
-		if(isnan(aabb.maxRot)) throw std::runtime_error("S.dem.par["+to_string(p->id)+"]: bound functor did not set maxRot -- should be set to either to a negative value (to ignore it) or to non-negative value (maxRot will be set from verletDist in that case); this is an implementation error.");
-		#if 0
-			// proportionally to relVel, shift bbox margin in the direction of velocity
-			// take velocity of nodes[0] as representative
-			const Vector3r& v0=p->shape->nodes[0]->getData<DemData>().vel;
-			Real vNorm=v0.norm();
-			Real relVel=max(maxVel2b,maxVel2)==0?0:vNorm/sqrt(max(maxVel2b,maxVel2));
-		#endif
-		if(verletDist>0){
-			if(aabb.maxRot>=0){
-				// maximum rotation arm, assume centroid in the middle
-				Real maxArm=.5*(aabb.max-aabb.min).maxCoeff();
-				if(maxArm>0.) aabb.maxRot=atan(verletDist/maxArm); // FIXME: this may be very slow...?
-				else aabb.maxRot=0.;
-			}
-			aabb.max+=verletDist*Vector3r::Ones();
-			aabb.min-=verletDist*Vector3r::Ones();
-		}
+		AabbCollider::updateAabb(p);
 	}
 	ISC_CHECKPOINT("bounds: recompute");
 	return true;
@@ -1102,6 +1006,14 @@ bool InsertionSortCollider::spatialOverlapPeri_axis(const int& axis, const Parti
 bool InsertionSortCollider::spatialOverlapPeri(Particle::id_t id1, Particle::id_t id2, Scene* scene, Vector3i& periods) const {
 	assert(periodic);
 	assert(id1!=id2); // programming error, or weird bodies (too large?)
+	#if 0
+		/*
+		TODO: check performance impact when this type of logic is not needed
+		even though mask check is present in Collider::mayCollide, spatialOverlapPeri_axis
+		will throw exception for ambiguous contacts.
+		*/
+		if((*particles)[id1]->mask & (*particles)[id2]->mask & dem->loneMask) return false;
+	#endif
 	for(int axis=0; axis<3; axis++){
 		if(!spatialOverlapPeri_axis(axis,id1,id2,minima[3*id1+axis],maxima[3*id1+axis],minima[3*id2+axis],maxima[3*id2+axis],scene->cell->getSize()[axis],periods[axis])) return false;
 	}
@@ -1138,16 +1050,16 @@ py::object InsertionSortCollider::dbgInfo(){
 	return ret;
 }
 
+#ifdef NO_ABSTRACT_AABB_COLLIDER
+	void InsertionSortCollider::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
+		if(py::len(t)==0) return; // nothing to do
+		if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)").c_str());
+		if(py::len(t)!=1) throw invalid_argument("GridCollider optionally takes exactly one list of GridBoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)");
+		if(!boundDispatcher) boundDispatcher=make_shared<BoundDispatcher>();
+		vector<shared_ptr<BoundFunctor>> vf=py::extract<vector<shared_ptr<BoundFunctor>>>((t[0]))();
+		for(const auto& f: vf) boundDispatcher->add(f);
+		t=py::tuple(); // empty the args
+	}
 
-void InsertionSortCollider::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
-	if(py::len(t)==0) return; // nothing to do
-	if(py::len(t)!=1) throw invalid_argument(("Collider optionally takes exactly one list of BoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)").c_str());
-	if(py::len(t)!=1) throw invalid_argument("GridCollider optionally takes exactly one list of GridBoundFunctor's as non-keyword argument for constructor ("+to_string(py::len(t))+" non-keyword ards given instead)");
-	if(!boundDispatcher) boundDispatcher=make_shared<BoundDispatcher>();
-	vector<shared_ptr<BoundFunctor>> vf=py::extract<vector<shared_ptr<BoundFunctor>>>((t[0]))();
-	for(const auto& f: vf) boundDispatcher->add(f);
-	t=py::tuple(); // empty the args
-}
-
-void InsertionSortCollider::getLabeledObjects(const shared_ptr<LabelMapper>& labelMapper){ if(boundDispatcher) boundDispatcher->getLabeledObjects(labelMapper); Engine::getLabeledObjects(labelMapper); }
-
+	void InsertionSortCollider::getLabeledObjects(const shared_ptr<LabelMapper>& labelMapper){ if(boundDispatcher) boundDispatcher->getLabeledObjects(labelMapper); Engine::getLabeledObjects(labelMapper); }
+#endif
