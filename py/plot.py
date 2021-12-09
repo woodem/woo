@@ -10,17 +10,6 @@ __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMar
 import sys
 import collections
 
-pilOk=False
-try:
-    import PIL as Image
-    pilOk=True
-except ImportError: pass
-try:
-    import Image
-    pilOk=True
-except ImportError: pass
-
-if not pilOk: print('WARN: PIL/Image module (python-imaging) not importable, embedding images into plots will give errors.')
 
 
 def _bytes(s): return bytes(s,'ascii')
@@ -76,6 +65,23 @@ else :
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as _HeadlessFigureCanvas
 from minieigen import *
+
+import woo.utils
+log=woo.utils.makeLog(__file__)
+
+
+pilOk=False
+try:
+    import PIL as Image
+    pilOk=True
+except ImportError: pass
+try:
+    import Image
+    pilOk=True
+except ImportError: pass
+
+if not pilOk: log.warning('PIL/Image module (python-imaging) not importable, embedding images into plots will give errors.')
+
 
 matplotlib.rc('axes',grid=True) # put grid in all figures
 import pylab
@@ -207,7 +213,7 @@ def Scene_plot_autoData(P,**kw):
         except:
             import traceback 
             traceback.print_exc()
-            print('WARN: ignoring exception raised while evaluating auto-column `'+expr+"'%s."%('' if name==expr else ' ('+name+')'))
+            log.warning('ignoring exception raised while evaluating auto-column `'+expr+"'%s."%('' if name==expr else ' ('+name+')'))
             
     cols={}
     S=P.scene
@@ -231,7 +237,7 @@ def Scene_plot_autoData(P,**kw):
                 except:
                     import traceback
                     traceback.print_exc()
-                    print('WARN: ignoring exception raised while evaluating dictionary-returning expression "'+yy1[2:]+':')
+                    log.warning('ignoring exception raised while evaluating dictionary-returning expression "'+yy1[2:]+':')
                 for k,v in list(dd.items()): cols[k]=v
             elif yy1.startswith('*'):
                 ee=eval(yy1[1:],{'S':S})
@@ -498,7 +504,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
             else:
                 addDataColumns(data,missing)
                 try:
-                    print('Missing columns in Scene.plot.data, added NaNs:',', '.join([m for m in missing]))
+                    log.info('Missing columns in Scene.plot.data, added NaNs:',', '.join([m for m in missing]))
                 except UnicodeDecodeError:
                     warnings.warn('UnicodeDecodeError reporting missing data columns -- harmless, just wondering...')
         def createLines(pStrip,ySpecs,axes,isY1=True,y2Exists=False):
@@ -521,7 +527,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                     ySpecs2+=[(ret,ys[1]) for ret in evEx] # traverse list or dict keys
                 else: ySpecs2.append(ys)
             if len(ySpecs2)==0:
-                print('woo.plot: creating fake plot, since there are no y-data yet')
+                log.info('woo.plot: creating fake plot, since there are no y-data yet')
                 line,=axes.plot([nan],[nan])
                 line2,=axes.plot([nan],[nan])
                 if replace: P.currLineRefs.append(LineRef(line=line,scatter=None,annotation=None,line2=line2,xdata=[nan],ydata=[nan]))
@@ -534,7 +540,7 @@ def createPlots(P,subPlots=True,noShow=False,replace=True,scatterSize=60,wider=F
                 #    print 'Missing column %s in Scene.plot.data, added NaN.'%pString
                 #    addDataColumns(data,[pStrip])
                 if d[0] not in data:
-                    print('Missing column %s in Scene.plot.data, added NaN.'%d[0])
+                    log.info('Missing column %s in Scene.plot.data, added NaN.'%d[0])
                     addDataColumns(data,[d[0]])
                 line,=axes.plot(data[pStrip],data[d[0]],d[1],label=xlateLabel(d[0],P.labels),**lineKw)
                 lineKwWithoutAlpha=dict([(k,v) for k,v in list(lineKw.items()) if k!='alpha'])
@@ -622,7 +628,7 @@ def liveUpdate(P,timestamp):
             for new in news:
                 ax.wooYNames.add(new)
                 if new in list(data.keys()) and id(data[new]) in linesData: continue # do not add when reloaded and the old lines are already there
-                print('woo.plot: creating new line for',new)
+                log.info('woo.plot: creating new line for',new)
                 if not new in list(data.keys()): data[new]=len(data[ax.wooXName])*[nan] # create data entry if necessary
                 #print 'data',len(data[ax.wooXName]),len(data[new]),data[ax.wooXName],data[new]
                 line,=ax.plot(data[ax.wooXName],data[new],label=xlateLabel(new,P.labels)) # no line specifier
@@ -677,7 +683,7 @@ def savePlotSequence(P,fileBase,stride=1,imgRatio=(5,7),title=None,titleFrames=2
     if pltLen==0: raise ValueError("Both plot.data and plot.imgData are empty.")
     global current
     ret=[]
-    print('Saving %d plot frames, it can take a while...'%(pltLen))
+    log.info('Saving %d plot frames, it can take a while...'%(pltLen))
     for i,n in enumerate(range(0,pltLen,stride)):
         current=n
         for l in P.currLineRefs: l.update()
@@ -901,7 +907,7 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
                 except:
                     import traceback
                     traceback.print_exc()
-                    print('WARN: ignoring exception raised while evaluating expression "'+pp[0][2:]+'".')
+                    log.warning('ignoring exception raised while evaluating expression "'+pp[0][2:]+'".')
             elif pp[0].startswith('*'):
                 plots_p2+=[(e,'') for e in eval(pp[0][1:],{'S':P.scene}) if e in list(data.keys())]
             else: plots_p2.append((pp[0],pp[1]))
