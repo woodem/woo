@@ -1,6 +1,7 @@
 #pragma once
 #include<woo/lib/aabbcc/AABB.h>
 #include<woo/pkg/dem/Collision.hpp>
+#include<woo/pkg/dem/Contact.hpp>
 
 #define WOO_ABBY
 
