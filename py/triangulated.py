@@ -184,6 +184,9 @@ def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**
     nan=float('nan')
     nn=[] # list of nodes
     ff=[] # list of facets
+    stacks=len(zz)
+    if stacks<2: raise ValueError(f'len(zz)≡stacks must be greater than 1 (not {stacks})')
+
     # tell whether pp[i] is an invalid point (beginning, ending, nan, None)
     def invalid(pp,i): return i<0 or i>=len(pp) or pp[i] is None or math.isnan(pp[i].maxAbsCoeff())
     # same as invalid, but point with a single NaN is a point (referring another node)
@@ -195,7 +198,7 @@ def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**
         assert refPt(pp,i)
         j=int(pp[i][1])
         if j<0: j+=negRefAdd
-        return nn[2*j],nn[2*j+1]
+        return nn[stacks*j:stacks*(j+1)]
 
     def angleBetween(a,b):
         # http://stackoverflow.com/a/2663678/761090
@@ -225,33 +228,37 @@ def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**
                 d=(halfThick/math.sin(a/2.))*(e1+e2).normalized()
                 pts2.append(pts[i]+d)
     else: pts2=pts
-    if len(zz)!=2: raise ValueError('len(zz) must be 2 (not %d)'%len(zz))
+    # if len(zz)!=2: raise ValueError('len(zz) must be 2 (not %d)'%len(zz))
     cs=(node if node else woo.core.Node(pos=(0,0,0),ori=Quaternion.Identity))
     for i in range(0,len(pts2)):
         if notPt(pts2,i): continue
         begPt,endPt=notPt(pts2,i-1),notPt(pts2,i+1)
         #print i,begPt,endPt
         if refPt(pts2,i):
-            C,D=refNodes(pts2,i,negRefAdd=0)
+            left=refNodes(pts2,i,negRefAdd=0)
             negRefAdd=0
         else:
             nn+=[woo.core.Node(pos=cs.loc2glob((pts2[i][0],pts2[i][1],z)),dem=woo.dem.DemData(blocked='xyzXYZ')) for z in zz]
-            C,D=nn[-2],nn[-1]
+            left=nn[-stacks:]
+            # C,D=nn[-2],nn[-1]
             # this added two nodes, so references counting backwards must go one further
             negRefAdd=-1
         # beginning point does nothing else, all other add the last segment
         if not begPt:
             if refPt(pts2,i-1):
-                A,B=refNodes(pts,i-1,negRefAdd=negRefAdd)
-            else: A,B=nn[-4],nn[-3]
+                right=refNodes(pts,i-1,negRefAdd=negRefAdd)
+            else: right=nn[-2*stacks:-stacks]
             assert len(nn)>=4 # there must be at least 4 points already
             # fakeVel
             if fakeVel==0.: fv=Vector3.Zero
-            else: fv=(C.pos-A.pos).normalized()*fakeVel
-            ff+=[
-                woo.dem.Facet.make((A,C,D),halfThick=halfThick,fakeVel=fv,**kw),
-                woo.dem.Facet.make((A,D,B),halfThick=halfThick,fakeVel=fv,**kw)
-            ]
+            else: fv=(right[0].pos-left[0].pos).normalized()*fakeVel
+            for i in range(stacks-1):
+                for verts in [(left[i],right[i],right[i+1]),(left[i],right[i+1],left[i+1])]:
+                    ff.append(woo.dem.Facet.make(verts,halfThick=halfThick,fakeVel=fv,**kw))
+            #ff+=[
+            #    woo.dem.Facet.make((A,C,D),halfThick=halfThick,fakeVel=fv,**kw),
+            #    woo.dem.Facet.make((A,D,B),halfThick=halfThick,fakeVel=fv,**kw)
+            #]
     return ff
 
 
