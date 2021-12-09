@@ -9,9 +9,6 @@ unit={}
 baseUnit={}
 'Map units to their base units (with unit multiplier)'
 
-import sys
-PY3K=(sys.version_info[0]==3)
-
 def _makeUnitsDicts():
     def addUnitMultiplier(name,mult):
         global unit

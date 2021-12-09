@@ -82,7 +82,7 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
         ext=os.path.splitext(db)[-1]
         if ext in ('.sqlite','.db',b'.sqlite',b'.db',u'.sqlite',u'.db'): dbFmt='sqlite'
         elif ext in ('.h5','.hdf5','.he5','.hdf',b'.h5',b'.hdf5',b'.he4',b'.hdf',u'.h5',u'.hdf5',u'.he5',u'.hdf'): dbFmt='hdf5'
-        else: raise ValueError("Unable to determine database format from '"+db+"' (extension '"+ext+"'): must be *.h5, *.hdf5, *.he5, *.hdf, *.sqlite, *.db.")
+        else: raise ValueError("Unable to determine database format from '"+db+"' (extension '"+ext+"'): must be *.h5, *.hdf5, *.he5, *.hdf.")
 
     # make sure keys are unicode objects (which is what json converts to!)
     unicodeTags=dict(S.tags)
