@@ -94,7 +94,7 @@ struct ConveyorInlet: public Inlet{
 		((int,initSortLimit,200,,"Limit of number of particles generated in a single step above which :obj:`woo.dem.InsertionSortCollider.forceInitSort` will be set (only useful if :obj:`InsertionSortCollider` is actually used).")) \
 		((Real,avgRate,NaN,AttrTrait<>().readonly().massRateUnit(),"Average feed rate (computed from :obj:`Material density <Material.density>`, packing and  and :obj:`vel`")) \
 		((int,kinEnergyIx,-1,AttrTrait<Attr::hidden|Attr::noSave>(),"Index for kinetic energy in scene.energy")) \
-		((vector<Vector3r>,genDiamMassTime,,AttrTrait<Attr::readonly>().noGui(),"List of generated diameters, masses and times (for making granulometry)")) \
+		((vector<Vector3r>,genDiamMassTime,,AttrTrait<Attr::readonly>().noDump().noGui(),"List of generated diameters, masses and times (for making granulometry)")) \
 		,/*py*/ \
 			.def("barrier",&ConveyorInlet::pyBarrier) \
 			.def("clear",&ConveyorInlet::pyClear) \
