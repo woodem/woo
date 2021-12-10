@@ -767,15 +767,19 @@ finished: %s
             self.sendHttp(f.read(),contentType=contentType,**headers)
         def sendHttp(self,data,contentType,**headers):
             "Send file over http, using appropriate content-type. Headers are converted to strings. The *refresh* header is handled specially: if the value is 0, it is not sent at all."
-            self.send_response(200)
-            self.send_header('Content-type',contentType)
-            if 'refresh' in headers and headers['refresh']==0: del headers['refresh']
-            for h in headers: self.send_header(h,str(headers[h]))
-            self.end_headers()
-            if isinstance(data,str): data=data.encode('utf-8') # convert to bytes
-            self.wfile.write(data)
-            # global httpLastServe
-            httpLastServe=time.time()
+            try:
+                self.send_response(200)
+                self.send_header('Content-type',contentType)
+                if 'refresh' in headers and headers['refresh']==0: del headers['refresh']
+                for h in headers: self.send_header(h,str(headers[h]))
+                self.end_headers()
+                if isinstance(data,str): data=data.encode('utf-8') # convert to bytes
+                self.wfile.write(data)
+                # global httpLastServe
+                httpLastServe=time.time()
+            # disconnected when serving the request
+            except BrokenPipeError:
+                pass 
         def sendPygmentizedFile(self,f,**kw):
             if not os.path.exists(f):
                 self.send_error(404); return
