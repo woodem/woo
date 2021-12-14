@@ -59,7 +59,7 @@ void Cg2_Any_Any_L6Geom__Base::handleSpheresLikeContact(const shared_ptr<Contact
 		// perhaps separating those 2 would help, or computing A/l1, A/l2 for stiffness in Cg2 functors already would be a good idea??
 		// XXX: this also fails with uN/2>ri, which is possible for Wall with one sense of contact only
 		if(iniLensTouch) g.lens=Vector2r(abs(r1),abs(r2));
-		else g.lens=Vector2r(abs(r1)+uN/2,arb(r2)+uN/2);
+		else g.lens=Vector2r(abs(r1)+uN/2,abs(r2)+uN/2);
 		// this is a hack around that
 		if(g.lens[0]<0) g.lens[0]=g.lens[1];
 		if(g.lens[1]<0) g.lens[1]=g.lens[0];
