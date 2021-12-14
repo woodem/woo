@@ -1,0 +1,240 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.timing &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.timing</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.timing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="c1"># 2008 © Václav Šmilauer &lt;eudoxos@arcig.cz&gt;</span>
+<span class="sd">&quot;&quot;&quot;Functions for accessing timing information stored in engines and functors.</span>
+
+<span class="sd">See `timing section &lt;https://yade-dem.org/doc/current/prog.html#timing&gt;`_ of the Yade manual, `wiki page &lt;http://yade-dem.org/index.php/Speed_profiling_using_TimingInfo_and_TimingDeltas_classes&gt;`_ for some examples.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">_resetEngine</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">timingDeltas</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">timingDeltas</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">Functor</span><span class="p">):</span> <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">Dispatcher</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">functors</span><span class="p">:</span> <span class="n">_resetEngine</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">ParallelEngine</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">slaves</span><span class="p">:</span> <span class="n">_resetEngine</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execCount</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+
+<div class="viewcode-block" id="reset"><a class="viewcode-back" href="../../woo.timing.html#woo.timing.reset">[docs]</a><span class="k">def</span> <span class="nf">reset</span><span class="p">():</span>
+    <span class="s2">&quot;Zero all timing data.&quot;</span>
+    <span class="kn">import</span> <span class="nn">woo</span>
+    <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span> <span class="n">_resetEngine</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<span class="n">_statCols</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="mi">38</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;relTime&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="n">_maxLev</span><span class="o">=</span><span class="mi">3</span>
+
+<span class="k">def</span> <span class="nf">_formatLine</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">count</span><span class="p">,</span><span class="n">threads</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">,</span><span class="n">count2</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">sp</span><span class="p">,</span><span class="n">negSp</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="n">level</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="p">(</span><span class="n">_maxLev</span><span class="o">-</span><span class="n">level</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+    <span class="n">raw</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">raw</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39; [/</span><span class="si">%d</span><span class="s1">]&#39;</span><span class="o">%</span><span class="n">threads</span> <span class="k">if</span> <span class="n">threads</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">count</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">count2</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span> <span class="n">raw</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;(</span><span class="si">%d</span><span class="s1">) </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">count2</span><span class="p">,</span><span class="n">raw</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># for nFullRuns for some colliders</span>
+    <span class="n">raw</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="o">/</span><span class="mf">1000000.</span><span class="p">))</span> <span class="k">if</span> <span class="n">time</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">raw</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;</span><span class="si">%6.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">100.</span><span class="o">/</span><span class="n">totalTime</span><span class="p">))</span> <span class="k">if</span> <span class="n">totalTime</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="c1">#raw.append(&#39;[%2.1f]&#39;%(time*100./totalTime/threads) if totalTime&gt;0 and threads&gt;1 else &#39;&#39;)</span>
+    <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+        <span class="p">(</span><span class="n">sp</span><span class="o">+</span><span class="n">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">negSp</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">negSp</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">negSp</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;relTime&#39;</span><span class="p">]),</span>
+        <span class="c1">#raw[4]</span>
+    <span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_delta_stats</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">):</span>
+    <span class="n">ret</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">deltaTime</span><span class="o">=</span><span class="nb">sum</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">_formatLine</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">));</span> <span class="n">ret</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">deltas</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">_formatLine</span><span class="p">(</span><span class="s1">&#39;TOTAL&#39;</span><span class="p">,</span><span class="n">deltaTime</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">));</span> <span class="n">ret</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ret</span>
+
+<span class="k">def</span> <span class="nf">_engines_stats</span><span class="p">(</span><span class="n">engines</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">):</span>
+    <span class="n">lines</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">hereLines</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">Functor</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">_formatLine</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&quot;&#39;</span><span class="o">+</span><span class="n">e</span><span class="o">.</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39;&quot;&#39;</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">label</span> <span class="k">else</span> <span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execCount</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">,</span><span class="n">count2</span><span class="o">=</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">nFullRuns</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="s1">&#39;nFullRuns&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)));</span> <span class="n">lines</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="n">hereLines</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">timingDeltas</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">Functor</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">_formatLine</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">level</span><span class="p">));</span> <span class="n">lines</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="n">hereLines</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="n">execTime</span><span class="o">=</span><span class="nb">sum</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">timingDeltas</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span> <span class="n">execTime</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span>
+            <span class="n">lines</span><span class="o">+=</span><span class="n">_delta_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">timingDeltas</span><span class="p">,</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">Dispatcher</span><span class="p">):</span> <span class="n">lines</span><span class="o">+=</span><span class="n">_engines_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">functors</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">ContactLoop</span><span class="p">):</span>
+            <span class="n">lines</span><span class="o">+=</span><span class="n">_engines_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">geoDisp</span><span class="o">.</span><span class="n">functors</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">+=</span><span class="n">_engines_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">phyDisp</span><span class="o">.</span><span class="n">functors</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">+=</span><span class="n">_engines_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">lawDisp</span><span class="o">.</span><span class="n">functors</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">ParallelEngine</span><span class="p">):</span> <span class="n">lines</span><span class="o">+=</span><span class="n">_engines_stats</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">slave</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span><span class="p">,</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hereLines</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">_formatLine</span><span class="p">(</span><span class="s1">&#39;TOTAL&#39;</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">totalTime</span><span class="p">,</span><span class="n">level</span><span class="p">));</span> <span class="n">lines</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">lines</span>
+
+<div class="viewcode-block" id="stats"><a class="viewcode-back" href="../../woo.timing.html#woo.timing.stats">[docs]</a><span class="k">def</span> <span class="nf">stats</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Print summary table of timing information from engines and functors. Absolute times as well as percentages are given. Sample output:</span>
+
+<span class="sd">    .. code-block:: none</span>
+
+<span class="sd">        Name                                     Count                 Time        Rel. time</span>
+<span class="sd">        ------------------------------------------------------------------------------------</span>
+<span class="sd">        ForceResetter                        400               9449μs            0.01%      </span>
+<span class="sd">        BoundingVolumeMetaEngine             400            1171770μs            1.15%      </span>
+<span class="sd">        PersistentSAPCollider                400            9433093μs            9.24%      </span>
+<span class="sd">        InteractionGeometryMetaEngine        400           15177607μs           14.87%      </span>
+<span class="sd">        InteractionPhysicsMetaEngine         400            9518738μs            9.33%      </span>
+<span class="sd">        ConstitutiveLawDispatcher            400           64810867μs           63.49%      </span>
+<span class="sd">          ef2_Spheres_Brefcom_BrefcomLaw                                                    </span>
+<span class="sd">             setup                            4926145            7649131μs           15.25%  </span>
+<span class="sd">             geom                             4926145           23216292μs           46.28%  </span>
+<span class="sd">             material                         4926145            8595686μs           17.14%  </span>
+<span class="sd">             rest                             4926145           10700007μs           21.33%  </span>
+<span class="sd">             TOTAL                                              50161117μs          100.00%  </span>
+<span class="sd">        &quot;damper&quot;                             400            1866816μs            1.83%      </span>
+<span class="sd">        &quot;strainer&quot;                           400              21589μs            0.02%      </span>
+<span class="sd">        &quot;plotDataCollector&quot;                  160              64284μs            0.06%      </span>
+<span class="sd">        &quot;damageChecker&quot;                        9               3272μs            0.00%      </span>
+<span class="sd">        TOTAL                                             102077490μs          100.00%      </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">woo</span>
+    <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Name&#39;</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;Count&#39;</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;Time [ms]&#39;</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;Rel. time [%]&#39;</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">_statCols</span><span class="p">[</span><span class="s1">&#39;relTime&#39;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">_statCols</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_statCols</span><span class="p">])</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">_statCols</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">_engines_stats</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">,</span><span class="nb">sum</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">execTime</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.timing</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.timing &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.triangulated" href="woo.triangulated.html" />
+    <link rel="prev" title="woo.tests" href="woo.tests.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.triangulated.html" title="woo.triangulated"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.tests.html" title="woo.tests"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.timing</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.timing">
+<span id="woo-timing"></span><h1><a class="reference internal" href="#module-woo.timing" title="woo.timing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.timing</span></code></a><a class="headerlink" href="#module-woo.timing" title="Permalink to this headline">¶</a></h1>
+<p>Functions for accessing timing information stored in engines and functors.</p>
+<p>See <a class="reference external" href="https://yade-dem.org/doc/current/prog.html#timing">timing section</a> of the Yade manual, <a class="reference external" href="http://yade-dem.org/index.php/Speed_profiling_using_TimingInfo_and_TimingDeltas_classes">wiki page</a> for some examples.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.timing.reset">
+<span class="sig-prename descclassname"><span class="pre">woo.timing.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/timing.html#reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.timing.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero all timing data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.timing.stats">
+<span class="sig-prename descclassname"><span class="pre">woo.timing.</span></span><span class="sig-name descname"><span class="pre">stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/timing.html#stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.timing.stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print summary table of timing information from engines and functors. Absolute times as well as percentages are given. Sample output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name                                     Count                 Time        Rel. time
+------------------------------------------------------------------------------------
+ForceResetter                        400               9449μs            0.01%      
+BoundingVolumeMetaEngine             400            1171770μs            1.15%      
+PersistentSAPCollider                400            9433093μs            9.24%      
+InteractionGeometryMetaEngine        400           15177607μs           14.87%      
+InteractionPhysicsMetaEngine         400            9518738μs            9.33%      
+ConstitutiveLawDispatcher            400           64810867μs           63.49%      
+  ef2_Spheres_Brefcom_BrefcomLaw                                                    
+     setup                            4926145            7649131μs           15.25%  
+     geom                             4926145           23216292μs           46.28%  
+     material                         4926145            8595686μs           17.14%  
+     rest                             4926145           10700007μs           21.33%  
+     TOTAL                                              50161117μs          100.00%  
+&quot;damper&quot;                             400            1866816μs            1.83%      
+&quot;strainer&quot;                           400              21589μs            0.02%      
+&quot;plotDataCollector&quot;                  160              64284μs            0.06%      
+&quot;damageChecker&quot;                        9               3272μs            0.00%      
+TOTAL                                             102077490μs          100.00%      
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.tests.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.triangulated.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.triangulated</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.timing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.triangulated.html" title="woo.triangulated"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.tests.html" title="woo.tests"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.timing</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,190 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo._monkey.gts &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo._monkey.gts</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo._monkey.gts</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This module reimplements the gts.read function in python, since it is stragenly broken under windows, and replaces the original one by monkey-patching.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="py_gts_read"><a class="viewcode-back" href="../../../woo._monkey.html#woo._monkey.gts.py_gts_read">[docs]</a><span class="k">def</span> <span class="nf">py_gts_read</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Pure-python implementation of the pygts._gts.read function; it hangs under Windows</span>
+<span class="sd">    when using woo.gts (not pure pygts), in gts-0.7.6/src/misc.c:173 in next_char, where</span>
+<span class="sd">    fgetc is waiting for the next character indefinitely (why?); when fgetc was replaced by lower-level read(fileno,buf,1), GTS was complaining about not seeing the first integer</span>
+<span class="sd">    (number of vertices) at the beginning of the file.</span>
+<span class="sd">    </span>
+<span class="sd">    Since there seemed little point digging into GTS any further, this monkey-patch</span>
+<span class="sd">    replaces that function with a pure-python implementation, which is perhaps not as</span>
+<span class="sd">    efficient, but works reliably under Windows.</span>
+<span class="sd">    </span>
+<span class="sd">    The patch is only applied under Windows, and if &#39;gts&#39; is in woo.config.features</span>
+<span class="sd">    (i.e. the module woo.gts exists, and is also exposed as gts).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="kn">import</span> <span class="nn">woo.gts</span>
+    <span class="n">lineno</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">surf</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">gts</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span>
+    <span class="c1">#nVert,nEdge,nFace=0,0,0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">l1</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">nVert</span><span class="p">,</span><span class="n">nEdge</span><span class="p">,</span><span class="n">nFace</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">l1</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">l1</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">l1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">l1</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="o">!=</span><span class="p">[</span><span class="s1">&#39;GtsSurface&#39;</span><span class="p">,</span><span class="s1">&#39;GtsFace&#39;</span><span class="p">,</span><span class="s1">&#39;GtsEdge&#39;</span><span class="p">,</span><span class="s1">&#39;GtsVertex&#39;</span><span class="p">]:</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Warning: expected &quot;GtsSurface GtsFace GtsEdge GtsVertex&quot; at the end of line 1; ignoring.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Error reading GTS header (number of vertices, edges, faces), line </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">lineno</span><span class="p">)</span>
+    <span class="n">vv</span><span class="p">,</span><span class="n">ee</span><span class="o">=</span><span class="p">[],[]</span>
+    <span class="k">for</span> <span class="n">vn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nVert</span><span class="p">):</span>
+        <span class="n">lineno</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gts</span><span class="o">.</span><span class="n">Vertex</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()])))</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Error reading vertex no. </span><span class="si">%d</span><span class="s1">, line </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">vn</span><span class="p">,</span><span class="n">lineno</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span><span class="o">==</span><span class="n">nVert</span>
+    <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nEdge</span><span class="p">):</span>
+        <span class="n">lineno</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span>
+            <span class="n">ee</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gts</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vv</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Error reading edge no. </span><span class="si">%d</span><span class="s1">, line </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">en</span><span class="p">,</span><span class="n">lineno</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="o">==</span><span class="n">nEdge</span>
+    <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nFace</span><span class="p">):</span>
+        <span class="n">lineno</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Error reading face no. </span><span class="si">%d</span><span class="s1">, line </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">lineno</span><span class="p">))</span>
+        <span class="n">surf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gts</span><span class="o">.</span><span class="n">Face</span><span class="p">(</span><span class="n">ee</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">ee</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">ee</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">surf</span></div>
+
+<span class="kn">import</span> <span class="nn">woo.config</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="s1">&#39;gts&#39;</span> <span class="ow">in</span> <span class="n">woo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">features</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">==</span><span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">woo.gts</span>
+    <span class="n">woo</span><span class="o">.</span><span class="n">gts</span><span class="o">.</span><span class="n">read</span><span class="o">=</span><span class="n">py_gts_read</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo._monkey.gts</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,7 @@
+:mod:`woo.WeightedAverage2d`
+=========================================
+
+.. automodule:: woo.WeightedAverage2d
+   :members:
+   :undoc-members:
+

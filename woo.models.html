@@ -1,0 +1,546 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.models &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.objectlibrary" href="woo.objectlibrary.html" />
+    <link rel="prev" title="woo.mesh" href="woo.mesh.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.objectlibrary.html" title="woo.objectlibrary"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.mesh.html" title="woo.mesh"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="woo-models">
+<h1><a class="reference internal" href="#module-woo.models" title="woo.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a><a class="headerlink" href="#woo-models" title="Permalink to this headline">¶</a></h1>
+digraph inheritancec80da1a5ff {
+bgcolor=transparent;
+rankdir=LR;
+size=&quot;&quot;;
+  &quot;core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
+  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;models.ContactModelSelector&quot; [URL=&quot;#woo.models.ContactModelSelector&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;User interface for humanely selecting contact model and all its features, plus functions returning respective :obj:`woo.dem.CPhysFunctor` and :obj:`woo.dem.LawFunctor` objects.&quot;];
+  &quot;core.Object&quot; -&gt; &quot;models.ContactModelSelector&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;pyderived.PyWooObject&quot; -&gt; &quot;models.ContactModelSelector&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;models.CundallModel&quot; [URL=&quot;#woo.models.CundallModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Linear model :cite:`Cundall1979`.&quot;];
+  &quot;models.HertzModel&quot; [URL=&quot;#woo.models.HertzModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Purely elastic Hertz contact model; base class for :obj:`SchwarzModel`. For details, see :ref:`hertzian_contact_models`.&quot;];
+  &quot;models.CundallModel&quot; -&gt; &quot;models.HertzModel&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;models.SchwarzModel&quot; [URL=&quot;#woo.models.SchwarzModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Schwarz contact model, following :cite:`Schwarz2003`. Details are given in :ref:`adhesive_contact_models`.&quot;];
+  &quot;models.HertzModel&quot; -&gt; &quot;models.SchwarzModel&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
+  &quot;pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
+}
+<span class="target" id="module-woo.models"></span><p>Collection of classes providing python-only implementation of various implementation models, mostly for testing or plotting in documentation. Plus a class for selecting material model along with all its parameters for use in preprocessors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.models.CundallModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.models.</span></span><span class="sig-name descname"><span class="pre">CundallModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ktDivKn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#CundallModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.CundallModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear model <span id="id1">[<a class="reference internal" href="references.html#id11" title="Peter A Cundall and Otto DL Strack. A discrete numerical model for granular assemblies. Geotechnique, 29(1):47–65, 1979.">CS79</a>]</span>.</p>
+<p>Initialize the model with constants. If E2 is not given, it is the same as E1</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.CundallModel.F_u">
+<span class="sig-name descname"><span class="pre">F_u</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#CundallModel.F_u"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.CundallModel.F_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <span class="math notranslate nohighlight">\(F=k_n u_N\)</span> (uses the Woo convention).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.CundallModel.make_plot">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#CundallModel.make_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.CundallModel.make_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.models.HertzModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.models.</span></span><span class="sig-name descname"><span class="pre">HertzModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Purely elastic Hertz contact model; base class for <a class="reference internal" href="#woo.models.SchwarzModel" title="woo.models.SchwarzModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SchwarzModel</span></code></a>. For details, see <a class="reference internal" href="theory/contact/hertzian.html#hertzian-contact-models"><span class="std std-ref">Hertzian contact models</span></a>.</p>
+<p>Initialize the model with constants. If nu2 is not given, it is the same as nu1. Passes most parameters to <a class="reference internal" href="#woo.models.CundallModel" title="woo.models.CundallModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CundallModel</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.HertzModel.F_a">
+<span class="sig-name descname"><span class="pre">F_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel.F_a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel.F_a" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(F(a)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.HertzModel.F_delta">
+<span class="sig-name descname"><span class="pre">F_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel.F_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel.F_delta" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(F(\\delta)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.HertzModel.a_F">
+<span class="sig-name descname"><span class="pre">a_F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel.a_F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel.a_F" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a(F)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.HertzModel.a_delta">
+<span class="sig-name descname"><span class="pre">a_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel.a_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel.a_delta" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a(\delta)=\sqrt{R\delta}\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.HertzModel.delta_a">
+<span class="sig-name descname"><span class="pre">delta_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#HertzModel.delta_a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.HertzModel.delta_a" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\delta(a)\)</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.models.</span></span><span class="sig-name descname"><span class="pre">SchwarzModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schwarz contact model, following <span id="id2">[<a class="reference internal" href="references.html#id9" title="Udo D Schwarz. A generalized analytical model for the elastic deformation of an adhesive contact between a sphere and a flat surface. Journal of colloid and interface science, 261(1):99–106, 2003.">Sch03</a>]</span>. Details are given in <a class="reference internal" href="theory/contact/adhesive.html#adhesive-contact-models"><span class="std std-ref">Adhesive models</span></a>.</p>
+<p>Initialize the model; passes elastic parameters to <a class="reference internal" href="#woo.models.HertzModel" title="woo.models.HertzModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HertzModel</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.F_a">
+<span class="sig-name descname"><span class="pre">F_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.F_a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.F_a" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(F(a)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aHat">
+<span class="sig-name descname"><span class="pre">aHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aHat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\hat a(a)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aHat_deltaHat">
+<span class="sig-name descname"><span class="pre">aHat_deltaHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltaHat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aHat_deltaHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aHat_deltaHat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aHat_fHat">
+<span class="sig-name descname"><span class="pre">aHat_fHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aHat_fHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aHat_fHat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aHi">
+<span class="sig-name descname"><span class="pre">aHi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aHi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aHi" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a_{\max}=a_{\min}+\sqrt{R(\delta-\delta_{\min})}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aMin">
+<span class="sig-name descname"><span class="pre">aMin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aMin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aMin" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a_{\min}=(R\xi)^\frac{2}{3}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.aUnhat">
+<span class="sig-name descname"><span class="pre">aUnhat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.aUnhat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.aUnhat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a(\hat a)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.a_F">
+<span class="sig-name descname"><span class="pre">a_F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.a_F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.a_F" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a(F)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.a_delta">
+<span class="sig-name descname"><span class="pre">a_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.a_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.a_delta" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(a(\delta)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.deltaHat">
+<span class="sig-name descname"><span class="pre">deltaHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.deltaHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.deltaHat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\hat\delta(\delta)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.deltaHat_aHat">
+<span class="sig-name descname"><span class="pre">deltaHat_aHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.deltaHat_aHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.deltaHat_aHat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.deltaMin">
+<span class="sig-name descname"><span class="pre">deltaMin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.deltaMin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.deltaMin" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\delta_{\min}=-3R^\frac{1}{3}\xi^\frac{4}{3}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.deltaUnhat">
+<span class="sig-name descname"><span class="pre">deltaUnhat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltaHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.deltaUnhat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.deltaUnhat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\delta(\hat \delta)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.delta_a">
+<span class="sig-name descname"><span class="pre">delta_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.delta_a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.delta_a" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\delta(a)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.fHat">
+<span class="sig-name descname"><span class="pre">fHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.fHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.fHat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\hat F(F)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.fHat_aHat">
+<span class="sig-name descname"><span class="pre">fHat_aHat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.fHat_aHat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.fHat_aHat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.fUnhat">
+<span class="sig-name descname"><span class="pre">fUnhat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fHat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.fUnhat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.fUnhat" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(F(\hat F)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.makeDefault">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">makeDefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.makeDefault"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.makeDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return instance of the model with some “reasonable” parameters, which are overridden with <code class="docutils literal notranslate"><span class="pre">**kw</span></code>. Useful for quick testing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.SchwarzModel.normalized_plot">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalized_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphaGammaName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aHi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legendAlpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#SchwarzModel.normalized_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.SchwarzModel.normalized_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create normalized plot as it appears in <span id="id3">[<a class="reference internal" href="references.html#id8" title="Daniel Maugis. Adhesion of spheres: the jkr-dmt transition using a dugdale model. Journal of Colloid and Interface Science, 150(1):243–269, 1992.">Mau92</a>]</span> including range of axes with normalized quantities. This function is mainly useful for documentation of Woo itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – one of <code class="docutils literal notranslate"><span class="pre">a(delta)</span></code>, <code class="docutils literal notranslate"><span class="pre">F(delta)</span></code>, <code class="docutils literal notranslate"><span class="pre">a(F)</span></code></p></li>
+<li><p><strong>alphaGammaName</strong> – list of (alpha,gamma,name) tuples which are passed to the <a class="reference internal" href="#woo.models.SchwarzModel" title="woo.models.SchwarzModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SchwarzModel</span></code></a> constructor</p></li>
+<li><p><strong>N</strong> – numer of points in linspace for each axis</p></li>
+<li><p><strong>stride</strong> – stride for plotting inverse relationships (with points)</p></li>
+<li><p><strong>aHi</strong> – with <code class="docutils literal notranslate"><span class="pre">what==a(delta)</span></code>, show upper bracket for $a$ for i-th model, if <em>i</em> appears in the list</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.models.</span></span><span class="sig-name descname"><span class="pre">ContactModelSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface for humanely selecting contact model and all its features, plus functions returning respective <a class="reference internal" href="woo.dem.html#woo.dem.CPhysFunctor" title="woo.dem.CPhysFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CPhysFunctor</span></code></a> and <a class="reference internal" href="woo.dem.html#woo.dem.LawFunctor" title="woo.dem.LawFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.LawFunctor</span></code></a> objects.</p>
+<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/models.py#L214">py/models.py</a>]</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Material model to use.</p>
+<p>[type: str, choices: linear, pellet, Hertz, DMT, Schwarz, concrete, ice, luding]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.numMat">
+<span class="sig-name descname"><span class="pre">numMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2i(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.numMat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum and maximum number of material definitions.</p>
+<p>[type: Vector2i, not shown in the UI, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.matDesc">
+<span class="sig-name descname"><span class="pre">matDesc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.matDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of strings describing individual materials. Keep the description very short (one word) as it will show up in the UI combo box for materials.</p>
+<p>[type: [str, …], not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.mats">
+<span class="sig-name descname"><span class="pre">mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">[&lt;FrictMat</span> <span class="pre">&#64;</span> <span class="pre">0x2d3cea0&gt;]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Material definitions</p>
+<p>[type: [Material, …]]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.distFactor">
+<span class="sig-name descname"><span class="pre">distFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.distFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distance factor for sphere-sphere contacts (copied to <a class="reference internal" href="woo.dem.html#woo.dem.DemField.distFactor" title="woo.dem.DemField.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.distFactor</span></code></a>)</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.poisson">
+<span class="sig-name descname"><span class="pre">poisson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.poisson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Poisson ratio (<a class="reference internal" href="woo.dem.html#woo.dem.Cp2_HertzMat_HertzPhys.poisson" title="woo.dem.Cp2_HertzMat_HertzPhys.poisson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_HertzMat_HertzPhys.poisson</span></code></a>)</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.restitution">
+<span class="sig-name descname"><span class="pre">restitution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.restitution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restitution coefficient for models with viscosity (<code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.en</span></code>).</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.damping">
+<span class="sig-name descname"><span class="pre">damping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.damping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerical (non-viscous) damping (<a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Leapfrog.damping</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This damping  value is <strong>only</strong> used for <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">ice</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">mocel</span></code>, otherwise the model has its own damping and this value will be ignored (<a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Leapfrog.damping</span></code></a> will be zero).</p>
+</div>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.linRoll">
+<span class="sig-name descname"><span class="pre">linRoll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.linRoll" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Linear model</em>: enable rolling, with parameters set in <a class="reference internal" href="#woo.models.ContactModelSelector.linRollParams" title="woo.models.ContactModelSelector.linRollParams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linRollParams</span></code></a>.</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.linRollParams">
+<span class="sig-name descname"><span class="pre">linRollParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.linRollParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolling parameters for the linear model, in the order of <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relRollStiff" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relRollStiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relRollStiff</span></code></a>, <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relTwistStiff" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.relTwistStiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relTwistStiff</span></code></a>, <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.rollTanPhi" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.rollTanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rollTanPhi</span></code></a>.</p>
+<p>[type: Vector3]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.plastSplit">
+<span class="sig-name descname"><span class="pre">plastSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.plastSplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split plastic dissipation into the normal and tangent component (obj:<cite>woo.dem.Law2_L6Geom_PelletPhys_Pellet.plastSplit</cite>).</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.pelletThin">
+<span class="sig-name descname"><span class="pre">pelletThin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector6(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.pelletThin" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Pellet model:</em> parameters for plastic thinning (decreasing pellet radius during normal plastic loading); their order is <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRate" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thinRate</span></code></a>, <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRelRMin" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinRelRMin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thinRelRMin</span></code></a>, <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinExp" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.thinExp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thinExp</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">thinRefRad</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">thinMinExp</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">thinRateExp</span></code>.</p>
+<p>[type: Vector6]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.pelletConf">
+<span class="sig-name descname"><span class="pre">pelletConf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.pelletConf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Pellet model:</em> parameters for history-independent adhesion (“confinement”); the values are <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.confSigma" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.confSigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confSigma</span></code></a>, <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.confRefRad" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.confRefRad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confRefRad</span></code></a> and <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_PelletPhys_Pellet.confExp" title="woo.dem.Law2_L6Geom_PelletPhys_Pellet.confExp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confExp</span></code></a>.</p>
+<p>[type: Vector3]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect whether deprecated alpha is used.</p>
+<p>[type: float, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.surfEnergy">
+<span class="sig-name descname"><span class="pre">surfEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.surfEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect whether deprecated surfEnergy is used.</p>
+<p>[type: float, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.__new__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.models.ContactModelSelector.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.models.ContactModelSelector.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.deepcopy">
+<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
+is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.getFunctors">
+<span class="sig-name descname"><span class="pre">getFunctors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.getFunctors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.getFunctors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of <code class="docutils literal notranslate"><span class="pre">([CPhysFunctor,...],[LawFunctor,...])</span></code> corresponding to the selected model and parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.getMat">
+<span class="sig-name descname"><span class="pre">getMat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.getMat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.getMat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return default-initialized material for use with this model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.getMatClass">
+<span class="sig-name descname"><span class="pre">getMatClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.getMatClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.getMatClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return class object of material for use with this model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.getNonviscDamping">
+<span class="sig-name descname"><span class="pre">getNonviscDamping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.getNonviscDamping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.getNonviscDamping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value for <a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Leapfrog.damping</span></code></a>; returns zero for models with internal damping, and <a class="reference internal" href="#woo.models.ContactModelSelector.damping" title="woo.models.ContactModelSelector.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">damping</span></code></a> for the <code class="docutils literal notranslate"><span class="pre">linear</span></code> (<a class="reference internal" href="theory/contact/linear.html#linear-contact-model"><span class="std std-ref">Linear (Cundall) contact model</span></a>) and <code class="docutils literal notranslate"><span class="pre">ice</span></code> (<a class="reference internal" href="theory/contact/ice.html#ice-contact-model"><span class="std std-ref">Ice contact model</span></a>) models.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.postLoad">
+<span class="sig-name descname"><span class="pre">postLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#ContactModelSelector.postLoad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.ContactModelSelector.postLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do various consistency adjustments, such as materials matching the selected model type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.models.ContactModelSelector.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.models.ContactModelSelector.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.mesh.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.mesh</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.objectlibrary.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.objectlibrary</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.models.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.objectlibrary.html" title="woo.objectlibrary"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.mesh.html" title="woo.mesh"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

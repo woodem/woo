@@ -1,0 +1,677 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.utils &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="wooMain" href="wooMain.html" />
+    <link rel="prev" title="woo.triangulated" href="woo.triangulated.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="wooMain.html" title="wooMain"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.triangulated.html" title="woo.triangulated"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.utils</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.utils">
+<span id="woo-utils"></span><h1><a class="reference internal" href="#module-woo.utils" title="woo.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.utils</span></code></a><a class="headerlink" href="#module-woo.utils" title="Permalink to this headline">¶</a></h1>
+<p>Heap of functions that don’t (yet) fit anywhere else.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.capsule">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">capsule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shaft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ori=Quaternion((1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#capsule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.capsule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a ready-made capsule particle.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.cone">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">cone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angVel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#cone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create cone with given parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.defaultEngines">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">defaultEngines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gravity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verletDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinSplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dontCollect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noSlip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noBreak</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">law</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynDtPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpKw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lawKw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#defaultEngines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.defaultEngines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return default set of engines, suitable for basic simulations during testing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.defaultMaterial">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">defaultMaterial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#defaultMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.defaultMaterial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return default material, when creating particles with <a class="reference internal" href="#woo.utils.sphere" title="woo.utils.sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.sphere</span></code></a> and friends and material is unspecified. This function returns <code class="docutils literal notranslate"><span class="pre">FrictMat(density=1e3,young=1e7,ktDivKn=.2,tanPhi=tan(.5))</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.ellipsoid">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">ellipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiAxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ori=Quaternion((1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angVel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.ellipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an <a class="reference internal" href="woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Ellipsoid</span></code></a> particle.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.ensureDir">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">ensureDir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Creating</span> <span class="pre">directory</span> <span class="pre">%s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#ensureDir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.ensureDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that directory <code class="docutils literal notranslate"><span class="pre">d</span></code> exists. If <code class="docutils literal notranslate"><span class="pre">d</span></code> is empty, return immediately (signifies usually the current directory). Otherwise try to create the directory. <em>msg</em> is an optional message to be printed to stdout only when something is actually done, and must include %s which will be replaced by the directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.ensureWriteableDir">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">ensureWriteableDir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#ensureWriteableDir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.ensureWriteableDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure given directory is writeable; raise exception (IOError) if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.facet">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">facet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fakeVel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halfThick=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flex=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__class=&lt;class</span> <span class="pre">'woo.dem.Facet'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#facet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.facet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create facet with given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<em>[</em><em>Vector3</em><em>,</em><em>Vector3</em><em>,</em><em>Vector3</em><em>]</em>) – coordinates of vertices in the global coordinate system.</p></li>
+<li><p><strong>wire</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, facets are shown as skeleton; otherwise facets are filled</p></li>
+</ul>
+</dd>
+</dl>
+<p>See <a class="reference internal" href="#woo.utils.sphere" title="woo.utils.sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.sphere</span></code></a>’s documentation for meaning of other parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.find_executable">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">find_executable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#find_executable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.find_executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thin wrapper for find_executable, using either shutil.which or distutils.spawn.find_executable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.fixWindowsPath">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">fixWindowsPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#fixWindowsPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.fixWindowsPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.freecadExport">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">freecadExport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#freecadExport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.freecadExport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.htmlReport">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">htmlReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repFmt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afterHead</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figFmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svgEmbed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideWooExtra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#htmlReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.htmlReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate (X)HTML report for simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> – <code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene</span></code> object; must contain <code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene.pre</span></code></p></li>
+<li><p><strong>repFmt</strong> – format for the output file; will be expanded using <code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene.tags</span></code>; it should end with <cite>.html</cite> or <cite>.xhtml</cite>.</p></li>
+<li><p><strong>headline</strong> – title of the report, used as HTML title and the first <code class="docutils literal notranslate"><span class="pre">&lt;h1&gt;</span></code> heading.</p></li>
+<li><p><strong>afterHead</strong> – contents (XHTML fragment) to be added verbatim after the header (title, woo config table, preprocessor parameters)</p></li>
+<li><p><strong>figs</strong> – <p>figures included in the report; they are either embedded (SVG, optionally ) or saved to files in the same directory as the report, using its name as prefix, and referenced via relative links from the XHTML. Figures are given as list of 2- or 3-tuples, where each item contains:</p>
+<ol class="arabic simple">
+<li><p>name of the figure (will generate a <code class="docutils literal notranslate"><span class="pre">&lt;h2&gt;</span></code> heading)</p></li>
+<li><p>figure object (<a class="reference external" href="http://matplotlib.org">Matplotlib</a> figure object)</p></li>
+<li><p>optionally, format to save the figure to (<cite>svg</cite>, <cite>png</cite>, …)</p></li>
+</ol>
+</p></li>
+<li><p><strong>figFmt</strong> – format of figures, if the format is not specified by the figure itself; if None, choose format appropriate for given dialect (png for html4, svg for html5 and xhtml)</p></li>
+<li><p><strong>dialect</strong> – one of “xhtml”, “html5”, “html4”; if not given (<em>None</em>), selected from file suffix (<code class="docutils literal notranslate"><span class="pre">.html</span></code> for <code class="docutils literal notranslate"><span class="pre">html4</span></code>, <code class="docutils literal notranslate"><span class="pre">.xhtml</span></code> for <code class="docutils literal notranslate"><span class="pre">xhtml</span></code>). <code class="docutils literal notranslate"><span class="pre">html4</span></code> will save figures as PNG (even if something else is specified) so that the resulting file is easily importable into LibreOffice (which does not import HTML with SVG correctly now).</p></li>
+<li><p><strong>svgEmbed</strong> – don’t save SVG as separate files, embed them in the report instead.</p></li>
+<li><p><strong>show</strong> – open the report in browser via the webbrowser module, unless running in batch.</p></li>
+<li><p><strong>hideWooExtra</strong> – don’t show wooExtra.* modules in object names or URLs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(filename of the report, list of external figures)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.htmlReportHead">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">htmlReportHead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xhtml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repBase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideWooExtra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#htmlReportHead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.htmlReportHead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (X)HTML fragment for simulation report: (X)HTML header, title, Woo logo, configuration and preprocessor parameters.</p>
+<p>In order to obtain a well-formed XHTML document, don’t forget to add ‘&lt;/body&gt;&lt;/html&gt;’.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.importNmesh">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">importNmesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trsf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfMat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfMask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfHalfThick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#importNmesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.importNmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import nmesh file, text format written by <a class="reference external" href="http://sourceforge.net/projects/netgen-mesher/">Netgen</a>. All nodes are created with <a class="reference internal" href="woo.dem.html#woo.dem.DemData.blocked" title="woo.dem.DemData.blocked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemData.blocked</span></code></a> equal to <code class="docutils literal notranslate"><span class="pre">XYZ</span></code> (no rotations, but all translations allowed); if some of them are to be fixed, this must be done by the user after calling the function. Tetrahedra mass is lumped onto nodes. Thickness of surface triangles (if any) is ignored for mass lumping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mat</strong> – material for volume (<a class="reference internal" href="woo.fem.html#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Tet4</span></code></a>) elements.</p></li>
+<li><p><strong>mask</strong> – <a class="reference internal" href="woo.dem.html#woo.dem.Particle.mask" title="woo.dem.Particle.mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Particle.mask</span></code></a> for new volume elements.</p></li>
+<li><p><strong>trsf</strong> – callable for transforming input-file vertex coordinate to the simulation space.</p></li>
+<li><p><strong>dem</strong> – a <a class="reference internal" href="woo.dem.html#woo.dem.DemField" title="woo.dem.DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField</span></code></a> instance; if given, nodes and particles will be added to this <a class="reference internal" href="woo.dem.html#woo.dem.DemField" title="woo.dem.DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField</span></code></a>.</p></li>
+<li><p><strong>surf</strong> – create surface triangulation, for collisions.</p></li>
+<li><p><strong>surfMat</strong> – material for surface (<a class="reference internal" href="woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Facet</span></code></a>); if <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>mat</em> is used.</p></li>
+<li><p><strong>surfMask</strong> – mask for surface; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>mask</em> is used.</p></li>
+<li><p><strong>surfHalfThick</strong> – <a class="reference internal" href="woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Facet.halfThick</span></code></a> for the surface (must be positive for collisions between two triangulated surfaces).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>([Node,Node,…],[Particle,Particle,…])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.infCylinder">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">infCylinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glAB=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angVel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#infCylinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.infCylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a ready-made infinite cylinder particle.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.makeLog">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">makeLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#makeLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.makeLog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.makeVideo">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">makeVideo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frameSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renameNotOverwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kbps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holdLast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#makeVideo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.makeVideo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a video from external image files using <a class="reference external" href="http://www.mplayerhq.hu">mencoder</a>, <a class="reference external" href="http://libav.org/avconv.html">avconv</a> or <a class="reference external" href="http://www.ffmpeg.org">ffmpeg</a> (whichever is found on the system). Encodes using the default mencoder codec (mpeg4), two-pass with mencoder and one-pass with avconv, running multi-threaded with number of threads equal to number of OpenMP threads allocated for Woo.</p>
+<p>Some <em>out</em> extensions (<code class="docutils literal notranslate"><span class="pre">.gif</span></code>, <code class="docutils literal notranslate"><span class="pre">.mng</span></code>) will call ImageMagick (<code class="docutils literal notranslate"><span class="pre">convert</span></code>; likely not available under Windows) to create animated image instead of video file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frameSpec</strong> – wildcard | sequence of filenames. If list or tuple, filenames to be encoded in given order; otherwise wildcard understood by mencoder’s mf:// URI option (shell wildcards such as <code class="docutils literal notranslate"><span class="pre">/tmp/snap-*.png</span></code> or and printf-style pattern like <code class="docutils literal notranslate"><span class="pre">/tmp/snap-%05d.png</span></code>), if using mencoder, or understood by <code class="docutils literal notranslate"><span class="pre">avconv</span></code> or <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> if those are being used.</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – file to save video into</p></li>
+<li><p><strong>renameNotOverwrite</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if True, existing same-named video file will have -<em>number</em> appended; will be overwritten otherwise.</p></li>
+<li><p><strong>fps</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Frames per second (<code class="docutils literal notranslate"><span class="pre">-mf</span> <span class="pre">fps=…</span></code>)</p></li>
+<li><p><strong>kbps</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Bitrate (<code class="docutils literal notranslate"><span class="pre">-lavcopts</span> <span class="pre">vbitrate=…</span></code>) in kb/s (ignored for animated images)</p></li>
+<li><p><strong>holdLast</strong> – Repeat the last frame this many times; if negative, it means seconds and will be converted to frames according to <em>fps</em>. This option is not applicable if <em>frameSpec</em> is a wildcard (as opposed to a list of images).</p></li>
+<li><p><strong>open</strong> – Open the resulting movie file with the default system program for that type of file.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">avconv</span></code> and <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> need symlinks, which are not available under Windows.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.membrane">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">membrane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#membrane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.membrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.readParamsFromTable">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">readParamsFromTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#readParamsFromTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.readParamsFromTable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.rod">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">rod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__class=&lt;class</span> <span class="pre">'woo.dem.Rod'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#rod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.rod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create <a class="reference internal" href="woo.dem.html#woo.dem.Rod" title="woo.dem.Rod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rod</span></code></a> with given parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> – endpoints given as coordinates (Vector3) or nodes</p></li>
+<li><p><strong>radius</strong> – radius of the rod</p></li>
+<li><p><strong>wire</strong> – render as wire by default</p></li>
+<li><p><strong>color</strong> – color as scalar (0…1); if not given, random color is assigned</p></li>
+<li><p><strong>mat</strong> – material; if not given, default material is assigned</p></li>
+<li><p><strong>visible</strong> – </p></li>
+<li><p><strong>mask</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.runAllPreprocessors">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">runAllPreprocessors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#runAllPreprocessors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.runAllPreprocessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all preprocessors with default parameters, and run the very first step of their simulation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.runPreprocessorInBatch">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">runPreprocessorInBatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#runPreprocessorInBatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.runPreprocessorInBatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.runningInBatch">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">runningInBatch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#runningInBatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.runningInBatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.sphere">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create sphere with given parameters; mass and inertia computed automatically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>Vector3</em>) – center</p></li>
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – radius</p></li>
+<li><p><strong>float-or-None</strong> – particle’s color as float; random color will be assigned if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>mat</strong> – <dl class="simple">
+<dt>specify <a class="reference internal" href="woo.dem.html#woo.dem.Particle.material" title="woo.dem.Particle.material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Particle.material</span></code></a>; different types are accepted:</dt><dd><ul>
+<li><p><a class="reference internal" href="woo.dem.html#woo.dem.Material" title="woo.dem.Material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Material</span></code></a> instance: this instance will be used</p></li>
+<li><p>callable: will be called without arguments; returned Material value will be used (Material factory object, if you like)</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>mask</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – <a class="reference internal" href="woo.dem.html#woo.dem.Particle.mask" title="woo.dem.Particle.mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Particle.mask</span></code></a> for the body</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Particle instance with desired characteristics.</p>
+</dd>
+</dl>
+<p>Instance of material can be given:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">woo</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">sphere</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="n">wire</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">color</span><span class="o">=.</span><span class="mi">7</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">ElastMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="mf">30e9</span><span class="p">,</span><span class="n">density</span><span class="o">=</span><span class="mf">2e3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">wire</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">color</span>
+<span class="go">0.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">density</span>
+<span class="go">2000.0</span>
+</pre></div>
+</div>
+<p>Finally, material can be a callable object (taking no arguments), which returns a Material instance.
+Use this if you don’t call this function directly (for instance, through woo.pack.randomDensePack), passing
+only 1 <em>material</em> parameter, but you don’t want material to be shared.</p>
+<p>For instance, randomized material properties can be created like this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">matFactory</span><span class="p">():</span> <span class="k">return</span> <span class="n">ElastMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="mf">1e10</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span><span class="n">density</span><span class="o">=</span><span class="mf">1e3</span><span class="o">+</span><span class="mf">1e3</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">matFactory</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s3</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">sphere</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">matFactory</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.spherePWaveDt">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">spherePWaveDt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">young</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#spherePWaveDt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.spherePWaveDt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute P-wave critical timestep for a single (presumably representative) sphere, using formula for P-Wave propagation speed <span class="math notranslate nohighlight">\(\Delta t_{c}=\frac{r}{\sqrt{E/\rho}}\)</span>. If you want to compute minimum critical timestep for all spheres in the simulation, use <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.pWaveDt</span></code> instead.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">spherePWaveDt</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span><span class="mi">2400</span><span class="p">,</span><span class="mf">30e9</span><span class="p">)</span>
+<span class="go">2.8284271247461903e-07</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.svgFileFragment">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">svgFileFragment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#svgFileFragment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.svgFileFragment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return fragment beginning with <code class="docutils literal notranslate"><span class="pre">&lt;svg</span></code> till the end of given <em>filename</em>. Those data may be used for embedding SVG in other formats, such as XHTML.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.tesselatePolyline">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">tesselatePolyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#tesselatePolyline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.tesselatePolyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return polyline tesselated so that distance between consecutive points is no more than maxDist. <em>l</em> is list of points (Vector2 or Vector3).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.tet4">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">tet4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#tet4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.tet4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.tetra">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">tetra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__class=&lt;class</span> <span class="pre">'woo.fem.Tetra'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#tetra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.tetra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create tetrahedral particle</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.truss">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#truss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.truss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.unbalancedEnergy">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">unbalancedEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#unbalancedEnergy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.unbalancedEnergy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.vmData">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">vmData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#vmData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.vmData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return memory usage data from Linux’s /proc/[pid]/status, line VmData.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.waitIfBatch">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">waitIfBatch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#waitIfBatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.waitIfBatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.wall">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">wall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glAB=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#wall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.wall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return ready-made wall body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>float-or-Vector3-or-Node</em>) – center of the wall. If float, it is the position along given axis, the other 2 components being zero</p></li>
+<li><p><strong>axis</strong> (<em>∈{0</em><em>,</em><em>1</em><em>,</em><em>2}</em>) – orientation of the wall normal (0,1,2) for x,y,z (sc. planes yz, xz, xy)</p></li>
+<li><p><strong>sense</strong> (<em>∈{-1</em><em>,</em><em>0</em><em>,</em><em>1}</em>) – sense in which to interact (0: both, -1: negative, +1: positive; see <a class="reference internal" href="woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Wall</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>See <a class="reference internal" href="#woo.utils.sphere" title="woo.utils.sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.sphere</span></code></a>’s documentation for meaning of other parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.wallBox">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">wallBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">box</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#wallBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.wallBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return box delimited by walls, created by <a class="reference internal" href="woo.dem.html#woo.dem.Wall.make" title="woo.dem.Wall.make"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Wall.make</span></code></a>, which receives most arguments. <a class="reference internal" href="woo.dem.html#woo.dem.Wall.glAB" title="woo.dem.Wall.glAB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall.glAB</span></code></a> are computed automatically so that walls visually end at the edges.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since <a class="reference internal" href="woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walls</span></code></a> are infinite, they will still interact with other particle beyond this box; use <a class="reference internal" href="woo.triangulated.html#woo.triangulated.box" title="woo.triangulated.box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.triangulated.box</span></code></a> for true box with arbitrary orientation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>box</strong> – axis-aligned box determining positions of walls.</p></li>
+<li><p><strong>which</strong> – determines which of the 6 walls are created (boolean values), in the order -x, -y, -z, +x, +y, +z. For instance, to create a box which does not have the top, say <code class="docutils literal notranslate"><span class="pre">which=(1,1,1,1,1,0)</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="woo.dem.html#woo.dem.Particle" title="woo.dem.Particle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Particle</span></code></a> objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.utils.xMirror">
+<span class="sig-prename descclassname"><span class="pre">woo.utils.</span></span><span class="sig-name descname"><span class="pre">xMirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">half</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/utils.html#xMirror"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.utils.xMirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirror a sequence of 2d points around the x axis (changing sign on the y coord).
+The sequence should start up and then it will wrap from y downwards (or vice versa).
+If the last point’s x coord is zero, it will not be duplicated.</p>
+</dd></dl>
+
+<section id="woo-utils2">
+<h2><a class="reference internal" href="#module-woo._utils2" title="woo._utils2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._utils2</span></code></a><a class="headerlink" href="#woo-utils2" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is imported into the <a class="reference internal" href="#module-woo.utils" title="woo.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils</span></code></a> module automatically; refer to its objects through <a class="reference internal" href="#module-woo.utils" title="woo.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils</span></code></a>.</p>
+</div>
+<span class="target" id="module-woo._utils2"></span><dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.bestFitCompliance">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">bestFitCompliance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.bestFitCompliance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute compliance based on best-fit hypothesis, using the paper [Liao1997], equations (30) and (28,31).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.boxPsd">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">boxPsd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.boxPsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute Particle size distribution in given box (min,max) or in the whole simulation, if box is not specified; list of couples (diameter,passing) is returned; with <em>unzip</em>, tuple of two sequences, diameters and passing values, are returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.contactCoordQuantiles">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">contactCoordQuantiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.contactCoordQuantiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of (local) contact z-coordinates for given quantile values; if <em>node</em> is omited, global coordinates are used; <em>box</em> is specified in node-local coordinates; if <em>box</em> is empty (default-initialized), all contacts are included.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.coordNumber">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">coordNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.coordNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return coordination number of the sampled area given by optional local coordinates (<em>node</em>) and <em>box</em> (which is in local coordinates if <em>node</em> is given and global if not); if <em>mask</em> is non-zero, particles without matching <a class="reference internal" href="woo.dem.html#woo.dem.Particle.mask" title="woo.dem.Particle.mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mask</span></code></a> are ignored. See <a class="reference external" href="https://yade-dem.org/doc/yade.utils.html#yade.utils.avgNumInteractions">yade.utils.avgNumInterations</a> for formulas on skipping free particles (TODO: copy those over).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Clumps are not handled properly by this function and an exception will be raised if they are encountered.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.createContacts">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">createContacts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.createContacts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create contacts between given DEM particles.</p>
+<p>Current engines are searched for <a class="reference internal" href="woo.dem.html#woo.dem.ContactLoop" title="woo.dem.ContactLoop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ContactLoop</span></code></a>, unless <em>geomFunctors</em> and <em>physFunctors</em> are given. <em>force</em> will make <a class="reference internal" href="woo.dem.html#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CGeomFunctor</span></code></a> acknowledge the contact even if particles don’t touch geometrically.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function will very likely behave incorrectly for periodic simulations (though it could be extended it to handle it farily easily).</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.facetsPlaneIntersectionSegments">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">facetsPlaneIntersectionSegments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.facetsPlaneIntersectionSegments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of points, where consecutive pairs are segment where <em>facets</em> were intersecting plane given by <em>pt</em> and <em>normal</em>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.flipCell">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">flipCell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.flipCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flip periodic cell (by default to the state the closest to the canonical (orthogonal) state) without affecting contacts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.importSTL">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">importSTL</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.importSTL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of <a class="reference internal" href="woo.dem.html#woo.dem.Particle" title="woo.dem.Particle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">particles</span></code></a> (with the <a class="reference internal" href="woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> <a class="reference internal" href="woo.dem.html#woo.dem.Particle.shape" title="woo.dem.Particle.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a>, or <a class="reference internal" href="woo.fem.html#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a> if <em>flex</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>) imported from given STL file.
+Both ASCII and binary formats are supported; <code class="docutils literal notranslate"><span class="pre">COLOR</span></code> and <code class="docutils literal notranslate"><span class="pre">MATERIAL</span></code> values in the binary format, if given and with <em>readColors</em>, are read but currently ignored (they should translate to the <a class="reference internal" href="woo.dem.html#woo.dem.Shape.color" title="woo.dem.Shape.color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Shape.color</span></code></a> scalar − that color difference would be preserved, but not the color as such), and a warning is issued.
+<em>scale</em>, <em>shift</em> and <em>ori</em> are applied in this order before <a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodal</span></code></a> coordinates are computed. The <em>threshold</em> value serves for merging incident vertices: if positive, it is distance in the STL space (before scaling); if negative, it is relative to the max bounding box size of the entire mesh. <em>maxBox</em>, if positive, will cause any faces to be tesselated until the smallest dimension of its bbox (in simulation space) is smaller than <em>maxBox</em>; this is to avoid many spurious (potential) contacts with large obliquely-oriented faces.</p>
+<p>If <em>thickness</em> is non-zero, all created particles (<a class="reference internal" href="woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> or <a class="reference internal" href="woo.fem.html#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a>) will have their <a class="reference internal" href="woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a> set, and node’s mass and inertia will be computed automatically.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.mapColor">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">mapColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.mapColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map scalar to color (as 3-tuple). See <a class="reference internal" href="woo.core.html#woo.core.Master.cmap" title="woo.core.Master.cmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Master.cmap</span></code></a>, <a class="reference internal" href="woo.core.html#woo.core.Master.cmaps" title="woo.core.Master.cmaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Master.cmaps</span></code></a> to set colormap globally.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.muStiffnessScaling">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">muStiffnessScaling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.muStiffnessScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute stiffness scaling parameter relating continuum-like stiffness with packing stiffness; see ‘Particle assembly with cross-anisotropic stiffness tensor’ for details. With <em>skipFloaters</em>, ignore contacts where any of the two contacting particlds has only one <em>real</em> contact (thus not contributing to the assembly stability).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.outerTri2Dist">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">outerTri2Dist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.outerTri2Dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return signed distance of point <em>pt</em> in triangle A,B,C. The result is distance of point <em>pt</em> to the closest point on triangle A,B,C. The distance is negative is <em>pt</em> is inside, 0 if exactly on the triangle and positive outside. Signedness supposes that A,B,C are given anti-clockwise; otherwise, the sign will be reversed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.pWaveDt">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">pWaveDt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.pWaveDt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get timestep accoring to the velocity of P-Wave propagation; computed from sphere radii, rigidities and masses.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.particleStress">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">particleStress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.particleStress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of normal and shear stresses acting on given particle; raise exception for non-spherical particles</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.porosity">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">porosity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.porosity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference external" href="http://en.wikipedia.org/wiki/Porosity">porosity</a> for given box (in local coordinates, if <em>node</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>), considering (only) spherical particles of which centroid is in the box.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.psd">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">psd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.psd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return PSD of given particles (given as array of Vector2, where each Vector2 specifies diameter and mass) as arrays of diameters and passing; the semantics is the same as for <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.BoxDeleter.psd</span></code> and <a class="reference internal" href="woo.dem.html#woo.dem.ParticleGenerator.psd" title="woo.dem.ParticleGenerator.psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleGenerator.psd</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.reactionInPoint">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">reactionInPoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.reactionInPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute force and torque in point <em>pt</em> generated by forces on particles matching <em>mask</em> in <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField</span></code> <em>dem</em>. Multinodal particles (such as <code class="xref py py-obj docutils literal notranslate"><span class="pre">facets</span></code>) usually don’t nodal forces evaluated; their contacts are traversed and contact reaction computed directly if <em>multinodal</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code> (in that case, multinodal-multinodal contacts should not be present at all). Return tuple <code class="docutils literal notranslate"><span class="pre">(force,torque,N)</span></code>, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of particles matched by <em>mask</em>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.stressStiffnessWork">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">stressStiffnessWork</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.stressStiffnessWork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute stress and stiffness tensors, and work increment of current velocity gradient (<em>nan</em> for aperiodic simulations); returns tuple (stress, stiffness, work), where stress and stiffness are in Voigt notation. <em>skipMultinodal</em> skips all contacts involving particles with multiple nodes, where stress &amp; stiffness values can be determined only by In2 functors.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.unbalancedForce">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">unbalancedForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.unbalancedForce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the ratio of mean (or maximum, if <em>useMaxForce</em>) summary force on bodies and mean force magnitude on interactions. It is an adimensional measure of staticity, which approaches zero for quasi-static states.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._utils2.vtkExportTraces">
+<span class="sig-prename descclassname"><span class="pre">woo._utils2.</span></span><span class="sig-name descname"><span class="pre">vtkExportTraces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._utils2.vtkExportTraces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export traces of existing spheroid particles to VTK file, for visualization in Paraview.</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.utils</span></code></a><ul>
+<li><a class="reference internal" href="#woo-utils2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._utils2</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.triangulated.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.triangulated</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="wooMain.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">wooMain</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="wooMain.html" title="wooMain"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.triangulated.html" title="woo.triangulated"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.utils</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

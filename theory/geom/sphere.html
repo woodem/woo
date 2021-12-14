@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Sphere &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ellipsoid" href="ellipsoid.html" />
+    <link rel="prev" title="Local contact coordinates" href="l6geom.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ellipsoid.html" title="Ellipsoid"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="l6geom.html" title="Local contact coordinates"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sphere</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sphere">
+<h1>Sphere<a class="headerlink" href="#sphere" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Spheres</span></code></a> are defined by their local coordinates and <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere.radius" title="woo.dem.Sphere.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a>.</p>
+<section id="sphere-sphere-contact">
+<h2>Sphere-Sphere contact<a class="headerlink" href="#sphere-sphere-contact" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Something along the following lines (note that htis semsntics – negative value of distFactor – is not yet implemented): <strong>Contact criterion for spheres:</strong> When there is not yet contact, it will be created if <span class="math notranslate nohighlight">\(u_n=|\curr{\vec{x}}_2-\curr{\vec{x}}_1|-|f_d|(r_1+r2)&lt;0\)</span>, where <span class="math notranslate nohighlight">\(f_d\)</span> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">interaction</span> <span class="pre">radius</span></code> (sometimes also called “interaction radius”). If <span class="math notranslate nohighlight">\(f_d&gt;0\)</span>, then <span class="math notranslate nohighlight">\(\vec{u}_{0x}\)</span> will be initalized to <span class="math notranslate nohighlight">\(u_N\)</span>, otherwise to 0. In another words, contact will be created if spheres enlarged by <span class="math notranslate nohighlight">\(|f_d|\)</span> touch, and the “equilibrium distance” (where <span class="math notranslate nohighlight">\(\vec{u}_x-\vec{u}_{0x}=0\)</span>) will be set to the current distance if <span class="math notranslate nohighlight">\(f_d&gt;0\)</span> is positive, and to the geometrically-touching distance if <span class="math notranslate nohighlight">\(f_d&lt;0\)</span>. Initial contact point is <span class="math notranslate nohighlight">\(\vec{c}=\vec{x}_1+\left(r_1+\frac{\vec{u}_{0x}}{2}\right)\normalized{\vec{x}_2-\vec{x}_1}\)</span>.</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p><code class="docutils literal notranslate"><span class="pre">distFactor</span></code> is not yet implemented as described above; some formulas mix values at different times, should be checked carefully.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Sphere</a><ul>
+<li><a class="reference internal" href="#sphere-sphere-contact">Sphere-Sphere contact</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="l6geom.html"
+                          title="Previous page">&larr; Local contact coordinates</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="ellipsoid.html"
+                          title="Next page">&rarr; Ellipsoid</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/geom/sphere.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ellipsoid.html" title="Ellipsoid"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="l6geom.html" title="Local contact coordinates"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sphere</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

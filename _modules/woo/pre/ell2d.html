@@ -1,0 +1,320 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.pre.ell2d &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pre.ell2d</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.pre.ell2d</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">woo.core</span>
+<span class="kn">import</span> <span class="nn">woo.dem</span>
+<span class="kn">import</span> <span class="nn">woo.pyderived</span>
+<span class="kn">import</span> <span class="nn">woo.models</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+<span class="n">nan</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="s1">&#39;qt5&#39;</span> <span class="ow">in</span> <span class="n">woo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="EllGroup"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.ell2d.EllGroup">[docs]</a><span class="k">class</span> <span class="nc">EllGroup</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">pyderived</span><span class="o">.</span><span class="n">PyWooObject</span><span class="p">):</span>
+    <span class="s1">&#39;Simulation of group of ellipsoids moving in 2-dimensional box.&#39;</span>
+    <span class="n">_classTraits</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">_PAT</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pyderived</span><span class="o">.</span><span class="n">PyAttrTrait</span> <span class="c1"># less typing</span>
+    <span class="n">_attrTraits</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">Vector2</span><span class="p">,</span><span class="s1">&#39;rRange&#39;</span><span class="p">,</span><span class="n">Vector2</span><span class="p">(</span><span class="o">.</span><span class="mi">02</span><span class="p">,</span><span class="o">.</span><span class="mi">04</span><span class="p">),</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Range (minimum and maximum) for particle radius (greatest semi-axis); if both are the same, all particles will have the same radius.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span><span class="s1">&#39;spheres&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Use spherical particles instead of elliptical&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;semiMinRelRnd&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">hideIf</span><span class="o">=</span><span class="s1">&#39;self.spheres&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Minimum semi-axis length relative to particle radius; minor semi-axes are randomly selected from (:obj:`semiMinRelRnd` … 1) × greatest semi-axis. If non-positive, :obj:`semiRelFixed` is used instead.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">Vector3</span><span class="p">,</span><span class="s1">&#39;semiRelFixed&#39;</span><span class="p">,</span><span class="n">Vector3</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">hideIf</span><span class="o">=</span><span class="s1">&#39;self.spheres&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Fixed sizes of semi-axes relative (all elements should be ≤ 1). The :math:`z`-component is the out-of-plane size which only indirectly influences contact stiffnesses. This variable is only used if semi-axes are not assigned randomly (see :obj:`semiMinRelRnd`).&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">Vector2</span><span class="p">,</span><span class="s1">&#39;boxSize&#39;</span><span class="p">,</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Size of the 2d domain in which particles move.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;vMax&#39;</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Maximum initial velocity of particle; assigned randomly from 0 to this value; intial angular velocity of all particles is zero.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ContactModelSelector</span><span class="p">,</span><span class="s1">&#39;model&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ContactModelSelector</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Schwarz&#39;</span><span class="p">,</span><span class="n">restitution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span><span class="n">damping</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">numMat</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">matDesc</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ellipsoids&#39;</span><span class="p">,</span><span class="s1">&#39;walls&#39;</span><span class="p">],</span><span class="n">mats</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">HertzMat</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span><span class="n">young</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="n">tanPhi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">surfEnergy</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">6</span><span class="p">)]),</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).&#39;</span><span class="p">),</span>
+
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="s1">&#39;exportFmt&#39;</span><span class="p">,</span><span class="s2">&quot;/tmp/ell2d-</span><span class="si">{tid}</span><span class="s2">-&quot;</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Prefix for saving :obj:`woo.dem.VtkExport` data, and :obj:`woo.pre.ell2d.ell2plot` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys.&quot;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;vtkStep&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export.&quot;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;vtkEllLev&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;Tesselation level of ellipsoids when expored as VTK meshes (see :obj:`woo.dem.VtkExport.ellLev`).&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;ell2Step&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;How often should :obj:`woo.pre.ell2d.ell2plot` run. If non-positive, never run that one.&quot;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;dtSafety&#39;</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Safety coefficient for critical timestep; should be smaller than one.&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+<div class="viewcode-block" id="EllGroup.__new__"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.ell2d.EllGroup.__new__">[docs]</a>    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="n">EllGroup</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<div class="viewcode-block" id="EllGroup.__call__"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.ell2d.EllGroup.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">woo</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">usesApi</span><span class="o">=</span><span class="mi">10102</span>
+        <span class="c1"># preprocessor builds the simulation when called</span>
+        <span class="n">pre</span><span class="o">=</span><span class="bp">self</span> <span class="c1"># more readable</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">()],</span><span class="n">pre</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">())</span>
+        <span class="c1"># material definitions</span>
+        <span class="n">ellMat</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">wallMat</span><span class="o">=</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">else</span> <span class="n">ellMat</span><span class="p">)</span>
+
+        <span class="n">ZZ</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">rRange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">;</span>
+        <span class="c1"># only generate spheres randomly in 2d box</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">BoxInlet2d</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">box</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">ZZ</span><span class="p">),(</span><span class="n">pre</span><span class="o">.</span><span class="n">boxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pre</span><span class="o">.</span><span class="n">boxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ZZ</span><span class="p">)),</span><span class="n">materials</span><span class="o">=</span><span class="p">[</span><span class="n">ellMat</span><span class="p">],</span><span class="n">generator</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">MinMaxSphereGenerator</span><span class="p">(</span><span class="n">dRange</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">pre</span><span class="o">.</span><span class="n">rRange</span><span class="p">),</span><span class="n">massRate</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">InsertionSortCollider</span><span class="p">([</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Bo1_Sphere_Aabb</span><span class="p">()])]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">posRad</span><span class="o">=</span><span class="p">[(</span><span class="n">p</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">]</span>
+        <span class="c1"># clear the dem field</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">()]</span>
+
+
+        <span class="kn">import</span> <span class="nn">random</span>
+
+        <span class="k">def</span> <span class="nf">rndOri2d</span><span class="p">():</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">Quaternion</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">());</span> <span class="n">q</span><span class="o">.</span><span class="n">normalize</span><span class="p">();</span> <span class="k">return</span> <span class="n">q</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kin0&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span><span class="n">rad</span> <span class="ow">in</span> <span class="n">posRad</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pre</span><span class="o">.</span><span class="n">spheres</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pre</span><span class="o">.</span><span class="n">semiMinRelRnd</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="n">semiAxes</span><span class="o">=</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">semiMinRelRnd</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">rad</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">semiAxes</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">semiRelFixed</span><span class="p">)</span><span class="o">*</span><span class="n">rad</span>
+                <span class="n">p</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">ellipsoid</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">semiAxes</span><span class="o">=</span><span class="n">semiAxes</span><span class="p">,</span><span class="n">ori</span><span class="o">=</span><span class="n">rndOri2d</span><span class="p">(),</span><span class="n">mat</span><span class="o">=</span><span class="n">ellMat</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="n">p</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">rad</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">ellMat</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="n">rndOri2d</span><span class="p">()</span><span class="o">*</span><span class="n">Vector3</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">vMax</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kin0&#39;</span><span class="p">]</span><span class="o">-=</span><span class="n">p</span><span class="o">.</span><span class="n">Ek</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">blocked</span><span class="o">=</span><span class="s1">&#39;zXY&#39;</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="c1">#for coord,axis,sense in [(0,0,+1),(pre.boxSize[0],0,-1),(0,1,+1),(pre.boxSize[1],1,-1)]:</span>
+        <span class="c1">#    S.dem.par.add(woo.utils.wall(coord,axis=axis,sense=sense,mat=wallMat,visible=False))</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">([</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Wall</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">wallMat</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Wall</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">wallMat</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">setBox</span><span class="p">((</span><span class="n">pre</span><span class="o">.</span><span class="n">boxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pre</span><span class="o">.</span><span class="n">boxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">2</span><span class="o">*</span><span class="n">ZZ</span><span class="p">))</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">WeirdTriaxControl</span><span class="p">(</span><span class="n">goal</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">stressMask</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">maxStrainRate</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">mass</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;triax&#39;</span><span class="p">),</span>
+        <span class="p">]</span><span class="o">+</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="p">,</span><span class="n">dynDtPeriod</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">+</span><span class="p">[</span>
+            <span class="c1"># trace particles and color by z-angVel</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Tracer</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">compress</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">compSkip</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">glSmooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">glWidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">scalar</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Tracer</span><span class="o">.</span><span class="n">scalarAngVel</span><span class="p">,</span><span class="n">vecAxis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">stepPeriod</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">minDist</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">rRange</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">PyRunner</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="s1">&#39;S.plot.addData(i=S.step,t=S.time,total=S.energy.total(),relErr=(S.energy.relErr() if S.step&gt;100 else 0),**S.energy)&#39;</span><span class="p">),</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">VtkExport</span><span class="p">(</span><span class="n">stepPeriod</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">vtkStep</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">exportFmt</span><span class="p">,</span><span class="n">ellLev</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">vtkEllLev</span><span class="p">,</span><span class="n">dead</span><span class="o">=</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">vtkStep</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)),</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">PyRunner</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">ell2Step</span><span class="p">,</span><span class="s1">&#39;import woo.pre.ell2d; mx=woo.pre.ell2d.ell2plot(out=&quot;</span><span class="si">%s</span><span class="s1">-</span><span class="si">%05d</span><span class="s1">.png&quot;%(S.expandTags(S.pre.exportFmt),engine.nDone),S=S,colorRange=(0,S.lab.maxEll2Color),bbox=((0,0),S.pre.boxSize)); S.lab.maxEll2Color=max(mx,S.lab.maxEll2Color)&#39;</span><span class="p">,</span><span class="n">dead</span><span class="o">=</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">ell2Step</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">leapfrog</span><span class="o">.</span><span class="n">kinSplit</span><span class="o">=</span><span class="kc">True</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">dtSafety</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">dtSafety</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">trackEnergy</span><span class="o">=</span><span class="kc">True</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">uiBuild</span><span class="o">=</span><span class="s1">&#39;import woo.pre.ell2d; woo.pre.ell2d.ellGroupUiBuild(S,area)&#39;</span>
+
+        <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">maxEll2Color</span><span class="o">=</span><span class="mf">0.</span> <span class="c1"># max |angVel| for the start when plotting</span>
+
+
+        <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plots</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;i&#39;</span><span class="p">:(</span><span class="s1">&#39;total&#39;</span><span class="p">,</span><span class="s1">&#39;**S.energy&#39;</span><span class="p">),</span><span class="s1">&#39; t&#39;</span><span class="p">:(</span><span class="s1">&#39;relErr&#39;</span><span class="p">)}</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;i&#39;</span><span class="p">:[</span><span class="n">nan</span><span class="p">],</span><span class="s1">&#39;total&#39;</span><span class="p">:[</span><span class="n">nan</span><span class="p">],</span><span class="s1">&#39;relErr&#39;</span><span class="p">:[</span><span class="n">nan</span><span class="p">]}</span> <span class="c1"># to make plot displayable from the very start</span>
+    
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">woo.gl</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">renderer</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">iniUp</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">iniViewDir</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">S</span></div></div>
+
+
+<div class="viewcode-block" id="ell2plot"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.ell2d.ell2plot">[docs]</a><span class="k">def</span> <span class="nf">ell2plot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">bbox</span><span class="p">,</span><span class="n">colorRange</span><span class="p">,</span><span class="n">colorBy</span><span class="o">=</span><span class="s1">&#39;angVel&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_agg</span> <span class="k">import</span> <span class="n">FigureCanvasAgg</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.collections</span><span class="o">,</span> <span class="nn">matplotlib.patches</span>
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="kn">import</span> <span class="nn">woo.dem</span>
+    <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="n">Vector2</span><span class="p">,</span> <span class="n">Vector3</span>
+    <span class="n">fig</span><span class="o">=</span><span class="n">Figure</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">canvas</span><span class="o">=</span><span class="n">FigureCanvasAgg</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="n">patches</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="p">[],[]</span>
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="k">return</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Ellipsoid</span><span class="p">):</span> <span class="k">continue</span>
+        <span class="c1"># project rotation onto the z-axis</span>
+        <span class="n">rotAxis</span><span class="p">,</span><span class="n">rotAngle</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">toAxisAngle</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rotAxis</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Vector3</span><span class="o">.</span><span class="n">UnitZ</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">0.99</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Ellipsoid rotated other than along the z-axis?&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rotAxis</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Vector3</span><span class="o">.</span><span class="n">UnitZ</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span> <span class="n">rotAngle</span><span class="o">*=-</span><span class="mi">1</span> <span class="c1"># rotation along -z = - rotation along +z </span>
+        <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Ellipse</span><span class="p">(</span><span class="n">xy</span><span class="o">=</span><span class="n">flat</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">semiAxes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">semiAxes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">rotAngle</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">colorBy</span><span class="o">==</span><span class="s1">&#39;angVel&#39;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">angVel</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">colorBy</span><span class="o">==</span><span class="s1">&#39;vel&#39;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;colorBy must be one of &quot;angVel&quot;, &quot;vel&quot; (not </span><span class="si">%s</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">colorBy</span><span class="p">)</span>
+    <span class="n">coll</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PatchCollection</span><span class="p">(</span><span class="n">patches</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">coll</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">coll</span><span class="p">)</span>
+    <span class="c1"># cbar=fig.colorbar(coll)</span>
+    <span class="n">coll</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="o">*</span><span class="n">colorRange</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ellGroupUiBuild"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.ell2d.ellGroupUiBuild">[docs]</a><span class="k">def</span> <span class="nf">ellGroupUiBuild</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">area</span><span class="p">):</span>
+    <span class="n">grid</span><span class="o">=</span><span class="n">QGridLayout</span><span class="p">(</span><span class="n">area</span><span class="p">);</span> <span class="n">grid</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1"># grid.setMargin(0)</span>
+    <span class="n">bHalf</span><span class="o">=</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Halve Ek&#39;</span><span class="p">)</span>
+    <span class="n">bDouble</span><span class="o">=</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Double Ek&#39;</span><span class="p">)</span>
+    <span class="n">boxEps</span><span class="o">=</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+    <span class="n">boxEps</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+    <span class="n">boxEps</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">boxEps</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+
+    <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bHalf</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bDouble</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;goal size&#39;</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">boxEps</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">boxEps</span><span class="o">=</span><span class="n">boxEps</span>
+
+    <span class="k">def</span> <span class="nf">ekAdjust</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">coeff</span><span class="p">,</span><span class="n">grid</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">S</span><span class="o">.</span><span class="n">paused</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">vel</span><span class="o">*=</span><span class="n">coeff</span><span class="o">**</span><span class="mi">2</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="o">*</span><span class="n">coeff</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">def</span> <span class="nf">epsChange</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">grid</span><span class="p">):</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">triax</span><span class="o">.</span><span class="n">goal</span><span class="o">=</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">bHalf</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ekAdjust</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="n">grid</span><span class="p">))</span>
+    <span class="n">bDouble</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ekAdjust</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="n">grid</span><span class="p">))</span>
+    <span class="n">boxEps</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">eps</span><span class="p">:</span> <span class="n">epsChange</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">grid</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="nf">uiRefresh</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">area</span><span class="p">):</span>
+        <span class="c1"># update updatable stuff</span>
+        <span class="k">if</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">triax</span><span class="o">.</span><span class="n">goal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">grid</span><span class="o">.</span><span class="n">boxEps</span><span class="o">.</span><span class="n">value</span><span class="p">():</span> <span class="n">grid</span><span class="o">.</span><span class="n">boxEps</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">triax</span><span class="o">.</span><span class="n">goal</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">grid</span><span class="o">.</span><span class="n">refreshTimer</span><span class="o">=</span><span class="n">QTimer</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">refreshTimer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">uiRefresh</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">area</span><span class="p">))</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">refreshTimer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span></div>
+    
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pre.ell2d</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

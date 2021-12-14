@@ -1,0 +1,330 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Meshes &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Impose force/velocity" href="impose.html" />
+    <link rel="prev" title="Internal data" href="data.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="impose.html" title="Impose force/velocity"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="data.html" title="Internal data"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Meshes</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="meshes">
+<h1>Meshes<a class="headerlink" href="#meshes" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-overview admonition">
+<p class="admonition-title">Overview</p>
+<p>This chapter explains particle masks and how to create mesh – by importing or by paramteric construction.</p>
+</div>
+<section id="stl-import">
+<h2>STL import<a class="headerlink" href="#stl-import" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/STL_%28file_format%29">STL (STereoLitography) file format</a> is an interchange format for triangulated surfaces in 3d. It is used as a possible export format in many CAD systems. There is a single function for their import, <a class="reference internal" href="../woo.utils.html#woo._utils2.importSTL" title="woo._utils2.importSTL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.importSTL</span></code></a> which return list of facet particles, which can be added to the simulation instantly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">importSTL</span><span class="p">(</span><span class="s1">&#39;your-model.stl&#39;</span><span class="p">),</span><span class="n">mat</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">defaultMaterial</span><span class="p">())</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id1">
+<img alt="../_images/ship-mesh.png" src="../_images/ship-mesh.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Mesh imported from the STL file.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <a class="reference internal" href="../woo.utils.html#woo._utils2.importSTL" title="woo._utils2.importSTL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.importSTL</span></code></a> function has options for scaling, shifting, rotating and assigning colors – check its documentation for details.</p>
+</section>
+<section id="parametric-surfaces">
+<h2>Parametric surfaces<a class="headerlink" href="#parametric-surfaces" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://gts.sourceforge.net">GNU Triangulated Surface library</a> is a library for constructing and manipulating triangulated surfaces. There are a few convenience functions in Woo for converting lists of points into a GTS surface, which can be again converted to list of facets easily, and added to the simulation.</p>
+<p>For example, let’s create V-shaped conveyor bed with flat bottom. Let’s work in local coordinates first, so that <span class="math notranslate nohighlight">\(x\)</span>-axis is the conveyor axis, <span class="math notranslate nohighlight">\(y\)</span> is horizontal and <span class="math notranslate nohighlight">\(z\)</span> is vertical. The dimensions of the bed will be:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">botWd</span></code>, flat bottom width</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sideWd</span></code>, elevated side width</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sideHt</span></code>, elevated side height</p></li>
+</ul>
+<p>The bed will start at <span class="math notranslate nohighlight">\(x=0\)</span> and will go up to <span class="math notranslate nohighlight">\(x=x_1\)</span> (<code class="docutils literal notranslate"><span class="pre">x1</span></code>) with <code class="docutils literal notranslate"><span class="pre">xDiv</span></code> segments:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="c1"># set parameters</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">botWd</span><span class="o">=.</span><span class="mi">3</span><span class="p">;</span> <span class="n">sideWd</span><span class="o">=.</span><span class="mi">2</span><span class="p">;</span> <span class="n">sideHt</span><span class="o">=.</span><span class="mi">1</span><span class="p">;</span> <span class="n">x1</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="n">xDiv</span><span class="o">=</span><span class="mi">5</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="c1"># x points where polylines will be defined</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">xx</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="n">xDiv</span><span class="p">)</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<span class="p">[</span><span class="mf">0.</span>  <span class="mf">0.5</span> <span class="mf">1.</span>  <span class="mf">1.5</span> <span class="mf">2.</span> <span class="p">]</span>
+
+<span class="c1"># for each x, create the polyline with 4 points</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">pts</span><span class="o">=</span><span class="p">[[(</span><span class="n">x</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="o">-</span><span class="n">sideWd</span><span class="p">,</span><span class="n">sideHt</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="o">+</span><span class="n">sideWd</span><span class="p">,</span><span class="n">sideHt</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xx</span><span class="p">]</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+<span class="p">[[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span> <span class="p">[(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span> <span class="p">[(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span> <span class="p">[(</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span> <span class="p">[(</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)]]</span>
+
+<span class="c1"># convert list of polylines to a gts surface (all must have the same number of points)</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">surf</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">sweptPolylines2gtsSurface</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">gts</span><span class="o">.</span><span class="n">Surface</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f622bf6f420</span><span class="o">&gt;</span>
+
+<span class="c1"># convert surface to facets and add them to the scene</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">gtsSurface2Facets</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> 
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span>
+ <span class="mi">1</span><span class="p">,</span>
+ <span class="mi">2</span><span class="p">,</span>
+ <span class="mi">3</span><span class="p">,</span>
+ <span class="mi">4</span><span class="p">,</span>
+ <span class="mi">5</span><span class="p">,</span>
+ <span class="mi">6</span><span class="p">,</span>
+ <span class="mi">7</span><span class="p">,</span>
+ <span class="mi">8</span><span class="p">,</span>
+ <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">10</span><span class="p">,</span>
+ <span class="mi">11</span><span class="p">,</span>
+ <span class="mi">12</span><span class="p">,</span>
+ <span class="mi">13</span><span class="p">,</span>
+ <span class="mi">14</span><span class="p">,</span>
+ <span class="mi">15</span><span class="p">,</span>
+ <span class="mi">16</span><span class="p">,</span>
+ <span class="mi">17</span><span class="p">,</span>
+ <span class="mi">18</span><span class="p">,</span>
+ <span class="mi">19</span><span class="p">,</span>
+ <span class="mi">20</span><span class="p">,</span>
+ <span class="mi">21</span><span class="p">,</span>
+ <span class="mi">22</span><span class="p">,</span>
+ <span class="mi">23</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>If one wants to convert from local to global coordinates, define local coordinates via <a class="reference internal" href="../woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a> and pass it as the <code class="docutils literal notranslate"><span class="pre">localCoords</span></code> parameter to <a class="reference internal" href="../woo.pack.html#woo.pack.sweptPolylines2gtsSurface" title="woo.pack.sweptPolylines2gtsSurface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack.sweptPolylines2gtsSurface</span></code></a>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">node</span><span class="o">=</span><span class="n">Node</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),</span><span class="n">ori</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span><span class="p">))</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">surf</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">sweptPolylines2gtsSurface</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span><span class="n">localCoords</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or use the node object manually to convert all points:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">pts</span><span class="o">=</span><span class="p">[[</span><span class="n">node</span><span class="o">.</span><span class="n">loc2glob</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pp</span><span class="p">]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">surf</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">sweptPolylines2gtsSurface</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Behind the scenes, <a class="reference internal" href="../woo.core.html#woo.core.Node.loc2glob" title="woo.core.Node.loc2glob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loc2glob</span></code></a> does nothing else than transforming the local point <span class="math notranslate nohighlight">\(p'\)</span> using the local origin position <span class="math notranslate nohighlight">\(O\)</span> and orientation <span class="math notranslate nohighlight">\(q\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[p=q(p'+O)q^*\]</div>
+<p>or, in Python, <code class="docutils literal notranslate"><span class="pre">n.ori*(p+n.pos)</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Quaternions are constructed from the <a class="reference external" href="http://en.wikipedia.org/wiki/Axis_angle">Axis-angle</a> representation of rotations; angles are always given in radians. Thus e.g. <code class="docutils literal notranslate"><span class="pre">Quaternion((0,0,1),math.pi/3.)</span></code> rotates around the <span class="math notranslate nohighlight">\(z\)</span>-axis by <span class="math notranslate nohighlight">\(\frac{\pi}{3}\equiv60°\)</span>.</p>
+</div>
+<p>In summary, the conveyor code looks like this, in a compact way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">botWd</span><span class="o">=.</span><span class="mi">3</span><span class="p">;</span> <span class="n">sideWd</span><span class="o">=.</span><span class="mi">2</span><span class="p">;</span> <span class="n">sideHt</span><span class="o">=.</span><span class="mi">1</span><span class="p">;</span> <span class="n">x1</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="n">xDiv</span><span class="o">=</span><span class="mi">5</span>
+<span class="kn">import</span> <span class="nn">woo</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span><span class="o">*</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">woo.utils</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">numpy</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">math</span>
+<span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
+<span class="n">xx</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="n">xDiv</span><span class="p">)</span>
+<span class="n">pts</span><span class="o">=</span><span class="p">[[(</span><span class="n">x</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="o">-</span><span class="n">sideWd</span><span class="p">,</span><span class="n">sideHt</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="n">x</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="n">botWd</span><span class="o">+</span><span class="n">sideWd</span><span class="p">,</span><span class="n">sideHt</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xx</span><span class="p">]</span>
+<span class="n">node</span><span class="o">=</span><span class="n">Node</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),</span><span class="n">ori</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">surf</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">sweptPolylines2gtsSurface</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span><span class="n">localCoords</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">pack</span><span class="o">.</span><span class="n">gtsSurface2Facets</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id2">
+<img alt="../_images/conveyor-mesh.png" src="../_images/conveyor-mesh.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Conveyor bed mesh created parametrically by the script above.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="note-on-particle-masks">
+<h2>Note on particle masks<a class="headerlink" href="#note-on-particle-masks" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.Particle.mask" title="woo.dem.Particle.mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Particle.mask</span></code></a> is a <a class="reference external" href="http://en.wikipedia.org/wiki/Bit_array">bit array</a> which determines which particles may have contacts with other particles. Mask is a regular (integer) number in the memory, but is interpreted as individual bits, for example like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0000</span> <span class="mi">0010</span>     <span class="o">=</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">decimal</span>
+<span class="mi">0000</span> <span class="mi">0011</span>     <span class="o">=</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">decimal</span>
+<span class="mi">0000</span> <span class="mi">0110</span>     <span class="o">=</span> <span class="mi">6</span> <span class="ow">in</span> <span class="n">decimal</span>
+</pre></div>
+</div>
+<p>Binary numbers can be written in python directly, e.g. <code class="docutils literal notranslate"><span class="pre">0b0010</span></code> would be the first bit array, equal to <code class="docutils literal notranslate"><span class="pre">2</span></code> in decimal.</p>
+<p>There are two basic rules:</p>
+<ol class="arabic simple">
+<li><p>Particles collide only if they have a common bit (that is, if their <a class="reference external" href="http://en.wikipedia.org/wiki/Bitwise_operation#AND">bitwise AND</a> is nonzero: <code class="docutils literal notranslate"><span class="pre">maskA</span> <span class="pre">&amp;</span> <span class="pre">maskB</span> <span class="pre">!=0</span></code>).</p></li>
+<li><p>If a common bit is contained in <a class="reference internal" href="../woo.dem.html#woo.dem.DemField.loneMask" title="woo.dem.DemField.loneMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.loneMask</span></code></a>, the particles will not collide. This rule is to avoid collisions of particles where it is meaningless, such as facets in a mesh between themselves. With meshes, the number of spurious “contacts” can be <strong>very high</strong> (thousands) slowing down the simulation unnecessarily.</p></li>
+</ol>
+<p>Mask bits can be further used for marking particles (e.g. with <a class="reference internal" href="../woo.dem.html#woo.dem.BoxOutlet" title="woo.dem.BoxOutlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxOutlet</span></code></a>, when <a class="reference internal" href="../woo.dem.html#woo.dem.Outlet.markMask" title="woo.dem.Outlet.markMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">markMask</span></code></a> is set) in arbitrary ways.</p>
+<p><strong>Default values</strong> of mask are different for different particles:</p>
+<ol class="arabic simple">
+<li><p>Particles which usually move (<a class="reference internal" href="../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>, <a class="reference internal" href="../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a>, <a class="reference internal" href="../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a>) have the mask set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.defaultMovableMask</span></code> (<code class="docutils literal notranslate"><span class="pre">0b0101</span></code>) by default (when created using the <a class="reference internal" href="../woo.dem.html#woo.dem.Sphere.make" title="woo.dem.Sphere.make"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere.make</span></code></a> etc functions). This (called <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.defaultInletMask</span></code>) is also the default value for <code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleInlet.mask</span></code> (particles created during the simulation; treated later)</p></li>
+<li><p>Particles usually acting as the boundary (<a class="reference internal" href="../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a>, <a class="reference internal" href="../woo.fem.html#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a>, <a class="reference internal" href="../woo.dem.html#woo.dem.InfCylinder" title="woo.dem.InfCylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfCylinder</span></code></a>, <a class="reference internal" href="../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code></a>) set the mask to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.defaultBoundaryMask</span></code> (<code class="docutils literal notranslate"><span class="pre">0b0011</span></code>) by default.</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.DemField.loneMask" title="woo.dem.DemField.loneMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.loneMask</span></code></a> default to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.defaultLoneMask</span></code> (<code class="docutils literal notranslate"><span class="pre">0b0010</span></code>).</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxOutlet.mask</span></code> defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.defaultOutletMask</span></code> (<code class="docutils literal notranslate"><span class="pre">0b0100</span></code>) (delting particles is treated in detail later).</p></li>
+</ol>
+<p>This means that</p>
+<ol class="arabic simple">
+<li><p>any contacts between boundary particles (<a class="reference internal" href="../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> + <a class="reference internal" href="../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> and such) are avoided, but that boundary will still interact with particles which usually move;</p></li>
+<li><p>deleters will by default only delete particles which usually move (since they contain the <code class="docutils literal notranslate"><span class="pre">0b0100</span></code> bit), but not boundary particles.</p></li>
+</ol>
+<p>If the default behavior is not sufficiently flexible for your setup, it can be always tuned by hand.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Meshes</a><ul>
+<li><a class="reference internal" href="#stl-import">STL import</a></li>
+<li><a class="reference internal" href="#parametric-surfaces">Parametric surfaces</a></li>
+<li><a class="reference internal" href="#note-on-particle-masks">Note on particle masks</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="data.html"
+                          title="Previous page">&larr; Internal data</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="impose.html"
+                          title="Next page">&rarr; Impose force/velocity</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorial/mesh.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="impose.html" title="Impose force/velocity"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="data.html" title="Internal data"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Meshes</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

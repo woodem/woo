@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>OpenSUSE 13.1 &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">OpenSUSE 13.1</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="opensuse-13-1">
+<h1>OpenSUSE 13.1<a class="headerlink" href="#opensuse-13-1" title="Permalink to this headline">¶</a></h1>
+<p>If on one-user machine, make /usr/local owned by yourself – for easy installation and updates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo chown $USER: -R /usr/local
+</pre></div>
+</div>
+<p>Install all dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># repository for libQGLViewer</span>
+sudo zypper ar -f http://download.opensuse.org/repositories/KDE:/Qt/openSUSE_13.1/KDE:Qt.repo
+<span class="c1"># repository for git&gt;=1.8.5 (13.1 has 1.8.4)</span>
+sudo zypper ar -f http://download.opensuse.org/repositories/devel:/tools:/scm/openSUSE_13.1/devel:tools:scm.repo
+<span class="c1"># repository for gts-snapshot</span>
+sudo zypper ar -f http://download.opensuse.org/repositories/home:/popinet/openSUSE_13.1/home:popinet.repo
+<span class="c1"># reload repositories; type &quot;a&quot; (&quot;trust always&quot;) for new repository keys</span>
+sudo zypper update
+<span class="c1"># install everything what is packaged</span>
+<span class="c1"># IMPORTANT: there will be vendor cachanges (KDE:Qt.repo) for packages</span>
+<span class="c1">#   make sure you accept all of them!</span>
+sudo zypper install git scons ccache gcc-c++ binutils-gold libeigen3-devel boost-devel ipython python-matplotlib python-numpy python-genshi python-xlwt python-xlrd python-h5py python-lockfile python-xlib python-imaging vtk-devel ipython hdf5-devel python-pip python-Cython python-devel python-numpy-devel python-psutil python-colorama freeglut-devel libgle-devel libqt4-devel python-qt4-devel python-qt4-utils libQGLViewer-devel vtk-devel gts-snapshot-devel
+<span class="c1"># patch vtk-6.0 headers, to work around http://www.paraview.org/Bug/view.php?id=14164</span>
+sudo perl -pi -e<span class="s1">&#39;s/\((isnan|isinf|isfinite)/\(std::$1/&#39;</span> /usr/include/vtk-6.0/vtkMath.h
+<span class="c1"># locally compile python modules which are not packaged</span>
+<span class="c1"># do not use python-h5py package since there may be hdf5 version mismatch for some reason</span>
+sudo pip install h5py minieigen colour_runner
+</pre></div>
+</div>
+<p>Now grab and compile woo itself:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># get Woo source</span>
+git clone https://github.com/woodem/woo
+<span class="c1"># compile (drink coffee); adjust jobs=... to number of cores, and at least 4GB RAM/job</span>
+scons <span class="nv">jobs</span><span class="o">=</span><span class="m">4</span> <span class="nv">CXX</span><span class="o">=</span><span class="s1">&#39;ccache g++&#39;</span> <span class="nv">brief</span><span class="o">=</span><span class="m">0</span> <span class="nv">features</span><span class="o">=</span>qt4,opengl,vtk,openmp,gts <span class="nv">CPPPATH</span><span class="o">=</span>/usr/lib64/python2.7/site-packages/numpy/core/include/:/usr/include/eigen3:/usr/include/vtk-6.1 <span class="nv">LIBPATH</span><span class="o">=</span>/usr/lib64/vtk <span class="nv">LIBDIR</span><span class="o">=</span>/usr/local/lib64/python2.7/site-packages <span class="nv">EXECDIR</span><span class="o">=</span>/usr/local/bin
+<span class="c1"># run self-tests</span>
+woo --test
+<span class="c1"># later, try integrated git update &amp; rebuild</span>
+woo -RR
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user/dist/suse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">OpenSUSE 13.1</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

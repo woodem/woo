@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Mass and inertia computation &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contact laws" href="contact.html" />
+    <link rel="prev" title="Timestep computation" href="timestep.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="contact.html" title="Contact laws"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="timestep.html" title="Timestep computation"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Mass and inertia computation</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mass-and-inertia-computation">
+<h1>Mass and inertia computation<a class="headerlink" href="#mass-and-inertia-computation" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.DemData.mass" title="woo.dem.DemData.mass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mass</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.DemData.inertia" title="woo.dem.DemData.inertia"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inertia</span></code></a> are computed automatically from particle geometry. For the purposes of rotation integration, <a class="reference internal" href="../woo.dem.html#woo.dem.DemData.inertia" title="woo.dem.DemData.inertia"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inertia</span></code></a> is diagonal tensor (and only the diagonal is actually stored) expressed in node-local coordinates (<a class="reference internal" href="../woo.core.html#woo.core.Node.pos" title="woo.core.Node.pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pos</span></code></a> and <a class="reference internal" href="../woo.core.html#woo.core.Node.ori" title="woo.core.Node.ori"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Node.ori</span></code></a>), therefore nodes might need to be rotated so that mass distribution is aligned with their local coordinate system.</p>
+<p>Uninodal particles always have the node in their centroid, and they are oriented along the local axes (e.g. <a class="reference internal" href="../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> is always elongated along the local <span class="math notranslate nohighlight">\(+x\)</span>-axis).</p>
+<section id="uninodal-particles">
+<h2>Uninodal particles<a class="headerlink" href="#uninodal-particles" title="Permalink to this headline">¶</a></h2>
+<p>Uninodal particles have a simplified interface for setting mass and inertia. <code class="docutils literal notranslate"><span class="pre">Particle::updateMassInertia</span></code> (callable from Python as <a class="reference internal" href="../woo.dem.html#woo.dem.Particle.updateMassInertia" title="woo.dem.Particle.updateMassInertia"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Particle.updateMassInertia</span></code></a>) calls in turn <code class="docutils literal notranslate"><span class="pre">Shape::updateMassInertia</span></code> passing particle’s material <a class="reference internal" href="../woo.dem.html#woo.dem.Material.density" title="woo.dem.Material.density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">density</span></code></a> as parameter.</p>
+</section>
+<section id="multinodal-particles">
+<h2>Multinodal particles<a class="headerlink" href="#multinodal-particles" title="Permalink to this headline">¶</a></h2>
+<p>The generic routine <code class="docutils literal notranslate"><span class="pre">Shape::lumpMassInertia</span></code> collects mass and inertia for given shape and node.</p>
+<p>This function is usually invoked throug the static <a class="reference internal" href="../woo.dem.html#woo.dem.DemData.setOriMassInertia" title="woo.dem.DemData.setOriMassInertia"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemData.setOriMassInertia</span></code></a> function (which takes <a class="reference internal" href="../woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Node</span></code></a> as argument), which collets mass and inertia from all shapes referenced by the node, computes principal axes and aligns node orientation with principal axes; this raises and exception if the shape is orientation-dependent, such as capsule attached to a tetrahedron node.</p>
+</section>
+<section id="clumps">
+<h2>Clumps<a class="headerlink" href="#clumps" title="Permalink to this headline">¶</a></h2>
+<p>Clumps implement analytical and numerical (grid-based) computation of centroid, mass, inertia and local orientation.</p>
+<p>The analytical method is suitable for clumps without overlaps, where first-momentum is used to compute centroid, second-order momentum and parallel axis theorem to compute inertia tensor eigenvalues and eigenvectors, which are principal axes.</p>
+<p>The numerical method is similar, except that it samples the clump with regular grid, and computes each voxel (volume element, grid cell) contribution to mass, first- and second-order momenta. This is suitable for clumps where different shapes are overlapping, since each voxel is only counted once. The numerical routine has different (more efficient) implementation for sphere-only clumps (<a class="reference internal" href="../woo.dem.html#woo.dem.SphereClumpGeom" title="woo.dem.SphereClumpGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.SphereClumpGeom</span></code></a>; testing whether a point is inside is trivial) and another one for generic-shape clumps (<a class="reference internal" href="../woo.dem.html#woo.dem.RawShapeClump" title="woo.dem.RawShapeClump"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.RawShapeClump</span></code></a>; the point is tested for being inside using the <code class="docutils literal notranslate"><span class="pre">Shape::isInside</span></code> virtual method).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Mass and inertia computation</a><ul>
+<li><a class="reference internal" href="#uninodal-particles">Uninodal particles</a></li>
+<li><a class="reference internal" href="#multinodal-particles">Multinodal particles</a></li>
+<li><a class="reference internal" href="#clumps">Clumps</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="timestep.html"
+                          title="Previous page">&larr; Timestep computation</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="contact.html"
+                          title="Next page">&rarr; Contact laws</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prog/mass-inertia.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="contact.html" title="Contact laws"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="timestep.html" title="Timestep computation"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Mass and inertia computation</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

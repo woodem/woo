@@ -1,0 +1,367 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Linear (Cundall) contact model &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pellet contact model" href="pellet.html" />
+    <link rel="prev" title="DEM contact models" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pellet.html" title="Pellet contact model"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="DEM contact models"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Linear (Cundall) contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="linear-cundall-contact-model">
+<span id="linear-contact-model"></span><h1>Linear (Cundall) contact model<a class="headerlink" href="#linear-cundall-contact-model" title="Permalink to this headline">¶</a></h1>
+<p>Linear contact model is widely used throughout the DEM field and was first published in <span id="id1">[<a class="reference internal" href="../../references.html#id11" title="Peter A Cundall and Otto DL Strack. A discrete numerical model for granular assemblies. Geotechnique, 29(1):47–65, 1979.">CS79</a>]</span>. Normal force is linear function of normal displacement (=overlap); shear force increases linearly with relative shear displacement, but is limited by Coulomb linear friciton. This model is implemented in <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_FrictPhys_IdealElPl</span></code></a>.</p>
+<section id="stiffness">
+<span id="linear-contact-model-stiffness"></span><h2>Stiffness<a class="headerlink" href="#stiffness" title="Permalink to this headline">¶</a></h2>
+<figure class="align-center" id="id3">
+<span id="fig-spheres-contact-stiffness"></span><img alt="../../_images/spheres-contact-stiffness.png" src="../../_images/spheres-contact-stiffness.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Series of 2 springs representing normal stiffness of contact between 2 spheres.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Normal stiffness is related to <a class="reference internal" href="../../woo.dem.html#woo.dem.ElastMat.young" title="woo.dem.ElastMat.young"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Young</span> <span class="pre">modulus</span></code></a> of both particles’ materials. For clarity, we define <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.contA" title="woo.dem.L6Geom.contA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contact</span> <span class="pre">area</span></code></a> of a fictious “connector” between spheres of total length <span class="math notranslate nohighlight">\(l=l_1+l_2\)</span>. These <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.lens" title="woo.dem.L6Geom.lens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">effective</span> <span class="pre">lengths</span></code></a> are equal to radii for spheres (but have other values for e.g. <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walls</span></code></a> or <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facets</span></code></a> – see below), minus the initial overlap. The contact area is</p>
+<div class="math notranslate nohighlight" id="equation-linear-a">
+<span class="eqno">(2)<a class="headerlink" href="#equation-linear-a" title="Permalink to this equation">¶</a></span>\[A=\pi\min(l_1,l_2)^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(l_i\)</span> is (equivalent – for non-spheres) radius the respective particle. The connector is therefore an imaginary cylinder with radius of the lesser sphere, spanning between their centers. Its <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stiffness</span></code></a> is then</p>
+<div class="math notranslate nohighlight" id="equation-linear-kn">
+<span class="eqno">(3)<a class="headerlink" href="#equation-linear-kn" title="Permalink to this equation">¶</a></span>\[k_n=\left(\frac{l_1}{E_1 A}+\frac{l_2}{E_2 A}\right)^{-1}.\]</div>
+<p>Tangent (shear) stiffness <span class="math notranslate nohighlight">\(k_t\)</span> is a fraction (<a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.ktDivKn" title="woo.dem.FrictMat.ktDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ktDivKn</span></code></a>) of <span class="math notranslate nohighlight">\(k_n\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-linear-kt">
+<span class="eqno">(4)<a class="headerlink" href="#equation-linear-kt" title="Permalink to this equation">¶</a></span>\[k_t=\left(\frac{k_t}{k_n}\right)k_n,\]</div>
+<p>where the ratio is averaged between both materials in contact.</p>
+<p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.tanPhi" title="woo.dem.FrictPhys.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Friction</span> <span class="pre">angle</span></code></a> on the contact is computed from contacting materials as</p>
+<div class="math notranslate nohighlight">
+\[\tan\phi=\min\left[(\tan\phi)_1,(\tan\phi)_2\right],\]</div>
+<p>(unless <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys.tanPhi" title="woo.dem.Cp2_FrictMat_FrictPhys.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specified</span> <span class="pre">otherwise</span></code></a>) of which consequence is that material without friction will not have frictional contacts, regardless of friction of the other material.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is a simplification to derive friction parameters from material properties – the interface of each couple of materials might have different parameters, though this simplification is mostly sufficient in the practice. If you need to define different parameters for every combination of material instances, there is the <a class="reference internal" href="../../woo.core.html#woo.core.MatchMaker" title="woo.core.MatchMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.MatchMaker</span></code></a> infrastructure.</p>
+</div>
+<section id="non-spherical-particles">
+<h3>Non-spherical particles<a class="headerlink" href="#non-spherical-particles" title="Permalink to this headline">¶</a></h3>
+<p>The formulas for spheres above suppose that there is particle radius (<a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere.radius" title="woo.dem.Sphere.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a>) which defines mechanically active length (between contact point and centroid) where the material deforms (<span class="math notranslate nohighlight">\(l_1\)</span>, <span class="math notranslate nohighlight">\(l_2\)</span>). This is generalized for contact of non-spherical particles, but there are often choices which have to balance computing performance, (somewhat subjective) intuition and (perceived) physical correctness.</p>
+<p>The rules for determining <span class="math notranslate nohighlight">\(l_i\)</span> are the following:</p>
+<ol class="arabic simple">
+<li><p>Round particles contacting between themselves (including <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> with non-zero <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a> use their natural radii: <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere.radius" title="woo.dem.Sphere.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere.radius</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet.halfThick</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule.radius" title="woo.dem.Capsule.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule.radius</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.InfCylinder.radius" title="woo.dem.InfCylinder.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfCylidner.radius</span></code></a>, computed centroid – contact point distance for <a class="reference internal" href="../../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a>).</p></li>
+<li><p>Flat particles (<a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code></a> or <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> with zero <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a>) use the other’s particle radius – this results in the same influence on contact parameters from both particles, which accounts for local (not simulated) deformation of those flat particles.</p></li>
+</ol>
+<blockquote>
+<div><p>As a special case, <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> + <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a> set <span class="math notranslate nohighlight">\(l_1\)</span> equal to max(<a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere.radius" title="woo.dem.Sphere.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a>) and <span class="math notranslate nohighlight">\(l_2\)</span> to <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere.radius" title="woo.dem.Sphere.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">max</span></code> is to account for facets with both zero and non-zero <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a>.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Contact of 2 flat particles is undefined.</p></li>
+</ol>
+<p>These rules are implemented in <a class="reference internal" href="../../woo.dem.html#woo.dem.CPhysFunctor" title="woo.dem.CPhysFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_</span> <span class="pre">functors</span></code></a> for respective shape combinations, and are passed as parameters to <code class="docutils literal notranslate"><span class="pre">Cg2_Any_Any_L6Geom__Base::handleSpheresLikeContact</span></code> and to <code class="docutils literal notranslate"><span class="pre">Cp2_FrictMat_FrictPhys::updateFrictPhys</span></code> in turn. Refer to their source code for details.</p>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic">
+<li><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> in contact with <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>, with</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   r_1&amp;=.2\,\mathrm{m}, &amp; r_2&amp;=.1\,\mathrm{m}, \\
+   u_N&amp;=.001\,\mathrm{m}, \\
+   E_1&amp;=10\,\mathrm{MPa}, &amp; E_2&amp;=30\,\mathrm{MPa}, \\
+   l_1&amp;=r_1-\frac{u_N}{2}, &amp; l_2&amp;=\frac{u_N}{2}, \\
+   A&amp;=\pi\min(l_1,l_2)^2, \\
+\end{align*}</div><p>lead to equivalent modulus and stiffness:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   \frac{l}{E'}&amp;=\frac{l_1+l_2}{E'}=\frac{l_1}{E_1}+\frac{l_2}{E_2}, \\
+   k_n=\frac{E'A}{l}&amp;=A\left(\frac{l_1}{E_1}+\frac{l_2}{E_2}\right)^{-1}
+\end{align*}</div><div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">;</span> <span class="n">uN</span><span class="o">=-.</span><span class="mo">001</span><span class="p">;</span> <span class="n">E1</span><span class="p">,</span><span class="n">E2</span><span class="o">=</span><span class="mf">10e6</span><span class="p">,</span><span class="mf">30e6</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">S1</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">par</span><span class="o">=</span><span class="p">[</span><span class="n">Capsule</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span><span class="n">shaft</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="n">E1</span><span class="p">)),</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">r1</span><span class="o">+</span><span class="n">r2</span><span class="o">+</span><span class="n">uN</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">r2</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="n">E2</span><span class="p">))])],</span><span class="n">engines</span><span class="o">=</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">())</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">S1</span><span class="o">.</span><span class="n">one</span><span class="p">();</span> <span class="n">c</span><span class="o">=</span><span class="n">S1</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># one step to create contact</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">contA</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">phys</span><span class="o">.</span><span class="n">kn</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.0995</span><span class="p">,</span><span class="mf">0.1995</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">1350254.7221732636</span><span class="p">)</span>
+
+<span class="c1"># recompute by hand to check:</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="o">=</span><span class="n">r1</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">r2</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">;</span> <span class="n">A</span><span class="o">=</span><span class="n">pi</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># l1,l2 swapped above since the functor Cg2_Sphere_Capsule_L6Geom reorders the contact</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="p">(</span><span class="n">l2</span><span class="p">,</span><span class="n">l1</span><span class="p">),</span> <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="o">*</span><span class="p">(</span><span class="n">l1</span><span class="o">/</span><span class="n">E1</span><span class="o">+</span><span class="n">l2</span><span class="o">/</span><span class="n">E2</span><span class="p">)</span><span class="o">**-</span><span class="mi">1</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="p">((</span><span class="mf">0.0995</span><span class="p">,</span> <span class="mf">0.1995</span><span class="p">),</span> <span class="mf">0.031102552668702352</span><span class="p">,</span> <span class="mf">1336785.9313195853</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>thin <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> (with <span class="math notranslate nohighlight">\(h=0\)</span> as <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">halfThick</span></code></a>) in contact with <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>, with</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   h&amp;=0\,\mathrm{m}, &amp; r&amp;=.1\,\mathrm{m}, \\
+   u_N&amp;=.001\,\mathrm{m}, \\
+   E_1&amp;=10\,\mathrm{MPa}, &amp; E_2&amp;=30\,\mathrm{MPa}, \\
+   l_1&amp;=\max(h,r)-\frac{u_N}{2}, &amp; l_2&amp;=r-\frac{u_N}{2}, \\
+   A&amp;=\pi\min(l_1,l_2)^2
+\end{align*}</div><div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">;</span> <span class="n">uN</span><span class="o">=-.</span><span class="mo">001</span><span class="p">;</span> <span class="n">E1</span><span class="p">,</span><span class="n">E2</span><span class="o">=</span><span class="mf">10e6</span><span class="p">,</span><span class="mf">30e6</span><span class="p">;</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">S2</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">par</span><span class="o">=</span><span class="p">[</span><span class="n">Facet</span><span class="o">.</span><span class="n">make</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)],</span><span class="n">halfThick</span><span class="o">=</span><span class="n">h</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="n">E1</span><span class="p">)),</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="n">h</span><span class="o">+</span><span class="n">r</span><span class="o">+</span><span class="n">uN</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">r</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="n">E2</span><span class="p">))])],</span><span class="n">engines</span><span class="o">=</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">())</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">S2</span><span class="o">.</span><span class="n">one</span><span class="p">();</span> <span class="n">c</span><span class="o">=</span><span class="n">S2</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># one step to create contact</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">contA</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">phys</span><span class="o">.</span><span class="n">kn</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.0995</span><span class="p">,</span><span class="mf">0.0995</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">2368034.663509894</span><span class="p">)</span>
+
+<span class="c1"># hand-computation</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">r</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">;</span> <span class="n">A</span><span class="o">=</span><span class="n">pi</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">),</span> <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="o">*</span><span class="p">(</span><span class="n">l1</span><span class="o">/</span><span class="n">E1</span><span class="o">+</span><span class="n">l2</span><span class="o">/</span><span class="n">E2</span><span class="p">)</span><span class="o">**-</span><span class="mi">1</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="p">((</span><span class="mf">0.0995</span><span class="p">,</span> <span class="mf">0.0995</span><span class="p">),</span> <span class="mf">0.031102552668702352</span><span class="p">,</span> <span class="mf">2344413.5177413835</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The above does not match?! Should be tracked down.</p>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="contact-respose">
+<h2>Contact respose<a class="headerlink" href="#contact-respose" title="Permalink to this headline">¶</a></h2>
+<p>Normal response is computed from the <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.uN" title="woo.dem.L6Geom.uN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal</span> <span class="pre">displacement</span></code></a> (or overlap) as</p>
+<div class="math notranslate nohighlight">
+\[F_n=u_n k_n\]</div>
+<p>and the contact is (<a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.noBreak" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.noBreak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optionally</span></code></a>) broken when <span class="math notranslate nohighlight">\(u_n&gt;0\)</span>.</p>
+<p>Trial tangential force is computed from tangential <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.vel" title="woo.dem.L6Geom.vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative</span> <span class="pre">velocity</span></code></a> <span class="math notranslate nohighlight">\(\dot u\)</span> incrementally and finally (<a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.noSlip" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.noSlip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optionally</span></code></a>) reduced by the coulomb Criterion. Tangential force is a 2-vector along contact-local <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> axes.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   \Delta \vec{F}_t&amp;=(\pprev{\vec{\dot u}})_t\Dt k_t, \\
+   \vec{F}_t^T&amp;=\curr{\vec{F}_t}+\Delta \vec{F}_t,
+\end{align*}</div><p>and total tangential force is reduced by the Coulomb criterion:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\next{\vec{F}_t}=\begin{cases} \curr{\vec{F}_t}+\Delta \vec{F}_t &amp; \text{if } |\curr{\vec{F}_t}+\Delta \vec{F}_t|&lt;F_n\tan\phi, \\  F_n\tan\phi\frac{\curr{\vec{F}_t}+\Delta \vec{F}_t}{|\cdot|} &amp; \text{otherwise}. \end{cases}\end{split}\]</div>
+</section>
+<section id="energy-balance">
+<h2>Energy balance<a class="headerlink" href="#energy-balance" title="Permalink to this headline">¶</a></h2>
+<p>Elastic potential stored in a contact is the contact is the triangular area below the displacement-force diagram, in both normal and tangent sense,</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}\left(\frac{F_n^2}{k_n}+\frac{|\vec{F}_t|^2}{k_t}\right).\]</div>
+<p>Plastically dissipated energy is the elastic energy removed by the tangent slip. Noting <span class="math notranslate nohighlight">\(f_y=F_n\tan\phi\)</span> (yield force magnitude), and norm of the trial tangent force <span class="math notranslate nohighlight">\(f_t=|\curr{\vec{F}_t}+\Delta\vec{F}_t|\)</span>, this energy can be seen as the red area (parallelogram) in the displacement-force diagram</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\fill[fill=red!40, fill opacity=50] (0,0)--(4,3)--(4,4)--(0,1) -- cycle;
+\draw[-&gt;] (-.5,0)--(4.5,0) node[anchor=north]{$|u_t|$};
+\draw[-&gt;] (0,-.5)--(0,4) node[anchor=east]{$|F_t|$};
+\draw (0,0)--(4.5,3.375);
+\draw[dashed] (0,1)--(4,4);
+\draw[-&gt;] (1,0) arc(0:36.87:1) node[anchor=north west]{$\;k_t$};
+\draw[&lt;-,very thick] (4,3)--(4,4) node[anchor=north west]{slip};</span>)</p>
+<p>!pdflatex command cannot be run</p>
+</div>
+</div><p>leading to</p>
+<div class="math notranslate nohighlight">
+\[\Delta E_{pt}=\frac{f_t-f_y}{k_t}f_y.\]</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>The code has a different formulation: one contribution of <span class="math notranslate nohighlight">\(\frac{1}{2}\frac{f_t-f_y}{k_t}(f_t-f_y)\)</span> and another of <span class="math notranslate nohighlight">\(f_y\frac{f_t-f_y}{k_t}\)</span>, giving together</p>
+<div class="math notranslate nohighlight">
+\[\Delta E_{pt}=\left(\frac{f_t-f_y}{2}+f_y\right)\frac{f_t-f_y}{k_t}.\]</div>
+<p>The difference of elastic potentials leads to yet another formulation:</p>
+<div class="math notranslate nohighlight">
+\[\Delta E_{pt}=\frac{1}{2}\frac{f_t^2}{k_t}-\frac{1}{2}\frac{f_y^2}{k_t}=\frac{f_t^2-f_y^2}{2k_t}.\]</div>
+<p>Decide analytically on which of those is the best approximation and use it both in the code and in the docs.</p>
+</div>
+</section>
+</section>
+<section id="purely-elastic-model-6-dof-model">
+<h1>Purely elastic model 6-DoF model<a class="headerlink" href="#purely-elastic-model-6-dof-model" title="Permalink to this headline">¶</a></h1>
+<p>This model is useful for testing purposes. It has elastic response along all 6 DoFs: normal displacement, 2 shear displacements, twisting and 2 bending rotations. There is no non-linearity (like plastic beahvior). The model is implemented in <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_LinEl6" title="woo.dem.Law2_L6Geom_FrictPhys_LinEl6"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_FrictPhys_LinEl6</span></code></a>. For simplicity, it uses <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys" title="woo.dem.FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FrictPhys</span></code></a> (ignoring <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.tanPhi" title="woo.dem.FrictPhys.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tanPhi</span></code></a>) to compute elastic parameters, plus an additional attribute <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_LinEl6.charLen" title="woo.dem.Law2_L6Geom_FrictPhys_LinEl6.charLen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">charLen</span></code></a> to compute rotational stiffnesses. Thus the stiffnesses are as follows:</p>
+<ul class="simple">
+<li><p>normal and tangential stiffnesses <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kn</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kt" title="woo.dem.FrictPhys.kt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kt</span></code></a> are computed as above in eqs. <a class="reference internal" href="#equation-linear-kn">(3)</a>, <a class="reference internal" href="#equation-linear-kt">(4)</a>. Their dimension is N/m² as usual.</p></li>
+<li><p>bending stiffnesses <span class="math notranslate nohighlight">\(k_w\)</span> (twist) and <span class="math notranslate nohighlight">\(k_b\)</span> (bending) have the dimension N/m and are computed using the factor <span class="math notranslate nohighlight">\(l\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_LinEl6.charLen" title="woo.dem.Law2_L6Geom_FrictPhys_LinEl6.charLen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">charLen</span></code></a>), which ensures dimensional consistency, as</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   k_w&amp;=l k_n, &amp; k_b&amp;=l k_s,
+\end{align*}</div><p>which means that <span class="math notranslate nohighlight">\(k_t/k_n=k_b/k_w\)</span>; this should be acceptable since the model is used for testing only.</p>
+<p>Contact forces are computed strictly elastically as</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   F_n&amp;=k_n u_n, &amp; \vec{F}_t&amp;=k_t \vec{u}_t, \\
+   T_n&amp;=k_w \phi_n, &amp; \vec{T}_b&amp;=k_b \vec{\phi}_t.
+\end{align*}</div><p>Stored elastic energy is computed as</p>
+<div class="math notranslate nohighlight">
+\[E_e=\frac{1}{2}\left(\frac{F_n^2}{k_n}+\frac{|\vec{F}_t|^2}{k_t}+\frac{T_n}{k_w}+\frac{|\vec{T}_b|^2}{k_b}\right)\]</div>
+<p>with careful handling of zero stiffnesses so that the expression is numerically sound.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Linear (Cundall) contact model</a><ul>
+<li><a class="reference internal" href="#stiffness">Stiffness</a><ul>
+<li><a class="reference internal" href="#non-spherical-particles">Non-spherical particles</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contact-respose">Contact respose</a></li>
+<li><a class="reference internal" href="#energy-balance">Energy balance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#purely-elastic-model-6-dof-model">Purely elastic model 6-DoF model</a></li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="index.html"
+                          title="Previous page">&larr; DEM contact models</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="pellet.html"
+                          title="Next page">&rarr; Pellet contact model</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/contact/linear.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pellet.html" title="Pellet contact model"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="DEM contact models"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Linear (Cundall) contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

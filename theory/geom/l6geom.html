@@ -1,0 +1,265 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Local contact coordinates &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sphere" href="sphere.html" />
+    <link rel="prev" title="Geometry" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="sphere.html" title="Sphere"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Geometry"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Local contact coordinates</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="local-contact-coordinates">
+<span id="l6geom"></span><h1>Local contact coordinates<a class="headerlink" href="#local-contact-coordinates" title="Permalink to this headline">¶</a></h1>
+<p>Contact geometry is given by local coordinates (situated at the contact point and having the <span class="math notranslate nohighlight">\(x\)</span>-axis along the contact normal) and also is responsible for computing relative velocity of contacting particles in local coordinates. This functionality is implemented by functors producing <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.L6Geom</span></code></a> (<a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Sphere_L6Geom" title="woo.dem.Cg2_Sphere_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cg2_Sphere_Sphere_L6Geom</span></code></a> and others).</p>
+<p>Local coordinates are defined by position (local origin) <span class="math notranslate nohighlight">\(c\)</span> (contact point) and rotation (local orientation) given as rotation (=orthonormal) matrix <span class="math notranslate nohighlight">\(\mat{T}\)</span>. The first row of <span class="math notranslate nohighlight">\(\mat{T}\)</span> i.e. the local <span class="math notranslate nohighlight">\(x\)</span>-axis, is noted <span class="math notranslate nohighlight">\(\vec{n}\)</span> for brevity.</p>
+<p>There is 6 generalized displacements (degrees of freedom) at the contact point:</p>
+<dl class="simple">
+<dt>relative displacements <span class="math notranslate nohighlight">\(\vec{u}\)</span></dt><dd><p>the first (<span class="math notranslate nohighlight">\(x\)</span>) component is the normal displacement <span class="math notranslate nohighlight">\(u_n\)</span>, the other two are tangential displacement vector <span class="math notranslate nohighlight">\(\vec{u_t}\)</span>;</p>
+</dd>
+<dt>relative rotations <span class="math notranslate nohighlight">\(\vec{\phi}\)</span></dt><dd><p>the <span class="math notranslate nohighlight">\(x\)</span>-component is the twist rotation <span class="math notranslate nohighlight">\(\phi_x\)</span>, <span class="math notranslate nohighlight">\(\phi_y\)</span> and <span class="math notranslate nohighlight">\(\phi_z\)</span> are bending (in-plane) rotation along respective local axes.</p>
+</dd>
+</dl>
+<p>All displacements define their respective rates noted <span class="math notranslate nohighlight">\(\dot{\vec{u}}\)</span> and <span class="math notranslate nohighlight">\(\dot{\vec{\phi}}\)</span>.</p>
+<p><a class="reference internal" href="../../woo.dem.html#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_*</span> <span class="pre">functors</span></code></a> are responsible for updating these values on every contact. Most of the computation is done incrementally.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It must be carefully observed for which time-point is any value valid; this is show by using time-indices <span class="math notranslate nohighlight">\(\prev{x}\equiv x^{(t-\Dt)}\)</span>, <span class="math notranslate nohighlight">\(\pprev{x}\equiv x^{(t-\Dt/2)}\)</span>, <span class="math notranslate nohighlight">\(\curr{x}\equiv x^{(t)}\)</span>, <span class="math notranslate nohighlight">\(\nnext{x} \equiv x^{(t+\Dt/2)}\)</span>, <span class="math notranslate nohighlight">\(\next{x} \equiv x^{(t+\Dt)}\)</span>. Because of the leap-frog integration scheme, even derivatives of position (position, acceleration, forces, torques) are known at full-steps while odd derivatives (velocity) are known at mid-steps.</p>
+</div>
+<section id="generic-contact-routine">
+<span id="contact-geometry-l6gom-generic"></span><h2>Generic contact routine<a class="headerlink" href="#generic-contact-routine" title="Permalink to this headline">¶</a></h2>
+<p>Contact of any two <a class="reference internal" href="../../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a> is handled by the same routine which supposes two spheres with radii <span class="math notranslate nohighlight">\(r_i\)</span>, positions <span class="math notranslate nohighlight">\(\vec{x}_i\)</span>, velocities <span class="math notranslate nohighlight">\(\vec{v}_i\)</span>, angular velocities <span class="math notranslate nohighlight">\(\vec{\omega}_i\)</span>. If the shapes in contact are not really spheres, we use “equivalent” sphere geometry which captures the configuration in question.</p>
+<p>At every step, every contact directly computes (incomplete) current local coordinates: the contact point <span class="math notranslate nohighlight">\(\curr{\vec{c}}\)</span> and contact normal <span class="math notranslate nohighlight">\(\curr{\vec{n}}\)</span>. The rest is computed indirectly. This computation is different for different combinations of <a class="reference internal" href="../../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a> (<a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere</span></code></a> with <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wall</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facet</span></code></a> and so on).</p>
+<section id="contact-formation">
+<h3>Contact formation<a class="headerlink" href="#contact-formation" title="Permalink to this headline">¶</a></h3>
+<p>When a contact is initially formed, current values of <span class="math notranslate nohighlight">\(\curr{\vec{c}}\)</span> and <span class="math notranslate nohighlight">\(\curr{\vec{n}}\)</span> are computed directly. Local axes (columns of <span class="math notranslate nohighlight">\(\mat{T}\)</span>) are initially defined as follows:</p>
+<ul class="simple">
+<li><p>local <span class="math notranslate nohighlight">\(x\)</span>-axis is contact normal <span class="math notranslate nohighlight">\(\vec{n}\)</span>;</p></li>
+<li><p>local <span class="math notranslate nohighlight">\(y\)</span>-axis is positioned arbitrarily, but in a deterministic manner: aligned with the <span class="math notranslate nohighlight">\(xz\)</span> plane (if <span class="math notranslate nohighlight">\(\vec{n}_y&lt;\vec{n}_z\)</span>) or <span class="math notranslate nohighlight">\(xy\)</span> plane (otherwise);</p></li>
+<li><p>local <span class="math notranslate nohighlight">\(z\)</span>-axis is perpendicular to both other axis <span class="math notranslate nohighlight">\(\vec{z}_l=\vec{x}_l\times\vec{y}_l\)</span>.</p></li>
+</ul>
+<p>Relative velocities are zero <span class="math notranslate nohighlight">\(\dot{\curr{\vec{u}}}=\dot{\curr{\vec{\phi}}}=\vec{0}\)</span>, displacements <span class="math notranslate nohighlight">\(\vec{u}\)</span> and <span class="math notranslate nohighlight">\(\vec{\phi}\)</span> are also intially zero (normal displacement is often compute in a non-incremental way and may have non-zero initial value).</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Is it ok that relative velocities are initially zero, and not updated until in the next step? Those could be computed directly, although with less precision, when the contact is formed.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Quasi-constant values of <span class="math notranslate nohighlight">\(\vec{u}_0\)</span> (and <span class="math notranslate nohighlight">\(\vec{\phi}_0\)</span>) are stored as shifted origins of <span class="math notranslate nohighlight">\(\vec{u}\)</span> (and <span class="math notranslate nohighlight">\(\vec{\phi}\)</span>); therefore, the current value of displacement is always <span class="math notranslate nohighlight">\(\curr{\vec{u}}-\vec{u}_0\)</span> This is useful for easy implementation of plastic slipping in the normal/twist sense where the value is often computed non-incrementally.</p>
+</div>
+</section>
+<section id="contact-update">
+<h3>Contact update<a class="headerlink" href="#contact-update" title="Permalink to this headline">¶</a></h3>
+<p>For a contact which already exists, the value of <span class="math notranslate nohighlight">\(\curr{\vec{c}}\)</span> and <span class="math notranslate nohighlight">\(\curr{\vec{n}}\)</span> is computed directly again. The contact is then updated to keep track of rigid motion of the contact (one that does not change mutual configuration of spheres) and mutual configuration changes. Some computations can be more or less approximate (trading performance for accuracy), which is controlled by <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base.approxMask" title="woo.dem.Cg2_Any_Any_L6Geom__Base.approxMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">approximation</span> <span class="pre">flags</span></code></a>.</p>
+<p>Rigid motion transforms local coordinate system and can be decomposed in rigid translation (affecting <span class="math notranslate nohighlight">\(\vec{c}\)</span>), and rigid rotation (affecting <span class="math notranslate nohighlight">\(\mat{T}\)</span>), which can be split in bending rotation <span class="math notranslate nohighlight">\(\vec{o}_r\)</span> perpendicular to the normal and twisting rotation <span class="math notranslate nohighlight">\(\vec{o}_t\)</span> parallel with the normal:</p>
+<div class="math notranslate nohighlight">
+\[\pprev{\vec{o}_r}=\prev{\vec{n}}\times\curr{\vec{n}}.\]</div>
+<p>Since velocities are known at previous midstep (<span class="math notranslate nohighlight">\(t-\Dt/2\)</span>), we consider mid-step normal</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\pprev{\vec{n}}\begin{cases}=\frac{\prev{\vec{n}}+\curr{\vec{n}}}{2} &amp; \text{(accurate solution)} \\ \approx\prev{\vec{n}} &amp; \text{(with approximation flag set)}\end{cases}.\end{split}\]</div>
+<p>For the sake of numerical stability, <span class="math notranslate nohighlight">\(\pprev{\vec{n}}\)</span> is re-normalized after being computed (unless prohibited by approximation flags).</p>
+<p>Rigid rotation parallel with the normal is</p>
+<div class="math notranslate nohighlight">
+\[\pprev{\vec{o}_t}=\pprev{\vec{n}}\left(\pprev{\vec{n}}\cdot\frac{\pprev{\vec{\omega}}_1+\pprev{\vec{\omega}}_2}{2}\right)\Dt.\]</div>
+<p><em>Branch vectors</em> <span class="math notranslate nohighlight">\(\vec{b}_1\)</span>, <span class="math notranslate nohighlight">\(\vec{b}_2\)</span> (connecting <span class="math notranslate nohighlight">\(\curr{\vec{x}}_1\)</span>, <span class="math notranslate nohighlight">\(\curr{\vec{x}}_2\)</span> with <span class="math notranslate nohighlight">\(\curr{\vec{c}}\)</span> are computed depending on <code class="xref py py-obj docutils literal notranslate"><span class="pre">noRatch</span></code> (see <a class="reference external" href="https://www.yade-dem.org/doc/current/yade.wrapper.html#yade.wrapper.Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting">details in Yade docs</a>):</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   \vec{b}_1&amp;=\begin{cases} r_1 \curr{\vec{n}} &amp; \mbox{with noRatch} \\ \curr{\vec{c}}-\curr{\vec{x}}_1 &amp; \mbox{otherwise} \end{cases} \\
+   \vec{b}_2&amp;=\begin{cases} -r_2\curr{\vec{n}} &amp; \mbox{with noRatch} \\ \curr{\vec{c}}-\curr{\vec{x}}_2 &amp; \mbox{otherwise} \end{cases} \\
+\end{align*}</div><p>Relative velocity at <span class="math notranslate nohighlight">\(\curr{\vec{c}}\)</span> can be computed as</p>
+<div class="math notranslate nohighlight">
+\[\pprev{\vec{v}_r}=(\pprev{\vec{\tilde{v}}_2}+\vec{\omega}_2\times\vec{b}_2)-(\vec{v}_1+\vec{\omega}_1\times\vec{b}_1)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\vec{\tilde{v}}_2\)</span> is <span class="math notranslate nohighlight">\(\vec{v}_2\)</span> without mean-field velocity gradient in periodic boundary conditions (see <a class="reference internal" href="../../woo.core.html#woo.core.Cell.homoDeform" title="woo.core.Cell.homoDeform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Cell.homoDeform</span></code></a>). In the numerial implementation, the normal part of incident velocity is removed (since it is computed directly) and replaced with with <span class="math notranslate nohighlight">\(\pprev{\vec{v}_{r2}}=\pprev{\vec{v}_r}-(\pprev{\vec{n}}\cdot\pprev{\vec{v}_r})\pprev{\vec{n}}\)</span>.</p>
+<p>Any vector <span class="math notranslate nohighlight">\(\vec{a}\)</span> expressed in global coordinates transforms during one timestep as</p>
+<div class="math notranslate nohighlight">
+\[\curr{\vec{a}}=\prev{\vec{a}}+\pprev{\vec{v}_r}\Dt-\prev{\vec{a}}\times\pprev{\vec{o}_r}-\prev{\vec{a}}\times{\pprev{\vec{t}_r}}\]</div>
+<p>where the increments have the meaning of relative shear, rigid rotation normal to <span class="math notranslate nohighlight">\(\vec{n}\)</span> and rigid rotation parallel with <span class="math notranslate nohighlight">\(\vec{n}\)</span>. Local coordinate system orientation, rotation matrix <span class="math notranslate nohighlight">\(\mat{T}\)</span>, is updated by columns (written as transpose for space reasons), i.e.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\curr{\mat{T}}=\begin{pmatrix} \curr{\vec{n}_x}, \curr{\vec{n}_y}, \curr{\vec{n}_z} \\ \prev{\mat{T}_{1,\bullet}}-\prev{\mat{T}_{1,\bullet}}\times\pprev{\vec{o}_r}-\prev{\mat{T}_{1,\bullet}}\times\pprev{\vec{o}_t} \\ \prev{\mat{T}_{2,\bullet}}-\prev{\mat{T}_{2,\bullet}}\times\pprev{\vec{o}_r}-\prev{\mat{T}_{,\bullet}}\times\pprev{\vec{o}_t} \end{pmatrix}^T\end{split}\]</div>
+<p>This matrix is re-normalized (unless prevented approximation flags) and mid-step transformation is computed using quaternion spherical interpolation as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\pprev{\mat{T}}\begin{cases}=\mathrm{Slerp}\,\left(\prev{\mat{T}};\curr{\mat{T}};t=1/2\right) &amp; \text{(accurate solution)} \\ \approx\prev{\mat{T}} &amp; \text{(with approximation flag set)}\end{cases}.\end{split}\]</div>
+<p>Finally, current generalized displacements in local coordinates are evaluated as</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   \curr{\vec{u}}&amp;=\prev{u}+{\pprev{\mat{T}}}^T\pprev{\vec{v}_r}\Dt, \\
+   \curr{\vec{\phi}}&amp;=\prev{\vec{\phi}}+{\pprev{\mat{T}}}^T\Dt(\vec{\omega}_2-\vec{\omega}_1)
+\end{align*}</div><p>For the normal component, non-incremental evaluation is preferred if possible; for two spheres, this reads</p>
+<div class="math notranslate nohighlight">
+\[\curr{\vec{u}_x}=|\curr{\vec{x}_2}-\curr{\vec{x}_1}|-(r_1+r_2).\]</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Local contact coordinates</a><ul>
+<li><a class="reference internal" href="#generic-contact-routine">Generic contact routine</a><ul>
+<li><a class="reference internal" href="#contact-formation">Contact formation</a></li>
+<li><a class="reference internal" href="#contact-update">Contact update</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="index.html"
+                          title="Previous page">&larr; Geometry</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="sphere.html"
+                          title="Next page">&rarr; Sphere</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/geom/l6geom.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="sphere.html" title="Sphere"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Geometry"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Local contact coordinates</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

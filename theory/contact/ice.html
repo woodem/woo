@@ -1,0 +1,385 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Ice contact model &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Luding contact model" href="luding.html" />
+    <link rel="prev" title="Concrete contact model" href="concrete.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="luding.html" title="Luding contact model"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="concrete.html" title="Concrete contact model"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Ice contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ice-contact-model">
+<span id="id1"></span><h1>Ice contact model<a class="headerlink" href="#ice-contact-model" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Developement of this model is commercially sponsored (identity undisclosed).</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Ice</span></code> model was conceived for ice simulations originally, but may be suitable for a wide range of materials. It considers elasticity, cohesion and friction in 4 senses (normal, shear, twisting, rolling); each of the senses can be independently fragile (“unbonding” upon reaching critical force/torque value – see below) or non-fragile (plastic slip taking place when critical force/torque is reached).</p>
+<p>The model consists of a set of classes for material parameters (<a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat" title="woo.dem.IceMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMatState</span></code>, <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys" title="woo.dem.IcePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys" title="woo.dem.Cp2_IceMat_IcePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_IceMat_IcePhys</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_IcePhys" title="woo.dem.Law2_L6Geom_IcePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_IcePhys</span></code></a>) but consumes <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a>, generic contact geometry object. Therefore, it works for any combination of <a class="reference internal" href="../../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a> handled by <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a>.</p>
+<p>Values related to respective degrees of freedom are denoted with the following indices:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\bullet_n\)</span> for normal sense (translations along the local <span class="math notranslate nohighlight">\(x\)</span>-axis);</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bullet_t\)</span> for tangential sense (translations in the local <span class="math notranslate nohighlight">\(yz\)</span>-plane; may be 2d vectors if indicated);</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bullet_w\)</span> for twisting sense (rotations around the local <span class="math notranslate nohighlight">\(x\)</span>-axis);</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bullet_r\)</span> for rolling sense (rotations around local <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> axes; may be 2d vectors if indicated).</p></li>
+</ol>
+<section id="stiffnesses">
+<h2>Stiffnesses<a class="headerlink" href="#stiffnesses" title="Permalink to this headline">¶</a></h2>
+<p>There are 4 stiffness values:</p>
+<ul class="simple">
+<li><p>normal and tangential stiffnesses <span class="math notranslate nohighlight">\(k_n\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kn</span></code></a>) and <span class="math notranslate nohighlight">\(k_t\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kt" title="woo.dem.FrictPhys.kt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kt</span></code></a>) are computed the same as in <a class="reference internal" href="linear.html#linear-contact-model"><span class="std std-ref">Linear (Cundall) contact model</span></a>.</p></li>
+<li><p>twisting stiffness <span class="math notranslate nohighlight">\(k_w=\alpha_w k_t A\)</span>, where <span class="math notranslate nohighlight">\(\alpha_w\)</span> is material parameter and <span class="math notranslate nohighlight">\(A\)</span> is geometry-dependent <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.contA" title="woo.dem.L6Geom.contA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contact</span> <span class="pre">area</span></code></a>.</p></li>
+<li><p>rolling stiffness <span class="math notranslate nohighlight">\(k_r=\alpha_r k_n A\)</span>, where <span class="math notranslate nohighlight">\(\alpha_r\)</span> is material parameter.</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\alpha_w\)</span> and <span class="math notranslate nohighlight">\(\alpha_r\)</span> are stored together (in this order) as 2-vector in <a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.alpha" title="woo.dem.IceMat.alpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.alpha</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>Twisting</em> stiffness is proportional to <em>tangential</em> stiffness and <em>rolling</em> stiffness is proportional to <em>normal</em> stiffness. (This is unlike for limit breakage forces, where normal–twist and tangential–rolling are proportional.) The rationale is that analogy with isotropic circular beam, where the rescpective stiffnesses are related to the same moduli (Young’s modulus <span class="math notranslate nohighlight">\(E\)</span> and shear modulus <span class="math notranslate nohighlight">\(G\)</span>)</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   k_n&amp;=\frac{EA}{L}, &amp; k_t&amp;=\frac{GA}{L}, \\
+   k_w&amp;=\frac{GJ}{L}, &amp; k_r&amp;=\frac{EI}{L}
+\end{align*}</div><p>with <span class="math notranslate nohighlight">\(A=\pi R^2\)</span>, <span class="math notranslate nohighlight">\(J=\frac{\pi R^4}{2}\)</span>, <span class="math notranslate nohighlight">\(I=\frac{\pi R^4}{4}\)</span>, <span class="math notranslate nohighlight">\(G=\frac{E}{2(1+\nu)}\)</span>. Thus, to emulate isotropic beam on the contact, the coefficients would be</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\alpha_w=\frac{1}{2\pi},\\\alpha_r=\frac{1}{4\pi}.\end{aligned}\end{align} \]</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Stiffness values are the same for bonded and unbonded contacts. Those concepts are orthogonal: stiffness is <span class="math notranslate nohighlight">\(\frac{\partial F}{\partial u}\)</span> (tangent stiffness, in this model identical to secant stiffness) while bonds determine the <span class="math notranslate nohighlight">\(u\)</span> range over which the <span class="math notranslate nohighlight">\(F(u)\)</span> function is linear (or elastic, physically speaking).</p>
+</div>
+</section>
+<section id="bonds">
+<h2>Bonds<a class="headerlink" href="#bonds" title="Permalink to this headline">¶</a></h2>
+<p>The contact state can be bonded (cohesive) or unbonded in any of the 4 senses, independently. The initial bonding state (stored per-sense as bitmask in <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.bonds" title="woo.dem.IcePhys.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a>) is determined by the <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys" title="woo.dem.Cp2_IceMat_IcePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_IceMat_IcePhys</span></code></a> functor, and the possibility for breakage in 4 different senses is also initially set there.</p>
+<section id="breakage">
+<h3>Breakage<a class="headerlink" href="#breakage" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p>Bond breaks (i.e. the contact becomes non-cohesive) when two conditions are met simultaneously:</p>
+<ul class="simple">
+<li><p>force/torque in any sense exceeds limit value (see below);</p></li>
+<li><p>the bond is breakable (fragile) in that sense, as indicated by flag for given sense (stored again in <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.bonds" title="woo.dem.IcePhys.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a>).</p></li>
+</ul>
+<p>E.g. for the normal sense, those conditions would be <span class="math notranslate nohighlight">\(F_{n}&gt;F_{nb}\)</span> (see below) for the first point, and having both <code class="docutils literal notranslate"><span class="pre">bondN</span></code> and <code class="docutils literal notranslate"><span class="pre">brkN</span></code> bits of <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.bonds" title="woo.dem.IcePhys.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a> set (rather than zero).</p>
+</li>
+<li><p>When breakage in any sense occurs, the bond is broken in all senses at once and becomes fully unboded.</p></li>
+<li><p>The transition from unbonded to bonded state never occurs naturally (though it can be forced by hand).</p></li>
+</ol>
+<p>Limit force values depend on cohesion parameters; the normal cohesion (size-independent stress) is computed as</p>
+<div class="math notranslate nohighlight" id="equation-ice-cn">
+<span class="eqno">(26)<a class="headerlink" href="#equation-ice-cn" title="Permalink to this equation">¶</a></span>\[c_n=\underbrace{l\left(\frac{l_1}{E_1}+\frac{l_2}{E_2}\right)^{-1}}_{E'}\eps_{bn}\]</div>
+<p><span class="math notranslate nohighlight">\(E'\)</span> being equivalent Young’s modulus and <span class="math notranslate nohighlight">\(\eps_{bn}\)</span> being “strain” (as in <span class="math notranslate nohighlight">\(\eps_{bn}=\Delta l/l\)</span>) at breakage in the normal sense (material parameter <a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.breakN" title="woo.dem.IceMat.breakN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.breakN</span></code></a>), <span class="math notranslate nohighlight">\(l=l_1+l_2\)</span> is total center distance and radii, as used  in <a class="reference internal" href="linear.html#linear-contact-model"><span class="std std-ref">Linear (Cundall) contact model</span></a> (or equivalent measures used to distribute stiffness, when contacting particles are not spheres).</p>
+<p>Cohesion values are only useful for senses which are both bonded and breakable, and the breakage condition is slightly different for different senses. The values are all computed from <span class="math notranslate nohighlight">\(c_n\)</span> using <span class="math notranslate nohighlight">\(A\)</span> for correct dimension and <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\beta_w\)</span>, <span class="math notranslate nohighlight">\(\beta_r\)</span> (stored as 3-vector in <a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.beta" title="woo.dem.IceMat.beta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.beta</span></code></a>, in this order) as dimensionless scaling parameters:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   F_{n}&amp; &gt; F_{nb},         &amp; F_{nb}&amp;=c_n A, \\
+   |\vec{F}_{t}|&amp; &gt; F_{tb}, &amp; F_{tb}&amp;=\beta_t F_{nb}=\beta_t c_n A, \\
+   |T_{w}|&amp; &gt; T_{wb},       &amp; T_{wb}&amp;=\beta_w F_{tb}A^{\frac{1}{2}}=\beta_w \beta_t c_n A^{\frac{3}{2}}, \\
+   |\vec{T}_{b}|&amp; &gt; T_{rb}, &amp; T_{rb}&amp;=\beta_r F_{nb}A^{\frac{1}{2}}=\beta_r c_n A^{\frac{3}{2}}.
+\end{align*}</div><p>Note that there is no absolute value in the first equation, as there is no breakage in compression (<span class="math notranslate nohighlight">\(F_n&lt;0\)</span>).</p>
+</section>
+<section id="bond-setup">
+<h3>Bond setup<a class="headerlink" href="#bond-setup" title="Permalink to this headline">¶</a></h3>
+<p>Simulations often need to create different bonding for contacts existing in the starti configuration (at the very beginning of the simulation) and different bonding for particles which only meet later, as an effect of their movement during the simulation.</p>
+<p>This scenario is supported out-of-box. Starting configuration’s <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.bonds" title="woo.dem.IcePhys.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys.bonds</span></code></a> are specified by <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys.bonds0" title="woo.dem.Cp2_IceMat_IcePhys.bonds0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_IceMat_IcePhys.bonds0</span></code></a>, and this value is assigned only during the first few steps of the simulation – precisely until <a class="reference internal" href="../../woo.core.html#woo.core.Scene.step" title="woo.core.Scene.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S.step</span></code></a> reaches <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys.step01" title="woo.dem.Cp2_IceMat_IcePhys.step01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step01</span></code></a>.</p>
+<p>After that, all new contacts are assigned <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys.bonds1" title="woo.dem.Cp2_IceMat_IcePhys.bonds1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_IceMat_IcePhys.bonds1</span></code></a> instead; contacts created before retain their old (<a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_IceMat_IcePhys.bonds0" title="woo.dem.Cp2_IceMat_IcePhys.bonds0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds0</span></code></a>) value, it is only updated when the contact is encountered for the very first time.</p>
+</section>
+<section id="bond-syntax">
+<h3>Bond syntax<a class="headerlink" href="#bond-syntax" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.bonds" title="woo.dem.IcePhys.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a> are represented by bits of an integeral number. Each bit represents whether the contact is bonded or breakable in one sense. The order is as follows:</p>
+<ol class="arabic simple">
+<li><p>First 4 bits (counting from the least significant ones, i.e. from the right) represent <em>bonds</em> in the 1. normal (<code class="docutils literal notranslate"><span class="pre">bondN</span></code>), 2. tangential (<code class="docutils literal notranslate"><span class="pre">bondT</span></code>), 3. twisting (<code class="docutils literal notranslate"><span class="pre">bondW</span></code>), 4. rolling (<code class="docutils literal notranslate"><span class="pre">bondR</span></code>) senses.</p></li>
+<li><p>Second 4 bits represent <em>breakability</em> in those senses again, i.e. <code class="docutils literal notranslate"><span class="pre">brkN</span></code>, <code class="docutils literal notranslate"><span class="pre">brkT</span></code>, <code class="docutils literal notranslate"><span class="pre">brkW</span></code>, <code class="docutils literal notranslate"><span class="pre">brkR</span></code>. It is understood that breakability bits are only useful in the sense where there is a bond.</p></li>
+</ol>
+<p>Numbers can be written as binary literal in Python; thus, for instance, if the starting configuration were to bond in all senses, and break in the twisting sense <em>only</em>, one would set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># the bits are (read from the left here):</span>
+<span class="c1">#     brkR=0,  brkW=0,  brkT=1,  brkN=0</span>
+<span class="c1">#    bondR=1, bondW=1, bondT=1, bondN=1</span>
+<span class="n">bonds0</span><span class="o">=</span><span class="mb">0b00101111</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="plasticity">
+<h2>Plasticity<a class="headerlink" href="#plasticity" title="Permalink to this headline">¶</a></h2>
+<p>Plastic force limiters (yield values, noted <span class="math notranslate nohighlight">\(\bullet_y\)</span>) apply only for senses which are currently not bonded (be they broken, or simply never bonded at all). If force/torque exceeds respective yield force/torque, it is limited to that yield value (retaining its direction).</p>
+<p>There are two plastic parameters, friction angle <span class="math notranslate nohighlight">\(\phi\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.tanPhi" title="woo.dem.FrictMat.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tanPhi</span></code></a>) and kinetic friction <span class="math notranslate nohighlight">\(\mu\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.mu" title="woo.dem.IceMat.mu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mu</span></code></a>), used to compute yield values. Note that the use of <span class="math notranslate nohighlight">\(\min(0,F_n \dots)\)</span> implies that the <em>yield values are always zero in tension</em>, therefore the behavior is ideally plastic in that case.</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   F_{ty}&amp;=-\min(0,F_n\tan\phi)\\
+   T_{wy}&amp;=-\sqrt{A/\pi} \min(0,F_n\tan\phi) \\
+   T_{ry}&amp;=-\sqrt{A/\pi} \min(0,F_n\mu)
+\end{align*}</div><p>Note that all these values are non-negative, since <span class="math notranslate nohighlight">\(\min(0,F_n)\leq0\)</span> and <span class="math notranslate nohighlight">\(\mu\geq0\)</span>, <span class="math notranslate nohighlight">\(\tan\phi\geq0\)</span>.</p>
+<p>For each unbonded sense, when the yield condition is satisfied, the corresponding force is reduced to return to the yield value:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+   |\vec{F}_t|&amp;&gt;F_{ty} &amp;  \Longrightarrow &amp;&amp; \vec{F}_t&amp;\leftarrow \normalized{\vec{F}_t} F_{ty}, \\
+   |T_w|&amp;&gt;T_{wy} &amp;  \Longrightarrow &amp;&amp; T_w&amp;\leftarrow \normalized{T_w} T_{wy}, \\
+   |\vec{T}_r|&amp;&gt;T_{ry} &amp;  \Longrightarrow &amp;&amp; \vec{T}_r&amp;\leftarrow \normalized{\vec{T}_r} T_{ry}.
+\end{align*}</div></section>
+<section id="nomenclature">
+<h2>Nomenclature<a class="headerlink" href="#nomenclature" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 9%" />
+<col style="width: 26%" />
+<col style="width: 9%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Symbol</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Algorithm</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(E\)</span></p></td>
+<td><p>Pa</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ElastMat.young" title="woo.dem.ElastMat.young"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElastMat.young</span></code></a></p></td>
+<td><p>geometry-weighted</p></td>
+<td><p>Young’s modulus</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(A\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{m^2}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.contA" title="woo.dem.L6Geom.contA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom.contA</span></code></a></p></td>
+<td><p>computed</p></td>
+<td><p>contact area</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k_t/k_n\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.ktDivKn" title="woo.dem.FrictMat.ktDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictMat.ktDivKn</span></code></a></p></td>
+<td><p>averaged</p></td>
+<td><p>factor to compute <span class="math notranslate nohighlight">\(k_t\)</span> from <span class="math notranslate nohighlight">\(k_n\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\tan\phi\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.tanPhi" title="woo.dem.FrictMat.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictMat.tanPhi</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.tanPhi" title="woo.dem.FrictPhys.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.tanPhi</span></code></a></p></td>
+<td><p>minimum</p></td>
+<td><p>friction angle</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((\alpha_w,\alpha_r)\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.alpha" title="woo.dem.IceMat.alpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.alpha</span></code></a></p></td>
+<td><p>averaged</p></td>
+<td><p>factors for computing <span class="math notranslate nohighlight">\(k_w\)</span>, <span class="math notranslate nohighlight">\(k_r\)</span> from <span class="math notranslate nohighlight">\(k_t\)</span>, <span class="math notranslate nohighlight">\(k_n\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\eps_{bn}\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.breakN" title="woo.dem.IceMat.breakN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.breakN</span></code></a></p></td>
+<td><p>averaged</p></td>
+<td><p>normal strain where cohesion stress is reached</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(c_n\)</span></p></td>
+<td><p>Pa</p></td>
+<td><p>temporary</p></td>
+<td><p>computed from <a class="reference internal" href="#equation-ice-cn">(26)</a></p></td>
+<td><p>normal cohesion value</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\((\beta_t,\beta_w,\beta_r)\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.beta" title="woo.dem.IceMat.beta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.beta</span></code></a></p></td>
+<td><p>averaged</p></td>
+<td><p>factors for computing cohesions from <span class="math notranslate nohighlight">\(c_n\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((F_{nb},F_{tb}), (T_{wb},T_{rb})\)</span></p></td>
+<td><p>(N ,N, Nm, Nm)</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.brkNT" title="woo.dem.IcePhys.brkNT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys.brkNT</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.brkWR" title="woo.dem.IcePhys.brkWR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys.brkWR</span></code></a></p></td>
+<td><p>computed</p></td>
+<td><p>limit forces for bond breakage</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mu\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.IceMat.mu" title="woo.dem.IceMat.mu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IceMat.mu</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.mu" title="woo.dem.IcePhys.mu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys.mu</span></code></a></p></td>
+<td><p>averaged</p></td>
+<td><p>kinetic (rolling) friction coefficient</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k_n, k_t, k_w, k_r\)</span></p></td>
+<td><p>N/m, N/m, N, N</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.kn</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kt" title="woo.dem.FrictPhys.kt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.kt</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.IcePhys.kWR" title="woo.dem.IcePhys.kWR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IcePhys.kWR</span></code></a></p></td>
+<td><p>computed</p></td>
+<td><p>stifffnesses in all 4 senses</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Ice contact model</a><ul>
+<li><a class="reference internal" href="#stiffnesses">Stiffnesses</a></li>
+<li><a class="reference internal" href="#bonds">Bonds</a><ul>
+<li><a class="reference internal" href="#breakage">Breakage</a></li>
+<li><a class="reference internal" href="#bond-setup">Bond setup</a></li>
+<li><a class="reference internal" href="#bond-syntax">Bond syntax</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plasticity">Plasticity</a></li>
+<li><a class="reference internal" href="#nomenclature">Nomenclature</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="concrete.html"
+                          title="Previous page">&larr; Concrete contact model</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="luding.html"
+                          title="Next page">&rarr; Luding contact model</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/contact/ice.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="luding.html" title="Luding contact model"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="concrete.html" title="Concrete contact model"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Ice contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

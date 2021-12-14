@@ -1,0 +1,314 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.remote &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.remote</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.remote</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="c1"># 2008-2009 © Václav Šmilauer &lt;eudoxos@arcig.cz&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Remote connections to woo: authenticated python command-line over telnet and anonymous socket for getting some read-only information about current simulation.</span>
+
+<span class="sd">These classes are used internally in gui/py/PythonUI_rc.py and are not intended for direct use.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">socketserver</span><span class="o">,</span><span class="nn">xmlrpc.client</span><span class="o">,</span><span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">time</span><span class="o">,</span><span class="nn">os</span><span class="o">,</span><span class="nn">math</span>
+
+<span class="n">useQThread</span><span class="o">=</span><span class="kc">False</span>
+<span class="s2">&quot;Set before using any of our classes to use QThread for background execution instead of the standard thread module. Mixing the two (in case the qt UI is running, for instance) does not work well.&quot;</span>
+
+<span class="n">plotImgFormat</span><span class="p">,</span><span class="n">plotImgMimetype</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="s1">&#39;image/png&#39;</span>
+<span class="c1">#plotImgFormat,plotImgMimetype=&#39;svg&#39;,&#39;image/svg+xml&#39;</span>
+
+<span class="n">bgThreads</span><span class="o">=</span><span class="p">[]</span> <span class="c1"># needed to keep background threads alive</span>
+
+<div class="viewcode-block" id="InfoProvider"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.InfoProvider">[docs]</a><span class="k">class</span> <span class="nc">InfoProvider</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="InfoProvider.basicInfo"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.InfoProvider.basicInfo">[docs]</a>    <span class="k">def</span> <span class="nf">basicInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">woo</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">ret</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">step</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span><span class="n">stopAtStep</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">stopAtStep</span><span class="p">,</span><span class="n">stopAtTime</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">stopAtTime</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">time</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;title&#39;</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span><span class="n">threads</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">numThreads</span><span class="p">,</span><span class="n">numBodies</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">)</span> <span class="k">if</span> <span class="n">S</span><span class="o">.</span><span class="n">hasDem</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">numIntrs</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">)</span> <span class="k">if</span> <span class="n">S</span><span class="o">.</span><span class="n">hasDem</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">PID</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">();</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+<div class="viewcode-block" id="InfoProvider.plot"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.InfoProvider.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">woo</span>
+            <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plots</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">fig</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subPlots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">noShow</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">img</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">plotImgFormat</span>
+            <span class="n">sqrtFigs</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plots</span><span class="p">))</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">sqrtFigs</span><span class="p">,</span><span class="mi">7</span><span class="o">*</span><span class="n">sqrtFigs</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">);</span> <span class="n">data</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">();</span> <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="c1"># print &#39;returning %s (%d bytes read)&#39;%(plotImgFormat,len(data))</span>
+            <span class="k">return</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Binary</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error updating plots:&#39;</span><span class="p">)</span>
+            <span class="kn">import</span> <span class="nn">traceback</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">None</span></div></div>
+        
+
+<div class="viewcode-block" id="PythonConsoleSocketEmulator"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator">[docs]</a><span class="k">class</span> <span class="nc">PythonConsoleSocketEmulator</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class emulating python command-line over a socket connection.</span>
+
+<span class="sd">    The connection is authenticated by requiring a cookie.</span>
+<span class="sd">    Only connections from localhost (127.0.0.*) are allowed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PythonConsoleSocketEmulator.setup"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;127.0.0&#39;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TCP Connection from non-127.0.0.* address </span><span class="si">%s</span><span class="s2"> rejected&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">,</span> <span class="s1">&#39;connected!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;Enter auth cookie: &#39;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="PythonConsoleSocketEmulator.tryLogin"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator.tryLogin">[docs]</a>    <span class="k">def</span> <span class="nf">tryLogin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">cookie</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">authenticated</span><span class="o">+=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Woo / TCP</span><span class="se">\n</span><span class="s2">(connected from </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt;&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">time</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;invalid cookie&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+<div class="viewcode-block" id="PythonConsoleSocketEmulator.displayhook"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator.displayhook">[docs]</a>    <span class="k">def</span> <span class="nf">displayhook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">pprint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">s</span><span class="p">))</span></div>
+<div class="viewcode-block" id="PythonConsoleSocketEmulator.handle"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_address</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">authenticated</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryLogin</span><span class="p">():</span> <span class="k">return</span>
+        <span class="kn">import</span> <span class="nn">code</span><span class="o">,</span><span class="nn">io</span><span class="o">,</span><span class="nn">traceback</span>
+        <span class="n">buf</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">==</span><span class="s1">&#39;</span><span class="se">\x04</span><span class="s1">&#39;</span> <span class="ow">or</span> <span class="n">data</span><span class="o">==</span><span class="s1">&#39;exit&#39;</span> <span class="ow">or</span> <span class="n">data</span><span class="o">==</span><span class="s1">&#39;quit&#39;</span><span class="p">:</span> <span class="c1"># \x04 == ^D </span>
+                <span class="k">return</span>
+            <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">orig_displayhook</span><span class="p">,</span><span class="n">orig_stdout</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">displayhook</span><span class="p">,</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+            <span class="n">sio</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+            <span class="n">continuation</span><span class="o">=</span><span class="kc">False</span>
+            <span class="c1">#print &quot;buffer:&quot;,buf</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">comp</span><span class="o">=</span><span class="n">code</span><span class="o">.</span><span class="n">compile_command</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">comp</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">displayhook</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">displayhook</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">=</span><span class="n">sio</span>
+                    <span class="n">exec</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sio</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+                    <span class="n">buf</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;... &#39;</span><span class="p">);</span> <span class="n">continuation</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+                <span class="n">buf</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">displayhook</span><span class="p">,</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">=</span><span class="n">orig_displayhook</span><span class="p">,</span><span class="n">orig_stdout</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">continuation</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&gt;&gt;&gt; &#39;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="PythonConsoleSocketEmulator.finish"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.PythonConsoleSocketEmulator.finish">[docs]</a>    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">,</span> <span class="s1">&#39;disconnected!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Bye &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_runInBackground</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">useQThread</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">woo.config</span>
+        <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QThread</span>
+        <span class="k">class</span> <span class="nc">WorkerThread</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">func_</span><span class="p">):</span> <span class="n">QThread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">);</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">=</span><span class="n">func_</span>
+            <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+        <span class="n">wt</span><span class="o">=</span><span class="n">WorkerThread</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">wt</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">global</span> <span class="n">bgThreads</span><span class="p">;</span> <span class="n">bgThreads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wt</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">_thread</span><span class="p">;</span> <span class="n">_thread</span><span class="o">.</span><span class="n">start_new_thread</span><span class="p">(</span><span class="n">func</span><span class="p">,())</span>
+
+
+<div class="viewcode-block" id="GenericTCPServer"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.GenericTCPServer">[docs]</a><span class="k">class</span> <span class="nc">GenericTCPServer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="s2">&quot;Base class for socket server, handling port allocation, initial logging and thead backgrounding.&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">handler</span><span class="p">,</span><span class="n">title</span><span class="p">,</span><span class="n">cookie</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">minPort</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">maxPort</span><span class="o">=</span><span class="mi">65536</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">host</span>
+        <span class="n">tryPort</span><span class="o">=</span><span class="n">minPort</span>
+        <span class="k">if</span> <span class="n">maxPort</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">maxPort</span><span class="o">=</span><span class="n">minPort</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">==-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">tryPort</span><span class="o">&lt;=</span><span class="n">maxPort</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">=</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingTCPServer</span><span class="p">((</span><span class="n">host</span><span class="p">,</span><span class="n">tryPort</span><span class="p">),</span><span class="n">handler</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="n">tryPort</span>
+                <span class="k">if</span> <span class="n">cookie</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">cookie</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="s1">&#39;woosucks&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">authenticated</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot; on </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">, auth cookie `</span><span class="si">%s</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">host</span> <span class="k">if</span> <span class="n">host</span> <span class="k">else</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">cookie</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot; on </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">host</span> <span class="k">if</span> <span class="n">host</span> <span class="k">else</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">background</span><span class="p">:</span> <span class="n">_runInBackground</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                <span class="n">tryPort</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No free port to listen on in range </span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">minPort</span><span class="p">,</span><span class="n">maxPort</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="runServers"><a class="viewcode-back" href="../../woo.remote.html#woo.remote.runServers">[docs]</a><span class="k">def</span> <span class="nf">runServers</span><span class="p">(</span><span class="n">xmlrpc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">tcpPy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run python telnet server and info socket. They will be run at localhost on ports 9000 (or higher if used) and 21000 (or higer if used) respectively.</span>
+<span class="sd">    </span>
+<span class="sd">    The python telnet server accepts only connection from localhost,</span>
+<span class="sd">    after authentication by random cookie, which is printed on stdout</span>
+<span class="sd">    at server startup.</span>
+
+<span class="sd">    The info socket provides read-only access to several simulation parameters</span>
+<span class="sd">    at runtime. Each connection receives pickled dictionary with those values.</span>
+<span class="sd">    This socket is primarily used by woo-multi batch scheduler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tcpPy</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">woo.runtime</span>
+        <span class="n">srv</span><span class="o">=</span><span class="n">GenericTCPServer</span><span class="p">(</span><span class="n">handler</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">PythonConsoleSocketEmulator</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;TCP python prompt&#39;</span><span class="p">,</span><span class="n">cookie</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">minPort</span><span class="o">=</span><span class="mi">9000</span><span class="p">)</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">cookie</span><span class="o">=</span><span class="n">srv</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">cookie</span>
+    <span class="k">if</span> <span class="n">xmlrpc</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">xmlrpc.server</span> <span class="k">import</span> <span class="n">SimpleXMLRPCServer</span>
+        <span class="n">port</span><span class="p">,</span><span class="n">maxPort</span><span class="o">=</span><span class="mi">21000</span><span class="p">,</span><span class="mi">65535</span> <span class="c1"># minimum port number</span>
+        <span class="k">while</span> <span class="n">port</span><span class="o">&lt;</span><span class="n">maxPort</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">info</span><span class="o">=</span><span class="n">SimpleXMLRPCServer</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">port</span><span class="p">),</span><span class="n">logRequests</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="k">break</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span> <span class="n">port</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">port</span><span class="o">==</span><span class="n">maxPort</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No free port to listen on in range 21000-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">maxPort</span><span class="p">)</span>
+        <span class="c1"># register methods, as per http://docs.python.org/library/simplexmlrpcserver.html#simplexmlrpcserver-example</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">register_instance</span><span class="p">(</span><span class="n">InfoProvider</span><span class="p">())</span> <span class="c1"># gets all defined methods by introspection</span>
+        <span class="c1">#prov=InfoProvider()</span>
+        <span class="c1">#for m in prov.exposedMethods(): info.register_function(m)</span>
+        <span class="n">_runInBackground</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;XMLRPC info provider on http://localhost:</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">port</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
+
+
+
+
+<span class="c1">#if __name__==&#39;__main__&#39;:</span>
+<span class="c1">#    p=GenericTCPServer(PythonConsoleSocketEmulator,&#39;Python TCP server&#39;,background=False)</span>
+<span class="c1">#    #while True: time.sleep(2)</span>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.remote</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

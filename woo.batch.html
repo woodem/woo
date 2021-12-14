@@ -1,0 +1,556 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.batch &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.comp" href="woo.comp.html" />
+    <link rel="prev" title="woo.apiversion" href="woo.apiversion.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.comp.html" title="woo.comp"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.apiversion.html" title="woo.apiversion"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.batch">
+<span id="woo-batch"></span><h1><a class="reference internal" href="#module-woo.batch" title="woo.batch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a><a class="headerlink" href="#module-woo.batch" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.batch.TableParamReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">TableParamReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstLine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#TableParamReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.TableParamReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for reading simulation parameters from text file.</p>
+<p>Each parameter is represented by one column, each parameter set by one line. Colums are separated by blanks (no quoting).</p>
+<p>First non-empty line contains column titles (without quotes).
+You may use special column named ‘title’ to describe this parameter set;
+if such colum is absent, title will be built by concatenating column names and corresponding values (<code class="docutils literal notranslate"><span class="pre">param1=34,param2=12.22,param4=foo</span></code>)</p>
+<ul class="simple">
+<li><p>from columns ending in <code class="docutils literal notranslate"><span class="pre">!</span></code> (the <code class="docutils literal notranslate"><span class="pre">!</span></code> is not included in the column name)</p></li>
+<li><p>from all columns, if no columns end in <code class="docutils literal notranslate"><span class="pre">!</span></code>.</p></li>
+<li><p>columns containing literal - (minus) will be ignored</p></li>
+</ul>
+<p>Empty lines within the file are ignored (although counted); <code class="docutils literal notranslate"><span class="pre">#</span></code> starts comment till the end of line. Number of blank-separated columns must be the same for all non-empty lines.</p>
+<p>A special value <code class="docutils literal notranslate"><span class="pre">=</span></code> can be used instead of parameter value; value from the previous non-empty line will be used instead (works recursively); in XLS, <em>empty</em> cell is treated the same as <code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>This class is used by <a class="reference internal" href="woo.utils.html#woo.utils.readParamsFromTable" title="woo.utils.readParamsFromTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.readParamsFromTable</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tryData</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="s1">&#39;head1&#39;</span><span class="p">,</span><span class="s1">&#39;important2!&#39;</span><span class="p">,</span><span class="s1">&#39;head3&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">,</span><span class="s1">&#39;!OMP_NUM_THREADS!&#39;</span><span class="p">,</span><span class="s1">&#39;abcd&#39;</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,],</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;HE&#39;</span><span class="p">,</span><span class="s1">&#39;AD&#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;###&#39;</span><span class="p">,</span><span class="s1">&#39;comment&#39;</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="s1">&#39;# empty line&#39;</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">woo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tryFile</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># write text</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="o">=</span><span class="n">tryFile</span><span class="o">+</span><span class="s1">&#39;.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ll</span> <span class="ow">in</span> <span class="n">tryData</span><span class="p">:</span> <span class="n">n</span><span class="o">=</span><span class="n">txt</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># set n to suppress output in doctest under py3k</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># write xls</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">xlwt</span><span class="o">,</span><span class="nn">itertools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="o">=</span><span class="n">tryFile</span><span class="o">+</span><span class="s1">&#39;.xls&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xls</span><span class="o">=</span><span class="n">xlwt</span><span class="o">.</span><span class="n">Workbook</span><span class="p">();</span> <span class="n">sheet</span><span class="o">=</span><span class="n">xls</span><span class="o">.</span><span class="n">add_sheet</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tryData</span><span class="p">)):</span>
+<span class="gp">... </span>  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tryData</span><span class="p">[</span><span class="n">r</span><span class="p">])):</span>
+<span class="gp">... </span>    <span class="n">sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">tryData</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xls</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">TableParamReader</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span><span class="o">.</span><span class="n">paramDict</span><span class="p">())</span>
+<span class="go">{2: {&#39;!OMP_NUM_THREADS&#39;: &#39;1.2&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;1.3&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;1&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;1.15&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;1.1&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=1.1,OMP_NUM_THREADS=1.2&#39;},</span>
+<span class="go"> 3: {&#39;!OMP_NUM_THREADS&#39;: &#39;c&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;d&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;a&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;HEAD_3&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;b&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=b,OMP_NUM_THREADS=c&#39;},</span>
+<span class="go"> 5: {&#39;!OMP_NUM_THREADS&#39;: &#39;c&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;g&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;1&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;HEAD_3&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;b&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=b,OMP_NUM_THREADS=c__line=5__&#39;}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">TableParamReader</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span><span class="o">.</span><span class="n">paramDict</span><span class="p">())</span>
+<span class="go">{2: {&#39;!OMP_NUM_THREADS&#39;: &#39;1.2&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;1.3&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;1&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;1.15&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;1.1&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=1.1,OMP_NUM_THREADS=1.2&#39;},</span>
+<span class="go"> 3: {&#39;!OMP_NUM_THREADS&#39;: &#39;c&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;d&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;a&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;HEAD_3&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;b&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=b,OMP_NUM_THREADS=c&#39;},</span>
+<span class="go"> 5: {&#39;!OMP_NUM_THREADS&#39;: &#39;c&#39;,</span>
+<span class="go">     &#39;abcd&#39;: &#39;g&#39;,</span>
+<span class="go">     &#39;head1&#39;: &#39;1&#39;,</span>
+<span class="go">     &#39;head3&#39;: &#39;HEAD_3&#39;,</span>
+<span class="go">     &#39;important2&#39;: &#39;b&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;important2=b,OMP_NUM_THREADS=c__line=5__&#39;}}</span>
+</pre></div>
+</div>
+<p>Setup the reader class, read data into memory. <em>firstLine</em> determines the number of the first line; if negative, 1 is used for XLS files and 0 for text files. The reason is that spreadsheets number lines from 1 whereas text editors number lines from zero, and having the numbering the same as the usual UI for editing that format is convenient.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.batch.TableParamReader.paramDict">
+<span class="sig-name descname"><span class="pre">paramDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#TableParamReader.paramDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.TableParamReader.paramDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary containing data from file given to constructor. Keys are line numbers (which might be non-contiguous and refer to real line numbers that one can see in text editors), values are dictionaries mapping parameter names to their values given in the file. The special value ‘=’ has already been interpreted, <code class="docutils literal notranslate"><span class="pre">!</span></code> (bangs) (if any) were already removed from column titles, <code class="docutils literal notranslate"><span class="pre">title</span></code> column has already been added (if absent).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.cartProdParamTable">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">cartProdParamTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">same</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#cartProdParamTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.cartProdParamTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write parameter table (as XLS) where all parameters in pp (which is a dictionary, or <a class="reference external" href="https://docs.python.org/3.8/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a>) are traversed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>same</strong> – content of repeated cellls; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, repeated cells are filled with the repeated value. Other useful values are <code class="docutils literal notranslate"><span class="pre">'='</span></code> and <code class="docutils literal notranslate"><span class="pre">''</span></code> (empty cell)</p></li>
+<li><p><strong>out</strong> – XLS file to write to</p></li>
+<li><p><strong>params</strong> – dictionary-like with parameter values; keys may be n-tuples, which will span multiple columns – in that case, values must also be n-tuples, and will also span those columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>total number of lines written</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">collections</span><span class="o">,</span> <span class="nn">woo.batch</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span> <span class="c1"># use OrderedDict for predictable column ordering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">[</span><span class="s1">&#39;pattern&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ortho&#39;</span><span class="p">,</span><span class="s1">&#39;hexa&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[(</span><span class="n">r</span><span class="p">,</span><span class="s1">&#39;*woo.unit[&quot;mm&quot;]&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>    <span class="c1"># use continuation columns for unit specification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">[</span><span class="s1">&#39;gravity&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">,</span><span class="s1">&#39;...&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;(0,0,&#39;</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">9.81</span><span class="p">,</span><span class="mi">20</span><span class="p">)]</span> <span class="c1"># use continuation columns for concatenation of expression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xls</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.xls&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">woo</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">cartProdParamTable</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">pp</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="n">xls</span><span class="p">)</span>
+<span class="go">12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">TableParamReader</span><span class="p">(</span><span class="n">xls</span><span class="p">)</span><span class="o">.</span><span class="n">paramDict</span><span class="p">())</span>
+<span class="go">{2: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;1*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=1mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 3: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;1*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=1mm,gravity=(0,0,20)&#39;},</span>
+<span class="go"> 4: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;2*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=2mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 5: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;2*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=2mm,gravity=(0,0,20)&#39;},</span>
+<span class="go"> 6: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;3*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=3mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 7: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;ortho&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;3*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=ortho,radius=3mm,gravity=(0,0,20)&#39;},</span>
+<span class="go"> 8: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;1*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=hexa,radius=1mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 9: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">     &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">     &#39;radius&#39;: &#39;1*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">     &#39;title&#39;: &#39;pattern=hexa,radius=1mm,gravity=(0,0,20)&#39;},</span>
+<span class="go"> 10: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">      &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">      &#39;radius&#39;: &#39;2*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">      &#39;title&#39;: &#39;pattern=hexa,radius=2mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 11: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">      &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">      &#39;radius&#39;: &#39;2*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">      &#39;title&#39;: &#39;pattern=hexa,radius=2mm,gravity=(0,0,20)&#39;},</span>
+<span class="go"> 12: {&#39;gravity&#39;: &#39;(0,0,9.81)&#39;,</span>
+<span class="go">      &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">      &#39;radius&#39;: &#39;3*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">      &#39;title&#39;: &#39;pattern=hexa,radius=3mm,gravity=(0,0,9.81)&#39;},</span>
+<span class="go"> 13: {&#39;gravity&#39;: &#39;(0,0,20)&#39;,</span>
+<span class="go">      &#39;pattern&#39;: &#39;hexa&#39;,</span>
+<span class="go">      &#39;radius&#39;: &#39;3*woo.unit[&quot;mm&quot;]&#39;,</span>
+<span class="go">      &#39;title&#39;: &#39;pattern=hexa,radius=3mm,gravity=(0,0,20)&#39;}}</span>
+</pre></div>
+</div>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Generated cartesian product parameter table (XLS)</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pattern</p></th>
+<th class="head"><p>radius</p></th>
+<th class="head"><p>…</p></th>
+<th class="head"><p>gravity</p></th>
+<th class="head"><p>…</p></th>
+<th class="head"><p>…</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ortho</p></td>
+<td><p>1</p></td>
+<td><p><a href="#id1"><span class="problematic" id="id2">*</span></a>woo.unit[“mm”]</p></td>
+<td><p>(0,0,</p></td>
+<td><p>9.81</p></td>
+<td><p>)</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>2</p></td>
+<td></td>
+<td></td>
+<td><p>9.81</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>3</p></td>
+<td></td>
+<td></td>
+<td><p>9.81</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>hexa</p></td>
+<td><p>1</p></td>
+<td></td>
+<td></td>
+<td><p>9.81</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>2</p></td>
+<td></td>
+<td></td>
+<td><p>9.81</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>3</p></td>
+<td></td>
+<td></td>
+<td><p>9.81</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>20</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.dbReadResults">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">dbReadResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basicTypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#dbReadResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.dbReadResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of dictionaries, representing database contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>basicTypes</strong> – don’t reconstruct Woo objects from JSON (keep those as dicts) and don’t return data series as numpy arrays.</p>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Nested (grouped) series are not read correctly from HDF5. Should be fixed either by flattening the hiearchy (like we do in <a class="reference internal" href="#woo.batch.dbToSpread" title="woo.batch.dbToSpread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dbToSpread</span></code></a> and stuffing it into returned dict; or by reflecting the hierarchy in the dict returned.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.dbToJSON">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">dbToJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#dbToJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.dbToJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return simulation database as JSON string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kw</strong> – additional arguments passed to <a class="reference external" href="http://docs.python.org/3/library/json.html#json.dumps">json.dumps</a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.dbToSpread">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">dbToSpread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xls'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('plotData',</span> <span class="pre">'tags')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortFirst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('title',</span> <span class="pre">'batchtable',</span> <span class="pre">'batchTableLine',</span> <span class="pre">'finished',</span> <span class="pre">'sceneId',</span> <span class="pre">'duration')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#dbToSpread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.dbToSpread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select simulation results (using <em>selector</em>) stored in batch database <em>db</em>, flatten data for each simulation,
+and dump the data in the CSV format (using <em>dialect</em>: ‘excel’, ‘excel-tab’, ‘xls’) into file <em>out</em> (standard output
+if not given). If <em>rows</em>, every simulation is saved into one row of the CSV file (i.e. attributes are in columns),
+otherwise each simulation corresponds to one column and each attribute is in one row.</p>
+<p>If <em>out</em> ends with ‘.xls’, the ‘xls’ dialect is forced regardless of the value given. The ‘xls’ format will refuse to write to standard output (<em>out</em> must be given).</p>
+<p><em>ignored</em> fields are used to exclude large data from the dump: either database column of that name, or any attribute
+of that name. Attributes are flattened and path separated with ‘.’.</p>
+<p><em>series</em> determines whether the <cite>series</cite> field will be written to a separate sheet, named by the sceneId. This is only supported with the <cite>xls</cite> dialect and raises error otherwise (unless <cite>series</cite> field is empty).</p>
+<p>Fields are sorted in their natural order (i.e. alphabetically, but respecting numbers), with <em>sortFirst</em> fields coming at the beginning.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.hasBatchTable">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">hasBatchTable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#hasBatchTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.hasBatchTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell whether an external batch table is given or not (scripts may be run in script also without batch tables)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.inBatch">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">inBatch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#inBatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.inBatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell whether we are running inside the batch or separately.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.mayHaveStaleLock">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">mayHaveStaleLock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#mayHaveStaleLock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.mayHaveStaleLock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.readParamsFromTable">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">readParamsFromTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'table'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noTableOk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknownOk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#readParamsFromTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.readParamsFromTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read parameters from a file and assign them to <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.lab</span></code> under the <code class="docutils literal notranslate"><span class="pre">under</span></code> pseudo-module (e.g. <code class="docutils literal notranslate"><span class="pre">Scene.lab.table.foo</span></code> and so on. This function is used for scripts (as opposed to preprocessors) running in a batch. The file format is described in <a class="reference internal" href="#woo.batch.TableParamReader" title="woo.batch.TableParamReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableParamReader</span></code></a> (CSV or XLS).</p>
+<p>Assigned tags (the <code class="docutils literal notranslate"><span class="pre">title</span></code> column is synthesized if absent,see <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.TableParamReader</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>S=woo.master.scene
+S.tags[&#39;title&#39;]=…                                            # assigns the title column; might be synthesized
+S.tags[&#39;params&#39;]=&quot;name1=val1,name2=val2,…&quot;                   # all explicitly assigned parameters
+S.tags[&#39;defaultParams&#39;]=&quot;unassignedName1=defaultValue1,…&quot;    # parameters that were left at their defaults
+S.tags[&#39;d.id&#39;]=s.tags[&#39;id&#39;]+&#39;.&#39;+s.tags[&#39;title&#39;]
+S.tags[&#39;id.d&#39;]=s.tags[&#39;title&#39;]+&#39;.&#39;+s.tags[&#39;id&#39;]
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tableFile</strong> – text file (with one value per blank-separated columns)</p></li>
+<li><p><strong>under</strong> – name of pseudo-module under <code class="docutils literal notranslate"><span class="pre">S.lab</span></code> to save all values to (<code class="docutils literal notranslate"><span class="pre">table</span></code> by default)</p></li>
+<li><p><strong>tableLine</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of line where to get the values from</p></li>
+<li><p><strong>noTableOk</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if False, raise exception if the file cannot be open; use default values otherwise</p></li>
+<li><p><strong>unknownOk</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – do not raise exception if unknown column name is found in the file, and assign it as well</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.runPreprocessor">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">runPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#runPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.runPreprocessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute given <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a>, modifying its attributes from batch (if running in batch). Each column from the batch table (except of environment variables starting with <code class="docutils literal notranslate"><span class="pre">!</span></code>) must correspond to a preprocessor’s attribute.</p>
+<p>Nested attributes are allowed, e.g. with <a class="reference internal" href="woo.pre.html#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pre.horse.FallingHorse</span></code></a>, a column named <code class="docutils literal notranslate"><span class="pre">mat.tanPhi</span></code> will modify horse’s material’s friction angle, using the default material object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.wait">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#wait"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>If running inside a batch, start the master simulation (if not already running) and block until it stops by itself. Typically used at the end of script so that it does not finish prematurely in batch mode (the execution would be ended in such a case). Does nothing outisde of batch.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.batch.writeResults">
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">writeResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultDb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'woo-results.hdf5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">syncXls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbFmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postHooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#writeResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.writeResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write results to batch database. With <em>syncXls</em>, corresponding excel-file is re-generated.
+Series is a dicionary of 1d arrays written to separate sheets in the XLS. If <em>series</em> is <cite>None</cite>
+(default), <cite>S.plot.data</cite> are automatically added. All other <code class="docutils literal notranslate"><span class="pre">**kw</span></code>
+arguments are serialized in the misc field, which then appears in the main XLS sheet.</p>
+<p>All data are serialized using json so that they can be read back in a language-independent manner.</p>
+<p><em>postHooks</em> is list of functions (taking a single argument - the database name) which will be called
+once the database has been updated. They can be used in conjunction with <a class="reference internal" href="#woo.batch.dbReadResults" title="woo.batch.dbReadResults"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.batch.dbReadResults</span></code></a>
+to write aaggregate results from all records in the database.</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.apiversion.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.apiversion</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.comp.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.comp</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.batch.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.comp.html" title="woo.comp"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.apiversion.html" title="woo.apiversion"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

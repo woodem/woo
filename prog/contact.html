@@ -1,0 +1,340 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Contact laws &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gallery" href="../gallery/index.html" />
+    <link rel="prev" title="Mass and inertia computation" href="mass-inertia.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../gallery/index.html" title="Gallery"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="mass-inertia.html" title="Mass and inertia computation"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Contact laws</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="contact-laws">
+<h1>Contact laws<a class="headerlink" href="#contact-laws" title="Permalink to this headline">¶</a></h1>
+<p>Contact resolution in Woo is divided into 3 mostly-orthogonal steps:</p>
+<ol class="arabic simple">
+<li><p>geometry computation, where local contact coordinates are updated and relative velocities and interpenetration are computed. These algorithms are detailed for different shape combinations in <a class="reference internal" href="../theory/geom/index.html#contact-geometry"><span class="std std-ref">the respective section</span></a>; they use data from particle shapes and create/update a <a class="reference internal" href="../woo.dem.html#woo.dem.CGeom" title="woo.dem.CGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeom</span></code></a> instance.</p></li>
+<li><p>physical contact properties computation, which take data from <a class="reference internal" href="../woo.dem.html#woo.dem.Material" title="woo.dem.Material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contacting</span> <span class="pre">materials</span></code></a> and create (usually this is done only when the contact is created the first time, but can be updated at request) a <a class="reference internal" href="../woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a> instance.</p></li>
+<li><p>contact resolution, which uses data from <a class="reference internal" href="../woo.dem.html#woo.dem.CGeom" title="woo.dem.CGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeom</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a> to compute response of the contact  – this usually entails force and torque, but other effect are possible.</p></li>
+</ol>
+<p>These 3 steps are done by <a class="reference internal" href="../woo.dem.html#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a>, <a class="reference internal" href="../woo.dem.html#woo.dem.CPhysFunctor" title="woo.dem.CPhysFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhysFunctor</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.LawFunctor" title="woo.dem.LawFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawFunctor</span></code></a>, and the functors used are selected by dispatchers hidden inside the <a class="reference internal" href="../woo.dem.html#woo.dem.ContactLoop" title="woo.dem.ContactLoop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactLoop</span></code></a> engine. Moreover, since usually the <a class="reference internal" href="../woo.dem.html#woo.dem.DemField.minimalEngines" title="woo.dem.DemField.minimalEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.minimalEngines</span></code></a> is used in conjunction with <a class="reference internal" href="../woo.models.html#woo.models.ContactModelSelector" title="woo.models.ContactModelSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector</span></code></a> to build the engine sequence, the details might not be familiar even to seaseoned Woo users. Let’s look at its output (with all defaults, i.e. using the linear contact model):</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">woo.dem</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">ee</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">()</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">loop</span><span class="o">=</span><span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ee</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">ContactLoop</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># when inserted into scene, accessible as S.lab.contactLoop by virtue of Engine.label</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">loop</span><span class="o">.</span><span class="n">geoDisp</span><span class="o">.</span><span class="n">functors</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> 
+<span class="p">[</span><span class="o">&lt;</span><span class="n">Cg2_Sphere_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x38ab9c0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Facet_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x3891250</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Wall_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x3a7c440</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_InfCylinder_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737ad0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Ellipsoid_Ellipsoid_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737b80</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Sphere_Ellipsoid_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737c30</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Wall_Ellipsoid_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737ce0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Wall_Facet_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737d90</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Rod_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737e40</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Wall_Capsule_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737ef0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Capsule_Capsule_L6Geom</span> <span class="err">@</span> <span class="mh">0x1737fa0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_InfCylinder_Capsule_L6Geom</span> <span class="err">@</span> <span class="mh">0x1738050</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Facet_Capsule_L6Geom</span> <span class="err">@</span> <span class="mh">0x1738100</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Sphere_Capsule_L6Geom</span> <span class="err">@</span> <span class="mh">0x17381b0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Facet_Facet_L6Geom</span> <span class="err">@</span> <span class="mh">0x1738260</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Facet_InfCylinder_L6Geom</span> <span class="err">@</span> <span class="mh">0x1738310</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">Cg2_Cone_Sphere_L6Geom</span> <span class="err">@</span> <span class="mh">0x17383c0</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">loop</span><span class="o">.</span><span class="n">phyDisp</span><span class="o">.</span><span class="n">functors</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Cp2_FrictMat_FrictPhys</span> <span class="err">@</span> <span class="mh">0x3a758a0</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">loop</span><span class="o">.</span><span class="n">lawDisp</span><span class="o">.</span><span class="n">functors</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Law2_L6Geom_FrictPhys_IdealElPl</span> <span class="err">@</span> <span class="mh">0x2bfc020</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>We can see that functors are named with the <code class="docutils literal notranslate"><span class="pre">Cg2</span></code>, <code class="docutils literal notranslate"><span class="pre">Cp2</span></code> and <code class="docutils literal notranslate"><span class="pre">Law2</span></code> prefix respectively (since they take 2 instances as arguments (2 <a class="reference internal" href="../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a>, 2 <a class="reference internal" href="../woo.dem.html#woo.dem.Material" title="woo.dem.Material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span></code></a> and, finally the couple of <a class="reference internal" href="../woo.dem.html#woo.dem.CGeom" title="woo.dem.CGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contact</span> <span class="pre">geometry</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contact</span> <span class="pre">physics</span></code></a> produced by the first 2 functors); the name is further comprised of accepted types of the arguments (for <code class="docutils literal notranslate"><span class="pre">Cp2</span></code> functors, if it accepts both materials of the same type, it is writte out just once), and ends with the instance which is produced (except contact law, which does not produce an instance; a suffix defining the algorithm is added instead).</p>
+<p>Thus to compute e.g. contact between <a class="reference internal" href="../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> made of <a class="reference internal" href="../woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictMat</span></code></a>, we need</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="woo.dem.Cg2_Sphere_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Sphere_Capsule_L6Geom</span></code></a> which resolves the geometry, and produces/updates <a class="reference internal" href="../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a>;</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys" title="woo.dem.Cp2_FrictMat_FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2_FrictMat_FrictPhys</span></code></a> which computes physical contact parameters from <a class="reference internal" href="../woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictMat</span></code></a> and produces <a class="reference internal" href="../woo.dem.html#woo.dem.FrictPhys" title="woo.dem.FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys</span></code></a>;</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_FrictPhys_IdealElPl</span></code></a> which applies contact forces, consuming data from the previous steps (we could use any other <code class="docutils literal notranslate"><span class="pre">Law2_L6Geom_FrictPhys_*</span></code> class suitable for our task).</p></li>
+</ol>
+<p>Note that types produced by the first two functors match types consumed by the last one; if that is not the case, the dispatch will fail and runtime error will occur.</p>
+<p>Thus we can imitate <a class="reference internal" href="../woo.dem.html#woo.dem.DemField.minimalEngines" title="woo.dem.DemField.minimalEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.minimalEngines</span></code></a> by hand as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">woo.core</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+<span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()],</span>
+   <span class="n">engines</span><span class="o">=</span><span class="p">[</span>
+      <span class="n">Leapfrog</span><span class="p">(),</span>
+      <span class="n">InsertionSortCollider</span><span class="p">([</span><span class="n">Bo1_Sphere_Aabb</span><span class="p">(),</span><span class="n">Bo1_Capsule_Aabb</span><span class="p">(),</span><span class="n">Bo1_Wall_Aabb</span><span class="p">()]),</span> <span class="c1"># and so on</span>
+      <span class="n">ContactLoop</span><span class="p">(</span>
+         <span class="p">[</span><span class="n">Cg2_Sphere_Capsule_L6Geom</span><span class="p">(),</span><span class="n">Cg2_Sphere_Sphere_L6Geom</span><span class="p">()],</span> <span class="c1"># ..., as needed</span>
+         <span class="p">[</span><span class="n">Cp2_FrictMat_FrictPhys</span><span class="p">()],</span>
+         <span class="p">[</span><span class="n">Law2_L6Geom_FrictPhys_IdealElPl</span><span class="p">()]</span>
+      <span class="p">),</span>
+      <span class="n">DynDt</span><span class="p">(</span><span class="n">stepPeriod</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+   <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This knowledge is important so that we can write and test our new contact law properly.</p>
+<section id="new-contact-law">
+<h2>New contact law<a class="headerlink" href="#new-contact-law" title="Permalink to this headline">¶</a></h2>
+<p>Assuming we can use already-existing <code class="docutils literal notranslate"><span class="pre">Cg2</span></code> and <code class="docutils literal notranslate"><span class="pre">Cp2</span></code> functors, writing a contact law is fairly easy, provided the mathematical formulation is ready. The <a class="reference internal" href="../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a> class provides relative velocity and rotations at contact point, and normal interpenetration (computed – usually – non-incrementally), all expressed in local coordinates; <code class="docutils literal notranslate"><span class="pre">L6</span></code> means local-coordinates with 6 degrees of freedom (3 translations and 3 rotations).</p>
+<p>This would be a simplified but working code for the linear-elastic and plastic law implemented in <a class="reference internal" href="../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_FrictPhys_IdealElPl</span></code></a>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/* header pkg/dem/MyLaw.hpp */</span>
+
+<span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="cpf">&lt;woo/pkg/dem/FrictMat.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;woo/pkg/dem/L6Geom.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;woo/pkg/dem/ContactLoop.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">struct</span> <span class="nl">Law2_L6Geom_FrictPhys_MyLaw</span><span class="p">:</span> <span class="k">public</span> <span class="n">LawFunctor</span><span class="p">{</span>
+   <span class="kt">bool</span> <span class="n">go</span><span class="p">(</span><span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">CGeom</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">CPhys</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Contact</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+   <span class="c1">// declared types that the functor accepts</span>
+   <span class="n">FUNCTOR2D</span><span class="p">(</span><span class="n">L6Geom</span><span class="p">,</span><span class="n">FrictPhys</span><span class="p">);</span>
+   <span class="cp">#define woo_dem_Law2_L6Geom_FrictPhys_MyLaw__CLASS_BASE_DOC_ATTRS \</span>
+<span class="cp">      Law2_L6Geom_FrictPhys_MyLaw,LawFunctor,&quot;Some documentation&quot;, \</span>
+<span class="cp">      ((int,attr,0,,&quot;Some attribute&quot;))</span>
+   <span class="n">WOO_DECL__CLASS_BASE_DOC_ATTRS</span><span class="p">(</span><span class="n">woo_dem_Law2_L6Geom_FrictPhys_MyLaw__CLASS_BASE_DOC_ATTRS</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="n">WOO_REGISTER_OBJECT</span><span class="p">(</span><span class="n">Law2_L6Geom_FrictPhys_MyLaw</span><span class="p">);</span>
+
+<span class="cm">/* implementation pkg/dem/MyLaw.cpp */</span>
+
+<span class="cp">#include</span><span class="cpf">&lt;woo/pkg/dem/MyLaw.hpp&gt;</span><span class="cp"></span>
+<span class="n">WOO_PLUGIN</span><span class="p">(</span><span class="n">dem</span><span class="p">,(</span><span class="n">Law2_L6Geom_FrictPhys_MyLaw</span><span class="p">));</span>
+<span class="n">WOO_IMPL__CLASS_BASE_DOC_ATTRS</span><span class="p">(</span><span class="n">woo_dem_Law2_L6Geom_FrictPhys_MyLaw__CLASS_BASE_DOC_ATTRS</span><span class="p">);</span>
+
+<span class="kt">bool</span> <span class="n">Law2_L6Geom_FrictPhys_MyLaw</span><span class="o">::</span><span class="n">go</span><span class="p">(</span><span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">CGeom</span><span class="o">&gt;&amp;</span> <span class="n">cg</span><span class="p">,</span> <span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">CPhys</span><span class="o">&gt;&amp;</span> <span class="n">cp</span><span class="p">,</span> <span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Contact</span><span class="o">&gt;&amp;</span> <span class="n">C</span><span class="p">){</span>
+   <span class="c1">// shorhands</span>
+   <span class="k">const</span> <span class="n">L6Geom</span><span class="o">&amp;</span> <span class="n">g</span><span class="p">(</span><span class="n">cg</span><span class="o">-&gt;</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">L6Geom</span><span class="o">&gt;</span><span class="p">());</span> <span class="n">FrictPhys</span><span class="o">&amp;</span> <span class="n">ph</span><span class="p">(</span><span class="n">cp</span><span class="o">-&gt;</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">FrictPhys</span><span class="o">&gt;</span><span class="p">());</span>
+   <span class="c1">// break contact if there is separation between particles</span>
+   <span class="k">if</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">uN</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+   <span class="c1">// normal force</span>
+   <span class="n">ph</span><span class="p">.</span><span class="n">force</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">pk</span><span class="p">.</span><span class="n">kn</span><span class="o">*</span><span class="n">g</span><span class="p">.</span><span class="n">uN</span><span class="p">;</span>
+   <span class="c1">// work with y-z subvector of force as with a Vector2r</span>
+   <span class="n">Eigen</span><span class="o">::</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Vector2r</span><span class="o">&gt;</span> <span class="n">Ft</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ph</span><span class="p">.</span><span class="n">force</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+   <span class="c1">// compute trial tangential force, as increment from relative velocity</span>
+   <span class="n">Ft</span><span class="o">+=</span><span class="n">scene</span><span class="o">-&gt;</span><span class="n">dt</span><span class="o">*</span><span class="n">ph</span><span class="p">.</span><span class="n">kt</span><span class="o">*</span><span class="n">Vector2r</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">g</span><span class="p">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+   <span class="c1">// Coulomb slip: maximum tangential force norm</span>
+   <span class="n">Real</span> <span class="n">maxFt</span><span class="o">=</span><span class="n">ph</span><span class="p">.</span><span class="n">force</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">ph</span><span class="p">.</span><span class="n">tanPhi</span><span class="p">;</span>
+   <span class="k">if</span><span class="p">(</span><span class="n">Ft</span><span class="p">.</span><span class="n">squaredNorm</span><span class="p">()</span><span class="o">&gt;</span><span class="n">pow</span><span class="p">(</span><span class="n">maxFt</span><span class="p">,</span><span class="mi">2</span><span class="p">)){</span>
+      <span class="n">Ft</span><span class="o">*=</span><span class="n">maxFt</span><span class="o">/</span><span class="n">Ft</span><span class="p">.</span><span class="n">norm</span><span class="p">();</span> <span class="c1">// work out floating-point corner-cases</span>
+   <span class="p">}</span>
+   <span class="c1">// keep the contact</span>
+   <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>One can note that both contact geometry (interpenetration and mutual relative velocity at the contact point) and the response (force and torque) are conveniently expressed in contact-local coordinates, thus the normal-tangential separation is simply expressed by axes orthogonality. The force &amp; torque is applied on contacting particles by <a class="reference internal" href="../woo.dem.html#woo.dem.ContactLoop" title="woo.dem.ContactLoop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactLoop</span></code></a> (for mono-monal particles, to be precise), it is something the contact law itself is not responsible for.</p>
+<p>Energy tracking (which is highly recommended, as it makes it possible to test for energy conservation by the contact law) might make the code a bit more complicated, as elasic and plastic contributions need to be computed if desired. The reader is referred to the source of <a class="reference internal" href="../woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_FrictPhys_IdealElPl</span></code></a> for details. Energy computation should be avoided when not requested, hence the <code class="docutils literal notranslate"><span class="pre">if(unlikely(scene-&gt;trackEnergy))</span></code> conditionals around those parts of the code.</p>
+<p>If the contact law is complex (e.g. entails iterative computation), it is advised to use timing services (<a class="reference internal" href="performance.html#timing-deltas-timing"><span class="std std-ref">In-engine and in-functor timing</span></a>) for profiling the performance and determining bottlenecks.</p>
+<section id="new-material-class">
+<h3>New material class<a class="headerlink" href="#new-material-class" title="Permalink to this headline">¶</a></h3>
+<p>More often than not, new contact law will need more information about the particle’s materials.</p>
+<p>In that case, one needs to define a new material class holding all parameters necessary for the model. This is not complicated in itself, but there are a few ingredients involved (see e.g. <a class="reference external" href="https://github.com/woodem/woo/tree/master/pkg/dem/FrictMat.hpp">pkg/dem/FrictMat.hpp</a>):</p>
+<ol class="arabic simple">
+<li><p>Defining the material class itself (in that case <a class="reference internal" href="../woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FrictMat</span></code></a>);</p></li>
+<li><p>Defining <a class="reference internal" href="../woo.dem.html#woo.dem.CPhysFunctor" title="woo.dem.CPhysFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CPhysFunctor</span></code></a> functor which can compute contact properties from those 2 materials (or combination with other materials) (<a class="reference internal" href="../woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys" title="woo.dem.Cp2_FrictMat_FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_FrictPhys</span></code></a>)</p></li>
+<li><p>Defining <a class="reference internal" href="../woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CPhys</span></code></a> which will hold results of the <code class="docutils literal notranslate"><span class="pre">Cp2</span></code> functor and pass them to the contact law itself.</p></li>
+</ol>
+<p>Obviously one has to adjust the engine/functor sequence as exaplined above, so that the new classes are picked up and used by Woo.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Often one can start the implementation with <a class="reference internal" href="../woo.dem.html#woo.dem.FrictPhys" title="woo.dem.FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys</span></code></a> and only add material parameters are attributes of the <code class="docutils literal notranslate"><span class="pre">Law2</span></code> functor, hard-coding them for first experimentation, and only later turn them into proper attributes of a new <a class="reference internal" href="../woo.dem.html#woo.dem.Material" title="woo.dem.Material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Material</span></code></a> subclass, which will be processed (averaged, whatever) by the new <code class="docutils literal notranslate"><span class="pre">Cp2</span></code> functor, to produce the new type of <a class="reference internal" href="../woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a> required by the contact law.</p>
+</div>
+</section>
+</section>
+<section id="testing-contact-laws">
+<h2>Testing contact laws<a class="headerlink" href="#testing-contact-laws" title="Permalink to this headline">¶</a></h2>
+<p>There are special tools to see whether the programmed behavior is identical to the one mathematically formulated. One of the most useful one is to prescribe mutual motion on particles (in contact-local coordinates) and record contact response (also in contact-local coordinates). For example, the <a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/law-test-concrete.py">examples/law-test-concrete.py</a> script uses the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LawTester</span><span class="p">(</span>
+   <span class="n">ids</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">abWeight</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">smooth</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span><span class="n">stages</span><span class="o">=</span><span class="p">[</span>
+       <span class="c1"># compress</span>
+       <span class="n">LawTesterStage</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1e-4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">whats</span><span class="o">=</span><span class="s1">&#39;v.....&#39;</span><span class="p">,</span><span class="n">until</span><span class="o">=</span><span class="s1">&#39;C.phys.sigmaN&lt;-2e7&#39;</span><span class="p">),</span>
+       <span class="c1"># shear while not moving in the normal sense</span>
+       <span class="n">LawTesterStage</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e-3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">whats</span><span class="o">=</span><span class="s1">&#39;vv....&#39;</span><span class="p">,</span><span class="n">until</span><span class="o">=</span><span class="s1">&#39;C.phys.epsT.norm()&gt;1e-2&#39;</span><span class="p">),</span>
+       <span class="c1"># unload in the normal sense; shear force should follow the plastic surface</span>
+       <span class="n">LawTesterStage</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">whats</span><span class="o">=</span><span class="s1">&#39;v.....&#39;</span><span class="p">,</span><span class="n">until</span><span class="o">=</span><span class="s1">&#39;not C&#39;</span><span class="p">),</span>
+   <span class="p">],</span>
+   <span class="n">done</span><span class="o">=</span><span class="s1">&#39;S.stop()&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;tester&#39;</span>
+<span class="p">),</span>
+</pre></div>
+</div>
+<p>where each <a class="reference internal" href="../woo.dem.html#woo.dem.LawTesterStage" title="woo.dem.LawTesterStage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawTesterStage</span></code></a> defines loading stage using 6 <a class="reference internal" href="../woo.dem.html#woo.dem.LawTesterStage.values" title="woo.dem.LawTesterStage.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a> (along 6 DoFs), which can be initial velocity, constant velocity, force or free (<a class="reference internal" href="../woo.dem.html#woo.dem.LawTesterStage.whats" title="woo.dem.LawTesterStage.whats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">whats</span></code></a>) and terminating condition <a class="reference internal" href="../woo.dem.html#woo.dem.LawTesterStage.until" title="woo.dem.LawTesterStage.until"><code class="xref py py-obj docutils literal notranslate"><span class="pre">until</span></code></a> of the respective stage. You can study the full <a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/law-test-concrete.py">examples/law-test-concrete.py</a> and other similar scripts to explore the functionality. Since the concrete law has a rather complex yield surface formulation, it is loaded in compression, then in shear, and unloaded in compression, with the following result:</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/law-test-concrete.svg" src="../_images/law-test-concrete.svg" /><figcaption>
+<p><span class="caption-number">Fig. 51 </span><span class="caption-text">Plot from loading 2-particle contact using the concrete contact law with <a class="reference internal" href="../woo.dem.html#woo.dem.LawTester" title="woo.dem.LawTester"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawTester</span></code></a> <a class="reference internal" href="../woo.dem.html#woo.dem.LawTesterStage" title="woo.dem.LawTesterStage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stages</span></code></a> as shown above.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Contact laws</a><ul>
+<li><a class="reference internal" href="#new-contact-law">New contact law</a><ul>
+<li><a class="reference internal" href="#new-material-class">New material class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-contact-laws">Testing contact laws</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="mass-inertia.html"
+                          title="Previous page">&larr; Mass and inertia computation</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="../gallery/index.html"
+                          title="Next page">&rarr; Gallery</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prog/contact.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../gallery/index.html" title="Gallery"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="mass-inertia.html" title="Mass and inertia computation"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Contact laws</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

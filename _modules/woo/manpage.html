@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.manpage &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.manpage</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.manpage</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks to logilab for this code.</span>
+<span class="c1">#</span>
+<span class="c1"># Copied from the logilab.common.optik_ext module (GPL-licensed) and modified for woo.</span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">optparse</span><span class="o">,</span><span class="nn">time</span>
+
+<div class="viewcode-block" id="ManHelpFormatter"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter">[docs]</a><span class="k">class</span> <span class="nc">ManHelpFormatter</span><span class="p">(</span><span class="n">optparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Format help using man pages ROFF format&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">indent_increment</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">max_help_position</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">79</span><span class="p">,</span><span class="n">short_first</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">optparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent_increment</span><span class="p">,</span> <span class="n">max_help_position</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">short_first</span><span class="p">)</span>
+<div class="viewcode-block" id="ManHelpFormatter.format_heading"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_heading">[docs]</a>    <span class="k">def</span> <span class="nf">format_heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">heading</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;.SH </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">heading</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_description"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_description">[docs]</a>    <span class="k">def</span> <span class="nf">format_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">description</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_option"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_option">[docs]</a>    <span class="k">def</span> <span class="nf">format_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">optstring</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="n">option_strings</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">optstring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_option_strings</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">help</span><span class="p">:</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;&#39;.IP &quot;</span><span class="si">%s</span><span class="s1">&quot;</span>
+<span class="si">%s</span><span class="s1"></span>
+<span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">optstring</span><span class="p">,</span> <span class="n">help</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_head"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_head">[docs]</a>    <span class="k">def</span> <span class="nf">format_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optparser</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">pgm</span> <span class="o">=</span> <span class="n">optparser</span><span class="o">.</span><span class="n">get_prog_name</span><span class="p">()</span>
+        <span class="n">short_desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_short_description</span><span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;short_desc&#39;</span><span class="p">])</span>
+        <span class="n">long_desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_long_description</span><span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;long_desc&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format_title</span><span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">section</span><span class="p">),</span> <span class="n">short_desc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_synopsis</span><span class="p">(</span><span class="n">optparser</span><span class="p">),</span> <span class="n">long_desc</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_title"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_title">[docs]</a>    <span class="k">def</span> <span class="nf">format_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pgm</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="s1">&#39;.TH </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> &quot;</span><span class="si">%s</span><span class="s1">&quot; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">pgm</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_short_description"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_short_description">[docs]</a>    <span class="k">def</span> <span class="nf">format_short_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pgm</span><span class="p">,</span> <span class="n">short_desc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;&#39;.SH NAME</span>
+<span class="s1">.B </span><span class="si">%s</span><span class="s1"> </span>
+<span class="s1">\- </span><span class="si">%s</span><span class="s1"></span>
+<span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">short_desc</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></div>
+    <span class="k">def</span> <span class="nf">_markup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prepares txt to be used in man pages.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">txt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">-&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ManHelpFormatter.format_synopsis"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_synopsis">[docs]</a>    <span class="k">def</span> <span class="nf">format_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optparser</span><span class="p">):</span>
+        <span class="n">synopsis</span> <span class="o">=</span> <span class="n">optparser</span><span class="o">.</span><span class="n">get_usage</span><span class="p">()</span>
+        <span class="n">pgm</span><span class="o">=</span><span class="n">optparser</span><span class="o">.</span><span class="n">get_prog_name</span><span class="p">()</span>                                    
+        <span class="k">if</span> <span class="n">synopsis</span><span class="p">:</span>                                                           
+            <span class="n">synopsis</span> <span class="o">=</span> <span class="n">synopsis</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Usage: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="o">%</span><span class="n">pgm</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>                   
+            <span class="k">return</span> <span class="s1">&#39;.SH SYNOPSIS</span><span class="se">\n</span><span class="s1">.B </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_markup</span><span class="p">(</span><span class="n">pgm</span><span class="p">),</span><span class="n">synopsis</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ManHelpFormatter.format_long_description"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_long_description">[docs]</a>    <span class="k">def</span> <span class="nf">format_long_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pgm</span><span class="p">,</span> <span class="n">long_desc</span><span class="p">):</span>
+        <span class="n">long_desc</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+                                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">long_desc</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span>
+        <span class="n">long_desc</span> <span class="o">=</span> <span class="n">long_desc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">long_desc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">pgm</span><span class="p">):</span>
+            <span class="n">long_desc</span> <span class="o">=</span> <span class="n">long_desc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pgm</span><span class="p">):]</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;&#39;.SH DESCRIPTION</span>
+<span class="s1">.B </span><span class="si">%s</span><span class="s1"> </span>
+<span class="si">%s</span><span class="s1"></span>
+<span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pgm</span><span class="p">,</span> <span class="n">long_desc</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></div>
+         
+<div class="viewcode-block" id="ManHelpFormatter.format_tail"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.ManHelpFormatter.format_tail">[docs]</a>    <span class="k">def</span> <span class="nf">format_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">seealso</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;.SH SEE ALSO</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">seealso</span> <span class="k">if</span> <span class="n">seealso</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&#39;&#39;.SH COPYRIGHT </span>
+<span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"></span>
+
+<span class="si">%s</span><span class="s1"></span>
+
+<span class="s1">.SH BUGS </span>
+<span class="s1">Please report bugs to the project</span><span class="se">\&#39;</span><span class="s1">s bug tracker at</span>
+<span class="s1">.br</span>
+<span class="si">%s</span><span class="s1"></span>
+
+<span class="s1">.SH AUTHOR</span>
+<span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)</span>
+<span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;copyright&#39;</span><span class="p">],</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">],</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;license&#39;</span><span class="p">],</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;bugtracker&#39;</span><span class="p">],</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">],</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;author_contact&#39;</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="generate_manpage"><a class="viewcode-back" href="../../woo.manpage.html#woo.manpage.generate_manpage">[docs]</a><span class="k">def</span> <span class="nf">generate_manpage</span><span class="p">(</span><span class="n">optparser</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">fileOut</span><span class="p">,</span><span class="n">seealso</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">section</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;generate a man page from an optparse parser&quot;&quot;&quot;</span>
+    <span class="n">out</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">fileOut</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">formatter</span><span class="o">=</span><span class="n">ManHelpFormatter</span><span class="p">()</span>
+    <span class="n">formatter</span><span class="o">.</span><span class="n">parser</span><span class="o">=</span><span class="n">optparser</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">formatter</span><span class="o">.</span><span class="n">format_head</span><span class="p">(</span><span class="n">optparser</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">section</span><span class="p">))</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">optparser</span><span class="o">.</span><span class="n">format_option_help</span><span class="p">(</span><span class="n">formatter</span><span class="p">))</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">formatter</span><span class="o">.</span><span class="n">format_tail</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="n">seealso</span><span class="p">))</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.manpage</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

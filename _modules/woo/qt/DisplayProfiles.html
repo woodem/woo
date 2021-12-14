@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.qt.DisplayProfiles &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../qt.html" accesskey="U">woo.qt</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.qt.DisplayProfiles</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.qt.DisplayProfiles</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">woo.dem</span>
+<span class="kn">import</span> <span class="nn">woo.gl</span> <span class="k">as</span> <span class="nn">gl</span>
+<span class="kn">from</span> <span class="nn">woo.gl</span> <span class="k">import</span> <span class="n">Gl1_DemField</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<div class="viewcode-block" id="predefPublishing"><a class="viewcode-back" href="../../../woo.qt.html#woo.qt.DisplayProfiles.predefPublishing">[docs]</a><span class="k">def</span> <span class="nf">predefPublishing</span><span class="p">():</span>
+    <span class="n">predefHighQuality</span><span class="p">()</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">bgColor</span><span class="o">=</span><span class="p">(</span><span class="mi">81</span><span class="o">/</span><span class="mf">255.</span><span class="p">,</span><span class="mi">87</span><span class="o">/</span><span class="mf">255.</span><span class="p">,</span><span class="mi">110</span><span class="o">/</span><span class="mf">255.</span><span class="p">),</span><span class="n">showTime</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fast</span><span class="o">=</span><span class="s1">&#39;never&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="predefHighQuality"><a class="viewcode-back" href="../../../woo.qt.html#woo.qt.DisplayProfiles.predefHighQuality">[docs]</a><span class="k">def</span> <span class="nf">predefHighQuality</span><span class="p">():</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Sphere</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">wire</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Facet</span><span class="p">(</span><span class="n">slices</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">wire</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="predefLowQuality"><a class="viewcode-back" href="../../../woo.qt.html#woo.qt.DisplayProfiles.predefLowQuality">[docs]</a><span class="k">def</span> <span class="nf">predefLowQuality</span><span class="p">():</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Sphere</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Facet</span><span class="p">(</span><span class="n">slices</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">wire</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="predefNonspheresSpheres"><a class="viewcode-back" href="../../../woo.qt.html#woo.qt.DisplayProfiles.predefNonspheresSpheres">[docs]</a><span class="k">def</span> <span class="nf">predefNonspheresSpheres</span><span class="p">():</span>
+    <span class="n">Gl1_DemField</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">shapeNonSpheres</span><span class="p">,</span>
+        <span class="n">colorBy</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">colorMatState</span><span class="p">,</span>
+        <span class="n">matStateIx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">shape2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorBy2</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">colorVel</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+<div class="viewcode-block" id="predefSpheresNonspheres"><a class="viewcode-back" href="../../../woo.qt.html#woo.qt.DisplayProfiles.predefSpheresNonspheres">[docs]</a><span class="k">def</span> <span class="nf">predefSpheresNonspheres</span><span class="p">():</span>
+    <span class="n">Gl1_DemField</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">shapeSpheres</span><span class="p">,</span>
+        <span class="n">colorBy</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">colorVel</span><span class="p">,</span>
+        <span class="n">shape2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorBy2</span><span class="o">=</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">colorSolid</span>
+    <span class="p">)</span></div>
+
+<span class="n">predefinedProfiles</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;High Quality&#39;</span><span class="p">,</span><span class="n">predefHighQuality</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Low Quality&#39;</span><span class="p">,</span><span class="n">predefLowQuality</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Publishing&#39;</span><span class="p">,</span><span class="n">predefPublishing</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Nonspheres-spheres&#39;</span><span class="p">,</span><span class="n">predefNonspheresSpheres</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Spheres-nonspheres&#39;</span><span class="p">,</span><span class="n">predefSpheresNonspheres</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../qt.html" >woo.qt</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.qt.DisplayProfiles</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

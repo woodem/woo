@@ -1,0 +1,271 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Conventions &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Performance issues" href="performance.html" />
+    <link rel="prev" title="woo::Object" href="object.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="performance.html" title="Performance issues"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="object.html" title="woo::Object"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Conventions</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="conventions">
+<h1>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h1>
+<section id="style">
+<h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Tabs for indentation, compact formatting.</p></li>
+<li><p>Avoid spurious spaces, like before parentheses, except in complex expressions.</p></li>
+<li><p>Comment so that code functionality is visible, don’t comment when the code says it better than the comment.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">struct</span></code> instead of <code class="docutils literal notranslate"><span class="pre">class</span></code> (everything public by default).</p></li>
+<li><p>Start header files with <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">once</span></code>.</p></li>
+<li><p>Headers are <code class="docutils literal notranslate"><span class="pre">.hpp</span></code>, implementations are <code class="docutils literal notranslate"><span class="pre">.cpp</span></code>.</p></li>
+<li><p>Include all headers using <code class="docutils literal notranslate"><span class="pre">#include&lt;woo/pkg/dem/Particle.hpp&gt;</span></code>, do <strong>not</strong> use <code class="docutils literal notranslate"><span class="pre">#include&quot;Particle.hpp&quot;</span></code>.</p></li>
+<li><p>Do not say <strong>using namespace</strong>, not in headers and not in implementation files.</p></li>
+<li><p>Put only short methods inline in headers, when important for performance.</p></li>
+<li><p>Mark const arguments with <code class="docutils literal notranslate"><span class="pre">const</span></code>.</p></li>
+<li><p>Pass by const reference as much as possible.</p></li>
+<li><p>Mark methods as <code class="docutils literal notranslate"><span class="pre">const</span></code> if they can be.</p></li>
+<li><p>When overriding virtual function, mark it with <code class="docutils literal notranslate"><span class="pre">WOO_CXX11_OVERRIDE</span></code> (expands to the <code class="docutils literal notranslate"><span class="pre">override</span></code> keyword for compilers which support it).</p></li>
+<li><p>Put assertions in the code, they expand to nothing in non-debug builds.</p></li>
+<li><p>Be defensive; for user-called functions, check that arguments make sense, raise exception if they don’t.</p></li>
+<li><p>Document everything.</p></li>
+<li><p>Use logging macros as necessary.</p></li>
+</ul>
+</section>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<p>Many types are declared in <a class="reference external" href="https://github.com/woodem/woo/tree/master/lib/base/Types.hpp">lib/base/Types.hpp</a>. Those include types imported from <code class="docutils literal notranslate"><span class="pre">std</span></code> or <code class="docutils literal notranslate"><span class="pre">boost</span></code> namespaces (like <code class="docutils literal notranslate"><span class="pre">shared_ptr</span></code>, <code class="docutils literal notranslate"><span class="pre">make_shared</span></code>, <code class="docutils literal notranslate"><span class="pre">vector</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">to_string</span></code>, <code class="docutils literal notranslate"><span class="pre">cout</span></code>, <code class="docutils literal notranslate"><span class="pre">cerr</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">isnan</span></code> and many others). A shorthand for <code class="docutils literal notranslate"><span class="pre">boost::python</span></code> is defined, namely <code class="docutils literal notranslate"><span class="pre">py</span></code> (so one can use <code class="docutils literal notranslate"><span class="pre">py::extract</span></code> and such).</p>
+<p>Be conservative with memory usage, so unless there is a reason for that, use <code class="docutils literal notranslate"><span class="pre">int</span></code> rather than <code class="docutils literal notranslate"><span class="pre">long</span></code>. For floating-point numbers, Woo uses the type <code class="docutils literal notranslate"><span class="pre">Real</span></code> everywhere, which is typedef for <code class="docutils literal notranslate"><span class="pre">double</span></code> (by default, that is).</p>
+<section id="math-types">
+<h3>Math types<a class="headerlink" href="#math-types" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://eigen.tuxfamily.org">Eigen</a> is our math library. Frequently used types are <code class="docutils literal notranslate"><span class="pre">typedef</span></code>’d with the <code class="docutils literal notranslate"><span class="pre">r</span></code> suffix for <code class="docutils literal notranslate"><span class="pre">Real</span></code> and <code class="docutils literal notranslate"><span class="pre">i</span></code> for <code class="docutils literal notranslate"><span class="pre">int</span></code>:</p>
+<ul class="simple">
+<li><p>vectors with <code class="docutils literal notranslate"><span class="pre">Real</span></code> scalars: <code class="docutils literal notranslate"><span class="pre">Vector2r</span></code>, <code class="docutils literal notranslate"><span class="pre">Vector3r</span></code>, <code class="docutils literal notranslate"><span class="pre">Vector6r</span></code>, <code class="docutils literal notranslate"><span class="pre">VectorXr</span></code> (dynamic-sized)</p></li>
+<li><p>vectors with <code class="docutils literal notranslate"><span class="pre">int</span></code> scalars: <code class="docutils literal notranslate"><span class="pre">Vector2i</span></code>, <code class="docutils literal notranslate"><span class="pre">Vector3i</span></code>, <code class="docutils literal notranslate"><span class="pre">Vector6i</span></code></p></li>
+<li><p>matrices with <code class="docutils literal notranslate"><span class="pre">Real</span></code> scalars:: <code class="docutils literal notranslate"><span class="pre">Matrix3r</span></code> (3×3), <code class="docutils literal notranslate"><span class="pre">Matrix6r</span></code> (6×6), <code class="docutils literal notranslate"><span class="pre">MatrixXr</span></code> (dynamic-sized)</p></li>
+<li><p>aligned boxes <code class="docutils literal notranslate"><span class="pre">AlignedBox2r</span></code>, <code class="docutils literal notranslate"><span class="pre">AlignedBox3r</span></code>, <code class="docutils literal notranslate"><span class="pre">AlignedBox2i</span></code>, <code class="docutils literal notranslate"><span class="pre">AlignedBox3i</span></code></p></li>
+<li><p>quaternions <code class="docutils literal notranslate"><span class="pre">Quaternionr</span></code>, angle-axis rotation <code class="docutils literal notranslate"><span class="pre">AngleAxisr</span></code></p></li>
+</ul>
+<p>Two importants constants are <code class="docutils literal notranslate"><span class="pre">NaN</span></code> and <code class="docutils literal notranslate"><span class="pre">Inf</span></code>. For <span class="math notranslate nohighlight">\(\pi\)</span>, use plain old <code class="docutils literal notranslate"><span class="pre">M_PI</span></code>.</p>
+</section>
+</section>
+<section id="feature-macros">
+<h2>Feature macros<a class="headerlink" href="#feature-macros" title="Permalink to this headline">¶</a></h2>
+<p>Woo has a number of features which can be enabled/disabled at compile-time. Those are passed as <code class="docutils literal notranslate"><span class="pre">features=...</span></code> argument to scons, can be retrived from python as <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.config.features`</span></code> and are available in c++ as macros <code class="docutils literal notranslate"><span class="pre">WOO_</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">WOO_OPENGL</span></code>. Note that builds without some feature must still compile and work, so any feature-specific code must be guarded by macros, e.g. for OpenGL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#ifdef WOO_OPENGL</span>
+   <span class="o">/*</span> <span class="o">...</span> <span class="o">*/</span>
+<span class="c1">#endif</span>
+</pre></div>
+</div>
+<p>Non-exhaustive list of features is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_DEBUG</span></code>: defined in debug builds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_OPENGL</span></code>: support for OpenGL 3d graphics; disabled on headless (cluster) builds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_OPENCL</span></code>: support for OpenCL; experimental only.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_QT4</span></code>: support for Qt4 user interface.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_VTK</span></code>: have headers and libs of <a class="reference external" href="http://vtk.org">Visualization ToolKit</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WOO_GTS</span></code>: have headers and libs of <a class="reference external" href="http://gts.sf.net">GNU Triangulated Surface</a>. Those are very useful for working with facets, don’t disable.</p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<p>Woo is at the moment not very consistent putting everything into the <code class="docutils literal notranslate"><span class="pre">woo</span></code> namespace. As Woo is dypically used as python module, the organization into Python modules (which is independent) is more important.</p>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Logging macros are for helping development or diagnostics, defined in <a class="reference external" href="https://github.com/woodem/woo/tree/master/lib/base/Logging.hpp">lib/base/Logging.hpp</a>. The logging backed is currently <a class="reference external" href="http://log4cxx.apache.org">log4cxx</a>, but this may change in the future. Logging is controlled per-class. Any class wishing to use logging should declare logger within the class body in the header file using <code class="docutils literal notranslate"><span class="pre">WOO_DECL_LOGGER</span></code> and do additional setup (allocation) in the implementation file using <code class="docutils literal notranslate"><span class="pre">WOO_IMPL_LOGGER(Rabbit)</span></code> at the top-level scope.</p>
+<p>The lower macros are ignored in non-debug builds:</p>
+<ul class="simple">
+<li><p><cite>LOG_TRACE</cite>, <cite>LOG_DEBUG</cite>, <cite>LOG_INFO</cite>: increasing severity levels. Tracing is for low-level debugging with possibly copious output, debug is more severe. Info level should provide manageable amount of information even when globally enabled.</p></li>
+<li><p><cite>LOG_WARN</cite> is used for warning about non-fatal conditions.</p></li>
+<li><p><cite>LOG_ERROR</cite> informs about erroneous condition; if the condition likely caused by the user, it may be better to throw an exception instead, since that allows for better diagnostics.</p></li>
+<li><p><cite>LOG_FATAL</cite> informs about a fatal condition, and is often followed by crash or an exception being thrown.</p></li>
+</ul>
+</section>
+<section id="renaming-classes">
+<h2>Renaming classes<a class="headerlink" href="#renaming-classes" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, classes are to be renamed for consistency. This may pose some problems with backwards-compatibility. For this reason, there is <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo._monkey.aliases._deprecated</span></code>: old name may still be used, but there will be a waning issued, along with the location of the offending code.</p>
+</section>
+<section id="unit-tests">
+<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Make sure your modifications don’t break existing code. There is a (rather limited) unit test suite which should be always run after modifications; it is launched with <code class="docutils literal notranslate"><span class="pre">woo</span> <span class="pre">--test</span></code>.</p>
+<p>When adding new functionality, adding a unit test for it is the best way to keep the interface stable (other people will see if they break it immediately).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Conventions</a><ul>
+<li><a class="reference internal" href="#style">Style</a></li>
+<li><a class="reference internal" href="#types">Types</a><ul>
+<li><a class="reference internal" href="#math-types">Math types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#feature-macros">Feature macros</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li><a class="reference internal" href="#logging">Logging</a></li>
+<li><a class="reference internal" href="#renaming-classes">Renaming classes</a></li>
+<li><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="object.html"
+                          title="Previous page">&larr; woo::Object</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="performance.html"
+                          title="Next page">&rarr; Performance issues</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prog/conventions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="performance.html" title="Performance issues"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="object.html" title="woo::Object"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Programming manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Conventions</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

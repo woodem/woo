@@ -1,0 +1,274 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>API Changes &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">API Changes</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="api-changes">
+<h1>API Changes<a class="headerlink" href="#api-changes" title="Permalink to this headline">¶</a></h1>
+<section id="framework">
+<h2>Framework<a class="headerlink" href="#framework" title="Permalink to this headline">¶</a></h2>
+<p>Woo keeps track of current API version in <a class="reference internal" href="woo.core.html#woo.core.Master.api" title="woo.core.Master.api"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.master.api</span></code></a>, which is set from the internal <a class="reference external" href="https://github.com/woodem/woo/tree/master/py/apiversion.py">woo.apiversion</a> module.</p>
+<p>Every script should state the API it was programmed for by setting <a class="reference internal" href="woo.core.html#woo.core.Master.usesApi" title="woo.core.Master.usesApi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.master.usesApi</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">usesApi</span><span class="o">=</span><span class="mi">10177</span> <span class="c1"># or (1,1,77) which is converted 10000*1+100*1+77</span>
+</pre></div>
+</div>
+<p>If <a class="reference internal" href="woo.core.html#woo.core.Master.usesApi" title="woo.core.Master.usesApi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesApi</span></code></a> is smaller than <a class="reference internal" href="woo.core.html#woo.core.Master.api" title="woo.core.Master.api"><code class="xref py py-obj docutils literal notranslate"><span class="pre">api</span></code></a>, functions which changed their behavior in significant ways (other than fixing bugs) will issue a warning about possibly unexpected result. In that case, this page can be consulted to find out about was to update the code accordingly.</p>
+</section>
+<section id="changes">
+<h2>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h2>
+<p>This page keeps track of major (and some minor) API changes for the purposes of updating the code and also for warning when older API is being used, possibly with different results.</p>
+<section id="api-10104">
+<h3>API 10104<a class="headerlink" href="#api-10104" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This API change was commited Oct 3, 2017</p>
+</div>
+<ul>
+<li><p>Deprecate <code class="docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys</span></code> and introduce <code class="docutils literal notranslate"><span class="pre">woo.dem.HertzMat</span></code> and <code class="docutils literal notranslate"><span class="pre">woo.dem.Cp2_HertzMat_HertzPhys</span></code>. This means that surface energy <code class="docutils literal notranslate"><span class="pre">surfEnergy</span></code> and the Carpick-Ogletree-Solmeron <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter are passed through <a class="reference internal" href="woo.dem.html#woo.dem.HertzMat" title="woo.dem.HertzMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzMat</span></code></a> and can be different for different material, whereas previously they had to be set per-simulation. <a class="reference internal" href="woo.models.html#woo.models.ContactModelSelector" title="woo.models.ContactModelSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector</span></code></a> will raise an exception when its <code class="docutils literal notranslate"><span class="pre">alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">surfEnergy</span></code> are assigned, since that menas the user is not aware of this change.</p>
+<p>Migration to the new API means using <a class="reference internal" href="woo.dem.html#woo.dem.HertzMat" title="woo.dem.HertzMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzMat</span></code></a> (instead of <a class="reference internal" href="woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FrictMat</span></code></a>), assigning <a class="reference internal" href="woo.dem.html#woo.dem.HertzMat.surfEnergy" title="woo.dem.HertzMat.surfEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzMat.surfEnergy</span></code></a> and <a class="reference internal" href="woo.dem.html#woo.dem.HertzMat.alpha" title="woo.dem.HertzMat.alpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzMat.alpha</span></code></a> to the material instance (not to the <code class="docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys</span></code> functor) and replacing <code class="docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys</span></code> with <a class="reference internal" href="woo.dem.html#woo.dem.Cp2_HertzMat_HertzPhys" title="woo.dem.Cp2_HertzMat_HertzPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_HertzMat_HertzPhys</span></code></a>.</p>
+<p>If <a class="reference internal" href="woo.models.html#woo.models.ContactModelSelector" title="woo.models.ContactModelSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector</span></code></a> is used, material types have to be changed but new functors will be returned automatically.</p>
+</li>
+</ul>
+</section>
+<section id="api-10103">
+<h3>API 10103<a class="headerlink" href="#api-10103" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This API change was commited Oct 23, 2015.</p>
+</div>
+<ul>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">woo.dem.Bo1_Sphere_Aabb.distFactor</span></code>, <code class="docutils literal notranslate"><span class="pre">woo.dem.Cg2_Sphere_Sphere_L6Geom.distFactor</span></code>, <code class="docutils literal notranslate"><span class="pre">woo.dem.Grid1_Sphere.distFactor</span></code>; accessing thsoe from Python (reading or writing) will raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> immediately. These values were replaced by <a class="reference internal" href="woo.dem.html#woo.dem.DemField.distFactor" title="woo.dem.DemField.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField.distFactor</span></code></a>, which is read from affected functors directly. This change ensures consistency of <a class="reference internal" href="woo.dem.html#woo.dem.DemField.distFactor" title="woo.dem.DemField.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distFactor</span></code></a> accross all functors and makes it easier to change everywhere.</p>
+<p>A related change is that <a class="reference internal" href="woo.models.html#woo.models.ContactModelSelector.distFactor" title="woo.models.ContactModelSelector.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector.distFactor</span></code></a> is <em>not</em> set automatically in engines returned from <a class="reference internal" href="woo.dem.html#woo.dem.DemField.minimalEngines" title="woo.dem.DemField.minimalEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.minimalEngines</span></code></a>; this must be set by hand in <a class="reference internal" href="woo.dem.html#woo.dem.DemField.distFactor" title="woo.dem.DemField.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.distFactor</span></code></a>. A warning will be issued when API is smaller than 10103 and <a class="reference internal" href="woo.models.html#woo.models.ContactModelSelector.distFactor" title="woo.models.ContactModelSelector.distFactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distFactor</span></code></a> is set.</p>
+</li>
+</ul>
+</section>
+<section id="api-10102">
+<h3>API 10102<a class="headerlink" href="#api-10102" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This API change was commited Aug 5, 2015.</p>
+</div>
+<ul>
+<li><p>All “static” classes (i.e. classes with static attributes declared with <code class="docutils literal notranslate"><span class="pre">WOO_CLASS_BASE_DOC_STATICATTRS</span></code> and similar) were converted to regular classes with per-instance attributes. It was done for architectural reasons and cleaner interfaces (e.g. saving rendering options along with the simulation). Some backwards-incompatible changes had to be introduced:</p>
+<ul>
+<li><p><a class="reference internal" href="woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Tracer</span></code></a> must be instantiated as any other engine, and multiple independent instances may exist. Since <a class="reference internal" href="woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a> was mostly used from the UI (where the internals were adjusted), there are no issues expected.</p></li>
+<li><p>All rendering classes and functors (<a class="reference internal" href="woo.gl.html#woo.gl.Renderer" title="woo.gl.Renderer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer</span></code></a>, <a class="reference internal" href="woo.gl.html#woo.gl.Gl1_DemField" title="woo.gl.Gl1_DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_DemField</span></code></a> and all others) were converted to regular classes. Instances of rendering classes are contained in <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.GlSetup</span></code></a> attached to <a class="reference internal" href="woo.core.html#woo.core.Scene.gl" title="woo.core.Scene.gl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S.gl</span></code></a>. <code class="docutils literal notranslate"><span class="pre">S.gl</span></code> is automatically created (with defaults) on-demand if not assigned explicitly. <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.GlSetup</span></code></a> can be instantiated with arbitrary OpenGL functors passed as argument (shown below), and functors are accessed as in <code class="docutils literal notranslate"><span class="pre">S.gl.cPhys</span></code> (for <a class="reference internal" href="woo.gl.html#woo.gl.Gl1_CPhys" title="woo.gl.Gl1_CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_CPhys</span></code></a>: leading <code class="docutils literal notranslate"><span class="pre">Gl1</span></code> removed and capital converted to lowercase). <code class="docutils literal notranslate"><span class="pre">S.gl</span></code> also defines the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> operator, which accepts any GL functor instances, which will replace the ones already existing.</p></li>
+<li><p>Assigning static attributes will not report any error, but will not do what you expect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span> <span class="c1"># try-block for running in headless mode</span>
+   <span class="kn">import</span> <span class="nn">woo.gl</span>
+   <span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="o">.</span><span class="n">scaleOn</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># creates new class attribute scaleOn, no effect on rendering</span>
+   <span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Sphere</span><span class="o">.</span><span class="n">quality</span><span class="o">=</span><span class="mi">5</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="c1"># TODO: show the exception being raised</span>
+</pre></div>
+</div>
+<p>and should be replaced with</p>
+<ol class="arabic">
+<li><p>setup of the whole rendering through <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlSetup</span></code></a> from scratch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+   <span class="kn">import</span> <span class="nn">woo.gl</span>
+   <span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">=</span><span class="n">GlSetup</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">scaleOn</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Sphere</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="k">pass</span>
+</pre></div>
+</div>
+</li>
+<li><p>replacing only some <em>functors</em> and keeping the rest of <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlSetup</span></code></a> intact:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">scaleOn</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Sphere</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>keeping everything (functors <em>and</em> <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlSetup</span></code></a>) and only change individual parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">scaleOn</span><span class="o">=</span><span class="kc">True</span>
+<span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">sphere</span><span class="o">.</span><span class="n">quality</span><span class="o">=</span><span class="mi">5</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>Construction (which used to result in assignment of static attributes) will have no effect, as the object will be immediately discarded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_DemField</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="s1">&#39;spheroids&#39;</span><span class="p">,</span><span class="n">colorBy</span><span class="o">=</span><span class="s1">&#39;radius&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and should be again replaced by using <a class="reference internal" href="woo.gl.html#woo.gl.GlSetup" title="woo.gl.GlSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlSetup</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">=</span><span class="n">GlSetup</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_DemField</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="s1">&#39;spheroids&#39;</span><span class="p">,</span><span class="n">colorBy</span><span class="o">=</span><span class="s1">&#39;radius&#39;</span><span class="p">))</span>
+<span class="c1">## or</span>
+<span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">demField</span><span class="o">.</span><span class="n">shape</span><span class="o">=</span><span class="s1">&#39;spheroids&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">demField</span><span class="o">.</span><span class="n">colorBy</span><span class="o">=</span><span class="s1">&#39;radius&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Warning will be issued when <a class="reference internal" href="woo.gl.html#woo.gl.Renderer" title="woo.gl.Renderer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Renderer</span></code></a> or any GL functor is construted with arguments (such as <code class="docutils literal notranslate"><span class="pre">Gl1_Sphere(quality=4)</span></code>, but not for <code class="docutils literal notranslate"><span class="pre">Gl1_Sphere()</span></code>).</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Scene.any</span></code>, which used to be a list of arbitrary <a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objects</span></code></a> was removed; it was mostly used for storing OpenGL renderers with the simulation (which is no longer necessary) and is functionally superseded by labeled objects in <code class="xref py py-obj docutils literal notranslate"><span class="pre">S.lab</span></code>. Since <code class="docutils literal notranslate"><span class="pre">Scene.any</span></code> was only sparsely documented, it was removed directly and an exception will be raised when accessed.</p></li>
+</ul>
+</section>
+<section id="api-10101">
+<h3>API 10101<a class="headerlink" href="#api-10101" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This API change was commited Jul 28, 2015.</p>
+</div>
+<ul>
+<li><p><a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleContainer.add</span></code></a> (as in <a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S.dem.par.add</span></code></a> newly may add nodes of particles to <a class="reference internal" href="woo.core.html#woo.core.Field.nodes" title="woo.core.Field.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S.dem.nodes</span></code></a>, depending on the optional argument <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, which is <code class="docutils literal notranslate"><span class="pre">-1</span></code> by default. The default (-1) will add the node if it has mass, or prescribed velocity, angular velocity, or imposition; 0 will not add nodes, 1 will add all nodes. If any node is in <a class="reference internal" href="woo.core.html#woo.core.Field.nodes" title="woo.core.Field.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S.dem.nodes</span></code></a>, it is silently skipped.</p>
+<p>This change makes <a class="reference internal" href="woo.dem.html#woo.dem.DemField.collectNodes" title="woo.dem.DemField.collectNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.collectNodes</span></code></a> largely obsolete, since nodes from particles are collected at the time they are added.</p>
+<p>When script uses an older API, warning is issued for every use of <a class="reference internal" href="woo.dem.html#woo.dem.DemField.collectNodes" title="woo.dem.DemField.collectNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.collectNodes</span></code></a>.</p>
+</li>
+<li><p>Introduced API versioning</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">API Changes</a><ul>
+<li><a class="reference internal" href="#framework">Framework</a></li>
+<li><a class="reference internal" href="#changes">Changes</a><ul>
+<li><a class="reference internal" href="#api-10104">API 10104</a></li>
+<li><a class="reference internal" href="#api-10103">API 10103</a></li>
+<li><a class="reference internal" href="#api-10102">API 10102</a></li>
+<li><a class="reference internal" href="#api-10101">API 10101</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">API Changes</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

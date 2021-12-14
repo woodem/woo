@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Finite Elements &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Granular" href="granular.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="models.html" title="Models"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="granular.html" title="Granular"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Finite Elements</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="finite-elements">
+<span id="gallery-fem"></span><h1>Finite Elements<a class="headerlink" href="#finite-elements" title="Permalink to this headline">¶</a></h1>
+<p>Woo implements <a class="reference internal" href="../theory/membrane-element.html#membrane-element"><span class="std std-ref">plate (CST+DKT)</span></a> and <a class="reference internal" href="../theory/tet4-element.html#tet4-element"><span class="std std-ref">tetrahedral (TET4)</span></a> elements. They use corotated FEM formulation to decompose nodal displacements into rigid-body motion and element deformation. Mass and inertia is lumped into nodes.</p>
+<section id="horse">
+<h2>Horse<a class="headerlink" href="#horse" title="Permalink to this headline">¶</a></h2>
+<p>This first example shows <a class="reference internal" href="../woo.pre.html#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">the</span> <span class="pre">horse</span></code></a> constructed from membrane elements, then from volume elements (without bones):</p>
+<iframe src="https://www.youtube.com/embed/0H4r7ciuMBw" style="border: 0; height: 345px; width: 560px">
+</iframe><iframe src="https://www.youtube.com/embed/BG62QAXNxbQ" style="border: 0; height: 345px; width: 560px">
+</iframe></section>
+<section id="tube">
+<h2>Tube<a class="headerlink" href="#tube" title="Permalink to this headline">¶</a></h2>
+<p>The tube is triangulated and falls (including self-collisions) onto cylinders; the material is elastic and exhibits nicely geometrical non-linearities of the deformation:</p>
+<iframe src="https://www.youtube.com/embed/cOLMNqtCy1c" style="border: 0; height: 345px; width: 560px">
+</iframe><p>This is the same example, but rigid cylinders were replaced by deformable beam. This simulation can be found in <a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/tube.py">examples/tube.py</a>:</p>
+<a class="reference internal image-reference" href="../_images/tube-with-spheres.png"><img alt="../_images/tube-with-spheres.png" src="../_images/tube-with-spheres.png" style="width: 100%;" /></a>
+</section>
+<section id="triaxial-test-with-membrane">
+<h2>Triaxial test with membrane<a class="headerlink" href="#triaxial-test-with-membrane" title="Permalink to this headline">¶</a></h2>
+<p>This simulation is made using the <a class="reference internal" href="../woo.pre.html#woo.pre.cylTriax.CylTriaxTest" title="woo.pre.cylTriax.CylTriaxTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pre.cylTriax.CylTriaxTest</span></code></a> preprocessor bundled with Woo; details are described in <a class="reference internal" href="../cases/cyl-triax/index.html#case-cyl-triax"><span class="std std-ref">Cylindrical triaxial test with flexible membrane</span></a>. Triaxial test first compresses the sample isotropically, then applies hydrostatic pressurae laterally (here applied by the elastic membrane) while prescribing axial deformation.</p>
+<iframe src="https://www.youtube.com/embed/Li13NrIyMYU" style="border: 0; height: 345px; width: 560px">
+</iframe></section>
+<section id="split-membrane">
+<h2>Split membrane<a class="headerlink" href="#split-membrane" title="Permalink to this headline">¶</a></h2>
+<p>This membrane has a predefined split in the middle (used by some people to model broken plastic packaging); this example is to be found in <a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/membrane-split.py">examples/membrane-split.py</a>.</p>
+<a class="reference internal image-reference" href="../_images/split.png"><img alt="../_images/split.png" src="../_images/split.png" style="width: 100%;" /></a>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Finite Elements</a><ul>
+<li><a class="reference internal" href="#horse">Horse</a></li>
+<li><a class="reference internal" href="#tube">Tube</a></li>
+<li><a class="reference internal" href="#triaxial-test-with-membrane">Triaxial test with membrane</a></li>
+<li><a class="reference internal" href="#split-membrane">Split membrane</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="granular.html"
+                          title="Previous page">&larr; Granular</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="models.html"
+                          title="Next page">&rarr; Models</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/fem.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="models.html" title="Models"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="granular.html" title="Granular"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Finite Elements</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

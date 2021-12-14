@@ -1,0 +1,208 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Models &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Shapes" href="shapes.html" />
+    <link rel="prev" title="Finite Elements" href="fem.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="shapes.html" title="Shapes"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="fem.html" title="Finite Elements"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Models</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="models">
+<span id="gallery-models"></span><h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<p>DEM usually assumes simplified geometry (such as spheres) and the actual physics must be expressed by the contact model. We take care to <a class="reference internal" href="../theory/contact/index.html#dem-contact-models"><span class="std std-ref">document contact models</span></a> thoroughly and implement them carefully.</p>
+<p>Woo features a complete decoupling of geometry computation and contact model, thus making any new contact model immediately accessible to all contacting shapes. Developing a new contact model is a relatively easy task, once the mathematical formulation is clear (e.g. the <a class="reference internal" href="../theory/contact/ice.html#ice-contact-model"><span class="std std-ref">ice contact model</span></a> was developed under a contract, and the <a class="reference external" href="https://github.com/woodem/woo/tree/master/pkg/dem/Ice.cpp">source code</a> is not all that complex).</p>
+<section id="adhesive-models">
+<h2>Adhesive models<a class="headerlink" href="#adhesive-models" title="Permalink to this headline">¶</a></h2>
+<p>Large family of models based on <a class="reference internal" href="../theory/contact/hertzian.html#hertzian-contact-models"><span class="std std-ref">Hertz theory</span></a> (for non-adhesive contact) <a class="reference internal" href="../theory/contact/adhesive.html#adhesive-contact-models"><span class="std std-ref">adding adhesion</span></a> in different ways. Adhesion is implemented as described by DMT (Derjaugin-Müller-Torporov), JKR (Johnson-Kenall-Roberts) and Schwarz (which interpolates between DMT and JKR using a parameter). These models are primarily useful for micro-particle (dust) simulations.</p>
+<a class="reference internal image-reference" href="../_images/adhesive.png"><img alt="../_images/adhesive.png" src="../_images/adhesive.png" style="width: 100%;" /></a>
+</section>
+<section id="concrete-model">
+<h2>Concrete model<a class="headerlink" href="#concrete-model" title="Permalink to this headline">¶</a></h2>
+<p>The concrete contact model was developped under commercial backing, in a Woo author’s thesis <span id="id1">[<a class="reference internal" href="../references.html#id35" title="Václav Šmilauer. Cohesive Particle Model using the Discrete Element Method on the Yade Platform. PhD thesis, Czech Technical University in Prague, Faculty of Civil Engineering &amp; Université Grenoble I – Joseph Fourier, École doctorale I-MEP2, 2010. LaTeX sources at http://bazaar.launchpad.net/\~eudoxos/+junk/thesis/files. URL: http://tel.archives-ouvertes.fr/docs/00/50/24/02/PDF/thesis.pdf.">Smi10</a>]</span>. It features cohesion with damage and visco-plasticity, and is as much as possible based on continuum models of damage, viscosity and plasticity. Calibration procedures are also described, based on dimensional analysis.</p>
+<p>This is an ancient screenshot, when still running under <a class="reference external" href="http://yade-dem.org">Yade</a>:</p>
+<a class="reference internal image-reference" href="../_images/Tension_uniax.png"><img alt="../_images/Tension_uniax.png" src="../_images/Tension_uniax.png" style="width: 100%;" /></a>
+</section>
+<section id="pellet-model">
+<h2>Pellet model<a class="headerlink" href="#pellet-model" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../theory/contact/pellet.html#pellet-contact-model"><span class="std std-ref">pellet contact model</span></a> was developed from scratch, with pen and paper, during a few days in a company working in the pelletizing industry, and subsequently adjusted and validated. It was supposed to capture the effect of partial breakage (compressive plasticity) and weak adhesion effects.</p>
+<a class="reference internal image-reference" href="../_images/plast-graph1.png"><img alt="../_images/plast-graph1.png" src="../_images/plast-graph1.png" style="width: 100%;" /></a>
+<p>This video shows a rolling screen which is ridiculously overloaded with pellets:</p>
+<iframe src="https://www.youtube.com/embed/cujQffoxR6w" style="border: 0; height: 345px; width: 560px">
+</iframe></section>
+<section id="cross-anisotropy">
+<h2>Cross-anisotropy<a class="headerlink" href="#cross-anisotropy" title="Permalink to this headline">¶</a></h2>
+<p>Cross-anisotropy was developed as a part of post-doc project and is described <a class="reference internal" href="../cases/x-aniso/index.html#cases-x-aniso"><span class="std std-ref">in the documentation</span></a>. It is the usual linear contact model, but the stiffness is directionally biased so that a prescribed cross-anisotropic stiffness tensor is obtained globally:</p>
+<p>This example is a circular hole loaded with hydrostatic pressure. Note how the deformation is bigger in the more compliant sense (vertically) while the elastic wave propagates more quickly in the stiffer sense (horizontally). Since cross-anisotropy plane is not aligned with the tunnel axis, radial pressure causes also axial deformation, which is shown at the end. Displacements are scaled.</p>
+<iframe src="https://www.youtube.com/embed/KYCvi6SNOc0" style="border: 0; height: 345px; width: 560px">
+</iframe><div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Models</a><ul>
+<li><a class="reference internal" href="#adhesive-models">Adhesive models</a></li>
+<li><a class="reference internal" href="#concrete-model">Concrete model</a></li>
+<li><a class="reference internal" href="#pellet-model">Pellet model</a></li>
+<li><a class="reference internal" href="#cross-anisotropy">Cross-anisotropy</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="fem.html"
+                          title="Previous page">&larr; Finite Elements</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="shapes.html"
+                          title="Next page">&rarr; Shapes</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/models.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="shapes.html" title="Shapes"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="fem.html" title="Finite Elements"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Models</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.comp &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.config" href="woo.config.html" />
+    <link rel="prev" title="woo.batch" href="woo.batch.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.config.html" title="woo.config"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.batch.html" title="woo.batch"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.comp</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.comp">
+<span id="woo-comp"></span><h1><a class="reference internal" href="#module-woo.comp" title="woo.comp"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.comp</span></code></a><a class="headerlink" href="#module-woo.comp" title="Permalink to this headline">¶</a></h1>
+<p>Expose interal utility c++ functions for computing volume, centroids, inertia, coordinate transforms; mostly used for testing.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.cart2cyl">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">cart2cyl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.cart2cyl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert cartesian coordinates to cylindrical; cylindrical coordinates are specified as <span class="math notranslate nohighlight">\((r,\theta,z)\)</span>, the reference plane is the <span class="math notranslate nohighlight">\(xy\)</span>-plane (see <a class="reference external" href="http://en.wikipedia.org/wiki/Cylindrical_coordinates">at Wikipedia</a>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.computePrincipalAxes">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">computePrincipalAxes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.computePrincipalAxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (<em>pos</em>, <em>ori</em>, <em>inertia</em>) of new coordinate system (relative to the current one), whose axes are principal, i.e. second-order momentum is diagonal (the diagonal is returned in <em>inertia</em>, which is sorted to be non-decreasing). The arguments are volume (mass) <em>V</em>, first-order momentum <em>Sg</em> and second-order momentum <em>Ig</em>. If <em>Sg</em> is <code class="docutils literal notranslate"><span class="pre">(0,0,0)</span></code>, the reference point will not change, only rotation will occur.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.cyl2cart">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">cyl2cart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.cyl2cart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert cylindrical coordinates to cartesian; cylindrical coordinates are specified as <span class="math notranslate nohighlight">\((r,\theta,z)\)</span>, the reference plane is the <span class="math notranslate nohighlight">\(xy\)</span>-plane (see <a class="reference external" href="http://en.wikipedia.org/wiki/Cylindrical_coordinates">at Wikipedia</a>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.inertiaTensorTranslate">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">inertiaTensorTranslate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.inertiaTensorTranslate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tensor of inertia of solid translated by <em>off</em> with previous inertia <span class="math notranslate nohighlight">\(I\)</span>, volume <span class="math notranslate nohighlight">\(V\)</span>; if <span class="math notranslate nohighlight">\(V\)</span> is positive, the translation is away from the centroid, if negative, towards the centroid. The computation implements <a class="reference external" href="https://en.wikipedia.org/wiki/Parallel_axis_theorem">Parallel axes theorem</a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.tetraInertia">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">tetraInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.tetraInertia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetrahedron inertia from covariance. If <em>fixSign</em> is true, the tensor is multiplied by -1 if the (0,0) entry is negative (this is caued by non-canonical vertex ordering).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.tetraInertia_grid">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">tetraInertia_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.tetraInertia_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetrahedron inertia from grid sampling (<em>div</em> gives subdivision along the shortest aabb side).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.tetraVolume">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">tetraVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.tetraVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Volume of tetrahedron, computed as <span class="math notranslate nohighlight">\(\frac{1}{6}((A-B)\cdot(B-D)))\times(C-D)\)</span>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.triangleArea">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">triangleArea</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.triangleArea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.triangleInertia">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">triangleInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.triangleInertia" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.comp.uniformResamplePiecewiseLinear">
+<span class="sig-prename descclassname"><span class="pre">woo.comp.</span></span><span class="sig-name descname"><span class="pre">uniformResamplePiecewiseLinear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo.comp.uniformResamplePiecewiseLinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample piecewise-linear function (given by points <em>xx</em> and <em>yy</em>, where <em>xx</em> is non-decreasing) using a uniform grid with endpoints <em>xRange</em> and <em>div</em> points (<em>div</em>-1 pieces), returning linearly interpolated value of <em>yy</em> in <a href="#id1"><span class="problematic" id="id2">*</span></a>div*+1 points.</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.batch.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.config.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.config</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.comp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.config.html" title="woo.config"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.batch.html" title="woo.batch"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.comp</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Theory &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Geometry" href="geom/index.html" />
+    <link rel="prev" title="Export" href="../tutorial/export.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="geom/index.html" title="Geometry"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../tutorial/export.html" title="Export"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">Theory</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="theory">
+<h1>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="geom/index.html">Geometry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geom/l6geom.html">Local contact coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geom/sphere.html">Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geom/ellipsoid.html">Ellipsoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geom/capsule.html">Capsule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geom/facet-smooth-edge.html">Smooth triangulation edge contacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geom/index.html#particle-shapes">Particle shapes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contact/index.html">DEM contact models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contact/linear.html">Linear (Cundall) contact model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/linear.html#purely-elastic-model-6-dof-model">Purely elastic model 6-DoF model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/pellet.html">Pellet contact model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/hertzian.html">Hertzian contact models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/adhesive.html">Adhesive models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/concrete.html">Concrete contact model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/ice.html">Ice contact model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contact/luding.html">Luding contact model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="leapfrog.html">Motion integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#position">Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#orientation">Orientation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#motion-in-uniformly-deforming-space">Motion in uniformly deforming space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#clumps">Clumps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#timestep">Timestep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leapfrog.html#numerical-damping">Numerical damping</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clumps.html">Clumps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tet4-element.html">Tet4 element</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tet4-element.html#element-coordinate-system">Element coordinate system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tet4-element.html#stiffness-matrix">Stiffness matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tet4-element.html#lumped-mass-and-inertia">Lumped mass and inertia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="membrane-element.html">Membrane element</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="membrane-element.html#element-coordinate-system">Element coordinate system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane-element.html#constant-strain-triangle-cst-element">Constant Strain Triangle (CST) Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane-element.html#discrete-krichhoff-triangle-dkt-element">Discrete Krichhoff Triangle (DKT) Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane-element.html#total-nodal-forces">Total nodal forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane-element.html#lumped-mass-and-inertia">Lumped mass and inertia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="granular/psd.html">Particle size distribution</a></li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="../tutorial/export.html"
+                          title="Previous page">&larr; Export</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="geom/index.html"
+                          title="Next page">&rarr; Geometry</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/theory/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="geom/index.html" title="Geometry"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../tutorial/export.html" title="Export"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href="">Theory</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

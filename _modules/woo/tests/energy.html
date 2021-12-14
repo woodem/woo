@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.tests.energy &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.tests.energy</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.tests.energy</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="c1"># 2013 © Václav Šmilauer &lt;eudoxos@arcig.cz&gt;</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Test some parts of energy conservation in DEM simulations.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo.pre</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">woo</span>
+<span class="kn">import</span> <span class="nn">woo.log</span>
+
+
+<div class="viewcode-block" id="TestInletsAndOutlets"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestInletsAndOutlets">[docs]</a><span class="k">class</span> <span class="nc">TestInletsAndOutlets</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestInletsAndOutlets.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestInletsAndOutlets.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">trackEnergy</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">defaultMaterial</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rad</span><span class="o">=.</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">density</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rad</span><span class="o">**</span><span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ek</span><span class="o">=.</span><span class="mi">5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;BoxOutlet&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">TRACE</span><span class="p">)</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;ConveyorInlet&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">TRACE</span><span class="p">)</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;RandomInlet&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">TRACE</span><span class="p">)</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;DemField&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">TRACE</span><span class="p">)</span>
+            <span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;ParticleContainer&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">TRACE</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TestInletsAndOutlets.testConveyorInlet"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestInletsAndOutlets.testConveyorInlet">[docs]</a>    <span class="k">def</span> <span class="nf">testConveyorInlet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;Energy: conveyor inlet traces kinetic energy&#39;</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">ConveyorInlet</span><span class="p">(</span><span class="n">maxNum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">material</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span><span class="n">cellLen</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span><span class="n">radii</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rad</span><span class="p">],</span><span class="n">centers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)],</span><span class="n">vel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="p">,</span><span class="n">node</span><span class="o">=</span><span class="n">Node</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))),</span>
+            <span class="n">BoxOutlet</span><span class="p">(</span><span class="n">inside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">box</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="p">]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1.</span> <span class="c1"># produce one particle in the first step</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="c1">#print 100*&#39;#&#39;,dict(S.energy)</span>
+        <span class="c1">#print &#39;Number of particles:&#39;,len(S.dem.par)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kinOutlet&#39;</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Ek</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kinInlet&#39;</span><span class="p">],</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Ek</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">total</span><span class="p">(),</span><span class="mf">0.</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TestInletsAndOutlets.testRandomInlet"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestInletsAndOutlets.testRandomInlet">[docs]</a>    <span class="k">def</span> <span class="nf">testRandomInlet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;Energy: random box factory traces kinetic energy&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">InsertionSortCollider</span><span class="p">(),</span>
+            <span class="n">BoxInlet</span><span class="p">(</span><span class="n">maxNum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">materials</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">],</span>
+                <span class="n">generator</span><span class="o">=</span><span class="n">MinMaxSphereGenerator</span><span class="p">(</span><span class="n">dRange</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rad</span><span class="p">)),</span>
+                <span class="n">shooter</span><span class="o">=</span><span class="n">AlignedMinMaxShooter</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">vRange</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="p">)),</span>
+                <span class="n">box</span><span class="o">=</span><span class="p">((</span><span class="o">-.</span><span class="mi">5</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="p">,</span><span class="o">-.</span><span class="mi">5</span><span class="p">),(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">)),</span>
+                <span class="n">massRate</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">BoxOutlet</span><span class="p">(</span><span class="n">inside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">box</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))),</span>
+        <span class="p">]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=.</span><span class="mi">05</span> <span class="c1"># produce one particle in the first step</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kinOutlet&#39;</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Ek</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;kinInlet&#39;</span><span class="p">],</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Ek</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">total</span><span class="p">(),</span><span class="mf">0.</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="TestLeapfrog"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestLeapfrog">[docs]</a><span class="k">class</span> <span class="nc">TestLeapfrog</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestLeapfrog.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestLeapfrog.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">m</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">defaultMaterial</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">dtSafety</span><span class="o">=.</span><span class="mi">9</span><span class="p">,</span><span class="n">trackEnergy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">engines</span><span class="o">=</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">damping</span><span class="o">=.</span><span class="mi">4</span><span class="p">),</span>
+            <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">),</span><span class="n">par</span><span class="o">=</span><span class="p">[</span><span class="n">Wall</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sense</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">m</span><span class="p">),</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">8</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">m</span><span class="p">)])])</span></div>
+<div class="viewcode-block" id="TestLeapfrog.testGravitySkip"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestLeapfrog.testGravitySkip">[docs]</a>    <span class="k">def</span> <span class="nf">testGravitySkip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;Energy: DemData.gravitySkip&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">gravitySkip</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># so that we hit ground and have dissipation</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s1">&#39;grav&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;nonviscDamp&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mf">0.</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TestLeapfrog.testDampingSkip"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.energy.TestLeapfrog.testDampingSkip">[docs]</a>    <span class="k">def</span> <span class="nf">testDampingSkip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;Energy: DemData.dampingSkip&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">dampingSkip</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;grav&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s1">&#39;nonviscDamp&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span></div></div>
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.tests.energy</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,611 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.pyderived &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pyderived</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.pyderived</h1><div class="highlight"><pre>
+<span></span><span class="c1">#encoding: utf-8</span>
+<span class="s1">&#39;Support subclassing c++ objects in python, with some limitations. Useful primarily for pure-python preprocessors.&#39;</span>
+
+<span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="PyAttrTrait"><a class="viewcode-back" href="../../woo.pyderived.html#woo.pyderived.PyAttrTrait">[docs]</a><span class="k">class</span> <span class="nc">PyAttrTrait</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class mimicking the `AttrTrait` template in c++, to be used when deriving from :obj:`PyWooObject`, like in this example (can be found in `woo.pyderived` module&#39;s source)::</span>
+
+<span class="sd">        class _SamplePyDerivedPreprocessor(woo.core.Preprocessor,PyWooObject):</span>
+<span class="sd">            &#39;Sample preprocessor written in pure python&#39;</span>
+<span class="sd">            _attrTraits=[</span>
+<span class="sd">                PyAttrTrait(bool,&#39;switch&#39;,True,&quot;Some bool switch, starting group&quot;,startGroup=&#39;General&#39;),</span>
+<span class="sd">                PyAttrTrait(int,&#39;a&#39;,2,&quot;Integer argument in python&quot;),</span>
+<span class="sd">                PyAttrTrait(str,&#39;b&#39;,&#39;whatever&#39;,&quot;String argument in python&quot;),</span>
+<span class="sd">                PyAttrTrait([Node,],&#39;c&#39;,[],&quot;List of nodes in python&quot;),</span>
+<span class="sd">                PyAttrTrait(float,&#39;d&#39;,.5,&quot;Parameter with range&quot;,range=Vector2(0,.7),startGroup=&#39;Advanced&#39;),</span>
+<span class="sd">                PyAttrTrait(int,&#39;choice&#39;,2,&quot;Param with choice&quot;,choice=[(0,&#39;choice0&#39;),(1,&#39;choice1&#39;),(2,&#39;choice2&#39;)]),</span>
+<span class="sd">                PyAttrTrait(int,&#39;flags&#39;,1,&quot;Param with bits&quot;,bits=[&#39;bit0&#39;,&#39;bit1&#39;,&#39;bit2&#39;,&#39;bit3&#39;,&#39;bit4&#39;],buttons=([&#39;Clear flags&#39;,&#39;self.flags=0&#39;,&#39;Set flags to zero&#39;],True)),</span>
+<span class="sd">                PyAttrTrait(int,&#39;choice2&#39;,2,&#39;Param with unnamed choice&#39;,choice=[0,1,2,3,4,5,6,-1]),</span>
+<span class="sd">                PyAttrTrait(Vector3,&#39;color&#39;,Vector3(.2,.2,.2),&quot;Color parameter&quot;,rgbColor=True),</span>
+<span class="sd">                PyAttrTrait(float,&#39;length&#39;,1.5e-3,&quot;Length&quot;,unit=&#39;mm&#39;),</span>
+<span class="sd">            ]</span>
+<span class="sd">            # this is needed for new-style pickling with pybind11</span>
+<span class="sd">            def __new__(klass,**kw):</span>
+<span class="sd">                self=super().__new__(klass)</span>
+<span class="sd">                # do not use self.__class__ here, it would break classes derived further from this class</span>
+<span class="sd">                self.wooPyInit(SamplePyDerivedPreprocessor,woo.core.Preprocessor,**kw)</span>
+<span class="sd">                return self</span>
+<span class="sd">            # this is needed for old-style pickling with boost::python</span>
+<span class="sd">            def __init__(self,**kw):</span>
+<span class="sd">                woo.core.Preprocessor.__init__(self)</span>
+<span class="sd">                self.wooPyInit(SamplePyDerivedPreprocessor,woo.core.Preprocessor,**kw) </span>
+<span class="sd">            def __call__(self):</span>
+<span class="sd">                pass</span>
+<span class="sd">                # ...</span>
+
+<span class="sd">    This class will be represented like this in the GUI:</span>
+
+<span class="sd">    .. image:: fig/pyderived-gui.png</span>
+
+
+<span class="sd">    :param pyType: python type object; can be</span>
+
+<span class="sd">        * primitive type (like `bool`, `float`, `Vector3`, `str`, …)</span>
+<span class="sd">        * sequence of primitive types, written as 1-list: `[bool,]`, `[float,]`, …</span>
+<span class="sd">        * :obj:`woo Object &lt;woo.core.Object&gt;` or any derived type (:obj:`woo.core.Node`, :obj:`woo.dem.Sphere`, …)</span>
+<span class="sd">        * sequence of woo objects, e.g. `[woo.core.Node,]`</span>
+
+<span class="sd">        When a value is assigned to the attribute, provided type must be convertible to *pyType*, otherwise `TypeError` is raised. There are some additional restrictions:</span>
+
+<span class="sd">        * `str` and `unicode` values will *not* be converted to `floats` and such − although python will accept `float(&#39;1.23&#39;)`</span>
+
+<span class="sd">    :param name: name of the attribute, given as `str`</span>
+<span class="sd">    :param ini: initial (default) value of the attribute</span>
+<span class="sd">    :param str doc: documentation for this attribute, as it appears in generated docs and tooltips in the UI</span>
+<span class="sd">    :param str unit: unit given as string, which is looked up in :obj:`woo.unit`; the multiplier is the ratio between *unit* and associated basic unit, which is found automatically.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning:: `unit` only determines multiplier for the GUI representation; it has no impact on the internal value used; in particular, the *ini* value is *unit-less*. If you want to give units to the initial value, say something like ``PyAttrTrait(float,&#39;angle&#39;,60*woo.unit[&#39;deg&#39;],units=&#39;deg&#39;,&#39;This is some angle&#39;)``.</span>
+
+<span class="sd">    :param bool noGui: do not show this attribute in the GUI; use this for attributes which the GUI does not know how to represent (such as python objects, numpy arrays and such), to avoid warnings.</span>
+<span class="sd">    :param bool noDump: skip this attribute when dumping/loading this object; that means that after loading (or after a :obj:`PyWooObjects.deepcopy`), the attribute will be default-initialized.</span>
+<span class="sd">    :param bool rgbColor: this attribute is color in the RGB space (its type must be `Vector3`); the GUI will show color picker.</span>
+<span class="sd">    :param str startGroup: start new attribute group, which is represented as collapsible blocks in the GUI.</span>
+<span class="sd">    :param str hideIf: python expression which determines whether the GUI hide/show this attribute entry dynamically; use `self` to refer to the instance, as usual.</span>
+<span class="sd">    :param range: give range (`Vector2` or `Vector2i`) to this numerical (`float` or `int`) attribute − a slider will be shown in the GUI.</span>
+<span class="sd">    :param choice: this attribute chooses from predefined set of integer values; `choice` itself can be</span>
+
+<span class="sd">        * list of unnamed values, e.g. `[0,1,2,3,4]` to choose from;</span>
+<span class="sd">        * list of named values, e.g. `[(0,&#39;choice0&#39;),(1,&#39;choice1&#39;),(2,&#39;choice2&#39;)]`, where the name will be displayed in the GUI, and the number will be assigned when the choice is made.</span>
+
+<span class="sd">    :param bits: give names for bit values which this (integer) attribute which represents; they will be shown as array of checkboxes in the GUI.</span>
+<span class="sd">    :param buttons: Tuple of *list* and *bool*; in the flat list of strings, where each consecutive triplet contains</span>
+
+<span class="sd">        1. button label</span>
+<span class="sd">        2. python expression to evaluate when the button is clicked</span>
+<span class="sd">        3. label to be shown as button description in the GUI</span>
+
+<span class="sd">        The bool at the end determined whether the button is created above (*True*) or below (*False*) the current attribute.</span>
+<span class="sd">    </span>
+<span class="sd">    :param filename: `str` attribute representing filename with file picker in the GUI; the file is possibly non-existent.</span>
+<span class="sd">    :param existingFilename: `str` attribute for existing filename, with file picker in the GUI.</span>
+<span class="sd">    :param dirname: `str` attribute for existing directory name, with directory picker in the GUI.</span>
+<span class="sd">    :param triggerPostLoad: when this attribute is being assigned to, `self.postLoad(&#39;attrName&#39;)` will be called.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#        </span>
+    <span class="c1"># fake cxxType</span>
+    <span class="c1">#</span>
+    <span class="n">primitiveTypes</span><span class="o">=</span><span class="p">{</span><span class="nb">int</span><span class="p">:</span><span class="s1">&#39;int&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">:</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="nb">float</span><span class="p">:</span><span class="s1">&#39;Real&#39;</span><span class="p">,</span><span class="nb">bool</span><span class="p">:</span><span class="s1">&#39;bool&#39;</span><span class="p">,</span>
+        <span class="n">Vector2</span><span class="p">:</span><span class="s1">&#39;Vector2r&#39;</span><span class="p">,</span><span class="n">Vector3</span><span class="p">:</span><span class="s1">&#39;Vector3r&#39;</span><span class="p">,</span><span class="n">Vector6</span><span class="p">:</span><span class="s1">&#39;Vector6r&#39;</span><span class="p">,</span><span class="n">Matrix3</span><span class="p">:</span><span class="s1">&#39;Matrix3r&#39;</span><span class="p">,</span><span class="n">Matrix6</span><span class="p">:</span><span class="s1">&#39;Matrix6r&#39;</span><span class="p">,</span>
+        <span class="n">Quaternion</span><span class="p">:</span><span class="s1">&#39;Quaternionr&#39;</span><span class="p">,</span><span class="n">Vector2i</span><span class="p">:</span><span class="s1">&#39;Vector2i&#39;</span><span class="p">,</span><span class="n">Vector3i</span><span class="p">:</span><span class="s1">&#39;Vector3i&#39;</span><span class="p">,</span><span class="n">Vector6i</span><span class="p">:</span><span class="s1">&#39;Vector6i&#39;</span><span class="p">,</span>
+	<span class="n">AlignedBox3</span><span class="p">:</span><span class="s1">&#39;AlignedBox3r&#39;</span><span class="p">,</span>
+	<span class="n">MatrixX</span><span class="p">:</span><span class="s1">&#39;MatrixXr&#39;</span><span class="p">,</span><span class="n">VectorX</span><span class="p">:</span><span class="s1">&#39;VectorXr&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pyType</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">ini</span><span class="p">,</span><span class="n">doc</span><span class="p">,</span><span class="c1"># *,</span>
+            <span class="n">unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">noGui</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">noDump</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="c1">#multiUnit=False,</span>
+            <span class="n">rgbColor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="c1">#prefUnit=None,</span>
+            <span class="c1">#altUnit=None,</span>
+            <span class="n">startGroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">hideIf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">choice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">bits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">buttons</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">altUnits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">existingFilename</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">dirname</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">psd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">triggerPostLoad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">guiReadonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">noGuiResize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">colormap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">deprecated</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">):</span>
+        <span class="c1"># validity checks</span>
+        <span class="k">if</span> <span class="nb">range</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pyType</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="nb">range</span><span class="p">))</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[(</span><span class="nb">int</span><span class="p">,</span><span class="n">Vector2i</span><span class="p">),(</span><span class="nb">float</span><span class="p">,</span><span class="n">Vector2</span><span class="p">)]:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Range must be Vector2 for floats and Vector2i for ints&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pyType</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pyType</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Type must be a list of length exactly one, or a plain type&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxxType</span><span class="o">=</span><span class="s1">&#39;vector&lt;</span><span class="si">%s</span><span class="s1">&gt;&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">[</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">type</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxxType</span><span class="o">=</span><span class="s1">&#39;vector&lt;shared_ptr&lt;</span><span class="si">%s</span><span class="s1">&gt;&gt;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;List element must be a type, not a </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="c1"># force correct types in the sequence</span>
+            <span class="k">if</span> <span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">:</span> <span class="n">ini</span><span class="o">=</span><span class="p">[</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ini</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ini</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">v</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">continue</span> <span class="c1"># this is OK</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-th initial value item must be a </span><span class="si">%s</span><span class="s2">, not a </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="k">elif</span> <span class="n">pyType</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cxxType</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">[</span><span class="n">pyType</span><span class="p">]</span>
+            <span class="n">ini</span><span class="o">=</span><span class="n">pyType</span><span class="p">(</span><span class="n">ini</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pyType</span><span class="p">,</span><span class="nb">type</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cxxType</span><span class="o">=</span><span class="s1">&#39;shared_ptr&lt;</span><span class="si">%s</span><span class="s1">&gt;&#39;</span><span class="o">%</span><span class="n">pyType</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Type must be a list of length one, or a primitive type; not a </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="n">pyType</span><span class="p">))</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># mandatory args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pyType</span><span class="o">=</span><span class="n">pyType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ini</span><span class="o">=</span><span class="n">ini</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">=</span><span class="n">doc</span>
+        <span class="c1"># optional args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noGui</span><span class="o">=</span><span class="n">noGui</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noDump</span><span class="o">=</span><span class="n">noDump</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rgbColor</span><span class="o">=</span><span class="n">rgbColor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startGroup</span><span class="o">=</span><span class="n">startGroup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hideIf</span><span class="o">=</span><span class="n">hideIf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="o">=</span><span class="nb">range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="o">=</span><span class="n">choice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bits</span><span class="o">=</span><span class="n">bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">=</span><span class="n">buttons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">existingFilename</span><span class="o">=</span><span class="n">existingFilename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="o">=</span><span class="n">dirname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggerPostLoad</span><span class="o">=</span><span class="n">triggerPostLoad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noGuiResize</span><span class="o">=</span><span class="n">noGuiResize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deprecated</span><span class="o">=</span><span class="n">deprecated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readonly</span><span class="o">=</span><span class="n">guiReadonly</span> <span class="c1"># this has different meaning in c++ and python, so call it differently</span>
+        <span class="c1"># those are unsupported in python</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noSave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pyByRef</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">activeLabel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namedEnum</span><span class="o">=</span><span class="kc">False</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="o">=</span><span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">str</span><span class="p">):</span>
+            <span class="c1">#print &#39;%s: Choice of strings (%s)!!!!&#39;%(self.name,str(self.choice))</span>
+            <span class="c1"># choice from strings</span>
+            <span class="k">def</span> <span class="nf">validateStrChoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: &#39;</span><span class="si">%s</span><span class="s2">&#39; is not an admissible value (must be one of: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">),</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="o">=</span><span class="n">validateStrChoice</span>
+        <span class="c1"># PSD buttons</span>
+        <span class="k">if</span> <span class="n">psd</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: psd and buttons are mutually exclusive (psd created a button for displaying the PSD)&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">=</span><span class="p">([</span><span class="s1">&#39;Plot the PSD&#39;</span><span class="p">,</span><span class="s1">&#39;import pylab; pylab.plot(*zip(*self.</span><span class="si">%s</span><span class="s1">)); pylab.grid(True); pylab.show();&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span><span class="s1">&#39;&#39;</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># side-effects of deprecated</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deprecated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noGui</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noDump</span><span class="o">=</span><span class="kc">True</span>
+        <span class="c1"># </span>
+        <span class="c1"># units</span>
+        <span class="c1">#</span>
+        <span class="kn">import</span> <span class="nn">woo._units</span>
+        <span class="n">baseUnit</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">baseUnit</span>
+        <span class="k">def</span> <span class="nf">_unicodeUnit</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span> <span class="k">return</span> <span class="n">u</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="nb">tuple</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="n">_unicodeUnit</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Unknown unit type </span><span class="si">%s</span><span class="s2">for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span><span class="n">u</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">_unicodeUnit</span><span class="p">(</span><span class="n">unit</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">altUnits</span><span class="p">:</span> <span class="n">altUnits</span><span class="o">=</span><span class="p">[[</span><span class="n">_unicodeUnit</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">altUnits</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">unit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">=</span><span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiUnit</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prefUnit</span><span class="o">=</span><span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">altUnits</span><span class="o">=</span><span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="nb">tuple</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiUnit</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">=</span><span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">altUnits</span><span class="o">=</span><span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prefUnit</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">unit</span><span class="p">:</span>
+                <span class="c1"># print self.name,u</span>
+                <span class="k">if</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">baseUnit</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;Unknown unit </span><span class="si">%s</span><span class="s1">; admissible values are: &#39;</span><span class="o">%</span><span class="n">u</span><span class="o">+</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baseUnit</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="n">base</span><span class="o">=</span><span class="n">baseUnit</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefUnit</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">u</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="n">woo</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
+                <span class="n">alts</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">alt</span> <span class="ow">in</span> <span class="n">baseUnit</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">baseUnit</span><span class="p">[</span><span class="n">alt</span><span class="p">]</span><span class="o">==</span><span class="n">base</span> <span class="ow">and</span> <span class="n">alt</span><span class="o">!=</span><span class="n">base</span><span class="p">:</span> <span class="n">alts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">alt</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="n">woo</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="n">alt</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">altUnits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alts</span><span class="p">)</span>
+            <span class="c1"># user-specified alternative units</span>
+            <span class="k">if</span> <span class="n">altUnits</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">altUnits</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;altUnits must be of the same length as unit&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">au</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">altUnits</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">altUnits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">au</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown unit type </span><span class="si">%s</span><span class="s1"> (must be list, tuple, str, unicode): </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">unit</span><span class="p">)))</span>
+<div class="viewcode-block" id="PyAttrTrait.validate"><a class="viewcode-back" href="../../woo.pyderived.html#woo.pyderived.PyAttrTrait.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+        <span class="s1">&#39;Called when the attribute is set&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">)</span></div>
+<div class="viewcode-block" id="PyAttrTrait.coerceValue"><a class="viewcode-back" href="../../woo.pyderived.html#woo.pyderived.PyAttrTrait.coerceValue">[docs]</a>    <span class="k">def</span> <span class="nf">coerceValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+        <span class="s1">&#39;Check whether *val* has type compatible with declared type (pyType). Raise exception if not. Values converted to required types are returned (it is safe to ignore the return value). In addition, validate the (converted) value, if a validator is defined&#39;</span>
+        <span class="k">def</span> <span class="nf">tName</span><span class="p">(</span><span class="n">T</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="vm">__module__</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="vm">__module__</span><span class="o">!=</span><span class="s1">&#39;__builtin__&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">T</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="c1"># sequences</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyType</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyType</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span>
+            <span class="n">ret</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="s1">&#39;__len__&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">{self.name}</span><span class="s2"> declared as sequence of </span><span class="si">{T}{cxxType}</span><span class="s2">, but its value </span><span class="si">{val!s}</span><span class="s2"> of type </span><span class="si">{valType}</span><span class="s2"> is not a sequence (__len__ not defined).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="n">valType</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)),</span><span class="n">cxxType</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39; (&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">cxxT</span><span class="o">+</span><span class="s1">&#39; in c++&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;cxxT&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span>
+            <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pyType</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">T</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">:</span> <span class="c1"># check convertibility</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">T</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Don&#39;t allow conversions from strings to numbers, since that will fail if used without conversion&quot;</span><span class="p">)</span>
+                        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">{self.name}</span><span class="s2"> declared as sequence of </span><span class="si">{T}</span><span class="s2">, but </span><span class="si">{i}</span><span class="s2">&#39;th item </span><span class="si">{v!s}</span><span class="s2"> of type </span><span class="si">{itemType}</span><span class="s2"> is not convertible to </span><span class="si">{T}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">itemType</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span><span class="n">T</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">v</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">continue</span> <span class="c1"># python representation for NULL shared_ptr</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">T</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">{self.name}</span><span class="s2"> declared as a sequence of </span><span class="si">{T}</span><span class="s2">, but </span><span class="si">{i}</span><span class="s2">&#39;th item </span><span class="si">{v!s}</span><span class="s2"> of type </span><span class="si">{itemType}</span><span class="s2"> is not a </span><span class="si">{T}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">itemType</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span><span class="n">T</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># do the same as for sequence items; ugly code duplication</span>
+            <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pyType</span>
+            <span class="k">if</span> <span class="n">T</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primitiveTypes</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">T</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Don&#39;t allow conversions from strings to numbers, since that will fail if used without conversion&quot;</span><span class="p">)</span>
+                    <span class="n">ret</span><span class="o">=</span><span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">{self.name}</span><span class="s2"> declared as </span><span class="si">{T}</span><span class="s2">, but value </span><span class="si">{val!s}</span><span class="s2"> of type </span><span class="si">{valType}</span><span class="s2"> is not convertible to </span><span class="si">{T}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="n">valType</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)),</span><span class="n">T</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># objects</span>
+                <span class="n">ret</span><span class="o">=</span><span class="n">val</span>
+                <span class="k">if</span> <span class="n">val</span><span class="o">!=</span><span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="n">T</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">{self.name}</span><span class="s2"> declared as </span><span class="si">{T}</span><span class="s2">, but value </span><span class="si">{val!s}</span><span class="s2"> of type </span><span class="si">{valType}</span><span class="s2"> is not a </span><span class="si">{T}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="n">valType</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)),</span><span class="n">T</span><span class="o">=</span><span class="n">tName</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s1">&#39;&lt;PyAttrTrait &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39; @ &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;&gt;&#39;</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PyWooObject"><a class="viewcode-back" href="../../woo.pyderived.html#woo.pyderived.PyWooObject">[docs]</a><span class="k">class</span> <span class="nc">PyWooObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Define some c++-compatibility functions for python classes. Derived class is created as::</span>
+<span class="sd">        </span>
+<span class="sd">        class SomeClass(woo.core.Object,woo.pyderived.PyWooObject): # order of base classes important!</span>
+<span class="sd">            _attrTraits=[</span>
+<span class="sd">                # see below</span>
+<span class="sd">            ]</span>
+<span class="sd">            # new-style pickling with pybind11</span>
+<span class="sd">            def __new__(klass,**kw):</span>
+<span class="sd">                self=super().__new__(klass)</span>
+<span class="sd">                self.wooPyInit(SomeClass,woo.core.Object,**kw)</span>
+<span class="sd">                return self</span>
+<span class="sd">            # for old-style pickling with boost::python</span>
+<span class="sd">            def __init__(self,**kw):</span>
+<span class="sd">                woo.core.Object.__init__(self)</span>
+<span class="sd">                self.wooPyInit(SomeClass,woo.core.Object,**kw)   # do NOT use self.__class__ instead of SomeClass, that would break classes deriving from SomeClass</span>
+
+<span class="sd">    This new class automatically obtains several features:</span>
+
+<span class="sd">    * dumping/loading via :obj:`woo.core.Object.dump` etc works.</span>
+<span class="sd">    * the GUI (:obj:`woo.qt.ObjectEditor`) will know how to present this class.</span>
+<span class="sd">    * documentation for this class will be generated</span>
+<span class="sd">    * all attributes are type-checked when assigned</span>
+<span class="sd">    * support for postLoad hooks (see below)</span>
+
+<span class="sd">    The `_attrTraits` ist a list of :obj:`PyAttrTrait`; each attribute</span>
+<span class="sd">    is defined via its traits, which declare its type, default value, documentation and so on -- this</span>
+<span class="sd">    is documented with :obj:`PyAttrTrait`.</span>
+
+<span class="sd">    This example shows trait definitions, and also the `triggerPostLoad` flag::</span>
+
+<span class="sd">        class SomeClass(woo.core.Object,woo.pyderived.PyWooObject):</span>
+<span class="sd">            _PAT=woo.pyderived.PyAttrTrait # alias for class name, to save typing</span>
+<span class="sd">            _attrTraits=[</span>
+<span class="sd">                _PAT(float,&#39;aF&#39;,1.,&#39;float attr&#39;),</span>
+<span class="sd">                _PAT([float,],&#39;aFF&#39;,[0.,1.,2.],&#39;list of floats attr&#39;),</span>
+<span class="sd">                _PAT(Vector2,&#39;aV2&#39;,(0.,1.),&#39;vector2 attr&#39;),</span>
+<span class="sd">                _PAT([Vector2,],&#39;aVV2&#39;,[(0.,0.),(1.,1.)],&#39;list of vector2 attr&#39;),</span>
+<span class="sd">                _PAT(woo.core.Node,&#39;aNode&#39;,woo.core.Node(pos=(1,1,1)),&#39;node attr&#39;),</span>
+<span class="sd">                _PAT([woo.core.Node,],&#39;aNNode&#39;,[woo.core.Node(pos=(1,1,1)),woo.core.Node(pos=(2,2,2))],&#39;List of nodes&#39;),</span>
+<span class="sd">                _PAT(float,&#39;aF_trigger&#39;,1.,triggerPostLoad=True,doc=&#39;Float triggering postLoad&#39;),</span>
+<span class="sd">            ]</span>
+<span class="sd">            def postLoad(self,I):</span>
+<span class="sd">                if I==None: pass                  # called when constructed/loaded</span>
+<span class="sd">                elif I==&#39;aF_trigger&#39;: pass # called when aF_trigger is modified</span>
+<span class="sd">            def __new__(klass,**kw):</span>
+<span class="sd">                pass</span>
+<span class="sd">                # ...</span>
+<span class="sd">            def __init__(self,**kw):</span>
+<span class="sd">                pass</span>
+<span class="sd">                # ...</span>
+
+<span class="sd">    The `postLoad` function is called with</span>
+<span class="sd">    </span>
+<span class="sd">    * `None` when the instance has just been created (or loaded); it *shoud* be idempotent, i.e. calling `postLoad(None)` the second time should have no effect::</span>
+
+<span class="sd">        SomeClass()         # default-constructed; will call postLoad(None)</span>
+<span class="sd">        SomeClass(aF=3.)    # default-construct, assign, call postLoad(None)</span>
+
+<span class="sd">    * `id(self.attr)` when `self.attr` is modified; this can be used to check for some particular conditions or modify other variables::</span>
+
+<span class="sd">        instance=SomeClass()  # calls instance.postLoad(None)</span>
+<span class="sd">        instance.aF_trigger=3 # calls instance.postLoad(&#39;aF_trigger&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">      .. note:: Pay attention to not call `postLoad` in infinite regression. </span>
+
+<span class="sd">    Python classes may be further derived from in python, along those lines::</span>
+
+<span class="sd">        class SomeChild(SomeClass): # python base class only</span>
+<span class="sd">            _PAT=woo.pyderived.PyAttrTrait</span>
+<span class="sd">            _attrTraits=[</span>
+<span class="sd">                _PAT(float,&#39;extraAttr&#39;,1.,triggerPostLoad=True,doc=&#39;Attributes as usual; postLoad is supported.&#39;),</span>
+<span class="sd">            ]</span>
+<span class="sd">            def postLoad(self,I):</span>
+<span class="sd">                if I==&#39;extraAttr&#39;: pass</span>
+<span class="sd">                # don&#39;t forget to eventually call parent&#39;s class postLoad, if you define postLoad in the derived class</span>
+<span class="sd">                # otherwise the triggers from the parents class would not work</span>
+<span class="sd">                else: super(SomeChild,self).postLoad(I)</span>
+<span class="sd">            # newer pickling (pybind11)</span>
+<span class="sd">            def __new__(klass,**kw):</span>
+<span class="sd">                self=super().__new__(klass)</span>
+<span class="sd">                self.wooPyInit(SomeChild,SomeClass,**kw) # this class, parent class, keywords</span>
+<span class="sd">                return self</span>
+<span class="sd">            # older pickling (boost::python)</span>
+<span class="sd">            def __init__(self,**kw):</span>
+<span class="sd">                SomeClass.__init__(self) # default-construct the parent</span>
+<span class="sd">                self.wooPyInit(SomeChild,SomeClass,**kw) # this class, parent class, keywords</span>
+<span class="sd">    </span>
+<span class="sd">    Derived classes should suppor pickling, GUI, documentation, type-checking, postLoad just like python class deriving from c++ directly. The internal machinery is checked by :obj:`woo.tests.core.TestPyDerived`.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="PyWooObject.wooPyInit"><a class="viewcode-back" href="../../woo.pyderived.html#woo.pyderived.PyWooObject.wooPyInit">[docs]</a>    <span class="k">def</span> <span class="nf">wooPyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">derivedClass</span><span class="p">,</span><span class="n">cxxBaseClass</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Inject methods into derivedClass, so that it behaves like woo.core.Object,</span>
+<span class="sd">        for the purposes of the GUI and expression dumps&#39;&#39;&#39;</span>
+        <span class="n">cxxBaseClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># repeat, just to make sure</span>
+        <span class="c1"># this class does not derive from c++ directly, call the helper that one for it as well (recurses)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cxxBaseClass</span><span class="p">,</span><span class="s1">&#39;wooPyInit&#39;</span><span class="p">):</span>
+            <span class="c1"># print &#39;Calling python base class wooPyInit&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="n">cxxBaseClass</span><span class="p">,</span><span class="n">cxxBaseClass</span><span class="o">.</span><span class="n">__base__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cxxBaseClass</span><span class="o">=</span><span class="n">cxxBaseClass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivedClass</span><span class="o">=</span><span class="n">derivedClass</span>
+        <span class="c1"># print derivedClass.__name__,&#39;wooPyInit&#39;</span>
+        <span class="c1"># initialize these conditionally; when the base class is in python, it has already set those</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_instanceTraits&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceTraits</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_attrValues&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_attrTraitsDict&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrTraitsDict</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attrTraitsDict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">trait</span><span class="p">)</span> <span class="k">for</span> <span class="n">trait</span> <span class="ow">in</span> <span class="n">derivedClass</span><span class="o">.</span><span class="n">_attrTraits</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">trait</span> <span class="ow">in</span> <span class="n">derivedClass</span><span class="o">.</span><span class="n">_attrTraits</span><span class="p">:</span>
+            <span class="c1"># basic getter/setter</span>
+            <span class="n">getter</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span><span class="n">trait</span><span class="o">=</span><span class="n">trait</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">[</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+            <span class="n">setter</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">trait</span><span class="o">=</span><span class="n">trait</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">trait</span><span class="o">.</span><span class="n">coerceValue</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">trait</span><span class="o">.</span><span class="n">triggerPostLoad</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">derivedClass</span><span class="p">,</span><span class="s1">&#39;postLoad&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1"> declared with triggerPostLoad, but </span><span class="si">%s</span><span class="s1">.postLoad is not defined.&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">derivedClass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">derivedClass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+                <span class="k">def</span> <span class="nf">triggerSetter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">trait</span><span class="o">=</span><span class="n">trait</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">[</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">trait</span><span class="o">.</span><span class="n">coerceValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">postLoad</span><span class="p">(</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">setter</span><span class="o">=</span><span class="n">triggerSetter</span>
+            <span class="c1"># chain validation and actual setting</span>
+            <span class="k">def</span> <span class="nf">validatingSetter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">trait</span><span class="o">=</span><span class="n">trait</span><span class="p">,</span><span class="n">setter</span><span class="o">=</span><span class="n">setter</span><span class="p">):</span>
+                <span class="n">trait</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">)</span>
+            <span class="c1"># deprecated attribute: raise error on any access</span>
+            <span class="k">def</span> <span class="nf">accessError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">trait</span><span class="o">=</span><span class="n">trait</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Error accessing </span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">: &#39;</span><span class="o">+</span><span class="n">trait</span><span class="o">.</span><span class="n">doc</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">trait</span><span class="o">.</span><span class="n">deprecated</span><span class="p">:</span> <span class="n">getter</span><span class="o">=</span><span class="n">validatingSetter</span><span class="o">=</span><span class="n">accessError</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">derivedClass</span><span class="p">,</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="nb">property</span><span class="p">(</span><span class="n">getter</span><span class="p">,</span><span class="n">validatingSetter</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="n">trait</span><span class="o">.</span><span class="n">doc</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">[</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">trait</span><span class="o">.</span><span class="n">ini</span>
+        <span class="c1"># print derivedClass.__name__,self._attrValues</span>
+        <span class="k">if</span> <span class="n">kw</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;No such attribute: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_attrTraitsDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">coerceValue</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">kw</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="fm">__str__</span><span class="o">=</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> @ </span><span class="si">%d</span><span class="s1"> (py)&gt;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">derivedClass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="nb">id</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="fm">__repr__</span><span class="o">=</span><span class="n">derivedClass</span><span class="o">.</span><span class="fm">__str__</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="n">_cxxAddr</span><span class="o">=</span><span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">sefl</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="c1"># pickle support</span>
+        <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1">#print &#39;__getstate__ in python&#39;</span>
+            <span class="n">ret</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cxxBaseClass</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="c1"># get boost::python stuff as well</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">st</span><span class="p">):</span>
+            <span class="c1">#print &#39;__setstate__ in python&#39;</span>
+            <span class="c1"># set managed attributes indirectly, to avoid side-effects</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_attrValues</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_attrTraitsDict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">coerceValue</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="c1"># set remaining attributes using setattr</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+            <span class="c1"># call postLoad as if after loading</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">derivedClass</span><span class="p">,</span><span class="s1">&#39;postLoad&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">postLoad</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy</span>
+<span class="sd">            is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.&#39;&#39;&#39;</span>
+            <span class="kn">import</span> <span class="nn">pickle</span>
+            <span class="n">copy</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">kw</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">copy</span>
+        <span class="k">def</span> <span class="nf">save_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">out</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.save not allowed for Python classes, use </span><span class="si">%s</span><span class="s1">.dump instead (only attributes of the closest c++ base class would be saved with save with boost::serialization, losing all python-only data).&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">derivedClass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="n">derivedClass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="n">__getstate__</span><span class="o">=</span><span class="n">__getstate__</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="n">__setstate__</span><span class="o">=</span><span class="n">__setstate__</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="n">deepcopy</span><span class="o">=</span><span class="n">deepcopy</span>
+        <span class="n">derivedClass</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="n">save_error</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">derivedClass</span><span class="p">,</span><span class="s1">&#39;postLoad&#39;</span><span class="p">):</span>
+            <span class="c1"># print derivedClass.__name__,&#39;: will call postLoad at construction time; attrValues are&#39;,str(self._attrValues)</span>
+            <span class="n">derivedClass</span><span class="o">.</span><span class="n">postLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span></div></div>
+        
+
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;wooMain&#39;</span><span class="p">:</span>
+    <span class="c1"># do not define this class when running woo normally,</span>
+    <span class="c1"># so that it does not show up in the preprocessor dialogue</span>
+    
+    <span class="c1"># inheritance order must not change, due to us using __bases__[0] frequently</span>
+    <span class="c1"># when traversing the class hierarchy</span>
+    <span class="k">class</span> <span class="nc">SamplePyDerivedPreprocessor</span><span class="p">(</span><span class="n">Preprocessor</span><span class="p">,</span><span class="n">PyWooObject</span><span class="p">):</span>
+        <span class="s1">&#39;Sample preprocessor written in pure python&#39;</span>
+        <span class="n">_classTraits</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">_attrTraits</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span><span class="s1">&#39;switch&#39;</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="s2">&quot;Some bool switch, starting group&quot;</span><span class="p">,</span><span class="n">startGroup</span><span class="o">=</span><span class="s1">&#39;General&#39;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;Integer argument in python&quot;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;whatever&#39;</span><span class="p">,</span><span class="s2">&quot;String argument in python&quot;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">([</span><span class="n">Node</span><span class="p">,],</span><span class="s1">&#39;c&#39;</span><span class="p">,[],</span><span class="s2">&quot;List of nodes in python&quot;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="s2">&quot;Parameter with range&quot;</span><span class="p">,</span><span class="nb">range</span><span class="o">=</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">7</span><span class="p">),</span><span class="n">startGroup</span><span class="o">=</span><span class="s1">&#39;Advanced&#39;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;choice&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;Param with choice&quot;</span><span class="p">,</span><span class="n">choice</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;choice0&#39;</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;choice1&#39;</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;choice2&#39;</span><span class="p">)]),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;flags&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;Param with bits&quot;</span><span class="p">,</span><span class="n">bits</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bit0&#39;</span><span class="p">,</span><span class="s1">&#39;bit1&#39;</span><span class="p">,</span><span class="s1">&#39;bit2&#39;</span><span class="p">,</span><span class="s1">&#39;bit3&#39;</span><span class="p">,</span><span class="s1">&#39;bit4&#39;</span><span class="p">],</span><span class="n">buttons</span><span class="o">=</span><span class="p">([</span><span class="s1">&#39;Clear flags&#39;</span><span class="p">,</span><span class="s1">&#39;self.flags=0&#39;</span><span class="p">,</span><span class="s1">&#39;Set flags to zero&#39;</span><span class="p">],</span><span class="kc">True</span><span class="p">)),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;choice2&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Param with unnamed choice&#39;</span><span class="p">,</span><span class="n">choice</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="n">Vector3</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="n">Vector3</span><span class="p">(</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),</span><span class="s2">&quot;Color parameter&quot;</span><span class="p">,</span><span class="n">rgbColor</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;length&#39;</span><span class="p">,</span><span class="mf">1.5e-3</span><span class="p">,</span><span class="s2">&quot;Length&quot;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">),</span>
+            <span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="s1">&#39;outDir&#39;</span><span class="p">,</span><span class="s1">&#39;/tmp&#39;</span><span class="p">,</span><span class="n">dirname</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;output directory&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+            <span class="c1"># construct all instance attributes</span>
+            <span class="n">Preprocessor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="n">SamplePyDerivedPreprocessor</span><span class="p">,</span><span class="n">Preprocessor</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">woo.core</span><span class="o">,</span> <span class="nn">woo.dem</span><span class="o">,</span> <span class="nn">woo.utils</span>
+            <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">()])</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Wall</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sense</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">2</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-4</span><span class="o">*</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">pWaveDt</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">damping</span><span class="o">=.</span><span class="mi">01</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">S</span>
+
+    <span class="kn">import</span> <span class="nn">woo.pre</span>
+    <span class="n">woo</span><span class="o">.</span><span class="n">pre</span><span class="o">.</span><span class="n">SamplePyDerivedPreprocessor</span><span class="o">=</span><span class="n">SamplePyDerivedPreprocessor</span>
+
+    <span class="n">t</span><span class="o">=</span><span class="n">PyAttrTrait</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="s1">&#39;sChoice&#39;</span><span class="p">,</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="n">choice</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="s1">&#39;bb&#39;</span><span class="p">,</span><span class="s1">&#39;cc&#39;</span><span class="p">],</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;string choice with validation&#39;</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pyderived</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

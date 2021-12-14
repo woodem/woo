@@ -1,0 +1,1025 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.pack &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.paraviewscript" href="woo.paraviewscript.html" />
+    <link rel="prev" title="woo.objectlibrary" href="woo.objectlibrary.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.paraviewscript.html" title="woo.paraviewscript"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.objectlibrary.html" title="woo.objectlibrary"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pack</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.pack">
+<span id="woo-pack"></span><h1><a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pack</span></code></a><a class="headerlink" href="#module-woo.pack" title="Permalink to this headline">¶</a></h1>
+<p>Creating packings and filling volumes defined by boundary representation or constructive solid geometry.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Broken links ahead:</p>
+</div>
+<p>For examples, see</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/scripts/test/gts-operators.py">scripts/test/gts-operators.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/scripts/test/gts-random-pack-obb.py">scripts/test/gts-random-pack-obb.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/scripts/test/gts-random-pack.py">scripts/test/gts-random-pack.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/scripts/test/pack-cloud.py">scripts/test/pack-cloud.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/scripts/test/pack-predicates.py">scripts/test/pack-predicates.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/packs/packs.py">examples/packs/packs.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/gts-horse/gts-horse.py">examples/gts-horse/gts-horse.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/WireMatPM/wirepackings.py">examples/WireMatPM/wirepackings.py</a></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.ParticleGenerator_makeCloud">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">ParticleGenerator_makeCloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#ParticleGenerator_makeCloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.ParticleGenerator_makeCloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.ShapePack_fromSimulation">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">ShapePack_fromSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#ShapePack_fromSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.ShapePack_fromSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.SpherePack_fromDem">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">SpherePack_fromDem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#SpherePack_fromDem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.SpherePack_fromDem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.SpherePack_fromSimulation">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">SpherePack_fromSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#SpherePack_fromSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.SpherePack_fromSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset this SpherePack object and initialize it from the current simulation; only spherical particles are taken in account. Periodic boundary conditions are supported, but the hSize matrix must be diagonal. Clumps are supported.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.SpherePack_toDem">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">SpherePack_toDem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Matrix3(1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#SpherePack_toDem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.SpherePack_toDem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append spheres directly to the simulation. In addition calling <a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleContainer.add</span></code></a>,
+this method also appropriately sets periodic cell information of the simulation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">woo</span> <span class="k">import</span> <span class="n">pack</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">=</span><span class="n">pack</span><span class="o">.</span><span class="n">SpherePack</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Create random periodic packing with 20 spheres:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">.</span><span class="n">makeCloud</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">rMean</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">rRelFuzz</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">20</span>
+</pre></div>
+</div>
+<p>Virgin simulation is aperiodic:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">periodic</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Add generated packing to the simulation, rotated by 45° along +z</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">.</span><span class="n">toDem</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span><span class="n">scene</span><span class="o">.</span><span class="n">dem</span><span class="p">,</span><span class="n">rot</span><span class="o">=</span><span class="n">Quaternion</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</span>
+</pre></div>
+</div>
+<p>Periodic properties are transferred to the simulation correctly, including rotation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">periodic</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">size</span>
+<span class="go">Vector3(5,5,5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span>
+<span class="go">Matrix3(3.5355339059327373,-3.5355339059327378,0, 3.5355339059327378,3.5355339059327373,0, 0,0,5)</span>
+</pre></div>
+</div>
+<p>The current state (even if rotated) is taken as mechanically undeformed, i.e. with identity transformation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span>
+<span class="go">Matrix3(1,0,0, 0,1,0, 0,0,1)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rot</strong> (<em>Quaternion/Matrix3</em>) – rotation of the packing, which will be applied on spheres and will be used to set <a class="reference internal" href="woo.core.html#woo.core.Cell.trsf" title="woo.core.Cell.trsf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Cell.trsf</span></code></a> as well.</p></li>
+<li><p><strong>kw</strong> – passed to <a class="reference internal" href="woo.utils.html#woo.utils.sphere" title="woo.utils.sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.sphere</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of body ids added (like <a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleContainer.add</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.SpherePack_toSimulation">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">SpherePack_toSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Matrix3(1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#SpherePack_toSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.SpherePack_toSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for old arguments, which merely calls <code class="xref py py-obj docutils literal notranslate"><span class="pre">SpherePack.toDem</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.filterSpherePack">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">filterSpherePack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spherePack</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#filterSpherePack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.filterSpherePack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using given SpherePack instance, return spheres the satisfy predicate.
+The packing will be recentered to match the predicate and warning is given if the predicate
+is larger than the packing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.gtsSurface2Facets">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">gtsSurface2Facets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shareNodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#gtsSurface2Facets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.gtsSurface2Facets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct facets from given GTS surface. <code class="docutils literal notranslate"><span class="pre">**kw</span></code> is passed to <a class="reference internal" href="woo.dem.html#woo.dem.Facet.make" title="woo.dem.Facet.make"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Facet.make</span></code></a> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Mambrane.make</span></code>, depending on <em>flex</em>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.gtsSurfaceBestFitOBB">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">gtsSurfaceBestFitOBB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#gtsSurfaceBestFitOBB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.gtsSurfaceBestFitOBB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (Vector3 center, Vector3 halfSize, Quaternion orientation) describing
+best-fit oriented bounding box (OBB) for the given surface. See cloudBestFitOBB
+for details.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.hexaNet">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">hexaNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cornerCoord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.04</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.04</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startAtCorner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isSymmetric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#hexaNet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.hexaNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of the particles for a hexagonal wire net in the x-y-plane for the WireMatPM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> – radius of the particle</p></li>
+<li><p><strong>cornerCoord</strong> – coordinates of the lower left corner of the net</p></li>
+<li><p><strong>xLenght</strong> – net length in x-direction</p></li>
+<li><p><strong>yLenght</strong> – net length in y-direction</p></li>
+<li><p><strong>mos</strong> – mesh opening size</p></li>
+<li><p><strong>a</strong> – length of double-twist</p></li>
+<li><p><strong>b</strong> – height of single wire section</p></li>
+<li><p><strong>startAtCorner</strong> – if true the generation starts with a double-twist at the lower left corner</p></li>
+<li><p><strong>isSymmetric</strong> – defines if the net is symmetric with respect to the y-axis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>set of spheres which defines the net (net) and exact dimensions of the net (lx,ly).</p>
+</dd>
+</dl>
+<p>note::
+This packing works for the WireMatPM only. The particles at the corner are always generated first.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.pack.inGtsSurface_py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">inGtsSurface_py</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noPad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inGtsSurface_py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inGtsSurface_py" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class was re-implemented in c++, but should stay here to serve as reference for implementing
+Predicates in pure python code. C++ allows us to play dirty tricks in GTS which are not accessible
+through pygts itself; the performance penalty of pygts comes from fact that if constructs and destructs
+bb tree for the surface at every invocation of gts.Point().is_inside(). That is cached in the c++ code,
+provided that the surface is not manipulated with during lifetime of the object (user’s responsibility).</p>
+<p>—</p>
+<p>Predicate for GTS surfaces. Constructed using an already existing surfaces, which must be closed.</p>
+<blockquote>
+<div><p>import gts
+surf=gts.read(open(‘horse.gts’))
+inGtsSurface(surf)</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Padding is optionally supported by testing 6 points along the axes in the pad distance. This
+must be enabled in the ctor by saying doSlowPad=True. If it is not enabled and pad is not zero,
+warning is issued.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pack.inGtsSurface_py.aabb">
+<span class="sig-name descname"><span class="pre">aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inGtsSurface_py.aabb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inGtsSurface_py.aabb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.pack.inSpace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">inSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Vector3(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inSpace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicate returning True for any points, with infinite bounding box.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pack.inSpace.aabb">
+<span class="sig-name descname"><span class="pre">aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inSpace.aabb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inSpace.aabb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pack.inSpace.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inSpace.center"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inSpace.center" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pack.inSpace.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#inSpace.dim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.inSpace.dim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.makeBandFeedPack">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">makeBandFeedPack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gravity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excessWd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtSafety</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dontBlock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoizeDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">botLine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftLine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightLine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clumps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnSpherePack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useEnergy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#makeBandFeedPack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.makeBandFeedPack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create dense packing periodic in the +x direction, suitable for use with ConveyorInlet.
+:param useEnergy: use <a class="reference internal" href="woo.utils.html#woo.utils.unbalancedEnergy" title="woo.utils.unbalancedEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.unbalancedEnergy</span></code></a> instead of <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.unbalancedForce</span></code> as stop criterion.
+:param goal: target unbalanced force/energy; if unbalanced energy is used, this value is <strong>multiplied by .2</strong>.
+:param psd: particle size distribution
+:param mat: material for particles
+:param gravity: gravity acceleration (as Vector3)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.makePeriodicFeedPack">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">makePeriodicFeedPack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lenAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dontBlock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnSpherePack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoizeDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clumps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#makePeriodicFeedPack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.makePeriodicFeedPack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.randomDensePack">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">randomDensePack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cropLayers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rRelFuzz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spheresInCell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoizeDb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useOBB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoDbg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#randomDensePack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.randomDensePack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator of random dense packing with given geometry properties, using TriaxialTest (aperiodic)
+or PeriIsoCompressor (periodic). The periodicity depens on whether the spheresInCell parameter is given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicate</strong> – solid-defining predicate for which we generate packing</p></li>
+<li><p><strong>spheresInCell</strong> – if given, the packing will be periodic, with given number of spheres in the periodic cell.</p></li>
+<li><p><strong>radius</strong> – mean radius of spheres</p></li>
+<li><p><strong>rRelFuzz</strong> – relative fuzz of the radius – e.g. radius=10, rRelFuzz=.2, then spheres will have radii 10 ± (10*.2)).
+0 by default, meaning all spheres will have exactly the same radius.</p></li>
+<li><p><strong>cropLayers</strong> – (aperiodic only) how many layers of spheres will be added to the computed dimension of the box so that there no
+(or not so much, at least) boundary effects at the boundaries of the predicate.</p></li>
+<li><p><strong>dim</strong> – dimension of the packing, to override dimensions of the predicate (if it is infinite, for instance)</p></li>
+<li><p><strong>memoizeDb</strong> – name of sqlite database (existent or nonexistent) to find an already generated packing or to store
+the packing that will be generated, if not found (the technique of caching results of expensive computations
+is known as memoization). Fuzzy matching is used to select suitable candidate – packing will be scaled, rRelFuzz
+and dimensions compared. Packing that are too small are dictarded. From the remaining candidate, the one with the
+least number spheres will be loaded and returned.</p></li>
+<li><p><strong>useOBB</strong> – effective only if a inGtsSurface predicate is given. If true (default), oriented bounding box will be
+computed first; it can reduce substantially number of spheres for the triaxial compression (like 10× depending on
+how much asymmetric the body is), see scripts/test/gts-triax-pack-obb.py.</p></li>
+<li><p><strong>memoDbg</strong> – show packigns that are considered and reasons why they are rejected/accepted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SpherePack object with spheres, filtered by the predicate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.randomDensePack2">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">randomDensePack2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approxLoosePoro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoizeDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#randomDensePack2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.randomDensePack2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dense arrangement of particles clipped by predicate. Particle are losely generated in cuboid volume of sufficient dimensions; the cuboid might be made smaller if <em>maxNum</em> were significantly exceeded, and tiled into the predicate volume afterwards.</p>
+<p>The algorithm computes initial (loose) volume from predicate bounding box using <em>approxLoosePoro</em>, and fills periodic cell of that size and aspect ratio (or of a part of it, if <em>maxNum</em> would be significantly exceeded) with generated particles. Isotropic compression (via <a class="reference internal" href="woo.dem.html#woo.dem.PeriIsoCompressor" title="woo.dem.PeriIsoCompressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.PeriIsoCompressor</span></code></a>) is subsequently applied with a predefined material (young 10MPa, no friction) down to 100MPa (and stabilization) and then the sample is unloaded to 1MPa and stabilized (those values are currently hard-coded). The resulting packing is tiled (if smaller than predicate), clipped by the predicate and returned as a <a class="reference internal" href="woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ShapePack</span></code></a> object (geometry only, no material data).</p>
+<p>The packing is not completely overlap-free, thus using options like <a class="reference internal" href="woo.dem.html#woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.iniEqlb" title="woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.iniEqlb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_FrictPhys_IdealElPl.iniEqlb</span></code></a> might be useful, depending on the stiffness used in the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicate</strong> (<em>woo.pack.Predicate</em>) – volume definition</p></li>
+<li><p><strong>generator</strong> (<a class="reference internal" href="woo.dem.html#woo.dem.ParticleGenerator" title="woo.dem.ParticleGenerator"><em>woo.dem.ParticleGenerator</em></a>) – particle definition</p></li>
+<li><p><strong>settle</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – relative final volume of dense packing, relative to the loose packing used for generation; usually not necessary to adjust for usual particles, but might have to be made smaller is the initial packing is very loose (significantly elongated particles or clumps and similar)</p></li>
+<li><p><strong>maxNum</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum number of initial particle; if the number of particles for the initial volume were higher, the predicate volume will be split into smaller periodic cells and the packing will be simply repeated (tiled) to cover the entire predicate volume afterwards.</p></li>
+<li><p><strong>approxLoosePoro</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – estimate of loose (random) packing proosity for given particles, used for estimating number of particles. <strong>This number is NOT related to the resulting porosity,</strong>, it only has effect on how the predicate volume is partitioned, and thus does not need to be set in most cases.</p></li>
+<li><p><strong>memoizeDir</strong> – path where memoized packings (named as hashed parameters, plus the <cite>.randomdense</cite> extension) are stored; if None, returned packings are not memoized. If memoized result is found, it is returned immediately, instead of running (often costly) simulation of compaction.</p></li>
+<li><p><strong>debug</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if True, returns <a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene</span></code></a> used for compaction, which can be inspected (instead of the usual <a class="reference internal" href="woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ShapePack</span></code></a> with dense packing)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ShapePack</span></code></a>, unless <em>debug</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, in which case a <a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene</span></code></a> is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.randomLoosePsd">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">randomLoosePsd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxAttempts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clumps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnSpherePack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#randomLoosePsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.randomLoosePsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return loose packing based on given PSD.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.randomPeriPack">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">randomPeriPack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rRelFuzz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoizeDb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#randomPeriPack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.randomPeriPack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate periodic dense packing.</p>
+<p>A cell of initSize is stuffed with as many spheres as possible, then we run periodic compression with PeriIsoCompressor, just like with randomDensePack.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> – mean sphere radius</p></li>
+<li><p><strong>rRelFuzz</strong> – relative fuzz of sphere radius (equal distribution); see the same param for randomDensePack.</p></li>
+<li><p><strong>initSize</strong> – initial size of the periodic cell.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SpherePack object, which also contains periodicity information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.regularHexa">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">regularHexa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retSpherePack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#regularHexa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.regularHexa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return set of spheres in regular hexagonal grid, clipped inside solid given by predicate.
+Created spheres will have given radius and will be separated by gap space.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.regularOrtho">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">regularOrtho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retSpherePack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#regularOrtho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.regularOrtho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return set of spheres in regular orthogonal grid, clipped inside solid given by predicate.
+Created spheres will have given radius and will be separated by gap space.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.revolutionSurfaceMeridians">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">revolutionSurfaceMeridians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sects</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node=&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x2bc5f60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#revolutionSurfaceMeridians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.revolutionSurfaceMeridians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Revolution surface given sequences of 2d points and sequence of corresponding angles,
+returning sequences of 3d points representing meridian sections of the revolution surface.
+The 2d sections are turned around z-axis, but they can be transformed
+using the origin and orientation arguments to give arbitrary orientation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pack.sweptPolylines2gtsSurface">
+<span class="sig-prename descclassname"><span class="pre">woo.pack.</span></span><span class="sig-name descname"><span class="pre">sweptPolylines2gtsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localCoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capStart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pack.html#sweptPolylines2gtsSurface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pack.sweptPolylines2gtsSurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create swept suface (as GTS triangulation) given same-length sequences of points (as 3-tuples). If <em>localCoords</em> is given, it must be a <a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Node</span></code></a> instance and will be used to convert local coordinates in <em>pts</em> to global coordinates.</p>
+<p>If threshold is given (&gt;0), then</p>
+<ul class="simple">
+<li><p>degenerate faces (with edges shorter than threshold) will not be created</p></li>
+<li><p>gts.Surface().cleanup(threshold) will be called before returning, which merges vertices mutually closer than threshold. In case your pts are closed (last point concident with the first one) this will the surface strip of triangles. If you additionally have capStart==True and capEnd==True, the surface will be closed.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>capStart and capEnd make the most naive polygon triangulation (diagonals) and will perhaps fail for non-convex sections.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>the algorithm connects points sequentially; if two polylines are mutually rotated or have inverse sense, the algorithm will not detect it and connect them regardless in their given order.</p>
+</div>
+</dd></dl>
+
+<section id="woo-packpredicates">
+<h2><a class="reference internal" href="#module-woo._packPredicates" title="woo._packPredicates"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packPredicates</span></code></a><a class="headerlink" href="#woo-packpredicates" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is imported into the <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a> module automatically; refer to its objects through <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a>.</p>
+</div>
+<span class="target" id="module-woo._packPredicates"></span><p>Spatial predicates for volumes (defined analytically or by triangulation).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.Predicate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">Predicate</span></span><a class="headerlink" href="#woo._packPredicates.Predicate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="woo._packPredicates.Predicate.aabb">
+<span class="sig-name descname"><span class="pre">aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packPredicates.Predicate.aabb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packPredicates.Predicate.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packPredicates.Predicate.center" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packPredicates.Predicate.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packPredicates.Predicate.dim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateBoolean">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">PredicateBoolean</span></span><a class="headerlink" href="#woo._packPredicates.PredicateBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean operation on 2 predicates (abstract class)</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateBoolean.A">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">A</span></span><a class="headerlink" href="#woo._packPredicates.PredicateBoolean.A" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateBoolean.B">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">B</span></span><a class="headerlink" href="#woo._packPredicates.PredicateBoolean.B" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateDifference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">PredicateDifference</span></span><a class="headerlink" href="#woo._packPredicates.PredicateDifference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Difference (conjunction with negative predicate) of 2 predicates. A point has to be inside the first and outside the second predicate. Can be constructed using the <code class="docutils literal notranslate"><span class="pre">-</span></code> operator on predicates: <code class="docutils literal notranslate"><span class="pre">pred1</span> <span class="pre">-</span> <span class="pre">pred2</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateIntersection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">PredicateIntersection</span></span><a class="headerlink" href="#woo._packPredicates.PredicateIntersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intersection (conjunction) of 2 predicates. A point has to be inside both predicates. Can be constructed using the <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> operator on predicates: <code class="docutils literal notranslate"><span class="pre">pred1</span> <span class="pre">&amp;</span> <span class="pre">pred2</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateSymmetricDifference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">PredicateSymmetricDifference</span></span><a class="headerlink" href="#woo._packPredicates.PredicateSymmetricDifference" title="Permalink to this definition">¶</a></dt>
+<dd><p>SymmetricDifference (exclusive disjunction) of 2 predicates. A point has to be in exactly one predicate of the two. Can be constructed using the <code class="docutils literal notranslate"><span class="pre">^</span></code> operator on predicates: <code class="docutils literal notranslate"><span class="pre">pred1</span> <span class="pre">^</span> <span class="pre">pred2</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.PredicateUnion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">PredicateUnion</span></span><a class="headerlink" href="#woo._packPredicates.PredicateUnion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Union (non-exclusive disjunction) of 2 predicates. A point has to be inside any of the two predicates to be inside. Can be constructed using the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator on predicates: <code class="docutils literal notranslate"><span class="pre">pred1</span> <span class="pre">|</span> <span class="pre">pred2</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inAlignedBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inAlignedBox</span></span><a class="headerlink" href="#woo._packPredicates.inAlignedBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axis-aligned box predicate</p>
+<p>Ctor taking minumum and maximum points of the box.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inAlignedHalfspace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inAlignedHalfspace</span></span><a class="headerlink" href="#woo._packPredicates.inAlignedHalfspace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Half-space given by coordinate at some axis.</p>
+<p>Ctor taking axis (0,1,2 for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span> respectively), the coordinate along that axis, and whether the <em>lower</em> half (or the upper half, if <em>lower</em> is false) is considered.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inAxisRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inAxisRange</span></span><a class="headerlink" href="#woo._packPredicates.inAxisRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Range of coordinate along some axis, effectively defining two axis-aligned enclosing planes.</p>
+<p>Ctor taking axis (0,1,2 for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span> respectively), and coordinate range along that axis.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inCylSector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inCylSector</span></span><a class="headerlink" href="#woo._packPredicates.inCylSector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sector of an arbitrarily oriented cylinder in 3d, limiting cylindrical coordinates <span class="math notranslate nohighlight">\(\rho\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(z\)</span>; all coordinate limits are optional.</p>
+<p>Ctor taking position and orientation of the local system, and aligned box in local coordinates.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inCylinder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inCylinder</span></span><a class="headerlink" href="#woo._packPredicates.inCylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cylinder predicate</p>
+<p>Ctor taking centers of the lateral walls and radius.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inEllipsoid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inEllipsoid</span></span><a class="headerlink" href="#woo._packPredicates.inEllipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ellipsoid predicate</p>
+<p>Ctor taking center of the ellipsoid and its 3 radii.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inGtsSurface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inGtsSurface</span></span><a class="headerlink" href="#woo._packPredicates.inGtsSurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>GTS surface predicate</p>
+<p>Ctor taking a gts.Surface() instance, which must not be modified during instance lifetime.
+The optional noPad can disable padding (if set to True), which speeds up calls several times.
+Note: padding checks inclusion of 6 points along +- cardinal directions in the pad distance from given point, which is not exact.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packPredicates.inGtsSurface.surf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">surf</span></span><a class="headerlink" href="#woo._packPredicates.inGtsSurface.surf" title="Permalink to this definition">¶</a></dt>
+<dd><p>The associated gts.Surface object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inHyperboloid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inHyperboloid</span></span><a class="headerlink" href="#woo._packPredicates.inHyperboloid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hyperboloid predicate</p>
+<p>Ctor taking centers of the lateral walls, radius at bases and skirt (middle radius).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inOrientedBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inOrientedBox</span></span><a class="headerlink" href="#woo._packPredicates.inOrientedBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arbitrarily oriented box specified as local coordinates (pos,ori) and aligned box in those local coordinates.</p>
+<p>Ctor taking position and orientation of the local system, and aligned box in local coordinates.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inParallelepiped">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inParallelepiped</span></span><a class="headerlink" href="#woo._packPredicates.inParallelepiped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parallelepiped predicate</p>
+<p>Ctor taking four points: <code class="docutils literal notranslate"><span class="pre">o</span></code> (for origin) and then <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code> which define endpoints of 3 respective edges from <code class="docutils literal notranslate"><span class="pre">o</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.inSphere">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">inSphere</span></span><a class="headerlink" href="#woo._packPredicates.inSphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sphere predicate.</p>
+<p>Ctor taking center and radius</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packPredicates.notInNotch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packPredicates.</span></span><span class="sig-name descname"><span class="pre">notInNotch</span></span><a class="headerlink" href="#woo._packPredicates.notInNotch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outside of infinite, rectangle-shaped notch predicate</p>
+<p>Ctor taking point in the symmetry plane, vector pointing along the edge, plane normal and aperture size.
+The side inside the notch is edge×normal.
+Normal is made perpendicular to the edge.
+All vectors are normalized at construction time.</p>
+</dd></dl>
+
+</section>
+<section id="woo-packspheres">
+<h2><a class="reference internal" href="#module-woo._packSpheres" title="woo._packSpheres"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packSpheres</span></code></a><a class="headerlink" href="#woo-packspheres" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is imported into the <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a> module automatically; refer to its objects through <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a>.</p>
+</div>
+<span class="target" id="module-woo._packSpheres"></span><p>Creation, manipulation, IO for generic sphere packings.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packSpheres.</span></span><span class="sig-name descname"><span class="pre">SpherePack</span></span><a class="headerlink" href="#woo._packSpheres.SpherePack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of spheres represented as centers and radii. This class is returned by <a class="reference internal" href="#woo.pack.randomDensePack" title="woo.pack.randomDensePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack.randomDensePack</span></code></a>, <a class="reference internal" href="#woo.pack.randomPeriPack" title="woo.pack.randomPeriPack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack.randomPeriPack</span></code></a> and others. The object supports iteration over spheres, as in</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">=</span><span class="n">SpherePack</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">center</span><span class="p">,</span><span class="n">radius</span> <span class="ow">in</span> <span class="n">sp</span><span class="p">:</span> <span class="nb">print</span> <span class="n">center</span><span class="p">,</span><span class="n">radius</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">sphere</span> <span class="ow">in</span> <span class="n">sp</span><span class="p">:</span> <span class="nb">print</span> <span class="n">sphere</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sphere</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>   <span class="c1">## same, but without unpacking the tuple automatically</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">sp</span><span class="p">)):</span> <span class="nb">print</span> <span class="n">sp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">sp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>   <span class="c1">## same, but accessing spheres by index</span>
+</pre></div>
+</div>
+<p>Clumps are supported, by using the <em>clumpId</em> parameter to <a class="reference internal" href="#woo._packSpheres.SpherePack.add" title="woo._packSpheres.SpherePack.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>.</p>
+<div class="admonition-special-constructors admonition">
+<p class="admonition-title">Special constructors</p>
+<p>Construct from list of <code class="docutils literal notranslate"><span class="pre">[(c1,r1),(c2,r2),…]</span></code>. To convert two same-length lists of <code class="docutils literal notranslate"><span class="pre">centers</span></code> and <code class="docutils literal notranslate"><span class="pre">radii</span></code>, construct with <code class="docutils literal notranslate"><span class="pre">zip(centers,radii)</span></code>.</p>
+</div>
+<p>Empty constructor, optionally taking list [ ((cx,cy,cz),r), … ] for initial data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.aabb">
+<span class="sig-name descname"><span class="pre">aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.aabb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get axis-aligned bounding box coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add single sphere to packing, given center as 3-tuple and radius</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.appliedPsdScaling">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appliedPsdScaling</span></span><a class="headerlink" href="#woo._packSpheres.SpherePack.appliedPsdScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factor between 0 and 1, uniformly applied on all sizes of the PSD.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.canonicalize">
+<span class="sig-name descname"><span class="pre">canonicalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.canonicalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move all sphere’s centers inside <em>cellSize</em>; only works for periodic packings without clumps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.cellFill">
+<span class="sig-name descname"><span class="pre">cellFill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.cellFill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeat the packing (if periodic) so that the results has dim() &gt;= given size. The packing retains periodicity, but changes cellSize. Raises exception for non-periodic packing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.cellRepeat">
+<span class="sig-name descname"><span class="pre">cellRepeat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.cellRepeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeat the packing given number of times in each dimension. Periodicity is retained, cellSize changes. Raises exception for non-periodic packing.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.cellSize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cellSize</span></span><a class="headerlink" href="#woo._packSpheres.SpherePack.cellSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of periodic cell; is Vector3(0,0,0) if not periodic. (Change this property only if you know what you’re doing).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return coordinates of the bounding box center.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dimensions of the packing in terms of aabb().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.filtered">
+<span class="sig-name descname"><span class="pre">filtered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.filtered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return new <a class="reference internal" href="#woo._packSpheres.SpherePack" title="woo._packSpheres.SpherePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpherePack</span></code></a> object, without any spheres which don’t match <em>predicate</em>. Clumps are handled gracefully, i.e. if any of clump’s spheres does not satisfy the predicate, the whole clump is taken away. If <em>recenter</em> is True (and none of the dimensions of the predicate is infinite), the packing will be translated to have center at the same point as the predicate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.fromDem">
+<span class="sig-name descname"><span class="pre">fromDem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.fromDem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.fromList">
+<span class="sig-name descname"><span class="pre">fromList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.fromList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make packing from given list, same format as for constructor. Discards current data.
+Make packing from given list, same format as for constructor. Discards current data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.fromSimulation">
+<span class="sig-name descname"><span class="pre">fromSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.fromSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset this SpherePack object and initialize it from the current simulation; only spherical particles are taken in account. Periodic boundary conditions are supported, but the hSize matrix must be diagonal. Clumps are supported.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.getClumps">
+<span class="sig-name descname"><span class="pre">getClumps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.getClumps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return lists of sphere ids sorted by clumps they belong to. The return value is (standalones,[clump1,clump2,…]), where each item is list of id’s of spheres.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.hasClumps">
+<span class="sig-name descname"><span class="pre">hasClumps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.hasClumps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this object contains clumps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load packing from external text file (current data will be discarded).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.loadTxt">
+<span class="sig-name descname"><span class="pre">loadTxt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.loadTxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identical to <a class="reference internal" href="#woo._packSpheres.SpherePack.load" title="woo._packSpheres.SpherePack.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>, with newer name for ShapePack compatibility.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.makeCloud">
+<span class="sig-name descname"><span class="pre">makeCloud</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.makeCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create random loose packing enclosed in a parallelepiped.
+Sphere radius distribution can be specified using one of the following ways:</p>
+<ol class="arabic simple">
+<li><p><em>rMean</em>, <em>rRelFuzz</em> and <em>num</em> gives uniform radius distribution in <em>rMean</em> (1 ± <em>rRelFuzz</em> ). Less than <em>num</em> spheres can be generated if it is too high.</p></li>
+<li><p><em>rRelFuzz</em>, <em>num</em> and (optional) <em>porosity</em>, which estimates mean radius so that <em>porosity</em> is attained at the end.  <em>rMean</em> must be less than 0 (default). <em>porosity</em> is only an initial guess for the generation algorithm, which will retry with higher porosity until the prescibed <em>num</em> is obtained.</p></li>
+<li><p><em>psdSizes</em> and <em>psdCumm</em>, two arrays specifying points of the <a class="reference external" href="http://en.wikipedia.org/wiki/Particle_size_distribution">particle size distribution</a> function. As many spheres as possible are generated.</p></li>
+<li><p><em>psdSizes</em>, <em>psdCumm</em>, <em>num</em>, and (optional) <em>porosity</em>, like above but if <em>num</em> is not obtained, <em>psdSizes</em> will be scaled down uniformly, until <em>num</em> is obtained (see <a class="reference internal" href="#woo._packSpheres.SpherePack.appliedPsdScaling" title="woo._packSpheres.SpherePack.appliedPsdScaling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appliedPsdScaling</span></code></a>).</p></li>
+</ol>
+<p>By default (with <code class="docutils literal notranslate"><span class="pre">distributeMass==False</span></code>), the distribution is applied to particle radii. The usual sense of “particle size distribution” is the distribution of <em>mass fraction</em> (rather than particle count); this can be achieved with <code class="docutils literal notranslate"><span class="pre">distributeMass=True</span></code>.</p>
+<p>If <em>num</em> is defined, then sizes generation is deterministic, giving the best fit of target distribution. It enables spheres placement in descending size order, thus giving lower porosity than the random generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minCorner</strong> (<em>Vector3</em>) – lower corner of an axis-aligned box</p></li>
+<li><p><strong>maxCorner</strong> (<em>Vector3</em>) – upper corner of an axis-aligned box</p></li>
+<li><p><strong>hSize</strong> (<em>Matrix3</em>) – base vectors of a generalized box (arbitrary parallelepiped, typically <a class="reference internal" href="woo.core.html#woo.core.Cell.hSize" title="woo.core.Cell.hSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Cell.hSize</span></code></a>), superseeds minCorner and maxCorner if defined. For periodic boundaries only.</p></li>
+<li><p><strong>rMean</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – mean radius or spheres</p></li>
+<li><p><strong>rRelFuzz</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – dispersion of radius relative to rMean</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of spheres to be generated. If negavite (default), generate as many as possible with stochastic sizes, ending after a fixed number of tries to place the sphere in space, else generate exactly <em>num</em> spheres with deterministic size distribution.</p></li>
+<li><p><strong>periodic</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – whether the packing to be generated should be periodic</p></li>
+<li><p><strong>porosity</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – initial guess for the iterative generation procedure (if <em>num</em>&gt;1). The algorithm will be retrying until the number of generated spheres is <em>num</em>. The first iteration tries with the provided porosity, but next iterations increase it if necessary (hence an initialy high porosity can speed-up the algorithm). If <em>psdSizes</em> is not defined, <em>rRelFuzz</em> (<span class="math notranslate nohighlight">\(z\)</span>) and <em>num</em> (<span class="math notranslate nohighlight">\(N\)</span>) are used so that the porosity given (<span class="math notranslate nohighlight">\(\rho\)</span>) is approximately achieved at the end of generation, <span class="math notranslate nohighlight">\(r_m=\sqrt[3]{\frac{V(1-\rho)}{\frac{4}{3}\pi(1+z^2)N}}\)</span>. The default is :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>rho`=0.5. The optimal value depends on <em>rRelFuzz</em> or  <em>psdSizes</em>.</p></li>
+<li><p><strong>psdSizes</strong> – sieve sizes (particle diameters) when particle size distribution (PSD) is specified</p></li>
+<li><p><strong>psdCumm</strong> – cummulative fractions of particle sizes given by <em>psdSizes</em>; must be the same length as <em>psdSizes</em> and should be non-decreasing</p></li>
+<li><p><strong>distributeMass</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, given distribution will be used to distribute sphere’s mass rather than radius of them.</p></li>
+<li><p><strong>seed</strong> – number used to initialize the random number generator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of created spheres, which can be lower than <em>num</em> depending on the method used.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.makeOverlapFree">
+<span class="sig-name descname"><span class="pre">makeOverlapFree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.makeOverlapFree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale by 1+maxRelOverlap(), without changing radii.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.maxRelOverlap">
+<span class="sig-name descname"><span class="pre">maxRelOverlap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.maxRelOverlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum relative overlap of particles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.psd">
+<span class="sig-name descname"><span class="pre">psd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.psd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference external" href="http://en.wikipedia.org/wiki/Particle_size_distribution">particle size distribution</a> of the packing.
+:param int bins: number of bins between minimum and maximum diameter
+:param mass: Compute relative mass rather than relative particle count for each bin. Corresponds to <code class="xref py py-obj docutils literal notranslate"><span class="pre">distributeMass</span> <span class="pre">parameter</span> <span class="pre">for</span> <span class="pre">makeCloud</span></code>.
+:returns: tuple of <code class="docutils literal notranslate"><span class="pre">(cumm,edges)</span></code>, where <code class="docutils literal notranslate"><span class="pre">cumm</span></code> are cummulative fractions for respective diameters  and <code class="docutils literal notranslate"><span class="pre">edges</span></code> are those diameter values. Dimension of both arrays is equal to <code class="docutils literal notranslate"><span class="pre">bins+1</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.relDensity">
+<span class="sig-name descname"><span class="pre">relDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.relDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative packing density, measured as sum of spheres’ volumes / aabb volume.
+(Sphere overlaps are ignored.)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-inialize this object (clear all spheres and reset periodic cell size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate all spheres around packing center (in terms of aabb()), given axis and angle of the rotation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save packing to external text file (will be overwritten).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.saveTxt">
+<span class="sig-name descname"><span class="pre">saveTxt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.saveTxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identical to <code class="xref py py-obj docutils literal notranslate"><span class="pre">save:</span></code>, with newer name for ShapePack compatibility.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the packing around its center (in terms of aabb()) by given factor (may be negative). If periodic, scale around origin. If <em>keepRadius</em> is True, radii are not scaled, only coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.solidVolume">
+<span class="sig-name descname"><span class="pre">solidVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.solidVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#woo._packSpheres.SpherePack.sphereVol" title="woo._packSpheres.SpherePack.sphereVol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphereVol</span></code></a>, for forward compatibility with <a class="reference internal" href="woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ShapePack</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.sphereVol">
+<span class="sig-name descname"><span class="pre">sphereVol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.sphereVol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Summary volume of spheres, disregarding any overlaps (<span class="math notranslate nohighlight">\(\frac{4}{3}\pi\sum r_i^3\)</span>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.toCcRr">
+<span class="sig-name descname"><span class="pre">toCcRr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.toCcRr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return packing data as ([c,c,…],[r,r,…]). Raises exception if there are clumps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.toDem">
+<span class="sig-name descname"><span class="pre">toDem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Matrix3(1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.toDem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append spheres directly to the simulation. In addition calling <a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleContainer.add</span></code></a>,
+this method also appropriately sets periodic cell information of the simulation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">woo</span> <span class="k">import</span> <span class="n">pack</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">=</span><span class="n">pack</span><span class="o">.</span><span class="n">SpherePack</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Create random periodic packing with 20 spheres:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">.</span><span class="n">makeCloud</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">rMean</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">rRelFuzz</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">20</span>
+</pre></div>
+</div>
+<p>Virgin simulation is aperiodic:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">periodic</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Add generated packing to the simulation, rotated by 45° along +z</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span><span class="o">.</span><span class="n">toDem</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span><span class="n">scene</span><span class="o">.</span><span class="n">dem</span><span class="p">,</span><span class="n">rot</span><span class="o">=</span><span class="n">Quaternion</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</span>
+</pre></div>
+</div>
+<p>Periodic properties are transferred to the simulation correctly, including rotation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">periodic</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">size</span>
+<span class="go">Vector3(5,5,5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span>
+<span class="go">Matrix3(3.5355339059327373,-3.5355339059327378,0, 3.5355339059327378,3.5355339059327373,0, 0,0,5)</span>
+</pre></div>
+</div>
+<p>The current state (even if rotated) is taken as mechanically undeformed, i.e. with identity transformation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scene</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span>
+<span class="go">Matrix3(1,0,0, 0,1,0, 0,0,1)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rot</strong> (<em>Quaternion/Matrix3</em>) – rotation of the packing, which will be applied on spheres and will be used to set <a class="reference internal" href="woo.core.html#woo.core.Cell.trsf" title="woo.core.Cell.trsf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Cell.trsf</span></code></a> as well.</p></li>
+<li><p><strong>kw</strong> – passed to <a class="reference internal" href="woo.utils.html#woo.utils.sphere" title="woo.utils.sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.sphere</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of body ids added (like <a class="reference internal" href="woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleContainer.add</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.toList">
+<span class="sig-name descname"><span class="pre">toList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.toList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return packing data as [(c,r),(c,r),…].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.toSimulation">
+<span class="sig-name descname"><span class="pre">toSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Matrix3(1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.toSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for old arguments, which merely calls <a class="reference internal" href="#woo._packSpheres.SpherePack.toDem" title="woo._packSpheres.SpherePack.toDem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpherePack.toDem</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.toSimulation_fast">
+<span class="sig-name descname"><span class="pre">toSimulation_fast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.toSimulation_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create spheres from this pack in the simulation; unlike <a class="reference internal" href="#woo._packSpheres.SpherePack.toSimulation" title="woo._packSpheres.SpherePack.toSimulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpherePack.toSimulation</span></code></a>, this method is implemented in c++ (hence rather fast) but lacks some flexibility</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packSpheres.SpherePack.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate all spheres by given vector.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePack.userData">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">userData</span></span><a class="headerlink" href="#woo._packSpheres.SpherePack.userData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arbitrary string (not cotaining newlines) which will be saved and loaded with this object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._packSpheres.SpherePackIterator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._packSpheres.</span></span><span class="sig-name descname"><span class="pre">SpherePackIterator</span></span><a class="headerlink" href="#woo._packSpheres.SpherePackIterator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="woo-packobb">
+<h2><a class="reference internal" href="#module-woo._packObb" title="woo._packObb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packObb</span></code></a><a class="headerlink" href="#woo-packobb" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is imported into the <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a> module automatically; refer to its objects through <a class="reference internal" href="#module-woo.pack" title="woo.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pack</span></code></a>.</p>
+</div>
+<span class="target" id="module-woo._packObb"></span><p>Computation of oriented bounding box for cloud of points.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._packObb.cloudBestFitOBB">
+<span class="sig-prename descclassname"><span class="pre">woo._packObb.</span></span><span class="sig-name descname"><span class="pre">cloudBestFitOBB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#woo._packObb.cloudBestFitOBB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (Vector3 center, Vector3 halfSize, Quaternion orientation) of
+best-fit oriented bounding-box for given tuple of points
+(uses brute-force velome minimization, do not use for very large clouds).</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pack</span></code></a><ul>
+<li><a class="reference internal" href="#woo-packpredicates"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packPredicates</span></code></a></li>
+<li><a class="reference internal" href="#woo-packspheres"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packSpheres</span></code></a></li>
+<li><a class="reference internal" href="#woo-packobb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._packObb</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.objectlibrary.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.objectlibrary</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.paraviewscript.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.paraviewscript</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.pack.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.paraviewscript.html" title="woo.paraviewscript"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.objectlibrary.html" title="woo.objectlibrary"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pack</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

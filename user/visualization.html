@@ -1,0 +1,449 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Visualization &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Flow analysis" href="flow-analysis.html" />
+    <link rel="prev" title="Postprocessing" href="postprocess.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="flow-analysis.html" title="Flow analysis"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="postprocess.html" title="Postprocessing"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Visualization</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="visualization">
+<h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
+<section id="integrated-3d-view">
+<span id="vis-opengl"></span><h2>Integrated 3d view<a class="headerlink" href="#integrated-3d-view" title="Permalink to this headline">¶</a></h2>
+<p>The 3d view is opened by the “3D” button in the controller, or by calling <code class="docutils literal notranslate"><span class="pre">woo.qt.View()</span></code>. It is based on OpenGL and rather flexible.</p>
+<img alt="../_images/controller-3d.png" src="../_images/controller-3d.png" />
+<p>Mouse can be used to manipulate the camera:</p>
+<ul class="simple">
+<li><p><em>left drag</em> rotates</p></li>
+<li><p><em>middle drag</em> (wheel) moves</p></li>
+<li><p><em>right drag</em> (wheel) zooms</p></li>
+<li><p><em>double left-click</em> sets view angle to the closes multiple of 45°</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">Alt</kbd> + <em>left-click</em> selects object (and shows distance to the previous selection)</p></li>
+</ul>
+<p>Many keyboard shortcuts are defined of which the most important ones are:</p>
+<ul class="simple">
+<li><p><kbd class="kbd docutils literal notranslate">h</kbd> shows help;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">t</kbd> toggles perspective/orthographic camera type;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">c</kbd> centers the view around whole scene; <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>-<kbd class="kbd docutils literal notranslate">c</kbd></kbd> centers the view intelligently around that part of the scene where most particles are;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">q</kbd> (as quality) cycles the FPS (frames per second value): 2, 5, 10, 15. <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>-<kbd class="kbd docutils literal notranslate">Q</kbd></kbd> toggles fast display (useful with many particles)</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">a</kbd> toggles display of axes;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">g</kbd> displays axes grids (cycles between all possible combinations; <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>-<kbd class="kbd docutils literal notranslate">G</kbd></kbd> toggles all on/off)</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">x</kbd>, <kbd class="kbd docutils literal notranslate">X</kbd>, <kbd class="kbd docutils literal notranslate">y</kbd>, <kbd class="kbd docutils literal notranslate">Y</kbd>, <kbd class="kbd docutils literal notranslate">z</kbd>, <kbd class="kbd docutils literal notranslate">Z</kbd>: make selected axes point upwars and align the other two, i.e. show respectively the <code class="docutils literal notranslate"><span class="pre">zx</span></code>, <code class="docutils literal notranslate"><span class="pre">yx</span></code>, <code class="docutils literal notranslate"><span class="pre">xy</span></code>, <code class="docutils literal notranslate"><span class="pre">zy</span></code>, <code class="docutils literal notranslate"><span class="pre">yz</span></code>, <code class="docutils literal notranslate"><span class="pre">xz</span></code> plane;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">s</kbd> toggles displacement/rotations scaling (see <a class="reference internal" href="../woo.gl.html#woo.gl.Renderer.scaleOn" title="woo.gl.Renderer.scaleOn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer.scaleOn</span></code></a>); <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>-<kbd class="kbd docutils literal notranslate">S</kbd></kbd> sets reference positions to current ones;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">d</kbd> selects which time information is displayed (cycles through all combinations);</p></li>
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>-<kbd class="kbd docutils literal notranslate">c</kbd></kbd> copies the view to clipboard, as raster image (can be pasted to documents/graphics editors).</p></li>
+</ul>
+<p>Colorscales can be manipulated using mouse:</p>
+<ul class="simple">
+<li><p><em>wheel</em> changes size</p></li>
+<li><p><em>right-draw</em> moves, and toggles portrait/landscape when touching the edge</p></li>
+<li><p><em>left-click</em> resets the range an sets to auto-adjust</p></li>
+</ul>
+<p>A movie from the 3d view can be made by checking the <span class="menuselection">Controller ‣ Video ‣ Take snapshots</span> first, and, when sufficient number of snapshots will have been save, clicking <span class="menuselection">Controller ‣ Video ‣ Make video</span>.</p>
+<section id="display-control">
+<h3>Display control<a class="headerlink" href="#display-control" title="Permalink to this headline">¶</a></h3>
+<p>The <em>Display</em> tab of the controller configures the 3D display. Woo dispatches OpenGL display of all objects to objects (always called <code class="docutils literal notranslate"><span class="pre">Gl1_*</span></code>) responsible for actual drawing, which is also how this dialogue is organized.</p>
+<img alt="../_images/controller-display.png" src="../_images/controller-display.png" />
+<p><a class="reference internal" href="../woo.gl.html#woo.gl.Renderer" title="woo.gl.Renderer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Renderer</span></code></a> configures global view properties – initial orientation, displacement scaling, lighting, clipping, and which general items are displayed. Useful options are <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer.engines&gt;</span></code> for showing/hiding engines which render something (typically inlets/outlets) and <a class="reference internal" href="../woo.gl.html#woo.gl.Renderer.ghosts" title="woo.gl.Renderer.ghosts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer.ghosts</span></code></a> for repeating particles in periodic boundary conditions.</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_DemField</span></code> (shown on the image) is reponsible for displaying contents of DEM simulations (<a class="reference internal" href="../woo.dem.html#woo.dem.DemField" title="woo.dem.DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField</span></code></a>) – particles, contacts between particles and so on.</p>
+<section id="particle-coloring">
+<h4>Particle coloring<a class="headerlink" href="#particle-coloring" title="Permalink to this headline">¶</a></h4>
+<p>When displaying the DEM scene, particles matching <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.shape" title="woo.gl.Gl1_DemField.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a> attribute are colored using the method specified with <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.colorBy" title="woo.gl.Gl1_DemField.colorBy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorBy</span></code></a>. Colormapping is controlled via the <code class="xref py py-obj docutils literal notranslate"><span class="pre">colorRange</span></code> object, which is automatically switched based on <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.colorBy" title="woo.gl.Gl1_DemField.colorBy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorBy</span></code></a>.</p>
+<p>Particles not matching <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.shape" title="woo.gl.Gl1_DemField.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a>, or those which cannot be color-mapped using <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.colorBy" title="woo.gl.Gl1_DemField.colorBy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorBy</span></code></a> (e.g. non-spherical particle by radius) will fall back to <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape2</span></code> (which can be turned off) and colored using <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.colorBy2" title="woo.gl.Gl1_DemField.colorBy2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorBy2</span></code></a> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">colorScale2</span></code>.</p>
+<p>Active color-mapping scale will be shown in the 3d view automatically, and can also be manipulated by mouse (resetting via right-click and so on).</p>
+<p>Once particle’s color is determined, particle’s <a class="reference internal" href="../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a> is dispatched to <a class="reference internal" href="../woo.gl.html#woo.gl.GlShapeFunctor" title="woo.gl.GlShapeFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_*</span></code></a> objects (e.g. <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_Sphere" title="woo.gl.Gl1_Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_Sphere</span></code></a>, <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_Facet" title="woo.gl.Gl1_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_Facet</span></code></a>, …), which control shape-specific options, such as display quality, forcing wire display and so on. Those are again parametrizable from the <em>Display</em> tab. These object can also be saved along with the simulation (by stuffing them to <a class="reference internal" href="../woo.core.html#woo.core.Scene.any" title="woo.core.Scene.any"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.any</span></code></a>, for instance); they are (currently) static, so loading then will overwrite current values.</p>
+</section>
+<section id="quality">
+<h4>Quality<a class="headerlink" href="#quality" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="../woo.gl.html#woo.gl.Renderer.fast" title="woo.gl.Renderer.fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer.fast</span></code></a> (toggled via <kbd class="kbd docutils literal notranslate">Q</kbd> in the 3d view) switches between normal, fast and “unfocused” fast display (when the 3d windows is not focused). Fast display is useful for huge simulations where regular rendering would be demanding on the 3d hardware, and also useless for just seeing what is happening.</p>
+</section>
+<section id="displacement-scaling">
+<h4>Displacement scaling<a class="headerlink" href="#displacement-scaling" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="../woo.gl.html#woo.gl.Renderer.dispScale" title="woo.gl.Renderer.dispScale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer.dispScale</span></code></a> and <a class="reference internal" href="../woo.gl.html#woo.gl.Renderer.rotScale" title="woo.gl.Renderer.rotScale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotScale</span></code></a> allow for scaling displacements and rotations, which is very useful for situations where movements are vey small compared to particle size, thus regular view only reveals static scene. Scaling can be turned on/off via <kbd class="kbd docutils literal notranslate">s</kbd> from the 3d view, and reference positions are set by pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>-<kbd class="kbd docutils literal notranslate">S</kbd></kbd> (this can be also done from the Display/Renderer tab).</p>
+</section>
+<section id="velocity-forces">
+<h4>Velocity/forces<a class="headerlink" href="#velocity-forces" title="Permalink to this headline">¶</a></h4>
+<p>Velocities, forces (or virtually any other glyphs attached to nodes by the user) are shown by setting <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.glyph" title="woo.gl.Gl1_DemField.glyph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_DemField.glyph</span></code></a> (under <span class="menuselection">Display ‣ Gl1_DemField ‣ Nodes</span>).</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/3d-velocity.png" src="../_images/3d-velocity.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Velocity shown as arrows. The particles are also colored by velocity, therefore there are two colorscaled shown.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="contact-network">
+<h4>Contact network<a class="headerlink" href="#contact-network" title="Permalink to this headline">¶</a></h4>
+<p><span class="menuselection">Display ‣ Gl1_DemField ‣ Contact nodes</span> configures how contacts are displayed. By default, contacts are not displayed at all. <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.cNode" title="woo.gl.Gl1_DemField.cNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cNode</span></code></a> bits can show contacts as lines, show contact-local coordinates, or user-attached <a class="reference internal" href="../woo.core.html#woo.core.NodeVisRep" title="woo.core.NodeVisRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.NodeVisRep</span></code></a> object.</p>
+<p>Contact network, where contacts are shown as cylinder, with radius corresponding to transmitted force, is shown by setting <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.cPhys" title="woo.gl.Gl1_DemField.cPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cPhys</span></code></a>. The rest is configured in the respective functor, i.e. under <span class="menuselection">Display ‣ Gl1_CPhys</span>. Coloring can depend on normal or shear force, and radius of cylinders can be set. To better see contact network, it is often useful to hide particles by unsetting <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.shape" title="woo.gl.Gl1_DemField.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_DemField.shape</span></code></a> and <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_DemField.shape2" title="woo.gl.Gl1_DemField.shape2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_DemField.shape2</span></code></a>, or, with spherical particles, show them smaller than they really are by using <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_Sphere.scale" title="woo.gl.Gl1_Sphere.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_Sphere.scale</span></code></a>.</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/3d-force-chain.png" src="../_images/3d-force-chain.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Force chain in cylindrical <a class="reference internal" href="../woo.pre.html#woo.pre.triax.TriaxTest" title="woo.pre.triax.TriaxTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">triaxial</span> <span class="pre">test</span></code></a>, with default settings of <a class="reference internal" href="../woo.gl.html#woo.gl.Gl1_CPhys" title="woo.gl.Gl1_CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Gl1_CPhys</span></code></a>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="particle-traces">
+<h4>Particle traces<a class="headerlink" href="#particle-traces" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="menuselection">Trace</span> tab serves to enable the <a class="reference internal" href="../woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a> engine, which attaches <a class="reference internal" href="../woo.dem.html#woo.dem.TraceVisRep" title="woo.dem.TraceVisRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TraceVisRep</span></code></a> to each node within the <a class="reference internal" href="../woo.dem.html#woo.dem.DemField" title="woo.dem.DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemField</span></code></a> and periodically stores position data, with some attached scalar (velocity, time, etc) which is used for coloring the trace. The trace works either as circular buffer (with zero :obj:~woo.dem.Tracer.compress`), or as fixed-length storage with varying resolution (older data being pruned, the latest having always the highest resolution).</p>
+<p>Traces support displacement scaling and periodic boundary conditions. Traces can be restricted to particles of some specific radius (<a class="reference internal" href="../woo.dem.html#woo.dem.Tracer.rRange" title="woo.dem.Tracer.rRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rRange</span></code></a>); quasi-random selection can be achieved using the <a class="reference internal" href="../woo.dem.html#woo.dem.Tracer.modulo" title="woo.dem.Tracer.modulo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modulo</span></code></a>.</p>
+<p>This image shows the horse where particles are colored by velocity and traces by kinetic energy:</p>
+<img alt="../_images/3d-traces.png" src="../_images/3d-traces.png" />
+</section>
+<section id="movies">
+<h4>Movies<a class="headerlink" href="#movies" title="Permalink to this headline">¶</a></h4>
+<p>Movie can be made from snapshots of the 3d view taken by <a class="reference internal" href="../woo.qt.html#woo.qt.SnapshotEngine" title="woo.qt.SnapshotEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.qt.SnapshotEngine</span></code></a>. This engine is usually activated from the control panel in <span class="menuselection">Video ‣ Take snapshots</span>; snapshots are taken using the usual periodicity parameters; video from those snapshots is created when clicking the <span class="menuselection">Make video</span> button.</p>
+</section>
+<section id="clipping">
+<h4>Clipping<a class="headerlink" href="#clipping" title="Permalink to this headline">¶</a></h4>
+<p>Clipping (by a clipping plane) is useful for showing what happens in an interior of a volume, or removing particles which are obstructing the view; this simulation was about leveling heap of particles by screed wall</p>
+<img alt="../_images/3d-leveling-topview.png" src="../_images/3d-leveling-topview.png" />
+<p>and this image insightfully shows velocity profile in the middle of the heap:</p>
+<img alt="../_images/3d-leveling-slice-velocity.png" src="../_images/3d-leveling-slice-velocity.png" />
+<p>Clipping is set interactively by pressing <kbd class="kbd docutils literal notranslate">F1</kbd>, <kbd class="kbd docutils literal notranslate">F2</kbd> or <kbd class="kbd docutils literal notranslate">F3</kbd> (for manipulating respectively clipping plane number 1, 2 or 3); the clipping plane manipulation is exited by pressing <kbd class="kbd docutils literal notranslate">Esc</kbd>. The plane is shown as grid. The following keyboard shortcuts are used to manipulate clipping planes:</p>
+<ul class="simple">
+<li><p><kbd class="kbd docutils literal notranslate">Space</kbd> activates or deactive current clipping plane (deactivated plane will have no effect);</p></li>
+<li><p>dragging the mouse rotates the plane around its center, left-draggign moves the wall center;</p></li>
+<li><p>mouse wheel moves the plane along its normal;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">x</kbd>, <kbd class="kbd docutils literal notranslate">y</kbd>, <kbd class="kbd docutils literal notranslate">z</kbd> aligns the normal with the respective axis;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">r</kbd> reverts the normal of the current plane;</p></li>
+<li><p><kbd class="kbd docutils literal notranslate">1</kbd>, <kbd class="kbd docutils literal notranslate">2</kbd>, <kbd class="kbd docutils literal notranslate">3</kbd> copies orientation from clip plane no. 1, 2 or 3 respectively (this is useful for making 2 planes parallel whcn showing a slice)</p></li>
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>-<kbd class="kbd docutils literal notranslate">1</kbd></kbd>, <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>-<kbd class="kbd docutils literal notranslate">2</kbd></kbd>, <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>-<kbd class="kbd docutils literal notranslate">3</kbd></kbd> adds clip plane of that number to the “bound group”, which retains its relative positions and rotation if one of the planes is rotated.</p></li>
+</ul>
+<p>Note that particles are always fully clipped, halves of particles will not be shown.</p>
+</section>
+</section>
+</section>
+<section id="paraview">
+<span id="vis-paraview"></span><h2>Paraview<a class="headerlink" href="#paraview" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.paraview.org">Paraview</a> is multi-platform data analysis and scientific visualization application. Woo can export two types of data:</p>
+<ul class="simple">
+<li><p>snapshots of particles and contacts for visualization or evolution analysis using <a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a>;</p></li>
+<li><p>time-averaged and space-averaged data for flow and segregation analysis using <a class="reference internal" href="../woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlowAnalysis</span></code></a>;</p></li>
+<li><p>particle traces, as collected by <a class="reference internal" href="../woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a>.</p></li>
+</ul>
+<p>The first two are shown in this movie, created in Paraview from the <a class="reference internal" href="../woo.pre.html#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pre.horse.FallingHorse</span></code></a> simulation:</p>
+<iframe src="https://www.youtube.com/embed/LB3T6sBdwz0" style="border: 0; height: 345px; width: 560px">
+</iframe><section id="paraview-data-sources">
+<h3>Paraview data sources<a class="headerlink" href="#paraview-data-sources" title="Permalink to this headline">¶</a></h3>
+<section id="vtkexport">
+<h4><a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a><a class="headerlink" href="#vtkexport" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a> is a <a class="reference internal" href="../woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">periodic</span> <span class="pre">engine</span></code></a> which saves particles and contacts in regular intervals; this results in several time-series of data which can be used e.g. to create beautiful movies from Paraview; Paraview visualization capabilities are far more advanced than what the 3d view in Woo offers, which is in contrast more DEM-specific, thus more useful in other situations.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">+</span><span class="p">[</span>
+   <span class="o">...</span><span class="p">:</span>   <span class="n">VtkExport</span><span class="p">(</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="c1"># run every 100 steps</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="n">stepPeriod</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="c1"># the default is what=VtkExport.all, no need to specify it usually</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="n">what</span><span class="o">=</span><span class="n">VtkExport</span><span class="o">.</span><span class="n">spheres</span><span class="o">|</span><span class="n">VtkExport</span><span class="o">.</span><span class="n">mesh</span><span class="o">|</span><span class="n">VtkExport</span><span class="o">.</span><span class="n">tri</span><span class="o">|</span><span class="n">VtkExport</span><span class="o">.</span><span class="n">con</span><span class="p">,</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="c1"># where will the output go; can use {tags}</span>
+   <span class="o">...</span><span class="p">:</span>      <span class="n">out</span><span class="o">=</span><span class="s2">&quot;/tmp/{tid}-&quot;</span><span class="p">,</span>
+   <span class="o">...</span><span class="p">:</span>   <span class="p">)</span>
+   <span class="o">...</span><span class="p">:</span> 
+  <span class="n">File</span> <span class="s2">&quot;&lt;ipython-input-1-00a7f490484d&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">9</span>
+    <span class="p">)</span>
+     <span class="o">^</span>
+<span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">unexpected</span> <span class="n">EOF</span> <span class="k">while</span> <span class="n">parsing</span>
+</pre></div>
+</div>
+<p>Output files can be opened by hand (tedious, but detailed below for reference), or using script which automated creating of the visualization pipeline.</p>
+</section>
+<section id="flowanalysis">
+<h4><a class="reference internal" href="../woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlowAnalysis</span></code></a><a class="headerlink" href="#flowanalysis" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlowAnalysis</span></code></a> is an engine which <a class="reference internal" href="../woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">periodically</span></code></a> stores flow data interpolated in a uniform grid. The theory is described in <a class="reference internal" href="flow-analysis.html#user-manual-flow-analysis"><span class="std std-ref">Flow analysis</span></a>. The <a class="reference internal" href="../woo.paraviewscript.html#woo.paraviewscript.fromEngines" title="woo.paraviewscript.fromEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.paraviewscript.fromEngines</span></code></a> introduced below recognizes the presence of <a class="reference internal" href="../woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlowAnalysis</span></code></a> and puts its data into the visualization pipeline script as well.</p>
+</section>
+<section id="tracer">
+<h4><a class="reference internal" href="../woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a><a class="headerlink" href="#tracer" title="Permalink to this headline">¶</a></h4>
+<p>Particle traces, if relevant data are collected with an instance of <a class="reference internal" href="../woo.dem.html#woo.dem.Tracer" title="woo.dem.Tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a>, are also exported by <a class="reference internal" href="../woo.paraviewscript.html#woo.paraviewscript.fromEngines" title="woo.paraviewscript.fromEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.paraviewscript.fromEngines</span></code></a> for use in Paraview. Note that trace data can considerably increase dataset size.</p>
+</section>
+</section>
+<section id="pipeline-script">
+<h3>Pipeline script<a class="headerlink" href="#pipeline-script" title="Permalink to this headline">¶</a></h3>
+<p>Loading files manually (detailed below) is not very easy. Fortunately, there is a handy command <a class="reference internal" href="../woo.paraviewscript.html#woo.paraviewscript.fromEngines" title="woo.paraviewscript.fromEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.paraviewscript.fromEngines</span></code></a> which writes Paraview script including all setup, by scanning engines in the simulation:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="c1"># import woo.paraviewscript</span>
+
+<span class="c1"># use launch=True to run Paraview right away</span>
+<span class="c1"># this writes into temporary file</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="c1"># woo.paraviewscript.fromEngines(S,launch=True)</span>
+
+<span class="c1"># writes into user-defined file</span>
+<span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="c1"># woo.paraviewscript.fromEngines(S,out=&#39;something.py&#39;)</span>
+</pre></div>
+</div>
+<p>The script can be then used in 2 ways:</p>
+<ol class="arabic">
+<li><p>As script to be run with Paraview, which will load all necessary files and set the visualization pipeline up:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">paraview</span> <span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">something</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This can also be achieved from Paraview GUI by going to <span class="menuselection">Tools ‣ Python Shell -&gt; Run Script</span>.</p>
+</li>
+<li><p>As a means to zip all or some (using the <code class="docutils literal notranslate"><span class="pre">--slice</span></code> option) data files and the script itself, e.g. for easy transfer or archiving (run with <code class="docutils literal notranslate"><span class="pre">--help</span></code> for more help):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">something</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="nb">zip</span> <span class="o">--</span><span class="nb">slice</span><span class="o">=-</span><span class="mi">1</span><span class="p">:</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The script is also used internally when the <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">in</span> <span class="pre">Paraview</span></code> button in the <a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a> is clicked from the Inspector.</p>
+<p>The script creates entries for spherical particles, for flow analysis data, contact networks, triangulated surfaces with opacity and more. The auto-created pipeline can look e.g. like this:</p>
+<img alt="../_images/paraview-script-pipeline.png" src="../_images/paraview-script-pipeline.png" />
+</section>
+<section id="making-movies">
+<h3>Making movies<a class="headerlink" href="#making-movies" title="Permalink to this headline">¶</a></h3>
+<p>Movies are important for cool presentatations. Once the visualization pipeline is set up to your satisfaction, go to <span class="menuselection">File ‣ Save Animation</span>.</p>
+</section>
+<section id="manual-pipline-setup">
+<h3>Manual pipline setup<a class="headerlink" href="#manual-pipline-setup" title="Permalink to this headline">¶</a></h3>
+<p>The visualization pipeline can be set up by hand. The following covers how this is done. The user should normally not need to to this, though.</p>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a> produces files periodically, and every time several files may be created, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="mi">20130107</span><span class="n">T161406p4252</span><span class="o">-</span><span class="n">con</span><span class="o">.</span><span class="mf">1040.</span><span class="n">vtp</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="mi">20130107</span><span class="n">T161406p4252</span><span class="o">-</span><span class="n">mesh</span><span class="o">.</span><span class="mf">1040.</span><span class="n">vtu</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="mi">20130107</span><span class="n">T161406p4252</span><span class="o">-</span><span class="n">spheres</span><span class="o">.</span><span class="mf">1040.</span><span class="n">vtu</span>
+</pre></div>
+</div>
+<p>Those can be loaded into Paraview as groups.  Note that the <code class="docutils literal notranslate"><span class="pre">/tmp/{tid}-</span></code> (from the example above) was expanded (see <a class="reference internal" href="../tutorial/data.html#tutorial-tags"><span class="std std-ref">Tags</span></a>) to <code class="docutils literal notranslate"><span class="pre">/tmp/20140620T145830p6238-</span></code> and different endings were appended for different data (<code class="docutils literal notranslate"><span class="pre">con</span></code> for contacts, <code class="docutils literal notranslate"><span class="pre">mesh</span></code> for boundary meshes, <code class="docutils literal notranslate"><span class="pre">spheres</span></code> for spherical particles, <code class="docutils literal notranslate"><span class="pre">tri</span></code> for triangulated particles). Each <code class="docutils literal notranslate"><span class="pre">...</span></code> hides series of step numbers (40, 80, 120, …) which Paraview loads sequentially.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-con</span></code> contains contact data, <code class="docutils literal notranslate"><span class="pre">-mesh</span></code> mesh data (triangulated surfaces), <code class="docutils literal notranslate"><span class="pre">-spheres</span></code> data concerning spherical particles. You can open all datasets at once with Paraview by selecting them with <kbd class="kbd docutils literal notranslate">Ctrl</kbd>:</p>
+<img alt="../_images/paraview-open-files.png" src="../_images/paraview-open-files.png" />
+<p>Datasets appear in the <em>Pipeline browser</em>, but will not be displayed until the <span class="guilabel">Apply</span> button is clicked.</p>
+<img alt="../_images/paraview-properties-apply.png" src="../_images/paraview-properties-apply.png" />
+<p>Every dataset can be colored, e.g. velocity can be used as coloring scalar by selecting that property:</p>
+<img alt="../_images/paraview-color-by-vel.png" src="../_images/paraview-color-by-vel.png" />
+<p>Datasets can be visualized at different timesteps using the frame control in the Paraview menu:</p>
+<img alt="../_images/paraview-frame-control.png" src="../_images/paraview-frame-control.png" />
+<section id="spherical-particles">
+<h4>Spherical particles<a class="headerlink" href="#spherical-particles" title="Permalink to this headline">¶</a></h4>
+<p>You notice that spherical particles are rendered as points rather than spheres. In order to see spheres, sphere “glyph” has to be attached to each point, and it will be scaled by the <em>radius</em> scalar defined in each point (particle).</p>
+<p>Select the <code class="docutils literal notranslate"><span class="pre">-spheres</span></code> dataset in the <em>Pipeline browser</em>, then add glyph using the <img alt="paraview-glyph-icon" src="../_images/paraview-glyph-icon.png" /> icon. In the <em>Properties</em> for the glyph, set the following:</p>
+<ul class="simple">
+<li><p><em>Glyph type</em> = Sphere;</p></li>
+<li><p><em>Radius</em> = 1 (further scaled by selected scalars to obtain true radius);</p></li>
+<li><p><em>Scale Mode</em> = scalar;</p></li>
+<li><p><em>Set Scale Factor</em> = 1;</p></li>
+<li><p>disable <em>Mask Points</em> and <em>Random Mode</em>;</p></li>
+<li><p>on the top, set <em>Scalars</em> = radius.</p></li>
+</ul>
+<p>Since glyphs are rendered over points of the dataset, those can be made invisible by clicking on the eye icon next to the <code class="docutils literal notranslate"><span class="pre">-spheres</span></code> dataset in the <em>Pipeline browser</em>.</p>
+</section>
+<section id="force-network">
+<h4>Force Network<a class="headerlink" href="#force-network" title="Permalink to this headline">¶</a></h4>
+<p>Presenting contacts as cylinders of which radius varies by transmitted force is possible in Paraview.</p>
+<ol class="arabic simple">
+<li><p>Load and select the <code class="docutils literal notranslate"><span class="pre">-con</span></code> dataset.</p></li>
+<li><p>Add the “Point Data to Cell Data” filter.</p></li>
+<li><p>Add the “Tube” filter; in there set:</p>
+<ol class="arabic simple">
+<li><p>“Scalar” to <code class="docutils literal notranslate"><span class="pre">Fn</span></code> or <code class="docutils literal notranslate"><span class="pre">|Ft|</span></code> depending on how you want to scale cylinders;</p></li>
+<li><p>“Vary Radius” to “By Scalar”;</p></li>
+<li><p>“Radius” to something rather small compared to particle radii;</p></li>
+<li><p>“Radius Factor” to something big, like 1000; the last two parameters determine how much the radius varies by force.</p></li>
+</ol>
+</li>
+</ol>
+<img alt="../_images/paraview-force-network.png" src="../_images/paraview-force-network.png" />
+</section>
+</section>
+</section>
+<section id="pov-ray">
+<h2>Pov-RAY<a class="headerlink" href="#pov-ray" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.povray.org">Pov-RAY</a> is open-source raytracing code. Woo supports output to POV-Ray via <a class="reference internal" href="../woo.dem.html#woo.dem.POVRayExport" title="woo.dem.POVRayExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.POVRayExport</span></code></a>. Particles are assigned textures based on their masks (in the future, texturing by <a class="reference internal" href="../woo.dem.html#woo.dem.Material" title="woo.dem.Material"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Material</span></code></a> instances is envisaged); camera parameters, texture definitions and others can be independently hand-tuned. Texturing procedures are informed about particle diameter, which is useful for scaling according to particle size.</p>
+<p>Refer to <a class="reference external" href="https://github.com/woodem/woo/tree/master/examples/povray-export.py">examples/povray-export.py</a> for a simple example.</p>
+<p>In the following movie, focal blur, procedural textures and bump-mapping (particles are ideally spherical in the simulation) are used for semi-realistic view of the scene. Rendering &gt;700 frames in the 2000x1500 resolution took many hours. View this movie at youtube for better resolution.</p>
+<iframe src="https://www.youtube.com/embed/p1VxvvNXDQc" style="border: 0; height: 345px; width: 560px">
+</iframe><div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Visualization</a><ul>
+<li><a class="reference internal" href="#integrated-3d-view">Integrated 3d view</a><ul>
+<li><a class="reference internal" href="#display-control">Display control</a><ul>
+<li><a class="reference internal" href="#particle-coloring">Particle coloring</a></li>
+<li><a class="reference internal" href="#quality">Quality</a></li>
+<li><a class="reference internal" href="#displacement-scaling">Displacement scaling</a></li>
+<li><a class="reference internal" href="#velocity-forces">Velocity/forces</a></li>
+<li><a class="reference internal" href="#contact-network">Contact network</a></li>
+<li><a class="reference internal" href="#particle-traces">Particle traces</a></li>
+<li><a class="reference internal" href="#movies">Movies</a></li>
+<li><a class="reference internal" href="#clipping">Clipping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#paraview">Paraview</a><ul>
+<li><a class="reference internal" href="#paraview-data-sources">Paraview data sources</a><ul>
+<li><a class="reference internal" href="#vtkexport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport</span></code></a></li>
+<li><a class="reference internal" href="#flowanalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlowAnalysis</span></code></a></li>
+<li><a class="reference internal" href="#tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tracer</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pipeline-script">Pipeline script</a></li>
+<li><a class="reference internal" href="#making-movies">Making movies</a></li>
+<li><a class="reference internal" href="#manual-pipline-setup">Manual pipline setup</a><ul>
+<li><a class="reference internal" href="#spherical-particles">Spherical particles</a></li>
+<li><a class="reference internal" href="#force-network">Force Network</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pov-ray">Pov-RAY</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="postprocess.html"
+                          title="Previous page">&larr; Postprocessing</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="flow-analysis.html"
+                          title="Next page">&rarr; Flow analysis</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/visualization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="flow-analysis.html" title="Flow analysis"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="postprocess.html" title="Postprocessing"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Visualization</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

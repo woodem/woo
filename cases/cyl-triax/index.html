@@ -1,0 +1,549 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Cylindrical triaxial test with flexible membrane &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Cross-anisotropy model with discrete elements" href="../x-aniso/index.html" />
+    <link rel="prev" title="Case studies" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../x-aniso/index.html" title="Cross-anisotropy model with discrete elements"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../index.html" title="Case studies"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Case studies</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cylindrical triaxial test with flexible membrane</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cylindrical-triaxial-test-with-flexible-membrane">
+<span id="case-cyl-triax"></span><h1>Cylindrical triaxial test with flexible membrane<a class="headerlink" href="#cylindrical-triaxial-test-with-flexible-membrane" title="Permalink to this headline">¶</a></h1>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>The task of this study was to investigate the <strong>role of support friction in triaxial tests</strong> using the discrete element method. Spherical grains and elastic membrane around the cylindrical specimen were used. Parametric study was performed varying specimen size, aspect ratio and support friction (normal or reduced values). The conclusion was that the role of support friction is in the same order of magnitude as scatter due to random factors in the simulation (such as particle arrangement), in contrast to laboratory experiments. A likely cause for this outcome is are spherical grains which do not have any rolling friction, unlike irregular shapes of real soils.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The simulation presented here was done using the <a class="reference internal" href="../../woo.pre.html#woo.pre.cylTriax.CylTriaxTest" title="woo.pre.cylTriax.CylTriaxTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.pre.cylTriax.CylTriaxTest</span></code></a> preprocessor. The results can be obtained by downloading</p>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="../../_downloads/edd497f5ec477f1a50e94998ceb5e38c/cyl-triax.preprocessor"><code class="xref download docutils literal notranslate"><span class="pre">preprocessor</span> <span class="pre">file</span></code></a>,</p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/5f0fcc87be092b018300bc64839da24b/cyl-triax.batch.xls"><code class="xref download docutils literal notranslate"><span class="pre">batch</span> <span class="pre">table</span></code></a>,</p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/a3aadf4ac5174cc8c6757b88b8e180a9/cyl-triax.postprocess-figures.py"><code class="xref download docutils literal notranslate"><span class="pre">script</span> <span class="pre">to</span> <span class="pre">produce</span> <span class="pre">graphs</span></code></a></p></li>
+</ul>
+<p>Running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">-</span><span class="n">batch</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">threads</span><span class="o">=</span><span class="mi">3</span> <span class="n">cyl</span><span class="o">-</span><span class="n">triax</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">xls</span> <span class="n">cyl</span><span class="o">-</span><span class="n">triax</span><span class="o">.</span><span class="n">preprocessor</span>
+</pre></div>
+</div>
+<p>(adjust <code class="docutils literal notranslate"><span class="pre">--job-threads</span></code> according to how many cores you want to allocate for each simulation; or don’t specify for using one core per simulation) and waiting a few hours for simulations to finish will result in reports for individual simulations being created, and also the <code class="docutils literal notranslate"><span class="pre">cyl-triax.batch.hdf5</span></code> file with aggregate results. Afterwards,  run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span> <span class="n">cyl</span><span class="o">-</span><span class="n">triax</span><span class="o">.</span><span class="n">postprocess</span><span class="o">-</span><span class="n">figures</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>to produce graphs shown below.</p>
+</div>
+<div class="admonition-acknowledgement admonition">
+<p class="admonition-title">Acknowledgement</p>
+<p>This project was supported by a commercial contract. We honor the wish to not disclose the identity of the contractor.</p>
+</div>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>The simulation runs in coordinate system where <span class="math notranslate nohighlight">\(z\)</span> is the axial direction, <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are radial; average quantities, such as radial stress, are noted with the <span class="math notranslate nohighlight">\(rr\)</span> index, as in <span class="math notranslate nohighlight">\(\sigma_{rr}\equiv(\sigma_{xx}+\sigma_{yy})/2\)</span>.</p>
+<p>The simulation runs in three distinct stages:</p>
+<ol class="arabic">
+<li><p><strong>Compaction.</strong>
+Non-overlapping spherical particles are generated in cylinder-shaped volume, of which radii satisfy the PSD (particle size distribution) function. Cylindrical volume, with rigid boundaries, is compressed to reach isotropic stress value <span class="math notranslate nohighlight">\(\sigma_{\rm iso}\)</span>; friction parameters are set to zero to ensure high compacity of the resulting packing, as rearrangements are not constrained by tangential forces. Stresses are evaluated from global stress tensor <span class="math notranslate nohighlight">\(\sigma\)</span> computed from contact forces. The controlling logic is independent for each axis and uses damped feedback loop <span id="id1">[<a class="reference internal" href="../../references.html#id7" title="Chiara Modenese. Numerical Study of the Mechanical Properties of Lunar Soil by the Discrete Element Method. PhD thesis, University of Oxford, 2013.">Mod13</a>]</span> to reach desired stress state <span class="math notranslate nohighlight">\(\sigma_{rr}=\sigma_{zz}=\sigma_{\rm iso}\)</span>.</p></li>
+<li><p><strong>Membrane stabilization.</strong>
+Rigid cylindrical boundary is made compliant (it is transformed into membrane), and each membrane element is loaded with surface load equal to <span class="math notranslate nohighlight">\(\sigma_{\rm iso}\)</span>. Membrane surface load is adjusted so that <span class="math notranslate nohighlight">\(\sigma_{rr}\)</span> reaches <span class="math notranslate nohighlight">\(\sigma_{\rm iso}\)</span>, and <span class="math notranslate nohighlight">\(\eps_{zz}\)</span> deformation is allowed to maintain <span class="math notranslate nohighlight">\(\sigma_{zz}=\sigma_{\rm iso}\)</span>. Friction angle of particles/membrane/supports is incremented during this phase linearly to reach real levels used in the triaxial phase.</p></li>
+<li><p><strong>Triaxial phase.</strong>
+The initial triaxial configuration is used as reference configuration with zero strain tensor. The value of <span class="math notranslate nohighlight">\(\dot\eps_{zz}\)</span> is increased linearly to reach prescribed value, and axial compression continues until prescribed axial strain <span class="math notranslate nohighlight">\(\eps_{zz}^{\rm max}\)</span> is attained. During this phase, volume enclosed by the membrane+supports triangulation is monitored. Besides axial strain <span class="math notranslate nohighlight">\(\eps_{zz}=\log\frac{l_z}{l_{z0}}\)</span>, volumetric strain <span class="math notranslate nohighlight">\(\eps_v=\log\frac{V}{V_0}\)</span> and stress tensor <span class="math notranslate nohighlight">\(\sigma_{ii}\)</span>, we can compute mean and deviatoric stresses</p>
+<div class="math notranslate nohighlight">
+   \begin{align}
+      p&amp;=\frac{1}{3}\tr\tens{\sigma}, &amp; q&amp;=\sigma_{zz}-\sigma_{rr}
+   \end{align}</div><p>and radial and deviatoric strain</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \eps_{rr}&amp;=\frac{1}{2}(\eps_{v}-\eps_{zz}), &amp; \eps_d=\eps_{zz}-\frac{2\eps_{rr}+\eps_{zz}}{3}.
+\end{align}</div><p>These are used to plot the <span class="math notranslate nohighlight">\(q/p(\eps_d)\)</span> and <span class="math notranslate nohighlight">\(\eps_v(\eps_d)\)</span> functions.</p>
+</li>
+</ol>
+</section>
+<section id="input-parameters">
+<h2>Input parameters<a class="headerlink" href="#input-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Particle parameters were using usual values for stiffness and the <span class="math notranslate nohighlight">\(k_T/k_N\)</span> ratio, with internal friction angle <span class="math notranslate nohighlight">\(\tan\phi=0.4\)</span>. This value was valid for inter-particle contacts, and for particle-membrane contacts. Supports had the same parameters as particles (stiffness), but their friction was reduced in to 4° in some simulations. Dimensions of the cylinder had varying aspect ratios; number of particles was around 5000 for all simulations, with the exception of the 1:1A one, which had approximately 14.000 particles. Membrane parameters were taken roughly from <span id="id2">[<a class="reference internal" href="../../references.html#id27" title="F Molenkamp and HJ Luger. Modelling and minimization of membrane penetration effects in tests on granular soils. Geotechnique, 31(4):471–486, 1981.">ML81</a>]</span>.</p>
+<p>Density of particles was scaled in order to establish quasi-static conditions with reasonable amount of computation <span id="id3">[<a class="reference internal" href="../../references.html#id28" title="C Thornton and SJ Antony. Quasi-static deformation of particulate media. Philosophical Transactions – Royal Society of London Series, pages 2763–2782, 1998.">TA98</a>]</span>.</p>
+<p>All the parameters are shown in the following; quantities marked with “†” are scaled for the purposes of the simulation.</p>
+<dl>
+<dt>Membrane parameters</dt><dd><table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 38%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Young’s modulus</p></td>
+<td><p>1.1</p></td>
+<td><p>MPa</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>density †</p></td>
+<td><p>1×10⁸</p></td>
+<td><p>kg/m³</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k_T/k_N\)</span></p></td>
+<td><p>0.2</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>friction angle <span class="math notranslate nohighlight">\(\phi\)</span></p></td>
+<td><p>22</p></td>
+<td><p>°</p></td>
+<td><p>(<span class="math notranslate nohighlight">\(\tan\phi=0.4\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>thickness</p></td>
+<td><p>3</p></td>
+<td><p>mm</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Particle parameters</dt><dd><table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 38%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Young’s modulus</p></td>
+<td><p>300</p></td>
+<td><p>MPa</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>density †</p></td>
+<td><p>1×10⁸</p></td>
+<td><p>kg/m³</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k_T/k_N\)</span></p></td>
+<td><p>0.2</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>friction angle <span class="math notranslate nohighlight">\(\phi\)</span></p></td>
+<td><p>22</p></td>
+<td><p>°</p></td>
+<td><p>(<span class="math notranslate nohighlight">\(\tan\phi=0.4\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>diameter</p></td>
+<td><p>1−3</p></td>
+<td><p>mm</p></td>
+<td><p>(see PSD)</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Support parameters</dt><dd><table class="docutils align-default">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 6%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 36%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Young’s modulus</p></td>
+<td></td>
+<td><p>300</p></td>
+<td><p>MPa</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k_T/k_N\)</span></p></td>
+<td></td>
+<td><p>0.2</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>friction angle <span class="math notranslate nohighlight">\(\phi\)</span></p></td>
+<td><p>a, A</p></td>
+<td><p>4</p></td>
+<td><p>°</p></td>
+<td><p>(<span class="math notranslate nohighlight">\(\tan\phi=0.07\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>b</p></td>
+<td><p>22</p></td>
+<td><p>°</p></td>
+<td><p>(<span class="math notranslate nohighlight">\(\tan\phi=0.4\)</span>)</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Global parameters</dt><dd><table class="docutils align-default">
+<colgroup>
+<col style="width: 68%" />
+<col style="width: 17%" />
+<col style="width: 6%" />
+<col style="width: 9%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hydrostatic stress <span class="math notranslate nohighlight">\(\sigma_{\rm iso}\)</span></p></td>
+<td><p>500</p></td>
+<td><p>kPa</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>maximum axial strain</p></td>
+<td><p>6</p></td>
+<td><p>%</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cylinder height×diameter</p></td>
+<td><p>40×40</p></td>
+<td><p>mm</p></td>
+<td><p>1:1</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>60×60</p></td>
+<td><p>mm</p></td>
+<td><p>1:1A</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>52×35</p></td>
+<td><p>mm</p></td>
+<td><p>1.5:1</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>60×30</p></td>
+<td><p>mm</p></td>
+<td><p>2:1</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>40×90</p></td>
+<td><p>mm</p></td>
+<td><p>3:1</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Particle size</dt><dd><figure class="align-center align-default" id="id4">
+<img alt="../../_images/sim4b-psd.svg" src="../../_images/sim4b-psd.svg" /><figcaption>
+<p><span class="caption-number">Fig. 30 </span><span class="caption-text">Prescribed and real PSD for the 2:1 simulation</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd>
+</dl>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>Each simulation resulted in <span class="math notranslate nohighlight">\(q/p(\eps_d)\)</span> and <span class="math notranslate nohighlight">\(\eps_v(\eps_d)\)</span> curves. They compare simulations with every feature varied:</p>
+<dl>
+<dt>Number of particles</dt><dd><p>The simulation was done with either the usual number (<strong>a</strong>/<strong>b</strong>) or an increased number (<strong>A</strong>) of particles:</p>
+<figure class="align-center align-default" id="id5">
+<span id="fig-res-num"></span><img alt="../../_images/sim4d_res_num.svg" src="../../_images/sim4d_res_num.svg" /><figcaption>
+<p><span class="caption-number">Fig. 31 </span><span class="caption-text">Influence of the number of particles on the result – 4.000 particles vs. 12.000 particles (larger specimen).</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd>
+<dt>Support friction</dt><dd><p><span class="math notranslate nohighlight">\(\phi\)</span> was either 4° or 22° − those simulations were respectively denoted with <strong>a</strong>/<strong>A</strong> or <strong>B</strong> in their simulation title.</p>
+<figure class="align-center align-default" id="id6">
+<img alt="../../_images/sim4d_res_1_1.svg" src="../../_images/sim4d_res_1_1.svg" /><figcaption>
+<p><span class="caption-number">Fig. 32 </span><span class="caption-text">Cylinder 1:1, with normal and reduced support friction.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id7">
+<img alt="../../_images/sim4d_res_15_1.svg" src="../../_images/sim4d_res_15_1.svg" /><figcaption>
+<p><span class="caption-number">Fig. 33 </span><span class="caption-text">Cylinder 1.5:1, with normal and reduced support friction.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id8">
+<img alt="../../_images/sim4d_res_2_1.svg" src="../../_images/sim4d_res_2_1.svg" /><figcaption>
+<p><span class="caption-number">Fig. 34 </span><span class="caption-text">Cylinder 2:1, with normal and reduced support friction.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id9">
+<img alt="../../_images/sim4d_res_3_1.svg" src="../../_images/sim4d_res_3_1.svg" /><figcaption>
+<p><span class="caption-number">Fig. 35 </span><span class="caption-text">Cylinder 3:1, with normal and reduced support friction.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd>
+<dt>Specimen aspect ratio</dt><dd><p>The height/diameter was 1:1, 1.5:1, 2:1 and 3:1.</p>
+<figure class="align-center align-default" id="id10">
+<img alt="../../_images/sim4d_res_a.svg" src="../../_images/sim4d_res_a.svg" /><figcaption>
+<p><span class="caption-number">Fig. 36 </span><span class="caption-text">All simulations with reduced friction − influence of specimen shape.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id11">
+<img alt="../../_images/sim4d_res_b.svg" src="../../_images/sim4d_res_b.svg" /><figcaption>
+<p><span class="caption-number">Fig. 37 </span><span class="caption-text">All simulations with normal friction − influence of specimen shape.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd>
+</dl>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>The influence of reduced support friction seems to be negligible – it is of the same order of magnitude as scatter of simulation results shown in tab. <a class="reference internal" href="#fig-res-num"><span class="std std-ref">Influence of the number of particles</span></a>.</p>
+<p>The most obvious explanation for this discrepancy between our simulations and experiments is the shape of particles.</p>
+<ul>
+<li><p>Spherical particles as a part of force chains have, by virtue of rotational symmetry, the property of not transforming shear force to normal and vice versa. In another words, shear force leads to rotation, and rotation only causes shear force (supposing small displacements).</p>
+<blockquote>
+<div><p>As there is a dissipation mechanics (Coulomb friction) in the shear direction, the amount of stored elastic energy, originating from shear force anywhere in the system, is globally limited.</p>
+</div></blockquote>
+</li>
+<li><p>On the other hand, with non-spherical particles, rotation around the centroid may lead to increment of normal force with some other particle, as the contact direction does not intersect the centroid. It follows that shear loading of particles at the support may be transmitted much further into the specimen, thus having substantial influence on the global behavior.</p></li>
+</ul>
+<p>A possible remedy for future simulations is to</p>
+<ul class="simple">
+<li><p>introduce non-physical rolling stiffness at contacts, accounting for non-spherical grain effects and micro-asperities of grain surfaces, i.e. macro-level and micro-level interlocking;</p></li>
+<li><p>use non-spherical particle shapes, such as clumped spheres.</p></li>
+</ul>
+</section>
+<section id="images">
+<h2>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
+<figure class="align-center align-default" id="id12">
+<a class="reference internal image-reference" href="../../_images/triax-elements.svg"><img alt="../../_images/triax-elements.svg" src="../../_images/triax-elements.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 38 </span><span class="caption-text">Membrane mesh during simulation (front view).</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id13">
+<a class="reference internal image-reference" href="../../_images/triax-elements-with-undeformed.svg"><img alt="../../_images/triax-elements-with-undeformed.svg" src="../../_images/triax-elements-with-undeformed.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 39 </span><span class="caption-text">Membrane mesh during simulation (front view); triangles show the undeformed (reference) configuration.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id14">
+<a class="reference internal image-reference" href="../../_images/triax-middle-clip-unscaled.png"><img alt="../../_images/triax-middle-clip-unscaled.png" src="../../_images/triax-middle-clip-unscaled.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 40 </span><span class="caption-text">Cut through the specimen mid-plane.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id15">
+<a class="reference internal image-reference" href="../../_images/triax-middle-clip-horiz3x.png"><img alt="../../_images/triax-middle-clip-horiz3x.png" src="../../_images/triax-middle-clip-horiz3x.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 41 </span><span class="caption-text">Cut through the specimen mid-plane (horizontal displacements scaled 3×).</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id16">
+<a class="reference internal image-reference" href="../../_images/triax-force-chains-scaled.png"><img alt="../../_images/triax-force-chains-scaled.png" src="../../_images/triax-force-chains-scaled.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 42 </span><span class="caption-text">Force chains transmitting normal loads (displacements scaled).</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id17">
+<a class="reference internal image-reference" href="../../_images/traces-top-view.png"><img alt="../../_images/traces-top-view.png" src="../../_images/traces-top-view.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 43 </span><span class="caption-text">Node traces (top view); membrane nodes on the perimeter (displacements scaled).</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id18">
+<a class="reference internal image-reference" href="../../_images/traces-side-clipped.png"><img alt="../../_images/traces-side-clipped.png" src="../../_images/traces-side-clipped.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 44 </span><span class="caption-text">Node traces (lateral view) clipped in the vertical mid-plane, without membrane (radial displacements scaled, axial displacements not shown).</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id19">
+<a class="reference internal image-reference" href="../../_images/triax-rot-clip.png"><img alt="../../_images/triax-rot-clip.png" src="../../_images/triax-rot-clip.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 45 </span><span class="caption-text">Relative rotation of particles; specimen clipped in the vertical mid-plane.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="videos">
+<h2>Videos<a class="headerlink" href="#videos" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Global view of the simulation (displacements scaled):</p>
+<blockquote>
+<div><iframe src="https://www.youtube.com/embed/https://youtube.com/watch?v=Li13NrIyMYU" style="border: 0; height: 345px; width: 560px">
+</iframe></div></blockquote>
+</li>
+<li><p>Force chain evolution during the compaction phase (displacements scaled):</p>
+<blockquote>
+<div><iframe src="https://www.youtube.com/embed/https://youtube.com/watch?v=o4cS1f4-CEI" style="border: 0; height: 345px; width: 560px">
+</iframe></div></blockquote>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Cylindrical triaxial test with flexible membrane</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#input-parameters">Input parameters</a></li>
+<li><a class="reference internal" href="#outputs">Outputs</a></li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+<li><a class="reference internal" href="#images">Images</a></li>
+<li><a class="reference internal" href="#videos">Videos</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="../index.html"
+                          title="Previous page">&larr; Case studies</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="../x-aniso/index.html"
+                          title="Next page">&rarr; Cross-anisotropy model with discrete elements</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cases/cyl-triax/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../x-aniso/index.html" title="Cross-anisotropy model with discrete elements"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../index.html" title="Case studies"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Case studies</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cylindrical triaxial test with flexible membrane</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

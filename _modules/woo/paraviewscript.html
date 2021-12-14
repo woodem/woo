@@ -1,0 +1,623 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.paraviewscript &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.paraviewscript</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.paraviewscript</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Convenience module for setting up visualization pipelines for Paraview through python scripts.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">woo</span>
+<span class="kn">import</span> <span class="nn">woo.dem</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="findPV"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.findPV">[docs]</a><span class="k">def</span> <span class="nf">findPV</span><span class="p">():</span>
+    <span class="s1">&#39;Find Paraview executable in the system. Under Windows (64bit only), this entails searching the registry (see `this post &lt;http://www.paraview.org/pipermail/paraview/2010-August/018645.html&gt;`__); under Linux, look in ``$PATH44 for executable called ``paraview``. Returns ``None`` is Paraview is not found.&#39;</span>
+    <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">operator</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">==</span><span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+        <span class="c1"># oh gee...</span>
+        <span class="c1"># http://www.paraview.org/pipermail/paraview/2010-August/018645.html</span>
+        <span class="c1"># - HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Kitware Inc.\ParaView 3.8.X (64bit machines single user install)</span>
+        <span class="c1"># - HKEY_CURRENT_USER\SOFTWARE\Kitware Inc.\ParaView 3.8.X (32bit machines single user install)</span>
+        <span class="c1"># - HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Kitware Inc.\ParaView 3.8.X (64bit machines all users)</span>
+        <span class="c1"># - HKEY_LOCAL_MACHINE\SOFTWARE\Kitware Inc.\ParaView 3.8.X (32bit machines all users)</span>
+        <span class="c1">#</span>
+        <span class="c1"># we don&#39;t care about 32 bit, do just 64bit</span>
+        <span class="kn">import</span> <span class="nn">winreg</span> <span class="k">as</span> <span class="nn">winreg</span>
+        <span class="n">path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;SOFTWARE\Wow6432Node\Kitware Inc.&#39;</span>
+        <span class="n">paraviews</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="p">(</span><span class="n">winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span><span class="n">winreg</span><span class="o">.</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">):</span>
+            <span class="n">aReg</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">ConnectRegistry</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="n">reg</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">aKey</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">aReg</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;SOFTWARE\Wow6432Node\Kitware, Inc.&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">winreg</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">(</span><span class="n">aKey</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">keyname</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">EnumKey</span><span class="p">(</span><span class="n">aKey</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">keyname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ParaView &#39;</span><span class="p">):</span>
+                    <span class="c1"># print &#39;no match:&#39;,keyname</span>
+                    <span class="k">continue</span>
+                <span class="n">subKey</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">aKey</span><span class="p">,</span><span class="n">keyname</span><span class="p">)</span>
+                <span class="n">paraviews</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">keyname</span><span class="p">,</span><span class="n">subKey</span><span class="p">))</span>
+        <span class="c1"># sort lexically using key name and use the last one (highest version)</span>
+        <span class="n">pv</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">paraviews</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pv</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span> <span class="c1"># raise RuntimeError(&#39;ParaView installation not found in registry.&#39;)</span>
+        <span class="n">pvName</span><span class="p">,</span><span class="n">pvKey</span><span class="o">=</span><span class="n">pv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pvExec</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">winreg</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">(</span><span class="n">pvKey</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">key</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">EnumValue</span><span class="p">(</span><span class="n">pvKey</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">pvExec</span><span class="o">=</span><span class="n">val</span><span class="o">+</span><span class="s1">&#39;/bin/paraview&#39;</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pvExec</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span> <span class="c1"># raise RuntimeError(&#39;ParaView installation: found in registry, but default key is missing...?&#39;)</span>
+        <span class="k">return</span> <span class="n">pvExec</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># on Linux, find it in $PATH</span>
+        <span class="kn">import</span> <span class="nn">woo.utils</span>
+        <span class="k">return</span> <span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">find_executable</span><span class="p">(</span><span class="s1">&#39;paraview&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="launchPV"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.launchPV">[docs]</a><span class="k">def</span> <span class="nf">launchPV</span><span class="p">(</span><span class="n">script</span><span class="p">):</span>
+    <span class="s1">&#39;Launch paraview as background process, passing --script=*script* as the only argument. If Paraview executable is not found via :obj:`findPV`, only a warning is printed and Paraview is not launched.&#39;</span>
+    <span class="kn">import</span> <span class="nn">subprocess</span><span class="o">,</span> <span class="nn">os.path</span>
+    <span class="c1"># will launch it in the background</span>
+    <span class="n">pv</span><span class="o">=</span><span class="n">findPV</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pv</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Paraview not executed since the executable was not found.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="n">scriptDir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;.&#39;</span>
+    <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="n">pv</span><span class="p">,</span><span class="s1">&#39;--script=&#39;</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">script</span><span class="p">)]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span><span class="s1">&#39;cd &quot;&#39;</span><span class="o">+</span><span class="n">scriptDir</span><span class="o">+</span><span class="s1">&#39;&quot;; &#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">cwd</span><span class="o">=</span><span class="n">scriptDir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="fromEngines"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.fromEngines">[docs]</a><span class="k">def</span> <span class="nf">fromEngines</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">launch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">noDataOk</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="o">**</span><span class="n">extraKw</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Write paraview script showing data from the current VTK-related engines and objects:</span>
+<span class="sd">    </span>
+<span class="sd">    * :obj:`woo.dem.VtkExport` is queried for files already written, and those are returned;</span>
+<span class="sd">    * :obj:`woo.dem.FlowAnalysis` is made to export its internal data at the moment of calling this function;</span>
+<span class="sd">    * :obj:`woo.dem.Tracer` indicates there are particles traces, which are exported by calling :obj:`woo.utils.vtkExportTraces`.</span>
+<span class="sd">    * :obj:`S.energy.grid &lt;woo.core.EnergyTrackerGrid&gt;`, if enabled, is exported to indicate spatial distribution of dissipated energy.</span>
+
+<span class="sd">    :param str out: script name written (if None, temporary file is used). Tags written as ``{tag}`` will be expanded using `S.expandTags &lt;woo.core.Scene.expandTags&gt;`.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">sphereFiles</span><span class="p">,</span><span class="n">meshFiles</span><span class="p">,</span><span class="n">conFiles</span><span class="o">=</span><span class="p">[],[],[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span> <span class="n">out</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.py&#39;</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">out</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">expandTags</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">):</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="o">+</span><span class="s1">&#39;.py&#39;</span>
+    <span class="n">outPrefix</span><span class="o">=</span><span class="n">out</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># without extension</span>
+    <span class="n">kw</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extraKw</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">VtkExport</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">nDone</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwFromVtkExport</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">FlowAnalysis</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">nDone</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwFromFlowAnalysis</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="n">outPrefix</span><span class="p">))</span> <span class="c1"># without the .py</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Tracer</span><span class="p">):</span> <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwFromVtkExportTraces</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">field</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="n">outPrefix</span><span class="p">))</span>
+    <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwFromEnergyGrid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="n">outPrefix</span><span class="p">))</span>
+     <span class="c1"># use static mesh as boundary, if present, otherwise use last mesh file</span>
+    <span class="k">if</span> <span class="s1">&#39;static&#39;</span> <span class="ow">in</span> <span class="n">kw</span> <span class="ow">or</span> <span class="s1">&#39;meshFiles&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+        <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;flowMeshFiles&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">if</span> <span class="s1">&#39;static&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;flowMeshFiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s1">&#39;static&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;meshFiles&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;flowMeshFiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s1">&#39;meshFiles&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># no data found from engines</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">kw</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">noDataOk</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No Paraview data found in engines.&quot;</span><span class="p">)</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">launch</span><span class="p">:</span> <span class="n">launchPV</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="kwFromVtkExport"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.kwFromVtkExport">[docs]</a><span class="k">def</span> <span class="nf">kwFromVtkExport</span><span class="p">(</span><span class="n">vtkExport</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">launch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s1">&#39;Extract keywords suitable for :obj:`write` from a given :obj:`~woo.dem.VtkExport` instance.&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vtkExport</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">VtkExport</span><span class="p">)</span>
+    <span class="n">ff</span><span class="o">=</span><span class="n">vtkExport</span><span class="o">.</span><span class="n">outFiles</span>
+    <span class="c1"># PVD not yet supported end-to-end :|       </span>
+    <span class="c1"># ff=vtkExport.makePvdFiles()</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sphereFiles</span><span class="o">=</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;spheres&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;spheres&#39;</span> <span class="ow">in</span> <span class="n">ff</span> <span class="k">else</span> <span class="p">[],</span><span class="n">meshFiles</span><span class="o">=</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;mesh&#39;</span> <span class="ow">in</span> <span class="n">ff</span> <span class="k">else</span> <span class="p">[],</span><span class="n">conFiles</span><span class="o">=</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;con&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;con&#39;</span> <span class="ow">in</span> <span class="n">ff</span> <span class="k">else</span> <span class="p">[],</span><span class="n">triFiles</span><span class="o">=</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;tri&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;tri&#39;</span> <span class="ow">in</span> <span class="n">ff</span> <span class="k">else</span> <span class="p">[],</span><span class="n">staticFile</span><span class="o">=</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;static&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;static&#39;</span> <span class="ow">in</span> <span class="n">ff</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="kwFromVtkExportTraces"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.kwFromVtkExportTraces">[docs]</a><span class="k">def</span> <span class="nf">kwFromVtkExportTraces</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">dem</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outPrefix</span><span class="p">:</span> <span class="n">outPrefix</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span>
+    <span class="n">out</span><span class="o">=</span><span class="n">outPrefix</span><span class="o">+</span><span class="s1">&#39;_traces.vtp&#39;</span>
+    <span class="n">tr</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">vtkExportTraces</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">dem</span><span class="p">,</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tr</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;tracesFile&#39;</span><span class="p">:</span><span class="n">out</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="kwFromEnergyGrid"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.kwFromEnergyGrid">[docs]</a><span class="k">def</span> <span class="nf">kwFromEnergyGrid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span> <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outPrefix</span><span class="p">:</span> <span class="n">outPrefix</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span>
+    <span class="n">out</span><span class="o">=</span><span class="n">outPrefix</span><span class="o">+</span><span class="s1">&#39;_energy.vti&#39;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;energyGridFile&#39;</span><span class="p">:</span><span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">gridToVTK</span><span class="p">(</span><span class="n">out</span><span class="p">)}</span></div>
+
+
+<div class="viewcode-block" id="kwFromFlowAnalysis"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.kwFromFlowAnalysis">[docs]</a><span class="k">def</span> <span class="nf">kwFromFlowAnalysis</span><span class="p">(</span><span class="n">flowAnalysis</span><span class="p">,</span><span class="n">outPrefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fractions</span><span class="o">=</span><span class="p">[],</span><span class="n">fracA</span><span class="o">=</span><span class="p">[],</span><span class="n">fracB</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="s1">&#39;Extract keywords suitable for :obj:`write` from a given :obj:`~woo.dem.VtkFlowAnalysis` instance.&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flowAnalysis</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">FlowAnalysis</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outPrefix</span><span class="p">:</span> <span class="n">outPrefix</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span>
+    <span class="n">ret</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">fa</span><span class="o">=</span><span class="n">flowAnalysis</span>
+    <span class="n">expFlow</span><span class="o">=</span><span class="n">fa</span><span class="o">.</span><span class="n">vtkExportFractions</span><span class="p">(</span><span class="n">outPrefix</span><span class="o">+</span><span class="s1">&#39;.all&#39;</span><span class="p">,</span><span class="n">fractions</span><span class="o">=</span><span class="n">fractions</span><span class="p">)</span>
+    <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;flowFile&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">expFlow</span>
+    <span class="c1"># export split data</span>
+    <span class="k">if</span> <span class="n">fa</span><span class="o">.</span><span class="n">nFractions</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fracA</span> <span class="ow">and</span> <span class="n">fracB</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Guessing values for fracA and fracB as they were not given&#39;</span><span class="p">)</span>
+            <span class="n">fracA</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fa</span><span class="o">.</span><span class="n">nFractions</span><span class="o">//</span><span class="mi">2</span><span class="p">));</span> <span class="n">fracB</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">fa</span><span class="o">.</span><span class="n">nFractions</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">fa</span><span class="o">.</span><span class="n">nFractions</span><span class="p">))</span>
+        <span class="n">expSplit</span><span class="o">=</span><span class="n">fa</span><span class="o">.</span><span class="n">vtkExportVectorOps</span><span class="p">(</span><span class="n">outPrefix</span><span class="o">+</span><span class="s1">&#39;.split&#39;</span><span class="p">,</span><span class="n">fracA</span><span class="o">=</span><span class="n">fracA</span><span class="p">,</span><span class="n">fracB</span><span class="o">=</span><span class="n">fracB</span><span class="p">)</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;splitFile&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">expSplit</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="fromVtkExport"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.fromVtkExport">[docs]</a><span class="k">def</span> <span class="nf">fromVtkExport</span><span class="p">(</span><span class="n">vtkExport</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">launch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s1">&#39;Write script for *vtkExport* (:obj:`~woo.dem.VtkExport`) and optionally *launch* Paraview on it.&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span> <span class="n">out</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.py&#39;</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="o">**</span><span class="n">kwFromVtkExport</span><span class="p">(</span><span class="n">vtkExport</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">launch</span><span class="p">:</span> <span class="n">launchPV</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="fromFlowAnalysis"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.fromFlowAnalysis">[docs]</a><span class="k">def</span> <span class="nf">fromFlowAnalysis</span><span class="p">(</span><span class="n">flowAnalysis</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">findMesh</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">launch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s1">&#39;Have *flowAnalysis* (:obj:`~woo.dem.FlowAnalysis`) export flow and split data, write Paraview script for it and optionally launch Paraview. With *findMesh*, try to find a :obj:`~woo.dem.VtkExport` and use its last exported mesh file as mesh to show with flow data as well.&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span> <span class="n">out</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.py&#39;</span>
+    <span class="n">flowMeshFiles</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">flowAnalysis</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">VtkExport</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;static&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">outFiles</span><span class="p">:</span> <span class="n">flowMeshFiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">outFiles</span><span class="p">[</span><span class="s1">&#39;static&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s1">&#39;mesh&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">outFiles</span><span class="p">:</span> <span class="n">flowMeshFiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">outFiles</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">flowMeshFiles</span><span class="o">=</span><span class="n">flowMeshFiles</span><span class="p">,</span><span class="o">**</span><span class="n">kwFromFlowAnalysis</span><span class="p">(</span><span class="n">flowAnalysis</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">launch</span><span class="p">:</span> <span class="n">launchPV</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write"><a class="viewcode-back" href="../../woo.paraviewscript.html#woo.paraviewscript.write">[docs]</a><span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">sphereFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">meshFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">conFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">triFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">staticFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">flowFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">splitFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">flowMeshFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">heightMapImageFiles</span><span class="o">=</span><span class="p">[],</span><span class="n">tracesFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">energyGridFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">flowMeshOpacity</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span><span class="n">splitStride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">splitClip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">flowStride</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Write out script suitable for running with Paraview (with the ``--script`` option). The options to this function are:</span>
+
+<span class="sd">    :param sphereFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``spheres``);</span>
+<span class="sd">    :param meshFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``mesh``);</span>
+<span class="sd">    :param conFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``con``);</span>
+<span class="sd">    :param triFiles: files from :obj:`woo.dem.VtkExport.outFiles` (``tri``);</span>
+<span class="sd">    :param staticFile: file from :obj:`woo.dem.VtkExport.outFiles` (``static``);</span>
+<span class="sd">    :param flowFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportFractions` (usually all fractions together);</span>
+<span class="sd">    :param splitFile: file written by :obj:`woo.dem.FlowAnalysis.vtkExportVectorOps`;</span>
+<span class="sd">    :param flowMeshFiles: mesh files to be used for showing boundaries for split analysis;</span>
+<span class="sd">    :param heightMapImageFiles: image files which will be warped by scalar;</span>
+<span class="sd">    :param tracesFile: file written by :obj:`woo.utils.vtkExportTraces`, for per-particle traces;</span>
+<span class="sd">    :param flowMeshOpacity: opacity of the mesh for flow analysis;</span>
+<span class="sd">    :param splitStride: spatial stride for segregation analysis; use 2 and more for very dense data meshes which are difficult to see through;</span>
+<span class="sd">    :param flowStride: spatial stride for flow analysis.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">fixPath</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">os.path</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="c1"># fix backslashes which might expand when written out (&#39;c:\temp&#39; to &#39;c: emp&#39;, for instance) </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="k">return</span> <span class="n">p</span>         <span class="c1"># empty or absolute, nothing to do</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">==</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">():</span> <span class="k">return</span> <span class="n">p</span> <span class="c1"># script in the current directory, so relative is OK</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out</span><span class="p">))</span> <span class="c1"># relative to where the script is being written</span>
+    <span class="n">subst</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">sphereFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">sphereFiles</span><span class="p">],</span>
+        <span class="n">meshFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">meshFiles</span><span class="p">],</span>
+        <span class="n">conFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">conFiles</span><span class="p">],</span>
+        <span class="n">triFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">triFiles</span><span class="p">],</span>
+        <span class="n">staticFile</span><span class="o">=</span><span class="n">fixPath</span><span class="p">(</span><span class="n">staticFile</span><span class="p">),</span>
+        <span class="n">flowFile</span><span class="o">=</span><span class="n">fixPath</span><span class="p">(</span><span class="n">flowFile</span><span class="p">),</span>
+        <span class="n">splitFile</span><span class="o">=</span><span class="n">fixPath</span><span class="p">(</span><span class="n">splitFile</span><span class="p">),</span>
+        <span class="n">flowMeshFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">flowMeshFiles</span><span class="p">],</span>
+        <span class="n">heightMapImageFiles</span><span class="o">=</span><span class="p">[</span><span class="n">fixPath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">heightMapImageFiles</span><span class="p">],</span>
+        <span class="n">tracesFile</span><span class="o">=</span><span class="n">fixPath</span><span class="p">(</span><span class="n">tracesFile</span><span class="p">),</span>
+        <span class="n">energyGridFile</span><span class="o">=</span><span class="n">fixPath</span><span class="p">(</span><span class="n">energyGridFile</span><span class="p">),</span>
+        <span class="n">flowMeshOpacity</span><span class="o">=</span><span class="n">flowMeshOpacity</span><span class="p">,</span>
+        <span class="n">splitStride</span><span class="o">=</span><span class="n">splitStride</span><span class="p">,</span>
+        <span class="n">splitClip</span><span class="o">=</span><span class="n">splitClip</span><span class="p">,</span>
+        <span class="n">flowStride</span><span class="o">=</span><span class="n">flowStride</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">f</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_paraviewScriptTemplate</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">subst</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    
+
+<span class="n">_paraviewScriptTemplate</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;#!/usr/bin/env python</span>
+<span class="s1">import sys, os.path</span>
+
+<span class="s1"># input parameters</span>
+
+<span class="s1"># fraction flow analysis</span>
+<span class="s1">splitFile=&#39;</span><span class="si">{splitFile}</span><span class="s1">&#39;</span>
+<span class="s1">splitStride=</span><span class="si">{splitStride}</span><span class="s1"> # with dense meshes, subsample to use only each nth point</span>
+<span class="s1">flowMeshFiles=</span><span class="si">{flowMeshFiles}</span><span class="s1"></span>
+<span class="s1">flowMeshOpacity=</span><span class="si">{flowMeshOpacity}</span><span class="s1"></span>
+
+<span class="s1"># height maps</span>
+<span class="s1">heightMapImageFiles=</span><span class="si">{heightMapImageFiles}</span><span class="s1"></span>
+
+<span class="s1"># global flow analysis</span>
+<span class="s1">flowFile=&#39;</span><span class="si">{flowFile}</span><span class="s1">&#39;</span>
+<span class="s1">flowStride=</span><span class="si">{flowStride}</span><span class="s1"></span>
+
+<span class="s1"># traces</span>
+<span class="s1">tracesFile=&#39;</span><span class="si">{tracesFile}</span><span class="s1">&#39;</span>
+
+
+<span class="s1"># energy grid</span>
+<span class="s1">energyGridFile=&#39;</span><span class="si">{energyGridFile}</span><span class="s1">&#39;</span>
+
+
+<span class="s1"># particles</span>
+<span class="s1">sphereFiles=</span><span class="si">{sphereFiles}</span><span class="s1"></span>
+<span class="s1">meshFiles=</span><span class="si">{meshFiles}</span><span class="s1"></span>
+<span class="s1">staticFile=&#39;</span><span class="si">{staticFile}</span><span class="s1">&#39;</span>
+<span class="s1">conFiles=</span><span class="si">{conFiles}</span><span class="s1"></span>
+<span class="s1">triFiles=</span><span class="si">{triFiles}</span><span class="s1"></span>
+
+<span class="s1">## we should change directory here, so that datafiles are found</span>
+<span class="s1"># Paraview defined current_script_path but that only works when run from Paraview</span>
+<span class="s1"># http://paraview.org/Bug/view.php?id=13287</span>
+<span class="s1">if &#39;current_script_path&#39; in dir():</span>
+<span class="s1">    d=os.path.dirname(current_script_path)</span>
+<span class="s1">    if d: os.chdir(d)</span>
+
+<span class="s1">### create zip archive</span>
+<span class="s1">if hasattr(sys,&#39;argv&#39;) and len(sys.argv)&gt;1:</span>
+<span class="s1">    import argparse,re</span>
+<span class="s1">    parser=argparse.ArgumentParser()</span>
+<span class="s1">    parser.add_argument(&#39;--zip&#39;,help=&#39;Create self-contained zip file from data files.&#39;,dest=&#39;zip&#39;,type=str,default=&#39;&#39;)</span>
+<span class="s1">    parser.add_argument(&#39;--slice&#39;,type=str,default=&#39;&#39;,dest=&#39;slice&#39;,help=&#39;Slice for packing files, to avoid large volumes of data; the slice must be in python format, i.e. ``start:stop`` or ``start:stop:step``, where any of the fields may be empty. E.g. to choose every second file, say ``--slice=::2``, to get just the last one, say ``--slice=-1:``.&#39;)</span>
+<span class="s1">    opts=parser.parse_args()</span>
+<span class="s1">    if opts.zip:</span>
+<span class="s1">        zipName=opts.zip+(&#39;.zip&#39; if not opts.zip.endswith(&#39;.zip&#39;) else &#39;&#39;)</span>
+<span class="s1">        out0=os.path.basename(os.path.splitext(zipName)[0]) # directory inside the archive</span>
+<span class="s1">        newFiles=dict()</span>
+<span class="s1">        if opts.slice:</span>
+<span class="s1">            # from http://stackoverflow.com/a/681949/761090 in comment by pprzemek</span>
+<span class="s1">            vtkSlice=slice(*map(lambda x: int(x.strip()) if x.strip() else None, opts.slice.split(&#39;:&#39;)))</span>
+<span class="s1">        else: vtkSlice=slice(None,None) # all files</span>
+<span class="s1">        import zipfile</span>
+<span class="s1">        with zipfile.ZipFile(zipName,&#39;w&#39;,allowZip64=True) as ar:</span>
+<span class="s1">            zippedFiles=set()</span>
+<span class="s1">            for fff in (&#39;sphereFiles&#39;,&#39;meshFiles&#39;,&#39;conFiles&#39;,&#39;triFiles&#39;,&#39;flowMeshFiles&#39;,&#39;heightMapImageFiles&#39;):</span>
+<span class="s1">                ff=eval(fff) # get the sequence</span>
+<span class="s1">                ff2=[]</span>
+<span class="s1">                for f in ff[vtkSlice]:</span>
+<span class="s1">                    fn=os.path.basename(f)</span>
+<span class="s1">                    print(zipName+&#39;: adding&#39;,fn)</span>
+<span class="s1">                    zippedFiles.add(fn)</span>
+<span class="s1">                    ar.write(f,out0+&#39;/&#39;+fn)</span>
+<span class="s1">                    ff2.append(fn)</span>
+<span class="s1">                newFiles[fff]=ff2</span>
+<span class="s1">            for ff in (&#39;staticFile&#39;,&#39;splitFile&#39;,&#39;flowFile&#39;,&#39;tracesFile&#39;,&#39;energyGridFile&#39;):</span>
+<span class="s1">                f=eval(ff)</span>
+<span class="s1">                fn=os.path.basename(f)</span>
+<span class="s1">                newFiles[ff]=fn</span>
+<span class="s1">                if not fn: continue # empty filename for missing data</span>
+<span class="s1">                if fn in zippedFiles: continue # skip if already in the archive</span>
+<span class="s1">                print(zipName+&#39;: adding&#39;,fn)</span>
+<span class="s1">                zippedFiles.add(fn)</span>
+<span class="s1">                ar.write(f,out0+&#39;/&#39;+fn)</span>
+<span class="s1">            # make a copy of this script, adjust filenames in there and add it to the archive as well</span>
+<span class="s1">            ll=[]</span>
+<span class="s1">            for l in open(sys.argv[0]):</span>
+<span class="s1">                var=l.split(&#39;=&#39;,1)[0]</span>
+<span class="s1">                if var in (&#39;sphereFiles&#39;,&#39;meshFiles&#39;,&#39;conFiles&#39;,&#39;triFiles&#39;,&#39;heightMapImageFiles&#39;,&#39;staticFile&#39;,&#39;splitFile&#39;,&#39;flowMeshFiles&#39;,&#39;flowFile&#39;,&#39;tracesFile&#39;,&#39;energyGridFile&#39;):</span>
+<span class="s1">                    if type(newFiles[var])==list: ll.append(var+&#39;=&#39;+str(newFiles[var])+&#39;\n&#39;)</span>
+<span class="s1">                    else: ll.append(var+&quot;=&#39;&quot;+newFiles[var]+&quot;&#39;\n&quot;)</span>
+<span class="s1">                else: ll.append(l)</span>
+<span class="s1">            ar.writestr(out0+&#39;/&#39;+os.path.basename(sys.argv[0]),&#39;&#39;.join(ll))</span>
+<span class="s1">        print(&#39;File &#39;+os.path.abspath(zipName)+&#39; written.&#39;)</span>
+<span class="s1">        sys.exit(0)</span>
+
+<span class="s1">from paraview.simple import *        </span>
+<span class="s1">        </span>
+
+<span class="s1">def readPointCellData(src):</span>
+<span class="s1">    # not sure this works really?</span>
+<span class="s1">    if 0: # does not work??</span>
+<span class="s1">        src.PointArrayStatus=src.GetPointDataInformation().keys()</span>
+<span class="s1">        src.CellArrayStatus=src.GetCellDataInformation().keys()</span>
+<span class="s1">    else:</span>
+<span class="s1">        # https://discourse.paraview.org/t/loading-data-with-python/768/2</span>
+<span class="s1">        stp=src.GetProperty(&#39;PointArrayInfo&#39;)</span>
+<span class="s1">        src.PointArrayStatus=[stp[i] for i in range(0,len(stp),2)]</span>
+<span class="s1">        stc=src.GetProperty(&#39;CellArrayInfo&#39;)</span>
+<span class="s1">        src.CellArrayStatus=[stc[i] for i in range(0,len(stc),2)]</span>
+<span class="s1">    src.UpdatePipeline()</span>
+
+<span class="s1">def readDataOrPvd(reader,FileName):</span>
+<span class="s1">    # PVD not yet supported in readPointCellData (how?), hence disabled</span>
+<span class="s1">    if 0 and len(FileName)==1 and FileName[0].endswith(&#39;.pvd&#39;):</span>
+<span class="s1">        return PVDReader(FileName=FileName[0])</span>
+<span class="s1">    else: return reader(FileName=FileName)</span>
+
+<span class="s1">if splitFile:</span>
+<span class="s1">    # input data</span>
+<span class="s1">    split=XMLImageDataReader(FileName=splitFile)</span>
+<span class="s1">    RenameSource(splitFile,split)</span>
+<span class="s1">    readPointCellData(split)</span>
+<span class="s1">    _bounds=split.GetDataInformation().GetBounds()</span>
+<span class="s1">    flowBounds=_bounds ## to be used later with in flowMeshFiles</span>
+<span class="s1">    _ext=split.GetDataInformation().GetExtent()</span>
+<span class="s1">    _avgcell=(1/3.)*sum([(_bounds[2*i+1]-_bounds[2*i])/(_ext[2*i+1]-_ext[2*1]) for i in (0,1,2)])</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Representation=&#39;Outline&#39;</span>
+<span class="s1">    rep.Visibility=0 # don&#39;t show input outline</span>
+<span class="s1">    # stride extraction</span>
+<span class="s1">    _ex=_last=ExtractSubset(VOI=_ext,SampleRateI=splitStride,SampleRateJ=splitStride,SampleRateK=splitStride)</span>
+<span class="s1">    _cl=_last=Clip(ClipType=&#39;Box&#39;)</span>
+<span class="s1">    _cl.ClipType.Bounds=_bounds</span>
+<span class="s1">    _cl.Invert=1</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Representation=&#39;Outline&#39;</span>
+<span class="s1">    rep.Visibility=1</span>
+<span class="s1">    rep.CubeAxesVisibility=1</span>
+
+<span class="s1">    for arr,name,rgb in [(&#39;cross&#39;,&#39;Segregation&#39;,(0,0,1)),(&#39;diffA&#39;,&#39;Small fraction&#39;,(0,1,0)),(&#39;diffB&#39;,&#39;Big fraction&#39;,(1,0,0))]:</span>
+<span class="s1">        SetActiveSource(_last)</span>
+<span class="s1">        arrData=split.GetPointDataInformation().GetArray(arr)</span>
+<span class="s1">        denom=max([max([abs(r) for r in arrData.GetRange(i)]) for i in (0,1,2)])</span>
+<span class="s1">        if denom==0: denom=1e-6</span>
+<span class="s1">        scale=_avgcell/denom</span>
+<span class="s1">        scale*=2*splitStride # biggest vector spans about 2 cells (including stride)</span>
+<span class="s1">        if name==&#39;Segregation&#39;: scale*=4</span>
+<span class="s1">        gl=Glyph(GlyphType=&quot;Arrow&quot;,GlyphTransform=&quot;Transform2&quot;,Vectors=[&#39;POINTS&#39;,arr])</span>
+<span class="s1">        if hasattr(gl,&#39;MaskPoints&#39;): # PV 4.0</span>
+<span class="s1">            gl.MaskPoints=0 </span>
+<span class="s1">            gl.SetScaleFactor=scale</span>
+<span class="s1">            gl.RandomMode=0</span>
+<span class="s1">        elif hasattr(gl,&#39;GlyphMode&#39;): # PV&gt;=4.3</span>
+<span class="s1">            gl.GlyphMode=&#39;All Points&#39;</span>
+<span class="s1">            gl.ScaleMode=&#39;vector&#39;</span>
+<span class="s1">            gl.ScaleFactor=scale</span>
+<span class="s1">        RenameSource(name,gl)</span>
+<span class="s1">        rep=Show()</span>
+<span class="s1">        rep.ColorArrayName=(&#39;POINT_DATA&#39;,&#39;&#39;) # solid color</span>
+<span class="s1">        rep.DiffuseColor=rgb</span>
+
+<span class="s1">if flowFile:</span>
+<span class="s1">    flow=XMLImageDataReader(FileName=[flowFile])</span>
+<span class="s1">    RenameSource(flowFile,flow)</span>
+<span class="s1">    flow.PointArrayStatus=flow.GetPointDataInformation().keys()</span>
+<span class="s1">    flow.CellArrayStatus=flow.GetCellDataInformation().keys()</span>
+<span class="s1">    bb=flow.GetDataInformation().GetBounds()</span>
+<span class="s1">    flowBounds=bb ## to be used later with in flowMeshFIle</span>
+<span class="s1">    ext=flow.GetDataInformation().GetExtent()</span>
+<span class="s1">    midPt=(.5*(bb[0]+bb[1]),.5*(bb[2]+bb[3]),.5*(bb[4]+bb[5]))</span>
+<span class="s1">    sizes=(bb[1]-bb[0],bb[3]-bb[2],bb[5]-bb[4])</span>
+<span class="s1">    rad=.5*min(sizes)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Representation=&#39;Outline&#39;</span>
+<span class="s1">    rep.Visibility=0</span>
+
+<span class="s1">    _ex=_last=ExtractSubset(VOI=ext,SampleRateI=flowStride,SampleRateJ=flowStride,SampleRateK=flowStride)</span>
+
+<span class="s1">    tr=StreamTracer(SeedType=&#39;Point Source&#39;)</span>
+<span class="s1">    tr.SeedType.Center=midPt</span>
+<span class="s1">    tr.SeedType.Radius=rad</span>
+<span class="s1">    tr.SeedType.NumberOfPoints=200</span>
+<span class="s1">    tr.Vectors=[&#39;POINTS&#39;,&#39;flow (momentum density)&#39;]</span>
+<span class="s1">    tr.MaximumStreamlineLength=max(sizes) # maximum extent</span>
+<span class="s1">    RenameSource(&#39;Global flow&#39;,tr)</span>
+
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.LineWidth=3.0</span>
+<span class="s1">    rep.LookupTable=GetLookupTableForArray(&#39;flow (momentum density)&#39;,3,VectorMode=&#39;Magnitude&#39;,EnableOpacityMapping=1)</span>
+<span class="s1">    rep.ColorArrayName=(&#39;POINT_DATA&#39;,&#39;flow (momentum density)&#39;)</span>
+
+<span class="s1">if flowMeshFiles:</span>
+<span class="s1">    for fmf in flowMeshFiles:</span>
+<span class="s1">        mesh=XMLUnstructuredGridReader(FileName=[fmf])</span>
+<span class="s1">        RenameSource(fmf,mesh)</span>
+<span class="s1">        mesh.CellArrayStatus=mesh.GetCellDataInformation().keys()</span>
+<span class="s1">        try:</span>
+<span class="s1">            _cl=Clip(ClipType=&#39;Box&#39;)</span>
+<span class="s1">            _cl.ClipType.Bounds=flowBounds</span>
+<span class="s1">            _cl.Invert=1</span>
+<span class="s1">            _cl.Scalars = [&#39;CELLS&#39;, &#39;color&#39;]</span>
+<span class="s1">        except NameError: pass # flowBounds not defined, as flow/split were not exported</span>
+<span class="s1">        rep=Show()</span>
+<span class="s1">        rep.Representation=&#39;Surface&#39;</span>
+<span class="s1">        rep.Opacity=flowMeshOpacity</span>
+
+<span class="s1">if tracesFile:</span>
+<span class="s1">    traces=XMLPolyDataReader(FileName=[tracesFile])</span>
+<span class="s1">    RenameSource(tracesFile,traces)</span>
+<span class="s1">    traces.CellArrayStatus=traces.GetCellDataInformation().keys()</span>
+<span class="s1">    rep=Show()</span>
+
+<span class="s1">if energyGridFile:</span>
+<span class="s1">    energy=XMLImageDataReader(FileName=[energyGridFile])</span>
+<span class="s1">    RenameSource(energyGridFile,energy)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Representation=&#39;Volume&#39;</span>
+
+
+<span class="s1">if sphereFiles:</span>
+<span class="s1">    spheres=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=sphereFiles)</span>
+<span class="s1">    readPointCellData(spheres)</span>
+<span class="s1">    RenameSource(sphereFiles[0],spheres)</span>
+<span class="s1">    # don&#39;t show glyphs for more than 5e4 spheres by default to avoid veeery sloooow rendering</span>
+<span class="s1">    isBig=(spheres.CellData.Proxy.GetDataInformation().GetNumberOfCells()&gt;5e4)</span>
+<span class="s1">    # setup glyphs, but don&#39;t show those by default</span>
+<span class="s1">    gl=Glyph(Input=spheres,GlyphType=&#39;Sphere&#39;)</span>
+<span class="s1">    gl.ScaleArray=[&#39;POINTS&#39;,&#39;radius&#39;]</span>
+<span class="s1">    gl.GlyphType.Radius=1.0</span>
+<span class="s1">    gl.GlyphMode=&#39;All Points&#39;</span>
+<span class="s1">    gl.ScaleFactor=1.0</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Visibility=(0 if isBig else 1)</span>
+<span class="s1">    rep.ColorArrayName=(&#39;POINT_DATA&#39;,&#39;radius&#39;)</span>
+<span class="s1">    rep.LookupTable=GetLookupTableForArray(&#39;radius&#39;,1)</span>
+<span class="s1">    # make sphere points invisible</span>
+<span class="s1">    SetActiveSource(spheres)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Visibility=(1 if isBig else 0)</span>
+<span class="s1">    rep.ColorArrayName=(&#39;POINT_DATA&#39;,&#39;radius&#39;)</span>
+<span class="s1">    rep.LookupTable=GetLookupTableForArray(&#39;radius&#39;,1)</span>
+
+<span class="s1">if meshFiles:</span>
+<span class="s1">    mesh=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=meshFiles)</span>
+<span class="s1">    readPointCellData(mesh)</span>
+<span class="s1">    RenameSource(meshFiles[0],mesh)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Opacity=0.2</span>
+
+<span class="s1">for hm in heightMapImageFiles:</span>
+<span class="s1">    img=XMLImageDataReader(FileName=[hm])</span>
+<span class="s1">    RenameSource(hm,img)</span>
+<span class="s1">    warp=WarpByScalar(Input=img)</span>
+<span class="s1">    rep=Show()</span>
+
+<span class="s1">if staticFile:</span>
+<span class="s1">    mesh=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=[staticFile])</span>
+<span class="s1">    # mesh=XMLUnstructuredGridReader(FileName=[staticFile])</span>
+<span class="s1">    readPointCellData(mesh)</span>
+<span class="s1">    RenameSource(staticFile,mesh)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Opacity=0.2</span>
+
+<span class="s1">if triFiles:</span>
+<span class="s1">    tri=readDataOrPvd(reader=XMLUnstructuredGridReader,FileName=triFiles)</span>
+<span class="s1">    readPointCellData(tri)</span>
+<span class="s1">    RenameSource(triFiles[0],tri)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    # rep.Opacity=1.0</span>
+
+<span class="s1">if conFiles:</span>
+<span class="s1">    con=readDataOrPvd(reader=XMLPolyDataReader,FileName=conFiles)</span>
+<span class="s1">    # con=XMLPolyDataReader(FileName=conFiles)</span>
+<span class="s1">    readPointCellData(con)</span>
+<span class="s1">    RenameSource(conFiles[0],con)</span>
+<span class="s1">    # by default, only lines are visible</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    c2p=CellDatatoPointData(PassCellData=1)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Visibility=0</span>
+<span class="s1">    # TODO: find some characteristic radius from the data</span>
+<span class="s1">    tub=Tube(Scalars=[&#39;POINTS&#39;,&#39;Fn&#39;],Radius=1e-5,VaryRadius=&#39;By Scalar&#39;,Capping=0,RadiusFactor=1000)</span>
+<span class="s1">    rep=Show()</span>
+<span class="s1">    rep.Visibility=0</span>
+
+<span class="s1">GetAnimationScene().PlayMode=&#39;Snap To TimeSteps&#39;</span>
+
+<span class="s1">GetRenderView().CenterAxesVisibility=0</span>
+<span class="s1">Render()</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.paraviewscript</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

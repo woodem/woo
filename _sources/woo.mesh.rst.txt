@@ -1,0 +1,40 @@
+:mod:`woo.mesh`
+============================
+
+.. inheritance-diagram:: woo.mesh
+   :parts: 2
+
+.. automodule:: woo.mesh
+   :members:
+   :undoc-members:
+   :exclude-members: MeshData
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+MeshData
+--------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeData` → :obj:`~woo.mesh.MeshData`
+
+.. autoclass:: MeshData
+   :members:
+   :exclude-members: uvCoord, vNorm, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: uvCoord (= Vector2(nan,nan))
+
+      Parametric coordinate for texture mapping (in POV-Ray export with :obj:`~woo.dem.POVRayExport`.
+
+      [type: Vector2r]
+
+   .. attribute:: vNorm (= 0)
+
+      How is vertex normal defined in this node; vertex normal makes the appearance smooth (in POV-Ray, that is) by interpolating between face normal and vertex normal, shared by faces around. In nodes where smooth appearance is not desired (such as with sharp folds in mesh), set to 'none'. 'some' uses groups of similarly oriented faces around the vertex to compute vertex normal separately for those groups (not yet implemented). 'all' considers all faces around the vertex to compute average vertex normal.
+
+      [type: short, named enum, possible values are: **'none'** (*''*; 0), **'some'** (1), **'all'** (2)]
+

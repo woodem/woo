@@ -1,0 +1,7 @@
+:mod:`woo.config`
+==============================
+
+.. automodule:: woo.config
+   :members:
+   :undoc-members:
+

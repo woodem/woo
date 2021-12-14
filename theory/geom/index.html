@@ -1,0 +1,393 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Geometry &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Local contact coordinates" href="l6geom.html" />
+    <link rel="prev" title="Theory" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="l6geom.html" title="Local contact coordinates"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../index.html" title="Theory"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Theory</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Geometry</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="geometry">
+<span id="contact-geometry"></span><h1>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">¶</a></h1>
+<p>Woo splits each contact into its geometrical features and the <a class="reference internal" href="../contact/index.html#dem-contact-models"><span class="std std-ref">contact model</span></a>.</p>
+<p>The geometry is given by local coordinates (situated at the contact point and having the <span class="math notranslate nohighlight">\(x\)</span>-axis along the contact normal) and is also responsible for computing relative velocity of contacting particles in local coordinates. THis information is stored in <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.L6Geom</span></code></a>.</p>
+<p>The geometry computation (performed by various <a class="reference internal" href="../../woo.dem.html#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CGeomFunctor</span></code></a> subclasses) is split in two parts:</p>
+<ul class="simple">
+<li><p>Algorithm for computing relative velocities (and other features) at the contact point, which is common for all particle shapes:</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="l6geom.html">Local contact coordinates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="l6geom.html#generic-contact-routine">Generic contact routine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="l6geom.html#contact-formation">Contact formation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="l6geom.html#contact-update">Contact update</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<ul class="simple">
+<li><p>Intersection algorithms for various <a class="reference internal" href="../../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a>, such as <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere</span></code></a> with <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facet</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ellipsoid</span></code></a> with <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wall</span></code></a> and so on.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sphere.html">Sphere</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html#sphere-sphere-contact">Sphere-Sphere contact</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ellipsoid.html">Ellipsoid</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ellipsoid.html#ellipsoid-ellipsoid-contact">Ellipsoid-Ellipsoid contact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ellipsoid.html#ellipsoid-wall-intersection">Ellipsoid-Wall intersection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="capsule.html">Capsule</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="capsule.html#properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capsule.html#capsule-capsule-contact">Capsule-capsule contact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capsule.html#wall-capsule-contact">Wall-capsule contact</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Additional topics dealing with contact geometry are described in the following sections:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="facet-smooth-edge.html">Smooth triangulation edge contacts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="facet-smooth-edge.html#motivation">Motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facet-smooth-edge.html#edge-smoothing">Edge smoothing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="particle-shapes">
+<h2>Particle shapes<a class="headerlink" href="#particle-shapes" title="Permalink to this headline">¶</a></h2>
+<p>The following particle shapes are supported:</p>
+<ol class="arabic simple">
+<li><p>Simple shapes (1-node): <a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a>;</p></li>
+<li><p>Multinodal shapes: <a class="reference internal" href="../../woo.dem.html#woo.dem.Truss" title="woo.dem.Truss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Truss</span></code></a> (2 nodes), <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> (3 nodes); <a class="reference internal" href="../../woo.fem.html#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a> (same as <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> geometrically, but adds deformability), <a class="reference internal" href="../../woo.fem.html#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Tetra</span></code></a> (4 nodes; plus deforming <a class="reference internal" href="../../woo.fem.html#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Tet4</span></code></a>)</p></li>
+<li><p>Infinite axis-aligned shapes: <a class="reference internal" href="../../woo.dem.html#woo.dem.InfCylinder" title="woo.dem.InfCylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfCylinder</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code></a>.</p></li>
+</ol>
+<p>The following matrix shows which shapes can collide with each other:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 9%" />
+<col style="width: 8%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 8%" />
+<col style="width: 17%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cone" title="woo.dem.Cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cone</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.InfCylinder" title="woo.dem.InfCylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfCylinder</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Rod" title="woo.dem.Rod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rod</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.fem.html#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Truss" title="woo.dem.Truss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Truss</span></code></a></p></th>
+<th class="head"><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code></a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Capsule_Capsule_L6Geom" title="woo.dem.Cg2_Capsule_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Capsule_L6Geom" title="woo.dem.Cg2_Facet_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_InfCylinder_Capsule_L6Geom" title="woo.dem.Cg2_InfCylinder_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="woo.dem.Cg2_Sphere_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Capsule_L6Geom" title="woo.dem.Cg2_Wall_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cone" title="woo.dem.Cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cone</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Cone_Sphere_L6Geom" title="woo.dem.Cg2_Cone_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom" title="woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Ellipsoid_L6Geom" title="woo.dem.Cg2_Facet_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Ellipsoid_L6Geom" title="woo.dem.Cg2_Sphere_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Ellipsoid_L6Geom" title="woo.dem.Cg2_Wall_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Capsule_L6Geom" title="woo.dem.Cg2_Facet_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Ellipsoid_L6Geom" title="woo.dem.Cg2_Facet_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Facet_L6Geom" title="woo.dem.Cg2_Facet_Facet_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_InfCylinder_L6Geom" title="woo.dem.Cg2_Facet_InfCylinder_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Sphere_L6Geom" title="woo.dem.Cg2_Facet_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Facet_L6Geom" title="woo.dem.Cg2_Wall_Facet_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.InfCylinder" title="woo.dem.InfCylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfCylinder</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_InfCylinder_Capsule_L6Geom" title="woo.dem.Cg2_InfCylinder_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_InfCylinder_L6Geom" title="woo.dem.Cg2_Facet_InfCylinder_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_InfCylinder_Sphere_L6Geom" title="woo.dem.Cg2_InfCylinder_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Rod" title="woo.dem.Rod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rod</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Rod_Sphere_L6Geom" title="woo.dem.Cg2_Rod_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="woo.dem.Cg2_Sphere_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Cone_Sphere_L6Geom" title="woo.dem.Cg2_Cone_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Ellipsoid_L6Geom" title="woo.dem.Cg2_Sphere_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Facet_Sphere_L6Geom" title="woo.dem.Cg2_Facet_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_InfCylinder_Sphere_L6Geom" title="woo.dem.Cg2_InfCylinder_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Rod_Sphere_L6Geom" title="woo.dem.Cg2_Rod_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Sphere_L6Geom" title="woo.dem.Cg2_Sphere_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Sphere_Sphere_G3Geom" title="woo.dem.Cg2_Sphere_Sphere_G3Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g3g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Sphere_L6Geom" title="woo.dem.Cg2_Wall_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Sphere_G3Geom" title="woo.dem.Cg2_Wall_Sphere_G3Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g3g</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../woo.fem.html#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Truss" title="woo.dem.Truss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Truss</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Capsule_L6Geom" title="woo.dem.Cg2_Wall_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Ellipsoid_L6Geom" title="woo.dem.Cg2_Wall_Ellipsoid_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Facet_L6Geom" title="woo.dem.Cg2_Wall_Facet_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Sphere_L6Geom" title="woo.dem.Cg2_Wall_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">l6g</span></code></a>, <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Sphere_G3Geom" title="woo.dem.Cg2_Wall_Sphere_G3Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g3g</span></code></a></p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+<td><p>×</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">g3g</span></code> geometry is an algorithm used in Yade’s <a class="reference external" href="https://yade-dem.org/doc/yade.wrapper.html#yade.wrapper.ScGeom">ScGeom</a> and many other codes including PFC3D; it was only included for comparison purposes and is not to be used otherwise.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Geometry</a><ul>
+<li><a class="reference internal" href="#particle-shapes">Particle shapes</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="../index.html"
+                          title="Previous page">&larr; Theory</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="l6geom.html"
+                          title="Next page">&rarr; Local contact coordinates</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/geom/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="l6geom.html" title="Local contact coordinates"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../index.html" title="Theory"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Geometry</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

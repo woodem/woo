@@ -1,0 +1,216 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Granular &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Finite Elements" href="fem.html" />
+    <link rel="prev" title="Gallery" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="fem.html" title="Finite Elements"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Gallery"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Granular</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="granular">
+<span id="gallery-granular"></span><h1>Granular<a class="headerlink" href="#granular" title="Permalink to this headline">¶</a></h1>
+<section id="sieving">
+<h2>Sieving<a class="headerlink" href="#sieving" title="Permalink to this headline">¶</a></h2>
+<p>The rolling screen is used for sieving of granular material. The simulation was evaluating not mass rates and PSD for each individual section of the screen. Improvements of the screen design were validated using batch of simulations with several varying parameters.</p>
+<p>This video is a HQ rendering of the screen being filled (via POV-Ray; set the video to 1440HD for better quality):</p>
+<iframe src="https://www.youtube.com/embed/p1VxvvNXDQc" style="border: 0; height: 345px; width: 560px">
+</iframe><p>This is a detail on the gap:</p>
+<iframe src="https://www.youtube.com/embed/66N2ltj2sFk" style="border: 0; height: 345px; width: 560px">
+</iframe><p>This was an experimental small-size screen with vibrating cylinders:</p>
+<iframe src="https://www.youtube.com/embed/2jYLx89etaM" style="border: 0; height: 345px; width: 560px">
+</iframe><p>This screen had several decks and complex transitions:</p>
+<img alt="../_images/roro-complex-b.png" src="../_images/roro-complex-b.png" />
+<a class="reference internal image-reference" href="../_images/screen.png"><img alt="../_images/screen.png" src="../_images/screen.png" style="width: 100%;" /></a>
+<p>This is a plot of PSDs in 3 different parts of the screen for batch with varying feed flow rates; it is collected as statistics of pellets passing through individual gaps:</p>
+<a class="reference internal image-reference" href="../_images/rainbow.png"><img alt="../_images/rainbow.png" src="../_images/rainbow.png" style="width: 100%;" /></a>
+</section>
+<section id="jamming">
+<h2>Jamming<a class="headerlink" href="#jamming" title="Permalink to this headline">¶</a></h2>
+<p>This transfer point was having issues with jamming and abrasion; the simulation was able to suggest improvements in the geometry design:</p>
+<iframe src="https://www.youtube.com/embed/UiAjvYVBMFU" style="border: 0; height: 345px; width: 560px">
+</iframe><p>This was a bin designed for partial segregation. Simulations were run to assess its efficiency and suggest improvements in the construction; this image shows layering evolution:</p>
+<a class="reference internal image-reference" href="../_images/bin1a.png"><img alt="../_images/bin1a.png" src="../_images/bin1a.png" style="width: 100%;" /></a>
+<p>Here, velocity vectors are shown so that active regions are visible:</p>
+<a class="reference internal image-reference" href="../_images/bin2a.png"><img alt="../_images/bin2a.png" src="../_images/bin2a.png" style="width: 100%;" /></a>
+</section>
+<section id="abrasion">
+<h2>Abrasion<a class="headerlink" href="#abrasion" title="Permalink to this headline">¶</a></h2>
+<p>This simulation was analyzing abrasion of the plate when directing the flow from the conveyor. Changing the shape of the plate (by running batch of parametric simulations) helped reducing abrasion effects:</p>
+<a class="reference internal image-reference" href="../_images/abrasion-smaller.png"><img alt="../_images/abrasion-smaller.png" src="../_images/abrasion-smaller.png" style="width: 60%;" /></a>
+</section>
+<section id="segregation">
+<h2>Segregation<a class="headerlink" href="#segregation" title="Permalink to this headline">¶</a></h2>
+<p>The chute on the image was exhibiting segregation of fractions, desipte them being well mixed on inlet conveyor; the simulation used the chute imported from STL and using a custom-developed <a class="reference internal" href="../user/flow-analysis.html#user-manual-flow-analysis"><span class="std std-ref">flow analysis tool</span></a>, we determined the places where the segregation was taking place, thus giving directions for improved chute design not exhibiting segregation.</p>
+<a class="reference internal image-reference" href="../_images/flow-small-big-cross-vol.png"><img alt="../_images/flow-small-big-cross-vol.png" src="../_images/flow-small-big-cross-vol.png" style="width: 100%;" /></a>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Granular</a><ul>
+<li><a class="reference internal" href="#sieving">Sieving</a></li>
+<li><a class="reference internal" href="#jamming">Jamming</a></li>
+<li><a class="reference internal" href="#abrasion">Abrasion</a></li>
+<li><a class="reference internal" href="#segregation">Segregation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="index.html"
+                          title="Previous page">&larr; Gallery</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="fem.html"
+                          title="Next page">&rarr; Finite Elements</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/granular.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="fem.html" title="Finite Elements"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Gallery"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Granular</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

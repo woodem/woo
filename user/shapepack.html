@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ShapePack &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Woo for seasoned Yade users" href="yade-diff.html" />
+    <link rel="prev" title="Clumps" href="clump.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="yade-diff.html" title="Woo for seasoned Yade users"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="clump.html" title="Clumps"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ShapePack</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="shapepack">
+<span id="user-shapepack"></span><h1>ShapePack<a class="headerlink" href="#shapepack" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a> is an object which stores purely geometrical configuration of a number of particles; contrary to <a class="reference internal" href="../tutorial/export.html#tutorial-spherepack"><span class="std std-ref">SpherePack</span></a> (which is less universal, but has many sphere-specific optimizaitons), it can contain also other shapes than just spheres.</p>
+<p>The API of both <a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">SpherePack</span></code> is deliberately almost identical.</p>
+<section id="file-format">
+<h2>File format<a class="headerlink" href="#file-format" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a> is useful as intermediary storage of particle arrangement (e.g. beteween different simulations, or as cache for routines such as <a class="reference internal" href="../woo.pack.html#woo.pack.makeBandFeedPack" title="woo.pack.makeBandFeedPack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">makeBandFeedPack</span></code></a>).</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">sp</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">ShapePack</span><span class="p">()</span>     <span class="c1"># create new object</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">sp</span><span class="o">.</span><span class="n">fromDem</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="p">)</span>       <span class="c1"># get data from the current simulation</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">sp</span><span class="o">.</span><span class="n">saveTxt</span><span class="p">(</span><span class="s1">&#39;export-shapepack.txt&#39;</span><span class="p">)</span> <span class="c1"># save data to file</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">sp2</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">ShapePack</span><span class="p">(</span><span class="n">loadFrom</span><span class="o">=</span><span class="s1">&#39;export-shapepack.txt&#39;</span><span class="p">)</span>  <span class="c1"># load at construction time</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">sp3</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">ShapePack</span><span class="p">()</span>
+
+<span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">sp3</span><span class="o">.</span><span class="n">loadTxt</span><span class="p">(</span><span class="s1">&#39;export-shapepack.txt&#39;</span><span class="p">)</span>                     <span class="c1"># load with an existing object</span>
+</pre></div>
+</div>
+<p>The resulting file contains one particle per line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="n">Capsule</span> <span class="mf">0.0120227</span> <span class="mf">0.976311</span> <span class="mf">0.163282</span> <span class="mf">0.105552</span> <span class="o">-</span><span class="mf">0.0138765</span> <span class="o">-</span><span class="mf">0.0322094</span> <span class="o">-</span><span class="mf">0.0335685</span>
+<span class="mi">1</span> <span class="n">Capsule</span> <span class="mf">0.849475</span> <span class="mf">0.849563</span> <span class="mf">0.0607862</span> <span class="mf">0.0953496</span> <span class="mf">0.0315324</span> <span class="mf">0.0102243</span> <span class="mf">0.000629567</span>
+<span class="mi">2</span> <span class="n">Capsule</span> <span class="o">-</span><span class="mf">0.372623</span> <span class="o">-</span><span class="mf">0.103693</span> <span class="mf">0.0763046</span> <span class="mf">0.141139</span> <span class="mf">0.0639594</span> <span class="mf">0.00390455</span> <span class="mf">0.000197987</span>
+<span class="mi">3</span> <span class="n">Capsule</span> <span class="mf">0.884581</span> <span class="mf">0.32526</span> <span class="mf">0.0991963</span> <span class="mf">0.17232</span> <span class="mf">0.0543704</span> <span class="mf">0.0431827</span> <span class="o">-</span><span class="mf">0.00213683</span>
+<span class="mi">4</span> <span class="n">Capsule</span> <span class="mf">0.610379</span> <span class="mf">0.250056</span> <span class="mf">0.257899</span> <span class="mf">0.117386</span> <span class="mf">0.0160657</span> <span class="o">-</span><span class="mf">0.0521275</span> <span class="mf">0.012216</span>
+<span class="mi">5</span> <span class="n">Capsule</span> <span class="o">-</span><span class="mf">1.07945</span> <span class="o">-</span><span class="mf">0.0630431</span> <span class="mf">0.0648866</span> <span class="mf">0.122897</span> <span class="o">-</span><span class="mf">0.0513651</span> <span class="mf">0.0231532</span> <span class="o">-</span><span class="mf">0.000282427</span>
+<span class="mi">6</span> <span class="n">Capsule</span> <span class="mf">0.629565</span> <span class="mf">1.33939</span> <span class="mf">0.202427</span> <span class="mf">0.099201</span> <span class="mf">0.0177916</span> <span class="mf">0.0208184</span> <span class="o">-</span><span class="mf">0.0254291</span>
+<span class="mi">7</span> <span class="n">Capsule</span> <span class="o">-</span><span class="mf">0.115262</span> <span class="o">-</span><span class="mf">1.0465</span> <span class="mf">0.089268</span> <span class="mf">0.170938</span> <span class="mf">0.0703223</span> <span class="mf">0.0447295</span> <span class="mf">0.00343105</span>
+<span class="mi">8</span> <span class="n">Capsule</span> <span class="o">-</span><span class="mf">0.331438</span> <span class="mf">0.762446</span> <span class="mf">0.121542</span> <span class="mf">0.114695</span> <span class="mf">0.0252811</span> <span class="o">-</span><span class="mf">0.0259674</span> <span class="o">-</span><span class="mf">0.020808</span>
+<span class="mi">9</span> <span class="n">Capsule</span> <span class="mf">0.383944</span> <span class="mf">0.935563</span> <span class="mf">0.397593</span> <span class="mf">0.154123</span> <span class="mf">0.0513785</span> <span class="mf">0.0153721</span> <span class="o">-</span><span class="mf">0.00217204</span>
+<span class="mi">10</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.192145</span> <span class="mf">0.137062</span> <span class="mf">0.592456</span> <span class="mf">0.0682023</span>
+<span class="mi">10</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.186653</span> <span class="mf">0.215515</span> <span class="mf">0.615108</span> <span class="mf">0.109124</span>
+<span class="mi">10</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.181162</span> <span class="mf">0.293969</span> <span class="mf">0.63776</span> <span class="mf">0.0682023</span>
+<span class="mi">11</span> <span class="n">Sphere</span> <span class="mf">0.23314</span> <span class="o">-</span><span class="mf">0.535194</span> <span class="mf">0.543624</span> <span class="mf">0.0788098</span>
+<span class="mi">11</span> <span class="n">Sphere</span> <span class="mf">0.146563</span> <span class="o">-</span><span class="mf">0.499811</span> <span class="mf">0.529616</span> <span class="mf">0.126096</span>
+<span class="mi">11</span> <span class="n">Sphere</span> <span class="mf">0.0599855</span> <span class="o">-</span><span class="mf">0.464427</span> <span class="mf">0.515607</span> <span class="mf">0.0788098</span>
+<span class="mi">12</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.355005</span> <span class="mf">0.980683</span> <span class="mf">0.353488</span> <span class="mf">0.110661</span>
+<span class="mi">12</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.345734</span> <span class="mf">0.89573</span> <span class="mf">0.392399</span> <span class="mf">0.110661</span>
+<span class="mi">13</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.751995</span> <span class="mf">0.926802</span> <span class="mf">0.246687</span> <span class="mf">0.101449</span>
+<span class="mi">13</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.828549</span> <span class="mf">0.924203</span> <span class="mf">0.207408</span> <span class="mf">0.101449</span>
+<span class="mi">14</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.700782</span> <span class="o">-</span><span class="mf">0.661376</span> <span class="mf">0.236885</span> <span class="mf">0.0769197</span>
+<span class="mi">15</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.671113</span> <span class="o">-</span><span class="mf">0.742401</span> <span class="mf">0.269667</span> <span class="mf">0.123072</span>
+<span class="mi">16</span> <span class="n">Sphere</span> <span class="o">-</span><span class="mf">0.641443</span> <span class="o">-</span><span class="mf">0.823426</span> <span class="mf">0.30245</span> <span class="mf">0.0769197</span>
+<span class="mi">17</span> <span class="n">Sphere</span> <span class="mf">0.0668563</span> <span class="mf">0.138768</span> <span class="mf">0.724237</span> <span class="mf">0.120268</span>
+<span class="mi">18</span> <span class="n">Sphere</span> <span class="mf">0.167893</span> <span class="mf">0.12529</span> <span class="mf">0.729157</span> <span class="mf">0.120268</span>
+</pre></div>
+</div>
+<p>The format has the following items:</p>
+<ol class="arabic simple">
+<li><p>first colum is particle ID (within this <a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a> object); if several consecutive particles have the same ID, they are clumped together;</p></li>
+<li><p>second column is <a class="reference internal" href="../woo.dem.html#woo.dem.Particle.shape" title="woo.dem.Particle.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a> type;</p></li>
+<li><p>columns 3–5 are bounding sphere center coordinates (x, y, z);</p></li>
+<li><p>column 6 is bounding sphere radius;</p></li>
+<li><p>remaining columns are shape-specific.</p></li>
+</ol>
+<section id="shape-specific-columns">
+<h3>Shape-specific columns<a class="headerlink" href="#shape-specific-columns" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a>’s text format is an implementation detail. Although efforts will be made to not change existing formats, there is no strong guarantee that it will never change. With this in mind, read on.</p>
+</div>
+<p>Details on shape-specific columns can be always found by looking at the implementation of respective <a class="reference internal" href="../woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Shape</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">asRaw</span></code> and <code class="docutils literal notranslate"><span class="pre">setFromRaw</span></code> methods.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a> has no shape-specific columns, it is identical with the bounding sphere.</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> has 3 additional columns representing the half-shaft vector (half of <a class="reference internal" href="../woo.dem.html#woo.dem.Capsule.shaft" title="woo.dem.Capsule.shaft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shaft</span></code></a> pointing in the direction of the local <span class="math notranslate nohighlight">\(z\)</span>-axis) in global 3d space.</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Ellipsoid" title="woo.dem.Ellipsoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a> has 6 additional columns storing two 3-vectors:</p>
+<ol class="arabic simple">
+<li><p>rotation vector (the <a class="reference internal" href="../woo.core.html#woo.core.Node.ori" title="woo.core.Node.ori"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ori</span></code></a> quaternion converted to angle <span class="math notranslate nohighlight">\(\alpha\)</span> and normalized axis <span class="math notranslate nohighlight">\(\vec{a}\)</span>, then compute <span class="math notranslate nohighlight">\(\alpha \vec{a}\)</span>)</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Ellipsoid.semiAxes" title="woo.dem.Ellipsoid.semiAxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">semiAxes</span></code></a></p></li>
+</ol>
+</li>
+</ul>
+<p>Multi-nodal shapes can also be stored in the <a class="reference internal" href="../woo.dem.html#woo.dem.ShapePack" title="woo.dem.ShapePack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapePack</span></code></a>, though this has been an experimental feature only so far. Their extra columns have the following meaning:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet</span></code></a> (and also geometrically identical <a class="reference internal" href="../woo.fem.html#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a>) store 3 nodal coordinates (9 extra columns) in global space.</p></li>
+<li><p><a class="reference internal" href="../woo.fem.html#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a> (and also geometrically identical <a class="reference internal" href="../woo.fem.html#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tet4</span></code></a>) store 4 nodal coordinates (12 extra columns) in global space.</p></li>
+</ul>
+<p>Multinodal shapes feature a special (little tested) way to share nodes, which is often the case with triangulated solids: if the x-coordinate of a node is <code class="docutils literal notranslate"><span class="pre">NaN</span></code> (not-a-number), then the <span class="math notranslate nohighlight">\(z\)</span>-coordinate encodes the index of an already-existing node to re-use (nodes are counted within groups with identical IDs).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ShapePack</a><ul>
+<li><a class="reference internal" href="#file-format">File format</a><ul>
+<li><a class="reference internal" href="#shape-specific-columns">Shape-specific columns</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="clump.html"
+                          title="Previous page">&larr; Clumps</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="yade-diff.html"
+                          title="Next page">&rarr; Woo for seasoned Yade users</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/shapepack.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="yade-diff.html" title="Woo for seasoned Yade users"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="clump.html" title="Clumps"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ShapePack</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

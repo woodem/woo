@@ -1,0 +1,308 @@
+:mod:`woo.fem`
+===========================
+
+.. inheritance-diagram:: woo.fem
+   :parts: 2
+
+.. automodule:: woo.fem
+   :members:
+   :undoc-members:
+   :exclude-members: Bo1_Tetra_Aabb,  In2_Membrane_FrictMat,  Membrane,  In2_Tet4_ElastMat,  Tetra,  In2_Membrane_ElastMat,  Tet4
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Bo1_Tetra_Aabb
+--------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.fem.Bo1_Tetra_Aabb`
+
+.. autoclass:: Bo1_Tetra_Aabb
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Tet4_ElastMat
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.fem.In2_Tet4_ElastMat`
+
+.. autoclass:: In2_Tet4_ElastMat
+   :members:
+   :exclude-members: contacts, nu, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: contacts (= False)
+
+      Apply contact forces to :obj:`Tetra` nodes (not yet implemented)
+
+      [type: bool, read-only in python]
+
+   .. attribute:: nu (= 0.25)
+
+      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`ElastMat`). Will be moved to the material class at some point.
+
+      [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Membrane
+--------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.dem.Facet` → :obj:`~woo.fem.Membrane`
+
+.. autoclass:: Membrane
+   :members:
+   :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= <Node @ 0x1d2dcd0, at (0,0,0)>)
+
+      Local coordinate system
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
+
+   .. attribute:: refRot (= [])
+
+      Rotation applied to nodes to obtain the local coordinate system, computed in the reference configuration. If this array is empty, it means that reference configuration has not yet been evaluated.
+
+      [type: vector<Quaternionr>, read-only in python]
+
+   .. attribute:: refPos (= Vector6(0,0,0, 0,0,0))
+
+      Nodal coordinates in the local coordinate system, in the reference configuration
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: uXy (= Vector6(0,0,0, 0,0,0))
+
+      Nodal displacements, stored as ux0, uy0, ux1, uy1, ux1, uy2.
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: surfLoad (= 0.0)
+
+      Normal load applied to this facet (positive in the direction of the local normal); this value is multiplied by the current facet's area and equally distributed to nodes.
+
+      [type: Real, unit: Pa]
+
+   .. attribute:: phiXy (= Vector6(0,0,0, 0,0,0))
+
+      Nodal rotations, only including in-plane rotations (drilling DOF not yet implemented)
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: KKcst (= MatrixX())
+
+      Stiffness matrix of the element (assembled from the reference configuration when needed for the first time)
+
+      [type: MatrixXr]
+
+   .. attribute:: KKdkt (= MatrixX())
+
+      Bending stiffness matrix of the element (assembled from the reference configuration when needed for the first time).
+
+      [type: MatrixXr]
+
+   .. attribute:: enableStress (= False)
+
+      Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.
+
+      [type: bool]
+
+   .. attribute:: EBcst (= MatrixX())
+
+      CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: DBdkt (= MatrixX())
+
+      DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. 
+      
+      .. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: noWarnExcessRot (= False)
+
+      Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Tetra
+-----
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra`
+
+.. graphviz::
+
+	digraph Tetra {
+		rankdir=LR;
+		margin=.2;
+		"Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
+		"Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
+		"Tetra" -> "Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Tetra
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Tet4
+++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra` → :obj:`~woo.fem.Tet4`
+
+.. autoclass:: Tet4
+   :members:
+   :exclude-members: node, refPos, uXyz, KK, EB, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= None)
+
+      Local coordinate system
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
+
+   .. attribute:: refPos (= MatrixX())
+
+      Reference nodal positions in local coordinates
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: uXyz (= VectorX())
+
+      Nodal displacements in local coordinates
+
+      [type: VectorXr, read-only in python]
+
+   .. attribute:: KK (= MatrixX())
+
+      Stiffness matrix
+
+      [type: MatrixXr, not shown in the UI, read-only in python]
+
+   .. attribute:: EB (= MatrixX())
+
+      :math:`E B` matrix, used to compute stresses from displacements.
+
+      [type: MatrixXr, not shown in the UI, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Membrane_ElastMat
+---------------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat`
+
+.. graphviz::
+
+	digraph In2_Membrane_ElastMat {
+		rankdir=LR;
+		margin=.2;
+		"In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
+		"In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
+		"In2_Membrane_ElastMat" -> "In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: In2_Membrane_ElastMat
+   :members:
+   :exclude-members: contacts, nu, thickness, bendThickness, bending, applyBary, rotIncr, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: contacts (= True)
+
+      Apply contact forces to facet's nodes (FIXME: very simply distributed in thirds now)
+
+      [type: bool]
+
+   .. attribute:: nu (= 0.25)
+
+      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`~woo.dem.ElastMat`). Will be moved to the material class at some point.
+
+      [type: Real]
+
+   .. attribute:: thickness (= nan)
+
+      Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick <woo.dem.Facet.halfThick>`.
+
+      [type: Real]
+
+   .. attribute:: bendThickness (= nan)
+
+      Thickness for DKT stiffness computation; if NaN, use :obj:`thickness`.
+
+      [type: Real]
+
+   .. attribute:: bending (= False)
+
+      Consider also bending stiffness of elements (DKT)
+
+      [type: bool]
+
+   .. attribute:: applyBary (= False)
+
+      Distribute force according to barycentric coordinate of the contact point; this is done normally with :obj:`bending` enabled, this forces the same also for particles without bending.
+
+      [type: bool]
+
+   .. attribute:: rotIncr (= False)
+
+      Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise).
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Membrane_FrictMat
++++++++++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat` → :obj:`~woo.fem.In2_Membrane_FrictMat`
+
+.. autoclass:: In2_Membrane_FrictMat
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+

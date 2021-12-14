@@ -1,0 +1,7 @@
+:mod:`woo._cxxInternal_ci`
+=======================================
+
+.. automodule:: woo._cxxInternal_ci
+   :members:
+   :undoc-members:
+

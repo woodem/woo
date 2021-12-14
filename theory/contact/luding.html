@@ -1,0 +1,389 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Luding contact model &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Motion integration" href="../leapfrog.html" />
+    <link rel="prev" title="Ice contact model" href="ice.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../leapfrog.html" title="Motion integration"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ice.html" title="Ice contact model"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Luding contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="luding-contact-model">
+<span id="id1"></span><h1>Luding contact model<a class="headerlink" href="#luding-contact-model" title="Permalink to this headline">¶</a></h1>
+<p>This contact model, published in <span id="id2">[<a class="reference internal" href="../../references.html#id51" title="Stefan Luding. Cohesive, frictional powders: contact models for tension. Granular matter, 10(4):235–246, 2008. URL: http://link.springer.com/content/pdf/10.1007\%2Fs10035-008-0099-x.pdf, doi:10.1007/s10035-008-0099-x.">Lud08</a>]</span>, is suitable for flexible handling and testing of various adhesion/plasticity/viscosity parameters.</p>
+<p>This model separately treats 4 contact senses, each including mostly-decoupled elastic-plastic-viscous behavior.</p>
+<ol class="arabic simple">
+<li><p><em>Normal</em> sense, where compressive plasticity during loading increases contact stiffness (up to value defined by plasticity limit), unloading/reloading following elastic path. Adhesion effects are proportional to historically maximum compression, thus suitable for modeling stickiness induced by prior compression (e.g. during impact). Further energy is dissipated by viscosity.</p></li>
+<li><p><em>Tangential</em> sense, with Coulomb-style friction with different limits for static/dynamic friction (related via a dimensionless parameter) and viscosity. This sense is 2-dimensional, perpendicular to the normal sense.</p></li>
+<li><p><em>Rolling</em> sense, describing rotation along the same 2 axes as tangential sliding/slipping, with Coulomb-style friction and viscosity.</p></li>
+<li><p><em>Twisting</em> sense, describing rotation along the normal axis, with Coulomb-style friciton and viscosity.</p></li>
+</ol>
+<p>The model is designed in such a way that all tangential, rolling and twisting senses can use the same routine, only with different parameters and different dimensionality: 2d for tangential and rolling, 1d for twisting).</p>
+<section id="formulation">
+<h2>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">¶</a></h2>
+<p>The contact exists if there is geometrical overlap (<span class="math notranslate nohighlight">\(\delta\geq0\)</span>) and is dissolved for <span class="math notranslate nohighlight">\(\delta&lt;0\)</span>.</p>
+<section id="normal">
+<h3>Normal<a class="headerlink" href="#normal" title="Permalink to this headline">¶</a></h3>
+<p>Elastic stiffness <span class="math notranslate nohighlight">\(k_{n2}\)</span> varies based on the historically maximum normal overlap <span class="math notranslate nohighlight">\(\delta_{\rm max}\)</span> and is interpolated between <span class="math notranslate nohighlight">\(k_{n1}\)</span> (for <span class="math notranslate nohighlight">\(\delta_{\rm max}=0\)</span>) and <span class="math notranslate nohighlight">\(\hat{k}_{n2}\)</span> (for <span class="math notranslate nohighlight">\(\delta_{\rm max}\geq\delta_{\rm lim}\)</span>). This is shown in <a class="reference internal" href="#fig-luding-normal"><span class="std std-numref">Fig. 28</span></a>. Algebraically,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_n=\underbrace{\gamma_n v_n}_{\hbox{viscosity}}+\begin{cases}k_{n1}\delta &amp; k_{n2}(\delta-\delta_0)\geq k_{n1}\delta\quad\text{(plastic loading)} \\ -k_{nc}\delta &amp; -k_{nc}\delta\geq k_{n2}(\delta-\delta_0)\quad\text{(adhesive)} \\ k2(\delta-\delta_0)&amp;\text{otherwise (in-between unloading/reloading)} \end{cases}\end{split}\]</div>
+<p>with variable stiffness</p>
+<div class="math notranslate nohighlight" id="equation-eq-luding-kn2">
+<span class="eqno">(27)<a class="headerlink" href="#equation-eq-luding-kn2" title="Permalink to this equation">¶</a></span>\[\begin{split}k_{n2}(\delta_{\rm max})&amp;=\begin{cases} \hat{k}_{n2} &amp; \delta_{\rm max}\geq\delta_{\rm lim} \\ k_{n1}+(\hat{k}_{2}-k_{n1})\frac{\delta_{\rm max}}{\delta_{\rm lim}} &amp; \delta_{\rm max}&lt;\delta_{\rm lim} \end{cases}\end{split}\]</div>
+<p>and the plastic limit overlap (constat for each contact) being defined as</p>
+<div class="math notranslate nohighlight">
+\[\delta_{\rm lim}=\frac{\hat{k}_{n2}}{\hat{k}_{n2}-k_{n1}}\phi_f a_{12}.\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_1\)</span>, <span class="math notranslate nohighlight">\(a_2\)</span> are equivalent radii of contacting particles and</p>
+<div class="math notranslate nohighlight">
+\[a_{12}=\frac{2a_1 a_2}{a_1+a_2}\]</div>
+<p>is “reduced radius” of the contact.</p>
+<figure class="align-default" id="id3">
+<span id="fig-luding-normal"></span><img alt="../../_images/luding-normal.svg" src="../../_images/luding-normal.svg" /><figcaption>
+<p><span class="caption-number">Fig. 28 </span><span class="caption-text">Diagram showing contact behavior in the normal sense: plastic loading with stiffness <span class="math notranslate nohighlight">\(k_{n1}\)</span>, elastic unloading/reloading with stiffness <span class="math notranslate nohighlight">\(k_{n2}(\delta_{\rm max})\)</span>, adhesion with <span class="math notranslate nohighlight">\(k_{na}\)</span> stiffness.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Dissipation (work) has two components:</p>
+<ol class="arabic">
+<li><p>viscous contribution, computed incrementally as</p>
+<div class="math notranslate nohighlight">
+\[\Delta W_{nv}=\gamma_n v_n^2 \Dt,\]</div>
+</li>
+<li><p>plastic contribution, which is the easiest to compute in a total manner when the contact breaks, using <span class="math notranslate nohighlight">\(\delta_{\rm max}\)</span> as history variable and current elastic stiffness <span class="math notranslate nohighlight">\(k_{n2}\equiv k_{n2}(\delta_{\rm max})\)</span>; we compute <span class="math notranslate nohighlight">\(\delta_0\)</span> (elastically unloaded zero-force overlap) as auxiliary, and <span class="math notranslate nohighlight">\(\delta_{\rm min}\)</span> to evaluate adhesive contribution (see <a class="reference internal" href="#fig-luding-normal"><span class="std std-numref">Fig. 28</span></a> which shows the work shaded):</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\delta_0&amp;=\delta_{\rm max}\left(1-\frac{k_{n1}}{k_{n2}}\right)\\-k_{na}\delta_{\rm min}&amp;=-(\delta_0-\delta_{\rm min})k_{n2}\\\delta_{\min}&amp;=\delta_0\frac{k_{n2}}{k_{n2}+k_{na}}\\W_{np}&amp;=(k_{n1}\delta_{\rm max}+k_{na}\delta_{\rm min})\delta_0\end{aligned}\end{align} \]</div>
+</li>
+</ol>
+<p>Rescaled damping coefficient, typical contact duration and restitution coefficient can be respectively computed as</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\eta_0&amp;=\frac{\gamma_n}{2m_{12}},\\t_c&amp;=\frac{\pi}{\omega}=\frac{\pi}{\sqrt{k_n/m_{12}-\eta_0^2}},\\r&amp;=v_n'/v_n=\exp(-\pi \eta_0/\omega)=\exp(-\eta_0 t_c)\end{aligned}\end{align} \]</div>
+<p>with reduced mass <span class="math notranslate nohighlight">\(m_{12}=m_1 m_2 /(m_1+m_2)\)</span>.</p>
+</section>
+<section id="tangential">
+<h3>Tangential<a class="headerlink" href="#tangential" title="Permalink to this headline">¶</a></h3>
+<p>Sliding (yield) force is defined in dependence on the normal force (including adhesion) as</p>
+<div class="math notranslate nohighlight">
+\[f_t^y=\tan\phi_t(f_n+k_{nc}\delta),\]</div>
+<p>trial force (2d vector in tangential plane) being computed from tangential stiffness <span class="math notranslate nohighlight">\(k_t\)</span>, elastic displacement <span class="math notranslate nohighlight">\(\vec{\xi}_t\)</span> (2d vector), viscous coefficient <span class="math notranslate nohighlight">\(\gamma_t\)</span> and relative velocity at contact <span class="math notranslate nohighlight">\(\vec{v}_t\)</span> (2d vector) as</p>
+<div class="math notranslate nohighlight">
+\[\vec{f}_t^t=-k_t\pprev{\vec{\xi}}_t-\gamma_t\vec{v}_t\]</div>
+<p>where tangential stiffness is defined as <span class="math notranslate nohighlight">\(k_{t}=\hat{k}_{n2}\frac{k_t}{k_n}\)</span>.</p>
+<ol class="arabic">
+<li><p>If <span class="math notranslate nohighlight">\(|\vec{f}_t|\leq f_y^y\)</span>, static friction is active (zero plastic dissipation) and</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\vec{f}_t&amp;=\vec{f}_t^t,\\\nnext{\vec{\xi}}_t&amp;=\pprev{\vec{\xi}}_t+\vec{v}_t\Dt.\end{aligned}\end{align} \]</div>
+</li>
+<li><p>Otherwise, dynamic friction is activated as</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\vec{f}_t&amp;=\frac{\vec{f}_t^t}{|\vec{f}_t^t|}f_t^y\phi_d,\\\nnext{\vec{\xi}}_t&amp;=-\frac{1}{k_t}\left(\vec{f}_t+\gamma_t\vec{v}_t\right).\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi_d\)</span> is the dynamic/static friction coefficients ratio. Plastic dissipation (work) is equal to</p>
+<div class="math notranslate nohighlight">
+\[\Delta W_{tp}=\frac{1}{2}(|\vec{f}_t^t|+f_t^y\phi_d)\frac{1}{k_t}(|\vec{f}_t^t|-f_t^y\phi_d).\]</div>
+</li>
+</ol>
+<p>Viscous dissipation is equal to</p>
+<div class="math notranslate nohighlight">
+\[\Delta W_{tv}=\gamma_v|\vec{v}_t|^2\Dt.\]</div>
+</section>
+<section id="rolling">
+<h3>Rolling<a class="headerlink" href="#rolling" title="Permalink to this headline">¶</a></h3>
+<p>Rolling and twisting are computed in terms of torques (rather than forces) but the same equations apply; reduced radius <span class="math notranslate nohighlight">\(a_{12}\)</span> is used as length to convert dimensionalities of forces/torques.</p>
+<p>Rolling stiffness is <span class="math notranslate nohighlight">\(k_r=\hat{k}_{n2}\frac{k_r}{k_n}a_{12}\)</span>, yield torque <span class="math notranslate nohighlight">\(m_r^y=\tan\phi_r(f_n+k_{nc}\delta)a_{12}\)</span>. Elastic rotation <span class="math notranslate nohighlight">\(\vec{\xi}_r\)</span> is initially zero, the contact is damped using viscous coefficient <span class="math notranslate nohighlight">\(\gamma_r\)</span>. Plastic and viscous work (<span class="math notranslate nohighlight">\(\Delta W_{rp}\)</span>, <span class="math notranslate nohighlight">\(\Delta W_{rv}\)</span>) are computed the same as in the tangential sense, with indices replaced.</p>
+</section>
+<section id="twisting">
+<h3>Twisting<a class="headerlink" href="#twisting" title="Permalink to this headline">¶</a></h3>
+<p>Twisting is identical to rolling, only by demoting 2d-vectors to 1d-vectors (scalars) with indices replaced, i.e. twisting stiffness <span class="math notranslate nohighlight">\(k_w=\hat{k}_{n2}\frac{k_w}{k_n}a_{12}\)</span>, yield torque <span class="math notranslate nohighlight">\(m_w^y=\tan\phi_w(f_n+k_{nc}\delta)a_{12}\)</span>, elastic twist <span class="math notranslate nohighlight">\(\xi_w\)</span>, viscous coefficient <span class="math notranslate nohighlight">\(\gamma_w\)</span>. Work contributions are <span class="math notranslate nohighlight">\(\Delta W_{wp}\)</span>, <span class="math notranslate nohighlight">\(\Delta W_{wv}\)</span>.</p>
+</section>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The following table summarizes all model parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>normal</p></th>
+<th class="head"><p>tangent</p></th>
+<th class="head"><p>rolling</p></th>
+<th class="head"><p>twisting</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>stiffness</p></td>
+<td><p><span class="math notranslate nohighlight">\(\hat{k}_{n2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(k_t/k_n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\((k_r/k_n)a_{12}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\((k_w/k_n)a_{12}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>normal plasticity</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{k_{n1}}{\hat{k}_{n2}}\)</span> <span class="math notranslate nohighlight">\(\delta_{\rm lim}\)</span></p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>adhesion</p></td>
+<td><p><span class="math notranslate nohighlight">\(k_{nc}/k_n\)</span></p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>static friction</p></td>
+<td><p>–</p></td>
+<td><p><span class="math notranslate nohighlight">\(\tan\phi_t\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\tan\phi_r\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\tan\phi_w\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>dynamic friction</p></td>
+<td><p>–</p></td>
+<td><p><span class="math notranslate nohighlight">\(\phi_d\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\phi_d\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\phi_d\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>viscous coefficient</p></td>
+<td><p><span class="math notranslate nohighlight">\(\gamma_n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\gamma_t\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\gamma_r\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\gamma_w\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>This table summarizes corresponding attributes in the WooDEM code. Since properties of every comtact are computed from contacting materials, these values are marked as * for averaging, † for minimum and # for averaging with scaling by <span class="math notranslate nohighlight">\(a_{12}\)</span>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>normal</p></th>
+<th class="head"><p>tangent</p></th>
+<th class="head"><p>rolling</p></th>
+<th class="head"><p>twisting</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>stiffness</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingPhys.k2hat" title="woo.dem.LudingPhys.k2hat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2hat</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.ktDivKn" title="woo.dem.FrictMat.ktDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ktDivKn</span></code></a> *</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.krDivKn" title="woo.dem.LudingMat.krDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">krDivKn</span></code></a> #</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.kwDivKn" title="woo.dem.LudingMat.kwDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kwDivKn</span></code></a> #</p></td>
+</tr>
+<tr class="row-odd"><td><p>normal plasticity</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.k1DivKn" title="woo.dem.LudingMat.k1DivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">k1DivKn</span></code></a> * <a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.deltaLimRel" title="woo.dem.LudingMat.deltaLimRel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaLimRel</span></code></a> *</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>adhesion</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.kaDivKn" title="woo.dem.LudingMat.kaDivKn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kaDivKn</span></code></a> *</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>static friction</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictMat.tanPhi" title="woo.dem.FrictMat.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tanPhi</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.statR" title="woo.dem.LudingMat.statR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statR</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.statW" title="woo.dem.LudingMat.statW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statW</span></code></a> †</p></td>
+</tr>
+<tr class="row-even"><td><p>dynamic friciton</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.dynDivStat" title="woo.dem.LudingMat.dynDivStat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dynDivStat</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.dynDivStat" title="woo.dem.LudingMat.dynDivStat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dynDivStat</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.dynDivStat" title="woo.dem.LudingMat.dynDivStat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dynDivStat</span></code></a> †</p></td>
+</tr>
+<tr class="row-odd"><td><p>viscous coefficient</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.viscN" title="woo.dem.LudingMat.viscN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">viscN</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.viscT" title="woo.dem.LudingMat.viscT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">viscT</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.viscR" title="woo.dem.LudingMat.viscR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">viscR</span></code></a> †</p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.LudingMat.viscW" title="woo.dem.LudingMat.viscW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">viscW</span></code></a> †</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Luding contact model</a><ul>
+<li><a class="reference internal" href="#formulation">Formulation</a><ul>
+<li><a class="reference internal" href="#normal">Normal</a></li>
+<li><a class="reference internal" href="#tangential">Tangential</a></li>
+<li><a class="reference internal" href="#rolling">Rolling</a></li>
+<li><a class="reference internal" href="#twisting">Twisting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="ice.html"
+                          title="Previous page">&larr; Ice contact model</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="../leapfrog.html"
+                          title="Next page">&rarr; Motion integration</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/contact/luding.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../leapfrog.html" title="Motion integration"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ice.html" title="Ice contact model"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Luding contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

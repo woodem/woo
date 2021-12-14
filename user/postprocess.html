@@ -1,0 +1,498 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Postprocessing &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="Batch system" href="batch.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="visualization.html" title="Visualization"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="batch.html" title="Batch system"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Postprocessing</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="postprocessing">
+<span id="id1"></span><h1>Postprocessing<a class="headerlink" href="#postprocessing" title="Permalink to this headline">¶</a></h1>
+<section id="report">
+<span id="id2"></span><h2>Report<a class="headerlink" href="#report" title="Permalink to this headline">¶</a></h2>
+<p>Every simulation (not just in batch) may generate report which summarizes its inputs and outputs in a human-readable form; it is usually in the XHTML format. There is one report for each simulation.</p>
+<a class="reference internal image-reference" href="../_images/batch-report.png"><img alt="../_images/batch-report.png" src="../_images/batch-report.png" style="width: 400px;" /></a>
+</section>
+<section id="vtk-export">
+<span id="user-manual-postprocess-vtk-export"></span><h2>VTK Export<a class="headerlink" href="#vtk-export" title="Permalink to this headline">¶</a></h2>
+<p>Woo exports python script for Paraview which serves to set the visualization pipeline so that important features of DEM are shown. This includes particles, force networks, transparent meshes and movies. This topic is covered in <a class="reference internal" href="visualization.html#vis-paraview"><span class="std std-ref">Paraview</span></a>.</p>
+</section>
+<section id="results-database">
+<h2>Results database<a class="headerlink" href="#results-database" title="Permalink to this headline">¶</a></h2>
+<p>Finished jobs may write some resulting data to results database in the lightweight <a class="reference external" href="http://www.sqlite.org">SQLite</a> format. Saved data include batch information, when was the simulation running, plot information, preprocessor parameters and plot data series.</p>
+<p>When running in batch, the database is usually named as the parameter table, only with the <code class="file docutils literal notranslate"><span class="pre">results</span></code> suffix – in the <a class="reference internal" href="batch.html#batch-example"><span class="std std-ref">batch example</span></a>, it is <code class="file docutils literal notranslate"><span class="pre">dt.results</span></code>. Standalone simulations use preprocessor-defined name, <a class="reference internal" href="../woo.pre.html#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FallingHorse</span></code></a> uses <code class="docutils literal notranslate"><span class="pre">horse.results</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The database file is never deleted, only appended to. Running the same batch several times will therefore leave results of old batches intact.</p>
+</div>
+<p><a class="reference external" href="http://www.sqlite.org">SQLite</a> databases can be accessed from virtually any programming language. Contained data are serialized using the neutral <a class="reference external" href="http://en.wikipedia.org/wiki/Json">JSON</a> representation, so that it can be processed with any language (Python, JavaScript, Matlab, …). Working with the database directly is an advanced topic not covered in this brief introduction. The easiest way is to use XLS dump of the database exaplined in the next section.</p>
+<section id="xls-dump">
+<h3>XLS dump<a class="headerlink" href="#xls-dump" title="Permalink to this headline">¶</a></h3>
+<p>The database file is (usually) converted to a <code class="docutils literal notranslate"><span class="pre">xls</span></code> file after every write (<code class="file docutils literal notranslate"><span class="pre">dt.xls</span></code> in the <a class="reference external" href="batch_example">batch example</a>). It contains most data in the database, and is suitable for human post-processing, such as creating ad-hoc figures or aggregating results in a non-automatic manner.</p>
+<p>The first worksheet contains each simulation in one column:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 25%" />
+<col style="width: 24%" />
+<col style="width: 27%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>title</p></td>
+<td><p>dt.05</p></td>
+<td><p>dt.1</p></td>
+<td><p>dt.2</p></td>
+</tr>
+<tr class="row-even"><td><p>batchtable</p></td>
+<td><p>dt.xls</p></td>
+<td><p>dt.xls</p></td>
+<td><p>dt.xls</p></td>
+</tr>
+<tr class="row-odd"><td><p>batchTableLine</p></td>
+<td><p>6</p></td>
+<td><p>5</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>finished</p></td>
+<td><p>2013-01-03  23:21:55.011794</p></td>
+<td><p>2013-01-03  23:21:34.595636</p></td>
+<td><p>2013-01-03  23:20:35.838987</p></td>
+</tr>
+<tr class="row-odd"><td><p>sceneId</p></td>
+<td><p>20130103T231904p19387</p></td>
+<td><p>20130103T231843p19371</p></td>
+<td><p>20130103T231837p19356</p></td>
+</tr>
+<tr class="row-even"><td><p>duration</p></td>
+<td><p>171</p></td>
+<td><p>171</p></td>
+<td><p>118</p></td>
+</tr>
+<tr class="row-odd"><td><p>formatNumber</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>misc.report</p></td>
+<td><p><a class="reference external" href="file:///tmp/dt.05.20130103T231904p19387.xhtml">file:///tmp/dt.05.20130103T231904p19387.xhtml</a></p></td>
+<td><p><a class="reference external" href="file:///tmp/dt.1.20130103T231843p19371.xhtml">file:///tmp/dt.1.20130103T231843p19371.xhtml</a></p></td>
+<td><p><a class="reference external" href="file:///tmp/dt.2.20130103T231837p19356.xhtml">file:///tmp/dt.2.20130103T231837p19356.xhtml</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>misc.simulationName</p></td>
+<td><p>horse</p></td>
+<td><p>horse</p></td>
+<td><p>horse</p></td>
+</tr>
+<tr class="row-even"><td><p>plots.t</p></td>
+<td><p>relErr</p></td>
+<td><p>relErr</p></td>
+<td><p>relErr</p></td>
+</tr>
+<tr class="row-odd"><td><p>plots.i.0</p></td>
+<td><p>total</p></td>
+<td><p>total</p></td>
+<td><p>total</p></td>
+</tr>
+<tr class="row-even"><td><p>plots.i.1</p></td>
+<td><p>S.energy.keys()</p></td>
+<td><p>S.energy.keys()</p></td>
+<td><p>S.energy.keys()</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.__class__</p></td>
+<td><p>woo.pre.horse.FallingHorse</p></td>
+<td><p>woo.pre.horse.FallingHorse</p></td>
+<td><p>woo.pre.horse.FallingHorse</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.damping</p></td>
+<td><p>0.2</p></td>
+<td><p>0.2</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.gravity.0</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.gravity.1</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.gravity.2</p></td>
+<td><p>-9.81</p></td>
+<td><p>-9.81</p></td>
+<td><p>-9.81</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.halfThick</p></td>
+<td><p>0.002</p></td>
+<td><p>0.002</p></td>
+<td><p>0.002</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.mat.__class__</p></td>
+<td><p>woo.dem.FrictMat</p></td>
+<td><p>woo.dem.FrictMat</p></td>
+<td><p>woo.dem.FrictMat</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.mat.density</p></td>
+<td><p>1000.0</p></td>
+<td><p>1000.0</p></td>
+<td><p>1000.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.mat.id</p></td>
+<td><p>-1</p></td>
+<td><p>-1</p></td>
+<td><p>-1</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.mat.ktDivKn</p></td>
+<td><p>0.2</p></td>
+<td><p>0.2</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.mat.tanPhi</p></td>
+<td><p>0.546302489844</p></td>
+<td><p>0.546302489844</p></td>
+<td><p>0.546302489844</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.mat.young</p></td>
+<td><p>50000.0</p></td>
+<td><p>50000.0</p></td>
+<td><p>50000.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.meshMat</p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.pWaveSafety</p></td>
+<td><p>0.05</p></td>
+<td><p>0.1</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.pattern</p></td>
+<td><p>hexa</p></td>
+<td><p>hexa</p></td>
+<td><p>hexa</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.radius</p></td>
+<td><p>0.002</p></td>
+<td><p>0.002</p></td>
+<td><p>0.002</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.relEkStop</p></td>
+<td><p>0.02</p></td>
+<td><p>0.02</p></td>
+<td><p>0.02</p></td>
+</tr>
+<tr class="row-even"><td><p>pre.relGap</p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre.reportFmt</p></td>
+<td><p>/tmp/{tid}.xhtml</p></td>
+<td><p>/tmp/{tid}.xhtml</p></td>
+<td><p>/tmp/{tid}.xhtml</p></td>
+</tr>
+</tbody>
+</table>
+<p>Other worksheets contain number series for each single simulation; worksheets are named using <code class="docutils literal notranslate"><span class="pre">title</span></code> and <code class="docutils literal notranslate"><span class="pre">sceneId</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">dt.7_20130103T231904p19387</span></code>)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 18%" />
+<col style="width: 3%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 5%" />
+<col style="width: 6%" />
+<col style="width: 10%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>elast</p></th>
+<th class="head"><p>grav</p></th>
+<th class="head"><p>i</p></th>
+<th class="head"><p>kinetic</p></th>
+<th class="head"><p>nonviscDamp</p></th>
+<th class="head"><p>plast</p></th>
+<th class="head"><p>relErr</p></th>
+<th class="head"><p>t</p></th>
+<th class="head"><p>total</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+</tr>
+<tr class="row-odd"><td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>NaN</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>NaN</p></td>
+<td><p>-2.42618457156355E-005</p></td>
+<td><p>10</p></td>
+<td><p>1.94633917852084E-005</p></td>
+<td><p>4.85206822100937E-006</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0025455844</p></td>
+<td><p>5.39152126996832E-008</p></td>
+</tr>
+<tr class="row-odd"><td><p>NaN</p></td>
+<td><p>-0.0001024389</p></td>
+<td><p>20</p></td>
+<td><p>0.000082005</p></td>
+<td><p>2.04874799044186E-005</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0050911688</p></td>
+<td><p>5.39152127070668E-008</p></td>
+</tr>
+<tr class="row-even"><td><p>NaN</p></td>
+<td><p>-0.0002345312</p></td>
+<td><p>30</p></td>
+<td><p>0.0001876789</p></td>
+<td><p>4.6905934128109E-005</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0076367532</p></td>
+<td><p>5.39152127214935E-008</p></td>
+</tr>
+<tr class="row-odd"><td><p>NaN</p></td>
+<td><p>-0.0004205387</p></td>
+<td><p>40</p></td>
+<td><p>0.0003364848</p></td>
+<td><p>8.41074308920784E-005</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0101823376</p></td>
+<td><p>5.39152127212767E-008</p></td>
+</tr>
+<tr class="row-even"><td><p>NaN</p></td>
+<td><p>-0.0006604614</p></td>
+<td><p>50</p></td>
+<td><p>0.000528423</p></td>
+<td><p>0.000132092</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0127279221</p></td>
+<td><p>5.39152126490417E-008</p></td>
+</tr>
+<tr class="row-odd"><td><p>NaN</p></td>
+<td><p>-0.0009542993</p></td>
+<td><p>60</p></td>
+<td><p>0.0007634933</p></td>
+<td><p>0.0001908596</p></td>
+<td><p>NaN</p></td>
+<td><p>0</p></td>
+<td><p>0.0152735065</p></td>
+<td><p>5.39152126933856E-008</p></td>
+</tr>
+<tr class="row-even"><td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="aggregate-results">
+<h3>Aggregate results<a class="headerlink" href="#aggregate-results" title="Permalink to this headline">¶</a></h3>
+<p>Simulations may define their own routines for aggregating reults from multiple simulations in an arbitrary manner. Those routines are called (via <code class="docutils literal notranslate"><span class="pre">postHooks</span></code> argument to <a class="reference internal" href="../woo.batch.html#woo.batch.writeResults" title="woo.batch.writeResults"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.batch.writeResults</span></code></a>) after every write to the databse – that way, synchronization of the aggregate data is assured.</p>
+<p>Usually, they can produce aggregate figure for the whole batch, as in the horse example:</p>
+<img alt="../_images/batch-aggregate.png" src="../_images/batch-aggregate.png" />
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Postprocessing</a><ul>
+<li><a class="reference internal" href="#report">Report</a></li>
+<li><a class="reference internal" href="#vtk-export">VTK Export</a></li>
+<li><a class="reference internal" href="#results-database">Results database</a><ul>
+<li><a class="reference internal" href="#xls-dump">XLS dump</a></li>
+<li><a class="reference internal" href="#aggregate-results">Aggregate results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="batch.html"
+                          title="Previous page">&larr; Batch system</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="visualization.html"
+                          title="Next page">&rarr; Visualization</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/postprocess.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="visualization.html" title="Visualization"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="batch.html" title="Batch system"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Postprocessing</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

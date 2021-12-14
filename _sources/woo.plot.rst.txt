@@ -1,0 +1,7 @@
+:mod:`woo.plot`
+============================
+
+.. automodule:: woo.plot
+   :members:
+   :undoc-members:
+

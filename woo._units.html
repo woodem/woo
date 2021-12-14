@@ -1,0 +1,184 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo._units &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.apiversion" href="woo.apiversion.html" />
+    <link rel="prev" title="woo._monkey" href="woo._monkey.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.apiversion.html" title="woo.apiversion"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo._monkey.html" title="woo._monkey"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._units</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo._units">
+<span id="woo-units"></span><h1><a class="reference internal" href="#module-woo._units" title="woo._units"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._units</span></code></a><a class="headerlink" href="#module-woo._units" title="Permalink to this headline">¶</a></h1>
+<p>Woo is internally unit-agnostic (using <a class="reference external" href="http://en.wikipedia.org/wiki/Si_units">SI units</a> is highly recommended). This module defines conversion multipliers for various units; values of multipliers are taken from c++ sources.</p>
+<p>The <a class="reference internal" href="#woo._units.unit" title="woo._units.unit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unit</span></code></a> map is exposed as <code class="docutils literal notranslate"><span class="pre">woo.unit</span></code>, so that expressions like <code class="docutils literal notranslate"><span class="pre">16*woo.unit['deg']</span></code> can be used in python.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="woo._units.baseUnit">
+<span class="sig-prename descclassname"><span class="pre">woo._units.</span></span><span class="sig-name descname"><span class="pre">baseUnit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'%':</span> <span class="pre">'-',</span> <span class="pre">'-':</span> <span class="pre">'-',</span> <span class="pre">'GPa':</span> <span class="pre">'Pa',</span> <span class="pre">'J/m²':</span> <span class="pre">'J/m²',</span> <span class="pre">'MN':</span> <span class="pre">'N',</span> <span class="pre">'MN·m':</span> <span class="pre">'N·m',</span> <span class="pre">'MPa':</span> <span class="pre">'Pa',</span> <span class="pre">'Mt/y':</span> <span class="pre">'kg/s',</span> <span class="pre">'N':</span> <span class="pre">'N',</span> <span class="pre">'N·m':</span> <span class="pre">'N·m',</span> <span class="pre">'N·m·s':</span> <span class="pre">'N·m·s',</span> <span class="pre">'Pa':</span> <span class="pre">'Pa',</span> <span class="pre">'cm':</span> <span class="pre">'m',</span> <span class="pre">'day':</span> <span class="pre">'s',</span> <span class="pre">'deg':</span> <span class="pre">'rad',</span> <span class="pre">'g':</span> <span class="pre">'kg',</span> <span class="pre">'g/cm³':</span> <span class="pre">'kg/m³',</span> <span class="pre">'in':</span> <span class="pre">'m',</span> <span class="pre">'kN':</span> <span class="pre">'N',</span> <span class="pre">'kN·m':</span> <span class="pre">'N·m',</span> <span class="pre">'kPa':</span> <span class="pre">'Pa',</span> <span class="pre">'kg':</span> <span class="pre">'kg',</span> <span class="pre">'kg/m³':</span> <span class="pre">'kg/m³',</span> <span class="pre">'kg/s':</span> <span class="pre">'kg/s',</span> <span class="pre">'kg·m²':</span> <span class="pre">'kg·m²',</span> <span class="pre">'km/h':</span> <span class="pre">'m/s',</span> <span class="pre">'m':</span> <span class="pre">'m',</span> <span class="pre">'m/min':</span> <span class="pre">'m/s',</span> <span class="pre">'m/s':</span> <span class="pre">'m/s',</span> <span class="pre">'m/s²':</span> <span class="pre">'m/s²',</span> <span class="pre">'mm':</span> <span class="pre">'m',</span> <span class="pre">'mm²':</span> <span class="pre">'m²',</span> <span class="pre">'mm³':</span> <span class="pre">'m³',</span> <span class="pre">'ms':</span> <span class="pre">'s',</span> <span class="pre">'m²':</span> <span class="pre">'m²',</span> <span class="pre">'m³':</span> <span class="pre">'m³',</span> <span class="pre">'ppm':</span> <span class="pre">'-',</span> <span class="pre">'rad':</span> <span class="pre">'rad',</span> <span class="pre">'rad/s':</span> <span class="pre">'rad/s',</span> <span class="pre">'rot/min':</span> <span class="pre">'rad/s',</span> <span class="pre">'rot/s':</span> <span class="pre">'rad/s',</span> <span class="pre">'rph':</span> <span class="pre">'rad/s',</span> <span class="pre">'rpm':</span> <span class="pre">'rad/s',</span> <span class="pre">'s':</span> <span class="pre">'s',</span> <span class="pre">'t':</span> <span class="pre">'kg',</span> <span class="pre">'t/h':</span> <span class="pre">'kg/s',</span> <span class="pre">'t/m³':</span> <span class="pre">'kg/m³',</span> <span class="pre">'t/y':</span> <span class="pre">'kg/s',</span> <span class="pre">'year':</span> <span class="pre">'s',</span> <span class="pre">'μs':</span> <span class="pre">'s',</span> <span class="pre">'‰':</span> <span class="pre">'-'}</span></em><a class="headerlink" href="#woo._units.baseUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map units to their base units (with unit multiplier)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="woo._units.unit">
+<span class="sig-prename descclassname"><span class="pre">woo._units.</span></span><span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'%':</span> <span class="pre">0.01,</span> <span class="pre">'-':</span> <span class="pre">1.0,</span> <span class="pre">'GPa':</span> <span class="pre">999999999.9999999,</span> <span class="pre">'J/m²':</span> <span class="pre">1.0,</span> <span class="pre">'MN':</span> <span class="pre">1000000.0,</span> <span class="pre">'MN·m':</span> <span class="pre">1000000.0,</span> <span class="pre">'MPa':</span> <span class="pre">1000000.0,</span> <span class="pre">'Mt/y':</span> <span class="pre">31.709791983764585,</span> <span class="pre">'N':</span> <span class="pre">1.0,</span> <span class="pre">'N·m':</span> <span class="pre">1.0,</span> <span class="pre">'N·m·s':</span> <span class="pre">1.0,</span> <span class="pre">'Pa':</span> <span class="pre">1.0,</span> <span class="pre">'cm':</span> <span class="pre">0.01,</span> <span class="pre">'day':</span> <span class="pre">86400.0,</span> <span class="pre">'deg':</span> <span class="pre">0.017453292519943295,</span> <span class="pre">'g':</span> <span class="pre">0.001,</span> <span class="pre">'g/cm³':</span> <span class="pre">1000.0,</span> <span class="pre">'in':</span> <span class="pre">0.0254,</span> <span class="pre">'kN':</span> <span class="pre">1000.0,</span> <span class="pre">'kN·m':</span> <span class="pre">1000.0,</span> <span class="pre">'kPa':</span> <span class="pre">1000.0,</span> <span class="pre">'kg':</span> <span class="pre">1.0,</span> <span class="pre">'kg/m³':</span> <span class="pre">1.0,</span> <span class="pre">'kg/s':</span> <span class="pre">1.0,</span> <span class="pre">'kg·m²':</span> <span class="pre">1.0,</span> <span class="pre">'km/h':</span> <span class="pre">0.2777777777777778,</span> <span class="pre">'m':</span> <span class="pre">1.0,</span> <span class="pre">'m/min':</span> <span class="pre">0.016666666666666666,</span> <span class="pre">'m/s':</span> <span class="pre">1.0,</span> <span class="pre">'m/s²':</span> <span class="pre">1.0,</span> <span class="pre">'mm':</span> <span class="pre">0.001,</span> <span class="pre">'mm²':</span> <span class="pre">1e-06,</span> <span class="pre">'mm³':</span> <span class="pre">1e-09,</span> <span class="pre">'ms':</span> <span class="pre">0.001,</span> <span class="pre">'m²':</span> <span class="pre">1.0,</span> <span class="pre">'m³':</span> <span class="pre">1.0,</span> <span class="pre">'ppm':</span> <span class="pre">1e-06,</span> <span class="pre">'rad':</span> <span class="pre">1.0,</span> <span class="pre">'rad/s':</span> <span class="pre">1.0,</span> <span class="pre">'rot/min':</span> <span class="pre">0.10471975511965977,</span> <span class="pre">'rot/s':</span> <span class="pre">6.283185307179586,</span> <span class="pre">'rph':</span> <span class="pre">0.0017453292519943296,</span> <span class="pre">'rpm':</span> <span class="pre">0.10471975511965977,</span> <span class="pre">'s':</span> <span class="pre">1.0,</span> <span class="pre">'t':</span> <span class="pre">1000.0,</span> <span class="pre">'t/h':</span> <span class="pre">0.2777777777777778,</span> <span class="pre">'t/m³':</span> <span class="pre">1000.0,</span> <span class="pre">'t/y':</span> <span class="pre">3.1709791983764585e-05,</span> <span class="pre">'year':</span> <span class="pre">31536000.0,</span> <span class="pre">'μs':</span> <span class="pre">1e-06,</span> <span class="pre">'‰':</span> <span class="pre">0.001}</span></em><a class="headerlink" href="#woo._units.unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map units to their respective multipliers</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo._monkey.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.apiversion.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.apiversion</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo._units.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.apiversion.html" title="woo.apiversion"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo._monkey.html" title="woo._monkey"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._units</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,244 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>woo.remote &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="woo.runtime" href="woo.runtime.html" />
+    <link rel="prev" title="woo.qt" href="woo.qt.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.runtime.html" title="woo.runtime"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.qt.html" title="woo.qt"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.remote</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-woo.remote">
+<span id="woo-remote"></span><h1><a class="reference internal" href="#module-woo.remote" title="woo.remote"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.remote</span></code></a><a class="headerlink" href="#module-woo.remote" title="Permalink to this headline">¶</a></h1>
+<p>Remote connections to woo: authenticated python command-line over telnet and anonymous socket for getting some read-only information about current simulation.</p>
+<p>These classes are used internally in gui/py/PythonUI_rc.py and are not intended for direct use.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.remote.GenericTCPServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.remote.</span></span><span class="sig-name descname"><span class="pre">GenericTCPServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookie</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minPort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxPort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">65536</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#GenericTCPServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.GenericTCPServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for socket server, handling port allocation, initial logging and thead backgrounding.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.remote.InfoProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.remote.</span></span><span class="sig-name descname"><span class="pre">InfoProvider</span></span><a class="reference internal" href="_modules/woo/remote.html#InfoProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.InfoProvider" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.InfoProvider.basicInfo">
+<span class="sig-name descname"><span class="pre">basicInfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#InfoProvider.basicInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.InfoProvider.basicInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.InfoProvider.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#InfoProvider.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.InfoProvider.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.remote.</span></span><span class="sig-name descname"><span class="pre">PythonConsoleSocketEmulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class emulating python command-line over a socket connection.</p>
+<p>The connection is authenticated by requiring a cookie.
+Only connections from localhost (127.0.0.*) are allowed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator.displayhook">
+<span class="sig-name descname"><span class="pre">displayhook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator.displayhook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator.displayhook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator.finish">
+<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator.finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator.finish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator.handle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator.handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.remote.PythonConsoleSocketEmulator.tryLogin">
+<span class="sig-name descname"><span class="pre">tryLogin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#PythonConsoleSocketEmulator.tryLogin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.PythonConsoleSocketEmulator.tryLogin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.remote.runServers">
+<span class="sig-prename descclassname"><span class="pre">woo.remote.</span></span><span class="sig-name descname"><span class="pre">runServers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmlrpc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcpPy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/remote.html#runServers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.remote.runServers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run python telnet server and info socket. They will be run at localhost on ports 9000 (or higher if used) and 21000 (or higer if used) respectively.</p>
+<p>The python telnet server accepts only connection from localhost,
+after authentication by random cookie, which is printed on stdout
+at server startup.</p>
+<p>The info socket provides read-only access to several simulation parameters
+at runtime. Each connection receives pickled dictionary with those values.
+This socket is primarily used by woo-multi batch scheduler.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="woo.remote.useQThread">
+<span class="sig-prename descclassname"><span class="pre">woo.remote.</span></span><span class="sig-name descname"><span class="pre">useQThread</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#woo.remote.useQThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set before using any of our classes to use QThread for background execution instead of the standard thread module. Mixing the two (in case the qt UI is running, for instance) does not work well.</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="woo.qt.html"
+                          title="Previous page">&larr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt</span></code></a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="woo.runtime.html"
+                          title="Next page">&rarr; <code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.runtime</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/woo.remote.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.runtime.html" title="woo.runtime"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="woo.qt.html" title="woo.qt"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.remote</span></code></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

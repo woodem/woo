@@ -1,0 +1,844 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Concrete contact model &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ice contact model" href="ice.html" />
+    <link rel="prev" title="Adhesive models" href="adhesive.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ice.html" title="Ice contact model"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="adhesive.html" title="Adhesive models"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Concrete contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="concrete-contact-model">
+<span id="id1"></span><h1>Concrete contact model<a class="headerlink" href="#concrete-contact-model" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This model was originally published in in the thesis <span id="id2">[<a class="reference internal" href="../../references.html#id35" title="Václav Šmilauer. Cohesive Particle Model using the Discrete Element Method on the Yade Platform. PhD thesis, Czech Technical University in Prague, Faculty of Civil Engineering &amp; Université Grenoble I – Joseph Fourier, École doctorale I-MEP2, 2010. LaTeX sources at http://bazaar.launchpad.net/\~eudoxos/+junk/thesis/files. URL: http://tel.archives-ouvertes.fr/docs/00/50/24/02/PDF/thesis.pdf.">Smi10</a>]</span> under the name Concrete Particle Model (CPM) and ported from Yade to Woo by the author. This page was converted from the thesis source.</p>
+</div>
+<p>Contact law is formulated on the level of individual contacts between 2 particles. However, since desired results are macroscopic and not observed until larger simulations are performed, motivations for introducing various contact-level features of the model might not be obvious until after reading <a class="reference internal" href="#concrete-model-calibration"><span class="std std-ref">Parameter calibration</span></a>.</p>
+<section id="prior-discrete-concrete-models">
+<h2>Prior discrete concrete models<a class="headerlink" href="#prior-discrete-concrete-models" title="Permalink to this headline">¶</a></h2>
+<p>Before describing the CPM model, we would like to give a brief overview of some of the main particle-based, DEM and non-DEM, concrete models.</p>
+<dl>
+<dt>Lattice models</dt><dd><p><span id="id3">[<a class="reference internal" href="../../references.html#id36" title="Adri Vervuurt. Interface Fracture in Concrete (proefschrift). Technische Universiteit Delft, 1997.">Ver97</a>]</span> (pg. 14-16) gives an overview of older lattice models used for concrete. Later lattice models of concrete aim usually at meso-scale modeling, where aggregates and mortar are distinguished by differing beam parameters. Beam configuration can be regular (leading to failure anisotropy), random <span id="id4">[<a class="reference internal" href="../../references.html#id37" title="G. Lilliu and J. G. M. van Mier. 3d lattice type fracture model for concrete. Engineering Fracture Mechanics, 70(7–8):927–941, 2003. URL: http://www.sciencedirect.com/science/article/B6V2R-47DM661-2/2/b3ec6fb13217ef0e8f7a854f6aa166de, doi:DOI: 10.1016/S0013-7944(02)00158-3.">LvM03</a>]</span>, or generated to match observed statistical distribution <span id="id5">[<a class="reference internal" href="../../references.html#id38" title="J. P. B. Leite, V. Slowik, and H. Mihashi. Computer simulation of fracture processes of concrete using mesolevel models of lattice structures. Cement and Concrete Research, 34(6):1025–1033, 2004. URL: http://www.sciencedirect.com/science/article/B6TWG-4B8X294-2/2/51f72ac6eb39cfeaf744c5980dd2fc2f, doi:DOI: 10.1016/j.cemconres.2003.11.011.">LSM04</a>]</span>.</p>
+<p><span id="id6">[<a class="reference internal" href="../../references.html#id37" title="G. Lilliu and J. G. M. van Mier. 3d lattice type fracture model for concrete. Engineering Fracture Mechanics, 70(7–8):927–941, 2003. URL: http://www.sciencedirect.com/science/article/B6V2R-47DM661-2/2/b3ec6fb13217ef0e8f7a854f6aa166de, doi:DOI: 10.1016/S0013-7944(02)00158-3.">LvM03</a>]</span> uses brittle beam behavior, simply removing broken beams from simulation; <span id="id7">[<a class="reference internal" href="../../references.html#id38" title="J. P. B. Leite, V. Slowik, and H. Mihashi. Computer simulation of fracture processes of concrete using mesolevel models of lattice structures. Cement and Concrete Research, 34(6):1025–1033, 2004. URL: http://www.sciencedirect.com/science/article/B6TWG-4B8X294-2/2/51f72ac6eb39cfeaf744c5980dd2fc2f, doi:DOI: 10.1016/j.cemconres.2003.11.011.">LSM04</a>]</span> uses tensile softening to avoid dependence of global softening (which is observed even with brittle behavior of beams) on beam size. Neither of these models focuses on capturing compression behavior.</p>
+<p><span id="id8">[<a class="reference internal" href="../../references.html#id45" title="Gianluca Cusatis, Zdenek P. Bažant, and Luigi Cedolin. Confinement-shear lattice model for concrete damage in tension and compression: i. theory. Journal of Engineering Mechanics, 129(12):1439–1448, 2003. URL: http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&amp;id=JENMDT000129000012001439000001&amp;idtype=cvips&amp;gifs=yes.">CBavzantC03</a>]</span> presents a rather sophisticated model, in which properties of lattice beams are computed from the geometry of Voronoï cells of each node. Granulometry is supposed to have substantial influence on confinement behavior; as it is not fully considered by the model, the beam-transversal stress history influences shear rigidity instead. Compression behavior is captured fairly well.</p>
+</dd>
+<dt>Rigid body – spring models</dt><dd><p>This family of models is, to our knowledge, used infrequently for concrete. <span id="id9">[<a class="reference internal" href="../../references.html#id39" title="Kouhei Nagai, Yasuhiko Sato, Tamon Ueda, and Yoshio Kakuta. Numerical simulation of fracture process of concrete model by rigid body spring method. コンクリート工学年次論文集, 24(2):163–168, 2002. URL: http://211.10.28.144/data_pdf/24/024-01-2028.pdf.">NSUK02</a>]</span> presents a mesoscopic (distinguishing aggregates and mortar) model, though only formulated in 2D.</p>
+</dd>
+<dt>Discrete element models</dt><dd><p>Such of concrete are rather rare. Most activity (judging by publications) comes from teams formed around Frédéric V. Donzé. His work (using SDEC software, see <a class="reference external" href="https://yade-dem.org/wiki/Yade_history">https://yade-dem.org/wiki/Yade_history</a> for details)) first targeted at 2D DEM <span id="id10">[<a class="reference internal" href="../../references.html#id40" title="F. Camborde, C. Mariotti, and F. V. Donzé. Numerical study of rock and concrete behaviour by discrete element modelling. Computers and Geotechnics, 27(4):225–247, 2000. URL: http://dx.doi.org/10.1016/S0266-352X(00)00013-6.">CMDonze00</a>]</span>. Later, exploiting the dynamic nature of DEM led to fast concrete dynamics in 3D <span id="id11">[<a class="reference internal" href="../../references.html#id41" title="Sébastien Hentz. Modélisation d'une Structure en Béton Armé Soumise à un Choc par la méthode des Éléments Discrets. PhD thesis, Université Grenoble 1 – Joseph Fourier, October 2003.">Hen03</a>]</span> <span id="id12">[<a class="reference internal" href="../../references.html#id42" title="Sébastien Hentz, Laurent Daudeville, and Frédéric V. Donzé. Identification and validation of a discrete element model for concrete. Journal of Engineering Mechanics, 130(6):709–719, June 2004.">HDD04</a>]</span> and impact simulation <span id="id13">[<a class="reference internal" href="../../references.html#id43" title="W. J. Shiu, F. V. Donzé, and L. Daudeville. Compaction process in concrete during missile impact: a dem analysis. Computers and Concrete, 5(4):329–342, 2008. URL: http://geo.hmg.inpg.fr/\%7Edaudevil/publis/Computers&amp;Concrete2.pdf.">SDonzeD08</a>]</span>. In order to reduce computational costs, elastic FEM for the non-damaged subdomain is used, with some tricks to avoid spurious dynamic effects on the DEM/FEM boundary <span id="id14">[<a class="reference internal" href="../../references.html#id44" title="Jessica Rousseau, Emmanuel Frangin, Phiippe Marin, and Laurent Daudeville. Multidomain finite and discrete elements method for impact analysis of a concrete structure. Engineering structures, 43(1–2):2735–2743, 2009. URL: http://geo.hmg.inpg.fr/\%7Edaudevil/publis/engstruct2.pdf.">RFMD09</a>]</span>.</p>
+</dd>
+</dl>
+<p>With both lattice and DEM models, arriving at reasonable compression behavior is non-trivial; it seems to stem from the fact that 1D elements (beams in lattice, bonds in DEM) have no notion of an overall stress state at their vicinity, but only insofar as it is manifested in the direction of the respective element. <span id="id15">[<a class="reference internal" href="../../references.html#id45" title="Gianluca Cusatis, Zdenek P. Bažant, and Luigi Cedolin. Confinement-shear lattice model for concrete damage in tension and compression: i. theory. Journal of Engineering Mechanics, 129(12):1439–1448, 2003. URL: http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&amp;id=JENMDT000129000012001439000001&amp;idtype=cvips&amp;gifs=yes.">CBavzantC03</a>]</span> works around this by explicitly introducing the influence of transversal stress. <span id="id16">[<a class="reference internal" href="../../references.html#id41" title="Sébastien Hentz. Modélisation d'une Structure en Béton Armé Soumise à un Choc par la méthode des Éléments Discrets. PhD thesis, Université Grenoble 1 – Joseph Fourier, October 2003.">Hen03</a>]</span> (sect. 5.3), on the other hand, blocks rotations of spherical elements to achieve a higher and more realistic <span class="math notranslate nohighlight">\(f_c/f_t\)</span> ratio, but it is questionable whether there is physically sound reason for such an adjustment.</p>
+</section>
+<section id="model-description">
+<h2>Model description<a class="headerlink" href="#model-description" title="Permalink to this headline">¶</a></h2>
+<section id="cohesive-and-non-cohesive-contacts">
+<h3>Cohesive and non-cohesive contacts<a class="headerlink" href="#cohesive-and-non-cohesive-contacts" title="Permalink to this headline">¶</a></h3>
+<p>We use the word contact to denote both cohesive (material bond) and non-cohesive (contact two spheres meeting during their motion) contacts, as they are governed by the same equations. The non-cohesive contact only differs by that it is considered as fully damaged from the very start, by setting the damage variable <span class="math notranslate nohighlight">\(\omega=1\)</span>; since damage effectively prevent tensile forces in the contact, the result is that the two spheres interact only while in tension (geometrically overlapping) and disappears when they geometrically separate. On the other hand, cohesive contact, which is always created at the beginning of the simulation, is created in virgin, undamaged state.</p>
+</section>
+<section id="contact-parameters">
+<h3>Contact parameters<a class="headerlink" href="#contact-parameters" title="Permalink to this headline">¶</a></h3>
+<p>As already explained above, most parameters of a contact are computed as averages of particle material properties. That is also true for the CPM model, with the respective <a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat" title="woo.dem.ConcreteMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">material</span></code></a> and <a class="reference internal" href="../../woo.dem.html#woo.dem.Cp2_ConcreteMat_ConcretePhys" title="woo.dem.Cp2_ConcreteMat_ConcretePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cp2</span> <span class="pre">functor</span></code></a> classes.</p>
+<p>Those computed as averages (from values that are typically identical, since particles share the same material) are <span class="math notranslate nohighlight">\(c_{T0}\)</span>, <span class="math notranslate nohighlight">\(\eps_0\)</span>, <span class="math notranslate nohighlight">\(\eps_s\)</span>, <span class="math notranslate nohighlight">\(k_N\)</span> (from particles’ moduli <span class="math notranslate nohighlight">\(E\)</span>), <span class="math notranslate nohighlight">\(\tau_d\)</span>, <span class="math notranslate nohighlight">\(M_d\)</span>, <span class="math notranslate nohighlight">\(\tau_{pl}\)</span>, <span class="math notranslate nohighlight">\(M_{pl}\)</span>, <span class="math notranslate nohighlight">\(\sigma_0\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span>. (The meaning of symbols used here is explained in the following text.)</p>
+<p>On the other hand, shear modulus <span class="math notranslate nohighlight">\(k_T\)</span> is computed from <span class="math notranslate nohighlight">\(k_N\)</span> using the ratio in <code class="xref py py-obj docutils literal notranslate"><span class="pre">ktDivKn</span></code>. <span class="math notranslate nohighlight">\(\eps_f\)</span> is computed from <span class="math notranslate nohighlight">\(\eps_0\)</span> by multiplying it by dimensionless <a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat.relDuctility" title="woo.dem.ConcreteMat.relDuctility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relDuctility</span></code></a>, which is <span class="math notranslate nohighlight">\(\eps_f/\eps_0\)</span>.</p>
+<p>Finally, some parameters are set in the <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_ConcretePhys" title="woo.dem.Law2_L6Geom_ConcretePhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_ConcretePhys</span></code></a> law functor, hence the same for all interactions. Those are <span class="math notranslate nohighlight">\(Y_0\)</span> and <span class="math notranslate nohighlight">\(\tilde K_s\)</span>.</p>
+<p>Density of the particle material is set to <span class="math notranslate nohighlight">\(\rho=4800\,{\rm kgm^{-3}}\)</span> (by default), as we have to compensate for porosity of the packing, which a little above 50% for spheres of the same radius and we take continuum concrete density roughly <span class="math notranslate nohighlight">\(2400\,{\rm kgm^{-3}}\)</span>.</p>
+</section>
+<section id="normal-stresses">
+<h3>Normal stresses<a class="headerlink" href="#normal-stresses" title="Permalink to this headline">¶</a></h3>
+<p>The normal stress-strain law  is formulated within the framework of damage mechanics:</p>
+<div class="math notranslate nohighlight" id="equation-eq-sigma-n-simple">
+<span class="eqno">(15)<a class="headerlink" href="#equation-eq-sigma-n-simple" title="Permalink to this equation">¶</a></span>\[\sigma_N =[1-\omega H(\eps_N)] k_N\eps_N.\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(k_N\)</span> is the normal modulus (model parameter, [Pa]), and <span class="math notranslate nohighlight">\(\omega\in\langle0,1\rangle\)</span> is the damage variable. The Heaviside function <span class="math notranslate nohighlight">\(H(\eps_N)\)</span> deactivates damage influence in compression, which physically corresponds to crack closure.</p>
+<p>The damage variable <span class="math notranslate nohighlight">\(\omega\)</span> is evaluated using the <em>damage evolution function</em> <span class="math notranslate nohighlight">\(g\)</span> (<a class="reference internal" href="#concrete-damage-evolution-function"><span class="std std-ref">figure</span></a>):</p>
+<div class="math notranslate nohighlight" id="equation-eq-tilde-eps">
+\begin{align}
+   \omega=g(\kappa)&amp;=1-\frac{\eps_f}{\kappa}\exp\left(-\frac{\kappa-\eps_0}{\eps_f}\right)\\
+   \kappa&amp;=\max \tilde\eps\\
+   \tilde\eps&amp;=\sqrt{\langle\eps_N\rangle^2+\xi_1^2|\eps_T|^2},
+\end{align}</div><p>where <span class="math notranslate nohighlight">\(\tilde\eps\)</span> is the equivalent strain responsible for damage (<span class="math notranslate nohighlight">\(\langle\eps_N \rangle\)</span> signifies the positive part of <span class="math notranslate nohighlight">\(\eps_N\)</span>) and <span class="math notranslate nohighlight">\(\xi_1\)</span> is a dimensionless coefficient weighting the contribution of the shear strain <span class="math notranslate nohighlight">\(\eps_T\)</span> to damage. However, comparative studies indicate that the optimal value is <span class="math notranslate nohighlight">\(\xi_1\equiv 0\)</span>, hence equation <a class="reference internal" href="#equation-eq-tilde-eps">(16)</a> simplifies to <span class="math notranslate nohighlight">\(\tilde\eps=\langle\eps_N\rangle\)</span>. <span class="math notranslate nohighlight">\(\kappa\)</span> is the maximum equivalent strain over the whole history of the contact.</p>
+<figure class="align-center align-default" id="id24">
+<span id="concrete-damage-evolution-function"></span><a class="reference internal image-reference" href="../../_images/cpm-funcG.svg"><img alt="../../_images/cpm-funcG.svg" src="../../_images/cpm-funcG.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Damage <span class="math notranslate nohighlight">\(\omega\)</span> evolution function <span class="math notranslate nohighlight">\(\omega=g(\kappa_D)\)</span>, where <span class="math notranslate nohighlight">\(\kappa_D=\max \eps_N\)</span> (using <span class="math notranslate nohighlight">\(\eps_0=0.0001\)</span>, <span class="math notranslate nohighlight">\(\eps_f=30\eps_0\)</span>).</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Parameter <span class="math notranslate nohighlight">\(\eps_0\)</span> is the limit elastic strain, and the product <span class="math notranslate nohighlight">\(K_T\eps_0\)</span> corresponds to the local tensile strength at the level of one contact (in general different from the macroscopic tensile strength). Parameter <span class="math notranslate nohighlight">\(\eps_f\)</span> is related to the slope of the softening part of the normal strain-stress diagram (<a class="reference internal" href="#concrete-strain-stress-normal"><span class="std std-ref">figure</span></a>) and must be larger than <span class="math notranslate nohighlight">\(\eps_0\)</span>.</p>
+<figure class="align-center align-default" id="id25">
+<span id="concrete-strain-stress-normal"></span><a class="reference internal image-reference" href="../../_images/cpm-distProx.svg"><img alt="../../_images/cpm-distProx.svg" src="../../_images/cpm-distProx.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">Strain-stress diagram in the normal direction.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="compressive-plasticity">
+<h4>Compressive plasticity<a class="headerlink" href="#compressive-plasticity" title="Permalink to this headline">¶</a></h4>
+<p>To better capture confinement effect, we introduce, as an extension to the model, hardening in plasticity in compression. Using material parameter <span class="math notranslate nohighlight">\(\eps_s&lt;0\)</span>, we define <span class="math notranslate nohighlight">\(\sigma_s=k_N\eps_s\)</span>. If <span class="math notranslate nohighlight">\(\sigma&lt;\sigma_s\)</span>, then <span class="math notranslate nohighlight">\(\tilde K_s k_N\)</span> is taken for tangent stiffness, <span class="math notranslate nohighlight">\(\tilde K_s \in\langle0,1\rangle\)</span> and plastic strain <span class="math notranslate nohighlight">\(\eps_N^{\rm pl}\)</span> is incremented accordingly. This introduces 2 new parameters <span class="math notranslate nohighlight">\(\eps_s\)</span> (stress at which the hardening branch begins) and <span class="math notranslate nohighlight">\(\tilde K_s\)</span> (relative modulus of the hardening branch) that must be calibrated (see <a class="reference internal" href="#concrete-model-calibration"><span class="std std-ref">Parameter calibration</span></a>) and one internal variable <span class="math notranslate nohighlight">\(\eps_N^{\rm pl}\)</span>.</p>
+<p>Extended strain-stress diagram for multiple loading cycles is shown in <a class="reference internal" href="#concrete-strain-stress-normal-hardening"><span class="std std-ref">this figure</span></a>. Note that this feature is activated only in compression, whereas damage is activated only in tension. Therefore, there is no need to specially consider interaction between both.</p>
+<span class="target" id="concrete-strain-stress-normal-hardening"></span><p>This following is the strain-stress diagram in normal direction, loaded cyclically in tension and compression; it shows several features of the model: (1) damage in tension, but not damage in compression (governed by the <span class="math notranslate nohighlight">\(\omega\)</span> internal variable) (2) plasticity in compression, starting at strain <span class="math notranslate nohighlight">\(\eps_s\)</span>; reduced (hardening) modulus is <span class="math notranslate nohighlight">\(\tilde K_s k_N\)</span>:</p>
+<p>(<a class="reference external" href="../../theory/contact/concrete-1.py">Source code</a>, <a class="reference external" href="../../theory/contact/concrete-1.png">png</a>, <a class="reference external" href="../../theory/contact/concrete-1.hires.png">hires.png</a>, <a class="reference external" href="../../theory/contact/concrete-1.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../_images/concrete-1.png" src="../../_images/concrete-1.png" />
+</figure>
+</section>
+<section id="visco-damage">
+<span id="concrete-visco-damage"></span><h4>Visco-damage<a class="headerlink" href="#visco-damage" title="Permalink to this headline">¶</a></h4>
+<p>In order to model time-dependent phenomena, viscosity is introduced in tension by adding viscous overstress <span class="math notranslate nohighlight">\(\sigma_{Nv}\)</span> to <a class="reference internal" href="#equation-eq-sigma-n-simple">(15)</a>. As we suppose it to be related to a limited rate of crack propagation, it cannot depend on total strain rate; rather, we split total strain into the elastic strain <span class="math notranslate nohighlight">\(\eps_e\)</span> and the damage part <span class="math notranslate nohighlight">\(\eps_d\)</span>. Since <span class="math notranslate nohighlight">\(\eps_e=\sigma_N/k_N\)</span>, we have</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-epsd">
+<span class="eqno">(17)<a class="headerlink" href="#equation-eq-cpm-epsd" title="Permalink to this equation">¶</a></span>\[\eps_d=\eps_N-\frac{\sigma_N}{k_N}.\]</div>
+<p>We then postulate the overstress in the form</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-sigmanv">
+<span class="eqno">(18)<a class="headerlink" href="#equation-eq-cpm-sigmanv" title="Permalink to this equation">¶</a></span>\[\sigma_{Nv}(\dot\eps_d)=k_N\eps_0\langle\tau_d\dot\eps_{Nd}\rangle^{M_d},\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_N\eps_0\)</span> is rate-independent tensile strength (introduced for the sake of dimensionality), <span class="math notranslate nohighlight">\(\tau_d\)</span> is characteristic time for visco-damage and <span class="math notranslate nohighlight">\(M_d\)</span> is a dimensionless exponent. The <span class="math notranslate nohighlight">\(\langle\dots\rangle\)</span> operator denotes positive part; therefore, for <span class="math notranslate nohighlight">\(\dot\eps_{Nd}\leq0\)</span>, viscous overstress vanishes. 2 new parameters <span class="math notranslate nohighlight">\(\tau_d\)</span> and <span class="math notranslate nohighlight">\(M_d\)</span> were introduced.</p>
+<p>The normal stress equation then reads</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-sigman">
+<span class="eqno">(19)<a class="headerlink" href="#equation-eq-cpm-sigman" title="Permalink to this equation">¶</a></span>\[\sigma_N=\left[1-\omega H(\eps_N)\right]k_N\eps_N+\sigma_{Nv}(\dot \eps_{Nd}).\]</div>
+<p>In a finite step computation, we can evaluate the damage variable <span class="math notranslate nohighlight">\(\omega\)</span> in a rate-independent manner first; then, we compute the increment of <span class="math notranslate nohighlight">\(\eps_d\)</span> satisfying equations <a class="reference internal" href="#equation-eq-cpm-epsd">(17)</a>–<a class="reference internal" href="#equation-eq-cpm-sigman">(19)</a>. As usual, we use <span class="math notranslate nohighlight">\(\curr{\bullet}\)</span>, <span class="math notranslate nohighlight">\(\next{\bullet}\)</span> to denote value of <span class="math notranslate nohighlight">\(\bullet\)</span> at <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(t+\Dt\)</span> (at the beginning and at the end of the current timestep) respectively. We approximate the damage strain rate by the difference formula</p>
+<div class="math notranslate nohighlight">
+\[\dot\eps_d=\frac{\next{\eps}_d-\curr{\eps}_d}{\Delta t}=\frac{\Delta\eps_d}{\Delta t}\]</div>
+<p>and substitute <a class="reference internal" href="#equation-eq-cpm-sigmanv">(18)</a> and <a class="reference internal" href="#equation-eq-cpm-sigman">(19)</a> into <a class="reference internal" href="#equation-eq-cpm-epsd">(17)</a> obtaining</p>
+<div class="math notranslate nohighlight">
+\[\curr{\eps}_d+\Delta\eps_d=\next{\eps}_N-(1-\omega)\next{\eps}_N-\frac{k_N\eps0}{k_N}\left\langle\frac{\tau_d\Delta\eps_d}{\Delta t}\right\rangle^{M_d},\]</div>
+<p>which can be written as</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-viscdmg">
+<span class="eqno">(20)<a class="headerlink" href="#equation-eq-cpm-viscdmg" title="Permalink to this equation">¶</a></span>\[\Delta\eps_d+\eps_0\left\langle\frac{\tau_d\Delta\eps_d}{\Delta t}\right\rangle^{M_d}=\omega\next{\eps}_N-\curr{\eps}_d\]</div>
+<p>During unloading, i.e. <span class="math notranslate nohighlight">\(\Delta\eps_d\leq0\)</span>, the power term vanishes, leading to</p>
+<div class="math notranslate nohighlight">
+\[\Delta\eps_d=\omega\next{\eps}_N-\curr{\eps}_d,\]</div>
+<p>applicable if <span class="math notranslate nohighlight">\(\omega\next{\eps}_N\leq\curr{\eps}_d\)</span>.</p>
+<p>In the contrary case, <a class="reference internal" href="#equation-eq-cpm-viscdmg">(20)</a> must be solved, but <span class="math notranslate nohighlight">\(\langle\cdots\rangle\)</span> can be replaced by <span class="math notranslate nohighlight">\((\cdots)\)</span> since the term is now known to be positive. We divide <a class="reference internal" href="#equation-eq-cpm-viscdmg">(20)</a> by its right-hand side and apply logarithm. We transform the unknown <span class="math notranslate nohighlight">\(\Delta\eps_d\)</span> into a new unknown</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-beta">
+<span class="eqno">(21)<a class="headerlink" href="#equation-eq-cpm-beta" title="Permalink to this equation">¶</a></span>\[\beta=\ln\frac{\Delta\eps_d}{\omega\next{\eps}_N-\curr{\eps}_d},\]</div>
+<p>obtaining the equation</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-logeq">
+<span class="eqno">(22)<a class="headerlink" href="#equation-eq-cpm-logeq" title="Permalink to this equation">¶</a></span>\[\ln\left({\rm e}^\beta+c{\rm e}^{M_d\beta}\right)=0,\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[c=(1-\omega)\eps_0\left(\omega\next{\eps}_N-\curr{\eps}_d\right)^{M_d-1}\left(\frac{\tau_d}{\Delta t}\right)^{M_d}.\]</div>
+<p>For positive <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(M_d\)</span>, the term <span class="math notranslate nohighlight">\(\ln({\rm e}^\beta+c{\rm e}^{M_d\beta})\)</span> from <a class="reference internal" href="#equation-eq-cpm-logeq">(22)</a>) is convex, increasing and positive at <span class="math notranslate nohighlight">\(\beta=0\)</span>. As a consequence, the Newton method with starting point at <span class="math notranslate nohighlight">\(\beta=0\)</span> always converges monotonically to a unique negative solution of <span class="math notranslate nohighlight">\(\beta\)</span>. (Using pre-determined maximum number of steps and given absolute tolerance <span class="math notranslate nohighlight">\(\delta\)</span>, we start with <span class="math notranslate nohighlight">\(\beta=0\)</span>. Then at each step, we compute <span class="math notranslate nohighlight">\(a=c\exp(N\beta)+\exp(N)\)</span> and <span class="math notranslate nohighlight">\(f=\log(a)\)</span>. If <span class="math notranslate nohighlight">\(|f|&lt;\delta\)</span>, then <span class="math notranslate nohighlight">\(\beta\)</span> is the desired solution. Otherwise, we update <span class="math notranslate nohighlight">\(\beta\leftarrow\beta-f/((cN\exp{N\beta}+\exp{\beta})/a)\)</span> and continue with the next step.)</p>
+<p>From the solution <span class="math notranslate nohighlight">\(\beta\)</span>, we compute</p>
+<div class="math notranslate nohighlight">
+\[\Delta\eps_d=\left(\omega\next{\eps}_N-\curr{\eps}_d\right){\rm e}^\beta.\]</div>
+<p>Finally, the term <span class="math notranslate nohighlight">\(\sigma_{Nd}(\dot\eps_d)=\sigma_{Nd}\left(\frac{\Delta\eps_d}{\Delta t}\right)\)</span> in <a class="reference internal" href="#equation-eq-cpm-sigmanv">(18)</a> can be evaluated and plugged into <a class="reference internal" href="#equation-eq-cpm-sigman">(19)</a>.</p>
+<p>The effect of viscosity on damage for one contact is shown in the <a class="reference internal" href="#concrete-visco-dist"><span class="std std-ref">following figure</span></a>; calibration of the new parameters <span class="math notranslate nohighlight">\(\tau_d\)</span> and <span class="math notranslate nohighlight">\(M_d\)</span> is described in <a class="reference internal" href="#concrete-model-calibration"><span class="std std-ref">Parameter calibration</span></a>.</p>
+<figure class="align-center align-default" id="id26">
+<span id="concrete-visco-dist"></span><a class="reference internal image-reference" href="../../_images/cpm-viscDist.svg"><img alt="../../_images/cpm-viscDist.svg" src="../../_images/cpm-viscDist.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Strain-stress curve in tension with different rates of loading; the parameters used here are <span class="math notranslate nohighlight">\(\tau_d=1\,{\rm s}\)</span> and <span class="math notranslate nohighlight">\(M_d=0.1\)</span>.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="isotropic-confinement">
+<span id="concrete-isoprestress"></span><h4>Isotropic confinement<a class="headerlink" href="#isotropic-confinement" title="Permalink to this headline">¶</a></h4>
+<p>During calibration, we faced the necessity to simulate confined compression setups. Applying boundary confinement on a specimen composed of many particles is not straightforward, since thera are necessary strong local effects. We then found a way to introduce isotropic confinement at contact level, by pre-adjusting <span class="math notranslate nohighlight">\(\eps_N\)</span> and post-adjusting <span class="math notranslate nohighlight">\(\sigma_N\)</span>; the supposition is that the confinement value <span class="math notranslate nohighlight">\(\sigma_0\)</span> is negative and does not lead to immediate damage to contacts.</p>
+<p>Given a prescribed confinement value <span class="math notranslate nohighlight">\(\sigma_0\)</span>, we adjust <span class="math notranslate nohighlight">\(\eps_N\)</span> value <em>before</em> computing normal and shear stresses:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\eps_N'=\eps_N+\begin{cases}
+   \sigma_0/k_N &amp; \hbox{if $\sigma_0&gt;k_N\eps_s$,} \\
+   \eps_s+\frac{\sigma_0-k_N\eps_s}{k_N\tilde K_s} &amp; \hbox{otherwise,} \\
+\end{cases}\end{split}\]</div>
+<p>where the second case takes in account compressive plasticity. The constitutive law then uses the adjusted value <span class="math notranslate nohighlight">\(\eps_N'\)</span>. At the end, computed normal stress is adjusted back to</p>
+<div class="math notranslate nohighlight">
+\[\sigma_N'=\sigma_N-\sigma_0\]</div>
+<p>before being applied on particle in contact.</p>
+</section>
+</section>
+<section id="shear-stresses">
+<h3>Shear stresses<a class="headerlink" href="#shear-stresses" title="Permalink to this headline">¶</a></h3>
+<p>For the shear stress we use plastic constitutive law</p>
+<div class="math notranslate nohighlight">
+\[\vec{\sigma}_T=k_T(\vec{\eps}_T-\vec{\eps}_{Tp})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\eps_{Tp}\)</span> is the plastic strain on the contact and <span class="math notranslate nohighlight">\(k_T\)</span> is shear contact modulus computed from <span class="math notranslate nohighlight">\(k_N\)</span> as the ratio <span class="math notranslate nohighlight">\(k_T/k_N\)</span> is fixed (usually 0.2, see the <a class="reference internal" href="#concrete-model-calibration"><span class="std std-ref">Parameter calibration</span></a>).</p>
+<p>XXX
+In the DEM formulation (large strains), however, <span class="math notranslate nohighlight">\(\vec{\eps}_{Tp}\)</span> is not stored and mapped contact points on element surfaces are moved instead as explained above, sect.~ref{sect-formulation-total-shear}.</p>
+<p>The shear stress is limited by the yield function (<a class="reference internal" href="#concrete-yield-surface-flow-rule"><span class="std std-ref">figure</span></a>)</p>
+<div class="math notranslate nohighlight" id="equation-plasticity-function">
+<span class="eqno">(23)<a class="headerlink" href="#equation-plasticity-function" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}f(\sigma_N,\vec{\sigma}_T)&amp;=|\vec{\sigma}_T|-r_{pl}=|\vec{\sigma}_T-(c_T-\sigma_N\tan\phi),\\c_T&amp;=c_{T0}(1-\omega)\end{aligned}\end{align} \]</div>
+<p>where material parameters <span class="math notranslate nohighlight">\(c_{T0}\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> are initial cohesion and internal friction angle, respectively. The initial cohesion  <span class="math notranslate nohighlight">\(c_{T0}\)</span> is reduced to the current cohesion <span class="math notranslate nohighlight">\(c_T\)</span> using damage state variable <span class="math notranslate nohighlight">\(\omega\)</span>. Note that we split the plasticity function in a part that depends on <span class="math notranslate nohighlight">\(\vec{\sigma}_T\)</span> and another part which depends on already known values of <span class="math notranslate nohighlight">\(\omega\)</span> and <span class="math notranslate nohighlight">\(\sigma_N\)</span>; the latter is denoted <span class="math notranslate nohighlight">\(r_{pl}\)</span>, radius of the plasticity surface in given <span class="math notranslate nohighlight">\(\sigma_N\)</span> plane.</p>
+<p>The plastic flow rule</p>
+<div class="math notranslate nohighlight">
+\[\vec{\dot\eps}_{Tp}=\dot\lambda\frac{\vec{\sigma}_T}{|\vec{\sigma}_T|},\]</div>
+<p><span class="math notranslate nohighlight">\(\lambda\)</span> being plastic multiplier, is associated in the plane of shear stresses but not with respect to the normal stress (<a class="reference internal" href="#concrete-yield-surface-flow-rule"><span class="std std-ref">figure</span></a>). The advantage of using a non-associated flow rule is computational. At every step, <span class="math notranslate nohighlight">\(\sigma_N\)</span> can be evaluated directly, followed by a direct evaluation of <span class="math notranslate nohighlight">\(\vec{\sigma}_T\)</span>; stress return in shear stress plane reduces to simple radial return and does not require any iterations as <span class="math notranslate nohighlight">\(f(\sigma_N,\vec{\sigma}_T)=0\)</span> is satisfied immediately.</p>
+<p>In the implementation, numerical evaluation starts from current value of <span class="math notranslate nohighlight">\(\vec{\eps}_T\)</span>. Trial stress <span class="math notranslate nohighlight">\(\vec{\sigma}_T^t=\vec{\eps}_T k_T\)</span> is computed and compared with current plasticity surface radius <span class="math notranslate nohighlight">\(r_{pl}\)</span> from <a class="reference internal" href="#equation-plasticity-function">(23)</a>. If <span class="math notranslate nohighlight">\(|\vec{\sigma}_T^t|&gt;r_{pl}\)</span>, the radial stress return is performed; since we do not store <span class="math notranslate nohighlight">\(\vec{\eps}_{Tp}\)</span>, <span class="math notranslate nohighlight">\(\vec{\eps}_T\)</span> is updated as well in such case:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \vec{\sigma}_T&amp;=r_{pl} \normalized{\vec{\sigma_T}} \\
+   \vec{\eps}_T'&amp;=\normalized{\vec{\eps}_T}\frac{|\vec{\sigma}_T|}{|\vec{\sigma}_T^t|}
+\end{align}</div><p>If <span class="math notranslate nohighlight">\(|\vec{\sigma}_T^t|\leq r_{pl}\)</span>, there is no plastic slip and we simply assign <span class="math notranslate nohighlight">\(\vec{\sigma}_T=\vec{\sigma}_T^t\)</span> without <span class="math notranslate nohighlight">\(\vec{\eps}_T\)</span> update.</p>
+<figure class="align-center align-default" id="id27">
+<span id="concrete-yield-surface-flow-rule"></span><a class="reference internal image-reference" href="../../_images/yield-surface-and-plastic-flow-rule.svg"><img alt="../../_images/yield-surface-and-plastic-flow-rule.svg" src="../../_images/yield-surface-and-plastic-flow-rule.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Linear yield surface and plastic flow rule.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="confinement-extension">
+<h4>Confinement extension<a class="headerlink" href="#confinement-extension" title="Permalink to this headline">¶</a></h4>
+<p>As in the case of normal stress, we introduce an extension to better capture confinement effect and to prevent shear locking under extreme compression: instead of using linear plastic surface we replace it by logarithmic surface in the compression part, which has <span class="math notranslate nohighlight">\(C_1\)</span> continuity with the linear surface in tension; the continuity condition avoids pathologic behavior around the switch point and also reduces number of new parameters. Instead of <a class="reference internal" href="#equation-plasticity-function">(23)</a>, we use</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f(\sigma_N,\sigma_T)=
+   \begin{cases}
+      |\sigma_T|-(c_{T0}(1-\omega)-\sigma_N\tan\phi) &amp; \hbox{if } \sigma_N\geq0 \\
+      |\sigma_T|-c_{T0}\left[(1-\omega)+Y_0\tan\phi\log\left(\frac{-\sigma_N}{c_{T0} Y_0}+1\right)\right] &amp; \hbox{if } \sigma_N&lt;0,
+   \end{cases}\end{split}\]</div>
+<p>which introduces a new dimensionless parameter <span class="math notranslate nohighlight">\(Y_0\)</span> determining how fast the logarithm deviates from the original, linear form. The function is shown, and compared with the linear function, for both virgin and damaged material, in this figure:</p>
+<p id="concrete-yield-surf-log">(<a class="reference external" href="../../theory/contact/concrete-2.py">Source code</a>, <a class="reference external" href="../../theory/contact/concrete-2.png">png</a>, <a class="reference external" href="../../theory/contact/concrete-2.hires.png">hires.png</a>, <a class="reference external" href="../../theory/contact/concrete-2.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../_images/concrete-2.png" src="../../_images/concrete-2.png" />
+</figure>
+</section>
+<section id="visco-plasticity">
+<h4>Visco-plasticity<a class="headerlink" href="#visco-plasticity" title="Permalink to this headline">¶</a></h4>
+<p>Viscosity in shear uses similar ideas as visco-damage from sect.~ref{sect-cpm-visco-damage}; the value of <span class="math notranslate nohighlight">\(r_t\)</span> in <a class="reference internal" href="#equation-plasticity-function">(23)</a> is augmented depending on rate of plastic flow following the equation</p>
+<div class="math notranslate nohighlight">
+\[r_{pl}'=r_{pl}+c_{T0}\left(\tau_{pl}\vec{\dot\eps}_{Tp}\right)^{M_{pl}}=r_{pl}+c_{T0}\left(\tau_{pl}\frac{\Delta\vec{\eps}_{Tp}}{\Dt}\right)^{M_{pl}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_{pl}\)</span> is characteristic time for visco-plasticity, <span class="math notranslate nohighlight">\(M_{pl}\)</span> is a dimensionless exponent (both to be calibrated. <span class="math notranslate nohighlight">\(c_{T0}\)</span> is undamaged cohesion introduced for the sake of dimensionality.</p>
+<p>Similar solution strategy as for visco-damage is used, with different substitutions</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \beta&amp;=\ln\left(\frac{|\vec{\sigma}_T^t|-r_{pl}'}{|\vec{\sigma}_T^t|-r_{pl}}\right), \\
+   c&amp;=c_{T0}\left(|\vec{\sigma}_T^t|-r_{pl}\right)^{M_{pl}-1}\left(\frac{\tau_{pl}}{k_T \Dt}\right)^{M_{pl}}.
+\end{align}</div><p>The equation to solve is then formally the same as <a class="reference internal" href="#equation-eq-cpm-logeq">(22)</a></p>
+<div class="math notranslate nohighlight">
+\[\ln\left({\rm e}^\beta+c{\rm e}^{M_{pl}\beta}\right)=0.\]</div>
+<p>After finding <span class="math notranslate nohighlight">\(\beta\)</span> using the Newton-Raphson method, trial stress <span class="math notranslate nohighlight">\(\vec{\sigma}_T^t\)</span> is scaled by the factor</p>
+<div class="math notranslate nohighlight">
+\[\frac{r'_{pl}}{|\vec{\sigma}_T^t|}=1-e^\beta\left(1-\frac{r_{pl}}{|\vec{\sigma}_T^t|}\right)\]</div>
+<p>to obtain the final shear stress value</p>
+<div class="math notranslate nohighlight">
+\[\vec{\sigma}_T=\frac{r'_{pl}}{|\vec{\sigma}_T^t|}\vec{\sigma}_T^t.\]</div>
+</section>
+</section>
+<section id="applying-stresses-on-particles">
+<h3>Applying stresses on particles<a class="headerlink" href="#applying-stresses-on-particles" title="Permalink to this headline">¶</a></h3>
+<p>Resulting stresses <span class="math notranslate nohighlight">\(\sigma_N\)</span> and and <span class="math notranslate nohighlight">\(\vec{\sigma}_T\)</span> are computed at the current contact point <span class="math notranslate nohighlight">\(\curr{\vec{C}}\)</span>. Summary force <span class="math notranslate nohighlight">\(\vec{F}_{\Sigma}=A_{eq}(\sigma_N\vec{n}+\vec{\sigma}_T)\)</span> has to be applied to particle’s positions <span class="math notranslate nohighlight">\(\curr{\vec{C}}_1\)</span>, <span class="math notranslate nohighlight">\(\curr{\vec{C}}_2\)</span>, exerting force and torque:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \vec{F}_1&amp;=\vec{F}_{\Sigma}, &amp; \vec{T}_1&amp;=(\curr{\vec{C}}-\curr{\vec{C}}_1)\times \vec{F}_{\Sigma}, \\
+   \vec{F}_2&amp;=-\vec{F}_{\Sigma}, &amp; \vec{T}_2&amp;=-(\curr{\vec{C}}-\curr{\vec{C}}_1)\times \vec{F}_{\Sigma}.
+\end{align}</div><p>Forces and torques on particles from multiple interactions accumulate during one computation step.</p>
+</section>
+<section id="contact-model-summary">
+<h3>Contact model summary<a class="headerlink" href="#contact-model-summary" title="Permalink to this headline">¶</a></h3>
+<p>The computation described above proceeds in the following order:</p>
+<ol class="arabic">
+<li><p><strong>Isotropic confinement</strong> <span class="math notranslate nohighlight">\(\sigma_0\)</span> is applied if active. This consists in adjusting normal strain to either <span class="math notranslate nohighlight">\(\eps_N\leftarrow\eps_N+\sigma_0\)</span> (if <span class="math notranslate nohighlight">\(\sigma_0\geq k_N\eps_s\)</span>) or <span class="math notranslate nohighlight">\(\eps_N\leftarrow\eps_s+(\sigma_0-k_N\eps_s)/(k_N\tilde K_s)\)</span>.</p></li>
+<li><p><strong>Normal stress</strong> <span class="math notranslate nohighlight">\(\sigma_N\)</span>. <span class="math notranslate nohighlight">\(\tilde\eps=\langle\eps_N\rangle\)</span> is computed, then the history variable is updated <span class="math notranslate nohighlight">\(\kappa\leftarrow\max(\kappa,\tilde\eps)\)</span>; <span class="math notranslate nohighlight">\(\kappa\)</span> is the state variable from which the current damage <span class="math notranslate nohighlight">\(\omega=g(k)=1-(\eps_f/\kappa)\exp(-(\kappa-\eps_0)/\eps_f)\)</span> is evaluated; for non-cohesive contacts, however, we set <span class="math notranslate nohighlight">\(\omega=1\)</span>. For cohesive contacts with damage disabled (<code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.neverDamage</span></code>), we set <span class="math notranslate nohighlight">\(\omega=0\)</span>.</p>
+<p>The state variable <span class="math notranslate nohighlight">\(\eps_N^{\rm pl}\)</span> (initially zero) holds the normal plastic strain; we use it to compute the elastic part of the current strain <span class="math notranslate nohighlight">\(\eps_N^{\rm el}=\eps_N-\eps_N^{\rm pl}\)</span>.</p>
+<p>Normal stress is computed using the equation of damage mechanics <span class="math notranslate nohighlight">\(\sigma_N=(1-H(\eps_N^{\rm el})\omega)k_N\eps_N^{\rm el}\)</span>.</p>
+<p>Whether compressive hardening is present is determined; <span class="math notranslate nohighlight">\(\sigma_{Ns}=k_N(\eps_s+\tilde K_s(\eps_N-\eps_s))\)</span> is pre-evaluated; then if <span class="math notranslate nohighlight">\(\eps_N^{\rm el}&lt;\eps_s\)</span> and <span class="math notranslate nohighlight">\(\sigma_{Ns}&gt;\sigma_N\)</span>, normal stress and normal plastic strains are updated <span class="math notranslate nohighlight">\(\eps_N^{\rm pl}\leftarrow \eps_N^{\rm pl}+(\sigma_N-\sigma_{Ns})/k_N\)</span>, <span class="math notranslate nohighlight">\(\sigma_N\leftarrow\sigma_{Ns}\)</span>. If the condition is not satisfied, compressive plasticity has no effect and does not have to be specifically considered.</p>
+</li>
+<li><p><strong>Shear stress</strong> <span class="math notranslate nohighlight">\(\vec{\sigma}_T\)</span>. First, trial value is computed simply from <span class="math notranslate nohighlight">\(\vec{\sigma}_T\leftarrow k_T\eps_T\)</span>. This value will be compared with the radius of plastic surface <span class="math notranslate nohighlight">\(r_{pl}\)</span> for given, already known <span class="math notranslate nohighlight">\(\sigma_N\)</span>. As there are different plasticity functions for tension and compression, we obtain <span class="math notranslate nohighlight">\(r_{pl}=c_{T0}(1-\omega)-\sigma_N\tan\phi\)</span> for <span class="math notranslate nohighlight">\(\sigma_N\geq0\)</span>; in compression, the logarithmic surface makes the formula more complicated, giving <span class="math notranslate nohighlight">\(r_{pl}=c_{T0}\left[(1-\omega)+Y_0\tan\phi(-\sigma_N/(c_{T0}Y_0)+1)\right]\)</span>.</p>
+<p>If the trial stress is beyond the admissible range, i.e. <span class="math notranslate nohighlight">\(|\vec{\sigma}_T|&gt;r_pl\)</span>, plastic flow will take place. Since the total formulation for strain is used, we update the <span class="math notranslate nohighlight">\(\vec{\eps}_T\)</span> to have the same direction, but the magnitude of <span class="math notranslate nohighlight">\(|\vec{\sigma}_T|/k_T\)</span>.</p>
+<p>Without visco-plasticity (the default), a simple update <span class="math notranslate nohighlight">\(\vec{\sigma}_T\leftarrow (\sigma_T/|\sigma_T|)r_{pl}\)</span> is performed during the plastic flow. If visco-plasticity is used, we update <span class="math notranslate nohighlight">\(\vec{\sigma}_T\leftarrow s\vec{\sigma}_T\)</span>, <span class="math notranslate nohighlight">\(s\)</span> being a scaling scalar. It is computed as <span class="math notranslate nohighlight">\(s=1-e^{\beta}(1-r_{pl}/|\vec{\sigma}_T|)\)</span>, where <span class="math notranslate nohighlight">\(\beta\)</span> is solved with Newton-Raphson iteration as described above, with the coefficient <span class="math notranslate nohighlight">\(c=c_{T0}(\tau_{pl}/(k_T\Dt))^{M_{pl}}(|\vec{\sigma}_T|-r_{pl})^{M_{pl}-1}\)</span> and the exponent <span class="math notranslate nohighlight">\(M_{pl}\)</span>.</p>
+</li>
+<li><p><strong>Viscous normal overstress</strong> <span class="math notranslate nohighlight">\(\sigma_{Nv}\)</span> is applied for cohesive contacts only. As explained above, it is effective for non-zero damage rate. When damage is not growing (i.e. the state variable <span class="math notranslate nohighlight">\(\eps_d\geq\eps_N\omega\)</span>, where <span class="math notranslate nohighlight">\(\eps_d\)</span> is initially zero), we simply update <span class="math notranslate nohighlight">\(\eps_d\leftarrow\eps_N\omega\)</span>, and the overstress is zero</p>
+<p>Otherwise, the viscosity equation has to be solved using the coefficient <span class="math notranslate nohighlight">\(c=\eps_0(1-\omega)(\tau_d/\Dt)^{M_d}(\eps_N\omega-\eps_d)^{M_d-1}\)</span> and the exponent <span class="math notranslate nohighlight">\(N=M_d\)</span>; once <span class="math notranslate nohighlight">\(\beta\)</span> is solved with the Newton-Raphson method as shown above, we update <span class="math notranslate nohighlight">\(\eps_d\leftarrow\eps_d+(\eps_N\omega-\eps_d)e^\beta\)</span> and finally obtain <span class="math notranslate nohighlight">\(\sigma_{Nv}=(\eps_N\omega-\eps_d)k_N\)</span>. Then the overstress is applied via <span class="math notranslate nohighlight">\(\sigma_N\leftarrow\sigma_N+\sigma_{Nv}\)</span>.</p>
+</li>
+</ol>
+<p>The following table summarizes the nomenclature and corresponding internal Woo (and Yade, for reference) variables:</p>
+<table class="docutils align-default" id="id28">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">:header-rows: 1</span><a class="headerlink" href="#id28" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>symbol</p></td>
+<td><p>Woo</p></td>
+<td><p>Yade</p></td>
+<td><p>meaning</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(A_{eq}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.contA" title="woo.dem.L6Geom.contA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom.contA</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.crossSection" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.crossSection</span></code></a></p></td>
+<td><p>geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\tan\phi\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.tanPhi" title="woo.dem.FrictPhys.tanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.tanPhi</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.tanFrictionAngle" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.tanFrictionAngle</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\eps_0\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.epsCrackOnset" title="woo.dem.ConcretePhys.epsCrackOnset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.epsCrackOnset</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.epsCrackOnset" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.epsCrackOnset</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\eps_f\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.epsFracture" title="woo.dem.ConcretePhys.epsFracture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ConcretePhys.epsFracture</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.epsFracture" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.epsFracture</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat.epsCrackOnset" title="woo.dem.ConcreteMat.epsCrackOnset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epsCrackOnset</span></code></a> multiplied by <a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat.relDuctility" title="woo.dem.ConcreteMat.relDuctility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relDuctility</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\eps_N\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.epsN" title="woo.dem.ConcretePhys.epsN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.epsN</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.epsN" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.epsN</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\vec{\eps}_T\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.epsT" title="woo.dem.ConcretePhys.epsT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.epsT</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.epsT" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.epsT</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\eps_s\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_ConcretePhys.epsSoft" title="woo.dem.Law2_L6Geom_ConcretePhys.epsSoft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_ConcretePhys.epsSoft</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.Law2_ScGeom_CpmPhys_Cpm.epsSoft" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_ScGeom_CpmPhys_Cpm.epsSoft</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\vec{F}_N\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.NormShearPhys.normalForce" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NormShearPhys.normalForce</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\vec{F}_T\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.NormShearPhys.shearForce" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NormShearPhys.shearForce</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(F_N\vec{n}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.CPhys.force" title="woo.dem.CPhys.force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys.force[0]</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.Fn" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.Fn</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(|\vec{F}_T|\)</span></p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.Fs" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.Fs</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\vec{F}_T\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.CPhys.force" title="woo.dem.CPhys.force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys.force[1,2]</span></code></a></p></td>
+<td><p>–</p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\tilde K_s\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_ConcretePhys.relKnSoft" title="woo.dem.Law2_L6Geom_ConcretePhys.relKnSoft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_ConcretePhys.relKnSoft</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.Law2_ScGeom_CpmPhys_Cpm.relKnSoft" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_ScGeom_CpmPhys_Cpm.relKnSoft</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k_N\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.kn</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.E" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.E</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k_T\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kt" title="woo.dem.FrictPhys.kt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys.kt</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.G" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.G</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\kappa\)</span></p></td>
+<td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappaD</span></code></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.kappaD" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.kappaD</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(M_d\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat.dmgRateExp" title="woo.dem.ConcreteMat.dmgRateExp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcreteMat.dmgRateExp</span></code></a> <a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.dmgRateExp" title="woo.dem.ConcretePhys.dmgRateExp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.dmgRateExp</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.dmgRateExp" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.dmgRateExp</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\tau_d\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.dmgTau" title="woo.dem.ConcretePhys.dmgTau"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dmgTau</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.dmgTau" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.dmgTau</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(M_{pl}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.plRateExp" title="woo.dem.ConcretePhys.plRateExp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plRateExp</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.plRateExp" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.plRateExp</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\tau_{pl}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.plTau" title="woo.dem.ConcretePhys.plTau"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plTau</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.plTau" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.plTau</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.omega" title="woo.dem.ConcretePhys.omega"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.omega" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.omega</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\sigma_N\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.sigmaN" title="woo.dem.ConcretePhys.sigmaN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.sigmaN</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.sigmaN" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.sigmaN</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\vec{\sigma}_T\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.sigmaT" title="woo.dem.ConcretePhys.sigmaT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.sigmaT</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.sigmaT" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.sigmaT</span></code></a></p></td>
+<td><p>state</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\sigma_0\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.isoPrestress" title="woo.dem.ConcretePhys.isoPrestress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isoPrestress</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.isoPrestress" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.isoPrestress</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(c_{T0}\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.coh0" title="woo.dem.ConcretePhys.coh0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coh0</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.CpmPhys.undamagedCohesion" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpmPhys.undamagedCohesion</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(Y_0\)</span></p></td>
+<td><p><a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_ConcretePhys.yieldLogSpeed" title="woo.dem.Law2_L6Geom_ConcretePhys.yieldLogSpeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">yieldLogSpeed</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.yade-dem.org/doc/yade.wrapper.html#yade.wrapper.Law2_ScGeom_CpmPhys_Cpm.yieldLogSpeed" title="(in Yade v3rd ed.)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_ScGeom_CpmPhys_Cpm.yieldLogSpeed</span></code></a></p></td>
+<td><p>material</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="parameter-calibration">
+<span id="concrete-model-calibration"></span><h2>Parameter calibration<a class="headerlink" href="#parameter-calibration" title="Permalink to this headline">¶</a></h2>
+<p>The model comprises two sets of parameters that determine elastic and inelastic behavior. In order to match simulations to experiments, a procedure to calibrate these parameters must be given. Since elastic properties are independent of inelastic ones, they are calibrated first.</p>
+<p><strong>Model parameters</strong> can be summarized as follows:</p>
+<ul class="simple">
+<li><p>geometry</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(r\)</span> sphere radius</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_I\)</span> interaction radius</p></li>
+</ul>
+</li>
+<li><p>elasticity</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(k_N\)</span> normal contact stiffness</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_T/k_N\)</span> relative shear contact stiffness</p></li>
+</ul>
+</li>
+<li><p>damage and plasticity</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\eps_0\)</span> limit elastic strain</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eps_f\)</span> parameter of damage evolution function</p></li>
+<li><p><span class="math notranslate nohighlight">\(C_{T0}\)</span> shear cohesion of undamaged material</p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi\)</span> internal friction angle</p></li>
+</ul>
+</li>
+<li><p>confinement</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(Y_0\)</span> parameter for plastic surface evolution in compression</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eps_s\)</span> hardening strain in compression</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tilde K_s\)</span> relative hardening modulus in compression</p></li>
+</ul>
+</li>
+<li><p>rate-dependence</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\tau_d\)</span> characteristic time for visco-damage</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_d\)</span> dimensionless visco-damage exponent</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_{pl}\)</span> characteristic time for visco-plasticity</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_{pl}\)</span> dimensionless visco-plasticity exponent</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Macroscopic properties</strong> should be matched to prescribed values by running simulation on sufficiently large specimen. Let us give overview of them, in the order of calibration:</p>
+<ul class="simple">
+<li><p><em>elastic properties</em>, which depend on only geometry and elastic parameters (using grouping from the list above)</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(E\)</span> Young’s modulus,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu\)</span> Poisson’s ratio</p></li>
+</ul>
+</li>
+<li><p><em>inelastic properties</em>, depending (in addition) on damage and plasticity parameters:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(f_t\)</span> tensile strength</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_c\)</span> compressive strength</p></li>
+<li><p><span class="math notranslate nohighlight">\(G_f\)</span> fracture energy (conventional definition shown in <a class="reference internal" href="#concrete-fracture-energy"><span class="std std-ref">this figure</span></a></p></li>
+</ul>
+</li>
+<li><p><em>confinement properties</em>; they appear only in high confinement situations and can be calibrated without having substantial impact on already calibrated inelastic properties. We do not describe them quantitatively; fitting simulation and experimental curves is used instead.</p></li>
+<li><p><em>rate-dependence properties</em>; they appear only in high-rate situations, therefore are again calibrated after inelastic properties independently. As in the previous case, a simple fitting approach is used here.</p></li>
+</ul>
+<figure class="align-center align-default" id="id29">
+<span id="concrete-fracture-energy"></span><a class="reference internal image-reference" href="../../_images/fracture-energy.svg"><img alt="../../_images/fracture-energy.svg" src="../../_images/fracture-energy.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Conventional definition of fracture energy of our own, which goes only to <span class="math notranslate nohighlight">\(0.2f_t\)</span> on the strain-stress curve.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="simulation-setup">
+<h3>Simulation setup<a class="headerlink" href="#simulation-setup" title="Permalink to this headline">¶</a></h3>
+<p>In order to calibrate macroscopic properties, simulations with multiple particles have to be run. This allows to smooth away different orientation of individual contacts and gives apparent continuum-like behavior.</p>
+<p>We were running simple strain-controlled tension/compression test on a 1:1:2 cuboid-shaped specimen of 2000 spheres. (Later, the test was being done on hyperboloid-shaped specimen, to pre-determine fracturing area, while avoiding boundary effects.) Straining is applied in the direction of the longest dimension, on boundary particles; they are identified, on the “positive” and “negative” end of the specimen, by distance from bounding box of the specimen; as result, roughly one layer of spheres is considered as support on each side. Distance between (some) two spheres on each end along the strained axis determines the reference length <span class="math notranslate nohighlight">\(l_0\)</span>; specimen elongation is computed from their current distance divided by <span class="math notranslate nohighlight">\(l_0\)</span> during subsequent simulation. Straining imposes displacement on support particles along strained axis, symmetrically on either end of the specimen (half on the “positive” and half on the “negative” boundary particles), while all their other degrees of freedom are kept free, including perpendicular translations, leading to simulation of frictionless supports.</p>
+<p>Axial force <span class="math notranslate nohighlight">\(F\)</span> is computed by averaging sums of forces on support particles from both supports <span class="math notranslate nohighlight">\(F^+\)</span> and <span class="math notranslate nohighlight">\(-F^-\)</span>. Divided by specimen cross-section <span class="math notranslate nohighlight">\(A\)</span>, average stress is obtained. The cross-section area is estimated as either cross-section of the specimen’s bounding box (for cuboid specimen) or as minimum of several areas <span class="math notranslate nohighlight">\(A_i\)</span> of convex hull around particles intersecting perpendicular plane at different coordinates along the axis (for non-prismatic specimen):.</p>
+<figure class="align-center align-default" id="id30">
+<a class="reference internal image-reference" href="../../_images/uniax-specimen.svg"><img alt="../../_images/uniax-specimen.svg" src="../../_images/uniax-specimen.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Simplified scheme of the uniaxial tension/compression setup. Strained spheres, negative and positive support, are shown in green and red respectively. Cross-section area <span class="math notranslate nohighlight">\(A\)</span> is minimum of convex hull’s areas <span class="math notranslate nohighlight">\(A_i\)</span>.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition-todo admonition" id="id17">
+<p class="admonition-title">Todo</p>
+<p>Such tension/compression test can be found in the ysrc{examples/concrete/uniax.py} script.</p>
+</div>
+<p><em>Periodic boundary conditions</em> were not implemented in Yade until later stages of the thesis (<a class="reference internal" href="../../woo.core.html#woo.core.Cell" title="woo.core.Cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code></a>). In such case, determining deformation and cross-section area is much simpler, as it exists objectively, embodies in the periodic cell size. Computing stress is equally trivial: first, vector of sum of all forces on contacts in the cell (taking tensile forces as positive and compressive as negative) is computed, then divided by-component by perpendicular areas of the cell. This is handled by <a class="reference internal" href="../../woo.dem.html#woo.dem.WeirdTriaxControl" title="woo.dem.WeirdTriaxControl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WeirdTriaxControl</span></code></a>.</p>
+<section id="stress-tensor-evaluation">
+<h4>Stress tensor evaluation<a class="headerlink" href="#stress-tensor-evaluation" title="Permalink to this headline">¶</a></h4>
+<p>Computation of stress from reaction forces is not suitable for cases where the loading scenario is not as straight-forwardly defined as in the case of uniaxial tension/compression. For general case, an equation for stress tensor can be derived. Using the work of <span id="id18">[<a class="reference internal" href="../../references.html#id32" title="E. Kuhl, G. D’Addetta, M. Leukart, and E. Ramm. Microplane modelling and particle modelling of cohesive-frictional materials. In Pieter Vermeer, Hans Herrmann, Stefan Luding, Wolfgang Ehlers, Stefan Diebels, and Ekkehard Ramm, editors, Continuous and Discontinuous Modelling of Cohesive-Frictional Materials, volume 568 of Lecture Notes in Physics, pages 31-46. Springer Berlin / Heidelberg, 2001. URL: http://dx.doi.org/10.1007/3-540-44424-6_3.">KDAddettaLR01</a>]</span>, eqs. (33) and (35), we have</p>
+<div class="math notranslate nohighlight" id="equation-eq-cpm-stress-tensor0">
+\begin{align}
+   \tens{\sigma}&amp;=\frac{1}{V}\sum_{c\in V}\left[\vec{F}_{\Sigma}^c \otimes (\vec{C}_2-\vec{C}_1)\right]^{\rm sym} = \\
+      &amp;=\frac{1}{V}\sum_{c\in V}l^c\left[\tens{N}^c \vec{F}_N^c+{\tens{T}^c}^T\vec{F}_T^c\right]
+\end{align}</div><p>where <span class="math notranslate nohighlight">\(V\)</span> is the considered volume containing contacts with the <span class="math notranslate nohighlight">\(c\)</span> index. For each contact, there is <span class="math notranslate nohighlight">\(l=|\vec{C}_2-\vec{C}_1|\)</span>, <span class="math notranslate nohighlight">\(F_{\Sigma}=F_N\vec{n}+\vec{F}_T\)</span>, with all variables assuming their current value. We use 2nd-order normal projection tensor <span class="math notranslate nohighlight">\(\tens{N}=\vec{n}\otimes\vec{n}\)</span> which, evaluated component-wise, gives</p>
+<div class="math notranslate nohighlight">
+\[\tens{N}_{ij}=\vec{n}_i\vec{n}_j.\]</div>
+<p>The 3rd-order tangential projection tensor <span class="math notranslate nohighlight">\(\tens{T}^T=\tens{I}_{\rm sym}\cdot \vec{n}-\vec{n}\otimes\vec{n}\otimes\vec{n}\)</span> is written by components</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \tens{T}_{ijk}^T&amp;=\frac{1}{2}\left(\delta_{ik}\delta_{jl}+\delta_{il}\delta_{jk}\right)\vec{n}_l-\vec{n}_i\vec{n}_j\vec{n}_k = \\
+     &amp;=\frac{\delta_{ik}\vec{n}_j}{2}+\frac{\delta_{jk}\vec{n}_i}{2}-\vec{n}_i\vec{n}_j\vec{n}_k.
+\end{align}</div><p>Plugging these expressions into <a class="reference internal" href="#equation-eq-cpm-stress-tensor0">(24)</a> gives</p>
+<div class="math notranslate nohighlight">
+\[\tens{\sigma}_{ij}=\frac{1}{V}\sum_{c\in V}\vec{n}_i^c\vec{n}_j^c F_N^c+\frac{\vec{n}_j^c \vec{F}_{Ti}^c}{2}+\frac{\vec{n}_i^c \vec{F}_{Tj}^c}{2}-\vec{n}_i^c\vec{n}_j^c\underbrace{\vec{n}_k^c\vec{F}_{Tk}^c}_{=0, \mbox{ since } \vec{n}^c\perp\vec{F}_{T}^c}\]</div>
+<p>Results from this formula were slightly lower than stress obtained from support reaction forces. It is likely due to small number of interaction in <span class="math notranslate nohighlight">\(V\)</span>; we were considering an interaction inside if the contact point was inside spherical <span class="math notranslate nohighlight">\(V\)</span>, which can also happen for an interaction between two spheres outside <span class="math notranslate nohighlight">\(V\)</span>; some weighting function could be used to avoid <span class="math notranslate nohighlight">\(V\)</span> boundary problems.</p>
+<p>Boundary effect is avoided for periodic cell (<a class="reference internal" href="../../woo.core.html#woo.core.Cell" title="woo.core.Cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code></a>), where the volume <span class="math notranslate nohighlight">\(V\)</span> is defined by its size and all interaction would are summed together.</p>
+<p>sect-calibration-elastic-properties</p>
+</section>
+</section>
+<section id="geometry-and-elastic-parameters">
+<h3>Geometry and elastic parameters<a class="headerlink" href="#geometry-and-elastic-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Let us recall the parameters that influence the elastic response of the model:</p>
+<ul>
+<li><p>radius <span class="math notranslate nohighlight">\(r\)</span>. The radius is considered to be the same for all the spheres, for the following two reasons:</p>
+<ol class="arabic simple">
+<li><p>The time step of the computation (which is one of the main factors determining computational costs) depends on the smallest critical time step for all bodies. Small elements have a smaller critical time step, therefore they would negatively impact the performance.</p></li>
+<li><p>A direct correlation of macroscopic and contact-level properties is based on the assumption that the sphere radii are the same.</p></li>
+</ol>
+</li>
+<li><p>interaction radius <span class="math notranslate nohighlight">\(R_I\)</span> is the relative distance determining the “non-locality” of contact detection. For <span class="math notranslate nohighlight">\(R_I=1\)</span>, only spheres that touch are considered as being in contact. In general, the condition reads</p>
+<div class="math notranslate nohighlight">
+\[d_0\leq R_I(r_1+r_2).\]</div>
+<p>The value of <span class="math notranslate nohighlight">\(R_I\)</span> directly influences the average number of interactions per sphere (percolation). For our purposes, we recommend to use <span class="math notranslate nohighlight">\(R_I=1.5\)</span>, which gives the average of ≈12 interactions per sphere for packing with porosity &lt; 0.5.</p>
+<p>This value was determined experimentally based on the average number of interactions; it stabilizes the packing with regards to contact-level phenomena (damage) and makes the model, in a way, “non-local”.</p>
+<p><span class="math notranslate nohighlight">\(R_I\)</span> also importantly influences the <span class="math notranslate nohighlight">\(f_t/f_c\)</span> ratio, which was the original motivation for increasing its value from 1.</p>
+<p><span class="math notranslate nohighlight">\(R_I\)</span> only serves to create initial (cohesive) interactions in the packing; after the initial step, interactions having been established, it is reset to 1. A disadvantage is that fractured material which becomes compact again (such as dust compaction) will have a smaller elastic stiffness, since it will have a smaller number of contacts per sphere.</p>
+</li>
+<li><p><span class="math notranslate nohighlight">\(k_N\)</span> and <span class="math notranslate nohighlight">\(k_T\)</span> are contact moduli in the normal and shear directions introduced above.</p></li>
+</ul>
+<p>These 4 parameters should be calibrated in such way that the given macroscopic properties <span class="math notranslate nohighlight">\(E\)</span> and <span class="math notranslate nohighlight">\(\nu\)</span> are matched. It can be shown by dimensional analysis that <span class="math notranslate nohighlight">\(\nu\)</span> depends on the dimensionless ratio <span class="math notranslate nohighlight">\(k_N/k_T\)</span> and, if <span class="math notranslate nohighlight">\(R_I\)</span> is fixed, Young’s modulus is proportional to <span class="math notranslate nohighlight">\(k_N\)</span> (at fixed <span class="math notranslate nohighlight">\(k_N/k_T\)</span>).</p>
+<p>By analogy with the microplane theory, the dependence can be derived analytically (see <span id="id19">[<a class="reference internal" href="../../references.html#id32" title="E. Kuhl, G. D’Addetta, M. Leukart, and E. Ramm. Microplane modelling and particle modelling of cohesive-frictional materials. In Pieter Vermeer, Hans Herrmann, Stefan Luding, Wolfgang Ehlers, Stefan Diebels, and Ekkehard Ramm, editors, Continuous and Discontinuous Modelling of Cohesive-Frictional Materials, volume 568 of Lecture Notes in Physics, pages 31-46. Springer Berlin / Heidelberg, 2001. URL: http://dx.doi.org/10.1007/3-540-44424-6_3.">KDAddettaLR01</a>]</span> and also <a class="reference internal" href="../../cases/x-aniso/index.html#equation-eq-c1111-iso">(43)</a>) as</p>
+<div class="math notranslate nohighlight">
+\[\nu=\frac{k_N-k_T}{4k_N+k_T}=\frac{1-k_T/k_N}{4+k_T/k_N},\]</div>
+<p>which matches quite well the results our simulations (below). <span id="id20">[<a class="reference internal" href="../../references.html#id30" title="Jan Stránský, Milan Jirásek, and Václav Šmilauer. Macroscopic elastic properties of particle models. In Proceedings of the International Conference on Modelling and Simulation 2010, Prague. June 2010. URL: https://yade-dem.org/w/images/6/64/Stransky2010-Macroscopic-elastic-properties-of-particle-models.pdf.">SJS10</a>]</span> reports similar numerical results, which get closer to theoretical values as <span class="math notranslate nohighlight">\(R_I\)</span> grows.</p>
+<figure class="align-center align-default" id="id31">
+<span id="concrete-nu-kt-kn"></span><a class="reference internal image-reference" href="../../_images/nu-calibration.svg"><img alt="../../_images/nu-calibration.svg" src="../../_images/nu-calibration.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Relationship between <span class="math notranslate nohighlight">\(k_T/k_N\)</span> and <span class="math notranslate nohighlight">\(\nu\)</span>.</span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>For <span class="math notranslate nohighlight">\(E\)</span>, similar equations can be derived, leading to</p>
+<div class="math notranslate nohighlight" id="equation-eq-concrete-ekn-ratio">
+<span class="eqno">(25)<a class="headerlink" href="#equation-eq-concrete-ekn-ratio" title="Permalink to this equation">¶</a></span>\[\frac{E}{k_N}=\frac{\sum A_i L_i}{3V}\frac{2+3\frac{k_T}{k_N}}{4+\frac{k_T}{k_N}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_i\)</span> is cross-sectional area of contact number <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(L_i\)</span> is its length and <span class="math notranslate nohighlight">\(V\)</span> is the volume of space in which the spheres are placed (total volume of the given sample). The first fraction, volume ratio, is determined solely by the interaction radius <span class="math notranslate nohighlight">\(R_I\)</span>; therefore, <span class="math notranslate nohighlight">\(E\)</span> depends linearly on <span class="math notranslate nohighlight">\(K_N\)</span>.</p>
+<p>In our case, however, we simply run elastic simulation to determine the actual <span class="math notranslate nohighlight">\(E/k_N\)</span> ratio <a class="reference internal" href="#equation-eq-concrete-ekn-ratio">(25)</a>. To obtain desired macroscopic modulus of <span class="math notranslate nohighlight">\(E^*\)</span>, the value of <span class="math notranslate nohighlight">\(k_N\)</span> is scaled by <span class="math notranslate nohighlight">\(E^*/E\)</span>.</p>
+<section id="measuring-macroscopic-elastic-properties">
+<h4>Measuring macroscopic elastic properties<a class="headerlink" href="#measuring-macroscopic-elastic-properties" title="Permalink to this headline">¶</a></h4>
+<p>Measuring linear properties in dynamic simulations faces 2 sources of non-linearity:</p>
+<ol class="arabic simple">
+<li><p>Dynamic oscillations may influence results if strain rate is too high. This can be avoided by stopping loading at some point and letting kinetic energy dissipate by using numerical damping (<a class="reference internal" href="../../woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Leapfrog.damping</span></code></a>).</p></li>
+<li><p>Early non-linear behavior might disturb the results. For avoiding damage, special flag <a class="reference internal" href="../../woo.dem.html#woo.dem.ConcreteMat.neverDamage" title="woo.dem.ConcreteMat.neverDamage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcreteMat.neverDamage</span></code></a> was introduced to the material, causing it to never damage. To prevent plasticity, loading to low strains is necessary. However, due to <span class="math notranslate nohighlight">\(R_I=1.5\)</span>, there will be no plastic behavior (rearranging particles under initial load, which would make the response artificially more compliant) until later loading stages.</p></li>
+</ol>
+<dl>
+<dt>Young’s modulus</dt><dd><p>can be evaluated in a straight-forward way from its definition <span class="math notranslate nohighlight">\(\sigma_i/\eps_i\)</span>, if <span class="math notranslate nohighlight">\(i\in\{x,y,z\}\)</span> is the strained axis.</p>
+</dd>
+<dt>Poisson’s ratio.</dt><dd><p>The original idea of measuring specimen dilation by tracking displacement of some boundary spheres was quickly abandoned, as it was giving highly unstable response due to local irregularities and boundary effects. Later, a simple and reliable way was found, consisting in correlation between average axial and transversal displacements.</p>
+<p>Taking <span class="math notranslate nohighlight">\(w\in\{x,y,z\}\)</span>, we evaluate displacement from the initial position <span class="math notranslate nohighlight">\(\Delta w(w)\)</span> for all particles. To avoid boundary effect, only sufficient number of particles inside the specimen can be considered. The slope of linear regression <span class="math notranslate nohighlight">\(\widehat{\Delta w}(w)\)</span> has the meaning of average <span class="math notranslate nohighlight">\(\eps_w\)</span>, shown in the <a class="reference internal" href="#concrete-poisson-regression"><span class="std std-ref">following figure</span></a>. If <span class="math notranslate nohighlight">\(z\)</span> is the strained axis, Poisson’s ratio is then computed as</p>
+<div class="math notranslate nohighlight">
+\[\nu=\frac{-\frac{1}{2}(\eps_x+\eps_y)}{\eps_z}.\]</div>
+<figure class="align-center align-default" id="concrete-poisson-regression">
+<a class="reference internal image-reference" href="../../_images/poisson-regression.png"><img alt="../../_images/poisson-regression.png" src="../../_images/poisson-regression.png" style="width: 80%;" /></a>
+</figure>
+<p>Displacements during uniaxial tension test, plotted against position on respective axis. The slope of the regression <span class="math notranslate nohighlight">\(\widehat{\Delta x}(x)\)</span> is the average <span class="math notranslate nohighlight">\(\eps_x\)</span> in the specimen. Straining was applied in the direction of the <span class="math notranslate nohighlight">\(z\)</span> axis (as <span class="math notranslate nohighlight">\(\eps_z&gt;0\)</span>) in the case pictured.}</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="damage-and-plasticity-parameters">
+<h3>Damage and plasticity parameters<a class="headerlink" href="#damage-and-plasticity-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Once the elastic parameters are calibrated, inelastic parameters <span class="math notranslate nohighlight">\(\eps_0\)</span>, <span class="math notranslate nohighlight">\(\eps_f\)</span>, <span class="math notranslate nohighlight">\(c_{T0}\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> should be adjusted such that we obtain the desired macroscopic properties <span class="math notranslate nohighlight">\(f_t\)</span>, <span class="math notranslate nohighlight">\(f_c\)</span>, <span class="math notranslate nohighlight">\(G_f\)</span>.</p>
+<p>The calibration procedure is as follows:</p>
+<ol class="arabic">
+<li><p>We transform model parameters to be dimensionless and material properties to be normalized:</p>
+<ul class="simple">
+<li><p><strong>parameters</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\frac{\eps_f}{\eps_0}\)</span> (relative ductility)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\frac{c_{T0}}{k_T\eps_0}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi\)</span></p></li>
+<li><p>(<span class="math notranslate nohighlight">\(\eps_0\)</span> is left as-is)</p></li>
+</ul>
+</li>
+<li><p><strong>properties</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\frac{f_c}{f_t}\)</span> (strength ratio)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\frac{k_N G_f}{f_t^2}\)</span> (characteristic length)</p></li>
+<li><p>(<span class="math notranslate nohighlight">\(f_t\)</span> is left as-is)</p></li>
+</ul>
+</li>
+</ul>
+<p>There is one additional degree of freedom on both sides (<span class="math notranslate nohighlight">\(\eps_0\)</span> and <span class="math notranslate nohighlight">\(f_t\)</span>), which we will use later.</p>
+</li>
+<li><p>Since there is one additional parameter on the material model side, we fix <span class="math notranslate nohighlight">\(c_{T0}\)</span> to a known good value. It was shown that it has the least influence on macroscopic properties, hence the choice.</p></li>
+<li><p>From graphs showing the parameter/property dependence, we set <span class="math notranslate nohighlight">\(\eps_f/\eps_0\)</span> to get the desired <span class="math notranslate nohighlight">\({k_N G_f}/{f_t^2}\)</span> (<a class="reference internal" href="#concrete-calibration-nonelastic"><span class="std std-ref">lower right in the figure</span></a>), since the only remaining parameter <span class="math notranslate nohighlight">\(\phi\)</span> has (almost) no influence on <span class="math notranslate nohighlight">\({k_N G_f}/{f_t^2}\)</span> (<a class="reference internal" href="#concrete-calibration-nonelastic"><span class="std std-ref">lower left in the figure</span></a>).</p></li>
+<li><p>We set <span class="math notranslate nohighlight">\(\tan\phi\)</span> such that we obtain the desired <span class="math notranslate nohighlight">\(f_c/f_t\)</span> (<a class="reference internal" href="#concrete-calibration-nonelastic"><span class="std std-ref">upper left in the figure</span></a>).</p></li>
+<li><p>We use the remaining degree of freedom to scale the stress-strain diagram to get the absolute values using <a class="reference internal" href="#concrete-radial-scaling"><span class="std std-ref">radial scaling</span></a>. By dimensional analysis it can be shown that</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[f_t=k_N\eps_0\Psi\left(\frac{\eps_f}{\eps_0},\frac{c_{T0}}{k_T\eps_0},\phi\right).\]</div>
+<p>Since <span class="math notranslate nohighlight">\(k_N\)</span> is already determined, it is only <span class="math notranslate nohighlight">\(\eps_0\)</span> that will directly determine <span class="math notranslate nohighlight">\(f_t\)</span>.</p>
+<figure class="align-center align-default" id="id32">
+<span id="concrete-calibration-nonelastic"></span><a class="reference internal image-reference" href="../../_images/nonelastic-correlations.svg"><img alt="../../_images/nonelastic-correlations.svg" src="../../_images/nonelastic-correlations.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Cross-dependencies of <span class="math notranslate nohighlight">\(\eps_0/\eps_f\)</span>, <span class="math notranslate nohighlight">\(EG_f/f_t^2\)</span> and <span class="math notranslate nohighlight">\(\tan\phi\)</span>. Since <span class="math notranslate nohighlight">\(\tan\phi\)</span> has little influence on <span class="math notranslate nohighlight">\(k_N G_f/f_t^2\)</span> (lower left), first <span class="math notranslate nohighlight">\(\eps_f/\eps_0\)</span> can be set based on desired <span class="math notranslate nohighlight">\(k_N G_f/f_t^2\)</span> (lower right), then <span class="math notranslate nohighlight">\(\tan\phi\)</span> is determined so that wanted <span class="math notranslate nohighlight">\(f_c/f_t\)</span> ratio is obtained (upper left).</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id33">
+<span id="concrete-radial-scaling"></span><a class="reference internal image-reference" href="../../_images/cpm-scaling.svg"><img alt="../../_images/cpm-scaling.svg" src="../../_images/cpm-scaling.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Radial and vertical scaling of the stress-strain diagram; vertical scaling is used during calibration and is achieved by changing the value of <span class="math notranslate nohighlight">\(\eps_0\)</span>.</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="confinement-parameters">
+<h3>Confinement parameters<a class="headerlink" href="#confinement-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Calibrating three confinement-related parameters <span class="math notranslate nohighlight">\(\eps_s\)</span>, <span class="math notranslate nohighlight">\(\tilde K_s\)</span> and <span class="math notranslate nohighlight">\(Y_0\)</span> is not algorithmic, but rather a trial-and-error process. On the other hand, typically it will be enough to calibrate the parameters for some generic confinement data, both for the lack of availability of exact measurements and for at best fuzzy matching that can be achieved. The chief reason is that the bilinear relationship for plasticity in compression is far from perfect and could be refined by using a smooth function; in our case, however, the confinement extension was only meant to mitigate high strength overestimation under confinement, not to accurately predict behavior under such conditions. Introducing more complicated functions would further increase the number of parameters, which was not desirable.</p>
+<p>The experimental data we use come from <span id="id21">[<a class="reference internal" href="../../references.html#id46" title="Ferhun C. Caner and Zdenek P. Bažant. Microplane model m4 for concrete. ii: algorithm and calibration. Journal of Engineering Mechanics, 126(9):954–961, 2000. URL: http://www.civil.northwestern.edu/people/bazant/PDFs/Papers/394.pdf, doi:10.1061/(ASCE)0733-9399(2000)126:9(954).">CBavzant00</a>]</span> and <span id="id22">[<a class="reference internal" href="../../references.html#id47" title="Peter Grassl and Milan Jirásek. Damage-plastic model for concrete failure. International Journal of Solids and Structures, 43(22-23):7166–7196, 2006. URL: http://www.sciencedirect.com/science/article/B6VJS-4K8NWXK-1/2/e3a41b693b156ce13a70e44e973d505f, doi:10.1016/j.ijsolstr.2006.06.032.">GJ06</a>]</span>.</p>
+<figure class="align-center align-default" id="id34">
+<span id="concrete-confined-linear-nosoft"></span><a class="reference internal image-reference" href="../../_images/cpm-confined-plain.svg"><img alt="../../_images/cpm-confined-plain.svg" src="../../_images/cpm-confined-plain.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 24 </span><span class="caption-text">Confined compression, comparing experimental data and simulation without the confinement extensions of the model. Experimental results (dashed) by Caner.</span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Consider confined strain-stress diagrams at the <a class="reference internal" href="#concrete-confined-linear-nosoft"><span class="std std-ref">preceding figure</span></a> exhibiting unrealistic behavior under high confinement (-400MPa). Parameters <span class="math notranslate nohighlight">\(\eps_s\)</span> and <span class="math notranslate nohighlight">\(\tilde K_s\)</span> will influence at which point the curve will get to the hardening branch and what will be its tangent modulus  (<a class="reference internal" href="#concrete-strain-stress-normal-hardening"><span class="std std-ref">figure</span></a>). The <span class="math notranslate nohighlight">\(Y_0\)</span> parameter determines evolution of plasticity surface in compression (<a class="reference internal" href="#concrete-yield-surf-log"><span class="std std-ref">figure</span></a>). We recommend the following values of the parameters:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \eps_s&amp;=-3\cdot10^{-3}, &amp; \tilde K_s&amp;=0.3, &amp; Y_0&amp;=0.1,
+\end{align}</div><p>which give curves in the <a class="reference internal" href="#concrete-confined-log-soft"><span class="std std-ref">following figure</span></a>. It was observed when running multiple simulations that results under high confinement depend greatly on the exact packing configuration, specimen shape and specimen size; therefore, the values given above should be taken with grain of salt.</p>
+<figure class="align-center align-default" id="id35">
+<span id="concrete-confined-log-soft"></span><a class="reference internal image-reference" href="../../_images/cpm-confined-extension.svg"><img alt="../../_images/cpm-confined-extension.svg" src="../../_images/cpm-confined-extension.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 25 </span><span class="caption-text">Experimental data and simulation in confined compression, using confinement extensions of the model. Cf. [previous figure] for the influence of those extensions.</span><a class="headerlink" href="#id35" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>During simulation, the confinement effect was introduced on the contact level, in the constitutive law itself, as described in <a class="reference internal" href="#concrete-isoprestress"><span class="std std-ref">Isotropic confinement</span></a>; the confinement is therefore isotropic and without boundary influence.</p>
+<p><strong>Cross-dependencies.</strong> Confinement properties may, to certain extent, have influence on inelastic properties. If that happens, reiterating the calibration with new confinement properties should give wanted results quickly.</p>
+</section>
+<section id="rate-dependence-parameters">
+<h3>Rate-dependence parameters<a class="headerlink" href="#rate-dependence-parameters" title="Permalink to this headline">¶</a></h3>
+<p>The visco-damage behavior in tension introduced two parameters, characteristic time <span class="math notranslate nohighlight">\(\tau_d\)</span> and exponent <span class="math notranslate nohighlight">\(M_d\)</span>. There is no calibration procedure developed for them, as measuring the response is experimentally challenging and the scatter of results is rather high. Instead, we determined those two parameters by a trial-and-error procedure so that the resulting curve approximately fits the experimental data cloud − we use figures from <span id="id23">[<a class="reference internal" href="../../references.html#id48" title="Frédéric Ragueneau and Fabrice Gatuingt. Inelastic behavior modelling of concrete in low and high strain rate dynamics. Computers &amp; Structures, 81(12):1287–1299, 2003. Advanced Computational Models and Techniques in Dynamics. doi:10.1016/S0045-7949(03)00043-9.">RG03</a>]</span>, which are in turn based on published experiments.</p>
+<p>The resulting curves show <a class="reference internal" href="#concrete-visco-tension"><span class="std std-ref">tension</span></a> and <a class="reference internal" href="#concrete-visco-compression"><span class="std std-ref">compression</span></a>. Because DEM computation would be very slow (large number of steps, determined by critical timestep) for slow rates, those results were computed with the same model implemented in the <a class="reference external" href="http://www.oofem.org">OOFEM</a> framework (using a static implicit FEM model); this also served to verify that both implementations give identical results. For high loading rates, DEM results deviate, since there is inertial mass that begins to play an important role.</p>
+<figure class="align-center align-default" id="id36">
+<span id="concrete-visco-tension"></span><a class="reference internal image-reference" href="../../_images/rb-tau-calibration-plot-ft.png"><img alt="../../_images/rb-tau-calibration-plot-ft.png" src="../../_images/rb-tau-calibration-plot-ft.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 26 </span><span class="caption-text">Experimental data and simulation results for tension.</span><a class="headerlink" href="#id36" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center align-default" id="id37">
+<span id="concrete-visco-compression"></span><a class="reference internal image-reference" href="../../_images/rb-tau-calibration-plot-fc.png"><img alt="../../_images/rb-tau-calibration-plot-fc.png" src="../../_images/rb-tau-calibration-plot-fc.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 27 </span><span class="caption-text">Experimental data and simulation results for compression.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The values that we recommend to use are</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+   \tau_d&amp;=1000\,{\rm s}, \\
+   M_d&amp;=0.3.
+\end{align}</div><p>Calibration of visco-plastic parameters was rather simple: we found out that it has no beneficial effect on results; therefore, visco-plasticity should be deactivated. In the implementation, this is done by setting <span class="math notranslate nohighlight">\(\tau_{pl}\)</span> (<a class="reference internal" href="../../woo.dem.html#woo.dem.ConcretePhys.plTau" title="woo.dem.ConcretePhys.plTau"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcretePhys.plTau</span></code></a> to an arbitrary non-positive value).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Concrete contact model</a><ul>
+<li><a class="reference internal" href="#prior-discrete-concrete-models">Prior discrete concrete models</a></li>
+<li><a class="reference internal" href="#model-description">Model description</a><ul>
+<li><a class="reference internal" href="#cohesive-and-non-cohesive-contacts">Cohesive and non-cohesive contacts</a></li>
+<li><a class="reference internal" href="#contact-parameters">Contact parameters</a></li>
+<li><a class="reference internal" href="#normal-stresses">Normal stresses</a><ul>
+<li><a class="reference internal" href="#compressive-plasticity">Compressive plasticity</a></li>
+<li><a class="reference internal" href="#visco-damage">Visco-damage</a></li>
+<li><a class="reference internal" href="#isotropic-confinement">Isotropic confinement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shear-stresses">Shear stresses</a><ul>
+<li><a class="reference internal" href="#confinement-extension">Confinement extension</a></li>
+<li><a class="reference internal" href="#visco-plasticity">Visco-plasticity</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#applying-stresses-on-particles">Applying stresses on particles</a></li>
+<li><a class="reference internal" href="#contact-model-summary">Contact model summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameter-calibration">Parameter calibration</a><ul>
+<li><a class="reference internal" href="#simulation-setup">Simulation setup</a><ul>
+<li><a class="reference internal" href="#stress-tensor-evaluation">Stress tensor evaluation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geometry-and-elastic-parameters">Geometry and elastic parameters</a><ul>
+<li><a class="reference internal" href="#measuring-macroscopic-elastic-properties">Measuring macroscopic elastic properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#damage-and-plasticity-parameters">Damage and plasticity parameters</a></li>
+<li><a class="reference internal" href="#confinement-parameters">Confinement parameters</a></li>
+<li><a class="reference internal" href="#rate-dependence-parameters">Rate-dependence parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="adhesive.html"
+                          title="Previous page">&larr; Adhesive models</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="ice.html"
+                          title="Next page">&rarr; Ice contact model</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/contact/concrete.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ice.html" title="Ice contact model"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="adhesive.html" title="Adhesive models"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Concrete contact model</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,253 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Capsule &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Smooth triangulation edge contacts" href="facet-smooth-edge.html" />
+    <link rel="prev" title="Ellipsoid" href="ellipsoid.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="facet-smooth-edge.html" title="Smooth triangulation edge contacts"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ellipsoid.html" title="Ellipsoid"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Capsule</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="capsule">
+<h1>Capsule<a class="headerlink" href="#capsule" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> (<a class="reference external" href="http://en.wikipedia.org/wiki/Capsule_%28geometry%29">Wikipedia</a>) is a cylinder with hemispherical ends, or a sphere swept along a segment. It is defined by <a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule.shaft" title="woo.dem.Capsule.shaft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shaft</span></code></a> (the length of the segment, noted <span class="math notranslate nohighlight">\(a\)</span>) and <a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule.radius" title="woo.dem.Capsule.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a> (<span class="math notranslate nohighlight">\(r\)</span>). The segment is always oriented along the local <span class="math notranslate nohighlight">\(x\)</span>-axis.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../../_images/capsule_geometry-wikipedia.svg"><img alt="../../_images/capsule_geometry-wikipedia.svg" src="../../_images/capsule_geometry-wikipedia.svg" width="50%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Geometry of a capsule particle.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Particle of this shapes are useful, among others, in the pharmaceutical industry or geomechanics.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../../_images/capsules.jpg"><img alt="../../_images/capsules.jpg" src="../../_images/capsules.jpg" style="width: 50%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Pharmaceutical capsules (image courtesy of <a class="reference external" href="http://en.wikipedia.org/wiki/File:Kapseln.JPG">wikipedia</a>).</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<p>The volume is computed as</p>
+<div class="math notranslate nohighlight">
+\[V=V_c+V_a=\frac{4}{3}\pi r^3+\pi r^2 a.\]</div>
+<p>Inertia is the sum of caps’ (hemispheres) and shaft’s (cylinder) inertia, applying <a class="reference external" href="http://en.wikipedia.org/wiki/Parallel_Axes_Theorem">Parallel Axes Theorem</a> along <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> axes:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+        I_{xx}&amp;=\rho\left[\frac{2}{5}V_c r^2 + \frac{1}{2}V_a r^2\right], \\
+        I_{yy}=I_{zz}&amp;=\rho\left[\frac{83}{320}V_c r^2+V_c\left(\frac{a}{2}+\frac{3}{8}r\right)^2+\frac{1}{12}V_a(3r^2+a^2) \right].
+\end{align*}</div><p>The centroid is always in the middle of the shaft due to symmetries. The radius of the bounding sphere is <span class="math notranslate nohighlight">\(r+a/2\)</span>.</p>
+</section>
+<section id="capsule-capsule-contact">
+<h2>Capsule-capsule contact<a class="headerlink" href="#capsule-capsule-contact" title="Permalink to this headline">¶</a></h2>
+<p>This algorithm is implemented by <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Capsule_Capsule_L6Geom" title="woo.dem.Cg2_Capsule_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cg2_Capsule_Capsule_L6Geom</span></code></a>. Determination of the contact is equivalent to finding minimum distance <span class="math notranslate nohighlight">\(d\)</span> between segments of both capsules. Each segment’s endpoints <span class="math notranslate nohighlight">\(A_i\)</span>, <span class="math notranslate nohighlight">\(B_i\)</span> are computed by multiplying local <span class="math notranslate nohighlight">\(x\)</span>-axis by <span class="math notranslate nohighlight">\(\pm a_i/2\)</span>. The algorithm is described in <span id="id1">[<a class="reference internal" href="../../references.html#id29" title="David Eberly. Distance between two line segments in 3d. Technical Report, Geometric Tools, LLC, 1999. URL: http://www.geometrictools.com/Documentation/DistanceLine3Line3.pdf.">Ebe99</a>]</span>.</p>
+<p>The normal overlap is based directly on the distance as</p>
+<div class="math notranslate nohighlight">
+\[u_N=d-(r_1+r_2).\]</div>
+<p>Determining contact point and normal purely geometrically would be discontinuous (small movement of the capsule would result in abrupt change); the reason is that the shaft (cylinder) is not convex and conforming contacts can be formed with other flat particles (such as <a class="reference internal" href="../../woo.dem.html#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> or <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Wall</span></code></a>). The algorithm determines the distance between endpoints and the opposite capsule, filters out those without geometrical overlap. There are 16 possible combinations.</p>
+<p>If there is one overlap, the purely geometrical contact point and normal applies. Otherwise, all overlaps are assigned weight <span class="math notranslate nohighlight">\(w_i=d_i-(r_1+r_2)\)</span>, and contact points <span class="math notranslate nohighlight">\(\vec{c}_i\)</span> and normals <span class="math notranslate nohighlight">\(\vec{n}_i\)</span> are computed normally (middle point of the segment in the intersection volume) and interpolated between as in</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+        \vec{n}&amp;=\frac{\sum w_i \vec{n}_i }{\sum w_i}, &amp; \vec{c}&amp;=\frac{\sum w_i \vec{c}_i}{\sum w_i}.
+\end{align*}</div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The overlap <span class="math notranslate nohighlight">\(u_N\)</span> is used in conjunction with contact point and normal which may not correspond geometrically to the place where <span class="math notranslate nohighlight">\(u_N\)</span> occurs. This can lead to strange consequences, such as <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.vel" title="woo.dem.L6Geom.vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom.vel[0]</span></code></a> not being the derivative of <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.uN" title="woo.dem.L6Geom.uN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uN</span></code></a>. The advantages of this approach (that the movement of the contact point and the normal is continuous, and that we still meaningfully represent the contact by one point) seem to outweight such inconveniences.</p>
+</div>
+</section>
+<section id="wall-capsule-contact">
+<h2>Wall-capsule contact<a class="headerlink" href="#wall-capsule-contact" title="Permalink to this headline">¶</a></h2>
+<p>This algorithm is implemented by <a class="reference internal" href="../../woo.dem.html#woo.dem.Cg2_Wall_Capsule_L6Geom" title="woo.dem.Cg2_Wall_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cg2_Wall_Capsule_L6Geom</span></code></a> and is similar to the capsule-capsule contact above; there is interpolation between max. two endpoints of the capsule touching the wall:</p>
+<figure class="align-default">
+<img alt="../../_images/capsule-wall.png" src="../../_images/capsule-wall.png" />
+</figure>
+<hr class="docutils" />
+<iframe src="https://www.youtube.com/embed/BksnzJ-D9dI" style="border: 0; height: 345px; width: 560px">
+</iframe><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">woo</span><span class="o">,</span> <span class="nn">woo.core</span><span class="o">,</span> <span class="nn">woo.dem</span><span class="o">,</span> <span class="nn">woo.utils</span><span class="o">,</span> <span class="nn">woo.gl</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">dtSafety</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span><span class="n">throttle</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">(</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">))])</span>
+<span class="n">mat</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">young</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="n">ktDivKn</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span><span class="n">density</span><span class="o">=</span><span class="mf">3e3</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Capsule</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span><span class="n">shaft</span><span class="o">=.</span><span class="mi">8</span><span class="p">,</span><span class="n">ori</span><span class="o">=</span><span class="n">Quaternion</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">8.</span><span class="p">),</span><span class="n">wire</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">mat</span><span class="p">),</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">wall</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sense</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">mat</span><span class="p">)])</span>
+<span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">dynDtPeriod</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">damping</span><span class="o">=.</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
+
+<span class="c1"># view setup</span>
+<span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_DemField</span><span class="o">.</span><span class="n">cPhys</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_CPhys</span><span class="o">.</span><span class="n">relMaxRad</span><span class="o">=.</span><span class="mi">1</span>
+<span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="o">.</span><span class="n">allowFast</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Renderer</span><span class="o">.</span><span class="n">iniViewDir</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">woo</span><span class="o">.</span><span class="n">gl</span><span class="o">.</span><span class="n">Gl1_Capsule</span><span class="o">.</span><span class="n">smooth</span><span class="o">=</span><span class="bp">True</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Capsule</a><ul>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#capsule-capsule-contact">Capsule-capsule contact</a></li>
+<li><a class="reference internal" href="#wall-capsule-contact">Wall-capsule contact</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="ellipsoid.html"
+                          title="Previous page">&larr; Ellipsoid</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="facet-smooth-edge.html"
+                          title="Next page">&rarr; Smooth triangulation edge contacts</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/geom/capsule.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="facet-smooth-edge.html" title="Smooth triangulation edge contacts"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="ellipsoid.html" title="Ellipsoid"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Geometry</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Capsule</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

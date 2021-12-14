@@ -1,0 +1,320 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Hertzian contact models &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Adhesive models" href="adhesive.html" />
+    <link rel="prev" title="Pellet contact model" href="pellet.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="adhesive.html" title="Adhesive models"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pellet.html" title="Pellet contact model"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Hertzian contact models</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="hertzian-contact-models">
+<span id="id1"></span><h1>Hertzian contact models<a class="headerlink" href="#hertzian-contact-models" title="Permalink to this headline">¶</a></h1>
+<p>Hertz contact model is non-linear model which takes in account elastic deformation of spherical solids and changing contact radius. Pure Hertzian model only describes normal deformation of spheres. Later extensions of the model add viscosity, shear response including friction and adhesion. The nomenclature usually used in literature on these models is the following (see <span id="id2">[<a class="reference internal" href="../../references.html#id7" title="Chiara Modenese. Numerical Study of the Mechanical Properties of Lunar Soil by the Discrete Element Method. PhD thesis, University of Oxford, 2013.">Mod13</a>]</span>):</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 91%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(R\)</span></p></td>
+<td><p>effective radius</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(E\)</span></p></td>
+<td><p>equivalent elastic modulus</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(K\)</span></p></td>
+<td><p>effective elastic modulus (<span class="math notranslate nohighlight">\(K=\frac{3}{4}E\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(m^{*}\)</span></p></td>
+<td><p>effective mass</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\delta\)</span></p></td>
+<td><p>normal geometrical overlap of spheres; <span class="math notranslate nohighlight">\(\delta=r_1+r_2-d\)</span> for two spheres (positive when there is overlap), numerically corresponds to <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.uN" title="woo.dem.L6Geom.uN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.L6Geom.uN</span></code></a> with the sign inversed.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(a\)</span></p></td>
+<td><p>contact radius, i.e. radius of the contacting area</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\epsilon\)</span></p></td>
+<td><p>coefficient of restitution</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\eta\)</span></p></td>
+<td><p>viscous coefficient (as in <span class="math notranslate nohighlight">\(F=\eta\dot u\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\dot\delta\)</span></p></td>
+<td><p>rate of overlap (<a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.vel" title="woo.dem.L6Geom.vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal</span> <span class="pre">displacement</span> <span class="pre">rate</span></code></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(p\)</span></p></td>
+<td><p>function fo contact pressure</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(P_{ne}\)</span></p></td>
+<td><p>normal elastic force; integral of <span class="math notranslate nohighlight">\(p\)</span> over the contact area</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(P_{nv}\)</span></p></td>
+<td><p>normal viscous force</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(P_n\)</span></p></td>
+<td><p>total normal external force acting on the particle</p></td>
+</tr>
+</tbody>
+</table>
+<p>Equivalent radius is computed as harmonic means of particle’s radii</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{R}=\frac{1}{R_1}+\frac{1}{R_2}\]</div>
+<p>which gives correct result also for a sphere-plane contacts (plane having <span class="math notranslate nohighlight">\(R_2=\infty\)</span>).</p>
+<p>Equivalent mass</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{m^{*}}=\frac{1}{m_1}+\frac{1}{m_2}\]</div>
+<p>is used for in models of viscosity; <span class="math notranslate nohighlight">\(m_i\)</span> is taken to be zero if the particles is not subject to contact forces (such as when <a class="reference internal" href="../../woo.dem.html#woo.dem.DemData.blocked" title="woo.dem.DemData.blocked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemData.blocked</span></code></a> is set for massless objects like <a class="reference internal" href="../../woo.dem.html#woo.dem.Facet" title="woo.dem.Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facets</span></code></a> or <a class="reference internal" href="../../woo.dem.html#woo.dem.Wall" title="woo.dem.Wall"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walls</span></code></a>).</p>
+<p>Moduli (different authors use either <span class="math notranslate nohighlight">\(E\)</span> or <span class="math notranslate nohighlight">\(K=\frac{3}{4}E\)</span>) are computed as</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\frac{1}{E}=\frac{1-\nu_1^2}{E_1}+\frac{1-\nu_2^2}{E_2},\\\frac{1}{K}=\frac{4}{3}\left(\frac{1-\nu_1^2}{E_1}+\frac{1-\nu_2^2}{E_2}\right)\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(E_i\)</span> are Young’s moduli of contacting particles (<a class="reference internal" href="../../woo.dem.html#woo.dem.ElastMat.young" title="woo.dem.ElastMat.young"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ElastMat.young</span></code></a>) and <span class="math notranslate nohighlight">\(\nu_i\)</span> their Poisson’s ratios (<code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.poisson</span></code>).</p>
+<p>A good summary of various contact models is given at <a class="reference external" href="http://en.wikipedia.org/wiki/Contact_mechanics">Wikipedia</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Literature on contact mechanics mostly gives positive sign to compressive stress. This is opposite than the convension used throughout Woo. Therefore the overlap <span class="math notranslate nohighlight">\(\delta\)</span> is positive when spheres are overlapping (whereas <a class="reference internal" href="../../woo.dem.html#woo.dem.L6Geom.uN" title="woo.dem.L6Geom.uN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.L6Geom.uN</span></code></a> is negative) and contact force <span class="math notranslate nohighlight">\(P_{n}\)</span> is positive for compression (repulsion) whereas the normal (<span class="math notranslate nohighlight">\(x\)</span>) component of <a class="reference internal" href="../../woo.dem.html#woo.dem.CPhys.force" title="woo.dem.CPhys.force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.CPhys.force</span></code></a>  would be negative. Keep this in mind when reading sources.</p>
+</div>
+<section id="hertz-contact">
+<h2>Hertz contact<a class="headerlink" href="#hertz-contact" title="Permalink to this headline">¶</a></h2>
+<p>Hertz gives contact pressure as</p>
+<div class="math notranslate nohighlight">
+\[p(r)=p_0\sqrt{1-\left(\frac{r}{a}\right)^2}\]</div>
+<p>with <span class="math notranslate nohighlight">\(r\in(0,r)\)</span> and <span class="math notranslate nohighlight">\(p_0\)</span> being the maximum pressure in the middle of the contact area; it follows by integration</p>
+<div class="math notranslate nohighlight">
+\[P_{ne}=\int_0^a p(r) 2\pi r \mathrm{d}\,r=\frac{2}{3}p_0\pi a^2.\]</div>
+<p>Using the geometrical relationship for non-adhesive contact</p>
+<div class="math notranslate nohighlight">
+\[a^2=R\delta,\]</div>
+<p>we can express substitute to obtain</p>
+<div class="math notranslate nohighlight" id="equation-hertz-elastic">
+<span id="eq-hertz-elastic"></span><span class="eqno">(5)<a class="headerlink" href="#equation-hertz-elastic" title="Permalink to this equation">¶</a></span>\[P_{ne}=\underbrace{K\sqrt{R}}_{k_{n0}}\delta^{\frac{3}{2}}=k_{n0}\delta^{\frac{3}{2}}\]</div>
+<p>where the <span class="math notranslate nohighlight">\(k_{n0}\)</span> term is often separated (<code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzPhys.kn0</span></code>) as it is constant throughout the contact duration. <a class="reference internal" href="../../woo.dem.html#woo.dem.FrictPhys.kn" title="woo.dem.FrictPhys.kn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Secant</span> <span class="pre">stiffness</span></code></a> of the contact is expressed as</p>
+<div class="math notranslate nohighlight">
+\[k_n=\frac{\partial P_{ne}}{\partial \delta}=\frac{3}{2}k_{n0}\delta^{\frac{1}{2}}.\]</div>
+<p>By combining the above, we also obtain:</p>
+<div class="math notranslate nohighlight" id="equation-contact-radius-general">
+<span id="eq-contact-radius-general"></span><span class="eqno">(6)<a class="headerlink" href="#equation-contact-radius-general" title="Permalink to this equation">¶</a></span>\[a=\sqrt[3]{\frac{R}{K}P_{ne}}.\]</div>
+<p><span id="id3">[<a class="reference internal" href="../../references.html#id2" title="D. Antypov and J. A. Elliott. On an analytical solution for the damped hertzian spring. EPL (Europhysics Letters), 94(5):50004, 2011. URL: http://people.ds.cam.ac.uk/jae1001/CUS/research/pfizer/Antypov_Elliott_EPL_2011.pdf, doi:10.1209/0295-5075/94/50004.">AE11</a>]</span> also references Landau &amp; Lifschitz’s analytical solution for collision time of purely elastic collision as</p>
+<div class="math notranslate nohighlight">
+\[\tau_{\rm Hertz}=2.214 \left(\frac{\rho}{E}\right)^{\frac{2}{5}}\frac{r_1+r_2}{v_0^{1/5}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is density of particles. There is a <a class="reference internal" href="../../woo.tests.html#woo.tests.hertz.TestHertz.testElasticCollisionTime" title="woo.tests.hertz.TestHertz.testElasticCollisionTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regression</span> <span class="pre">test</span></code></a> verifying that simulated collision gives the same result.</p>
+<section id="viscosity">
+<h3>Viscosity<a class="headerlink" href="#viscosity" title="Permalink to this headline">¶</a></h3>
+<section id="coefficient-of-restitution">
+<h4>Coefficient of restitution<a class="headerlink" href="#coefficient-of-restitution" title="Permalink to this headline">¶</a></h4>
+<p>Observable collisions of particles usually result in some energy dissipation of which measure is <a class="reference external" href="http://en.wikipedia.org/wiki/Coefficient_of_restitution">coefficient of restitution</a> which can be expressed as the ratio of relative velocity before and after collision, <span class="math notranslate nohighlight">\(\epsilon=v_0/v_1\)</span> where <span class="math notranslate nohighlight">\(v_0\)</span>, <span class="math notranslate nohighlight">\(v_1\)</span> are relative velocities before and after collision respectively.</p>
+<p>The coefficient must be squared when reasoning in terms of energy with kinetic energy <span class="math notranslate nohighlight">\(E_k\)</span> and <span class="math notranslate nohighlight">\(E_d\)</span> the dissipated energy, since kinertic energy <span class="math notranslate nohighlight">\(E_k=\frac{1}{2}mv^2\)</span> contains the velocity squared:</p>
+<div class="math notranslate nohighlight">
+\[\epsilon=\sqrt{\frac{E_{k0}-E_{k1}}{E_{k0}}}=\sqrt{\frac{E_d}{E_{k_0}}}.\]</div>
+<p>Similarly, potential field (gravity) can be used to determine coefficient of restitution based on potential energy (<span class="math notranslate nohighlight">\(E_p=mgh\)</span>) for particle falling from intial height <span class="math notranslate nohighlight">\(h_0\)</span> with zero initial velocity, rebounding from horizontal plane and again reaching zero velocity at <span class="math notranslate nohighlight">\(h_1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\epsilon=\sqrt{\frac{h_1}{h_0}}.\]</div>
+</section>
+<section id="viscous-damping">
+<h4>Viscous damping<a class="headerlink" href="#viscous-damping" title="Permalink to this headline">¶</a></h4>
+<p>Viscosity adds the <span class="math notranslate nohighlight">\(P_{nv}\)</span> force linearly related to the current rate of overlap <span class="math notranslate nohighlight">\(\dot\delta\)</span> via the linear term <span class="math notranslate nohighlight">\(\eta\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[P_{nv}=\eta\dot\delta .\]</div>
+<p>The viscous coefficient <span class="math notranslate nohighlight">\(\eta\)</span> is not straight-forwardly realted to the coefficient of restitution <span class="math notranslate nohighlight">\(\epsilon\)</span>, which is an integral measure over the whole collision time.</p>
+<p>This problem is treated by <span id="id5">[<a class="reference internal" href="../../references.html#id2" title="D. Antypov and J. A. Elliott. On an analytical solution for the damped hertzian spring. EPL (Europhysics Letters), 94(5):50004, 2011. URL: http://people.ds.cam.ac.uk/jae1001/CUS/research/pfizer/Antypov_Elliott_EPL_2011.pdf, doi:10.1209/0295-5075/94/50004.">AE11</a>]</span> in detail, which derives analytical relationships for viscous coefficient and coefficient of restitution in Hertzian contact. In order to obtain dissipative force resulting in velocity-independent coefficient of restitution, the force must take the form</p>
+<div class="math notranslate nohighlight" id="equation-hertz-viscous">
+<span class="eqno">(7)<a class="headerlink" href="#equation-hertz-viscous" title="Permalink to this equation">¶</a></span>\[P_{nv}(\delta)=\alpha(\epsilon)\sqrt{m^* k_{n0}}\delta^{\frac{1}{4}}\dot\delta.\]</div>
+<p>(this result was previously known, but <span class="math notranslate nohighlight">\(\alpha(\epsilon)\)</span> was only numerically evaluated) and <span class="math notranslate nohighlight">\(\alpha(\epsilon)\)</span> is shown to be</p>
+<div class="math notranslate nohighlight">
+\[\alpha(\epsilon)=\frac{-\sqrt{5}\ln\epsilon}{\sqrt{\ln^2\epsilon+\pi^2}}.\]</div>
+<p>The part which is constant throughout the contact life, <span class="math notranslate nohighlight">\(\alpha(\epsilon)\sqrt{m^*k_{n0}}\)</span> is stored in <a class="reference internal" href="../../woo.dem.html#woo.dem.HertzPhys.alpha_sqrtMK" title="woo.dem.HertzPhys.alpha_sqrtMK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.HertzPhys.alpha_sqrtMK</span></code></a>.</p>
+<p>The total contact force <span class="math notranslate nohighlight">\(P_n\)</span> is superposition of the elastic response <span class="math notranslate nohighlight">\(P\)</span> <a class="reference internal" href="#equation-hertz-elastic">(5)</a> and normal viscous force <span class="math notranslate nohighlight">\(P_{nv}\)</span> <a class="reference internal" href="#equation-hertz-viscous">(7)</a>, i.e.</p>
+<div class="math notranslate nohighlight" id="equation-hertz-viscoleastic">
+<span class="eqno">(8)<a class="headerlink" href="#equation-hertz-viscoleastic" title="Permalink to this equation">¶</a></span>\[P_n=P_{ne}+P_{nv}.\]</div>
+</section>
+<section id="nonphysical-attraction">
+<h4>Nonphysical attraction<a class="headerlink" href="#nonphysical-attraction" title="Permalink to this headline">¶</a></h4>
+<p>The presence of viscous force can lead to attraction between spheres towards the end of collision (<span class="math notranslate nohighlight">\(\dot\delta&lt;0\)</span>) when <span class="math notranslate nohighlight">\(P_n=P_{ne}+P_{nv}&lt;0\)</span>. This effect is non-physical in the absence of adhesion. For this reason, such attractive force is ignored, though it can be changed by setting <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_HertzPhys_DMT.noAttraction" title="woo.dem.Law2_L6Geom_HertzPhys_DMT.noAttraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_HertzPhys_DMT.noAttraction</span></code></a>.</p>
+<p>This effect is discussed in <span id="id6">[<a class="reference internal" href="../../references.html#id2" title="D. Antypov and J. A. Elliott. On an analytical solution for the damped hertzian spring. EPL (Europhysics Letters), 94(5):50004, 2011. URL: http://people.ds.cam.ac.uk/jae1001/CUS/research/pfizer/Antypov_Elliott_EPL_2011.pdf, doi:10.1209/0295-5075/94/50004.">AE11</a>]</span> and should be taken in account when measuring coefficients of restitution in simulations (see <a class="reference external" href="https://answers.launchpad.net/yade/+question/235934">this discussion</a>).</p>
+<div class="admonition-implementation-note admonition">
+<p class="admonition-title">Implementation note:</p>
+<p>Hertz contact model can be used via <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_HertzPhys_DMT" title="woo.dem.Law2_L6Geom_HertzPhys_DMT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_HertzPhys_DMT</span></code></a>, when <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.gamma</span></code> (surface energy <span class="math notranslate nohighlight">\(\gamma\)</span>) and <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.alpha</span></code> (Carpick-Ogletree-Salmeron transition parameter <span class="math notranslate nohighlight">\(\alpha\)</span>) are zero. Appropriate engines are returned from <a class="reference internal" href="../../woo.dem.html#woo.dem.DemField.minimalEngines" title="woo.dem.DemField.minimalEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.minimalEngines</span></code></a> when <code class="docutils literal notranslate"><span class="pre">model</span></code> is an instance of <a class="reference internal" href="../../woo.models.html#woo.models.ContactModelSelector" title="woo.models.ContactModelSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector</span></code></a> with <code class="docutils literal notranslate"><span class="pre">name</span></code> equal to <code class="docutils literal notranslate"><span class="pre">&quot;Hertz&quot;</span></code>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Hertzian contact models</a><ul>
+<li><a class="reference internal" href="#hertz-contact">Hertz contact</a><ul>
+<li><a class="reference internal" href="#viscosity">Viscosity</a><ul>
+<li><a class="reference internal" href="#coefficient-of-restitution">Coefficient of restitution</a></li>
+<li><a class="reference internal" href="#viscous-damping">Viscous damping</a></li>
+<li><a class="reference internal" href="#nonphysical-attraction">Nonphysical attraction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="pellet.html"
+                          title="Previous page">&larr; Pellet contact model</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="adhesive.html"
+                          title="Next page">&rarr; Adhesive models</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/contact/hertzian.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="adhesive.html" title="Adhesive models"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pellet.html" title="Pellet contact model"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Hertzian contact models</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

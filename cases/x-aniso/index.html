@@ -1,0 +1,733 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Cross-anisotropy model with discrete elements &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "TeX": {"Macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Programming manual" href="../../prog/index.html" />
+    <link rel="prev" title="Cylindrical triaxial test with flexible membrane" href="../cyl-triax/index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../prog/index.html" title="Programming manual"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../cyl-triax/index.html" title="Cylindrical triaxial test with flexible membrane"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Case studies</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cross-anisotropy model with discrete elements</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p id="cases-x-aniso"><em>Section author: Václav Šmilauer &lt;<a class="reference external" href="mailto:eu&#37;&#52;&#48;doxos&#46;eu">eu<span>&#64;</span>doxos<span>&#46;</span>eu</a>&gt;</em></p>
+<section id="cross-anisotropy-model-with-discrete-elements">
+<h1>Cross-anisotropy model with discrete elements<a class="headerlink" href="#cross-anisotropy-model-with-discrete-elements" title="Permalink to this headline">¶</a></h1>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>The task was to prepare theoretical foundation for <strong>modelling rock with cross-anisotropic elasticity</strong> (schistosity) by using modified DEM formulation.</p>
+<p>The following paragraphs present derivation of local stiffnesses of geometrically isotropic linear-elastic lattice leading to globally cross-anisotropic behavior. Lattice elements are assumed to have only normal and shear stiffnesses, which are made dependent on the element orientation. The derivation is based on the microplane theory regarded as continuous limit of a dense lattice, and the Voigt hypothesis of uniform displacement of lattice nodes. Microplane moduli are made orientation-dependent in the same way as for the lattice, via a function which allows us to carry out analytical integration of the stiffness tensor.</p>
+<p>Geometrically isotropic lattices can be found within the Discrete Element Method (DEM) with spherical particles, where the mechanical structure is a transient lattice. Due to the local Voigt hypothesis, only packings with relatively high number of contacts per particle will fulfill our assumptions; this can be achieved by introducing distant contacts between particles which are not geometrically touching, a common practice for modeling cohesive materials.</p>
+<p>Element tests on a periodic lattice structure were done, and simulation results were compared with stiffness tensor based on which the lattice stiffnesses were assigned.</p>
+<p>Behavior of circular cavity under radial pressure was examined using this model; this is shown at the very end.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The results presented here can be reproduced by downloading the following scripts:</p>
+<ul>
+<li><p><a class="reference download internal" download="" href="../../_downloads/2c19e3136980e77e88244bc1ca75b0a6/pbc-prepare-sample.py"><code class="xref download docutils literal notranslate"><span class="pre">pbc-prepare-sample.py</span></code></a> to prepare monomodal periodic packing with porosity equal to 0.5; alternatively, download <a class="reference download internal" download="" href="../../_downloads/31c98c7c96efa135a01db631a9ed8a5f/pbc-spheres_N%3D2556%2Cr%3D0.03%2CrRelFuzz%3D0.txt"><code class="xref download docutils literal notranslate"><span class="pre">pbc-spheres_N=2556,r=0.03,rRelFuzz=0.txt</span></code></a> which is the result of running this script</p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/b79f91f07d5c010cf1e19fed97530146/pbc-deform-sample.py"><code class="xref download docutils literal notranslate"><span class="pre">pbc-deform-sample.py</span></code></a> to run a single element test on the whole periodic lattice</p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/9d3e183e346f22e7a5e975973989a455/pbc-deform-sample.table.xls"><code class="xref download docutils literal notranslate"><span class="pre">pbc-deform-sample.table.xls</span></code></a> as input to batch for running element tests on a range of the <span class="math notranslate nohighlight">\(I_R\)</span> parameters by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">-</span><span class="n">batch</span> <span class="n">pbc</span><span class="o">-</span><span class="n">deform</span><span class="o">-</span><span class="n">sample</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">xls</span> <span class="n">pbc</span><span class="o">-</span><span class="n">deform</span><span class="o">-</span><span class="n">sample</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/ee5e05205d103ac27974661ad3ec3e2a/pbc-process-logs.py"><code class="xref download docutils literal notranslate"><span class="pre">pbc-process-logs.py</span></code></a> to extract resulting tables (such as those presented in <a class="reference internal" href="#contact-radius-ir-1-8"><span class="std std-ref">Contact radius I_R=1.8</span></a>) from log files, once the batch is completed.</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_FrictPhys_CrossAnisotropy</span></code> implements the cross-anisotropic stiffness computation, <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.muStiffnessScaling</span></code> implements computation of the <span class="math notranslate nohighlight">\(\mu\)</span> proportionality coefficient, and <a class="reference internal" href="../../woo.dem.html#woo.dem.WeirdTriaxControl" title="woo.dem.WeirdTriaxControl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.WeirdTriaxControl</span></code></a> was used for stress-controlled element tests.</p>
+</div>
+<div class="admonition-acknowledgement admonition">
+<p class="admonition-title">Acknowledgement</p>
+<p>This work was done during post-doc position at <a class="reference external" href="http://uibk.ac.at/geotechnik">Arbeitsbereich für Geotechnik und Tunnelbau</a> at the <a class="reference external" href="http://uibk.ac.at">University of Innsbruck</a>; limited part of this work was <a class="reference external" href="http://www.scribd.com/doc/234669103/Blioumi-Smilauer-Cross-anisotropic-Rock-Modelled-with-Discrete-Methods-EURO-TUN-2013">presented</a> at the EURO:TUN 2013 conference, but the full version including all derivations never made it to a proper publication.</p>
+</div>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Cross-anisotropic (also <a class="reference external" href="http://en.wikipedia.org/wiki/Transverse_isotropy">transverse-isotropic</a>) materials exhibit rotational symmetry in mechanical response about the cross-anisotropy axis <span class="math notranslate nohighlight">\(\vec{a}\)</span>: the material behaves isotropically perpendicular to <span class="math notranslate nohighlight">\(\vec{a}\)</span>. Such behavior is often found in layered materials. For the case where <span class="math notranslate nohighlight">\(\vec{a}\)</span> coincides with the global <span class="math notranslate nohighlight">\(z\)</span>-axis, this symmetry is captured by the stiffness tensor</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\tens{C}=
+   \begin{pmatrix}
+      C_{11} &amp; C_{12} &amp; C_{13} &amp; 0 &amp; 0 &amp; 0  \\
+      C_{12} &amp; C_{11} &amp; C_{13} &amp; 0 &amp; 0 &amp; 0  \\
+      C_{13} &amp; C_{13} &amp; C_{33} &amp; 0 &amp; 0 &amp; 0  \\
+      0 &amp; 0 &amp; 0 &amp; C_{44} &amp; 0 &amp; 0 \\
+      0 &amp; 0 &amp; 0 &amp; 0 &amp; C_{44} &amp; 0 \\
+      0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{C_{11}-C_{12}}{2}
+   \end{pmatrix}\end{split}\]</div>
+<p>with five independent components.</p>
+<section id="lattice">
+<h3>Lattice<a class="headerlink" href="#lattice" title="Permalink to this headline">¶</a></h3>
+<p>The objective of this paper is to model a linear-elastic cross-anisotropic medium using a discrete model. Under discrete models we understand the Discrete Element Method (DEM) with spherical particles, though we are only interested in the static solution in the linear domain. Therefore, an arrangement of DEM particles with contacts in-between them can be seen as a lattice structure, where the contacts (lattice elements) describe interactions with neighboring particles (lattice nodes). We will thus speak of lattice elements, and only turn to the DEM terminology when required.</p>
+<p>Constructing the lattice from an arrangement of spherical particles is shown in <a class="reference internal" href="#fig-contact-radius"><span class="std std-ref">this figure</span></a>; the procedure is of geometrical nature, where spheres with positions <span class="math notranslate nohighlight">\(\vec{x}_i\)</span> and radii <span class="math notranslate nohighlight">\(r_i\)</span> are in contact if</p>
+<div class="math notranslate nohighlight" id="equation-eq-ir">
+<span class="eqno">(37)<a class="headerlink" href="#equation-eq-ir" title="Permalink to this equation">¶</a></span>\[\lvert\vec{x}_1-\vec{x}_2\rvert≤I_R(r_1+r_2)\]</div>
+<p>where <span class="math notranslate nohighlight">\(I_R\)</span> is <em>contact radius</em> <span id="id1">[<a class="reference internal" href="../../references.html#id30" title="Jan Stránský, Milan Jirásek, and Václav Šmilauer. Macroscopic elastic properties of particle models. In Proceedings of the International Conference on Modelling and Simulation 2010, Prague. June 2010. URL: https://yade-dem.org/w/images/6/64/Stransky2010-Macroscopic-elastic-properties-of-particle-models.pdf.">SJS10</a>]</span>, dimensionless parameter determining density of the lattice. <em>I_R</em> is equal to 1 if only geometrically adjacent spheres are to be considered in contact, while greater values will allow “contact” between spheres which some distance between them.</p>
+<figure class="align-center align-default" id="id11">
+<span id="fig-contact-radius"></span><a class="reference internal image-reference" href="../../_images/contact-radius-lattice.svg"><img alt="../../_images/contact-radius-lattice.svg" src="../../_images/contact-radius-lattice.svg" width="80%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 46 </span><span class="caption-text">Dependence of lattice density on contact radius <span class="math notranslate nohighlight">\(I_R\)</span>: (a) sphere packing for constructing the lattice, (b) lattice with <span class="math notranslate nohighlight">\(I_R=1\)</span>, (b) lattice with bigger <span class="math notranslate nohighlight">\(I_R\)</span>.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The cross-anisotropic behavior is described by the stiffness tensor. With continuum models, the constitutive law is written in terms of the stiffness tensor itself; however, discrete models are not homogeneous and a distinction between local (microscopic) and global (macroscopic) levels of description is to be made. In the local sense, each lattice element is be characterized by stiffness values. Globally, though, the behavior is given by complicated interplay between numerous lattice elements.</p>
+<p>Our task is therefore to investigate the relationship between local and global lattice behavior: providing a mathematical description of how the global behavior (expressed as a stiffness tensor) depends on local characteristics (stiffnesses of lattice elements) and how are they playing together (lattice geometry). Subsequently, we will inverse the previous result, i.e. for some desired stiffness tensor, we will determine local characteristics (stiffnesses) leading to the behavior described by that tensor.</p>
+<p>To this end, we make use of the following assumptions:</p>
+<ul class="simple">
+<li><p>elements of the lattice have only normal and shear stiffnesses <span class="math notranslate nohighlight">\(k_n\)</span>, <span class="math notranslate nohighlight">\(k_t\)</span>;</p></li>
+<li><p>the lattice is geometrically isotropic: the orientation of the lattice elements is <em>in average</em> uniformly distributed;</p></li>
+<li><p>the displacement of lattice nodes does not deviate from the mean displacement; in another words, the lattice is deformed uniformly, as whole. This assumption is commonly referred to as <em>Voigt hypothesis</em> <span id="id2">[<a class="reference internal" href="../../references.html#id31" title="Ching-Lung Liao, Ta-Peng Chang, Dong-Hwa Young, and Ching S. Chang. Stress-strain relationship for granular materials based on the hypothesis of best fit. International Journal of Solids and Structures, 34(31-32):4087 - 4100, 1997. URL: http://www.sciencedirect.com/science/article/B6VJS-3XDHMP5-10/2/9311e21c602280eb84adca51eb4dc744, doi:DOI: 10.1016/S0020-7683(97)00015-2.">LCYC97</a>]</span> and is an important restriction for the lattice behavior. Denser lattices (with greater <span class="math notranslate nohighlight">\(I_R\)</span>) fulfill this assumption by themselves better than loose lattices, as they have more contacts restricting deviation of individual nodes from the surrounding deformation. We therefore expect our results to better describe the real behavior in the case of dense lattices.</p></li>
+</ul>
+</section>
+<section id="microplane-and-lattice">
+<h3>Microplane and lattice<a class="headerlink" href="#microplane-and-lattice" title="Permalink to this headline">¶</a></h3>
+<p>The transition between discrete (lattice) <span id="id3">[<a class="reference internal" href="../../references.html#id32" title="E. Kuhl, G. D’Addetta, M. Leukart, and E. Ramm. Microplane modelling and particle modelling of cohesive-frictional materials. In Pieter Vermeer, Hans Herrmann, Stefan Luding, Wolfgang Ehlers, Stefan Diebels, and Ekkehard Ramm, editors, Continuous and Discontinuous Modelling of Cohesive-Frictional Materials, volume 568 of Lecture Notes in Physics, pages 31-46. Springer Berlin / Heidelberg, 2001. URL: http://dx.doi.org/10.1007/3-540-44424-6_3.">KDAddettaLR01</a>]</span> and continuous description will be done via the <em>microplane</em> theory <span id="id4">[<a class="reference internal" href="../../references.html#id33" title="Ignacio Carol, Milan Jirásek, and Zdenek P. Bazant. A framework for microplane models at large strain, with application to hyperelasticity. International Journal of Solids and Structures, 41(2):511 - 557, 2004. URL: http://www.sciencedirect.com/science/article/B6VJS-49SN9H7-1/2/b86c9e49305b528a681866a1eb847c03, doi:DOI: 10.1016/S0020-7683(03)00416-5.">CJirasekB04</a>]</span>. This theory describes each material point as infinite number of microplanes oriented uniformly in all possible directions at that material point, each of them characterized by volumetric, deviatoric, normal and shear moduli (in our case, we only use the latter two, <span class="math notranslate nohighlight">\(E_N\)</span> and <span class="math notranslate nohighlight">\(E_T\)</span>). The cross-anisotropic nature is introduced by supposing dependency of those moduli on the respective microplane orientation such that symmetries of a cross-anisotropic medium are satisfied. The stiffness tensor is obtained by <em>integration of the moduli</em> over all microplanes.</p>
+<p>The lattice structure has only a finite number of nodes and a finite number of isotropically-oriented lattice elements in each node. The stiffness tensor is obtained by <em>summation of stiffnesses</em> over all elements. We can write the lattice stiffnesses <span class="math notranslate nohighlight">\(k_n\)</span>, <span class="math notranslate nohighlight">\(k_t\)</span> as functions of some yet unknown moduli <span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span> (which depend on the orientation in the same way as <span class="math notranslate nohighlight">\(E_N\)</span>, <span class="math notranslate nohighlight">\(E_T\)</span>) and let the lattice density grow without bounds. After limit transition, we obtain the stiffness tensor of the infinitely dense lattice by <em>integration of the unknown moduli</em> over all lattice elements.</p>
+<p>By imposing equality of microplane and lattice stiffness tensors, we obtain the values of the unknown lattice moduli <span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span> (proportional to the microplane moduli via a yet unknown factor <span class="math notranslate nohighlight">\(\mu\)</span>); using those moduli when constructing the lattice ensures that the stiffness tensor of the discrete lattice will be equal to the stiffness tensor of the microplane model. Consequently, for a given stiffness tensor, we can compute lattice moduli which will lead to the response characterized by that stiffness tensor.</p>
+<p>The function expressing how moduli depend on the orientation is the same for the microplane and the lattice model; in our case, we chose a function with only 4 independent parameters. Thus, the resulting stiffness tensor is cross-anisotropic, but has only four linearly independent components.</p>
+</section>
+<section id="tests">
+<h3>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h3>
+<p>The stiffness tensor of a lattice is obtained from <em>element tests</em> (in our case, uniaxial unconfined compression and simple shear tests) on a periodic lattice. It is subsequently compared with the prescribed values, and the dependence between accuracy and lattice density is shown.</p>
+</section>
+</section>
+<section id="notation">
+<h2>Notation<a class="headerlink" href="#notation" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(E_N\)</span>, <span class="math notranslate nohighlight">\(E_T\)</span></p></td>
+<td><p>microplane normal and tangential moduli</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span></p></td>
+<td><p>lattice normal and tangential moduli</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k_n\)</span>, <span class="math notranslate nohighlight">\(k_t\)</span></p></td>
+<td><p>lattice normal and tangential stiffnesses</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(E_*^a\)</span>, <span class="math notranslate nohighlight">\({E_*^a}'\)</span></p></td>
+<td><p>in-plane microplane/lattice moduli</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(E_*^b\)</span>, <span class="math notranslate nohighlight">\({E_*^b}'\)</span></p></td>
+<td><p>out-of-plane microplane/lattice moduli</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\tens{E}\)</span></p></td>
+<td><p>stiffness tensor</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(C_{ijkl}\)</span></p></td>
+<td><p>stiffness tensor, index notation</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(C_{mn}\)</span></p></td>
+<td><p>stiffness matrix (in Voigt notation) element</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathcal{E}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\((E_N^a, E_N^b,E_T^a,E_T^b)^T\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathcal{E}'\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(({E_N^a}', {E_N^b}', {E_T^a}',{E_T^b}')^T\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathcal{C}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\((C_{11}, C_{33}, C_{13}, C_{12})^T\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi\in\langle 0,2\pi)\)</span></p></td>
+<td><p>azimuth angle in spherical coordinates</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\theta\in\langle 0,\pi)\)</span></p></td>
+<td><p>inclination angle in spherical coordinates, from the pole</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\({\rm s}\theta\)</span>, <span class="math notranslate nohighlight">\({\rm s}\phi\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\sin\phi\)</span>, <span class="math notranslate nohighlight">\(\sin\theta\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\({\rm c}\theta\)</span>, <span class="math notranslate nohighlight">\({\rm c}\phi\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\cos\phi\)</span>, <span class="math notranslate nohighlight">\(\cos\theta\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Cartesian coordinates of a point <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span> on sphere with radius <span class="math notranslate nohighlight">\(r\)</span> are given (see <a class="reference internal" href="#fig-polar-coords"><span class="std std-ref">the image</span></a> as</p>
+<div class="math notranslate nohighlight" id="equation-eq-nijk">
+<span class="eqno">(38)<a class="headerlink" href="#equation-eq-nijk" title="Permalink to this equation">¶</a></span>\[\begin{split}\vec{n}=\begin{pmatrix}r {\rm s}\theta{\rm c}\phi \\ r {\rm s}\theta{\rm s}\phi \\ r{\rm c}\theta\end{pmatrix}\end{split}\]</div>
+<p>with the transformation Jacobian equal to <span class="math notranslate nohighlight">\(r^2 {\rm s}\theta\)</span>:</p>
+<figure class="align-center align-default" id="id12">
+<span id="fig-polar-coords"></span><a class="reference internal image-reference" href="../../_images/polar-coords.svg"><img alt="../../_images/polar-coords.svg" src="../../_images/polar-coords.svg" width="30%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 47 </span><span class="caption-text">Polar coordinate system; <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span> are radius, inclination, azimuth respectively.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="microplane-stiffness-tensor">
+<h2>Microplane stiffness tensor<a class="headerlink" href="#microplane-stiffness-tensor" title="Permalink to this headline">¶</a></h2>
+<p>We consider the microplane model by <span id="id5">[<a class="reference internal" href="../../references.html#id33" title="Ignacio Carol, Milan Jirásek, and Zdenek P. Bazant. A framework for microplane models at large strain, with application to hyperelasticity. International Journal of Solids and Structures, 41(2):511 - 557, 2004. URL: http://www.sciencedirect.com/science/article/B6VJS-49SN9H7-1/2/b86c9e49305b528a681866a1eb847c03, doi:DOI: 10.1016/S0020-7683(03)00416-5.">CJirasekB04</a>]</span> where all microplanes only have normal and shear moduli <span class="math notranslate nohighlight">\(E_N\)</span>, <span class="math notranslate nohighlight">\(E_T\)</span> volumetric and deviatoric moduli <span class="math notranslate nohighlight">\(E_V\)</span>, <span class="math notranslate nohighlight">\(E_D\)</span> are zero. Stiffness tensor is obtained by integration of moduli over all possible orientations of microplanes given by unit vector <span class="math notranslate nohighlight">\(\vec{n}\)</span>. For our purposes, we will integrate in spherical coordinates with unit radius over angles <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span> (<a class="reference internal" href="#fig-polar-coords"><span class="std std-ref">polar coordinates</span></a>), <span class="math notranslate nohighlight">\(z\)</span>-axis being coincident with the cross-anisotropy axis; this lets us write microplane moduli as <span class="math notranslate nohighlight">\(E_N=E_N(\theta)\)</span> and <span class="math notranslate nohighlight">\(E_T=E_T(\theta)\)</span>, independent of the azimuth <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-stiff-integral">
+<span class="eqno">(39)<a class="headerlink" href="#equation-eq-stiff-integral" title="Permalink to this equation">¶</a></span>\[\begin{split}\tens{\mathcal{C}}&amp;=\frac{3}{2\pi}\int\limits_{\Omega} E_N\tens{\mathcal{N}}\otimes\tens{\mathcal{N}} + E_T \tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}}\d\Omega= \\
+   &amp;=\frac{3}{2\pi}\int\limits_{\theta=0}^{\pi}\int\limits_{\phi=0}^{2\pi} \left(E_N\tens{\mathcal{N}}\otimes\tens{\mathcal{N}} + E_T \tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}}\right){{\mathrm s}\theta\,}\d\phi\d\theta\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tens{\mathcal{N}}\)</span>, <span class="math notranslate nohighlight">\(\tens{\mathcal{T}}\)</span> are projection tensors; in index notation, they read</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\tens{\mathcal{N}}\otimes\tens{\mathcal{N}}&amp;=\tens{n}\otimes\tens{n}\otimes\tens{n}\otimes\tens{n}=n_i n_j n_k n_l \\
+\tens{\mathcal{T}}&amp;=\tens{n}\cdot\tens{\mathcal{I}}^{\rm sym}-\tens{n}\otimes\tens{n}\otimes\tens{n} \\
+\tens{\mathcal{T}}^{T}&amp;=\tens{\mathcal{I}}^{\rm sym}\cdot{n}-\tens{n}\otimes\tens{n}\otimes\tens{n} \\
+T_{ijk}&amp;=n_l\frac{1}{2}(\delta_{lj}\delta_{ik}+\delta_{lk}\delta_{ij})-n_i n_j n_k \\
+T^T_{ijk}&amp;=n_l\frac{1}{2}(\delta_{ik}\delta_{jl}+\delta_{il}\delta_{jk})-n_i n_j n_k \\
+\tens{\mathcal{T}}^T\cdot \tens{\mathcal{T}} &amp;= T^T_{ijm} T_{mkl} = \\
+   &amp;=\frac{n_j n_k}{4} \delta_{il}+\frac{n_j n_l}{4}\delta_{ik}+\frac{n_i n_k}{4}\delta_{jl}+\frac{n_i n_l}{4}\delta_{jk}-n_i n_j n_k n_l\end{split}\]</div>
+<p>Stiffness tensor components are subsequently written as</p>
+<div class="math notranslate nohighlight" id="equation-eq-eijkl">
+<span class="eqno">(40)<a class="headerlink" href="#equation-eq-eijkl" title="Permalink to this equation">¶</a></span>\[\begin{split}C_{ijkl}&amp;=\frac{3}{2\pi}\int\limits_0^{2\pi}\int\limits_0^{\pi}\Big[E_N(\theta)(n_i n_j n_k n_l)+E_T(\theta)\Big(\frac{n_j n_k}{4} \delta_{il}+\frac{n_j n_l}{4}\delta_{ik}+ \\
+&amp;\quad+\frac{n_i n_k}{4}\delta_{jl}+\frac{n_i n_l}{4}\delta_{jk}-n_i n_j n_k n_l\Big)\Big]{{\mathrm s}\theta\,}\d\phi\d\theta\end{split}\]</div>
+<p>Plugging <span class="math notranslate nohighlight">\(\vec{n}\)</span> in <a class="reference internal" href="#equation-eq-nijk">(38)</a> into <a class="reference internal" href="#equation-eq-eijkl">(40)</a>, and reversing integration order, we obtain</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}C_{1111}&amp;=\frac{3}{2\pi}\int\limits_{\theta=0}^{\pi}{\int\limits_{\phi=0}^{2\pi}{\left[E_N {{\mathrm s}^4\theta\,} {{\mathrm c}^4\phi\,} + E_T({{\mathrm s}^2\theta\,}{{\mathrm s}^2\phi\,}-{{\mathrm s}^4\theta\,}{{\mathrm c}^4\phi\,})\right]{{\mathrm s}\theta\,}\,{\rm d}\theta}\,{\rm d}\phi}\,{\rm d}\theta = \\
+   &amp;=\frac{3}{2\pi}\int\limits_{\theta=0}^{\pi}{E_N{{\mathrm s}^5\theta\,}\int\limits_{0}^{2\pi}{{{\mathrm c}^4\phi\,}\,{\rm d}\phi}+E_T{{\mathrm s}^3\theta\,}\int\limits_{0}^{2\pi}{{{\mathrm c}^2\phi\,}\,{\rm d}\phi}-E_T{{\mathrm s}^5\theta\,}\int\limits_{0}^{2\pi}{{{\mathrm c}^4\phi\,}\,{\rm d}\phi}}\,{\rm d}\theta\end{split}\]</div>
+<p>As the inner integrals over <span class="math notranslate nohighlight">\(\phi\)</span> do not depend on <span class="math notranslate nohighlight">\(\theta\)</span>, they can be evaluated directly, giving</p>
+<div class="math notranslate nohighlight" id="equation-eq-c1111-gen">
+<span class="eqno">(41)<a class="headerlink" href="#equation-eq-c1111-gen" title="Permalink to this equation">¶</a></span>\[   C_{1111}=\frac{3}{2}\int\limits_{\theta=0}^{\pi}{\frac{3}{4}E_N{{\mathrm s}^5\theta\,}+ E_T{{\mathrm s}^3\theta\,}-\frac{3}{4}E_T{{\mathrm s}^5\theta\,}}\,{\rm d}\theta.\]</div>
+<p>Similarly for other components,</p>
+<div class="math notranslate nohighlight" id="equation-eq-c2323-gen">
+<span class="eqno">(42)<a class="headerlink" href="#equation-eq-c2323-gen" title="Permalink to this equation">¶</a></span>\[\begin{split}      C_{2222}&amp;=C_{1111} \\
+      C_{3333}&amp;=\frac{3}{2}\int\limits_{0}^{\pi}{2E_N{{\mathrm c}^4\theta\,}{{\mathrm s}\theta\,}+2E_T{{\mathrm c}^2\theta\,}{{\mathrm s}\theta\,}-2E_T{{\mathrm c}^4\theta\,}{{\mathrm s}\theta\,}}\,{\rm d}\theta \\
+      C_{2233}&amp;=\frac{3}{2}\int\limits_{0}^{\pi}{E_N{{\mathrm s}^3\theta\,}{{\mathrm c}^2\theta\,}-E_T{{\mathrm s}^3\theta\,}{{\mathrm c}^2\theta\,}}\,{\rm d}\theta \\
+      C_{1133}&amp;=C_{2233} \\
+      C_{1122}&amp;=\frac{3}{2}\int\limits_{0}^{\pi}{\frac{1}{4}E_N{{\mathrm s}^5\theta\,}-\frac{1}{4}E_T{{\mathrm s}^5\theta\,}}\,{\rm d}\theta \\
+      C_{2323}&amp;=\frac{3}{2}\int\limits_{0}^{\pi}{E_N{{\mathrm s}^3\theta\,}{{\mathrm s}^2\theta\,}+E_T\left(\frac{{{\mathrm c}^2\theta\,}{{\mathrm s}\theta\,}}{4\pi}+\frac{{{\mathrm s}^3\theta\,}}{4}-{{\mathrm s}^3\theta\,}{{\mathrm c}^2\theta\,}\right)} \,{\rm d}\theta \\
+      C_{1313}&amp;=C_{2323} \\
+      C_{1212}&amp;=\frac{3}{2}\int\limits_{0}^{\pi}{\frac{1}{4}E_N{{\mathrm s}^5\theta\,}+E_T\left(\frac{{{\mathrm s}^3\theta\,}}{2}-\frac{{{\mathrm s}^5\theta\,}}{4}\right)}\,{\rm d}\theta= \\
+         &amp;=\frac{1}{2}\left(C_{1111}-C_{1122}\right)\end{split}\]</div>
+<p>Note that only 5 of the stiffness tensor components are independent, which is consistent with the symmetries of the cross-anisotropic material.</p>
+<section id="isotropy">
+<h3>Isotropy<a class="headerlink" href="#isotropy" title="Permalink to this headline">¶</a></h3>
+<p>With <span class="math notranslate nohighlight">\(\theta\)</span>-independent <span class="math notranslate nohighlight">\(E_N\)</span> and <span class="math notranslate nohighlight">\(E_N\)</span>, <span class="math notranslate nohighlight">\(C_{ijkl}\)</span> can be evaluated explicitly and assumes the values given in literature <span id="id6">[<a class="reference internal" href="../../references.html#id32" title="E. Kuhl, G. D’Addetta, M. Leukart, and E. Ramm. Microplane modelling and particle modelling of cohesive-frictional materials. In Pieter Vermeer, Hans Herrmann, Stefan Luding, Wolfgang Ehlers, Stefan Diebels, and Ekkehard Ramm, editors, Continuous and Discontinuous Modelling of Cohesive-Frictional Materials, volume 568 of Lecture Notes in Physics, pages 31-46. Springer Berlin / Heidelberg, 2001. URL: http://dx.doi.org/10.1007/3-540-44424-6_3.">KDAddettaLR01</a>]</span>, <span id="id7">[<a class="reference internal" href="../../references.html#id30" title="Jan Stránský, Milan Jirásek, and Václav Šmilauer. Macroscopic elastic properties of particle models. In Proceedings of the International Conference on Modelling and Simulation 2010, Prague. June 2010. URL: https://yade-dem.org/w/images/6/64/Stransky2010-Macroscopic-elastic-properties-of-particle-models.pdf.">SJS10</a>]</span>, i.e.</p>
+<div class="math notranslate nohighlight" id="equation-eq-c1111-iso">
+<span class="eqno">(43)<a class="headerlink" href="#equation-eq-c1111-iso" title="Permalink to this equation">¶</a></span>\[\begin{split}         C_{1111}=C_{2222}=C_{3333}&amp;=\frac{1}{5}(6E_N+4E_T), \\
+         C_{2233}=C_{1133}=C_{1122}&amp;=\frac{1}{5}(2E_N-2E_T), \\
+         C_{2323}=C_{1313}=C_{1212}&amp;=\frac{1}{5}(2E_N+3E_T).\end{split}\]</div>
+</section>
+<section id="cross-anisotropy">
+<h3>Cross-anisotropy<a class="headerlink" href="#cross-anisotropy" title="Permalink to this headline">¶</a></h3>
+<p><span class="math notranslate nohighlight">\(E_N\)</span> and <span class="math notranslate nohighlight">\(E_T\)</span> are functions of inclination <span class="math notranslate nohighlight">\(\theta\in\langle0,\pi\rangle\)</span>. To further evaluate the stiffness tensors, we will assume that they can be written as functions interpolating between in-plane moduli <span class="math notranslate nohighlight">\(E_*^a\)</span> and out-of-plane-moduli <span class="math notranslate nohighlight">\(E_*^b\)</span>, via some weight function <span class="math notranslate nohighlight">\(w(\theta)\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-ent-w">
+<span class="eqno">(44)<a class="headerlink" href="#equation-eq-ent-w" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}E_N(\theta)&amp;=w(\theta)E_N^a+(1-w(\theta))E_N^b\\E_T(\theta)&amp;=w(\theta)E_T^a+(1-w(\theta))E_T^b.\end{aligned}\end{align} \]</div>
+<p>We require the function <span class="math notranslate nohighlight">\(w\)</span> to be</p>
+<ul class="simple">
+<li><p>interpolating between in-plane and out-of-plane values, i.e. <span class="math notranslate nohighlight">\(w(0)=0\)</span>, <span class="math notranslate nohighlight">\(w(\pi/2)=1\)</span>;</p></li>
+<li><p>continuous in <span class="math notranslate nohighlight">\(\langle 0, \pi/2\rangle\)</span>;</p></li>
+<li><p>symmetrical around <span class="math notranslate nohighlight">\(\pi/2\)</span>, i.e. <span class="math notranslate nohighlight">\(\forall\theta: w(\theta)=w(\pi/2-\theta)\)</span>.</p></li>
+</ul>
+<section id="elliptic-interpolation">
+<h4>Elliptic interpolation<a class="headerlink" href="#elliptic-interpolation" title="Permalink to this headline">¶</a></h4>
+<p>One candidate for <span class="math notranslate nohighlight">\(w\)</span>, used in the rest of this paper, is the function</p>
+<div class="math notranslate nohighlight" id="equation-eq-w-elliptic">
+<span class="eqno">(45)<a class="headerlink" href="#equation-eq-w-elliptic" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}w(\theta)&amp;={{\mathrm s}^2\theta\,},\\1-w(\theta)&amp;={{\mathrm c}^2\theta\,}.\end{aligned}\end{align} \]</div>
+<figure class="align-center" id="id13">
+<span id="fig-elliptic-interp"></span><a class="reference internal image-reference" href="../../_images/elliptic-interp.svg"><img alt="../../_images/elliptic-interp.svg" src="../../_images/elliptic-interp.svg" width="40%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 48 </span><span class="caption-text">Elliptic interpolation of stiffnesses.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The advantage is that the interpolation function has simple elliptical shape and that we are able to evaluate stiffness tensor components in a closed form. The disadvantage is that <span class="math notranslate nohighlight">\(w\)</span> contains no additional parameter, therefore only 4 stiffness tensor components will be independent; however, such an approximation can be in many cases accurate enough; we will choose the out-of-plane shear modulus <span class="math notranslate nohighlight">\(C_{44}\)</span> to be the dependent component, for it is difficult to measure experimentally <span id="id8">[<a class="reference internal" href="../../references.html#id34" title="Anastasia Blioumi. On Linear-Elastic, Cross-Anisotropic Rock. PhD thesis, Faculty of Civil Engineering of the University of Innsbruck, 2011.">Bli11</a>]</span>, but any other component could be selected instead.</p>
+<p>Plugging <a class="reference internal" href="#equation-eq-w-elliptic">(45)</a> into <a class="reference internal" href="#equation-eq-ent-w">(44)</a>, and then into <a class="reference internal" href="#equation-eq-c1111-gen">(41)</a> − <a class="reference internal" href="#equation-eq-c2323-gen">(42)</a>, we obtain all stiffness tensor components as function of the lattice moduli,</p>
+<div class="math notranslate nohighlight" id="equation-eq-celliptic">
+<span class="eqno">(46)<a class="headerlink" href="#equation-eq-celliptic" title="Permalink to this equation">¶</a></span>\[\begin{split}\begin{pmatrix}C_{1111} \\ C_{3333} \\ C_{2233} \\ C_{1122} \\ C_{2323} \end{pmatrix} =
+\begin{pmatrix}C_{11}\\C_{33}\\C_{13}\\C_{12}\\C_{44}\end{pmatrix}=
+   \frac{1}{35}
+   \begin{pmatrix}
+      36 &amp; 6 &amp; 20 &amp; 8 \\ % E_1111
+      12 &amp; 30 &amp; 16 &amp; 12 \\ % E_3333
+      8 &amp; 6 &amp; -8 &amp; -6 \\ % E_2233
+      12 &amp; 2 &amp; -12 &amp; -2 \\ % E_1122
+      8 &amp; 6 &amp; 13 &amp; 8 \\ % E_2323
+   \end{pmatrix}
+   \begin{pmatrix}E_N^a \\ E_N^b \\ E_T^a \\ E_T^b \end{pmatrix}.\end{split}\]</div>
+<p>Writing out the independent components separately, we obtain</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix}C_{11}\\C_{33}\\C_{13}\\C_{12}\end{pmatrix}&amp;=
+\frac{1}{35}
+   \begin{pmatrix}
+      36 &amp; 6 &amp; 20 &amp; 8 \\ % E_1111
+      12 &amp; 30 &amp; 16 &amp; 12 \\ % E_3333
+      8 &amp; 6 &amp; -8 &amp; -6 \\ % E_2233
+      12 &amp; 2 &amp; -12 &amp; -2 \\ % E_1122
+   \end{pmatrix}
+  \begin{pmatrix}E_N^a \\ E_N^b \\ E_T^a \\ E_T^b \end{pmatrix}\end{split}\]</div>
+<p>or in a compact form</p>
+<div class="math notranslate nohighlight" id="equation-eq-celliptic-compact">
+<span class="eqno">(47)<a class="headerlink" href="#equation-eq-celliptic-compact" title="Permalink to this equation">¶</a></span>\[\mathcal{C}=\mat{A}\mathcal{E}\]</div>
+<p>with the dependent component</p>
+<div class="math notranslate nohighlight" id="equation-eq-c44-dep">
+<span class="eqno">(48)<a class="headerlink" href="#equation-eq-c44-dep" title="Permalink to this equation">¶</a></span>\[C_{44}=\frac{1}{35}\begin{pmatrix}8&amp; 6&amp; 13&amp; 8\end{pmatrix}\mathcal{E}=\begin{pmatrix}\frac{1}{4}&amp; \frac{1}{4}&amp; -\frac{1}{2}&amp; 0\end{pmatrix} \mathcal{C}.\]</div>
+<p>Since the <span class="math notranslate nohighlight">\(\mat{A}\)</span> matrix is invertible, we can determine <span class="math notranslate nohighlight">\(\mathcal{E}\)</span> for given values of <span class="math notranslate nohighlight">\(\mathcal{C}\)</span> as</p>
+<div class="math notranslate nohighlight" id="equation-eq-eelliptic-compact">
+<span class="eqno">(49)<a class="headerlink" href="#equation-eq-eelliptic-compact" title="Permalink to this equation">¶</a></span>\[\mathcal{E}=\mat{A}^{-1}\mathcal{C}.\]</div>
+</section>
+</section>
+</section>
+<section id="lattice-stiffness-tensor">
+<h2>Lattice stiffness tensor<a class="headerlink" href="#lattice-stiffness-tensor" title="Permalink to this headline">¶</a></h2>
+<p>We start with a lattice composed of elements characterized by normal and shear stiffnesses <span class="math notranslate nohighlight">\(k_n\)</span>, <span class="math notranslate nohighlight">\(k_t\)</span>. Since we want to compare lattice with the microplane model, we will write lattice element stiffnesses as functions of some lattice moduli <span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span>; we will further suppose that <span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span> are orientation-dependent as in <a class="reference internal" href="#equation-eq-ent-w">(44)</a>, with different in-plane and out-of-plane moduli <span class="math notranslate nohighlight">\(\mathcal{E}'\)</span>.</p>
+<p>Without loss of generality, we consider that the lattice is constructed from spherical packing and that intra-nodal stiffnesses are given as <span class="math notranslate nohighlight">\(k_n=E_N'\pi r^2 /(2r')\)</span>, where <span class="math notranslate nohighlight">\(\pi r^2\)</span> is a fictitious contact area divided by the contact length <span class="math notranslate nohighlight">\(2r'\)</span>; depending on the algorithm, the actual stiffness can be different up to multiplicative constant, so we will write</p>
+<div class="math notranslate nohighlight" id="equation-eq-kn-en">
+\begin{align*}
+   k_n &amp;=E_N'\frac{\hat\pi r^2}{2r'}, &amp; k_t&amp;=E_T'\frac{\hat\pi r^2}{2r'}.
+\end{align*}</div><p>In the case we mentioned, <span class="math notranslate nohighlight">\(\hat\pi=\pi\)</span> but we assume no particular value in the following.</p>
+<p>Stiffness tensor of a lattice is, assuming Voigt hypothesis of uniform node displacements, written as <span id="id9">[<a class="reference internal" href="../../references.html#id32" title="E. Kuhl, G. D’Addetta, M. Leukart, and E. Ramm. Microplane modelling and particle modelling of cohesive-frictional materials. In Pieter Vermeer, Hans Herrmann, Stefan Luding, Wolfgang Ehlers, Stefan Diebels, and Ekkehard Ramm, editors, Continuous and Discontinuous Modelling of Cohesive-Frictional Materials, volume 568 of Lecture Notes in Physics, pages 31-46. Springer Berlin / Heidelberg, 2001. URL: http://dx.doi.org/10.1007/3-540-44424-6_3.">KDAddettaLR01</a>]</span> (eq. (35)):</p>
+<div class="math notranslate nohighlight" id="equation-eq-te-knkt">
+<span class="eqno">(51)<a class="headerlink" href="#equation-eq-te-knkt" title="Permalink to this equation">¶</a></span>\[\tens{\mathcal{C}}=\frac{1}{V}\sum|l|^2\left[k_n \tens{\mathcal{N}}\otimes\tens{\mathcal{N}} +k_t\tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}}\right],\]</div>
+<p>where <span class="math notranslate nohighlight">\(|l|=(2r')\)</span> is the length of a lattice element. After limit transition, for some representative volume <span class="math notranslate nohighlight">\(V\)</span> and large number of lattice elements <span class="math notranslate nohighlight">\(N\)</span>, the tensor is written as an integral over all orientations</p>
+<div class="math notranslate nohighlight" id="equation-eq-te-integral">
+<span class="eqno">(52)<a class="headerlink" href="#equation-eq-te-integral" title="Permalink to this equation">¶</a></span>\[\tens{\mathcal{C}}=\frac{N}{4V\pi}\int_\Omega (2r')^2 \left( k_n \tens{\mathcal{N}}\otimes\tens{\mathcal{N}} +k_t\tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}}\right) \d\Omega,\]</div>
+<p>where <span class="math notranslate nohighlight">\((2r')\)</span> was kept inside the integral, as it is not a constant. Plugging in stiffnesses from <a class="reference internal" href="#equation-eq-kn-en">(50)</a> yields</p>
+<div class="math notranslate nohighlight" id="equation-eq-te-a">
+<span class="eqno">(53)<a class="headerlink" href="#equation-eq-te-a" title="Permalink to this equation">¶</a></span>\[\tens{\mathcal{C}}=\frac{N}{2V\pi}\hat\pi \overline{r^2r'}\int_{\Omega}E_N'\tens{\mathcal{N}}\otimes\tens{\mathcal{N}}+E_T'\tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}} \d\Omega.\]</div>
+<p>where the <span class="math notranslate nohighlight">\(r^2r'\)</span> term appearing inside the integral was written in the front as an average, because it is on average orientation-independent.</p>
+</section>
+<section id="microplane-lattice-moduli-proportion">
+<h2>Microplane-lattice moduli proportion<a class="headerlink" href="#microplane-lattice-moduli-proportion" title="Permalink to this headline">¶</a></h2>
+<p>Microplane moduli <span class="math notranslate nohighlight">\(E_N\)</span>, <span class="math notranslate nohighlight">\(E_T\)</span> and lattice moduli <span class="math notranslate nohighlight">\(E_N'\)</span>, <span class="math notranslate nohighlight">\(E_T'\)</span> have the same dimensions and both depend on the orientation via <a class="reference internal" href="#equation-eq-ent-w">(44)</a>; they are therefore related via an unknown dimensionless parameter <span class="math notranslate nohighlight">\(\mu\)</span></p>
+<div class="math notranslate nohighlight" id="equation-eq-e-e">
+<span class="eqno">(54)<a class="headerlink" href="#equation-eq-e-e" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}E_N&amp;=\mu E_N',\\E_T&amp;=\mu E_T'.\end{aligned}\end{align} \]</div>
+<p>We can plug this relation into <a class="reference internal" href="#equation-eq-stiff-integral">(39)</a> obtaining</p>
+<div class="math notranslate nohighlight" id="equation-eq-te-b">
+<span class="eqno">(55)<a class="headerlink" href="#equation-eq-te-b" title="Permalink to this equation">¶</a></span>\[\tens{\mathcal{C}}=\frac{3}{2\pi}\mu\int_{\Omega} E_N'\tens{\mathcal{N}}\otimes\tens{\mathcal{N}} + E_T' \tens{\mathcal{T}}^T\cdot\tens{\mathcal{T}}\d\Omega.\]</div>
+<p>By putting <a class="reference internal" href="#equation-eq-te-a">(53)</a> and <a class="reference internal" href="#equation-eq-te-b">(55)</a> equal, we solve</p>
+<div class="math notranslate nohighlight" id="equation-eq-mu">
+<span class="eqno">(56)<a class="headerlink" href="#equation-eq-mu" title="Permalink to this equation">¶</a></span>\[\mu=\frac{E_N}{E_N'}=\frac{E_T}{E_T'}=\frac{1}{3}\frac{N\overline{r'r^2}\hat\pi}{V}\]</div>
+<p>If we consider the special case of <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(r'\)</span> being constant, we can omit the average and write <span class="math notranslate nohighlight">\(\mu\)</span> in the form better revealing its geometrical meaning as</p>
+<div class="math notranslate nohighlight">
+\[\mu=\frac{1}{6}\frac{N (\hat\pi r^2)(2r')}{V}=\frac{1}{6}\frac{N A l}{V}\]</div>
+<p>with <span class="math notranslate nohighlight">\(A=\hat\pi r^2\)</span> and <span class="math notranslate nohighlight">\(l\)</span> being is the cross-section area and length of one lattice element; the fraction is therefore proportion between the stiff volume of lattice elements <span class="math notranslate nohighlight">\(NAl\)</span> to the overall volume <span class="math notranslate nohighlight">\(V\)</span>.</p>
+<section id="stiffness-tensor-from-lattice-moduli">
+<h3>Stiffness tensor from lattice moduli<a class="headerlink" href="#stiffness-tensor-from-lattice-moduli" title="Permalink to this headline">¶</a></h3>
+<p>Since stiffness tensor components <span class="math notranslate nohighlight">\(C_{ij}\)</span> are linear with respect to microplane moduli <span class="math notranslate nohighlight">\(E_*\)</span>, we can write <span class="math notranslate nohighlight">\(C_{ij}(E_*)=C_{ij}(\mu E_*')=\mu C_{ij}(E_*')\)</span>. Thus, for instance, <a class="reference internal" href="#equation-eq-c1111-iso">(43)</a> becomes</p>
+<div class="math notranslate nohighlight">
+\[C_{1111}=\frac{1}{5}(6E_N+4E_T)=\mu\frac{1}{5}(6E_N'+4E_T')\]</div>
+<p>and <a class="reference internal" href="#equation-eq-celliptic-compact">(47)</a>, <a class="reference internal" href="#equation-eq-eelliptic-compact">(49)</a> become respectively</p>
+<div class="math notranslate nohighlight" id="equation-eq-celliptic-micro">
+<span class="eqno">(57)<a class="headerlink" href="#equation-eq-celliptic-micro" title="Permalink to this equation">¶</a></span>\[ \mathcal{C}=\mu\mat{A}\mathcal{E}'\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight" id="equation-eq-eelliptic-micro">
+<span class="eqno">(58)<a class="headerlink" href="#equation-eq-eelliptic-micro" title="Permalink to this equation">¶</a></span>\[ \mathcal{E}'=\frac{1}{\mu}\mat{A}^{-1}\mathcal{C}.\]</div>
+</section>
+</section>
+<section id="element-test">
+<h2>Element test<a class="headerlink" href="#element-test" title="Permalink to this headline">¶</a></h2>
+<p>Random dense (porosity equal to 0.5) periodic packing of spheres with equal radius is considered. The lattice structure is created by finding contacts between particles with varying contact radius <span class="math notranslate nohighlight">\(I_R\)</span> according to <a class="reference internal" href="#equation-eq-ir">(37)</a>. Local lattice moduli are computed using <a class="reference internal" href="#equation-eq-ent-w">(44)</a> with the elliptic interpolation <a class="reference internal" href="#equation-eq-w-elliptic">(45)</a>. Cross-anisotropy axis is aligned with the global <span class="math notranslate nohighlight">\(z\)</span>-axis. Given some input values of the <span class="math notranslate nohighlight">\(\mathcal{C}\)</span> vector (i.e. <span class="math notranslate nohighlight">\(C_{11}\)</span>, <span class="math notranslate nohighlight">\(C_{33}\)</span>, <span class="math notranslate nohighlight">\(C_{13}\)</span>, <span class="math notranslate nohighlight">\(C_{12}\)</span>), we use the current packing geometry to determine <span class="math notranslate nohighlight">\(\mu\)</span> via <a class="reference internal" href="#equation-eq-mu">(56)</a> and obtain <span class="math notranslate nohighlight">\(\mathcal{E}'\)</span> via <a class="reference internal" href="#equation-eq-eelliptic-micro">(58)</a>.</p>
+<p>The goal is to compare stiffness tensor from 3 sources:</p>
+<ol class="arabic simple">
+<li><p>from prescribed <span class="math notranslate nohighlight">\(\mathcal{C}\)</span>, additionally with the dependent component <span class="math notranslate nohighlight">\(C_{44}\)</span> from <a class="reference internal" href="#equation-eq-c44-dep">(48)</a>;</p></li>
+<li><p>from the current lattice stiffnesses using <a class="reference internal" href="#equation-eq-te-knkt">(51)</a>;</p></li>
+<li><p>from simulated lattice response during element tests (described below), with stiffnesses <a class="reference internal" href="#equation-eq-sim-ex">(60)</a>, <a class="reference internal" href="#equation-eq-sim-gij">(61)</a>, <a class="reference internal" href="#equation-eq-cc-from-egnu">(62)</a>.</p></li>
+</ol>
+<p>The test will be run for a range of contact radius <span class="math notranslate nohighlight">\(I_R\)</span>; higher values of <span class="math notranslate nohighlight">\(I_R\)</span> lead to stabilization of the packing, better satisfying the Voigt hypothesis of uniform deformation, as mentioned in the introduction. It is therefore expected that lower values of <span class="math notranslate nohighlight">\(I_R\)</span> will overestimate the microplane/lattice stiffnesses with respect to the simulated response and that this difference will be smaller with growing <span class="math notranslate nohighlight">\(I_R\)</span>. The minimum value of <span class="math notranslate nohighlight">\(I_R\)</span> is 1.2, since smaller values yielded unstable lattices. A rendering of the lattice for is shown in fig. <a class="reference internal" href="#fig-dem-lattice-3d"><span class="std std-ref">Periodic lattice</span></a>.</p>
+<figure class="align-center align-default" id="id14">
+<span id="fig-dem-lattice-3d"></span><a class="reference internal image-reference" href="../../_images/dem-lattice-3d.png"><img alt="../../_images/dem-lattice-3d.png" src="../../_images/dem-lattice-3d.png" style="width: 100%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 49 </span><span class="caption-text">Periodic lattice of the element test for <span class="math notranslate nohighlight">\(I_R=1.4\)</span>, shown in the <span class="math notranslate nohighlight">\(yz\)</span> plane. The right picture varies color depending on stiffness, showing the preference for more compliant behavior (dark) along the <span class="math notranslate nohighlight">\(z\)</span> axis.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="evaluating-the-stiffness-tensor">
+<h3>Evaluating the stiffness tensor<a class="headerlink" href="#evaluating-the-stiffness-tensor" title="Permalink to this headline">¶</a></h3>
+<p>Homogeneous periodic lattice is loaded in order to obtain parameters of the cross-anisotropic material. For each axis, unconfined uniaxial compression is performed to obtain the normal modulus and Poisson’s ratios, and shear test is performed to obtain the shear modulus (<a class="reference internal" href="#fig-element-test-2d"><span class="std std-ref">&lt;element test figure</span></a>). In total, six tests (for each value of <span class="math notranslate nohighlight">\(I_R\)</span>) are run.</p>
+<p>Within the 12 values (3 normal moduli, 3 shear moduli, 3 Poisson’s ratios, each measured twice) obtained, there are 5 symmetric couples (<span class="math notranslate nohighlight">\(E_{xy}=E_{yx}\)</span>, <span class="math notranslate nohighlight">\(G_{yz}=G_{zx}\)</span>, <span class="math notranslate nohighlight">\(\nu_{xy}=\nu_{yx}\)</span>, <span class="math notranslate nohighlight">\(\nu_{yz}=\nu_{xz}\)</span>, <span class="math notranslate nohighlight">\(\nu_{zx}=\nu_{zy}\)</span>) and 2 dependent values (e.g. <span class="math notranslate nohighlight">\(\nu_{xz}=\nu_{zx}E_x/E_z\)</span> and <span class="math notranslate nohighlight">\(G_{xy}=E_x/2(1+\nu_{xy})\)</span>). This results in five independent material constants of the cross-anisotropic material. The redundant values can be used to check correctness.</p>
+<figure class="align-center align-default" id="id15">
+<span id="fig-element-test-2d"></span><a class="reference internal image-reference" href="../../_images/element-test-2d.svg"><img alt="../../_images/element-test-2d.svg" src="../../_images/element-test-2d.svg" width="90%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 50 </span><span class="caption-text">Configuration of (a) unconfined uniaxial compression test in the <span class="math notranslate nohighlight">\(y\)</span>-direction and (b) shear test in the <span class="math notranslate nohighlight">\(xy\)</span> plane.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="normal-moduli-and-poisson-s-ratios">
+<h4>Normal moduli and Poisson’s ratios<a class="headerlink" href="#normal-moduli-and-poisson-s-ratios" title="Permalink to this headline">¶</a></h4>
+<p>To find normal moduli from simulations, we make use of the normal compliance relationship for an orthotropic material, of which cross-anisotropic material is a special case:</p>
+<div class="math notranslate nohighlight" id="equation-eq-orthotropic-normal-compliance">
+<span class="eqno">(59)<a class="headerlink" href="#equation-eq-orthotropic-normal-compliance" title="Permalink to this equation">¶</a></span>\[\begin{split}\begin{pmatrix}\eps_{xx} \\ \eps_{yy} \\ \eps_{zz}\end{pmatrix}=\begin{pmatrix}\frac{1}{E_x} &amp; -\frac{\nu_{yx}}{E_y} &amp; -\frac{\nu_{zx}}{E_z} \\ -\frac{\nu_{xy}}{E_x} &amp; \frac{1}{E_y} &amp; -\frac{\nu_{zy}}{E_z} \\ -\frac{\nu_{xz}}{E_x} &amp; -\frac{\nu_{yz}}{E_y} &amp; \frac{1}{E_z} \end{pmatrix}\begin{pmatrix}T_{xx} \\ T_{yy} \\ T_{zz} \end{pmatrix}\end{split}\]</div>
+<p>and prescribe extension <span class="math notranslate nohighlight">\(\hat{\eps}\)</span> (the hat signifies that the value is prescribed) in one direction with zero lateral stresses and evaluate the response; since stress cannot be prescribed directly in DEM, we adjust lateral strains until stress is smaller than some relative tolerance <span class="math notranslate nohighlight">\(t_r\)</span> times axial stress. Because the behavior is linear elastic, the way lateral strains are adjusted has no influence on the result. For instance, for <span class="math notranslate nohighlight">\(x\)</span> extension we prescribe</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\eps_{xx}&amp;=\hat{\eps}_{xx}=\hat\eps, \\
+T_{yy}=T_{zz}&amp;=0,\end{split}\]</div>
+<p>and use measured response <span class="math notranslate nohighlight">\(T_{xx}\)</span>, <span class="math notranslate nohighlight">\(\eps_{yy}\)</span>, <span class="math notranslate nohighlight">\(\eps_{zz}\)</span> to compute</p>
+<div class="math notranslate nohighlight" id="equation-eq-sim-ex">
+<span class="eqno">(60)<a class="headerlink" href="#equation-eq-sim-ex" title="Permalink to this equation">¶</a></span>\[\begin{split}E_x&amp;=\frac{T_{xx}}{\hat{\eps}_{xx}} \\
+\nu_{xy}&amp;=-\eps_{yy}\frac{E_x}{T_{xx}}=-\frac{\eps_{yy}}{\hat{\eps}_{xx}} \\
+\nu_{xz}&amp;=-\frac{\eps_{zz}}{\hat{\eps}_{xx}}.\end{split}\]</div>
+</section>
+<section id="shear-moduli">
+<h4>Shear moduli<a class="headerlink" href="#shear-moduli" title="Permalink to this headline">¶</a></h4>
+<p>Shear test is purely deformation-controlled. The periodic cell is prescribed pure shear <span class="math notranslate nohighlight">\(\eps_{ij}=\eps_{ji}=\hat\eps\)</span> (zero elsewhere). Shear moduli are found from shear stiffness equations</p>
+<div class="math notranslate nohighlight" id="equation-eq-sim-gij">
+<span class="eqno">(61)<a class="headerlink" href="#equation-eq-sim-gij" title="Permalink to this equation">¶</a></span>\[G_{ij}=\frac{T_{ij}}{2\hat\eps_{ij}}=\frac{T_{ij}}{\gamma_{ij}}.\]</div>
+<hr class="docutils" />
+<p>Components of the stiffness tensor are found by inversion of orthotropic compliance matrix <a class="reference internal" href="#equation-eq-orthotropic-normal-compliance">(59)</a> using symmetries <span class="math notranslate nohighlight">\(E_y=E_x\)</span> and <span class="math notranslate nohighlight">\(\nu_{xz}=\nu_{yz}\)</span> and abbreviating <span class="math notranslate nohighlight">\(e=E_x/E_z\)</span>, <span class="math notranslate nohighlight">\(m=1-\nu_{xy}-2e\nu_{xz}^2\)</span> as</p>
+<div class="math notranslate nohighlight" id="equation-eq-cc-from-egnu">
+<span class="eqno">(62)<a class="headerlink" href="#equation-eq-cc-from-egnu" title="Permalink to this equation">¶</a></span>\[\begin{split}\begin{pmatrix} C_{11} \\ C_{12} \\ C_{13} \\ C_{33} \\ C_{44}\end{pmatrix}&amp;=\begin{pmatrix}E_x\frac{1-e\nu_{xz}^2}{(1+\nu_{xy})m} \\ E_x\frac{\nu_{xy}+e\nu_{xz}^2}{(1+\nu_{xy})m} \\ E_x\frac{\nu_{xy}}{m} \\  E_z\frac{1-\nu_{xy}}{m}  \\ G_{yz} \end{pmatrix}.\end{split}\]</div>
+</section>
+</section>
+<section id="numerical-results">
+<h3>Numerical results<a class="headerlink" href="#numerical-results" title="Permalink to this headline">¶</a></h3>
+<section id="contact-radius-i-r-1-8">
+<span id="contact-radius-ir-1-8"></span><h4>Contact radius <span class="math notranslate nohighlight">\(I_R=1.8\)</span><a class="headerlink" href="#contact-radius-i-r-1-8" title="Permalink to this headline">¶</a></h4>
+<p>For the particular value of <span class="math notranslate nohighlight">\(I_R=1.8\)</span>, the input values are as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>number of spheres</p></td>
+<td><p>2556</p></td>
+</tr>
+<tr class="row-even"><td><p>sphere radius</p></td>
+<td><p>0.03 m</p></td>
+</tr>
+<tr class="row-odd"><td><p>interaction radius <span class="math notranslate nohighlight">\(I_r\)</span></p></td>
+<td><p>1.8</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\hat\pi\)</span> parameter</p></td>
+<td><p><span class="math notranslate nohighlight">\(\pi\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(C_{11}\)</span></p></td>
+<td><p>130 MPa</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(C_{33}\)</span></p></td>
+<td><p>55 MPa</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(C_{13}\)</span></p></td>
+<td><p>28 MPa</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(C_{12}\)</span></p></td>
+<td><p>40 MPa</p></td>
+</tr>
+<tr class="row-odd"><td><p>rel. stress tolerance <span class="math notranslate nohighlight">\(t_r\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(10^{-3}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>prescribed axial strain <span class="math notranslate nohighlight">\(\hat\eps\)</span></p></td>
+<td><p>-1%</p></td>
+</tr>
+</tbody>
+</table>
+<p>These are the derived values, computed from geometry of the actual lattice:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>average number of contacts</p></td>
+<td><p>22</p></td>
+</tr>
+<tr class="row-even"><td><p>lattice density scaling <span class="math notranslate nohighlight">\(\mu\)</span> <a class="reference internal" href="#equation-eq-mu">(56)</a></p></td>
+<td><p>2.02</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\({E_N^a}'\)</span></p></td>
+<td><p>59.7 MPa</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\({E_N^b}'\)</span></p></td>
+<td><p>5.94 MPa</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\({E_T^a}'\)</span></p></td>
+<td><p>2.84 MPa</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\({E_T^b}'\)</span></p></td>
+<td><p>0.989 MPa</p></td>
+</tr>
+</tbody>
+</table>
+<p>Simulation of normal loading yielded the following results; fives symmetric couples are marked with symbols (<span class="math notranslate nohighlight">\(\dagger\)</span>, <span class="math notranslate nohighlight">\(\ddagger\)</span>, <span class="math notranslate nohighlight">\(*\)</span>, <span class="math notranslate nohighlight">\(\circ\)</span>, <span class="math notranslate nohighlight">\(+\)</span>), each line corresponds to one axis of compression:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+             E_{x}&amp;=103.8\,{\rm MPa}^{\circ}, &amp; \nu_{xy}&amp;=0.2244^{\ddagger}, &amp; \nu_{xz}&amp;=0.3962^{*},\\
+             E_{y}&amp;=103.1\,{\rm MPa}^{\circ}, &amp; \nu_{yz}&amp;=0.3916^{*}, &amp; \nu_{yx}&amp;=0.223^{\ddagger},\\
+             E_{z}&amp;=43.93\,{\rm MPa}^{}, &amp; \nu_{zx}&amp;=0.1669^{\dagger}, &amp; \nu_{zy}&amp;=0.1664^{\dagger},
+\end{align*}</div><p>while three pure shear simulations gave</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+                     G_{yz}&amp;=30.67\,{\rm MPa}^{+} , &amp;
+                     G_{zx}&amp;=30.88\,{\rm MPa}^{+} , &amp;
+                     G_{xy}&amp;=42.91\,{\rm MPa}^{} .
+\end{align*}</div><p>Dependent values can be written (we used averages for symmetric couples):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\nu_{xz}=\nu_{yz}=\frac{E_x}{E_z}\nu_{zx}&amp;=0.392, \\
+G_{xy}=\frac{E_x}{2(1+\nu_{xy})}&amp;=42.3\,{\rm MPa}.\end{split}\]</div>
+<p>We see that both symmetric couples and dependent values are consistent, with some error due to imperfect isotropicity of the lattice geometry.</p>
+<p>These are resulting stiffness tensor components (in MPa) from different sources; <strong>bold</strong> values were prescribed:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(C_{11}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(C_{33}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(C_{13}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(C_{12}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(C_{44}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>microplane <a class="reference internal" href="#equation-eq-celliptic-micro">(57)</a></p></td>
+<td><p><strong>130</strong></p></td>
+<td><p><strong>55</strong></p></td>
+<td><p><strong>28</strong></p></td>
+<td><p><strong>40</strong></p></td>
+<td><p><strong>32.2</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>lattice <a class="reference internal" href="#equation-eq-te-knkt">(51)</a></p></td>
+<td><p>130</p></td>
+<td><p>55.1</p></td>
+<td><p>28.1</p></td>
+<td><p>40</p></td>
+<td><p>32.1</p></td>
+</tr>
+<tr class="row-even"><td><p>  error</p></td>
+<td><p>0.2%</p></td>
+<td><p>0.2%</p></td>
+<td><p>0.3%</p></td>
+<td><p>0.09%</p></td>
+<td><p>-0.4%</p></td>
+</tr>
+<tr class="row-odd"><td><p>simulations <a class="reference internal" href="#equation-eq-sim-ex">(60)</a>, <a class="reference internal" href="#equation-eq-sim-gij">(61)</a>, <a class="reference internal" href="#equation-eq-cc-from-egnu">(62)</a></p></td>
+<td><p>122</p></td>
+<td><p>52.8</p></td>
+<td><p>26.7</p></td>
+<td><p>37.9</p></td>
+<td><p>30.8</p></td>
+</tr>
+<tr class="row-even"><td><p>  error</p></td>
+<td><p>-5%</p></td>
+<td><p>-3%</p></td>
+<td><p>-4%</p></td>
+<td><p>-5%</p></td>
+<td><p>-4%</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="all-element-tests">
+<h4>All element tests<a class="headerlink" href="#all-element-tests" title="Permalink to this headline">¶</a></h4>
+<p>The procedure described above was repeated for a range of contact radii <span class="math notranslate nohighlight">\(I_R\in\{1.2, \dots, 2.8\}\)</span>; values lower than <span class="math notranslate nohighlight">\(1.2\)</span> (for spheres of equal radii) lead to unstable packing, whereas high values bring no additional information.</p>
+<p>This figure shows how the actual sample response (only <span class="math notranslate nohighlight">\(C_{11}\)</span> is shown, figures for other values are similar) approaches the theoretical value for higher <span class="math notranslate nohighlight">\(I_R\)</span> due to better stabilization of the packing, leading to more uniform deformation (the Voigt hypothesis).</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/element-stiffnesses.svg"><img alt="../../_images/element-stiffnesses.svg" src="../../_images/element-stiffnesses.svg" width="60%" /></a>
+</figure>
+</section>
+</section>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>An analytical derivation of orientation-dependent stiffness for geometrically isotropic lattice with global cross-anisotropic behavior was presented. The derivation was done withing the microplane framework, related to lattice behavior under the assumption of the Voigt hypothesis (uniform displacements). The orientation-dependent lattice stiffness was written as an interpolation function between in-plane and out-of-plane moduli, reducing the number of elastic parameters to four (instead of five for a general cross-anisotropic material). The <span class="math notranslate nohighlight">\(\mu\)</span> coefficient relates lattice local moduli to global moduli using geometrical configuration of the lattice. Dense geometrically isotropic lattices can be obtained from the Discrete Element Method (DEM) for larger values of contact radius <span class="math notranslate nohighlight">\(I_R\)</span>; this procedure was used to perform element tests on periodic lattice structures. It was shown that larger values of <span class="math notranslate nohighlight">\(I_R\)</span> give better agreement between analytical and simulated stiffness tensor, due to stabilization leading to more uniform deformation.</p>
+<p>Future work could use the best-fit deformation description <span id="id10">[<a class="reference internal" href="../../references.html#id31" title="Ching-Lung Liao, Ta-Peng Chang, Dong-Hwa Young, and Ching S. Chang. Stress-strain relationship for granular materials based on the hypothesis of best fit. International Journal of Solids and Structures, 34(31-32):4087 - 4100, 1997. URL: http://www.sciencedirect.com/science/article/B6VJS-3XDHMP5-10/2/9311e21c602280eb84adca51eb4dc744, doi:DOI: 10.1016/S0020-7683(97)00015-2.">LCYC97</a>]</span> to determine global lattice stiffness to obtain lower estimate of the stiffness for cross-anisotropic medium, instead of the upper bound obtained with the Voigt hypothesis.</p>
+</section>
+<section id="videos">
+<h2>Videos<a class="headerlink" href="#videos" title="Permalink to this headline">¶</a></h2>
+<p>Circular hole in DEM-discretized medium is subjected to radial hydrostatic pressure applied in the cavity. Contact stiffness are cross-anisotropic, with the strike angle <span class="math notranslate nohighlight">\(\alpha=270^{\circ}\)</span> and the dip angle <span class="math notranslate nohighlight">\(\beta=25^{\circ}\)</span>. This video shows behavior of the medium when the pressure is applied.</p>
+<iframe src="https://www.youtube.com/embed/KYCvi6SNOc0" style="border: 0; height: 345px; width: 560px">
+</iframe><p>It can be seen that:</p>
+<ul class="simple">
+<li><p>the sound wave propagates faster in the sense of higher stiffness (horizontally)</p></li>
+<li><p>the deformation is bigger in the sense of lower stiffness (vertically)</p></li>
+<li><p>radial loading leads to axial deformation due to cross-anisotropy axis not aligned with the cavity axis (it goes downwards under the angle <span class="math notranslate nohighlight">\(\beta\)</span>).</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Cross-anisotropy model with discrete elements</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#lattice">Lattice</a></li>
+<li><a class="reference internal" href="#microplane-and-lattice">Microplane and lattice</a></li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notation">Notation</a></li>
+<li><a class="reference internal" href="#microplane-stiffness-tensor">Microplane stiffness tensor</a><ul>
+<li><a class="reference internal" href="#isotropy">Isotropy</a></li>
+<li><a class="reference internal" href="#cross-anisotropy">Cross-anisotropy</a><ul>
+<li><a class="reference internal" href="#elliptic-interpolation">Elliptic interpolation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lattice-stiffness-tensor">Lattice stiffness tensor</a></li>
+<li><a class="reference internal" href="#microplane-lattice-moduli-proportion">Microplane-lattice moduli proportion</a><ul>
+<li><a class="reference internal" href="#stiffness-tensor-from-lattice-moduli">Stiffness tensor from lattice moduli</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#element-test">Element test</a><ul>
+<li><a class="reference internal" href="#evaluating-the-stiffness-tensor">Evaluating the stiffness tensor</a><ul>
+<li><a class="reference internal" href="#normal-moduli-and-poisson-s-ratios">Normal moduli and Poisson’s ratios</a></li>
+<li><a class="reference internal" href="#shear-moduli">Shear moduli</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#numerical-results">Numerical results</a><ul>
+<li><a class="reference internal" href="#contact-radius-i-r-1-8">Contact radius <span class="math notranslate nohighlight">\(I_R=1.8\)</span></a></li>
+<li><a class="reference internal" href="#all-element-tests">All element tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+<li><a class="reference internal" href="#videos">Videos</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="../cyl-triax/index.html"
+                          title="Previous page">&larr; Cylindrical triaxial test with flexible membrane</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="../../prog/index.html"
+                          title="Next page">&rarr; Programming manual</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cases/x-aniso/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../prog/index.html" title="Programming manual"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../cyl-triax/index.html" title="Cylindrical triaxial test with flexible membrane"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Case studies</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cross-anisotropy model with discrete elements</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

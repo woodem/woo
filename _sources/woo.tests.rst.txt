@@ -1,0 +1,259 @@
+:mod:`woo.tests`
+=============================
+
+.. automodule:: woo.tests
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.shapepack`
+---------------------------------------
+
+.. automodule:: woo.tests.shapepack
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.hertz`
+-----------------------------------
+
+.. automodule:: woo.tests.hertz
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.tetra`
+-----------------------------------
+
+.. automodule:: woo.tests.tetra
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.ellipsoid`
+---------------------------------------
+
+.. automodule:: woo.tests.ellipsoid
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.volumetric`
+----------------------------------------
+
+.. automodule:: woo.tests.volumetric
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.batch`
+-----------------------------------
+
+.. automodule:: woo.tests.batch
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.demfield`
+--------------------------------------
+
+.. automodule:: woo.tests.demfield
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.core`
+----------------------------------
+
+.. inheritance-diagram:: woo.tests.core
+   :parts: 3
+
+.. automodule:: woo.tests.core
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+_TestPyClass
+++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.tests.core._TestPyClass`
+
+.. graphviz::
+
+	digraph _TestPyClass {
+		rankdir=LR;
+		margin=.2;
+		"_TestPyClass" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.tests.html#woo.tests.core._TestPyClass"];
+		"_TestPyClass2" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.tests.html#woo.tests.core._TestPyClass"];
+		"_TestPyClass" -> "_TestPyClass2" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: _TestPyClass
+   :members:
+   :exclude-members: aF, aFF, aV2, aVV2, aNode, aNodeNone, aNNode, aF_trigger, postLoadCounter, deprecAttr, sChoice, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/tests/core.py <py/tests/core.py#L504>`]
+
+   .. attribute:: aF (= 1.0)
+
+      float attr
+
+      [type: float]
+
+   .. attribute:: aFF (= [0.0, 1.0, 2.0])
+
+      list of floats attr
+
+      [type: [float, …]]
+
+   .. attribute:: aV2 (= Vector2(0,1))
+
+      vector2 attr
+
+      [type: Vector2]
+
+   .. attribute:: aVV2 (= [Vector2(0,0), Vector2(1,1)])
+
+      list of vector2 attr
+
+      [type: [Vector2, …]]
+
+   .. attribute:: aNode (= <Node @ 0x2c6eb90, at (1,1,1)>)
+
+      node attr
+
+      [type: Node]
+
+   .. attribute:: aNodeNone (= None)
+
+      node attr, uninitialized
+
+      [type: Node]
+
+   .. attribute:: aNNode (= [<Node @ 0x2c65080, at (1,1,1)>, <Node @ 0x2abc1b0, at (2,2,2)>])
+
+      List of nodes
+
+      [type: [Node, …]]
+
+   .. attribute:: aF_trigger (= 1.0)
+
+      Float triggering postLoad, copying its value to aF
+
+      [type: float]
+
+   .. attribute:: postLoadCounter (= 0)
+
+      counter for postLoad (readonly). Incremented by 1 after construction, incremented by 10 when assigning to aF_trigger.
+
+      [type: int]
+
+   .. attribute:: deprecAttr (= -1)
+
+      deprecated, here should be the explanation.
+
+      [type: int, not shown in the UI, not dumped, **DEPRECATED**, raises ``ValueError`` when accessed]
+
+   .. attribute:: sChoice (= 'aa')
+
+      String choice attribute
+
+      [type: str, choices: aa, bb, cc]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+_TestPyClass2
+"""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.tests.core._TestPyClass` → :obj:`~woo.tests.core._TestPyClass2`
+
+.. autoclass:: _TestPyClass2
+   :members:
+   :exclude-members: f2, f2counter, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/tests/core.py <py/tests/core.py#L536>`]
+
+   .. attribute:: f2 (= 0)
+
+      Float attr in derived class
+
+      [type: int]
+
+   .. attribute:: f2counter (= 0)
+
+      Count how many times was f2 manipulated (to test triggerPostLoad in class with python parent)
+
+      [type: int]
+
+:mod:`woo.tests.clustering`
+----------------------------------------
+
+.. automodule:: woo.tests.clustering
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.clump`
+-----------------------------------
+
+.. automodule:: woo.tests.clump
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.io`
+--------------------------------
+
+.. automodule:: woo.tests.io
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.labels`
+------------------------------------
+
+.. automodule:: woo.tests.labels
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.pbc`
+---------------------------------
+
+.. automodule:: woo.tests.pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.energy`
+------------------------------------
+
+.. automodule:: woo.tests.energy
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.grid`
+----------------------------------
+
+.. automodule:: woo.tests.grid
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.psd`
+---------------------------------
+
+.. automodule:: woo.tests.psd
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+

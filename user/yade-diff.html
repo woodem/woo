@@ -1,0 +1,222 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Woo for seasoned Yade users &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorial" href="../tutorial/index.html" />
+    <link rel="prev" title="ShapePack" href="shapepack.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../tutorial/index.html" title="Tutorial"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="shapepack.html" title="ShapePack"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Woo for seasoned Yade users</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="woo-for-seasoned-yade-users">
+<h1>Woo for seasoned Yade users<a class="headerlink" href="#woo-for-seasoned-yade-users" title="Permalink to this headline">¶</a></h1>
+<p>Woo is an evolution of <a class="reference external" href="http://www.launchpad.net/yade">Yade</a> and inherits some of its code and much of its ideas. We attempt to list key differences, which should help you get started with Woo, if you already have a good experience with Yade.</p>
+<section id="code-differences">
+<h2>Code differences<a class="headerlink" href="#code-differences" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Woo is a python-importable module. You can do <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">woo</span></code> in any Python script.</p></li>
+<li><p>Written in <code class="docutils literal notranslate"><span class="pre">c++11</span></code>.</p></li>
+<li><p>Supports additional <a class="reference internal" href="running.html#fileformats"><span class="std std-ref">serialization formats</span></a>, some of them human-readable.</p></li>
+<li><p>Properly organized in python modules: <a class="reference internal" href="../woo.core.html#module-woo.core" title="woo.core"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core</span></code></a>, <a class="reference internal" href="../woo.dem.html#module-woo.dem" title="woo.dem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem</span></code></a> and so on.</p></li>
+<li><p>Python’s standard setuptools can be used to build Woo, both under Windows and Linux.</p></li>
+<li><p>Windows installer is provided (<a class="reference external" href="http://launchpad.net/woo/+download">http://launchpad.net/woo/+download</a>)</p></li>
+</ol>
+</section>
+<section id="simulation-differences">
+<h2>Simulation differences<a class="headerlink" href="#simulation-differences" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Many features in Yade are not newly implemented, such as contact models.</p></li>
+<li><p>Each particle is defined via <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code> (or several nodes), which can be shared among particles.</p></li>
+<li><p><a class="reference internal" href="../woo.dem.html#woo.dem.DemField" title="woo.dem.DemField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField</span></code></a> is only one of fields, which take part in the simulation; each <a class="reference internal" href="../woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Engine</span></code></a> can operate on several fields, if desired.</p></li>
+<li><p>Contacts define local coordinates (via contact node), and their geometry is handles uniformly.</p></li>
+<li><p>Unlimited number of <a class="reference internal" href="../woo.core.html#woo.core.Scene" title="woo.core.Scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene</span></code></a> objects, which can run in parallel. The one manipulated with the UI is always <code class="docutils literal notranslate"><span class="pre">woo.master.scene</span></code>.</p></li>
+</ol>
+</section>
+<section id="user-interface">
+<h2>User interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Rendering code is moved away from <a class="reference internal" href="../woo.gl.html#woo.gl.Renderer" title="woo.gl.Renderer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.Renderer</span></code></a> to appropriate functors.</p></li>
+<li><p>Nodes define <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.gl.NodeGlRep</span></code> for their own representation in OpenGL.</p></li>
+<li><p>Enhanced inspection and manipulation of objects through the UI – choices, bitfields, arrays, hiding attributes.</p></li>
+<li><p>Pure-python classes deriving from <a class="reference internal" href="../woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Object</span></code></a>, including user-iterface.</p></li>
+<li><p>Simulations (preprocessors) can define their custom UI for given problem.</p></li>
+</ol>
+</section>
+<section id="batch-processing">
+<h2>Batch processing<a class="headerlink" href="#batch-processing" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>XLS format supported at the input side.</p></li>
+<li><p>Results from each job can be saved to sqlite database, and are automatically converted to XLS file.</p></li>
+<li><p>Report-generation facilites.</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="sphinx-toc sphinxlocaltoc">
+    <h3><a href="../contents.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Woo for seasoned Yade users</a><ul>
+<li><a class="reference internal" href="#code-differences">Code differences</a></li>
+<li><a class="reference internal" href="#simulation-differences">Simulation differences</a></li>
+<li><a class="reference internal" href="#user-interface">User interface</a></li>
+<li><a class="reference internal" href="#batch-processing">Batch processing</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="shapepack.html"
+                          title="Previous page">&larr; ShapePack</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="../tutorial/index.html"
+                          title="Next page">&rarr; Tutorial</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user/yade-diff.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../tutorial/index.html" title="Tutorial"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="shapepack.html" title="ShapePack"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >User’s manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Woo for seasoned Yade users</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,34 @@
+:mod:`woo.pack`
+============================
+
+.. automodule:: woo.pack
+   :members:
+   :undoc-members:
+
+:mod:`woo._packPredicates`
+---------------------------------------
+
+.. note:: This module is imported into the :obj:`woo.pack` module automatically; refer to its objects through :obj:`woo.pack`.
+
+.. automodule:: woo._packPredicates
+   :members:
+   :undoc-members:
+
+:mod:`woo._packSpheres`
+------------------------------------
+
+.. note:: This module is imported into the :obj:`woo.pack` module automatically; refer to its objects through :obj:`woo.pack`.
+
+.. automodule:: woo._packSpheres
+   :members:
+   :undoc-members:
+
+:mod:`woo._packObb`
+--------------------------------
+
+.. note:: This module is imported into the :obj:`woo.pack` module automatically; refer to its objects through :obj:`woo.pack`.
+
+.. automodule:: woo._packObb
+   :members:
+   :undoc-members:
+

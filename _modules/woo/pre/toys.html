@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.pre.toys &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pre.toys</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.pre.toys</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">woo.core</span><span class="o">,</span> <span class="nn">woo.models</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+
+<span class="c1">#class PourFeliciter(woo.core.Preprocessor,woo.pyderived.PyWooObject):</span>
+<span class="c1">#    &#39;&#39;&#39;Showcase for custom packing predicates, and importing surfaces from STL.&#39;&#39;&#39;</span>
+<span class="c1">#    _classTraits=None</span>
+<span class="c1">#    _PAT=woo.pyderived.PyAttrTrait # less typing</span>
+<span class="c1">#    _attrTraits=[</span>
+<span class="c1">#    ]</span>
+<span class="c1">#    def __new__(klass,**kw):</span>
+<span class="c1">#        self=super().__new__(klass)</span>
+<span class="c1">#        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)</span>
+<span class="c1">#        return self</span>
+<span class="c1">#    def __init__(self,**kw):</span>
+<span class="c1">#        woo.core.Preprocessor.__init__(self)</span>
+<span class="c1">#        self.wooPyInit(PourFeliciter,woo.core.Preprocessor,**kw)</span>
+<span class="c1">#    def __call__(self):</span>
+<span class="c1">#        # preprocessor builds the simulation when called</span>
+<span class="c1">#        pass</span>
+
+<div class="viewcode-block" id="NewtonsCradle"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.toys.NewtonsCradle">[docs]</a><span class="k">class</span> <span class="nc">NewtonsCradle</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">pyderived</span><span class="o">.</span><span class="n">PyWooObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Showcase for custom packing predicates, and importing surfaces from STL.&#39;&#39;&#39;</span>
+    <span class="n">_classTraits</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">_PAT</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pyderived</span><span class="o">.</span><span class="n">PyAttrTrait</span> <span class="c1"># less typing</span>
+    <span class="n">_attrTraits</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;nSpheres&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Total number of spheres&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;nFall&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;The number of spheres which are out of the equilibrium position at the beginning.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;fallAngle&#39;</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;deg&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Initial angle of falling spheres.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;rad&#39;</span><span class="p">,</span><span class="o">.</span><span class="mi">005</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Radius of spheres&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">Vector2</span><span class="p">,</span><span class="s1">&#39;cabHtWd&#39;</span><span class="p">,(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">),</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Height and width of the suspension&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;cabRad&#39;</span><span class="p">,</span><span class="o">.</span><span class="mi">0005</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Radius of the suspending cables&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ContactModelSelector</span><span class="p">,</span><span class="s1">&#39;model&#39;</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ContactModelSelector</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Hertz&#39;</span><span class="p">,</span><span class="n">restitution</span><span class="o">=.</span><span class="mi">99</span><span class="p">,</span><span class="n">numMat</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">matDesc</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spheres&#39;</span><span class="p">,</span><span class="s1">&#39;cables&#39;</span><span class="p">],</span><span class="n">mats</span><span class="o">=</span><span class="p">[</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mf">3e3</span><span class="p">,</span><span class="n">young</span><span class="o">=</span><span class="mf">2e8</span><span class="p">),</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">density</span><span class="o">=.</span><span class="mi">001</span><span class="p">,</span><span class="n">young</span><span class="o">=</span><span class="mf">2e8</span><span class="p">)]),</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="n">Vector3</span><span class="p">,</span><span class="s1">&#39;gravity&#39;</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">9.81</span><span class="p">),</span><span class="s1">&#39;Gravity acceleration&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="s1">&#39;plotEvery&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;How often to collect plot data&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;dtSafety&#39;</span><span class="p">,</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;:obj:`woo.core.Scene.dtSafety`&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+<div class="viewcode-block" id="NewtonsCradle.__new__"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.toys.NewtonsCradle.__new__">[docs]</a>    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="n">NewtonsCradle</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wooPyInit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<div class="viewcode-block" id="NewtonsCradle.__call__"><a class="viewcode-back" href="../../../woo.pre.html#woo.pre.toys.NewtonsCradle.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pre</span><span class="o">=</span><span class="bp">self</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">gravity</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">gravity</span><span class="p">)],</span><span class="n">dtSafety</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtSafety</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">pre</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
+
+        <span class="c1"># preprocessor builds the simulation when called</span>
+        <span class="n">xx</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="n">pre</span><span class="o">.</span><span class="n">nSpheres</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pre</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">nSpheres</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cabMat</span><span class="o">=</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mats</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">else</span> <span class="n">mat</span><span class="p">)</span>
+        <span class="n">ht</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">cabHtWd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xx</span><span class="p">):</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="o">.</span><span class="mi">999</span><span class="p">,(</span><span class="n">x</span><span class="o">/</span><span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">&gt;=</span><span class="n">pre</span><span class="o">.</span><span class="n">nFall</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">ht</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">fallAngle</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">ht</span><span class="o">-</span><span class="n">ht</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">fallAngle</span><span class="p">)),</span><span class="n">radius</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">mat</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="c1"># sphere&#39;s node is integrated</span>
+            <span class="c1"># S.dem.nodesAppend(n)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Vector3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="n">pre</span><span class="o">.</span><span class="n">cabHtWd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">pre</span><span class="o">.</span><span class="n">cabHtWd</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">Vector3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">pre</span><span class="o">.</span><span class="n">cabHtWd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">pre</span><span class="o">.</span><span class="n">cabHtWd</span><span class="p">[</span><span class="mi">0</span><span class="p">])]:</span>
+                <span class="n">t</span><span class="o">=</span><span class="n">Truss</span><span class="o">.</span><span class="n">make</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">],</span><span class="n">radius</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">cabRad</span><span class="p">,</span><span class="n">wire</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">cabMat</span><span class="p">,</span><span class="n">fixed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">blocked</span><span class="o">=</span><span class="s1">&#39;xyzXYZ&#39;</span>
+                <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">model</span><span class="p">,</span><span class="n">dynDtPeriod</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">+</span><span class="p">[</span>
+            <span class="n">IntraForce</span><span class="p">([</span><span class="n">In2_Truss_ElastMat</span><span class="p">()]),</span>
+                <span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">PyRunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotEvery</span><span class="p">,</span><span class="s1">&#39;S.plot.addData(i=S.step,t=S.time,total=S.energy.total(),relErr=(S.energy.relErr() if S.step&gt;1000 else 0),**S.energy)&#39;</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">dynDt</span><span class="o">.</span><span class="n">maxRelInc</span><span class="o">=</span><span class="mf">1e-6</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">trackEnergy</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plots</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;i&#39;</span><span class="p">:(</span><span class="s1">&#39;total&#39;</span><span class="p">,</span><span class="s1">&#39;**S.energy&#39;</span><span class="p">)}</span>
+
+        <span class="k">return</span> <span class="n">S</span></div></div>
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.pre.toys</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

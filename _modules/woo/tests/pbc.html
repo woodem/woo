@@ -1,0 +1,339 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.tests.pbc &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.tests.pbc</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.tests.pbc</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="c1"># 2010 © Václav Šmilauer &lt;eudoxos@arcig.cz&gt;</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Various computations affected by the periodic boundary conditions.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">random</span><span class="o">,</span><span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">import</span> <span class="nn">woo</span>
+<span class="kn">from</span> <span class="nn">woo.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="TestPBC"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC">[docs]</a><span class="k">class</span> <span class="nc">TestPBC</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="c1"># prefix test names with PBC: </span>
+<div class="viewcode-block" id="TestPBC.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span><span class="p">;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">setBox</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellDist</span><span class="o">=</span><span class="n">Vector3i</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># how many cells away we go</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relDist</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">999999999999999999</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># rel position of the 2nd ball within the cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="o">.</span><span class="mi">5</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initPos</span><span class="o">=</span><span class="n">Vector3</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">relDist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">cellDist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize0</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initPos</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">Leapfrog</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">nextGradV</span><span class="o">=</span><span class="n">Matrix3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;vel2&#39;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mi">0</span> <span class="c1"># do not change positions with dt=0 in NewtonIntegrator, but still update velocities from velGrad</span></div>
+<div class="viewcode-block" id="TestPBC.testVelGrad"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testVelGrad">[docs]</a>    <span class="k">def</span> <span class="nf">testVelGrad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: velGrad changes hSize but not hSize0, accumulates in trsf (homoDeform=&#39;vel2&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;vel2&#39;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-3</span>
+        <span class="n">hSize</span><span class="p">,</span><span class="n">trsf</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="p">,</span><span class="n">Matrix3</span><span class="o">.</span><span class="n">Identity</span>
+        <span class="n">hSize0</span><span class="o">=</span><span class="n">hSize</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">hSize</span><span class="o">+=</span><span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">gradV</span><span class="o">*</span><span class="n">hSize</span><span class="p">;</span> <span class="n">trsf</span><span class="o">+=</span><span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">gradV</span><span class="o">*</span><span class="n">trsf</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">();</span>
+            <span class="c1">#print hSize, S.cell.hSize</span>
+            <span class="c1">#print trsf, S.cell.trsf</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">hSize</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">trsf</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+            <span class="c1"># ?? should work</span>
+            <span class="c1">#self.assertAlmostEqual(hSize0[i],S.cell.hSize0[i])</span>
+<div class="viewcode-block" id="TestPBC.testTrsfChange"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testTrsfChange">[docs]</a>    <span class="k">def</span> <span class="nf">testTrsfChange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;PBC: chaing trsf changes hSize0, but does not modify hSize&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-2</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span><span class="o">=</span><span class="n">Matrix3</span><span class="o">.</span><span class="n">Identity</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+<div class="viewcode-block" id="TestPBC.testDegenerate"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testDegenerate">[docs]</a>    <span class="k">def</span> <span class="nf">testDegenerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: degenerate cell raises exception&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span><span class="s1">&#39;hSize&#39;</span><span class="p">,</span><span class="n">Matrix3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span></div>
+<div class="viewcode-block" id="TestPBC.testSetBox"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testSetBox">[docs]</a>    <span class="k">def</span> <span class="nf">testSetBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: setBox modifies hSize correctly&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">setBox</span><span class="p">(</span><span class="mf">2.55</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">45</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">hSize</span><span class="o">==</span><span class="n">Matrix3</span><span class="p">(</span><span class="mf">2.55</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">45</span><span class="p">));</span></div>
+<div class="viewcode-block" id="TestPBC.testHomotheticResizeVel"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testHomotheticResizeVel">[docs]</a>    <span class="k">def</span> <span class="nf">testHomotheticResizeVel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: homothetic cell deformation adjusts particle velocity (homoDeform==&#39;vel&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-5</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;vel&#39;</span>
+        <span class="n">s1</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1">#print &#39;init&#39;,self.initPos,self.initVel</span>
+        <span class="c1">#print &#39;before&#39;,s1.pos,s1.vel</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="c1">#print &#39;after&#39;,s1.pos,s1.vel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">initPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">gradV</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span></div>
+<div class="viewcode-block" id="TestPBC.testHomotheticResizePos"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testHomotheticResizePos">[docs]</a>    <span class="k">def</span> <span class="nf">testHomotheticResizePos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: homothetic cell deformation adjusts particle position (homoDeform==&#39;pos&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;pos&#39;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">s1</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">initPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">initPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">gradV</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TestPBC.testL6GeomIncidentVelocity"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testL6GeomIncidentVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">testL6GeomIncidentVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: L6Geom incident velocity (homoDeform==&#39;gradV2&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;gradV2&#39;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">ForceResetter</span><span class="p">(),</span><span class="n">ContactLoop</span><span class="p">([</span><span class="n">Cg2_Sphere_Sphere_L6Geom</span><span class="p">()],[</span><span class="n">Cp2_FrictMat_FrictPhys</span><span class="p">()],[</span><span class="n">Law2_L6Geom_FrictPhys_IdealElPl</span><span class="p">(</span><span class="n">noBreak</span><span class="o">=</span><span class="kc">True</span><span class="p">)]),</span><span class="n">Leapfrog</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="n">i</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">createContacts</span><span class="p">([</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span> <span class="c1"># tiny timestep, to not move the normal too much</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span><span class="n">i</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">norm</span><span class="p">())</span></div>
+<div class="viewcode-block" id="TestPBC.testL3GeomIncidentVelocity_homoPos"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testL3GeomIncidentVelocity_homoPos">[docs]</a>    <span class="k">def</span> <span class="nf">testL3GeomIncidentVelocity_homoPos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: L6Geom incident velocity (homoDeform==&#39;pos&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;pos&#39;</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">ForceResetter</span><span class="p">(),</span><span class="n">ContactLoop</span><span class="p">([</span><span class="n">Cg2_Sphere_Sphere_L6Geom</span><span class="p">()],[</span><span class="n">Cp2_FrictMat_FrictPhys</span><span class="p">()],[</span><span class="n">Law2_L6Geom_FrictPhys_IdealElPl</span><span class="p">(</span><span class="n">noBreak</span><span class="o">=</span><span class="kc">True</span><span class="p">)]),</span><span class="n">Leapfrog</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="n">i</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">createContacts</span><span class="p">([</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span><span class="n">i</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">norm</span><span class="p">())</span></div>
+        <span class="c1">#self.assertAlmostEqual(self.relDist[1],1-i.geom.penetrationDepth)</span>
+<div class="viewcode-block" id="TestPBC.testKineticEnergy"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testKineticEnergy">[docs]</a>    <span class="k">def</span> <span class="nf">testKineticEnergy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: Particle.getEk considers only fluctuation velocity, not the velocity gradient (homoDeform==&#39;vel2&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;vel2&#39;</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span> <span class="c1"># updates velocity with homotheticCellResize</span>
+        <span class="c1"># ½(mv²+ωIω)</span>
+        <span class="c1"># #0 is still, no need to add it; #1 has zero angular velocity</span>
+        <span class="c1"># we must take self.initVel since S.dem.par[1].vel now contains the homothetic resize which utils.kineticEnergy is supposed to compensate back </span>
+        <span class="n">Ek</span><span class="o">=.</span><span class="mi">5</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="o">.</span><span class="n">squaredNorm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">Ek</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">getEk</span><span class="p">(</span><span class="n">trans</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">rot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">scene</span><span class="o">=</span><span class="n">S</span><span class="p">))</span></div>
+<div class="viewcode-block" id="TestPBC.testKineticEnergy_homoPos"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBC.testKineticEnergy_homoPos">[docs]</a>    <span class="k">def</span> <span class="nf">testKineticEnergy_homoPos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;PBC: Particle.Ekt considers only fluctuation velocity, not the velocity gradient (homoDeform==&#39;pos&#39;)&quot;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">homoDeform</span><span class="o">=</span><span class="s1">&#39;pos&#39;</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">initVel</span><span class="o">.</span><span class="n">squaredNorm</span><span class="p">(),</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Ekt</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="TestPBCCollisions"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions">[docs]</a><span class="k">class</span> <span class="nc">TestPBCCollisions</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestPBCCollisions.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">setBox</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">InsertionSortCollider</span><span class="p">([</span><span class="n">Bo1_Sphere_Aabb</span><span class="p">()])]</span></div>
+        <span class="c1">#self.cellDist=Vector3i(0,0,10) # how many cells away we go</span>
+        <span class="c1">#self.relDist=Vector3(0,.999999999999999999,0) # rel position of the 2nd ball within the cell</span>
+        <span class="c1">#self.initVel=Vector3(0,0,5)</span>
+        <span class="c1">#S.dem.par.add(utils.sphere((1,1,1),.5))</span>
+<div class="viewcode-block" id="TestPBCCollisions.testOverHalfContact"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions.testOverHalfContact">[docs]</a>    <span class="k">def</span> <span class="nf">testOverHalfContact</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;PBC: InsertionSortCollider handles particle spanning more than half cell-size&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">([</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">4</span><span class="p">),</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cellDist</span><span class="o">==</span><span class="n">Vector3i</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># move the first sphere elsewhere</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">loadTmp</span><span class="p">()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="o">+=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cellDist</span><span class="o">==</span><span class="n">Vector3i</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span></div>
+<div class="viewcode-block" id="TestPBCCollisions.testDoubleContact"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions.testDoubleContact">[docs]</a>    <span class="k">def</span> <span class="nf">testDoubleContact</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;PBC: InsertionSortCollider raises on double-contact of large particles accross the cell&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="c1"># 2*.4+2*.2=1.2, with contact on both sides</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">([</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">4</span><span class="p">),</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">)</span></div>
+        <span class="c1">#S.one()</span>
+        <span class="c1">#self.assertTrue(S.dem.con[0,1].cellDist==Vector3i(0,0,0))</span>
+<div class="viewcode-block" id="TestPBCCollisions.testNormalContact"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions.testNormalContact">[docs]</a>    <span class="k">def</span> <span class="nf">testNormalContact</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;PBC: InsertionSortCollider computes collisions and cellDist correctly&#39;</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="o">.</span><span class="n">add</span><span class="p">([</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">radius</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
+        <span class="c1"># move the second sphere elsewhere</span>
+        <span class="k">for</span> <span class="n">shift2</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">)]:</span>
+            <span class="n">S</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">loadTmp</span><span class="p">()</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="o">+=</span><span class="n">shift2</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">cellDist</span><span class="o">==-</span><span class="n">Vector3i</span><span class="p">(</span><span class="n">shift2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TestPBCCollisions.testCrossBoundarySort"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.pbc.TestPBCCollisions.testCrossBoundarySort">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">woo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">compiler</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span><span class="s1">&#39;THIS CRASHES WITH CLANG AND DEBUGGING, SKIPPING. SHOULD BE FIXED!!!&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">testCrossBoundarySort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s1">&#39;PBC: InsertionSortCollider correctly sorts on the boundary (bug #... discovered by Bruno)&#39;</span>
+        <span class="n">rr</span><span class="o">=</span><span class="mf">1e-6</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">(</span><span class="n">par</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="n">x</span><span class="o">+</span><span class="n">rr</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">rr</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">8</span><span class="p">)])],</span>
+            <span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Leapfrog</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">InsertionSortCollider</span><span class="p">([</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Bo1_Sphere_Aabb</span><span class="p">()],</span><span class="n">verletDist</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;coll&#39;</span><span class="p">,</span><span class="n">paraPeri</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">periodic</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">setBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="c1"># check initial bound for #1</span>
+        <span class="c1">#print(S.lab.coll.dumpBounds()[0])</span>
+        <span class="n">x0</span><span class="p">,</span><span class="n">sid</span><span class="p">,</span><span class="n">wrap</span><span class="p">,</span><span class="n">flags</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">coll</span><span class="o">.</span><span class="n">dumpBounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># signed ID, neg. for lower bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">wrap</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="c1"># move by one step</span>
+        <span class="n">s1</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">s1</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">53</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="c1"># check updated bound for #1</span>
+        <span class="c1">#print(S.lab.coll.dumpBounds()[0])</span>
+        <span class="n">x0</span><span class="p">,</span><span class="n">sid</span><span class="p">,</span><span class="n">wrap</span><span class="p">,</span><span class="n">_</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">coll</span><span class="o">.</span><span class="n">dumpBounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="o">.</span><span class="mi">03</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span> <span class="c1"># moved by this amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">wrap</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># moved by one period already</span>
+        <span class="c1"># check bounds are sorted correctly</span>
+        <span class="n">bb</span><span class="o">=</span><span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">coll</span><span class="o">.</span><span class="n">dumpBounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">bs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">bb</span><span class="p">,</span><span class="n">bs</span><span class="p">)</span></div></div>
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.tests.pbc</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

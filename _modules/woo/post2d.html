@@ -1,0 +1,486 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>woo.post2d &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../../_static/cloud.js"></script>
+    
+
+    <link rel="shortcut icon" href="../../_static/woo-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.post2d</a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for woo.post2d</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="c1"># 2009 © Václav Šmilauer &lt;eudoxos@arcig.cz&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for 2d postprocessing, containing classes to project points from 3d to 2d in various ways,</span>
+<span class="sd">providing basic but flexible framework for extracting arbitrary scalar values from particles/contacts</span>
+<span class="sd">and plotting the results. There are 2 basic components: flatteners and extractors.</span>
+
+<span class="sd">The algorithms operate on particles (default) or contacts, depending on the ``con`` parameter</span>
+<span class="sd">of post2d.data.</span>
+
+<span class="sd">Flatteners</span>
+<span class="sd">----------</span>
+<span class="sd">Instance of classes that convert 3d (model) coordinates to 2d (plot) coordinates. Their interface is</span>
+<span class="sd">defined by the :obj:`woo.post2d.Flatten` class (``__call__``, ``planar``, ``normal``).</span>
+
+<span class="sd">Extractors</span>
+<span class="sd">----------</span>
+<span class="sd">Callable objects returning scalar or vector value, given a body/interaction object.</span>
+<span class="sd">If a 3d vector is returned, Flattener.planar is called, which should return only in-plane</span>
+<span class="sd">components of the vector.</span>
+
+<span class="sd">Example</span>
+<span class="sd">-------</span>
+<span class="sd">This example can be found in examples/concrete/uniax-post.py ::</span>
+
+<span class="sd"> from woo import post2d</span>
+<span class="sd"> import pylab # the matlab-like interface of matplotlib</span>
+
+<span class="sd"> O.load(&#39;/tmp/uniax-tension.xml.bz2&#39;)</span>
+
+<span class="sd"> # flattener that project to the xz plane</span>
+<span class="sd"> flattener=post2d.AxisFlatten(useRef=False,axis=1)</span>
+<span class="sd"> # return scalar given a Body instance</span>
+<span class="sd"> extractDmg=lambda b: b.state.normDmg</span>
+<span class="sd"> # will call flattener.planar implicitly</span>
+<span class="sd"> # the same as: extractVelocity=lambda b: flattener.planar(b,b.state.vel)</span>
+<span class="sd"> extractVelocity=lambda b: b.state.vel</span>
+
+<span class="sd"> # create new figure</span>
+<span class="sd"> pylab.figure()</span>
+<span class="sd"> # plot raw damage</span>
+<span class="sd"> post2d.plot(post2d.data(extractDmg,flattener))</span>
+
+<span class="sd"> # plot smooth damage into new figure</span>
+<span class="sd"> pylab.figure(); ax,map=post2d.plot(post2d.data(extractDmg,flattener,stDev=2e-3))</span>
+<span class="sd"> # show color scale</span>
+<span class="sd"> pylab.colorbar(map,orientation=&#39;horizontal&#39;)</span>
+
+<span class="sd"> # raw velocity (vector field) plot</span>
+<span class="sd"> pylab.figure(); post2d.plot(post2d.data(extractVelocity,flattener))</span>
+
+<span class="sd"> # smooth velocity plot; data are sampled at regular grid</span>
+<span class="sd"> pylab.figure(); ax,map=post2d.plot(post2d.data(extractVelocity,flattener,stDev=1e-3))</span>
+<span class="sd"> # save last (current) figure to file</span>
+<span class="sd"> pylab.gcf().savefig(&#39;/tmp/foo.png&#39;) </span>
+
+<span class="sd"> # show the figures</span>
+<span class="sd"> pylab.show()</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="n">Particle</span><span class="p">,</span><span class="n">Sphere</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="n">nan</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Flatten"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.Flatten">[docs]</a><span class="k">class</span> <span class="nc">Flatten</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for converting 3d point into 2d. Used by post2d.data2d.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dispScale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dispScale</span><span class="o">=</span><span class="n">dispScale</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="s2">&quot;Given a :obj:`woo.dem.Particle` / :obj:`woo.dem.Contact` instance, should return either 2d coordinates as a 2-tuple, or None if the Body should be discarded.&quot;</span> 
+        <span class="k">pass</span>
+<div class="viewcode-block" id="Flatten.planar"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.Flatten.planar">[docs]</a>    <span class="k">def</span> <span class="nf">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="s2">&quot;Given position and vector value, project the vector value to the flat plane and return its 2 in-plane components.&quot;</span></div>
+<div class="viewcode-block" id="Flatten.normal"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.Flatten.normal">[docs]</a>    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="s2">&quot;Given position and vector value, return lenght of the vector normal to the flat plane.&quot;</span></div>
+<div class="viewcode-block" id="Flatten.scaledPos"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.Flatten.scaledPos">[docs]</a>    <span class="k">def</span> <span class="nf">scaledPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispScale</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">pos</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">refPos</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">dispScale</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pos</span><span class="o">-</span><span class="n">p</span><span class="o">.</span><span class="n">refPos</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="HelixFlatten"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.HelixFlatten">[docs]</a><span class="k">class</span> <span class="nc">HelixFlatten</span><span class="p">(</span><span class="n">Flatten</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class converting 3d point to 2d based on projection from helix.</span>
+<span class="sd">    The y-axis in the projection corresponds to the rotation axis&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">useRef</span><span class="p">,</span><span class="n">thetaRange</span><span class="p">,</span><span class="n">dH_dTheta</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">periodStart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">dispScale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param bool useRef:       use reference positions rather than actual positions</span>
+<span class="sd">        :param (θmin,θmax) thetaRange: particles outside this range will be discarded</span>
+<span class="sd">        :param float dH_dTheta:   inclination of the spiral (per radian)</span>
+<span class="sd">        :param {0,1,2} axis:      axis of rotation of the spiral</span>
+<span class="sd">        :param float periodStart: height of the spiral for zero angle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Flatten</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dispScale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">thetaRange</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dH_dTheta</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">periodStart</span><span class="o">=</span><span class="n">useRef</span><span class="p">,</span><span class="n">thetaRange</span><span class="p">,</span><span class="n">dH_dTheta</span><span class="p">,</span><span class="n">axis</span><span class="p">,</span><span class="n">periodStart</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="o">=</span><span class="p">(</span><span class="n">axis</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span><span class="p">,(</span><span class="n">axis</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span>
+    <span class="k">def</span> <span class="nf">_getPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">b</span><span class="o">.</span><span class="n">refPos</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaledPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">woo.utils</span>
+        <span class="n">xy</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spiralProject</span><span class="p">(</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">dH_dTheta</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">periodStart</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">theta</span><span class="o">&lt;</span><span class="n">thetaRange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">theta</span><span class="o">&gt;</span><span class="n">thetaRange</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">xy</span>
+<div class="viewcode-block" id="HelixFlatten.planar"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.HelixFlatten.planar">[docs]</a>    <span class="k">def</span> <span class="nf">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">pos</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pos</span><span class="o">.</span><span class="n">Dot</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span><span class="n">vec</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span></div>
+<div class="viewcode-block" id="HelixFlatten.normal"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.HelixFlatten.normal">[docs]</a>    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">pos</span><span class="o">=</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">circum</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">Cross</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span> <span class="n">circum</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">circum</span><span class="o">.</span><span class="n">Dot</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span></div></div>
+        
+
+<div class="viewcode-block" id="CylinderFlatten"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.CylinderFlatten">[docs]</a><span class="k">class</span> <span class="nc">CylinderFlatten</span><span class="p">(</span><span class="n">Flatten</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class for converting 3d point to 2d based on projection onto plane from circle.</span>
+<span class="sd">    The y-axis in the projection corresponds to the rotation axis; the x-axis is distance form the axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">useRef</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">dispScale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param useRef: (bool) use reference positions rather than actual positions</span>
+<span class="sd">        :param axis: axis of the cylinder, ∈{0,1,2}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;axis must be one of 0,1,2 (not </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="o">%</span><span class="n">axis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">=</span><span class="n">useRef</span><span class="p">,</span><span class="n">axis</span><span class="p">,</span><span class="n">Vector3</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+        <span class="n">Flatten</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dispScale</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_getPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">refPos</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaledPos</span><span class="p">(</span><span class="n">b</span><span class="p">))</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">pp</span><span class="o">=</span><span class="n">Vector2</span><span class="p">(</span><span class="n">p</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span><span class="p">],</span><span class="n">p</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">pp</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span><span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span>
+<div class="viewcode-block" id="CylinderFlatten.planar"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.CylinderFlatten.planar">[docs]</a>    <span class="k">def</span> <span class="nf">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">pos</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pos</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span><span class="n">vec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span></div>
+<div class="viewcode-block" id="CylinderFlatten.normal"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.CylinderFlatten.normal">[docs]</a>    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+        <span class="n">circum</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">circum</span><span class="o">.</span><span class="n">Dot</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AxisFlatten"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.AxisFlatten">[docs]</a><span class="k">class</span> <span class="nc">AxisFlatten</span><span class="p">(</span><span class="n">Flatten</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">useRef</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">swapAxes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">dispScale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param bool useRef: use reference positions rather than actual positions (only meaningful when operating on Particles)</span>
+<span class="sd">        :param {0,1,2}    axis: axis normal to the plane; the return value will be simply position with this component dropped.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;axis must be one of 0,1,2 (not </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="o">%</span><span class="n">axis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">=</span><span class="n">useRef</span><span class="p">,</span><span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span><span class="p">,(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span>
+        <span class="k">if</span> <span class="n">swapAxes</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax1</span>
+        <span class="n">Flatten</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dispScale</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_getPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="o">.</span><span class="n">refPos</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRef</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaledPos</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">Particle</span><span class="p">)</span> <span class="k">else</span> <span class="n">b</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getPos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ax1</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="p">])</span>
+<div class="viewcode-block" id="AxisFlatten.planar"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.AxisFlatten.planar">[docs]</a>    <span class="k">def</span> <span class="nf">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">vec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ax1</span><span class="p">],</span><span class="n">vec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ax2</span><span class="p">]</span></div>
+<div class="viewcode-block" id="AxisFlatten.normal"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.AxisFlatten.normal">[docs]</a>    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">vec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span></div></div>
+
+<div class="viewcode-block" id="LocalAxisFlatten"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.LocalAxisFlatten">[docs]</a><span class="k">class</span> <span class="nc">LocalAxisFlatten</span><span class="p">(</span><span class="n">AxisFlatten</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">ori</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">useRef</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">swapAxes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">dispScale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Like :obj:`AxisFlatten`, but transform the point to local coordinates first, using given position (Vector3) and orientation (Quaternion).&#39;&#39;&#39;</span>
+        <span class="n">AxisFlatten</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span><span class="n">useRef</span><span class="o">=</span><span class="n">useRef</span><span class="p">,</span><span class="n">swapAxes</span><span class="o">=</span><span class="n">swapAxes</span><span class="p">,</span><span class="n">dispScale</span><span class="o">=</span><span class="n">dispScale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">ori</span>
+    <span class="k">def</span> <span class="nf">_getPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">AxisFlatten</span><span class="o">.</span><span class="n">_getPos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">)</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<div class="viewcode-block" id="LocalAxisFlatten.planar"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.LocalAxisFlatten.planar">[docs]</a>    <span class="k">def</span> <span class="nf">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">AxisFlatten</span><span class="o">.</span><span class="n">planar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span></div>
+<div class="viewcode-block" id="LocalAxisFlatten.normal"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.LocalAxisFlatten.normal">[docs]</a>    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">AxisFlatten</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ori</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="data"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.data">[docs]</a><span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span><span class="n">extractor</span><span class="p">,</span><span class="n">flattener</span><span class="p">,</span><span class="n">con</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">onlyDynamic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">stDev</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">relThreshold</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">perArea</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">div</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span><span class="n">margin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter all particles/contacts, project them to 2d and extract required scalar value;</span>
+<span class="sd">    return either discrete array of positions and values, or smoothed data, depending on whether the stDev</span>
+<span class="sd">    value is specified.</span>
+
+<span class="sd">    The ``con`` parameter determines whether we operate on particles or contacts;</span>
+<span class="sd">    the extractor provided should expect to receive body/interaction.</span>
+
+<span class="sd">    :param callable extractor: receives :obj:`woo.dem.Particle` (or :obj:`woo.dem.Contact`, if ``con`` is ``True``) instance, should return scalar, a 2-tuple (vector fields) or None (to skip that body/interaction)</span>
+<span class="sd">    :param callable flattener: :obj:`woo.post2d.Flatten` instance, receiving body/interaction, returns its 2d coordinates or ``None`` (to skip that body/interaction)</span>
+<span class="sd">    :param bool con: operate on contacts rather than particles</span>
+<span class="sd">    :param bool onlyDynamic: skip all non-dynamic particles</span>
+<span class="sd">    :param float/None stDev: standard deviation for averaging, enables smoothing; ``None`` (default) means raw mode, where discrete points are returned</span>
+<span class="sd">    :param float relThreshold: threshold for the gaussian weight function relative to stDev (smooth mode only)</span>
+<span class="sd">    :param int perArea: if 1, compute weightedSum/weightedArea rather than weighted average (weightedSum/sumWeights); the first is useful to compute average stress; if 2, compute averages on subdivision elements, not using weight function</span>
+<span class="sd">    :param (int,int) div: number of cells for the gaussian grid (smooth mode only)</span>
+<span class="sd">    :param (float,float) margin: x,y margins around bounding box for data (smooth mode only)</span>
+<span class="sd">    :param float/callable radius: Fallback value for radius (for raw plotting) for non-spherical particles or contacts; if a callable, receives body/interaction and returns radius</span>
+<span class="sd">    :return: dictionary</span>
+<span class="sd">    </span>
+<span class="sd">    Returned dictionary always containing keys &#39;type&#39; (one of &#39;rawScalar&#39;,&#39;rawVector&#39;,&#39;smoothScalar&#39;,&#39;smoothVector&#39;, depending on value of smooth and on return value from extractor), &#39;x&#39;, &#39;y&#39;, &#39;bbox&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    Raw data further contains &#39;radii&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    Scalar fields contain &#39;val&#39; (value from *extractor*), vector fields have &#39;valX&#39; and &#39;valY&#39; (2 components returned by the *extractor*).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="n">Vector3</span>
+    <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="n">Sphere</span>
+    <span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">,</span><span class="n">dd1</span><span class="p">,</span><span class="n">dd2</span><span class="p">,</span><span class="n">rr</span><span class="o">=</span><span class="p">[],[],[],[],[]</span>
+    <span class="n">nDim</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">objects</span><span class="o">=</span><span class="n">scene</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span> <span class="k">if</span> <span class="n">con</span> <span class="k">else</span> <span class="n">scene</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">con</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">onlyDynamic</span> <span class="ow">and</span> <span class="n">b</span><span class="o">.</span><span class="n">blocked</span><span class="o">==</span><span class="s1">&#39;xyzXYZ&#39;</span><span class="p">)):</span> <span class="k">continue</span>
+        <span class="n">xy</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">flattener</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="n">extractor</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xy</span><span class="o">==</span><span class="kc">None</span> <span class="ow">or</span> <span class="n">d</span><span class="o">==</span><span class="kc">None</span> <span class="ow">or</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">d</span><span class="p">):</span> <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">nDim</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">nDim</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="nb">float</span><span class="p">)</span> <span class="k">else</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nDim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">dd1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">dd1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="n">dd2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="o">=</span><span class="n">flattener</span><span class="o">.</span><span class="n">planar</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">Vector3</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+            <span class="n">dd1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">);</span> <span class="n">dd2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Extractor must return float or 2 or 3 (not </span><span class="si">%d</span><span class="s2">) floats&quot;</span><span class="o">%</span><span class="n">nDim</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stDev</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="c1"># radii are needed in the raw mode exclusively</span>
+            <span class="k">if</span> <span class="n">nDim</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">d</span><span class="p">):</span> <span class="n">rr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nan</span><span class="p">)</span> <span class="c1"># add NaN if value was also invalid</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">con</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">Sphere</span><span class="p">):</span> <span class="n">r</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">radius</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">r</span><span class="o">=</span><span class="p">(</span><span class="n">radius</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="k">else</span> <span class="n">radius</span><span class="p">)</span>
+                <span class="n">rr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="n">xx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="n">yy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="n">stDev</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+        <span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">yy</span><span class="p">)),(</span><span class="nb">max</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">nDim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;rawScalar&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">xx</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">yy</span><span class="p">,</span><span class="s1">&#39;val&#39;</span><span class="p">:</span><span class="n">dd1</span><span class="p">,</span><span class="s1">&#39;radii&#39;</span><span class="p">:</span><span class="n">rr</span><span class="p">,</span><span class="s1">&#39;bbox&#39;</span><span class="p">:</span><span class="n">bbox</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;rawVector&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">xx</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">yy</span><span class="p">,</span><span class="s1">&#39;valX&#39;</span><span class="p">:</span><span class="n">dd1</span><span class="p">,</span><span class="s1">&#39;valY&#39;</span><span class="p">:</span><span class="n">dd2</span><span class="p">,</span><span class="s1">&#39;radii&#39;</span><span class="p">:</span><span class="n">rr</span><span class="p">,</span><span class="s1">&#39;bbox&#39;</span><span class="p">:</span><span class="n">bbox</span><span class="p">}</span>
+    
+    <span class="kn">from</span> <span class="nn">woo.WeightedAverage2d</span> <span class="k">import</span> <span class="n">GaussAverage</span>
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Nothing to plot (extractor did not return any values)&#39;</span><span class="p">)</span>
+    <span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="o">=</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">yy</span><span class="p">)),(</span><span class="nb">max</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span>
+    <span class="n">llo</span><span class="o">=</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">hhi</span><span class="o">=</span><span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ga</span><span class="o">=</span><span class="n">GaussAverage</span><span class="p">(</span><span class="n">llo</span><span class="p">,</span><span class="n">hhi</span><span class="p">,</span><span class="n">div</span><span class="p">,</span><span class="n">stDev</span><span class="p">,</span><span class="n">relThreshold</span><span class="p">)</span>
+    <span class="n">ga2</span><span class="o">=</span><span class="n">GaussAverage</span><span class="p">(</span><span class="n">llo</span><span class="p">,</span><span class="n">hhi</span><span class="p">,</span><span class="n">div</span><span class="p">,</span><span class="n">stDev</span><span class="p">,</span><span class="n">relThreshold</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">xx</span><span class="p">)):</span>
+        <span class="n">ga</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dd1</span><span class="p">[</span><span class="n">i</span><span class="p">],(</span><span class="n">xx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yy</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">nDim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span> <span class="n">ga2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dd2</span><span class="p">[</span><span class="n">i</span><span class="p">],(</span><span class="n">xx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yy</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">step</span><span class="o">=</span><span class="p">[(</span><span class="n">hhi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">llo</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">div</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">xxx</span><span class="p">,</span><span class="n">yyy</span><span class="o">=</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">llo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+.</span><span class="mi">5</span><span class="o">*</span><span class="n">step</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">hhi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">step</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">ddd</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">xxx</span><span class="p">)),</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">ddd2</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">xxx</span><span class="p">)),</span><span class="nb">float</span><span class="p">)</span>
+    <span class="c1"># set the type of average we are going to use</span>
+    <span class="k">if</span> <span class="n">perArea</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">compAvg</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">cellCoord</span><span class="p">):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">gauss</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="n">coord</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">perArea</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">compAvg</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">cellCoord</span><span class="p">):</span> <span class="k">return</span> <span class="n">gauss</span><span class="o">.</span><span class="n">avgPerUnitArea</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">perArea</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">compAvg</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">cellCoord</span><span class="p">):</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">gauss</span><span class="o">.</span><span class="n">cellSum</span><span class="p">(</span><span class="n">cellCoord</span><span class="p">);</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">s</span><span class="o">/</span><span class="n">gauss</span><span class="o">.</span><span class="n">cellArea</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="n">nan</span>
+    <span class="k">elif</span> <span class="n">perArea</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">compAvg</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">cellCoord</span><span class="p">):</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">gauss</span><span class="o">.</span><span class="n">cellSum</span><span class="p">(</span><span class="n">cellCoord</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="k">if</span> <span class="n">s</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="n">nan</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Invalid value of *perArea*, must be one of 0,1,2,3.&#39;</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="k">for</span> <span class="n">cx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">div</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">cy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">div</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">ddd</span><span class="p">[</span><span class="n">cy</span><span class="p">,</span><span class="n">cx</span><span class="p">]</span><span class="o">=</span><span class="n">compAvg</span><span class="p">(</span><span class="n">ga</span><span class="p">,(</span><span class="n">xxx</span><span class="p">[</span><span class="n">cx</span><span class="p">],</span><span class="n">yyy</span><span class="p">[</span><span class="n">cy</span><span class="p">]),(</span><span class="n">cx</span><span class="p">,</span><span class="n">cy</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">nDim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span> <span class="n">ddd2</span><span class="p">[</span><span class="n">cy</span><span class="p">,</span><span class="n">cx</span><span class="p">]</span><span class="o">=</span><span class="n">compAvg</span><span class="p">(</span><span class="n">ga2</span><span class="p">,(</span><span class="n">xxx</span><span class="p">[</span><span class="n">cx</span><span class="p">],</span><span class="n">yyy</span><span class="p">[</span><span class="n">cy</span><span class="p">]),(</span><span class="n">cx</span><span class="p">,</span><span class="n">cy</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">nDim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;smoothScalar&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">xxx</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">yyy</span><span class="p">,</span><span class="s1">&#39;val&#39;</span><span class="p">:</span><span class="n">ddd</span><span class="p">,</span><span class="s1">&#39;bbox&#39;</span><span class="p">:(</span><span class="n">llo</span><span class="p">,</span><span class="n">hhi</span><span class="p">),</span><span class="s1">&#39;perArea&#39;</span><span class="p">:</span><span class="n">perArea</span><span class="p">,</span><span class="s1">&#39;grid&#39;</span><span class="p">:</span><span class="n">ga</span><span class="p">}</span> 
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;smoothVector&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">xxx</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">yyy</span><span class="p">,</span><span class="s1">&#39;valX&#39;</span><span class="p">:</span><span class="n">ddd</span><span class="p">,</span><span class="s1">&#39;valY&#39;</span><span class="p">:</span><span class="n">ddd2</span><span class="p">,</span><span class="s1">&#39;bbox&#39;</span><span class="p">:(</span><span class="n">llo</span><span class="p">,</span><span class="n">hhi</span><span class="p">),</span><span class="s1">&#39;grid&#39;</span><span class="p">:</span><span class="n">ga</span><span class="p">,</span><span class="s1">&#39;grid2&#39;</span><span class="p">:</span><span class="n">ga2</span><span class="p">}</span></div>
+    
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../woo.post2d.html#woo.post2d.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">clabel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">rawVecColorRadius</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given output from post2d.data, plot the scalar as discrete or smooth plot.</span>
+
+<span class="sd">    For raw discrete data, plot filled circles with radii of particles, colored by the scalar value.</span>
+
+<span class="sd">    For smooth discrete data, plot image with optional contours and contour labels.</span>
+
+<span class="sd">    For vector data (raw or smooth), plot quiver (vector field), with arrows colored by the magnitude.</span>
+
+<span class="sd">    :param axes: matplotlib.axes instance where the figure will be plotted; if None, will be created from scratch.</span>
+<span class="sd">    :param data: value returned by :obj:`woo.post2d.data`</span>
+<span class="sd">    :param bool clabel: show contour labels (smooth mode only), or annotate cells with numbers inside (with perArea==2)</span>
+<span class="sd">    :param bool cbar: show colorbar (equivalent to calling pylab.colorbar(mappable) on the returned mappable)</span>
+<span class="sd">    :param rawVecColorRadius: if True, use radius associated with each point to color arrows in raw quiver plot.</span>
+<span class="sd">    :param bbox: if given, use this as axes limits instead of bbox computed from data points</span>
+<span class="sd">    :param clip_path: clip plotted image maps, contour lines or patches with this clip path (should be an instance of ``matplotlib.patches.Patch``). </span>
+
+<span class="sd">    :return: tuple of ``(axes,mappable)``; mappable can be used in further calls to pylab.colorbar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.figure</span><span class="o">,</span> <span class="nn">math</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">axes</span><span class="p">:</span>
+        <span class="c1"># see http://stackoverflow.com/a/18261110/761090 </span>
+        <span class="n">fig</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+        <span class="n">axes</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># this is to make sure the </span>
+        <span class="c1">#canvas=matplotlib.backends.backend_agg.FigureCanvasAgg(fig)</span>
+        <span class="c1">#import matplotlib.figure, matplotlib.backends.backend_agg</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;rawScalar&#39;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Circle</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.collections</span><span class="o">,</span><span class="nn">numpy</span>
+        <span class="n">patches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;radii&#39;</span><span class="p">]):</span>
+            <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Circle</span><span class="p">(</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">r</span><span class="p">))</span>
+        <span class="n">coll</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PatchCollection</span><span class="p">(</span><span class="n">patches</span><span class="p">,</span><span class="n">linewidths</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="n">coll</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]))</span>
+        <span class="c1"># if clip_path: coll.set_clip_path(clip_path)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">coll</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bbox</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bb</span><span class="o">=</span><span class="n">coll</span><span class="o">.</span><span class="n">get_datalim</span><span class="p">(</span><span class="n">coll</span><span class="o">.</span><span class="n">get_transform</span><span class="p">())</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cbar</span><span class="p">:</span> <span class="n">axes</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">coll</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">axes</span><span class="p">,</span><span class="n">coll</span>
+    <span class="k">elif</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;smoothScalar&#39;</span><span class="p">:</span>
+        <span class="c1"># for imshow - do not depend on axes limits (if passed as the bbox param)</span>
+        <span class="n">imgExtent</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> 
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bbox</span><span class="p">:</span> <span class="n">bbox</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;perArea&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">img</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">],</span><span class="n">extent</span><span class="o">=</span><span class="n">imgExtent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="n">ct</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">],</span><span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+            <span class="c1">#if clip_path and 0:</span>
+            <span class="c1">#    img.set_clip_path(clip_path)</span>
+            <span class="c1">#    # XXX: does not work</span>
+            <span class="c1">#    # http://matplotlib.1069221.n5.nabble.com/Clipping-Contours-td39474.html</span>
+            <span class="c1">#    # for coll in ct.collections: coll.set_clip_path(clip_path)</span>
+            <span class="k">if</span> <span class="n">clabel</span><span class="p">:</span> <span class="n">axes</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="n">inline</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">],</span><span class="n">extent</span><span class="o">=</span><span class="n">imgExtent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="c1"># if clip_path: img.set_clip_path(clip_path)</span>
+            <span class="n">xStep</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">valLine</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">valLine</span><span class="p">):</span> <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="o">-.</span><span class="mi">4</span><span class="o">*</span><span class="n">xStep</span><span class="p">,</span><span class="n">y</span><span class="p">,(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">%5g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">val</span><span class="p">),</span><span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">update_datalim</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cbar</span><span class="p">:</span> <span class="n">axes</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;perArea&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span><span class="p">);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">axes</span><span class="p">,</span><span class="n">img</span>
+    <span class="k">elif</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;rawVector&#39;</span><span class="p">,</span><span class="s1">&#39;smoothVector&#39;</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">numpy</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bbox</span><span class="p">:</span> <span class="n">bbox</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+        <span class="n">valX</span><span class="p">,</span><span class="n">valY</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;valX&#39;</span><span class="p">]),</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;valY&#39;</span><span class="p">])</span> <span class="c1"># rawVector data are plain python lists</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;rawVector&#39;</span> <span class="ow">and</span> <span class="n">rawVecColorRadius</span><span class="p">:</span> <span class="n">scalars</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;radii&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">scalars</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">valX</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">valY</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># use vector magnitudes</span>
+        <span class="c1"># numpy.sqrt computes element-wise sqrt</span>
+        <span class="n">quiv</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;valX&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;valY&#39;</span><span class="p">],</span><span class="n">scalars</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="c1"># if clip_path: quiv.set_clip_path(clip_path)</span>
+        <span class="c1">#axes.update_datalim(bbox)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cbar</span><span class="p">:</span> <span class="n">axes</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">coll</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">);</span> <span class="n">axes</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">axes</span><span class="p">,</span><span class="n">quiv</span></div>
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">woo.post2d</a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
