@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Linear (Cundall) contact model &#8212; Woo 1.0+rev1-git-d15a706 documentation</title>
+    <title>Linear (Cundall) contact model &#8212; Woo 1.0+rev1-git-0cba429 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -61,7 +61,7 @@
         <li class="right" >
           <a href="index.html" title="DEM contact models"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-0cba429 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
@@ -143,7 +143,7 @@
 <span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">S1</span><span class="o">.</span><span class="n">one</span><span class="p">();</span> <span class="n">c</span><span class="o">=</span><span class="n">S1</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># one step to create contact</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">contA</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">phys</span><span class="o">.</span><span class="n">kn</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.0995</span><span class="p">,</span><span class="mf">0.1995</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">1350254.7221732636</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">1346396.8515384828</span><span class="p">)</span>
 
 <span class="c1"># recompute by hand to check:</span>
 <span class="n">Woo</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="o">=</span><span class="n">r1</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">r2</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">;</span> <span class="n">A</span><span class="o">=</span><span class="n">pi</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
@@ -169,7 +169,7 @@
 <span class="n">Woo</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">S2</span><span class="o">.</span><span class="n">one</span><span class="p">();</span> <span class="n">c</span><span class="o">=</span><span class="n">S2</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># one step to create contact</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">contA</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">phys</span><span class="o">.</span><span class="n">kn</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.0995</span><span class="p">,</span><span class="mf">0.0995</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">2368034.663509894</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span> <span class="mf">0.031415926535897934</span><span class="p">,</span> <span class="mf">2356194.4901923453</span><span class="p">)</span>
 
 <span class="c1"># hand-computation</span>
 <span class="n">Woo</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">r</span><span class="o">+</span><span class="n">uN</span><span class="o">/</span><span class="mf">2.</span><span class="p">;</span> <span class="n">A</span><span class="o">=</span><span class="n">pi</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
@@ -349,7 +349,7 @@
         <li class="right" >
           <a href="index.html" title="DEM contact models"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-d15a706 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-0cba429 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>
