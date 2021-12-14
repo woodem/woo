@@ -33,6 +33,7 @@ struct Cg2_Any_Any_L6Geom__Base: public CGeomFunctor{
 	#define woo_dem_Cg2_Any_Any_L6Geom__Base__CLASS_BASE_DOC_ATTRS \
 		Cg2_Any_Any_L6Geom__Base,CGeomFunctor,"Common base for L6Geom-computing functors such as :obj:`Cg2_Sphere_Sphere_L6Geom`, holding common approximation flags.", \
 		((bool,noRatch,false,,"FIXME: document what it really does.")) \
+		((bool,iniLensTouch,true,,"Set :obj:`L6Geom.lens` to touch distance (e.g. radii sum for spheres). If *false*, :obj:`L6Geom.lens` is set to the initial contact distance (which is less than the touch distance, with overlap subtracted); this implies path-dependent :obj:`L6Geom.lens` and unpredictable stiffness. Do not set to *false* unless you know what you are doing.")) \
 		((int,trsfRenorm,100,,"How often to renormalize :obj:`trsf <L6Geom.trsf>`; if non-positive, never renormalized (simulation might be unstable)")) \
 		((int,approxMask,0,AttrTrait<>().range(Vector2i(0,15)),"Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled.\n\n" \
 		"== ===============================================================\n" \
