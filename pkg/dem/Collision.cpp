@@ -173,7 +173,7 @@ void AabbCollider::setVerletDist(Scene* scene, DemField* dem){
 	for(const shared_ptr<Engine>& e: scene->engines){
 		if(!e->isA<Inlet>()) continue;
 		Real dMin=e->cast<Inlet>().minMaxDiam()[0];
-		LOG_WARN("{}: dMin={}",e->pyStr(),dMin);
+		// LOG_WARN("{}: dMin={}",e->pyStr(),dMin);
 		if(!isnan(dMin)) minR=min(.5*dMin,minR);
 	}
 	if(!isinf(minR)) verletDist=abs(verletDist)*minR;
