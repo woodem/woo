@@ -91,10 +91,42 @@ This table will run 6 simulations. The **title** column is optional; if not give
 
 .. note:: Simulation title can be used as basis for output files. In particular, Windows systems don't allow many characters in filenames, which can lead to errors. Therefore, specifying the **title** column without dangerous characters is always advisable under Windows.
 
+
+Enhanced table syntax
+""""""""""""""""""""""
+
+For ease of use, there are some special syntax rules when reading the table:
+
+.. image:: fig/batch-xls-headings.png
+
+* one preprocessor value can span multiple columns, indicated with ``...`` (three dots) or ``…`` (unicode ellipsis character) in the column heading. In the example above, the gravity value spans 7 columns, which makes it easy to compute relevant values in excel. These columns will be concatenated and evaluated as Python expression.
+* empty cells (or cells containing ``=``, as shown in ``E3``) will assume the value of the first (valid, i.e. uncommented) cell above; it is an error to have empty cell (or ``=``) in the first valid line.
+* ``#`` starts comment and the rest of the line is ignored; this can be used not only for comments, but also for settings aside a part of the spreadsheet where calculations can be done.
+* cell styling (colors, fonts) are ignored, thus can be used to make the table visually easier to read.
+
+======== ============
+title    gravity
+======== ============
+normal   (0,0,-9.81)
+high     (0,0,-20)
+sideways (0,-10,0)
+low      (0,0,-5)
+diagonal (-5,-5,0)
+======== ============
+
+Special column names
+"""""""""""""""""""""
+
+Special column names start with ``!`` and will not be passed to the preprocessor. Recognized special values are:
+
+* ``!THREADS`` (or ``!OMP_NUM_THREADS``) which will set the number of threads/cores to use for parallel computation; this will override any value set with ``--job-threads`` when launching the batch.
+* ``!TIME`` will set maximum execution time; this is used with the :src:`scripts/woo-slurm.py` script template which submits batch jobs to SLURM (batch scheduling system on HPC clusters).
+
+
 Generated table
 """""""""""""""
 
-If a batcvh is to be run for all possible combinations of input parameters, use :obj:`woo.batch.cartProdParamTable` to generate the table, intead of writing it by hand.
+If a batch is to be run for all possible combinations of input parameters, use :obj:`woo.batch.cartProdParamTable` to generate the table, intead of writing it by hand.
 
 Launching the batch
 --------------------

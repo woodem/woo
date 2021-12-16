@@ -5,45 +5,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.demfield`
---------------------------------------
-
-.. automodule:: woo.tests.demfield
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.clustering`
+:mod:`woo.tests.volumetric`
 ----------------------------------------
 
-.. automodule:: woo.tests.clustering
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.hertz`
------------------------------------
-
-.. automodule:: woo.tests.hertz
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.clump`
------------------------------------
-
-.. automodule:: woo.tests.clump
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.pbc`
----------------------------------
-
-.. automodule:: woo.tests.pbc
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.ellipsoid`
----------------------------------------
-
-.. automodule:: woo.tests.ellipsoid
+.. automodule:: woo.tests.volumetric
    :members:
    :undoc-members:
 
@@ -54,13 +19,6 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.batch`
------------------------------------
-
-.. automodule:: woo.tests.batch
-   :members:
-   :undoc-members:
-
 :mod:`woo.tests.grid`
 ----------------------------------
 
@@ -68,10 +26,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.psd`
----------------------------------
+:mod:`woo.tests.demfield`
+--------------------------------------
 
-.. automodule:: woo.tests.psd
+.. automodule:: woo.tests.demfield
    :members:
    :undoc-members:
 
@@ -140,7 +98,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x3a18920, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x32f6990, at (1,1,1)>)
 
       node attr
 
@@ -152,7 +110,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x3dd12c0, at (1,1,1)>, <Node @ 0x3a14430, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x3338ca0, at (1,1,1)>, <Node @ 0x2f6d2d0, at (2,2,2)>])
 
       List of nodes
 
@@ -214,10 +172,66 @@ _TestPyClass2
 
       [type: int]
 
+:mod:`woo.tests.clustering`
+----------------------------------------
+
+.. automodule:: woo.tests.clustering
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.clump`
+-----------------------------------
+
+.. automodule:: woo.tests.clump
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.labels`
+------------------------------------
+
+.. automodule:: woo.tests.labels
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.pbc`
+---------------------------------
+
+.. automodule:: woo.tests.pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.batch`
+-----------------------------------
+
+.. automodule:: woo.tests.batch
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.psd`
+---------------------------------
+
+.. automodule:: woo.tests.psd
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.shapepack`
 ---------------------------------------
 
 .. automodule:: woo.tests.shapepack
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.hertz`
+-----------------------------------
+
+.. automodule:: woo.tests.hertz
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
@@ -238,18 +252,10 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.labels`
-------------------------------------
+:mod:`woo.tests.ellipsoid`
+---------------------------------------
 
-.. automodule:: woo.tests.labels
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.volumetric`
-----------------------------------------
-
-.. automodule:: woo.tests.volumetric
+.. automodule:: woo.tests.ellipsoid
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass

@@ -5,6 +5,145 @@
    :members:
    :undoc-members:
 
+:mod:`woo.pre.triax`
+---------------------------------
+
+.. inheritance-diagram:: woo.pre.triax
+   :parts: 3
+
+.. automodule:: woo.pre.triax
+   :members:
+   :undoc-members:
+   :exclude-members: TriaxTest
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+TriaxTest
++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.triax.TriaxTest`
+
+.. autoclass:: TriaxTest
+   :members:
+   :exclude-members: preCooked, sigIso, maxRates, stopStrain, planeStrain, shape, iniSize, generator, model, reportFmt, saveFmt, dtSafety, maxUnbalanced, cylDiv, massFactor, rateStep, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/triax.py <py/pre/triax.py#L14>`]
+
+   .. rubric:: ► Predefined config
+
+   .. attribute:: preCooked (= '')
+
+      Apply pre-cooked configuration (i.e. change other parameters); this option is not saved.
+
+      [type: str, not dumped, choices: , Spheres in cylinder, Capsules in cylinder, Ellipsoids in box, Sphere clumps in box]
+
+   .. rubric:: ► General
+
+   .. attribute:: sigIso (= -500000.0)
+
+      Confining stress (isotropic during compaction)
+
+      [type: float, unit: Pa, preferred unit: kPa]
+
+   .. attribute:: maxRates (= Vector3(0.2,0.2,1))
+
+      Maximum strain rate during the compaction phase (for all directions), during the triaxial phase in axial sense, and during the triaxial phase in radial sense(s).
+
+      [type: Vector3]
+
+   .. attribute:: stopStrain (= -0.3)
+
+      Goal value of axial deformation in the triaxial phase
+
+      [type: float, unit: -, preferred unit: %]
+
+   .. attribute:: planeStrain (= False)
+
+      (For demonstration purposes only:) during the triaxial phase, prescribe zero displacement along :math:`x` and stress-control only :math:`y`-axis.
+
+      [type: bool]
+
+   .. attribute:: shape (= 'cell')
+
+      Shape of the volume being compressed; *cell* is rectangular periodic cell, *box* is rectangular :obj:`~woo.dem.Wall`-delimited box, *cylinder* is triangulated cylinder aligned with the :math:`z`-axis
+
+      [type: str, choices: cell, box, cylinder]
+
+   .. attribute:: iniSize (= Vector3(0.3,0.3,0.6))
+
+      Initial size of the volume; when :obj:`shape` is ``cylinder``, the second (:math:`y`) dimension is ignored.
+
+      [type: Vector3, unit: m]
+
+   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x2513d00>)
+
+      Particle generator; partices are then randomly placed in the volume.
+
+      [type: ParticleGenerator]
+
+   .. attribute:: model (= <ContactModelSelector @ 139720575375776 (py)>)
+
+      Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).
+
+      [type: ContactModelSelector]
+
+   .. rubric:: ► Outputs
+
+   .. attribute:: reportFmt (= '/tmp/{tid}.xhtml')
+
+      Report output format; :obj:`Scene.tags <woo.core.Scene.tags>` can be used.
+
+      [type: str]
+
+   .. attribute:: saveFmt (= '/tmp/{tid}-{stage}.bin.gz')
+
+      Savefile format; keys are :obj:`Scene.tags <woo.core.Scene.tags>`; additionally ``{stage}`` will be replaced by
+      * ``init`` for stress-free but compact cloud,
+      * ``iso`` after isotropic compaction,
+      * ``backup-011234`` for regular backups, see :obj:`backupSaveTime`, 'done' at the very end.
+      
+
+      [type: str]
+
+   .. rubric:: ► Tunables
+
+   .. attribute:: dtSafety (= 0.7)
+
+      See :obj:`woo.core.Scene.dtSafety`.
+
+      [type: float]
+
+   .. attribute:: maxUnbalanced (= 0.1)
+
+      Maximum unbalanced force at the end of compaction
+
+      [type: float]
+
+   .. attribute:: cylDiv (= 40)
+
+      Number of segments to approximate the cylinder with.
+
+      [type: int]
+
+   .. attribute:: massFactor (= 0.2)
+
+      Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter
+
+      [type: float]
+
+   .. attribute:: rateStep (= 0.01)
+
+      Increase strain rate by this relative amount at the beginning of the triaxial phase, until the value given in :obj:`maxRates` is reached.
+
+      [type: float]
+
 :mod:`woo.pre.cylTriax`
 ------------------------------------
 
@@ -14,7 +153,7 @@
 .. automodule:: woo.pre.cylTriax
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest
+   :exclude-members: TriaxTest,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -76,7 +215,7 @@ CylTriaxTest
 
    .. rubric:: ► Materials
 
-   .. attribute:: model (= <ContactModelSelector @ 139961945793776 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139720575326704 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the membrane (the first material is used if there is no second one, but its friction is nevertheless reduced during the compaction phase to :obj:`suppTanPhi`).
 
@@ -160,248 +299,6 @@ CylTriaxTest
 
       [type: float]
 
-:mod:`woo.pre.ell2d`
----------------------------------
-
-.. inheritance-diagram:: woo.pre.ell2d
-   :parts: 3
-
-.. automodule:: woo.pre.ell2d
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  EllGroup
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-EllGroup
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.ell2d.EllGroup`
-
-.. autoclass:: EllGroup
-   :members:
-   :exclude-members: rRange, spheres, semiMinRelRnd, semiRelFixed, boxSize, vMax, model, exportFmt, vtkStep, vtkEllLev, ell2Step, dtSafety, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/ell2d.py <py/pre/ell2d.py#L17>`]
-
-   .. attribute:: rRange (= Vector2(0.02,0.04))
-
-      Range (minimum and maximum) for particle radius (greatest semi-axis); if both are the same, all particles will have the same radius.
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: spheres (= False)
-
-      Use spherical particles instead of elliptical
-
-      [type: bool]
-
-   .. attribute:: semiMinRelRnd (= 0.0)
-
-      Minimum semi-axis length relative to particle radius; minor semi-axes are randomly selected from (:obj:`semiMinRelRnd` … 1) × greatest semi-axis. If non-positive, :obj:`semiRelFixed` is used instead.
-
-      [type: float]
-
-   .. attribute:: semiRelFixed (= Vector3(1,0.5,0.5))
-
-      Fixed sizes of semi-axes relative (all elements should be ≤ 1). The :math:`z`-component is the out-of-plane size which only indirectly influences contact stiffnesses. This variable is only used if semi-axes are not assigned randomly (see :obj:`semiMinRelRnd`).
-
-      [type: Vector3]
-
-   .. attribute:: boxSize (= Vector2(2,2))
-
-      Size of the 2d domain in which particles move.
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: vMax (= 1.0)
-
-      Maximum initial velocity of particle; assigned randomly from 0 to this value; intial angular velocity of all particles is zero.
-
-      [type: float, unit: m/s]
-
-   .. attribute:: model (= <ContactModelSelector @ 139961946101296 (py)>)
-
-      Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).
-
-      [type: ContactModelSelector]
-
-   .. attribute:: exportFmt (= '/tmp/ell2d-{tid}-')
-
-      Prefix for saving :obj:`woo.dem.VtkExport` data, and :obj:`woo.pre.ell2d.ell2plot` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys.
-
-      [type: str, filename]
-
-   .. attribute:: vtkStep (= 0)
-
-      How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export.
-
-      [type: int]
-
-   .. attribute:: vtkEllLev (= 1)
-
-      Tesselation level of ellipsoids when expored as VTK meshes (see :obj:`woo.dem.VtkExport.ellLev`).
-
-      [type: int]
-
-   .. attribute:: ell2Step (= 0)
-
-      How often should :obj:`woo.pre.ell2d.ell2plot` run. If non-positive, never run that one.
-
-      [type: int]
-
-   .. attribute:: dtSafety (= 0.5)
-
-      Safety coefficient for critical timestep; should be smaller than one.
-
-      [type: float]
-
-:mod:`woo.pre.triax`
----------------------------------
-
-.. inheritance-diagram:: woo.pre.triax
-   :parts: 3
-
-.. automodule:: woo.pre.triax
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  EllGroup,  TriaxTest
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-TriaxTest
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.triax.TriaxTest`
-
-.. autoclass:: TriaxTest
-   :members:
-   :exclude-members: preCooked, sigIso, maxRates, stopStrain, planeStrain, shape, iniSize, generator, model, reportFmt, saveFmt, dtSafety, maxUnbalanced, cylDiv, massFactor, rateStep, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/triax.py <py/pre/triax.py#L14>`]
-
-   .. rubric:: ► Predefined config
-
-   .. attribute:: preCooked (= '')
-
-      Apply pre-cooked configuration (i.e. change other parameters); this option is not saved.
-
-      [type: str, not dumped, choices: , Spheres in cylinder, Capsules in cylinder, Ellipsoids in box, Sphere clumps in box]
-
-   .. rubric:: ► General
-
-   .. attribute:: sigIso (= -500000.0)
-
-      Confining stress (isotropic during compaction)
-
-      [type: float, unit: Pa, preferred unit: kPa]
-
-   .. attribute:: maxRates (= Vector3(0.2,0.2,1))
-
-      Maximum strain rate during the compaction phase (for all directions), during the triaxial phase in axial sense, and during the triaxial phase in radial sense(s).
-
-      [type: Vector3]
-
-   .. attribute:: stopStrain (= -0.3)
-
-      Goal value of axial deformation in the triaxial phase
-
-      [type: float, unit: -, preferred unit: %]
-
-   .. attribute:: planeStrain (= False)
-
-      (For demonstration purposes only:) during the triaxial phase, prescribe zero displacement along :math:`x` and stress-control only :math:`y`-axis.
-
-      [type: bool]
-
-   .. attribute:: shape (= 'cell')
-
-      Shape of the volume being compressed; *cell* is rectangular periodic cell, *box* is rectangular :obj:`~woo.dem.Wall`-delimited box, *cylinder* is triangulated cylinder aligned with the :math:`z`-axis
-
-      [type: str, choices: cell, box, cylinder]
-
-   .. attribute:: iniSize (= Vector3(0.3,0.3,0.6))
-
-      Initial size of the volume; when :obj:`shape` is ``cylinder``, the second (:math:`y`) dimension is ignored.
-
-      [type: Vector3, unit: m]
-
-   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x388c910>)
-
-      Particle generator; partices are then randomly placed in the volume.
-
-      [type: ParticleGenerator]
-
-   .. attribute:: model (= <ContactModelSelector @ 139961945355824 (py)>)
-
-      Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).
-
-      [type: ContactModelSelector]
-
-   .. rubric:: ► Outputs
-
-   .. attribute:: reportFmt (= '/tmp/{tid}.xhtml')
-
-      Report output format; :obj:`Scene.tags <woo.core.Scene.tags>` can be used.
-
-      [type: str]
-
-   .. attribute:: saveFmt (= '/tmp/{tid}-{stage}.bin.gz')
-
-      Savefile format; keys are :obj:`Scene.tags <woo.core.Scene.tags>`; additionally ``{stage}`` will be replaced by
-      * ``init`` for stress-free but compact cloud,
-      * ``iso`` after isotropic compaction,
-      * ``backup-011234`` for regular backups, see :obj:`backupSaveTime`, 'done' at the very end.
-      
-
-      [type: str]
-
-   .. rubric:: ► Tunables
-
-   .. attribute:: dtSafety (= 0.7)
-
-      See :obj:`woo.core.Scene.dtSafety`.
-
-      [type: float]
-
-   .. attribute:: maxUnbalanced (= 0.1)
-
-      Maximum unbalanced force at the end of compaction
-
-      [type: float]
-
-   .. attribute:: cylDiv (= 40)
-
-      Number of segments to approximate the cylinder with.
-
-      [type: int]
-
-   .. attribute:: massFactor (= 0.2)
-
-      Multiply real mass of particles by this number to obtain the :obj:`woo.dem.WeirdTriaxControl.mass` control parameter
-
-      [type: float]
-
-   .. attribute:: rateStep (= 0.01)
-
-      Increase strain rate by this relative amount at the beginning of the triaxial phase, until the value given in :obj:`maxRates` is reached.
-
-      [type: float]
-
 :mod:`woo.pre.psdrender`
 -------------------------------------
 
@@ -411,7 +308,7 @@ TriaxTest
 .. automodule:: woo.pre.psdrender
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  PsdRender,  EllGroup,  TriaxTest
+   :exclude-members: PsdRender,  TriaxTest,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -445,7 +342,7 @@ PsdRender
 
       [type: float]
 
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x3e213c0>)
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x2857500>)
 
       Particle generator
 
@@ -487,7 +384,7 @@ PsdRender
 
       [type: float]
 
-   .. attribute:: model (= <ContactModelSelector @ 139961945413008 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139720575424848 (py)>)
 
       Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
 
@@ -529,6 +426,97 @@ PsdRender
 
       [type: bool]
 
+:mod:`woo.pre.toys`
+--------------------------------
+
+.. inheritance-diagram:: woo.pre.toys
+   :parts: 3
+
+.. automodule:: woo.pre.toys
+   :members:
+   :undoc-members:
+   :exclude-members: NewtonsCradle,  PsdRender,  TriaxTest,  CylTriaxTest
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+NewtonsCradle
++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+
+.. autoclass:: NewtonsCradle
+   :members:
+   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+
+   .. attribute:: nSpheres (= 5)
+
+      Total number of spheres
+
+      [type: int]
+
+   .. attribute:: nFall (= 1)
+
+      The number of spheres which are out of the equilibrium position at the beginning.
+
+      [type: int]
+
+   .. attribute:: fallAngle (= 0.7853981633974483)
+
+      Initial angle of falling spheres.
+
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: rad (= 0.005)
+
+      Radius of spheres
+
+      [type: float, unit: m]
+
+   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
+
+      Height and width of the suspension
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: cabRad (= 0.0005)
+
+      Radius of the suspending cables
+
+      [type: float, unit: m]
+
+   .. attribute:: model (= <ContactModelSelector @ 139720575425248 (py)>)
+
+      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
+
+      [type: ContactModelSelector]
+
+   .. attribute:: gravity (= Vector3(0,0,-9.81))
+
+      Gravity acceleration
+
+      [type: Vector3]
+
+   .. attribute:: plotEvery (= 10)
+
+      How often to collect plot data
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
 :mod:`woo.pre.horse`
 ---------------------------------
 
@@ -538,7 +526,7 @@ PsdRender
 .. automodule:: woo.pre.horse
    :members:
    :undoc-members:
-   :exclude-members: TriaxTest,  CylTriaxTest,  EllGroup,  PsdRender,  FallingHorse
+   :exclude-members: CylTriaxTest,  NewtonsCradle,  FallingHorse,  TriaxTest,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -604,7 +592,7 @@ FallingHorse
 
       [type: str, choices: hexa, ortho]
 
-   .. attribute:: model (= <ContactModelSelector @ 139961945733616 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139720575279808 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).
 
@@ -670,16 +658,16 @@ FallingHorse
 
       [type: bool]
 
-:mod:`woo.pre.toys`
---------------------------------
+:mod:`woo.pre.ell2d`
+---------------------------------
 
-.. inheritance-diagram:: woo.pre.toys
+.. inheritance-diagram:: woo.pre.ell2d
    :parts: 3
 
-.. automodule:: woo.pre.toys
+.. automodule:: woo.pre.ell2d
    :members:
    :undoc-members:
-   :exclude-members: TriaxTest,  CylTriaxTest,  NewtonsCradle,  EllGroup,  PsdRender,  FallingHorse
+   :exclude-members: CylTriaxTest,  EllGroup,  NewtonsCradle,  FallingHorse,  TriaxTest,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -687,77 +675,89 @@ FallingHorse
 
 .. rst-class:: emphasized
 
-NewtonsCradle
-+++++++++++++
+EllGroup
+++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.ell2d.EllGroup`
 
-.. autoclass:: NewtonsCradle
+.. autoclass:: EllGroup
    :members:
-   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :exclude-members: rRange, spheres, semiMinRelRnd, semiRelFixed, boxSize, vMax, model, exportFmt, vtkStep, vtkEllLev, ell2Step, dtSafety, __init__, __getstate__, __setstate__
    :special-members:
 
 
-   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+   [:woosrc:`py/pre/ell2d.py <py/pre/ell2d.py#L17>`]
 
-   .. attribute:: nSpheres (= 5)
+   .. attribute:: rRange (= Vector2(0.02,0.04))
 
-      Total number of spheres
-
-      [type: int]
-
-   .. attribute:: nFall (= 1)
-
-      The number of spheres which are out of the equilibrium position at the beginning.
-
-      [type: int]
-
-   .. attribute:: fallAngle (= 0.7853981633974483)
-
-      Initial angle of falling spheres.
-
-      [type: float, unit: rad, preferred unit: deg]
-
-   .. attribute:: rad (= 0.005)
-
-      Radius of spheres
-
-      [type: float, unit: m]
-
-   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
-
-      Height and width of the suspension
+      Range (minimum and maximum) for particle radius (greatest semi-axis); if both are the same, all particles will have the same radius.
 
       [type: Vector2, unit: m]
 
-   .. attribute:: cabRad (= 0.0005)
+   .. attribute:: spheres (= False)
 
-      Radius of the suspending cables
+      Use spherical particles instead of elliptical
 
-      [type: float, unit: m]
+      [type: bool]
 
-   .. attribute:: model (= <ContactModelSelector @ 139961945413328 (py)>)
+   .. attribute:: semiMinRelRnd (= 0.0)
 
-      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
+      Minimum semi-axis length relative to particle radius; minor semi-axes are randomly selected from (:obj:`semiMinRelRnd` … 1) × greatest semi-axis. If non-positive, :obj:`semiRelFixed` is used instead.
 
-      [type: ContactModelSelector]
+      [type: float]
 
-   .. attribute:: gravity (= Vector3(0,0,-9.81))
+   .. attribute:: semiRelFixed (= Vector3(1,0.5,0.5))
 
-      Gravity acceleration
+      Fixed sizes of semi-axes relative (all elements should be ≤ 1). The :math:`z`-component is the out-of-plane size which only indirectly influences contact stiffnesses. This variable is only used if semi-axes are not assigned randomly (see :obj:`semiMinRelRnd`).
 
       [type: Vector3]
 
-   .. attribute:: plotEvery (= 10)
+   .. attribute:: boxSize (= Vector2(2,2))
 
-      How often to collect plot data
+      Size of the 2d domain in which particles move.
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: vMax (= 1.0)
+
+      Maximum initial velocity of particle; assigned randomly from 0 to this value; intial angular velocity of all particles is zero.
+
+      [type: float, unit: m/s]
+
+   .. attribute:: model (= <ContactModelSelector @ 139720575328144 (py)>)
+
+      Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).
+
+      [type: ContactModelSelector]
+
+   .. attribute:: exportFmt (= '/tmp/ell2d-{tid}-')
+
+      Prefix for saving :obj:`woo.dem.VtkExport` data, and :obj:`woo.pre.ell2d.ell2plot` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys.
+
+      [type: str, filename]
+
+   .. attribute:: vtkStep (= 0)
+
+      How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export.
 
       [type: int]
 
-   .. attribute:: dtSafety (= 0.7)
+   .. attribute:: vtkEllLev (= 1)
 
-      :obj:`woo.core.Scene.dtSafety`
+      Tesselation level of ellipsoids when expored as VTK meshes (see :obj:`woo.dem.VtkExport.ellLev`).
+
+      [type: int]
+
+   .. attribute:: ell2Step (= 0)
+
+      How often should :obj:`woo.pre.ell2d.ell2plot` run. If non-positive, never run that one.
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.5)
+
+      Safety coefficient for critical timestep; should be smaller than one.
 
       [type: float]
 
@@ -770,7 +770,7 @@ NewtonsCradle
 .. automodule:: woo.pre.chute
    :members:
    :undoc-members:
-   :exclude-members: DissipChute,  TriaxTest,  CylTriaxTest,  NewtonsCradle,  EllGroup,  PsdRender,  FallingHorse
+   :exclude-members: CylTriaxTest,  EllGroup,  NewtonsCradle,  FallingHorse,  TriaxTest,  DissipChute,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -816,13 +816,13 @@ DissipChute
 
       [type: float, unit: rad, preferred unit: deg]
 
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x3bc4c70>)
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x2ceb1a0>)
 
       Particle generator, placed above the chute
 
       [type: ParticleGenerator]
 
-   .. attribute:: model (= <ContactModelSelector @ 139961945411728 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139720575423488 (py)>)
 
       Contact model
 
