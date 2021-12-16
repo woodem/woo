@@ -1,0 +1,70 @@
+#!/some/path/to/python3
+#!! PUT_FULL_PATH_TO_PYTHON_INTERPRETER_HERE !!
+#
+# Example script for submitting batch (param table + preprocessor) to Slurm.
+#
+
+import logging
+import woo.batch
+import sys
+import os
+import prettytable
+import tempfile
+import subprocess
+import argparse
+logging.basicConfig(level=logging.INFO)
+try:
+    import coloredlogs
+    coloredlogs.install(level='INFO',fmt='%(asctime)s %(name)-8s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',datefmt='%H:%M:%S')
+except ImportError: pass
+log=logging.getLogger('woo-slurm')
+
+parser=argparse.ArgumentParser('Submit WooDEM batch to SLURM')
+parser.add_argument('table',help='Parameter table (XLS or CSV); each line specifies one simulation from preprocessor with parameter modified accordingly.',metavar='TABLE.[xls|csv]')
+parser.add_argument('preprocessor',help='Preprocessor for simulations.',metavar='PREPROCESSOR')
+args=parser.parse_args(sys.argv[1:])
+
+table,preprocessor=args.table,args.preprocessor
+# makes sure preprocessor exists and that preprocessor and table were not swapped on the command-line
+pre=woo.core.Object.load(preprocessor)
+if not os.path.exists(preprocessor): raise RuntimeError(f'Preprocessor file {preprocessor} does not exist.')
+reader=woo.batch.TableParamReader(table)
+params=reader.paramDict()
+allLines=list(params.keys())
+tab=prettytable.PrettyTable(border=True,vrules=prettytable.NONE,hrules=prettytable.HEADER)
+tab.field_names=['LINE']+list(params[list(params.keys())[0]].keys())
+for k,v in params.items():
+    tab.add_row([k]+list(params[k].values()))
+log.info(f'Parameter table {table} has {len(params)} entries:\n'+tab.get_string())
+log.info(f'Parameters will be applied on preprocessor {preprocessor}')
+mypath=os.getcwd()
+for line in allLines:
+    threads,timelimit=None,None
+    if '!OMP_NUM_THREADS' in params[line]: threads=int(params[line]['!OMP_NUM_THREADS'])
+    elif '!THREADS' in params[line]: threads=int(params[line]['!THREADS'])
+    if '!TIME' in params[line]: timelimit=params[line]['!TIME']
+    if threads is None:
+        log.warning(f'Line {line}: no threads (!THREADS column) specified, using 4.')
+        threads=4
+    if timelimit is None:
+        log.warning(f'Line {line}: no timelimit (!TIME column) specified, using 3:00:00 (3 hours)')
+        timelimit='3:00:00'
+    script=f'''#!/bin/bash
+echo 'Hello, job script running'
+source ~/woo-prepare # loads modules, sets up the virtual env.
+cd {mypath}
+export PYTHONIOENCODING=utf_8
+woo -xn --threads={threads} --batch-table={table} --batch-line={line} --batch-results={table}.{line}.hdf5 {preprocessor}
+'''
+    log.debug('This is the job script:\n'+script)
+    tmp=tempfile.NamedTemporaryFile('w',delete=False)
+    tmp.write(script)
+    tmpName=tmp.name
+    tmp.close()
+    os.chmod(tmpName,0o744)
+    out=f'{table}.{line}.out'
+    cmd=['sbatch',f'--job-name={table}.{line}','--ntasks=1',f'--cpus-per-task={threads}',f'--time={timelimit}',f'--error={out}',f'--output={out}',tmpName]
+    log.info(f'Invoking: {" ".join(cmd)}')
+    subprocess.call(cmd)
+    os.remove(tmpName)
+
