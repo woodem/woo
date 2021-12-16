@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo._monkey &#8212; Woo 1.0+rev1-git-19c947b documentation</title>
+    <title>woo._monkey &#8212; Woo 1.0+rev1-git-2733374 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="woo._gts.html" title="woo._gts"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-19c947b documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a></li> 
@@ -80,6 +80,49 @@ This approach is called <a class="reference external" href="http://en.wikipedia.
 <p>This module is imported automatically by Woo at startup and should not be used directly.</p>
 <section id="module-woo._monkey.compat">
 <span id="woo-monkey-compat"></span><h2><a class="reference internal" href="#module-woo._monkey.compat" title="woo._monkey.compat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.compat</span></code></a><a class="headerlink" href="#module-woo._monkey.compat" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-woo._monkey.extraDocs">
+<span id="woo-monkey-extradocs"></span><h2><a class="reference internal" href="#module-woo._monkey.extraDocs" title="woo._monkey.extraDocs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.extraDocs</span></code></a><a class="headerlink" href="#module-woo._monkey.extraDocs" title="Permalink to this headline">¶</a></h2>
+<p>Update docstrings which are not practical to be written in the c++ source code, such as <a class="reference internal" href="woo.dem.html#woo.dem.Cg2_Sphere_Sphere_L6Geom" title="woo.dem.Cg2_Sphere_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cg2_Sphere_Sphere_L6Geom</span></code></a>.</p>
+<p>Don’t forget to
+#. provide at least brief description of the class in the c++ code (for those who read the c++ code it);
+#. write something like <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">documentation</span> <span class="pre">of</span> <span class="pre">this</span> <span class="pre">class</span> <span class="pre">is</span> <span class="pre">in</span> <span class="pre">py/_monkey/extraDocs.py.</span></code></p>
+<p>Set the new docstring like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">MyCoolClass</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1"> Complicated documentation.</span>
+<span class="s1"> &#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The c++ documentation will be overwritten by the new docstring.</p>
+</div>
+</section>
+<section id="module-woo._monkey.aliases">
+<span id="woo-monkey-aliases"></span><h2><a class="reference internal" href="#module-woo._monkey.aliases" title="woo._monkey.aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.aliases</span></code></a><a class="headerlink" href="#module-woo._monkey.aliases" title="Permalink to this headline">¶</a></h2>
+<p>Define various convenience attributes, such as <code class="docutils literal notranslate"><span class="pre">Node.dem</span></code> for accessing DEM data of a node (equivalent to <code class="docutils literal notranslate"><span class="pre">node-&gt;getData&lt;DemData&gt;()</span></code> in c++).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo._monkey.aliases.LabelMapperProxy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">LabelMapperProxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#LabelMapperProxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.LabelMapperProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for attribute-like access to <a class="reference internal" href="woo.core.html#woo.core.LabelMapper" title="woo.core.LabelMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.LabelMapper</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._monkey.aliases.Scene_lab">
+<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">Scene_lab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#Scene_lab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.Scene_lab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._monkey.aliases.deprecWrapper">
+<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">deprecWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_oldName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_newName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_newFunc</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#deprecWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.deprecWrapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._monkey.aliases.injectDeprecated">
+<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">injectDeprecated</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#injectDeprecated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.injectDeprecated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inject decprecated classes into woo modules as needed.</p>
+</dd></dl>
+
 </section>
 <section id="module-woo._monkey.io">
 <span id="woo-monkey-io"></span><h2><a class="reference internal" href="#module-woo._monkey.io" title="woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a><a class="headerlink" href="#module-woo._monkey.io" title="Permalink to this headline">¶</a></h2>
@@ -342,49 +385,6 @@ implement default like this:</p>
 </dd></dl>
 
 </section>
-<section id="module-woo._monkey.extraDocs">
-<span id="woo-monkey-extradocs"></span><h2><a class="reference internal" href="#module-woo._monkey.extraDocs" title="woo._monkey.extraDocs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.extraDocs</span></code></a><a class="headerlink" href="#module-woo._monkey.extraDocs" title="Permalink to this headline">¶</a></h2>
-<p>Update docstrings which are not practical to be written in the c++ source code, such as <a class="reference internal" href="woo.dem.html#woo.dem.Cg2_Sphere_Sphere_L6Geom" title="woo.dem.Cg2_Sphere_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cg2_Sphere_Sphere_L6Geom</span></code></a>.</p>
-<p>Don’t forget to
-#. provide at least brief description of the class in the c++ code (for those who read the c++ code it);
-#. write something like <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">documentation</span> <span class="pre">of</span> <span class="pre">this</span> <span class="pre">class</span> <span class="pre">is</span> <span class="pre">in</span> <span class="pre">py/_monkey/extraDocs.py.</span></code></p>
-<p>Set the new docstring like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">MyCoolClass</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1"> Complicated documentation.</span>
-<span class="s1"> &#39;&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The c++ documentation will be overwritten by the new docstring.</p>
-</div>
-</section>
-<section id="module-woo._monkey.aliases">
-<span id="woo-monkey-aliases"></span><h2><a class="reference internal" href="#module-woo._monkey.aliases" title="woo._monkey.aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.aliases</span></code></a><a class="headerlink" href="#module-woo._monkey.aliases" title="Permalink to this headline">¶</a></h2>
-<p>Define various convenience attributes, such as <code class="docutils literal notranslate"><span class="pre">Node.dem</span></code> for accessing DEM data of a node (equivalent to <code class="docutils literal notranslate"><span class="pre">node-&gt;getData&lt;DemData&gt;()</span></code> in c++).</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo._monkey.aliases.LabelMapperProxy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">LabelMapperProxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#LabelMapperProxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.LabelMapperProxy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Proxy for attribute-like access to <a class="reference internal" href="woo.core.html#woo.core.LabelMapper" title="woo.core.LabelMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.LabelMapper</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="woo._monkey.aliases.Scene_lab">
-<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">Scene_lab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#Scene_lab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.Scene_lab" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="woo._monkey.aliases.deprecWrapper">
-<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">deprecWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_oldName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_newName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_newFunc</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#deprecWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.deprecWrapper" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="woo._monkey.aliases.injectDeprecated">
-<span class="sig-prename descclassname"><span class="pre">woo._monkey.aliases.</span></span><span class="sig-name descname"><span class="pre">injectDeprecated</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/aliases.html#injectDeprecated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.aliases.injectDeprecated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inject decprecated classes into woo modules as needed.</p>
-</dd></dl>
-
-</section>
 <section id="module-woo._monkey.gts">
 <span id="woo-monkey-gts"></span><h2><a class="reference internal" href="#module-woo._monkey.gts" title="woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a><a class="headerlink" href="#module-woo._monkey.gts" title="Permalink to this headline">¶</a></h2>
 <p>This module reimplements the gts.read function in python, since it is stragenly broken under windows, and replaces the original one by monkey-patching.</p>
@@ -420,9 +420,9 @@ efficient, but works reliably under Windows.</p>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a><ul>
 <li><a class="reference internal" href="#module-woo._monkey.compat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.compat</span></code></a></li>
-<li><a class="reference internal" href="#module-woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.extraDocs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.extraDocs</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.aliases</span></code></a></li>
+<li><a class="reference internal" href="#module-woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a></li>
 </ul>
 </li>
@@ -494,7 +494,7 @@ efficient, but works reliably under Windows.</p>
         <li class="right" >
           <a href="woo._gts.html" title="woo._gts"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-19c947b documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a></li> 

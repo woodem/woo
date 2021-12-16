@@ -5,6 +5,333 @@
    :members:
    :undoc-members:
 
+:mod:`woo.pre.psdrender`
+-------------------------------------
+
+.. inheritance-diagram:: woo.pre.psdrender
+   :parts: 3
+
+.. automodule:: woo.pre.psdrender
+   :members:
+   :undoc-members:
+   :exclude-members: PsdRender
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+PsdRender
++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.psdrender.PsdRender`
+
+.. autoclass:: PsdRender
+   :members:
+   :exclude-members: size, sizeExtraRel, gen, relHt, gravity, porosity, stepPeriod, dtSafety, maxUnbalanced, model, povEnable, camPos, out, imgDim, povLights, saveShapePack, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/psdrender.py <py/pre/psdrender.py#L12>`]
+
+   .. attribute:: size (= Vector2(0.2,0.3))
+
+      Region to be rendered (the particle area will be larger by :obj:`sizeExtraRel`
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: sizeExtraRel (= 0.2)
+
+      Enlarge particle area by this much, relative to size.
+
+      [type: float]
+
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x25275a0>)
+
+      Particle generator
+
+      [type: ParticleGenerator]
+
+   .. attribute:: relHt (= 2.0)
+
+      Bed height relative to largest particle diameter (computed via mass, supposing porosity of :obj:`porosity`)
+
+      [type: float]
+
+   .. attribute:: gravity (= Vector3(0,0,-9.81))
+
+      Gravity acceleration.
+
+      [type: Vector3]
+
+   .. attribute:: porosity (= 0.4)
+
+      Approximate porosity to convert bed height (:obj:`relHt`) to mass; it will not influence porosity itself, which is given almost exclusively geometrically.
+
+      [type: float]
+
+   .. attribute:: stepPeriod (= 200)
+
+      Periodicity for the factory.
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      Safety factor for timestep.
+
+      [type: float]
+
+   .. attribute:: maxUnbalanced (= 0.5)
+
+      Unbalanced force/energy to wait for before declared settled.
+
+      [type: float]
+
+   .. attribute:: model (= <ContactModelSelector @ 140648168761600 (py)>)
+
+      Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
+
+      [type: ContactModelSelector]
+
+   .. attribute:: povEnable (= True)
+
+      Enable POV-Ray export.
+
+      [type: bool]
+
+   .. attribute:: camPos (= Vector3(0,0,0.5))
+
+      Camera position; x, y components determine offset from bed normal; z is height above the highest particle center.
+
+      [type: Vector3]
+
+   .. attribute:: out (= '/tmp/{tid}')
+
+      Prefix for outputs (:obj:`woo.core.Scene.tags` are expanded).
+
+      [type: str]
+
+   .. attribute:: imgDim (= 2000)
+
+      Larger image dimension when the scene is rendered; the scene can be re-rendered by calling POV-Ray by hand anytime with arbitrary resolution.
+
+      [type: int]
+
+   .. attribute:: povLights (= '// light_source{<-8,-20,30> color rgb .75}\n        // light_source{<25,-12,12> color rgb .44}\n        light_source{<-.5,-.5,10> color White area_light <1,0,0>,<0,1,0>, 5, 5 adaptive 1 jitter }\n        ')
+
+      Default light specifications for POV-Ray
+
+      [type: str]
+
+   .. attribute:: saveShapePack (= True)
+
+      Create a .shapepack file with particle geometries.
+
+      [type: bool]
+
+:mod:`woo.pre.toys`
+--------------------------------
+
+.. inheritance-diagram:: woo.pre.toys
+   :parts: 3
+
+.. automodule:: woo.pre.toys
+   :members:
+   :undoc-members:
+   :exclude-members: NewtonsCradle,  PsdRender
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+NewtonsCradle
++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+
+.. autoclass:: NewtonsCradle
+   :members:
+   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+
+   .. attribute:: nSpheres (= 5)
+
+      Total number of spheres
+
+      [type: int]
+
+   .. attribute:: nFall (= 1)
+
+      The number of spheres which are out of the equilibrium position at the beginning.
+
+      [type: int]
+
+   .. attribute:: fallAngle (= 0.7853981633974483)
+
+      Initial angle of falling spheres.
+
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: rad (= 0.005)
+
+      Radius of spheres
+
+      [type: float, unit: m]
+
+   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
+
+      Height and width of the suspension
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: cabRad (= 0.0005)
+
+      Radius of the suspending cables
+
+      [type: float, unit: m]
+
+   .. attribute:: model (= <ContactModelSelector @ 140648168762000 (py)>)
+
+      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
+
+      [type: ContactModelSelector]
+
+   .. attribute:: gravity (= Vector3(0,0,-9.81))
+
+      Gravity acceleration
+
+      [type: Vector3]
+
+   .. attribute:: plotEvery (= 10)
+
+      How often to collect plot data
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
+:mod:`woo.pre.chute`
+---------------------------------
+
+.. inheritance-diagram:: woo.pre.chute
+   :parts: 3
+
+.. automodule:: woo.pre.chute
+   :members:
+   :undoc-members:
+   :exclude-members: NewtonsCradle,  DissipChute,  PsdRender
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+DissipChute
++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.chute.DissipChute`
+
+.. autoclass:: DissipChute
+   :members:
+   :exclude-members: dim, finNum, finLen, finSlope, gen, model, feedRate, feedTime, stopTime, vtkStep, vtkOut, dtSafety, saveDone, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/chute.py <py/pre/chute.py#L6>`]
+
+   .. attribute:: dim (= Vector3(0.2,0.2,2))
+
+      Chute dimensions: width, depth, height
+
+      [type: Vector3, unit: m]
+
+   .. attribute:: finNum (= 5)
+
+      Number of fins protruding from the sides (alternating from left/right
+
+      [type: int]
+
+   .. attribute:: finLen (= 0.15)
+
+      Length of fins
+
+      [type: float, unit: m]
+
+   .. attribute:: finSlope (= 0.5235987755982988)
+
+      Slope of fins (positive downwards).
+
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x299eae0>)
+
+      Particle generator, placed above the chute
+
+      [type: ParticleGenerator]
+
+   .. attribute:: model (= <ContactModelSelector @ 140648168760160 (py)>)
+
+      Contact model
+
+      [type: ContactModelSelector]
+
+   .. attribute:: feedRate (= 5.0)
+
+      Feed mass rate
+
+      [type: float, unit: kg/s]
+
+   .. attribute:: feedTime (= 0.5)
+
+      Time for which the feed is activated
+
+      [type: float, unit: s]
+
+   .. attribute:: stopTime (= 2.0)
+
+      Time when to stop the simulation
+
+      [type: float, unit: s]
+
+   .. attribute:: vtkStep (= 400)
+
+      Interval to run VTK export
+
+      [type: int]
+
+   .. attribute:: vtkOut (= '/tmp/{tid}')
+
+      Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.
+
+      [type: str]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
+   .. attribute:: saveDone (= '')
+
+      File to same simulation at the end; not saved if empty.
+
+      [type: str]
+
 :mod:`woo.pre.triax`
 ---------------------------------
 
@@ -14,7 +341,7 @@
 .. automodule:: woo.pre.triax
    :members:
    :undoc-members:
-   :exclude-members: TriaxTest
+   :exclude-members: NewtonsCradle,  DissipChute,  TriaxTest,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -82,13 +409,13 @@ TriaxTest
 
       [type: Vector3, unit: m]
 
-   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x2513d00>)
+   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x21c9970>)
 
       Particle generator; partices are then randomly placed in the volume.
 
       [type: ParticleGenerator]
 
-   .. attribute:: model (= <ContactModelSelector @ 139720575375776 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140648168712448 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).
 
@@ -153,7 +480,7 @@ TriaxTest
 .. automodule:: woo.pre.cylTriax
    :members:
    :undoc-members:
-   :exclude-members: TriaxTest,  CylTriaxTest
+   :exclude-members: NewtonsCradle,  TriaxTest,  CylTriaxTest,  DissipChute,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -215,7 +542,7 @@ CylTriaxTest
 
    .. rubric:: ► Materials
 
-   .. attribute:: model (= <ContactModelSelector @ 139720575326704 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140648168651248 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the membrane (the first material is used if there is no second one, but its friction is nevertheless reduced during the compaction phase to :obj:`suppTanPhi`).
 
@@ -299,224 +626,6 @@ CylTriaxTest
 
       [type: float]
 
-:mod:`woo.pre.psdrender`
--------------------------------------
-
-.. inheritance-diagram:: woo.pre.psdrender
-   :parts: 3
-
-.. automodule:: woo.pre.psdrender
-   :members:
-   :undoc-members:
-   :exclude-members: PsdRender,  TriaxTest,  CylTriaxTest
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-PsdRender
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.psdrender.PsdRender`
-
-.. autoclass:: PsdRender
-   :members:
-   :exclude-members: size, sizeExtraRel, gen, relHt, gravity, porosity, stepPeriod, dtSafety, maxUnbalanced, model, povEnable, camPos, out, imgDim, povLights, saveShapePack, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/psdrender.py <py/pre/psdrender.py#L12>`]
-
-   .. attribute:: size (= Vector2(0.2,0.3))
-
-      Region to be rendered (the particle area will be larger by :obj:`sizeExtraRel`
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: sizeExtraRel (= 0.2)
-
-      Enlarge particle area by this much, relative to size.
-
-      [type: float]
-
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x2857500>)
-
-      Particle generator
-
-      [type: ParticleGenerator]
-
-   .. attribute:: relHt (= 2.0)
-
-      Bed height relative to largest particle diameter (computed via mass, supposing porosity of :obj:`porosity`)
-
-      [type: float]
-
-   .. attribute:: gravity (= Vector3(0,0,-9.81))
-
-      Gravity acceleration.
-
-      [type: Vector3]
-
-   .. attribute:: porosity (= 0.4)
-
-      Approximate porosity to convert bed height (:obj:`relHt`) to mass; it will not influence porosity itself, which is given almost exclusively geometrically.
-
-      [type: float]
-
-   .. attribute:: stepPeriod (= 200)
-
-      Periodicity for the factory.
-
-      [type: int]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      Safety factor for timestep.
-
-      [type: float]
-
-   .. attribute:: maxUnbalanced (= 0.5)
-
-      Unbalanced force/energy to wait for before declared settled.
-
-      [type: float]
-
-   .. attribute:: model (= <ContactModelSelector @ 139720575424848 (py)>)
-
-      Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
-
-      [type: ContactModelSelector]
-
-   .. attribute:: povEnable (= True)
-
-      Enable POV-Ray export.
-
-      [type: bool]
-
-   .. attribute:: camPos (= Vector3(0,0,0.5))
-
-      Camera position; x, y components determine offset from bed normal; z is height above the highest particle center.
-
-      [type: Vector3]
-
-   .. attribute:: out (= '/tmp/{tid}')
-
-      Prefix for outputs (:obj:`woo.core.Scene.tags` are expanded).
-
-      [type: str]
-
-   .. attribute:: imgDim (= 2000)
-
-      Larger image dimension when the scene is rendered; the scene can be re-rendered by calling POV-Ray by hand anytime with arbitrary resolution.
-
-      [type: int]
-
-   .. attribute:: povLights (= '// light_source{<-8,-20,30> color rgb .75}\n        // light_source{<25,-12,12> color rgb .44}\n        light_source{<-.5,-.5,10> color White area_light <1,0,0>,<0,1,0>, 5, 5 adaptive 1 jitter }\n        ')
-
-      Default light specifications for POV-Ray
-
-      [type: str]
-
-   .. attribute:: saveShapePack (= True)
-
-      Create a .shapepack file with particle geometries.
-
-      [type: bool]
-
-:mod:`woo.pre.toys`
---------------------------------
-
-.. inheritance-diagram:: woo.pre.toys
-   :parts: 3
-
-.. automodule:: woo.pre.toys
-   :members:
-   :undoc-members:
-   :exclude-members: NewtonsCradle,  PsdRender,  TriaxTest,  CylTriaxTest
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-NewtonsCradle
-+++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
-
-.. autoclass:: NewtonsCradle
-   :members:
-   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
-
-   .. attribute:: nSpheres (= 5)
-
-      Total number of spheres
-
-      [type: int]
-
-   .. attribute:: nFall (= 1)
-
-      The number of spheres which are out of the equilibrium position at the beginning.
-
-      [type: int]
-
-   .. attribute:: fallAngle (= 0.7853981633974483)
-
-      Initial angle of falling spheres.
-
-      [type: float, unit: rad, preferred unit: deg]
-
-   .. attribute:: rad (= 0.005)
-
-      Radius of spheres
-
-      [type: float, unit: m]
-
-   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
-
-      Height and width of the suspension
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: cabRad (= 0.0005)
-
-      Radius of the suspending cables
-
-      [type: float, unit: m]
-
-   .. attribute:: model (= <ContactModelSelector @ 139720575425248 (py)>)
-
-      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
-
-      [type: ContactModelSelector]
-
-   .. attribute:: gravity (= Vector3(0,0,-9.81))
-
-      Gravity acceleration
-
-      [type: Vector3]
-
-   .. attribute:: plotEvery (= 10)
-
-      How often to collect plot data
-
-      [type: int]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      :obj:`woo.core.Scene.dtSafety`
-
-      [type: float]
-
 :mod:`woo.pre.horse`
 ---------------------------------
 
@@ -526,7 +635,7 @@ NewtonsCradle
 .. automodule:: woo.pre.horse
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  NewtonsCradle,  FallingHorse,  TriaxTest,  PsdRender
+   :exclude-members: NewtonsCradle,  FallingHorse,  TriaxTest,  CylTriaxTest,  DissipChute,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -592,7 +701,7 @@ FallingHorse
 
       [type: str, choices: hexa, ortho]
 
-   .. attribute:: model (= <ContactModelSelector @ 139720575279808 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140648169514944 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).
 
@@ -667,7 +776,7 @@ FallingHorse
 .. automodule:: woo.pre.ell2d
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  EllGroup,  NewtonsCradle,  FallingHorse,  TriaxTest,  PsdRender
+   :exclude-members: NewtonsCradle,  FallingHorse,  TriaxTest,  CylTriaxTest,  EllGroup,  DissipChute,  PsdRender
 
 
 .. rst-class:: html-toggle
@@ -725,7 +834,7 @@ EllGroup
 
       [type: float, unit: m/s]
 
-   .. attribute:: model (= <ContactModelSelector @ 139720575328144 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140648178412416 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).
 
@@ -760,113 +869,4 @@ EllGroup
       Safety coefficient for critical timestep; should be smaller than one.
 
       [type: float]
-
-:mod:`woo.pre.chute`
----------------------------------
-
-.. inheritance-diagram:: woo.pre.chute
-   :parts: 3
-
-.. automodule:: woo.pre.chute
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  EllGroup,  NewtonsCradle,  FallingHorse,  TriaxTest,  DissipChute,  PsdRender
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-DissipChute
-+++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.chute.DissipChute`
-
-.. autoclass:: DissipChute
-   :members:
-   :exclude-members: dim, finNum, finLen, finSlope, gen, model, feedRate, feedTime, stopTime, vtkStep, vtkOut, dtSafety, saveDone, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/chute.py <py/pre/chute.py#L6>`]
-
-   .. attribute:: dim (= Vector3(0.2,0.2,2))
-
-      Chute dimensions: width, depth, height
-
-      [type: Vector3, unit: m]
-
-   .. attribute:: finNum (= 5)
-
-      Number of fins protruding from the sides (alternating from left/right
-
-      [type: int]
-
-   .. attribute:: finLen (= 0.15)
-
-      Length of fins
-
-      [type: float, unit: m]
-
-   .. attribute:: finSlope (= 0.5235987755982988)
-
-      Slope of fins (positive downwards).
-
-      [type: float, unit: rad, preferred unit: deg]
-
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x2ceb1a0>)
-
-      Particle generator, placed above the chute
-
-      [type: ParticleGenerator]
-
-   .. attribute:: model (= <ContactModelSelector @ 139720575423488 (py)>)
-
-      Contact model
-
-      [type: ContactModelSelector]
-
-   .. attribute:: feedRate (= 5.0)
-
-      Feed mass rate
-
-      [type: float, unit: kg/s]
-
-   .. attribute:: feedTime (= 0.5)
-
-      Time for which the feed is activated
-
-      [type: float, unit: s]
-
-   .. attribute:: stopTime (= 2.0)
-
-      Time when to stop the simulation
-
-      [type: float, unit: s]
-
-   .. attribute:: vtkStep (= 400)
-
-      Interval to run VTK export
-
-      [type: int]
-
-   .. attribute:: vtkOut (= '/tmp/{tid}')
-
-      Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.
-
-      [type: str]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      :obj:`woo.core.Scene.dtSafety`
-
-      [type: float]
-
-   .. attribute:: saveDone (= '')
-
-      File to same simulation at the end; not saved if empty.
-
-      [type: str]
 

@@ -7,144 +7,7 @@
 .. automodule:: woo.fem
    :members:
    :undoc-members:
-   :exclude-members: Bo1_Tetra_Aabb,  In2_Membrane_FrictMat,  Membrane,  In2_Tet4_ElastMat,  Tetra,  In2_Membrane_ElastMat,  Tet4
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Bo1_Tetra_Aabb
---------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.fem.Bo1_Tetra_Aabb`
-
-.. autoclass:: Bo1_Tetra_Aabb
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Tet4_ElastMat
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.fem.In2_Tet4_ElastMat`
-
-.. autoclass:: In2_Tet4_ElastMat
-   :members:
-   :exclude-members: contacts, nu, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: contacts (= False)
-
-      Apply contact forces to :obj:`Tetra` nodes (not yet implemented)
-
-      [type: bool, read-only in python]
-
-   .. attribute:: nu (= 0.25)
-
-      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`ElastMat`). Will be moved to the material class at some point.
-
-      [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Membrane
---------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.dem.Facet` → :obj:`~woo.fem.Membrane`
-
-.. autoclass:: Membrane
-   :members:
-   :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= <Node @ 0x1fe06c0, at (0,0,0)>)
-
-      Local coordinate system
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
-
-   .. attribute:: refRot (= [])
-
-      Rotation applied to nodes to obtain the local coordinate system, computed in the reference configuration. If this array is empty, it means that reference configuration has not yet been evaluated.
-
-      [type: vector<Quaternionr>, read-only in python]
-
-   .. attribute:: refPos (= Vector6(0,0,0, 0,0,0))
-
-      Nodal coordinates in the local coordinate system, in the reference configuration
-
-      [type: Vector6r, read-only in python]
-
-   .. attribute:: uXy (= Vector6(0,0,0, 0,0,0))
-
-      Nodal displacements, stored as ux0, uy0, ux1, uy1, ux1, uy2.
-
-      [type: Vector6r, read-only in python]
-
-   .. attribute:: surfLoad (= 0.0)
-
-      Normal load applied to this facet (positive in the direction of the local normal); this value is multiplied by the current facet's area and equally distributed to nodes.
-
-      [type: Real, unit: Pa]
-
-   .. attribute:: phiXy (= Vector6(0,0,0, 0,0,0))
-
-      Nodal rotations, only including in-plane rotations (drilling DOF not yet implemented)
-
-      [type: Vector6r, read-only in python]
-
-   .. attribute:: KKcst (= MatrixX())
-
-      Stiffness matrix of the element (assembled from the reference configuration when needed for the first time)
-
-      [type: MatrixXr]
-
-   .. attribute:: KKdkt (= MatrixX())
-
-      Bending stiffness matrix of the element (assembled from the reference configuration when needed for the first time).
-
-      [type: MatrixXr]
-
-   .. attribute:: enableStress (= False)
-
-      Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.
-
-      [type: bool]
-
-   .. attribute:: EBcst (= MatrixX())
-
-      CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).
-
-      [type: MatrixXr, read-only in python]
-
-   .. attribute:: DBdkt (= MatrixX())
-
-      DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. 
-      
-      .. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.
-
-      [type: MatrixXr, read-only in python]
-
-   .. attribute:: noWarnExcessRot (= False)
-
-      Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.
-
-      [type: bool]
+   :exclude-members: Membrane,  In2_Tet4_ElastMat,  Tetra,  In2_Membrane_ElastMat,  Tet4,  Bo1_Tetra_Aabb,  In2_Membrane_FrictMat
 
 
 .. rst-class:: html-toggle
@@ -305,4 +168,141 @@ In2_Membrane_FrictMat
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Bo1_Tetra_Aabb
+--------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.fem.Bo1_Tetra_Aabb`
+
+.. autoclass:: Bo1_Tetra_Aabb
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Tet4_ElastMat
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.fem.In2_Tet4_ElastMat`
+
+.. autoclass:: In2_Tet4_ElastMat
+   :members:
+   :exclude-members: contacts, nu, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: contacts (= False)
+
+      Apply contact forces to :obj:`Tetra` nodes (not yet implemented)
+
+      [type: bool, read-only in python]
+
+   .. attribute:: nu (= 0.25)
+
+      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`ElastMat`). Will be moved to the material class at some point.
+
+      [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Membrane
+--------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.dem.Facet` → :obj:`~woo.fem.Membrane`
+
+.. autoclass:: Membrane
+   :members:
+   :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= <Node @ 0x1c92f50, at (0,0,0)>)
+
+      Local coordinate system
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
+
+   .. attribute:: refRot (= [])
+
+      Rotation applied to nodes to obtain the local coordinate system, computed in the reference configuration. If this array is empty, it means that reference configuration has not yet been evaluated.
+
+      [type: vector<Quaternionr>, read-only in python]
+
+   .. attribute:: refPos (= Vector6(0,0,0, 0,0,0))
+
+      Nodal coordinates in the local coordinate system, in the reference configuration
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: uXy (= Vector6(0,0,0, 0,0,0))
+
+      Nodal displacements, stored as ux0, uy0, ux1, uy1, ux1, uy2.
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: surfLoad (= 0.0)
+
+      Normal load applied to this facet (positive in the direction of the local normal); this value is multiplied by the current facet's area and equally distributed to nodes.
+
+      [type: Real, unit: Pa]
+
+   .. attribute:: phiXy (= Vector6(0,0,0, 0,0,0))
+
+      Nodal rotations, only including in-plane rotations (drilling DOF not yet implemented)
+
+      [type: Vector6r, read-only in python]
+
+   .. attribute:: KKcst (= MatrixX())
+
+      Stiffness matrix of the element (assembled from the reference configuration when needed for the first time)
+
+      [type: MatrixXr]
+
+   .. attribute:: KKdkt (= MatrixX())
+
+      Bending stiffness matrix of the element (assembled from the reference configuration when needed for the first time).
+
+      [type: MatrixXr]
+
+   .. attribute:: enableStress (= False)
+
+      Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.
+
+      [type: bool]
+
+   .. attribute:: EBcst (= MatrixX())
+
+      CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: DBdkt (= MatrixX())
+
+      DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. 
+      
+      .. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: noWarnExcessRot (= False)
+
+      Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.
+
+      [type: bool]
 
