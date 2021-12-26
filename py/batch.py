@@ -54,12 +54,12 @@ def mayHaveStaleLock(db):
     if not os.path.splitext(db)[-1] in ('.h5','.hdf5','.he5','.hdf'): return
     return FileLock(db).is_locked()
 
-def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,series=None,quiet=False,postHooks=[],**kw):
+def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,series=None,verbose=False,quiet=False,postHooks=[],**kw):
     '''
     Write results to batch database. With *syncXls*, corresponding excel-file is re-generated.
     Series is a dicionary of 1d arrays written to separate sheets in the XLS. If *series* is `None`
     (default), `S.plot.data` are automatically added. All other ``**kw``
-    arguments are serialized in the misc field, which then appears in the main XLS sheet.
+    arguments are serialized in the misc field, which then appears in the main XLS sheet. If *verbsoe* is given, labels and engines will be written in JSON to HDF5 attributes.
 
     All data are serialized using json so that they can be read back in a language-independent manner.
 
@@ -124,8 +124,9 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
             G.attrs['pre']=S.pre.dumps(format='json') if S.pre else ''
             G.attrs['tags']=json.dumps(unicodeTags)
             G.attrs['plots']=json.dumps(S.plot.plots)
-            G.attrs['labels']=wooJSON.encode(dict(S.labels))
-            G.attrs['engines']=wooJSON.encode(list(S.engines))
+            if verbose:
+                G.attrs['labels']=wooJSON.encode(dict(S.labels))
+                G.attrs['engines']=wooJSON.encode(list(S.engines))
             G_misc=G.create_group('misc')
             for k,v in kw.items(): G_misc.attrs[k]=wooJSON.encode(v)
             G_series=G.create_group('series')
