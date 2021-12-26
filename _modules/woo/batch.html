@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.batch &#8212; Woo 1.0+rev1-git-2733374 documentation</title>
+    <title>woo.batch &#8212; Woo 1.0+rev1-git-797b069 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-797b069 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.batch</a></li> 
@@ -121,12 +121,12 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">db</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.h5&#39;</span><span class="p">,</span><span class="s1">&#39;.hdf5&#39;</span><span class="p">,</span><span class="s1">&#39;.he5&#39;</span><span class="p">,</span><span class="s1">&#39;.hdf&#39;</span><span class="p">):</span> <span class="k">return</span>
     <span class="k">return</span> <span class="n">FileLock</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">is_locked</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="writeResults"><a class="viewcode-back" href="../../woo.batch.html#woo.batch.writeResults">[docs]</a><span class="k">def</span> <span class="nf">writeResults</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span><span class="n">defaultDb</span><span class="o">=</span><span class="s1">&#39;woo-results.hdf5&#39;</span><span class="p">,</span><span class="n">syncXls</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">dbFmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">series</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">postHooks</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="writeResults"><a class="viewcode-back" href="../../woo.batch.html#woo.batch.writeResults">[docs]</a><span class="k">def</span> <span class="nf">writeResults</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span><span class="n">defaultDb</span><span class="o">=</span><span class="s1">&#39;woo-results.hdf5&#39;</span><span class="p">,</span><span class="n">syncXls</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">dbFmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">series</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">postHooks</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Write results to batch database. With *syncXls*, corresponding excel-file is re-generated.</span>
 <span class="sd">    Series is a dicionary of 1d arrays written to separate sheets in the XLS. If *series* is `None`</span>
 <span class="sd">    (default), `S.plot.data` are automatically added. All other ``**kw``</span>
-<span class="sd">    arguments are serialized in the misc field, which then appears in the main XLS sheet.</span>
+<span class="sd">    arguments are serialized in the misc field, which then appears in the main XLS sheet. If *verbsoe* is given, labels and engines will be written in JSON to HDF5 attributes.</span>
 
 <span class="sd">    All data are serialized using json so that they can be read back in a language-independent manner.</span>
 
@@ -191,8 +191,9 @@
             <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;pre&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">pre</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">S</span><span class="o">.</span><span class="n">pre</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
             <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">unicodeTags</span><span class="p">)</span>
             <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;plots&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plots</span><span class="p">)</span>
-            <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">wooJSON</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">labels</span><span class="p">))</span>
-            <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;engines&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">wooJSON</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">wooJSON</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">labels</span><span class="p">))</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;engines&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">wooJSON</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="p">))</span>
             <span class="n">G_misc</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;misc&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="n">G_misc</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">wooJSON</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
             <span class="n">G_series</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;series&#39;</span><span class="p">)</span>
@@ -1125,7 +1126,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-797b069 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.batch</a></li> 
@@ -1135,7 +1136,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
     <!-- cloud_sptheme 1.4 -->
   </body>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.batch &#8212; Woo 1.0+rev1-git-2733374 documentation</title>
+    <title>woo.batch &#8212; Woo 1.0+rev1-git-797b069 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="woo.apiversion.html" title="woo.apiversion"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-797b069 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a></li> 
@@ -450,11 +450,11 @@ S.tags[&#39;id.d&#39;]=s.tags[&#39;title&#39;]+&#39;.&#39;+s.tags[&#39;id&#39;]
 
 <dl class="py function">
 <dt class="sig sig-object py" id="woo.batch.writeResults">
-<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">writeResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultDb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'woo-results.hdf5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">syncXls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbFmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postHooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#writeResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.writeResults" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">woo.batch.</span></span><span class="sig-name descname"><span class="pre">writeResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultDb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'woo-results.hdf5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">syncXls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbFmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postHooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/batch.html#writeResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.batch.writeResults" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write results to batch database. With <em>syncXls</em>, corresponding excel-file is re-generated.
 Series is a dicionary of 1d arrays written to separate sheets in the XLS. If <em>series</em> is <cite>None</cite>
 (default), <cite>S.plot.data</cite> are automatically added. All other <code class="docutils literal notranslate"><span class="pre">**kw</span></code>
-arguments are serialized in the misc field, which then appears in the main XLS sheet.</p>
+arguments are serialized in the misc field, which then appears in the main XLS sheet. If <em>verbsoe</em> is given, labels and engines will be written in JSON to HDF5 attributes.</p>
 <p>All data are serialized using json so that they can be read back in a language-independent manner.</p>
 <p><em>postHooks</em> is list of functions (taking a single argument - the database name) which will be called
 once the database has been updated. They can be used in conjunction with <a class="reference internal" href="#woo.batch.dbReadResults" title="woo.batch.dbReadResults"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.batch.dbReadResults</span></code></a>
@@ -539,7 +539,7 @@ to write aaggregate results from all records in the database.</p>
         <li class="right" >
           <a href="woo.apiversion.html" title="woo.apiversion"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2733374 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-797b069 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.batch</span></code></a></li> 
@@ -549,7 +549,7 @@ to write aaggregate results from all records in the database.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012−2021, Václav Šmilauer &lt;eu@doxos.eu&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
     <!-- cloud_sptheme 1.4 -->
   </body>
