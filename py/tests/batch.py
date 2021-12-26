@@ -27,7 +27,7 @@ class TestBatchResults(unittest.TestCase):
         self.assertTrue(r['series']['ones'][2]==1)
         self.assertEqual(len(r['engines']),self.numE)
     def _writeDb(self,db):
-        woo.batch.writeResults(self.scene,defaultDb=db,syncXls=False,quiet=True,series=self.series,**self.misc)
+        woo.batch.writeResults(self.scene,defaultDb=db,syncXls=False,quiet=True,series=self.series,verbose=True,**self.misc)
     def _writeXls(self,db,xls):
         woo.batch.dbToSpread(db,xls)
     def _writeCsv(self,db,out):
