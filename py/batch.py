@@ -54,12 +54,14 @@ def mayHaveStaleLock(db):
     if not os.path.splitext(db)[-1] in ('.h5','.hdf5','.he5','.hdf'): return
     return FileLock(db).is_locked()
 
-def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,series=None,verbose=False,quiet=False,postHooks=[],**kw):
+def writeResults(scene,defaultDb='woo-results.hdf5',hdf5version='latest',syncXls=True,dbFmt=None,series=None,verbose=False,quiet=False,postHooks=[],**kw):
     '''
     Write results to batch database. With *syncXls*, corresponding excel-file is re-generated.
     Series is a dicionary of 1d arrays written to separate sheets in the XLS. If *series* is `None`
     (default), `S.plot.data` are automatically added. All other ``**kw``
-    arguments are serialized in the misc field, which then appears in the main XLS sheet. If *verbsoe* is given, labels and engines will be written in JSON to HDF5 attributes.
+    arguments are serialized in the misc field, which then appears in the main XLS sheet. If *verbsoe* is given,
+    labels and engines will be written in JSON to HDF5 attributes.
+    *h5ver* specified HDF5 version format as used in h5py (possibilities are: earliest, latest).
 
     All data are serialized using json so that they can be read back in a language-independent manner.
 
@@ -98,13 +100,13 @@ def writeResults(scene,defaultDb='woo-results.hdf5',syncXls=True,dbFmt=None,seri
     elif dbFmt=='hdf5':
         import h5py
         try:
-            hdf=h5py.File(db,('w' if newDb else 'a'),libver='latest')
+            hdf=h5py.File(db,('w' if newDb else 'a'),libver=hdf5version)
         except IOError:
             import warnings
             warnings.warn("Error opening HDF5 file %s, moving to %s~~corrupt and creating a new one"%(db,db))
             import shutil
             shutil.move(db,db+'~~corrupt')
-            hdf=h5py.File(db,'a',libver='latest')
+            hdf=h5py.File(db,'a',libver=hdf5version)
         with FileLock(db):
             wooJSON=woo.core.WooJSONEncoder(indent=None,oneway=True)
             i=0
