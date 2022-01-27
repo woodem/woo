@@ -79,10 +79,13 @@ static void wooInitialize(){
 		if(sh.loaded()) { LOG_DEBUG("backward signal handlers installed."); }
 		else LOG_WARN("backward signal handlers not installed correctly (proceeding).");
 	}
+	
+	// this is called automatically since python3.7, and deprecation warning is produced since 3.9
+	#if PY_VERSION_HEX<0x03070000
+		PyEval_InitThreads();
+	#endif
 
-	PyEval_InitThreads();
-
-	py::module m("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.");
+	py::module m=py::module_::create_extension_module("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.",new py::module_::module_def);
 	woo::registerEigenClassesInPybind11(m);
 	auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
 	if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
