@@ -165,6 +165,14 @@ SnapshotEngine
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
 
+:mod:`woo.qt.DisplayProfiles`
+------------------------------------------
+
+.. automodule:: woo.qt.DisplayProfiles
+   :members:
+   :undoc-members:
+   :exclude-members: UiPrefs,  SnapshotEngine
+
 :mod:`woo.qt.img_rc`
 ---------------------------------
 
@@ -193,14 +201,6 @@ SnapshotEngine
 ---------------------------------------
 
 .. automodule:: woo.qt.ObjectEditor
-   :members:
-   :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
-
-:mod:`woo.qt.DisplayProfiles`
-------------------------------------------
-
-.. automodule:: woo.qt.DisplayProfiles
    :members:
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
