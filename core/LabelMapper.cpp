@@ -301,7 +301,7 @@ py::object LabelMapper::__getitem__(const string& label){
 	}
 	int where=whereIs(label);
 	switch(where){
-		case NOWHERE: woo::AttributeError("No such label: '"+label+"'"); break;
+		case NOWHERE: woo::NameError("No such label: '"+label+"'"); break;
 		case IN_MOD: woo::ValueError("Label '"+label+"' is a pseudo-module and cannot be obtained directly.");
 		case IN_WOO: return py::cast(wooMap[label.c_str()]); break;
 		case IN_PY: return pyMap[label]; break;
@@ -326,6 +326,7 @@ void LabelMapper::__delitem__mod(const string& label){
 	std::list<string> kk=this->keys();
 	kk.remove_if([&label](const string& s){ return !boost::starts_with(s,label+"."); });
 	for(const auto& k: kk){ if(this->__contains__(k)) this->__delitem__(k); }
+	modSet.erase(label);
 }
 
 
