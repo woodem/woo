@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.gl &#8212; Woo 1.0+rev1-git-4118aa7 documentation</title>
+    <title>woo.gl &#8212; Woo 1.0+rev1-git-3aa1e28 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="woo.fem.html" title="woo.fem"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-4118aa7 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3aa1e28 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.gl</span></code></a></li> 
@@ -176,41 +176,7 @@ size=&quot;&quot;;
   &quot;core.NodeVisRep&quot; -&gt; &quot;gl.VectorGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
 }
-<span class="target" id="module-woo.gl"></span><section class="html-toggle emphasized" id="glfielddispatcher">
-<h2>GlFieldDispatcher<a class="headerlink" href="#glfielddispatcher" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Dispatcher" title="woo.core.Dispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dispatcher</span></code></a> → <a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlFieldDispatcher</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.gl.</span></span><span class="sig-name descname"><span class="pre">GlFieldDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.GlFieldDispatcher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dispatcher calling <a class="reference internal" href="#woo.gl.GlFieldFunctor" title="woo.gl.GlFieldFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">functors</span></code></a> based on received argument type(s).</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.gl.GlFieldDispatcher) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.GlFieldDispatcher, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.functors">
-<span class="sig-name descname"><span class="pre">functors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.functors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functors active in the dispatch mechanism [overridden below].</p>
-<p>[type: vector&lt;shared_ptr&lt;GlFieldFunctor&gt;&gt;]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.dispFunctor">
-<span class="sig-name descname"><span class="pre">dispFunctor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><span class="pre">woo.gl.GlFieldDispatcher</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Field" title="woo.core.Field"><span class="pre">woo.core.Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#woo.gl.GlFieldFunctor" title="woo.gl.GlFieldFunctor"><span class="pre">woo.gl.GlFieldFunctor</span></a></span></span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.dispFunctor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.dispMatrix">
-<span class="sig-name descname"><span class="pre">dispMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><span class="pre">woo.gl.GlFieldDispatcher</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.dispMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return dictionary with contents of the dispatch matrix.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="glshapefunctor">
+<span class="target" id="module-woo.gl"></span><section class="html-toggle emphasized" id="glshapefunctor">
 <h2>GlShapeFunctor<a class="headerlink" href="#glshapefunctor" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.gl.GlShapeFunctor" title="woo.gl.GlShapeFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlShapeFunctor</span></code></a></p>
 digraph GlShapeFunctor {
@@ -236,7 +202,7 @@ digraph GlShapeFunctor {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.GlShapeFunctor) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.GlShapeFunctor, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.GlShapeFunctor, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
@@ -256,7 +222,7 @@ digraph Gl1_Facet {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Facet) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Facet, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Facet, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Facet.wire">
@@ -298,7 +264,7 @@ digraph Gl1_Facet {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Membrane) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Membrane, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Membrane, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Membrane.node">
@@ -379,14 +345,14 @@ digraph Gl1_Facet {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Membrane.uRange">
-<span class="sig-name descname"><span class="pre">uRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0xfe58f0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Membrane.uRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">uRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x209fa30&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Membrane.uRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range for displacements (colors only)</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Membrane.phiRange">
-<span class="sig-name descname"><span class="pre">phiRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0xfead40&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Membrane.phiRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">phiRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x20a4e80&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Membrane.phiRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range for rotations (colors only)</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
@@ -405,7 +371,7 @@ digraph Gl1_Facet {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Wall) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Wall, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Wall, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Wall.div">
@@ -433,7 +399,7 @@ digraph Gl1_Tetra {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Tetra) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Tetra, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Tetra, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Tetra.wire">
@@ -468,7 +434,7 @@ digraph Gl1_Tetra {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Tet4) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Tet4, <a href="#id25"><span class="problematic" id="id26">*</span></a>args, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Tet4, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Tet4.node">
@@ -533,7 +499,7 @@ digraph Gl1_Sphere {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Sphere) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Sphere, <a href="#id29"><span class="problematic" id="id30">*</span></a>args, <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Sphere, <a href="#id25"><span class="problematic" id="id26">*</span></a>args, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Sphere.quality">
@@ -589,7 +555,7 @@ digraph Gl1_Sphere {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Ellipsoid) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Ellipsoid, <a href="#id34"><span class="problematic" id="id35">*</span></a>args, <a href="#id36"><span class="problematic" id="id37">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Ellipsoid, <a href="#id30"><span class="problematic" id="id31">*</span></a>args, <a href="#id32"><span class="problematic" id="id33">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
@@ -604,47 +570,11 @@ digraph Gl1_Sphere {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Capsule) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Capsule, <a href="#id38"><span class="problematic" id="id39">*</span></a>args, <a href="#id40"><span class="problematic" id="id41">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Capsule, <a href="#id34"><span class="problematic" id="id35">*</span></a>args, <a href="#id36"><span class="problematic" id="id37">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
 </section>
-</section>
-<section class="html-toggle emphasized" id="gl1-cone">
-<h3>Gl1_Cone<a class="headerlink" href="#gl1-cone" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.gl.GlShapeFunctor" title="woo.gl.GlShapeFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlShapeFunctor</span></code></a> → <a class="reference internal" href="#woo.gl.Gl1_Cone" title="woo.gl.Gl1_Cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_Cone</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.gl.Gl1_Cone">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.gl.</span></span><span class="sig-name descname"><span class="pre">Gl1_Cone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Render cone particles</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.gl.Gl1_Cone) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Cone, <a href="#id42"><span class="problematic" id="id43">*</span></a>args, <a href="#id44"><span class="problematic" id="id45">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.slices">
-<span class="sig-name descname"><span class="pre">slices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">12</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.slices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of slices, controls quality</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.stacks">
-<span class="sig-name descname"><span class="pre">stacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.stacks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of stacks, controls quality</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.wire">
-<span class="sig-name descname"><span class="pre">wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.wire" title="Permalink to this definition">¶</a></dt>
-<dd><p>Render all shapes with wireframe only</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 <section class="html-toggle emphasized" id="gl1-rod">
 <h3>Gl1_Rod<a class="headerlink" href="#gl1-rod" title="Permalink to this headline">¶</a></h3>
@@ -656,7 +586,7 @@ digraph Gl1_Sphere {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_Rod) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_Rod, <a href="#id46"><span class="problematic" id="id47">*</span></a>args, <a href="#id48"><span class="problematic" id="id49">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Rod, <a href="#id38"><span class="problematic" id="id39">*</span></a>args, <a href="#id40"><span class="problematic" id="id41">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_Rod.slices">
@@ -696,6 +626,42 @@ digraph Gl1_Sphere {
 </dd></dl>
 
 </section>
+<section class="html-toggle emphasized" id="gl1-cone">
+<h3>Gl1_Cone<a class="headerlink" href="#gl1-cone" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.gl.GlShapeFunctor" title="woo.gl.GlShapeFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlShapeFunctor</span></code></a> → <a class="reference internal" href="#woo.gl.Gl1_Cone" title="woo.gl.Gl1_Cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_Cone</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.gl.Gl1_Cone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.gl.</span></span><span class="sig-name descname"><span class="pre">Gl1_Cone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render cone particles</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.gl.Gl1_Cone) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_Cone, <a href="#id42"><span class="problematic" id="id43">*</span></a>args, <a href="#id44"><span class="problematic" id="id45">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.slices">
+<span class="sig-name descname"><span class="pre">slices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">12</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.slices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of slices, controls quality</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.stacks">
+<span class="sig-name descname"><span class="pre">stacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of stacks, controls quality</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.gl.Gl1_Cone.wire">
+<span class="sig-name descname"><span class="pre">wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_Cone.wire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render all shapes with wireframe only</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section class="html-toggle emphasized" id="gl1-infcylinder">
 <h3>Gl1_InfCylinder<a class="headerlink" href="#gl1-infcylinder" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.gl.GlShapeFunctor" title="woo.gl.GlShapeFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlShapeFunctor</span></code></a> → <a class="reference internal" href="#woo.gl.Gl1_InfCylinder" title="woo.gl.Gl1_InfCylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gl1_InfCylinder</span></code></a></p>
@@ -706,7 +672,7 @@ digraph Gl1_Sphere {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.gl.Gl1_InfCylinder) -&gt; None</p></li>
-<li><p>__init__(self: woo.gl.Gl1_InfCylinder, <a href="#id50"><span class="problematic" id="id51">*</span></a>args, <a href="#id52"><span class="problematic" id="id53">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.Gl1_InfCylinder, <a href="#id46"><span class="problematic" id="id47">*</span></a>args, <a href="#id48"><span class="problematic" id="id49">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_InfCylinder.wire">
@@ -739,6 +705,40 @@ digraph Gl1_Sphere {
 </dd></dl>
 
 </section>
+</section>
+<section class="html-toggle emphasized" id="glfielddispatcher">
+<h2>GlFieldDispatcher<a class="headerlink" href="#glfielddispatcher" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Dispatcher" title="woo.core.Dispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dispatcher</span></code></a> → <a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlFieldDispatcher</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.gl.</span></span><span class="sig-name descname"><span class="pre">GlFieldDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.GlFieldDispatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatcher calling <a class="reference internal" href="#woo.gl.GlFieldFunctor" title="woo.gl.GlFieldFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">functors</span></code></a> based on received argument type(s).</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.gl.GlFieldDispatcher) -&gt; None</p></li>
+<li><p>__init__(self: woo.gl.GlFieldDispatcher, <a href="#id50"><span class="problematic" id="id51">*</span></a>args, <a href="#id52"><span class="problematic" id="id53">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.functors">
+<span class="sig-name descname"><span class="pre">functors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.functors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functors active in the dispatch mechanism [overridden below].</p>
+<p>[type: vector&lt;shared_ptr&lt;GlFieldFunctor&gt;&gt;]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.dispFunctor">
+<span class="sig-name descname"><span class="pre">dispFunctor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><span class="pre">woo.gl.GlFieldDispatcher</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Field" title="woo.core.Field"><span class="pre">woo.core.Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#woo.gl.GlFieldFunctor" title="woo.gl.GlFieldFunctor"><span class="pre">woo.gl.GlFieldFunctor</span></a></span></span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.dispFunctor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.gl.GlFieldDispatcher.dispMatrix">
+<span class="sig-name descname"><span class="pre">dispMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.gl.GlFieldDispatcher" title="woo.gl.GlFieldDispatcher"><span class="pre">woo.gl.GlFieldDispatcher</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#woo.gl.GlFieldDispatcher.dispMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary with contents of the dispatch matrix.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section class="html-toggle emphasized" id="glnodefunctor">
 <h2>GlNodeFunctor<a class="headerlink" href="#glnodefunctor" title="Permalink to this headline">¶</a></h2>
@@ -1655,21 +1655,21 @@ digraph GlFieldFunctor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_DemField.shapeDispatcher">
-<span class="sig-name descname"><span class="pre">shapeDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlShapeDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0xf8dc50&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.shapeDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">shapeDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlShapeDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x2047d90&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.shapeDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispatcher for rendering <a class="reference internal" href="woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shapes</span></code></a>. Set up automatically.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.gl.GlShapeDispatcher" title="woo.gl.GlShapeDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlShapeDispatcher</span></code></a>&gt;, not shown in the UI, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_DemField.boundDispatcher">
-<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0xf8db70&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.boundDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x2047cb0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.boundDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispatcher for rendering <a class="reference internal" href="woo.dem.html#woo.dem.Bound" title="woo.dem.Bound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bounds</span></code></a>. Set up automatically.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.gl.GlBoundDispatcher" title="woo.gl.GlBoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlBoundDispatcher</span></code></a>&gt;, not shown in the UI, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_DemField.cPhysDispatcher">
-<span class="sig-name descname"><span class="pre">cPhysDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlCPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0xfc02b0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.cPhysDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cPhysDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GlCPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x207a3f0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_DemField.cPhysDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispatcher for rendering <a class="reference internal" href="woo.dem.html#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a>. Set up automatically.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.gl.GlCPhysDispatcher" title="woo.gl.GlCPhysDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlCPhysDispatcher</span></code></a>&gt;, not shown in the UI, read-only in python]</p>
 </dd></dl>
@@ -1920,14 +1920,14 @@ digraph Gl1_CPhys {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_CPhys.range">
-<span class="sig-name descname"><span class="pre">range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0xf9eda0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_CPhys.range" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x2058ee0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_CPhys.range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range for normal force</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_CPhys.shearRange">
-<span class="sig-name descname"><span class="pre">shearRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0xf9e100&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_CPhys.shearRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">shearRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x2058240&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_CPhys.shearRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range for absolute value of shear force</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
@@ -1990,7 +1990,7 @@ digraph Gl1_CPhys {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.gl.Gl1_ConcretePhys.dmgRange">
-<span class="sig-name descname"><span class="pre">dmgRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0xff2da0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_ConcretePhys.dmgRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dmgRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x20acee0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.gl.Gl1_ConcretePhys.dmgRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range for disk damage coloring.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
@@ -2268,7 +2268,6 @@ digraph Gl1_CPhys {
     <h3><a href="contents.html">Page contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.gl</span></code></a><ul>
-<li><a class="reference internal" href="#glfielddispatcher">GlFieldDispatcher</a></li>
 <li><a class="reference internal" href="#glshapefunctor">GlShapeFunctor</a><ul>
 <li><a class="reference internal" href="#gl1-facet">Gl1_Facet</a><ul>
 <li><a class="reference internal" href="#gl1-membrane">Gl1_Membrane</a></li>
@@ -2284,11 +2283,12 @@ digraph Gl1_CPhys {
 <li><a class="reference internal" href="#gl1-capsule">Gl1_Capsule</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#gl1-cone">Gl1_Cone</a></li>
 <li><a class="reference internal" href="#gl1-rod">Gl1_Rod</a></li>
+<li><a class="reference internal" href="#gl1-cone">Gl1_Cone</a></li>
 <li><a class="reference internal" href="#gl1-infcylinder">Gl1_InfCylinder</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#glfielddispatcher">GlFieldDispatcher</a></li>
 <li><a class="reference internal" href="#glnodefunctor">GlNodeFunctor</a><ul>
 <li><a class="reference internal" href="#gl1-node">Gl1_Node</a></li>
 </ul>
@@ -2400,7 +2400,7 @@ digraph Gl1_CPhys {
         <li class="right" >
           <a href="woo.fem.html" title="woo.fem"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-4118aa7 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3aa1e28 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.gl</span></code></a></li> 

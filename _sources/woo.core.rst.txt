@@ -107,14 +107,14 @@ Preprocessor
 		rankdir=LR;
 		margin=.2;
 		"Preprocessor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Preprocessor"];
-		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
-		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
-		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
-		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
-		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
-		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
+		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
+		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
+		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
+		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
+		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Preprocessor
@@ -388,7 +388,7 @@ Scene
 
       [type: StrStrMap, not accessible from python]
 
-   .. attribute:: labels (= <LabelMapper @ 0xdb9dc0>)
+   .. attribute:: labels (= <LabelMapper @ 0x1e73f00>)
 
       Atrbitrary key=object, key=list of objects, key=py::object associations which survive saving/loading. Labeled objects are automatically added to this container. This object is more conveniently accessed through the :obj:`lab` attribute, which exposes the mapping as attributes of that object rather than as a dictionary.
 
@@ -412,7 +412,7 @@ Scene
 
       [type: vector<shared_ptr<Engine>>, not accessible from python]
 
-   .. attribute:: energy (= <EnergyTracker @ 0xcd1660>)
+   .. attribute:: energy (= <EnergyTracker @ 0x1d8b660>)
 
       Energy values, if energy tracking is enabled.
 
@@ -424,7 +424,7 @@ Scene
 
       [type: vector<shared_ptr<Field>>, not shown in the UI]
 
-   .. attribute:: cell (= <Cell @ 0xdc6a30>)
+   .. attribute:: cell (= <Cell @ 0x1e80b70>)
 
       Information on periodicity; only should be used if Scene::isPeriodic.
 
@@ -484,7 +484,7 @@ Scene
 
       [type: py::object, not shown in the UI]
 
-   .. attribute:: plot (= <Plot @ 0xdc54e0>)
+   .. attribute:: plot (= <Plot @ 0x1e7f620>)
 
       Data and settings for plots.
 
@@ -1189,16 +1189,16 @@ Dispatcher
 		"Dispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Dispatcher"];
 		"woo.dem.LawDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.LawDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlShapeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
-		"Dispatcher" -> "woo.gl.GlShapeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraForce" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.IntraForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlFieldDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.gl.GlShapeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlFieldDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlFieldDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.GridBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.GridBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlCPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
-		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraForce" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
+		"Dispatcher" -> "woo.dem.IntraForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
+		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Dispatcher
@@ -1241,8 +1241,7 @@ Functor
 		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cp2_FrictMat_FrictPhys" -> "woo.dem.Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Bo1_Ellipsoid_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Bo1_Sphere_Aabb" -> "woo.dem.Bo1_Ellipsoid_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Law2_G3Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.LawFunctor" -> "woo.dem.Law2_G3Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Functor"];
+		"woo.dem.LawFunctor" -> "woo.dem.Law2_G3Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Functor"];
 		"Functor" -> "woo.gl.GlNodeFunctor" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.Gl1_GridBound" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Functor"];
 		"woo.gl.GlBoundFunctor" -> "woo.gl.Gl1_GridBound" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
@@ -1268,7 +1267,8 @@ Functor
 		"woo.gl.Gl1_Sphere" -> "woo.gl.Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Functor"];
 		"woo.gl.GlShapeFunctor" -> "woo.gl.Gl1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Grid1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.GridBoundFunctor" -> "woo.dem.Grid1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.In2_Sphere_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
+		"woo.dem.GridBoundFunctor" -> "woo.dem.Grid1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
+		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.In2_Sphere_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.IntraFunctor" -> "woo.dem.In2_Sphere_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
@@ -1279,8 +1279,7 @@ Functor
 		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cp2_ConcreteMat_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.CPhysFunctor" -> "woo.dem.Cp2_ConcreteMat_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Bo1_InfCylinder_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.BoundFunctor" -> "woo.dem.Bo1_InfCylinder_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Wall_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
+		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Wall_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"Functor" -> "woo.dem.BoundFunctor" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlBoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Functor"];
 		"Functor" -> "woo.gl.GlBoundFunctor" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Law2_L6Geom_PelletPhys_Pellet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
@@ -1308,7 +1307,8 @@ Functor
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Bo1_Capsule_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
 		"woo.dem.BoundFunctor" -> "woo.dem.Bo1_Capsule_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
-		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"woo.dem.LawFunctor" -> "woo.dem.Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Functor"];
+		"woo.dem.Cg2_Any_Any_L6Geom__Base" -> "woo.dem.Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Functor
@@ -1608,7 +1608,7 @@ WooTestClass
 
       [type: shared_ptr<:obj:`Object <woo.core.Object>`>]
 
-   .. attribute:: objList (= ObjectList[0xdd8210, 0xdd8240])
+   .. attribute:: objList (= ObjectList[0x1e92350, 0x1e92380])
 
       Testing opaque object list.
 

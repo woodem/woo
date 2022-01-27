@@ -15,29 +15,6 @@
 
 .. rst-class:: emphasized
 
-GlFieldDispatcher
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlFieldDispatcher`
-
-.. autoclass:: GlFieldDispatcher
-   :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: functors (= [])
-
-      Functors active in the dispatch mechanism [overridden below].
-
-      [type: vector<shared_ptr<GlFieldFunctor>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 GlShapeFunctor
 --------------
 
@@ -203,13 +180,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0xfe58f0>)
+   .. attribute:: uRange (= <ScalarRange @ 0x209fa30>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0xfead40>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x20a4e80>)
 
       Range for rotations (colors only)
 
@@ -440,41 +417,6 @@ Gl1_Capsule
 
 .. rst-class:: emphasized
 
-Gl1_Cone
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
-
-.. autoclass:: Gl1_Cone
-   :members:
-   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: slices (= 12)
-
-      Number of slices, controls quality
-
-      [type: int]
-
-   .. attribute:: stacks (= 6)
-
-      Number of stacks, controls quality
-
-      [type: int]
-
-   .. attribute:: wire (= False)
-
-      Render all shapes with wireframe only
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 Gl1_Rod
 +++++++
 
@@ -522,6 +464,41 @@ Gl1_Rod
 
 .. rst-class:: emphasized
 
+Gl1_Cone
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
+
+.. autoclass:: Gl1_Cone
+   :members:
+   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: slices (= 12)
+
+      Number of slices, controls quality
+
+      [type: int]
+
+   .. attribute:: stacks (= 6)
+
+      Number of stacks, controls quality
+
+      [type: int]
+
+   .. attribute:: wire (= False)
+
+      Render all shapes with wireframe only
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 Gl1_InfCylinder
 +++++++++++++++
 
@@ -556,6 +533,29 @@ Gl1_InfCylinder
       Number of rings on the cylinder inside the visible scene part.
 
       [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlFieldDispatcher
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlFieldDispatcher`
+
+.. autoclass:: GlFieldDispatcher
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<GlFieldFunctor>>]
 
 
 .. rst-class:: html-toggle
@@ -1406,19 +1406,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0xf8dc50>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x2047d90>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0xf8db70>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x2047cb0>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0xfc02b0>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x207a3f0>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 
@@ -1681,13 +1681,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0xf9eda0>)
+   .. attribute:: range (= <ScalarRange @ 0x2058ee0>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0xf9e100>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x2058240>)
 
       Range for absolute value of shear force
 
@@ -1746,7 +1746,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0xff2da0>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x20acee0>)
 
       Range for disk damage coloring.
 

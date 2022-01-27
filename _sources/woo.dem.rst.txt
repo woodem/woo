@@ -7,7 +7,7 @@
 .. automodule:: woo.dem
    :members:
    :undoc-members:
-   :exclude-members: HertzMat,  Rod,  Bo1_Sphere_Aabb,  ConcretePhys,  ConstantForce,  Cg2_Any_Any_L6Geom__Base,  Cg2_Facet_Ellipsoid_L6Geom,  In2_Wall_ElastMat,  PelletCData,  AlignedMinMaxShooter,  Collider,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Cp2_IceMat_IcePhys,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  ReadForce,  Cg2_Sphere_Sphere_G3Geom,  ParticleContainer,  Aabb,  IceMat,  CGeom,  Impose,  InletMatState,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  CGeomFunctor,  Cg2_Facet_Sphere_L6Geom,  InterpolatedMotion,  IntraForce,  BoxOutlet,  ElastMat,  LawTesterStage,  LudingPhys,  Cg2_Sphere_Capsule_L6Geom,  Suspicious,  PelletMatState,  Inlet,  Grid1_Sphere,  Truss,  RadialForce,  PsdAxialBias,  ArcInlet,  In2_Sphere_ElastMat,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  CombinedImpose,  AabbCollider,  PharmaCapsuleGenerator,  RandomInlet,  Law2_L6Geom_IcePhys,  Cp2_ConcreteMat_ConcretePhys,  FlowAnalysis,  NodalForcesToHdf5,  HarmonicOscillation,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  ConcreteMat,  GridCollider,  CData,  LudingMat,  DynDt,  Cg2_Wall_Sphere_G3Geom,  Particle,  HalfspaceBuoyancy,  BoundDispatcher,  Ellipsoid,  PelletAgglomerator,  POVRayExport,  Cg2_Facet_Facet_L6Geom,  VtkExport,  PelletPhys,  Cp2_LudingMat_LudingPhys,  CGeomDispatcher,  HertzPhys,  Tracer,  ParticleGenerator,  FrictMat,  Cg2_Wall_Capsule_L6Geom,  Grid1_Wall,  CPhysFunctor,  Bo1_Rod_Aabb,  DemField,  PsdEllipsoidGenerator,  Cg2_Sphere_Ellipsoid_L6Geom,  InsertionSortCollider,  LayeredAxialBias,  FrictPhys,  Law2_L6Geom_FrictPhys_IdealElPl,  Law2_L6Geom_ConcretePhys,  Contact,  ArcShooter,  BoxInlet,  StackedBoxOutlet,  LudingMatState,  ClumpData,  AlignedHarmonicOscillations,  VariableVelocity3d,  Sphere,  Shape,  Cg2_Wall_Facet_L6Geom,  MatState,  AabbTreeCollider,  CPhysDispatcher,  Wall,  PeriIsoCompressor,  Cg2_Facet_InfCylinder_L6Geom,  Law2_L6Geom_LudingPhys,  PsdSphereGenerator,  Bo1_Ellipsoid_Aabb,  Cg2_InfCylinder_Sphere_L6Geom,  Law2_G3Geom_FrictPhys_IdealElPl,  LawTester,  MinMaxSphereGenerator,  TraceVisRep,  IntraFunctor,  Bo1_Cone_Aabb,  Cp2_PelletMat_PelletPhys,  Cp2_HertzMat_HertzPhys,  Grid1_InfCylinder,  LawFunctor,  GridBound,  GridStore,  CircularOrbit,  In2_Truss_ElastMat,  ClusterAnalysis,  Cg2_Facet_Capsule_L6Geom,  Cp2_FrictMat_FrictPhys,  ArcOutlet,  SpatialBias,  IdealElPlData,  SphereClumpGeom,  InfCylinder,  Local6Dofs,  ShapeClump,  PelletMat,  DemData,  LawDispatcher,  Capsule,  Material,  In2_Facet,  Cg2_Sphere_Sphere_L6Geom,  Leapfrog,  AxialGravity,  ConcreteMatState,  GridBoundDispatcher,  Bo1_Wall_Aabb,  NonuniformAxisPlacementBias,  Cone,  BoxInlet2d,  ContactHook,  Law2_L6Geom_HertzPhys_DMT,  MeshVolume,  ParticleShooter,  ContactContainer,  Bo1_InfCylinder_Aabb,  PsdClumpGenerator,  BoundFunctor,  G3GeomCData,  BoxTraceTimeSetter,  Cg2_Wall_Ellipsoid_L6Geom,  Law2_L6Geom_PelletPhys_Pellet,  StableCircularOrbit,  WeirdTriaxControl,  Grid1_Facet,  G3Geom,  Cg2_InfCylinder_Capsule_L6Geom,  DemDataTagged,  Bo1_Facet_Aabb,  ForcesToHdf5,  VariableAlignedRotation,  ClusterMatState,  Facet,  IcePhys,  RawShapeClump,  DetectSteadyState,  Law2_L6Geom_FrictPhys_LinEl6,  ConveyorInlet,  CountContactsHook,  AxialBias,  VelocityAndReadForce,  GridBoundFunctor,  L6Geom,  Bound,  CPhys,  ContactLoop,  CylinderInlet,  Outlet,  ForceResetter,  Cg2_Cone_Sphere_L6Geom,  Cg2_Rod_Sphere_L6Geom,  Bo1_Capsule_Aabb
+   :exclude-members: HertzMat,  Rod,  Bo1_Sphere_Aabb,  ConcretePhys,  ConstantForce,  Cg2_Any_Any_L6Geom__Base,  Cg2_Facet_Ellipsoid_L6Geom,  In2_Wall_ElastMat,  PelletCData,  AlignedMinMaxShooter,  Collider,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Cp2_IceMat_IcePhys,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  ReadForce,  Cg2_Sphere_Sphere_G3Geom,  ParticleContainer,  Aabb,  IceMat,  CGeom,  Impose,  InletMatState,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  CGeomFunctor,  Cg2_Facet_Sphere_L6Geom,  InterpolatedMotion,  IntraForce,  Cg2_Cone_Sphere_L6Geom,  BoxOutlet,  ElastMat,  LawTesterStage,  LudingPhys,  Cg2_Sphere_Capsule_L6Geom,  Suspicious,  PelletMatState,  Inlet,  Grid1_Sphere,  Truss,  RadialForce,  PsdAxialBias,  ArcInlet,  In2_Sphere_ElastMat,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  CombinedImpose,  AabbCollider,  PharmaCapsuleGenerator,  RandomInlet,  Law2_L6Geom_IcePhys,  Cp2_ConcreteMat_ConcretePhys,  FlowAnalysis,  NodalForcesToHdf5,  HarmonicOscillation,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  ConcreteMat,  GridCollider,  CData,  LudingMat,  DynDt,  Cg2_Wall_Sphere_G3Geom,  Particle,  HalfspaceBuoyancy,  BoundDispatcher,  Ellipsoid,  PelletAgglomerator,  POVRayExport,  Cg2_Facet_Facet_L6Geom,  VtkExport,  PelletPhys,  Cp2_LudingMat_LudingPhys,  CGeomDispatcher,  HertzPhys,  Tracer,  ParticleGenerator,  FrictMat,  Cg2_Wall_Capsule_L6Geom,  Grid1_Wall,  CPhysFunctor,  Bo1_Rod_Aabb,  DemField,  PsdEllipsoidGenerator,  Cg2_Sphere_Ellipsoid_L6Geom,  InsertionSortCollider,  LayeredAxialBias,  FrictPhys,  Law2_L6Geom_ConcretePhys,  Law2_L6Geom_FrictPhys_IdealElPl,  Contact,  ArcShooter,  BoxInlet,  StackedBoxOutlet,  LudingMatState,  ClumpData,  VariableVelocity3d,  AlignedHarmonicOscillations,  Sphere,  Shape,  Cg2_Wall_Facet_L6Geom,  MatState,  AabbTreeCollider,  CPhysDispatcher,  Wall,  PeriIsoCompressor,  Cg2_Facet_InfCylinder_L6Geom,  Law2_L6Geom_LudingPhys,  PsdSphereGenerator,  Bo1_Ellipsoid_Aabb,  Law2_G3Geom_FrictPhys_IdealElPl,  LawTester,  MinMaxSphereGenerator,  TraceVisRep,  IntraFunctor,  Bo1_Cone_Aabb,  Cp2_PelletMat_PelletPhys,  Cp2_HertzMat_HertzPhys,  Grid1_InfCylinder,  LawFunctor,  GridBound,  GridStore,  CircularOrbit,  In2_Truss_ElastMat,  ClusterAnalysis,  Cg2_Facet_Capsule_L6Geom,  Cp2_FrictMat_FrictPhys,  ArcOutlet,  SpatialBias,  IdealElPlData,  SphereClumpGeom,  InfCylinder,  Local6Dofs,  ShapeClump,  PelletMat,  DemData,  LawDispatcher,  Capsule,  Material,  In2_Facet,  Cg2_Sphere_Sphere_L6Geom,  Leapfrog,  AxialGravity,  ConcreteMatState,  GridBoundDispatcher,  Bo1_Wall_Aabb,  NonuniformAxisPlacementBias,  Cone,  BoxInlet2d,  ContactHook,  Law2_L6Geom_HertzPhys_DMT,  MeshVolume,  ParticleShooter,  ContactContainer,  Bo1_InfCylinder_Aabb,  PsdClumpGenerator,  BoundFunctor,  G3GeomCData,  BoxTraceTimeSetter,  Cg2_Wall_Ellipsoid_L6Geom,  Law2_L6Geom_PelletPhys_Pellet,  StableCircularOrbit,  WeirdTriaxControl,  Grid1_Facet,  G3Geom,  Cg2_InfCylinder_Capsule_L6Geom,  DemDataTagged,  Bo1_Facet_Aabb,  ForcesToHdf5,  VariableAlignedRotation,  ClusterMatState,  Facet,  IcePhys,  RawShapeClump,  DetectSteadyState,  Law2_L6Geom_FrictPhys_LinEl6,  ConveyorInlet,  CountContactsHook,  AxialBias,  VelocityAndReadForce,  GridBoundFunctor,  L6Geom,  Bound,  CPhys,  ContactLoop,  CylinderInlet,  Outlet,  ForceResetter,  Cg2_InfCylinder_Sphere_L6Geom,  Cg2_Rod_Sphere_L6Geom,  Bo1_Capsule_Aabb
 
 
 .. rst-class:: html-toggle
@@ -209,7 +209,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0xe0e820>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x1ec8960>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -302,7 +302,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0xdbca90>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x1e76bd0>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -1451,7 +1451,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0xf85490, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x203f5d0, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -1687,7 +1687,7 @@ BoxInlet
 
       [type: AlignedBox3r]
 
-   .. attribute:: node (= <Node @ 0xe57d50, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1f11e90, at (0,0,0)>)
 
       Node defining local coordinate system (optional; if not given, global coordinates are used).
 
@@ -1727,7 +1727,7 @@ ArcInlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0xe5e540, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1f18680, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -1764,10 +1764,10 @@ ParticleGenerator
 		margin=.2;
 		"ParticleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
 		"MinMaxSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"ParticleGenerator" -> "MinMaxSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdSphereGenerator" -> "PsdCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"ParticleGenerator" -> "MinMaxSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
 		"PsdSphereGenerator" -> "PsdEllipsoidGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdClumpGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PharmaCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdSphereGenerator" -> "PsdCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PharmaCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
 		"ParticleGenerator" -> "PharmaCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
 		"ParticleGenerator" -> "PsdSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -2225,7 +2225,7 @@ ArcShooter
    :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0xe5f740, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1f19880, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -2296,10 +2296,10 @@ Outlet
 		rankdir=LR;
 		margin=.2;
 		"Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
 		"Outlet" -> "BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Outlet
@@ -2426,7 +2426,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0xe978b0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1f519f0, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -4212,7 +4212,7 @@ POVRayExport
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0xee2960>)
+   .. attribute:: colorRange (= <ScalarRange @ 0x1f9caa0>)
 
       Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
 
@@ -4320,13 +4320,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0xea38b0>)
+   .. attribute:: particles (= <ParticleContainer @ 0x1f5d9f0>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0xea3ad0>)
+   .. attribute:: contacts (= <ContactContainer @ 0x1f5dc10>)
 
       Linear view on particle contacts
 
@@ -4549,19 +4549,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0xdff3c0>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x1eb9500>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0xdf2300>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x1eac440>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0xdff2e0>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x1eb9420>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -4734,7 +4734,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0xde74e0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1ea1620, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -4872,14 +4872,14 @@ CGeomFunctor
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"CGeomFunctor" -> "Cg2_Wall_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"CGeomFunctor" -> "Cg2_Sphere_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: CGeomFunctor
@@ -4937,8 +4937,7 @@ Cg2_Any_Any_L6Geom__Base
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
@@ -4949,9 +4948,10 @@ Cg2_Any_Any_L6Geom__Base
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Cg2_Any_Any_L6Geom__Base
@@ -5004,13 +5004,13 @@ Cg2_Rod_Sphere_L6Geom
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
 
-Cg2_Cone_Sphere_L6Geom
-''''''''''''''''''''''
+Cg2_InfCylinder_Sphere_L6Geom
+'''''''''''''''''''''''''''''
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Cone_Sphere_L6Geom`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_InfCylinder_Sphere_L6Geom`
 
-.. autoclass:: Cg2_Cone_Sphere_L6Geom
+.. autoclass:: Cg2_InfCylinder_Sphere_L6Geom
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
@@ -5065,13 +5065,13 @@ Cg2_Facet_Capsule_L6Geom
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
 
-Cg2_InfCylinder_Sphere_L6Geom
-'''''''''''''''''''''''''''''
+Cg2_Cone_Sphere_L6Geom
+''''''''''''''''''''''
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_InfCylinder_Sphere_L6Geom`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Cone_Sphere_L6Geom`
 
-.. autoclass:: Cg2_InfCylinder_Sphere_L6Geom
+.. autoclass:: Cg2_Cone_Sphere_L6Geom
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
@@ -6120,13 +6120,13 @@ LawFunctor
 		rankdir=LR;
 		margin=.2;
 		"LawFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"Law2_L6Geom_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_PelletPhys_Pellet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_PelletPhys_Pellet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_G3Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_G3Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_HertzPhys_DMT" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -6393,6 +6393,59 @@ Law2_L6Geom_LudingPhys
 
       [type: int, not saved, not accessible from python]
 
+Law2_L6Geom_ConcretePhys
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.LawFunctor` → :obj:`~woo.dem.Law2_L6Geom_ConcretePhys`
+
+.. autoclass:: Law2_L6Geom_ConcretePhys
+   :members:
+   :exclude-members: yieldSurfType, yieldLogSpeed, yieldEllipseShift, omegaThreshold, epsSoft, relKnSoft, elastPotIx, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: yieldSurfType (= 3)
+
+      yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log
+
+      [type: int, named enum, possible values are: **'linear'** (*'lin'*, *'MC'*, *'mc'*, *'Mohr-Coulomb'*; 0), **'para'** (*'parabolic'*; 1), **'log'** (*'logarithmic'*; 2), **'log+lin'** (*'logarithmic, linear tension'*, *'loglin'*; 3), **'elliptic'** (*'ell'*; 4), **'elliptic+logarithmic'** (*'ell+log'*; 5)]
+
+   .. attribute:: yieldLogSpeed (= 0.1)
+
+      scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)
+
+      [type: Real]
+
+   .. attribute:: yieldEllipseShift (= nan)
+
+      horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)
+
+      [type: Real]
+
+   .. attribute:: omegaThreshold (= 1.0)
+
+      damage after which the contact disappears (<1), since omega reaches 1 only for strain →+∞
+
+      [type: Real]
+
+   .. attribute:: epsSoft (= -0.003)
+
+      Strain at which softening in compression starts (non-negative to deactivate)
+
+      [type: Real]
+
+   .. attribute:: relKnSoft (= 0.3)
+
+      Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)
+
+      [type: Real]
+
+   .. attribute:: elastPotIx (= -1)
+
+      Index for elastic potential energy
+
+      [type: int, not saved, not accessible from python]
+
 Law2_L6Geom_FrictPhys_IdealElPl
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -6461,59 +6514,6 @@ Law2_L6Geom_FrictPhys_IdealElPl
    .. attribute:: brokenIx (= -1)
 
       Index for energy lost in broken contacts with non-zero force
-
-      [type: int, not saved, not accessible from python]
-
-Law2_L6Geom_ConcretePhys
-%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.LawFunctor` → :obj:`~woo.dem.Law2_L6Geom_ConcretePhys`
-
-.. autoclass:: Law2_L6Geom_ConcretePhys
-   :members:
-   :exclude-members: yieldSurfType, yieldLogSpeed, yieldEllipseShift, omegaThreshold, epsSoft, relKnSoft, elastPotIx, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: yieldSurfType (= 3)
-
-      yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log
-
-      [type: int, named enum, possible values are: **'linear'** (*'lin'*, *'MC'*, *'mc'*, *'Mohr-Coulomb'*; 0), **'para'** (*'parabolic'*; 1), **'log'** (*'logarithmic'*; 2), **'log+lin'** (*'logarithmic, linear tension'*, *'loglin'*; 3), **'elliptic'** (*'ell'*; 4), **'elliptic+logarithmic'** (*'ell+log'*; 5)]
-
-   .. attribute:: yieldLogSpeed (= 0.1)
-
-      scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)
-
-      [type: Real]
-
-   .. attribute:: yieldEllipseShift (= nan)
-
-      horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)
-
-      [type: Real]
-
-   .. attribute:: omegaThreshold (= 1.0)
-
-      damage after which the contact disappears (<1), since omega reaches 1 only for strain →+∞
-
-      [type: Real]
-
-   .. attribute:: epsSoft (= -0.003)
-
-      Strain at which softening in compression starts (non-negative to deactivate)
-
-      [type: Real]
-
-   .. attribute:: relKnSoft (= 0.3)
-
-      Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)
-
-      [type: Real]
-
-   .. attribute:: elastPotIx (= -1)
-
-      Index for elastic potential energy
 
       [type: int, not saved, not accessible from python]
 
@@ -7710,7 +7710,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0xfc2310, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x207c450, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -7750,35 +7750,6 @@ StableCircularOrbit
       Radius, i.e. enforced distance from the rotation axis.
 
       [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-AlignedHarmonicOscillations
-"""""""""""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.AlignedHarmonicOscillations`
-
-.. autoclass:: AlignedHarmonicOscillations
-   :members:
-   :exclude-members: freqs, amps, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: freqs (= Vector3(nan,nan,nan))
-
-      Frequencies for individual axes. NaN value switches that axis off, the component will not be touched
-
-      [type: Vector3r]
-
-   .. attribute:: amps (= Vector3(0,0,0))
-
-      Amplitudes along individual axes.
-
-      [type: Vector3r]
 
 
 .. rst-class:: html-toggle
@@ -7846,6 +7817,35 @@ VariableVelocity3d
       Time offset which is subtracted from t (before wrapping, if :obj:`wrap` is used).
 
       [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+AlignedHarmonicOscillations
+"""""""""""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.AlignedHarmonicOscillations`
+
+.. autoclass:: AlignedHarmonicOscillations
+   :members:
+   :exclude-members: freqs, amps, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: freqs (= Vector3(nan,nan,nan))
+
+      Frequencies for individual axes. NaN value switches that axis off, the component will not be touched
+
+      [type: Vector3r]
+
+   .. attribute:: amps (= Vector3(0,0,0))
+
+      Amplitudes along individual axes.
+
+      [type: Vector3r]
 
 
 .. rst-class:: html-toggle
@@ -8128,7 +8128,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0xf1a3f0>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x1fd4530>)
 
       Color range for coloring the trace line
 
