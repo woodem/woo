@@ -195,22 +195,29 @@ bool PeriodicEngine::isActivated(){
 }
 
 void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
-	bool cmdDone(false),stepDone(false);
-	for(int i=0; i<(int)py::len(t); i++){
-		py::extract<string> exStr(t[i]);
-		py::extract<int> exInt(t[i]);
-		if(exStr.check()){
-			if(!cmdDone) command=exStr();
-			else throw std::invalid_argument(("PyRunner.command was already specified (extra unnamed string argument, at position "+to_string(i)+")").c_str());
-			cmdDone=true;
-			continue;
-		}
-		if(exInt.check()){
-			if(!stepDone) stepPeriod=exInt();
-			else throw std::invalid_argument(("PyRunner.stepPeriod was already specified (extra unnamed int argument, at position "+to_string(i)+")").c_str());
-			stepDone=true;
-			continue;
-		}
+	if(py::len(t)==0) return;
+	if(py::len(t)==1){
+		try {
+			command=py::cast<std::string>(t[0]);
+			t=py::tuple();
+			return;
+		} catch(...){ throw std::invalid_argument("Positional argument to PyRunner must be command (a string)."); }
 	}
-	t=py::tuple();
+	if(py::len(t)==2){
+		try{
+			command=py::cast<std::string>(t[0]);
+			stepPeriod=py::cast<int>(t[1]);
+			t=py::tuple();
+			return;
+		} catch(...){ };
+	}
+	if(py::len(t)==2){
+		try{
+			command=py::cast<std::string>(t[1]);
+			stepPeriod=py::cast<int>(t[0]);
+			t=py::tuple();
+			return;
+		} catch(...){ };
+	}
+	throw std::invalid_argument("Unable to extract positional (unnamed) arguments to PyRunner; must be PyRunner([string]) for command, or PyRunner([string],[int]) or PyRunner([string],[int]) for command and stepPeriod.");
 };
