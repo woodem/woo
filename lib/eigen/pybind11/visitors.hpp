@@ -29,8 +29,8 @@ class MatrixBaseVisitor{
 		.def("__imul__",&MatrixBaseVisitor::__imul__scalar<long>,py::is_operator())
 		.def("__rmul__",&MatrixBaseVisitor::__rmul__scalar<long>,py::is_operator())
 		.def("isApprox",&MatrixBaseVisitor::isApprox,py::arg("other"),py::arg("prec")=Eigen::NumTraits<Scalar>::dummy_precision(),"Approximate comparison with precision *prec*.")
-		.def("rows",&MatrixBaseT::rows,"Number of rows.")
-		.def("cols",&MatrixBaseT::cols,"Number of columns.")
+		.def("rows",[](const MatrixBaseT& self){ return self.rows(); })
+		.def("cols",[](const MatrixBaseT& self){ return self.cols(); })
 		;
 		visit_if_float<Scalar,PyClass>(cl);
 		visit_fixed_or_dynamic<MatrixBaseT,PyClass>(cl);
