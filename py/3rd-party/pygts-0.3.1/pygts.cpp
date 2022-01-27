@@ -405,9 +405,24 @@ triangle_enclosing(PyObject *self, PyObject *args)
 }
 
 
-#if PY_MAJOR_VERSION >= 3
-// in python/Modules/_io/_iomodule.h
-extern PyTypeObject PyIOBase_Type;
+#if PY_MAJOR_VERSION>=3
+  #if 0
+    // in python/Modules/_io/_iomodule.h
+    extern PyTypeObject PyIOBase_Type;
+  #else
+    static PyObject *PyIOBase_TypeObj;
+
+    static int init_file_emulator(void)
+    {
+      PyObject *io = PyImport_ImportModule("_io");
+      if (io == NULL)
+        return -1;
+      PyIOBase_TypeObj = PyObject_GetAttrString(io, "_IOBase");
+      if (PyIOBase_TypeObj == NULL)
+        return -1;
+      return 0;
+    }
+  #endif
 // taken from:
 // https://github.com/mapserver/mapserver/issues/4748
 /* Translate Python's built-in file object to FILE * */
@@ -797,6 +812,10 @@ static PyMethodDef gts_methods[] = {
 #endif
 {
   PyObject* m;
+
+  #if PY_MAJOR_VERSION>=3
+    if(init_file_emulator()<0) return MOD_ERROR_VAL;
+  #endif
 
   /* Allocate the object table */
   if( (obj_table=g_hash_table_new(NULL,NULL)) == NULL ) return MOD_ERROR_VAL;
