@@ -76,7 +76,7 @@ CylTriaxTest
 
    .. rubric:: ► Materials
 
-   .. attribute:: model (= <ContactModelSelector @ 140027950725216 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813787940640 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the membrane (the first material is used if there is no second one, but its friction is nevertheless reduced during the compaction phase to :obj:`suppTanPhi`).
 
@@ -169,7 +169,7 @@ CylTriaxTest
 .. automodule:: woo.pre.horse
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  FallingHorse
+   :exclude-members: FallingHorse,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -235,7 +235,7 @@ FallingHorse
 
       [type: str, choices: hexa, ortho]
 
-   .. attribute:: model (= <ContactModelSelector @ 140027950681440 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813787872048 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).
 
@@ -310,7 +310,7 @@ FallingHorse
 .. automodule:: woo.pre.psdrender
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  PsdRender,  FallingHorse
+   :exclude-members: FallingHorse,  PsdRender,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -344,7 +344,7 @@ PsdRender
 
       [type: float]
 
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x2999310>)
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x1c5ef00>)
 
       Particle generator
 
@@ -386,7 +386,7 @@ PsdRender
 
       [type: float]
 
-   .. attribute:: model (= <ContactModelSelector @ 140027949955008 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813787170752 (py)>)
 
       Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
 
@@ -428,97 +428,6 @@ PsdRender
 
       [type: bool]
 
-:mod:`woo.pre.toys`
---------------------------------
-
-.. inheritance-diagram:: woo.pre.toys
-   :parts: 3
-
-.. automodule:: woo.pre.toys
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  NewtonsCradle,  PsdRender,  FallingHorse
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-NewtonsCradle
-+++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
-
-.. autoclass:: NewtonsCradle
-   :members:
-   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
-
-   .. attribute:: nSpheres (= 5)
-
-      Total number of spheres
-
-      [type: int]
-
-   .. attribute:: nFall (= 1)
-
-      The number of spheres which are out of the equilibrium position at the beginning.
-
-      [type: int]
-
-   .. attribute:: fallAngle (= 0.7853981633974483)
-
-      Initial angle of falling spheres.
-
-      [type: float, unit: rad, preferred unit: deg]
-
-   .. attribute:: rad (= 0.005)
-
-      Radius of spheres
-
-      [type: float, unit: m]
-
-   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
-
-      Height and width of the suspension
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: cabRad (= 0.0005)
-
-      Radius of the suspending cables
-
-      [type: float, unit: m]
-
-   .. attribute:: model (= <ContactModelSelector @ 140027949955408 (py)>)
-
-      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
-
-      [type: ContactModelSelector]
-
-   .. attribute:: gravity (= Vector3(0,0,-9.81))
-
-      Gravity acceleration
-
-      [type: Vector3]
-
-   .. attribute:: plotEvery (= 10)
-
-      How often to collect plot data
-
-      [type: int]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      :obj:`woo.core.Scene.dtSafety`
-
-      [type: float]
-
 :mod:`woo.pre.ell2d`
 ---------------------------------
 
@@ -528,7 +437,7 @@ NewtonsCradle
 .. automodule:: woo.pre.ell2d
    :members:
    :undoc-members:
-   :exclude-members: EllGroup,  PsdRender,  CylTriaxTest,  NewtonsCradle,  FallingHorse
+   :exclude-members: FallingHorse,  PsdRender,  CylTriaxTest,  EllGroup
 
 
 .. rst-class:: html-toggle
@@ -586,7 +495,7 @@ EllGroup
 
       [type: float, unit: m/s]
 
-   .. attribute:: model (= <ContactModelSelector @ 140027950537120 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813800909136 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).
 
@@ -622,6 +531,97 @@ EllGroup
 
       [type: float]
 
+:mod:`woo.pre.toys`
+--------------------------------
+
+.. inheritance-diagram:: woo.pre.toys
+   :parts: 3
+
+.. automodule:: woo.pre.toys
+   :members:
+   :undoc-members:
+   :exclude-members: PsdRender,  CylTriaxTest,  EllGroup,  FallingHorse,  NewtonsCradle
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+NewtonsCradle
++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+
+.. autoclass:: NewtonsCradle
+   :members:
+   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+
+   .. attribute:: nSpheres (= 5)
+
+      Total number of spheres
+
+      [type: int]
+
+   .. attribute:: nFall (= 1)
+
+      The number of spheres which are out of the equilibrium position at the beginning.
+
+      [type: int]
+
+   .. attribute:: fallAngle (= 0.7853981633974483)
+
+      Initial angle of falling spheres.
+
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: rad (= 0.005)
+
+      Radius of spheres
+
+      [type: float, unit: m]
+
+   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
+
+      Height and width of the suspension
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: cabRad (= 0.0005)
+
+      Radius of the suspending cables
+
+      [type: float, unit: m]
+
+   .. attribute:: model (= <ContactModelSelector @ 139813787171152 (py)>)
+
+      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
+
+      [type: ContactModelSelector]
+
+   .. attribute:: gravity (= Vector3(0,0,-9.81))
+
+      Gravity acceleration
+
+      [type: Vector3]
+
+   .. attribute:: plotEvery (= 10)
+
+      How often to collect plot data
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
 :mod:`woo.pre.triax`
 ---------------------------------
 
@@ -631,7 +631,7 @@ EllGroup
 .. automodule:: woo.pre.triax
    :members:
    :undoc-members:
-   :exclude-members: EllGroup,  TriaxTest,  PsdRender,  CylTriaxTest,  NewtonsCradle,  FallingHorse
+   :exclude-members: PsdRender,  TriaxTest,  CylTriaxTest,  EllGroup,  FallingHorse,  NewtonsCradle
 
 
 .. rst-class:: html-toggle
@@ -699,13 +699,13 @@ TriaxTest
 
       [type: Vector3, unit: m]
 
-   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x25d5880>)
+   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x18ac7f0>)
 
       Particle generator; partices are then randomly placed in the volume.
 
       [type: ParticleGenerator]
 
-   .. attribute:: model (= <ContactModelSelector @ 140027949766752 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813786974224 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).
 
@@ -770,7 +770,7 @@ TriaxTest
 .. automodule:: woo.pre.chute
    :members:
    :undoc-members:
-   :exclude-members: EllGroup,  DissipChute,  TriaxTest,  PsdRender,  CylTriaxTest,  NewtonsCradle,  FallingHorse
+   :exclude-members: PsdRender,  TriaxTest,  CylTriaxTest,  DissipChute,  EllGroup,  FallingHorse,  NewtonsCradle
 
 
 .. rst-class:: html-toggle
@@ -816,13 +816,13 @@ DissipChute
 
       [type: float, unit: rad, preferred unit: deg]
 
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x2daa330>)
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x2087730>)
 
       Particle generator, placed above the chute
 
       [type: ParticleGenerator]
 
-   .. attribute:: model (= <ContactModelSelector @ 140027949953648 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 139813787169312 (py)>)
 
       Contact model
 
