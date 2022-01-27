@@ -35,7 +35,7 @@
 
       [type: [str, …], not shown in the UI]
 
-   .. attribute:: mats (= [<FrictMat @ 0x274aa00>])
+   .. attribute:: mats (= [<FrictMat @ 0x23284c0>])
 
       Material definitions
 
