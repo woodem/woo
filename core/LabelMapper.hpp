@@ -20,12 +20,13 @@ struct LabelMapper: public Object{
 	py::object __getitem__(const string& label);
 	// shared_ptr<Object>& __getitem__woo(const string& label);
 	void __delitem__(const string& label);
+	void __delitem__mod(const string& label);
 
 	template<typename listTuple>
 	bool sequence_check_setitem(const string& label, py::object o);
 	void opaque_sequence_with_woo_objects_error(py::object oo);
 
-
+	std::list<string> keys() const;
 	py::list pyKeys() const;
 	py::list pyItems() const;
 	int __len__() const;

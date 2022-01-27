@@ -64,7 +64,7 @@ struct QglMovableObject: public qglviewer::MouseGrabber{
 	}
 	void wheelEvent(QWheelEvent* const e, qglviewer::Camera* const camera){
 		//QPoint numDeg=e->angleDelta()/8.; // qt5
-		int dist=e->delta();
+		int dist=e->angleDelta().y();
 		dL=dist;
 		e->accept();
 	}

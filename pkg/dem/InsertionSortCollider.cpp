@@ -759,8 +759,12 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 			#endif
 			j=v.norm(j-1); // should allow j==-1 so that j<=iBegin works in the conditional ??!
 			#if 1
-				if(iter++==40000 || iter>100000){
+				static int nWarn=0;
+				const int maxWarn=50;
+				if((iter++==80000 || iter>100000) && nWarn<maxWarn){
 					LOG_ERROR("iter={}, partial={}, iBegin={}, i={}, i_1={}, j={}, vi.coord={}, v[v.norm(j)].coord={}, v.norm(j+1)={}, loIdx={}, v.cellDim={}",iter,partial,iBegin,i,i_1,j,vi.coord,v[v.norm(j)].coord,v.norm(j+1),loIdx,v.cellDim);
+					nWarn++;
+					if(nWarn==maxWarn) LOG_ERROR("[Further errors from insertion sort will be supressed]");
 				}
 			#endif
 		}

@@ -266,13 +266,13 @@ void GLViewer::mouseMovesCamera(){
 		setMouseBinding(Qt::LeftButton, CAMERA, ROTATE);
 		if(paraviewLike3d){
 			setMouseBinding(Qt::RightButton, CAMERA, ZOOM);
-			setMouseBinding(Qt::MidButton, CAMERA, TRANSLATE);
+			setMouseBinding(Qt::MiddleButton, CAMERA, TRANSLATE);
 			setMouseBinding(Qt::SHIFT + Qt::RightButton, FRAME, TRANSLATE);
-			setMouseBinding(Qt::SHIFT + Qt::MidButton, FRAME, ROTATE);
+			setMouseBinding(Qt::SHIFT + Qt::MiddleButton, FRAME, ROTATE);
 		} else {
-			setMouseBinding(Qt::MidButton, CAMERA, ZOOM);
+			setMouseBinding(Qt::MiddleButton, CAMERA, ZOOM);
 			setMouseBinding(Qt::RightButton, CAMERA, TRANSLATE);
-			setMouseBinding(Qt::SHIFT + Qt::MidButton, FRAME, TRANSLATE);
+			setMouseBinding(Qt::SHIFT + Qt::MiddleButton, FRAME, TRANSLATE);
 			setMouseBinding(Qt::SHIFT + Qt::RightButton, FRAME, ROTATE);
 		}
 	#else
@@ -280,13 +280,13 @@ void GLViewer::mouseMovesCamera(){
 		setMouseBinding(Qt::NoModifier, Qt::LeftButton, CAMERA, ROTATE);
 		if(paraviewLike3d){
 			setMouseBinding(Qt::NoModifier, Qt::RightButton, CAMERA, ZOOM);
-			setMouseBinding(Qt::NoModifier, Qt::MidButton, CAMERA, TRANSLATE);
+			setMouseBinding(Qt::NoModifier, Qt::MiddleButton, CAMERA, TRANSLATE);
 			setMouseBinding(Qt::ShiftModifier, Qt::RightButton, FRAME, TRANSLATE);
-			setMouseBinding(Qt::ShiftModifier, Qt::MidButton, FRAME, ROTATE);
+			setMouseBinding(Qt::ShiftModifier, Qt::MiddleButton, FRAME, ROTATE);
 		} else {
-			setMouseBinding(Qt::NoModifier, Qt::MidButton, CAMERA, ZOOM);
+			setMouseBinding(Qt::NoModifier, Qt::MiddleButton, CAMERA, ZOOM);
 			setMouseBinding(Qt::NoModifier, Qt::RightButton, CAMERA, TRANSLATE);
-			setMouseBinding(Qt::ShiftModifier, Qt::MidButton, FRAME, TRANSLATE);
+			setMouseBinding(Qt::ShiftModifier, Qt::MiddleButton, FRAME, TRANSLATE);
 			setMouseBinding(Qt::ShiftModifier, Qt::RightButton, FRAME, ROTATE);
 		}
 	#endif
@@ -298,11 +298,11 @@ void GLViewer::mouseMovesCamera(){
 
 void GLViewer::mouseMovesManipulatedFrame(qglviewer::Constraint* c){
 	#if QGLVIEWER_VERSION<0x020500
-		setMouseBinding(Qt::MidButton, FRAME, ZOOM);
+		setMouseBinding(Qt::MiddleButton, FRAME, ZOOM);
 		setMouseBinding(Qt::LeftButton, FRAME, ROTATE);
 		setMouseBinding(Qt::RightButton, FRAME, TRANSLATE);
 	#else
-		setMouseBinding(Qt::NoModifier, Qt::MidButton, FRAME, ZOOM);
+		setMouseBinding(Qt::NoModifier, Qt::MiddleButton, FRAME, ZOOM);
 		setMouseBinding(Qt::NoModifier, Qt::LeftButton, FRAME, ROTATE);
 		setMouseBinding(Qt::NoModifier, Qt::RightButton, FRAME, TRANSLATE);
 	#endif
@@ -438,7 +438,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	else if(e->key()==Qt::Key_S){
 		if(e->modifiers() & Qt::AltModifier){
 			LOG_INFO("Saving QGLViewer state to /tmp/qglviewerState.xml");
-			setStateFileName("/tmp/qglviewerState.xml"); saveStateToFile(); setStateFileName(QString::null);
+			setStateFileName("/tmp/qglviewerState.xml"); saveStateToFile(); setStateFileName(QString());
 			// return;
 		} else if (e->modifiers() & Qt::ControlModifier){
 			#if 0
@@ -902,7 +902,7 @@ void GLViewer::postDraw(){
 				glEnd();
 			}
 			glLineWidth(1.);
-			QGLViewer::drawText(scaleCenter[0],scaleCenter[1],QString().sprintf("%.3g",(double)segmentSize));
+			QGLViewer::drawText(scaleCenter[0],scaleCenter[1],QString().asprintf("%.3g",(double)segmentSize));
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_LIGHTING);
 		stopScreenCoordinatesSystem();
@@ -1257,7 +1257,7 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 			qglviewer::Vec up(camera()->upVector());
 			qglviewer::Vec dir(camera()->viewDirection());
 			//  QT5: use angleDelta() instead of delta()
-			float angle=manipulatedFrame()->rotationSensitivity()*manipulatedFrame()->wheelSensitivity()*event->delta()*(1/15.)*(M_PI/180);
+			float angle=manipulatedFrame()->rotationSensitivity()*manipulatedFrame()->wheelSensitivity()*event->angleDelta().y()*(1/15.)*(M_PI/180);
 			qglviewer::Quaternion qRot; qRot.setAxisAngle(dir,angle);
 			camera()->setUpVector(qRot.rotate(up));
 		} else QGLViewer::wheelEvent(event);
@@ -1266,8 +1266,8 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 	assert(manipulatedClipPlane<(int)renderer->clipPlanes.size());
 	float distStep=1e-3*sceneRadius();
 	//const float wheelSensitivityCoef = 8E-4f;
-	//Vec trans(0.0, 0.0, -event->delta()*wheelSensitivity()*wheelSensitivityCoef*(camera->position()-position()).norm());
-	float dist=event->delta()*manipulatedFrame()->wheelSensitivity()*distStep;
+	//Vec trans(0.0, 0.0, -event->angleDelta().y().*wheelSensitivity()*wheelSensitivityCoef*(camera->position()-position()).norm());
+	float dist=event->angleDelta().y()*manipulatedFrame()->wheelSensitivity()*distStep;
 	Vector3r normal=renderer->clipPlanes[manipulatedClipPlane]->ori*Vector3r::UnitZ();
 	qglviewer::Vec newPos=manipulatedFrame()->position()+qglviewer::Vec(normal[0],normal[1],normal[2])*dist;
 	manipulatedFrame()->setPosition(newPos);
