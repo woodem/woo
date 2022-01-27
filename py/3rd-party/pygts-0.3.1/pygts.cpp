@@ -406,7 +406,8 @@ triangle_enclosing(PyObject *self, PyObject *args)
 
 
 #if PY_MAJOR_VERSION>=3
-  #if 0
+  #define _EMULATE_PYIOBASE
+  #ifndef _EMULATE_PYIOBASE
     // in python/Modules/_io/_iomodule.h
     extern PyTypeObject PyIOBase_Type;
   #else
@@ -449,7 +450,11 @@ static FILE* streamFromPyFile(PyObject* file, const char* mode)
 FILE* FILE_from_py_file__raises(PyObject *f_, const char* mode){
   FILE* f;
   #if PY_MAJOR_VERSION >= 3
-    if(!PyObject_IsInstance(f_,PyIOBase_TypeObj)){
+    #ifdef _EMULATE_PYIOBASE
+      if(!PyObject_IsInstance(f_,PyIOBase_TypeObj)){
+    #else
+      if(!PyObjecr_IsInstance(f_,(PyObject*)&PyIOBase_Type)){
+    #endif
       PyErr_SetString(PyExc_TypeError,"expected a File (PyIOBase_type).");
       return NULL;
     }
@@ -813,7 +818,7 @@ static PyMethodDef gts_methods[] = {
 {
   PyObject* m;
 
-  #if PY_MAJOR_VERSION>=3
+  #ifdef _EMULATE_PYIOBASE
     if(init_file_emulator()<0) return MOD_ERROR_VAL;
   #endif
 
