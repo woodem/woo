@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.labels &#8212; Woo 1.0+rev1-git-dee587e documentation</title>
+    <title>woo.tests.labels &#8212; Woo 1.0+rev1-git-826b5c5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-dee587e documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-826b5c5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
@@ -165,7 +165,9 @@
         <span class="s1">&#39;LabelMapper: pseudo-modules&#39;</span>
         <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span>
         <span class="c1"># using name which does not exist yet</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">NameError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">abc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">abc</span><span class="p">)</span>
+        <span class="c1"># this internally calls getattr and catches AttributeError</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc&#39;</span><span class="p">))</span>
         <span class="c1"># using name which does not exist yet as pseudo-module</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">NameError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc.defg&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">_newModule</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
@@ -177,8 +179,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">_newModule</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">))</span> 
         <span class="c1"># deletion; should also delete abc.a1 automatically</span>
         <span class="k">del</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">abc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">NameError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">NameError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc.a1&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="p">,</span><span class="s1">&#39;abc.a1&#39;</span><span class="p">))</span>
         <span class="c1"># nested</span>
         <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">_newModule</span><span class="p">(</span><span class="s1">&#39;foo.bar&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">_whereIs</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">==</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">LabelMapper</span><span class="o">.</span><span class="n">inMod</span><span class="p">)</span>
@@ -278,7 +280,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-dee587e documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-826b5c5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>

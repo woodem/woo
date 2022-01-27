@@ -12,87 +12,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.batch`
------------------------------------
-
-.. automodule:: woo.tests.batch
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.psd`
----------------------------------
-
-.. automodule:: woo.tests.psd
-   :members:
-   :undoc-members:
-
 :mod:`woo.tests.demfield`
 --------------------------------------
 
 .. automodule:: woo.tests.demfield
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.shapepack`
----------------------------------------
-
-.. automodule:: woo.tests.shapepack
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.clustering`
-----------------------------------------
-
-.. automodule:: woo.tests.clustering
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.hertz`
------------------------------------
-
-.. automodule:: woo.tests.hertz
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.tetra`
------------------------------------
-
-.. automodule:: woo.tests.tetra
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.clump`
------------------------------------
-
-.. automodule:: woo.tests.clump
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.io`
---------------------------------
-
-.. automodule:: woo.tests.io
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.labels`
-------------------------------------
-
-.. automodule:: woo.tests.labels
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.ellipsoid`
----------------------------------------
-
-.. automodule:: woo.tests.ellipsoid
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.volumetric`
-----------------------------------------
-
-.. automodule:: woo.tests.volumetric
    :members:
    :undoc-members:
 
@@ -161,7 +84,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x24129b0, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x3203050, at (1,1,1)>)
 
       node attr
 
@@ -173,7 +96,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x1c0f9a0, at (1,1,1)>, <Node @ 0x2321e60, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x2a00130, at (1,1,1)>, <Node @ 0x3112b60, at (2,2,2)>])
 
       List of nodes
 
@@ -235,10 +158,98 @@ _TestPyClass2
 
       [type: int]
 
+:mod:`woo.tests.clustering`
+----------------------------------------
+
+.. automodule:: woo.tests.clustering
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.hertz`
+-----------------------------------
+
+.. automodule:: woo.tests.hertz
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.clump`
+-----------------------------------
+
+.. automodule:: woo.tests.clump
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.labels`
+------------------------------------
+
+.. automodule:: woo.tests.labels
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.ellipsoid`
+---------------------------------------
+
+.. automodule:: woo.tests.ellipsoid
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.batch`
+-----------------------------------
+
+.. automodule:: woo.tests.batch
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.psd`
+---------------------------------
+
+.. automodule:: woo.tests.psd
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.shapepack`
+---------------------------------------
+
+.. automodule:: woo.tests.shapepack
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.tetra`
+-----------------------------------
+
+.. automodule:: woo.tests.tetra
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.io`
+--------------------------------
+
+.. automodule:: woo.tests.io
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.pbc`
 ---------------------------------
 
 .. automodule:: woo.tests.pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.volumetric`
+----------------------------------------
+
+.. automodule:: woo.tests.volumetric
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass

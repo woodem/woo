@@ -568,13 +568,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0x137da70>)
+   .. attribute:: uRange (= <ScalarRange @ 0x216da70>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0x1382ec0>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x2172ec0>)
 
       Range for rotations (colors only)
 
@@ -1452,19 +1452,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x1325dd0>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x2115dd0>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x1325cf0>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x2115cf0>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x1358430>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x2148430>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 
@@ -1525,13 +1525,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x1336f20>)
+   .. attribute:: range (= <ScalarRange @ 0x2126f20>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x1336280>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x2126280>)
 
       Range for absolute value of shear force
 
@@ -1590,7 +1590,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x138af20>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x217af20>)
 
       Range for disk damage coloring.
 

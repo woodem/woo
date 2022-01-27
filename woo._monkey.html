@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo._monkey &#8212; Woo 1.0+rev1-git-dee587e documentation</title>
+    <title>woo._monkey &#8212; Woo 1.0+rev1-git-826b5c5 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="woo._gts.html" title="woo._gts"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-dee587e documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-826b5c5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a></li> 
@@ -339,6 +339,24 @@ implement default like this:</p>
 </dd></dl>
 
 </section>
+<section id="module-woo._monkey.gts">
+<span id="woo-monkey-gts"></span><h2><a class="reference internal" href="#module-woo._monkey.gts" title="woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a><a class="headerlink" href="#module-woo._monkey.gts" title="Permalink to this headline">¶</a></h2>
+<p>This module reimplements the gts.read function in python, since it is stragenly broken under windows, and replaces the original one by monkey-patching.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="woo._monkey.gts.py_gts_read">
+<span class="sig-prename descclassname"><span class="pre">woo._monkey.gts.</span></span><span class="sig-name descname"><span class="pre">py_gts_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/gts.html#py_gts_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.gts.py_gts_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pure-python implementation of the pygts._gts.read function; it hangs under Windows
+when using woo.gts (not pure pygts), in gts-0.7.6/src/misc.c:173 in next_char, where
+fgetc is waiting for the next character indefinitely (why?); when fgetc was replaced by lower-level read(fileno,buf,1), GTS was complaining about not seeing the first integer
+(number of vertices) at the beginning of the file.</p>
+<p>Since there seemed little point digging into GTS any further, this monkey-patch
+replaces that function with a pure-python implementation, which is perhaps not as
+efficient, but works reliably under Windows.</p>
+<p>The patch is only applied under Windows, and if ‘gts’ is in woo.config.features
+(i.e. the module woo.gts exists, and is also exposed as gts).</p>
+</dd></dl>
+
+</section>
 <section id="module-woo._monkey.compat">
 <span id="woo-monkey-compat"></span><h2><a class="reference internal" href="#module-woo._monkey.compat" title="woo._monkey.compat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.compat</span></code></a><a class="headerlink" href="#module-woo._monkey.compat" title="Permalink to this headline">¶</a></h2>
 </section>
@@ -384,24 +402,6 @@ implement default like this:</p>
 <dd><p>Inject decprecated classes into woo modules as needed.</p>
 </dd></dl>
 
-</section>
-<section id="module-woo._monkey.gts">
-<span id="woo-monkey-gts"></span><h2><a class="reference internal" href="#module-woo._monkey.gts" title="woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a><a class="headerlink" href="#module-woo._monkey.gts" title="Permalink to this headline">¶</a></h2>
-<p>This module reimplements the gts.read function in python, since it is stragenly broken under windows, and replaces the original one by monkey-patching.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="woo._monkey.gts.py_gts_read">
-<span class="sig-prename descclassname"><span class="pre">woo._monkey.gts.</span></span><span class="sig-name descname"><span class="pre">py_gts_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/_monkey/gts.html#py_gts_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo._monkey.gts.py_gts_read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pure-python implementation of the pygts._gts.read function; it hangs under Windows
-when using woo.gts (not pure pygts), in gts-0.7.6/src/misc.c:173 in next_char, where
-fgetc is waiting for the next character indefinitely (why?); when fgetc was replaced by lower-level read(fileno,buf,1), GTS was complaining about not seeing the first integer
-(number of vertices) at the beginning of the file.</p>
-<p>Since there seemed little point digging into GTS any further, this monkey-patch
-replaces that function with a pure-python implementation, which is perhaps not as
-efficient, but works reliably under Windows.</p>
-<p>The patch is only applied under Windows, and if ‘gts’ is in woo.config.features
-(i.e. the module woo.gts exists, and is also exposed as gts).</p>
-</dd></dl>
-
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
@@ -420,10 +420,10 @@ efficient, but works reliably under Windows.</p>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a><ul>
 <li><a class="reference internal" href="#module-woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a></li>
+<li><a class="reference internal" href="#module-woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.compat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.compat</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.extraDocs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.extraDocs</span></code></a></li>
 <li><a class="reference internal" href="#module-woo._monkey.aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.aliases</span></code></a></li>
-<li><a class="reference internal" href="#module-woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -494,7 +494,7 @@ efficient, but works reliably under Windows.</p>
         <li class="right" >
           <a href="woo._gts.html" title="woo._gts"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-dee587e documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-826b5c5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a></li> 
