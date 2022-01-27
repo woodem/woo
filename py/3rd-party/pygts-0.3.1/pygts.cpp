@@ -84,10 +84,10 @@ merge(PyObject *self, PyObject *args)
   v = vertices;
   for(i=0;i<N;i++) {
     if( (vertex = PYGTS_VERTEX(g_hash_table_lookup(obj_table,
-						   GTS_OBJECT(v->data))
-			       )) ==NULL ) {
+               GTS_OBJECT(v->data))
+             )) ==NULL ) {
       PyErr_SetString(PyExc_RuntimeError,
-		      "could not get object from table (internal error)");
+          "could not get object from table (internal error)");
       g_list_free(vertices);
       return NULL;
     }
@@ -153,9 +153,9 @@ vertices(PyObject *self, PyObject *args)
   v = vertices;
   for(i=0;i<N;i++) {
     if( (vertex = pygts_vertex_new(GTS_VERTEX(v->data))) == NULL ) {
-	Py_DECREF(tuple);
-	g_slist_free(vertices);
-	return NULL;
+  Py_DECREF(tuple);
+  g_slist_free(vertices);
+  return NULL;
     }
     PyTuple_SET_ITEM(tuple,i,(PyObject*)vertex);
     v = g_slist_next(v);
@@ -449,7 +449,7 @@ static FILE* streamFromPyFile(PyObject* file, const char* mode)
 FILE* FILE_from_py_file__raises(PyObject *f_, const char* mode){
   FILE* f;
   #if PY_MAJOR_VERSION >= 3
-    if(!PyObject_IsInstance(f_,(PyObject*)&PyIOBase_Type)){
+    if(!PyObject_IsInstance(f_,PyIOBase_TypeObj)){
       PyErr_SetString(PyExc_TypeError,"expected a File (PyIOBase_type).");
       return NULL;
     }
@@ -534,7 +534,7 @@ sphere(PyObject *self, PyObject *args)
   args = Py_BuildValue("()");
   kwds = Py_BuildValue("{s:O}","alloc_gtsobj",Py_True);
   surface = PYGTS_SURFACE(PygtsSurfaceType.tp_new(&PygtsSurfaceType, 
-						  args, kwds));
+              args, kwds));
   Py_DECREF(args);
   Py_DECREF(kwds);
   if( surface == NULL ) {
@@ -543,7 +543,7 @@ sphere(PyObject *self, PyObject *args)
   }
 
   gts_surface_generate_sphere(PYGTS_SURFACE_AS_GTS_SURFACE(surface),
-			      geodesation_order);
+            geodesation_order);
 
   pygts_object_register(PYGTS_OBJECT(surface));
   return (PyObject*)surface;
@@ -561,7 +561,7 @@ static void isofunc(gdouble **f, GtsCartesianGrid g, guint k, gpointer data)
   for (i = 0; i < PyArray_DIMS(scalars)[0]; i++) {
     for (j = 0; j < PyArray_DIMS(scalars)[1]; j++) {
       f[i][j] = *((gdouble *)PyArray_DATA(scalars) + i*PyArray_STRIDES(scalars)[0] + \
-			     j*PyArray_STRIDES(scalars)[1] + k*PyArray_STRIDES(scalars)[2]);
+           j*PyArray_STRIDES(scalars)[1] + k*PyArray_STRIDES(scalars)[2]);
     }
   }
 }
@@ -584,7 +584,7 @@ isosurface(PyObject *self, PyObject *args, PyObject *kwds)
   static char *kwlist[] = {"scalars", "isoval", "method", "extents", NULL};
 
   if(!PyArg_ParseTupleAndKeywords(args, kwds, "Od|sO", kwlist, 
-				  &Oscalars, isoval, &method, &Oextents)) {
+          &Oscalars, isoval, &method, &Oextents)) {
     return NULL;
   }
   
@@ -596,7 +596,7 @@ isosurface(PyObject *self, PyObject *args, PyObject *kwds)
 
   if(Oextents && 
      (!(extents =  (PyArrayObject *)
-	PyArray_ContiguousFromObject(Oextents, NPY_DOUBLE, 1, 1)))) {
+  PyArray_ContiguousFromObject(Oextents, NPY_DOUBLE, 1, 1)))) {
     ISO_CLEANUP;
     return NULL;
   }
@@ -612,17 +612,17 @@ isosurface(PyObject *self, PyObject *args, PyObject *kwds)
     g.x = *((gdouble*)PyArray_DATA(extents) + 0*s);
     g.nx = PyArray_DIMS(scalars)[0];
     g.dx = (*((gdouble*)PyArray_DATA(extents) + 1*s) - \
-	    *((gdouble*)PyArray_DATA(extents) + 0* s))/(g.nx-1);
+      *((gdouble*)PyArray_DATA(extents) + 0* s))/(g.nx-1);
 
     g.y = *((gdouble*)PyArray_DATA(extents) + 2*s);
     g.ny = PyArray_DIMS(scalars)[1];
     g.dy = (*((gdouble*)PyArray_DATA(extents) + 3*s) - \
-	    *((gdouble*)PyArray_DATA(extents) + 2*s))/(g.ny-1);
+      *((gdouble*)PyArray_DATA(extents) + 2*s))/(g.ny-1);
 
     g.z = *((gdouble*)PyArray_DATA(extents) + 4*s);
     g.nz = PyArray_DIMS(scalars)[2];
     g.dz = (*((gdouble*)PyArray_DATA(extents) + 5*s) - \
-	    *((gdouble*)PyArray_DATA(extents) + 4*s))/(g.nz-1);
+      *((gdouble*)PyArray_DATA(extents) + 4*s))/(g.nz-1);
   }
   else {
     g.x = -1.0;
@@ -638,7 +638,7 @@ isosurface(PyObject *self, PyObject *args, PyObject *kwds)
 
   /* Create the surface */
   if((s = gts_surface_new(gts_surface_class(), gts_face_class(),
-			  gts_edge_class(), gts_vertex_class())) == NULL ) {
+        gts_edge_class(), gts_vertex_class())) == NULL ) {
     PyErr_SetString(PyExc_MemoryError,"could not create Surface");
     return NULL;
   }
