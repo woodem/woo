@@ -105,6 +105,10 @@ class TestSceneLabels(unittest.TestCase):
         S.lab.abc.a1=1
         # fail using method on proxyed pseudo-module
         self.assertRaises(AttributeError, lambda: S.lab.abc._newModule('a1')) 
+        # deletion; should also delete abc.a1 automatically
+        del S.lab['abc']
+        self.assertRaises(NameError,lambda: getattr(S.lab,'abc'))
+        self.assertRaises(NameError,lambda: getattr(S.lab,'abc.a1'))
         #self.assertRaises(ValueError, lambda: S.lab._newModule('abc.a1'))
         # fail when recreating existing module
         self.assertRaises(ValueError, lambda: S.lab._newModule('abc'))

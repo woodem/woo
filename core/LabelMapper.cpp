@@ -23,9 +23,7 @@ bool LabelMapper::__contains__(const string& label) const {
 
 py::list LabelMapper::pyKeys() const{
 	py::list ret;
-	for(auto& kv: wooMap) ret.append(kv.first);
-	for(auto& kv: wooSeqMap) ret.append(kv.first);
-	for(auto& kv: pyMap) ret.append(kv.first);
+	for(const auto& k: this->keys()) ret.append(k);
 	return ret;
 }
 
@@ -316,11 +314,18 @@ void LabelMapper::__delitem__(const string& label){
 	int where=whereIs(label);
 	switch(where){
 		case NOWHERE: woo::NameError("No such label: '"+label+"'"); break;
-		case IN_MOD: modSet.erase(label); break;
+		case IN_MOD: __delitem__mod(label); break;
 		case IN_WOO: wooMap.erase(label); break;
 		case IN_PY: pyMap.erase(label); break;
 		case IN_WOO_SEQ: wooSeqMap.erase(label); break;
 	};
+}
+
+void LabelMapper::__delitem__mod(const string& label){
+	assert(whereIs(label)==IN_MOD);
+	std::list<string> kk=this->keys();
+	kk.remove_if([&label](const string& s){ return !boost::starts_with(s,label+"."); });
+	for(const auto& k: kk){ if(this->__contains__(k)) this->__delitem__(k); }
 }
 
 
@@ -361,12 +366,17 @@ void LabelMapper::newModule(const string& label){
 	}
 }
 
+std::list<string> LabelMapper::keys() const{
+	std::list<string> allKeys;
+	for(auto& kv: wooMap) allKeys.push_back(kv.first);
+	for(auto& kv: wooSeqMap) allKeys.push_back(kv.first);
+	for(auto& kv: pyMap) allKeys.push_back(kv.first);
+	for(auto& k: modSet) allKeys.push_back(k);
+	return allKeys;
+}
+
 py::list LabelMapper::__dir__(const string& prefix) const {
-	std::set<string> allKeys;
-	for(auto& kv: wooMap) allKeys.insert(kv.first);
-	for(auto& kv: wooSeqMap) allKeys.insert(kv.first);
-	for(auto& kv: pyMap) allKeys.insert(kv.first);
-	for(auto& k: modSet) allKeys.insert(k);
+	std::list<string> allKeys=this->keys();
 	py::list ret;
 	if(prefix.empty()){ for(auto& k: allKeys) ret.append(k); }
 	else {
