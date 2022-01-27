@@ -97,7 +97,9 @@ class TestSceneLabels(unittest.TestCase):
         'LabelMapper: pseudo-modules'
         S=self.S
         # using name which does not exist yet
-        self.assertRaises(NameError,lambda: S.lab.abc)
+        self.assertRaises(AttributeError,lambda: S.lab.abc)
+        # this internally calls getattr and catches AttributeError
+        self.assertFalse(hasattr(S.lab,'abc'))
         # using name which does not exist yet as pseudo-module
         self.assertRaises(NameError,lambda: setattr(S.lab,'abc.defg',1))
         S.lab._newModule('abc')
@@ -109,8 +111,8 @@ class TestSceneLabels(unittest.TestCase):
         self.assertRaises(AttributeError, lambda: S.lab.abc._newModule('a1')) 
         # deletion; should also delete abc.a1 automatically
         del S.lab.abc
-        self.assertRaises(NameError,lambda: getattr(S.lab,'abc'))
-        self.assertRaises(NameError,lambda: getattr(S.lab,'abc.a1'))
+        self.assertRaises(AttributeError,lambda: getattr(S.lab,'abc'))
+        self.assertRaises(AttributeError,lambda: getattr(S.lab,'abc.a1'))
         # nested
         S.lab._newModule('foo.bar')
         self.assertTrue(S.lab._whereIs('foo')==woo.core.LabelMapper.inMod)

@@ -301,7 +301,8 @@ py::object LabelMapper::__getitem__(const string& label){
 	}
 	int where=whereIs(label);
 	switch(where){
-		case NOWHERE: woo::NameError("No such label: '"+label+"'"); break;
+		// MUST be AttributeError, since hasattr in python tries getattr and catches AttributeError (not NameError)
+		case NOWHERE: woo::AttributeError("No such label: '"+label+"'"); break;
 		case IN_MOD: woo::ValueError("Label '"+label+"' is a pseudo-module and cannot be obtained directly.");
 		case IN_WOO: return py::cast(wooMap[label.c_str()]); break;
 		case IN_PY: return pyMap[label]; break;
