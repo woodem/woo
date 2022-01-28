@@ -7,7 +7,7 @@
 .. automodule:: woo.fem
    :members:
    :undoc-members:
-   :exclude-members: In2_Membrane_FrictMat,  Bo1_Tetra_Aabb,  In2_Membrane_ElastMat,  In2_Tet4_ElastMat,  Tetra,  Membrane,  Tet4
+   :exclude-members: In2_Membrane_FrictMat,  In2_Membrane_ElastMat,  Bo1_Tetra_Aabb,  In2_Tet4_ElastMat,  Tetra,  Membrane,  Tet4
 
 
 .. rst-class:: html-toggle
@@ -232,7 +232,7 @@ Membrane
    :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x25fee10, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x2410e80, at (0,0,0)>)
 
       Local coordinate system
 
