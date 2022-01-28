@@ -1,6 +1,6 @@
 # encoding: utf-8
 # 2013 © Václav Šmilauer <eu@doxos.eu>
-
+import woo
 import unittest
 from minieigen import *
 import woo.dem, woo.core, woo.pre, woo.batch

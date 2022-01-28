@@ -5,26 +5,25 @@ import unittest, types
 
 # import all test suites so that they can be picked up by testAll
 # explicit imports here so that suites are packed by pyInstaller
-from . import core
-from . import pbc
-from . import clump
-from . import psd
-from . import io
-from . import energy
-from . import grid
-from . import labels
-from . import hertz
-from . import ellipsoid
-from . import batch
-from . import shapepack
-from . import tetra
-from . import volumetric
-from . import demfield
-from . import clustering
+from . import test_core
+from . import test_pbc
+from . import test_clump
+from . import test_psd
+from . import test_io
+from . import test_energy
+from . import test_grid
+from . import test_labels
+from . import test_hertz
+from . import test_ellipsoid
+from . import test_batch
+from . import test_shapepack
+from . import test_tetra
+from . import test_volumetric
+from . import test_demfield
+from . import test_clustering
 # this is ugly, but automatic
 allTests=[m for m in dir() if type(eval(m))==types.ModuleType and eval(m).__name__.startswith('woo.tests')]
 # should the above break, do it manually (but keep the imports above):
-## allTests=['core','pbc','clump','psd','io']
 
 
 # all woo modules (ugly...)

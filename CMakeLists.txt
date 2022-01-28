@@ -499,23 +499,23 @@ install(FILES
 	DESTINATION ${WOO_MODULEDIR}
 )
 install(FILES
-	py/tests/batch.py
-	py/tests/clump.py
-	py/tests/clustering.py
-	py/tests/core.py
-	py/tests/demfield.py
-	py/tests/ellipsoid.py
-	py/tests/energy.py
-	py/tests/grid.py
-	py/tests/hertz.py
 	py/tests/__init__.py
-	py/tests/io.py
-	py/tests/labels.py
-	py/tests/pbc.py
-	py/tests/psd.py
-	py/tests/shapepack.py
-	py/tests/tetra.py
-	py/tests/volumetric.py
+	py/tests/test_batch.py
+	py/tests/test_clump.py
+	py/tests/test_clustering.py
+	py/tests/test_core.py
+	py/tests/test_demfield.py
+	py/tests/test_ellipsoid.py
+	py/tests/test_energy.py
+	py/tests/test_grid.py
+	py/tests/test_hertz.py
+	py/tests/test_io.py
+	py/tests/test_labels.py
+	py/tests/test_pbc.py
+	py/tests/test_psd.py
+	py/tests/test_shapepack.py
+	py/tests/test_tetra.py
+	py/tests/test_volumetric.py
 	DESTINATION ${WOO_MODULEDIR}/tests
 )
 install(FILES

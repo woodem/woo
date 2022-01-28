@@ -4,7 +4,7 @@
 '''
 Test some parts of energy conservation in DEM simulations.
 '''
-
+import woo
 import unittest
 from minieigen import *
 from math import *

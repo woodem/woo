@@ -1,6 +1,7 @@
 '''
 Tests for the new :obj:`woo.dem.ClusterAnalysis`.
 '''
+import woo
 import unittest
 import woo, woo.dem, woo.core, woo.utils
 from math import *
