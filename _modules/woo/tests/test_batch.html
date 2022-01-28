@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.batch &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests.test_batch &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,11 +50,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.batch</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_batch</a></li> 
       </ul>
     </div>
     </div>
@@ -65,10 +65,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for woo.tests.batch</h1><div class="highlight"><pre>
+  <h1>Source code for woo.tests.test_batch</h1><div class="highlight"><pre>
 <span></span><span class="c1"># encoding: utf-8</span>
 <span class="c1"># 2013 © Václav Šmilauer &lt;eu@doxos.eu&gt;</span>
-
+<span class="kn">import</span> <span class="nn">woo</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">woo.dem</span><span class="o">,</span> <span class="nn">woo.core</span><span class="o">,</span> <span class="nn">woo.pre</span><span class="o">,</span> <span class="nn">woo.batch</span>
@@ -76,8 +76,8 @@
 
 <span class="n">PY3K</span><span class="o">=</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TestBatchResults"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.batch.TestBatchResults">[docs]</a><span class="k">class</span> <span class="nc">TestBatchResults</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="TestBatchResults.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.batch.TestBatchResults.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestBatchResults"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_batch.TestBatchResults">[docs]</a><span class="k">class</span> <span class="nc">TestBatchResults</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestBatchResults.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_batch.TestBatchResults.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="n">pi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">sphere</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Sphere</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">2.3</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">()])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">pre</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">pre</span><span class="o">.</span><span class="n">horse</span><span class="o">.</span><span class="n">FallingHorse</span><span class="p">()</span>
@@ -107,7 +107,7 @@
     <span class="c1">#    self._checkDbContents(db)</span>
     <span class="c1">#    self._writeXls(db,db+&#39;.xlsx&#39;)</span>
     <span class="c1">#    self._writeCsv(db,db+&#39;.csv&#39;)</span>
-<div class="viewcode-block" id="TestBatchResults.testHdf5"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.batch.TestBatchResults.testHdf5">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">==</span><span class="s1">&#39;win32&#39;</span><span class="p">,</span><span class="s1">&#39;HDF5 not supported under Windows yet.&#39;</span><span class="p">)</span>    
+<div class="viewcode-block" id="TestBatchResults.testHdf5"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_batch.TestBatchResults.testHdf5">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">==</span><span class="s1">&#39;win32&#39;</span><span class="p">,</span><span class="s1">&#39;HDF5 not supported under Windows yet.&#39;</span><span class="p">)</span>    
     <span class="k">def</span> <span class="nf">testHdf5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Batch: results in HDF5 (store/read/XLS(X)/CSV)&#39;</span>
         <span class="n">db</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">tmpFilename</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;.hdf5&#39;</span>
@@ -166,11 +166,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.batch</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_batch</a></li> 
       </ul>
     </div>
     </div>

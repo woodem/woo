@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.grid &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests.test_grid &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,11 +50,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.grid</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_grid</a></li> 
       </ul>
     </div>
     </div>
@@ -65,20 +65,20 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for woo.tests.grid</h1><div class="highlight"><pre>
+  <h1>Source code for woo.tests.test_grid</h1><div class="highlight"><pre>
 <span></span><span class="c1"># encoding: utf-8</span>
 <span class="c1"># 2013 © Václav Šmilauer &lt;eu@doxos.eu&gt;</span>
-
+<span class="kn">import</span> <span class="nn">woo</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">woo.dem</span>
 
 
-<div class="viewcode-block" id="TestGridStore"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore">[docs]</a><span class="k">class</span> <span class="nc">TestGridStore</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="TestGridStore.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore">[docs]</a><span class="k">class</span> <span class="nc">TestGridStore</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">GridStore</span><span class="p">(</span><span class="n">gridSize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span><span class="n">cellLen</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">denseLock</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">exNumMaps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="o">=</span><span class="n">Vector3i</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestGridStore.testEx"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.testEx">[docs]</a>    <span class="k">def</span> <span class="nf">testEx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
+<div class="viewcode-block" id="TestGridStore.testEx"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.testEx">[docs]</a>    <span class="k">def</span> <span class="nf">testEx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
         <span class="s1">&#39;Grid: storage: dense and extra data&#39;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">]</span><span class="o">==</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)))</span>
@@ -87,16 +87,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">dense</span><span class="o">==</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">extra</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="o">==</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">countEx</span><span class="p">()</span><span class="o">==</span><span class="p">{</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">):</span><span class="mi">6</span><span class="p">})</span></div>
-<div class="viewcode-block" id="TestGridStore.testAppend"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.testAppend">[docs]</a>    <span class="k">def</span> <span class="nf">testAppend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore.testAppend"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.testAppend">[docs]</a>    <span class="k">def</span> <span class="nf">testAppend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Grid: storage: appending data&#39;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
-<div class="viewcode-block" id="TestGridStore.testStorageOrder"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.testStorageOrder">[docs]</a>    <span class="k">def</span> <span class="nf">testStorageOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore.testStorageOrder"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.testStorageOrder">[docs]</a>    <span class="k">def</span> <span class="nf">testStorageOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Grid: storage: storage order&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">lin2ijk</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># last varies the fastest</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">ijk2lin</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestGridStore.testPyAcces"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.testPyAcces">[docs]</a>    <span class="k">def</span> <span class="nf">testPyAcces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore.testPyAcces"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.testPyAcces">[docs]</a>    <span class="k">def</span> <span class="nf">testPyAcces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Grid: storage: python access&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">]</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">]</span><span class="o">==</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)))</span>
@@ -105,7 +105,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">countEx</span><span class="p">()</span><span class="o">==</span><span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ijk</span><span class="p">]</span><span class="o">==</span><span class="p">[])</span></div>
-<div class="viewcode-block" id="TestGridStore.testComplement"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridStore.testComplement">[docs]</a>    <span class="k">def</span> <span class="nf">testComplement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridStore.testComplement"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridStore.testComplement">[docs]</a>    <span class="k">def</span> <span class="nf">testComplement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Grid: storage: complements&#39;</span>
         <span class="c1"># make insignificant parameters different</span>
         <span class="n">g1</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">GridStore</span><span class="p">(</span><span class="n">gridSize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">cellLen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">denseLock</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">exNumMaps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -135,8 +135,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">g12</span><span class="p">[</span><span class="n">c4</span><span class="p">]</span><span class="o">==</span><span class="p">[])</span></div></div>
 
 
-<div class="viewcode-block" id="TestGridColliderBasics"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridColliderBasics">[docs]</a><span class="k">class</span> <span class="nc">TestGridColliderBasics</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="TestGridColliderBasics.testParams"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.grid.TestGridColliderBasics.testParams">[docs]</a>    <span class="k">def</span> <span class="nf">testParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridColliderBasics"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridColliderBasics">[docs]</a><span class="k">class</span> <span class="nc">TestGridColliderBasics</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestGridColliderBasics.testParams"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_grid.TestGridColliderBasics.testParams">[docs]</a>    <span class="k">def</span> <span class="nf">testParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;GridCollider: used-definable parameters&#39;</span>
         <span class="n">gc</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">GridCollider</span><span class="p">()</span>
         <span class="n">gc</span><span class="o">.</span><span class="n">domain</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
@@ -198,11 +198,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.grid</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_grid</a></li> 
       </ul>
     </div>
     </div>

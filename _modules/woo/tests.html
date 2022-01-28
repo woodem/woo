@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.tests</a></li> 
@@ -72,26 +72,25 @@
 
 <span class="c1"># import all test suites so that they can be picked up by testAll</span>
 <span class="c1"># explicit imports here so that suites are packed by pyInstaller</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">core</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">pbc</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">clump</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">psd</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">io</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">energy</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">grid</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">labels</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">hertz</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">ellipsoid</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">batch</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">shapepack</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">tetra</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">volumetric</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">demfield</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">clustering</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_core</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_pbc</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_clump</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_psd</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_io</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_energy</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_grid</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_labels</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_hertz</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_ellipsoid</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_batch</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_shapepack</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_tetra</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_volumetric</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_demfield</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">test_clustering</span>
 <span class="c1"># this is ugly, but automatic</span>
 <span class="n">allTests</span><span class="o">=</span><span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span> <span class="ow">and</span> <span class="nb">eval</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;woo.tests&#39;</span><span class="p">)]</span>
 <span class="c1"># should the above break, do it manually (but keep the imports above):</span>
-<span class="c1">## allTests=[&#39;core&#39;,&#39;pbc&#39;,&#39;clump&#39;,&#39;psd&#39;,&#39;io&#39;]</span>
 
 
 <span class="c1"># all woo modules (ugly...)</span>
@@ -204,7 +203,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.tests</a></li> 

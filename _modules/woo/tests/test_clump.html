@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.clump &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests.test_clump &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,11 +50,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.clump</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_clump</a></li> 
       </ul>
     </div>
     </div>
@@ -65,12 +65,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for woo.tests.clump</h1><div class="highlight"><pre>
+  <h1>Source code for woo.tests.test_clump</h1><div class="highlight"><pre>
 <span></span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Various computations affected by the periodic boundary conditions.</span>
 <span class="sd">&#39;&#39;&#39;</span>
-
+<span class="kn">import</span> <span class="nn">woo</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
@@ -80,9 +80,9 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">woo</span>
 
-<div class="viewcode-block" id="TestSimpleClump"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump">[docs]</a><span class="k">class</span> <span class="nc">TestSimpleClump</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump">[docs]</a><span class="k">class</span> <span class="nc">TestSimpleClump</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="s2">&quot;Test things on a simple clump composed of 2 spheres.&quot;</span>
-<div class="viewcode-block" id="TestSimpleClump.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="o">=</span><span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
         <span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="p">,</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="n">Vector3</span><span class="o">.</span><span class="n">Zero</span><span class="p">,</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
@@ -96,7 +96,7 @@
         <span class="c1">#print self.b1,self.b1.dem.master,id(self.b1.dem.master),self.b1.dem.master._cxxAddr</span>
         <span class="c1">#print self.b2,self.b2.dem.master,id(self.b2.dem.master),self.b1.dem.master._cxxAddr</span>
         <span class="c1">#print self.bC,id(self.bC),self.bC._cxxAddr</span>
-<div class="viewcode-block" id="TestSimpleClump.testConsistency"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump.testConsistency">[docs]</a>    <span class="k">def</span> <span class="nf">testConsistency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump.testConsistency"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump.testConsistency">[docs]</a>    <span class="k">def</span> <span class="nf">testConsistency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Clump: ids and flags consistency&quot;</span>
         <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
         <span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="n">bC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bC</span>
@@ -110,7 +110,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">b2</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">clumped</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">b1</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">master</span><span class="o">==</span><span class="n">bC</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">b2</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">master</span><span class="o">==</span><span class="n">bC</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestSimpleClump.testStaticProperties"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump.testStaticProperties">[docs]</a>    <span class="k">def</span> <span class="nf">testStaticProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump.testStaticProperties"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump.testStaticProperties">[docs]</a>    <span class="k">def</span> <span class="nf">testStaticProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Clump: mass, centroid, intertia&quot;</span>
         <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
         <span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="n">bC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bC</span>
@@ -131,7 +131,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">iC</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">iMax</span><span class="p">)</span></div>
         <span class="c1"># check orientation...?</span>
         <span class="c1">#self.assertAlmostEqual</span>
-<div class="viewcode-block" id="TestSimpleClump.testVelocity"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump.testVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">testVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump.testVelocity"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump.testVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">testVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Clump: velocities of member assigned by Leapfrog&quot;</span>
         <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>
         <span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="n">bC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bC</span>
@@ -147,7 +147,7 @@
         <span class="c1"># angular velocities</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">b1</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="p">,</span><span class="n">bC</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="p">);</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">b2</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="p">,</span><span class="n">bC</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">angVel</span><span class="p">);</span></div>
-<div class="viewcode-block" id="TestSimpleClump.testNoCollide"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSimpleClump.testNoCollide">[docs]</a>    <span class="k">def</span> <span class="nf">testNoCollide</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSimpleClump.testNoCollide"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSimpleClump.testNoCollide">[docs]</a>    <span class="k">def</span> <span class="nf">testNoCollide</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Clump: particles inside one clump don&#39;t collide with each other&quot;</span>
         <span class="c1"># use a new scene, with a different clump in this test</span>
         <span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
@@ -158,7 +158,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="ow">not</span> <span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">Collider</span><span class="o">.</span><span class="n">mayCollide</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="sphereClumpPrincipalAxes"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.sphereClumpPrincipalAxes">[docs]</a><span class="k">def</span> <span class="nf">sphereClumpPrincipalAxes</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="n">rr</span><span class="p">):</span>
+<div class="viewcode-block" id="sphereClumpPrincipalAxes"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.sphereClumpPrincipalAxes">[docs]</a><span class="k">def</span> <span class="nf">sphereClumpPrincipalAxes</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="n">rr</span><span class="p">):</span>
     <span class="s1">&#39;Clump: return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres&#39;</span>
     <span class="n">ii</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">))</span>
     <span class="n">Ii</span><span class="o">=</span><span class="p">[</span><span class="n">Matrix3</span><span class="p">(</span><span class="n">Vector3</span><span class="o">.</span><span class="n">Ones</span><span class="o">*</span><span class="p">((</span><span class="mi">8</span><span class="o">/</span><span class="mf">15.</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">rr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">5</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ii</span><span class="p">]</span>
@@ -175,14 +175,14 @@
     <span class="k">return</span> <span class="n">V</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">ori</span><span class="p">,</span><span class="n">inertia</span></div>
 
 
-<div class="viewcode-block" id="TestSphereClumpGeom"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSphereClumpGeom">[docs]</a><span class="k">class</span> <span class="nc">TestSphereClumpGeom</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSphereClumpGeom"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSphereClumpGeom">[docs]</a><span class="k">class</span> <span class="nc">TestSphereClumpGeom</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="s2">&quot;Clump: geometry of clumps composed of spheres only&quot;</span>
-<div class="viewcode-block" id="TestSphereClumpGeom.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSphereClumpGeom.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSphereClumpGeom.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSphereClumpGeom.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># c has no self-intersections</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">=</span><span class="n">SphereClumpGeom</span><span class="p">(</span><span class="n">centers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">radii</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span><span class="n">div</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># c2 has several identical (overlapping) spheres</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">=</span><span class="n">SphereClumpGeom</span><span class="p">(</span><span class="n">centers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)],</span><span class="n">radii</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">div</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestSphereClumpGeom.testSteiner"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSphereClumpGeom.testSteiner">[docs]</a>    <span class="k">def</span> <span class="nf">testSteiner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSphereClumpGeom.testSteiner"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSphereClumpGeom.testSteiner">[docs]</a>    <span class="k">def</span> <span class="nf">testSteiner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;SphereClumpGeom: properties via Steiner&#39;s theorem&quot;</span>
         <span class="n">vol</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">ori</span><span class="p">,</span><span class="n">inertia</span><span class="o">=</span><span class="n">sphereClumpPrincipalAxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">centers</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">radii</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">recompute</span><span class="p">(</span><span class="n">div</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -190,7 +190,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">inertia</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">inertia</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>    <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestSphereClumpGeom.testSampling"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.clump.TestSphereClumpGeom.testSampling">[docs]</a>    <span class="k">def</span> <span class="nf">testSampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestSphereClumpGeom.testSampling"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_clump.TestSphereClumpGeom.testSampling">[docs]</a>    <span class="k">def</span> <span class="nf">testSampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;SphereClumpGeom: properties via grid sampling&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">.</span><span class="n">recompute</span><span class="p">(</span><span class="n">div</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">exactV</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">radii</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span>
@@ -250,11 +250,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.clump</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_clump</a></li> 
       </ul>
     </div>
     </div>

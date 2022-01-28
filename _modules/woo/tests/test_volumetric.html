@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.volumetric &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests.test_volumetric &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,11 +50,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.volumetric</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_volumetric</a></li> 
       </ul>
     </div>
     </div>
@@ -65,7 +65,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for woo.tests.volumetric</h1><div class="highlight"><pre>
+  <h1>Source code for woo.tests.test_volumetric</h1><div class="highlight"><pre>
 <span></span><span class="c1"># encoding: utf-8</span>
 <span class="c1"># 2013 © Václav Šmilauer &lt;eu@doxos.eu&gt;</span>
 
@@ -79,9 +79,9 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
 
-<div class="viewcode-block" id="TestVolumetric"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.volumetric.TestVolumetric">[docs]</a><span class="k">class</span> <span class="nc">TestVolumetric</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestVolumetric"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_volumetric.TestVolumetric">[docs]</a><span class="k">class</span> <span class="nc">TestVolumetric</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="s1">&#39;Volumetric properties&#39;</span>
-<div class="viewcode-block" id="TestVolumetric.testTetraCanon"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.volumetric.TestVolumetric.testTetraCanon">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraCanon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestVolumetric.testTetraCanon"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_volumetric.TestVolumetric.testTetraCanon">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraCanon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Tetra: mass, centrer, inertia of canonical tetrahedron&#39;</span>
         <span class="c1"># analytical result:</span>
         <span class="c1"># covariance matrix of canonical tetrahedron -- see </span>
@@ -100,7 +100,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">Va</span><span class="p">,</span><span class="n">Vn</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">)</span></div>
     <span class="c1">#def testTetraGeneric(self):</span>
     <span class="c1">#    &#39;Tetra: mass, center, inertia of generic tetrahedron&#39;</span>
-<div class="viewcode-block" id="TestVolumetric.testTriCanon"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.volumetric.TestVolumetric.testTriCanon">[docs]</a>    <span class="k">def</span> <span class="nf">testTriCanon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestVolumetric.testTriCanon"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_volumetric.TestVolumetric.testTriCanon">[docs]</a>    <span class="k">def</span> <span class="nf">testTriCanon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Triangle: area, inertia of canonical triangle&#39;</span>
         <span class="c1"># http://en.wikipedia.org/wiki/Inertia_tensor_of_triangle#Covariance_of_a_canonical_triangle</span>
         <span class="c1"># inertia</span>
@@ -114,7 +114,7 @@
         <span class="n">Aa</span><span class="o">=.</span><span class="mi">5</span>
         <span class="n">An</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">comp</span><span class="o">.</span><span class="n">triangleArea</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">Aa</span><span class="p">,</span><span class="n">An</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestVolumetric.testTetraUnit"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.volumetric.TestVolumetric.testTetraUnit">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraUnit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestVolumetric.testTetraUnit"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_volumetric.TestVolumetric.testTetraUnit">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraUnit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Tetra: principal axes of unit tetrahedron&#39;</span>
         <span class="n">vv</span><span class="o">=</span><span class="p">[</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span><span class="n">Vector3</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span><span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
         <span class="n">a</span><span class="o">=</span><span class="mi">2</span>
@@ -142,7 +142,7 @@
                 <span class="c1">#print &#39;e&#39;,e</span>
                 <span class="c1">#for j in 0,1,2:</span>
                     <span class="c1"># self.assertAlmostEqual(ax[i],e[i],delta=1e-9)</span>
-<div class="viewcode-block" id="TestVolumetric.testTetraGeneric"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.volumetric.TestVolumetric.testTetraGeneric">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraGeneric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestVolumetric.testTetraGeneric"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_volumetric.TestVolumetric.testTetraGeneric">[docs]</a>    <span class="k">def</span> <span class="nf">testTetraGeneric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Tetra: inertia and principal axes of generic tetrahedron&#39;</span>
         <span class="c1"># example from</span>
         <span class="c1"># https://books.google.com/books?id=2b8-79CuIkAC&amp;pg=PA185</span>
@@ -221,11 +221,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.volumetric</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_volumetric</a></li> 
       </ul>
     </div>
     </div>

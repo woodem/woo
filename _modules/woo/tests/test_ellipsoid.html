@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.tests.ellipsoid &#8212; Woo 1.0+rev1-git-7a292dd documentation</title>
+    <title>woo.tests.test_ellipsoid &#8212; Woo 1.0+rev1-git-a9252c1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,11 +50,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" accesskey="U">woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.ellipsoid</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_ellipsoid</a></li> 
       </ul>
     </div>
     </div>
@@ -65,10 +65,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for woo.tests.ellipsoid</h1><div class="highlight"><pre>
+  <h1>Source code for woo.tests.test_ellipsoid</h1><div class="highlight"><pre>
 <span></span><span class="c1"># encoding: utf-8</span>
 <span class="c1"># 2013 © Václav Šmilauer &lt;eu@doxos.eu&gt;</span>
-
+<span class="kn">import</span> <span class="nn">woo</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">minieigen</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">woo.core</span>
@@ -77,9 +77,9 @@
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="k">import</span> <span class="o">*</span>
 
-<div class="viewcode-block" id="TestEllipsoid"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.ellipsoid.TestEllipsoid">[docs]</a><span class="k">class</span> <span class="nc">TestEllipsoid</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestEllipsoid"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_ellipsoid.TestEllipsoid">[docs]</a><span class="k">class</span> <span class="nc">TestEllipsoid</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="s1">&#39;Test :obj:`Cg2_Ellipsoid_Ellipsoid_L6Geom`.&#39;</span>
-<div class="viewcode-block" id="TestEllipsoid.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.ellipsoid.TestEllipsoid.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestEllipsoid.setUp"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_ellipsoid.TestEllipsoid.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">S</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">DemField</span><span class="p">()])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">=</span><span class="n">FrictMat</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span><span class="n">young</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span><span class="n">ktDivKn</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span><span class="n">tanPhi</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">S</span><span class="o">.</span><span class="n">dtSafety</span><span class="o">=</span><span class="mf">0.7</span>
@@ -89,7 +89,7 @@
             <span class="c1"># -123 is replaced by v0 before actually used</span>
         <span class="c1">#    LawTester(ids=(0,1),abWeight=.5,stages=[LawTesterStage(values=(-123,0,0,0,0,0),whats=&#39;ivv...&#39;,until=&#39;stage.rebound&#39;,done=&#39;S.stop(); tester.dead=True&#39;)],label=&#39;tester&#39;)</span>
         <span class="c1">#]</span>
-<div class="viewcode-block" id="TestEllipsoid.testNormalDisplacementEllipsoid"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid">[docs]</a>    <span class="k">def</span> <span class="nf">testNormalDisplacementEllipsoid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestEllipsoid.testNormalDisplacementEllipsoid"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid">[docs]</a>    <span class="k">def</span> <span class="nf">testNormalDisplacementEllipsoid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Ellipsoid: normal displacement on contact with ellipsoid.&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
         <span class="c1"># try the same thing with different sizes of ellipsoids</span>
@@ -123,13 +123,13 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;displacement&#39;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">uN</span><span class="p">)</span>
             <span class="c1"># e1 should move by -.1×.1 = .01 towards the first one, which should be the overlap distance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">uN</span><span class="p">,</span><span class="o">-.</span><span class="mi">01</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mf">1e-5</span><span class="o">*</span><span class="mf">0.01</span><span class="p">)</span></div>
-<div class="viewcode-block" id="TestEllipsoid.testNormalDisplacementWall"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.ellipsoid.TestEllipsoid.testNormalDisplacementWall">[docs]</a>    <span class="k">def</span> <span class="nf">testNormalDisplacementWall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestEllipsoid.testNormalDisplacementWall"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementWall">[docs]</a>    <span class="k">def</span> <span class="nf">testNormalDisplacementWall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Ellipsoid: normal displacement on contact with wall&#39;</span>
         <span class="k">pass</span></div>
         <span class="c1">#self.S.saveTmp()</span>
         <span class="c1">#for scale in [.1,1.,10.]:</span>
         <span class="c1">#    gOri=Quaternion((1,2,3),math.pi/4.) # some random orientation</span>
-<div class="viewcode-block" id="TestEllipsoid.testMassInertia"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.ellipsoid.TestEllipsoid.testMassInertia">[docs]</a>    <span class="k">def</span> <span class="nf">testMassInertia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestEllipsoid.testMassInertia"><a class="viewcode-back" href="../../../woo.tests.html#woo.tests.test_ellipsoid.TestEllipsoid.testMassInertia">[docs]</a>    <span class="k">def</span> <span class="nf">testMassInertia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s1">&#39;Ellipsoid: mass and inertia computation&#39;</span>
         <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span>
         <span class="n">rho</span><span class="o">=</span><span class="mi">1</span>
@@ -190,11 +190,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../../index.html">Woo 1.0+rev1-git-7a292dd documentation</a> &#187;</li>
+    <li><a href="../../../index.html">Woo 1.0+rev1-git-a9252c1 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../tests.html" >woo.tests</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">woo.tests.ellipsoid</a></li> 
+        <li class="nav-item nav-item-this"><a href="">woo.tests.test_ellipsoid</a></li> 
       </ul>
     </div>
     </div>

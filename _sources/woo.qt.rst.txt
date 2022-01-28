@@ -165,6 +165,14 @@ SnapshotEngine
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
 
+:mod:`woo.qt.ExceptionDialog`
+------------------------------------------
+
+.. automodule:: woo.qt.ExceptionDialog
+   :members:
+   :undoc-members:
+   :exclude-members: UiPrefs,  SnapshotEngine
+
 :mod:`woo.qt.ui_controller`
 ----------------------------------------
 
@@ -193,14 +201,6 @@ SnapshotEngine
 ---------------------------------------
 
 .. automodule:: woo.qt.ObjectEditor
-   :members:
-   :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
-
-:mod:`woo.qt.ExceptionDialog`
-------------------------------------------
-
-.. automodule:: woo.qt.ExceptionDialog
    :members:
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
