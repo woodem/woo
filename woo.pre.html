@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.pre &#8212; Woo 1.0+rev1-git-bd4f65e documentation</title>
+    <title>woo.pre &#8212; Woo 1.0+rev1-git-cfd23c6 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="woo.post2d.html" title="woo.post2d"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-bd4f65e documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-cfd23c6 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre</span></code></a></li> 
@@ -78,15 +78,15 @@
             
   <section id="module-woo.pre">
 <span id="woo-pre"></span><h1><a class="reference internal" href="#module-woo.pre" title="woo.pre"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre</span></code></a><a class="headerlink" href="#module-woo.pre" title="Permalink to this headline">¶</a></h1>
-<section id="woo-pre-chute">
-<h2><a class="reference internal" href="#module-woo.pre.chute" title="woo.pre.chute"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.chute</span></code></a><a class="headerlink" href="#woo-pre-chute" title="Permalink to this headline">¶</a></h2>
-digraph inheritance6147678fee {
+<section id="woo-pre-horse">
+<h2><a class="reference internal" href="#module-woo.pre.horse" title="woo.pre.horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><a class="headerlink" href="#woo-pre-horse" title="Permalink to this headline">¶</a></h2>
+digraph inheritance8af2cc835f {
 bgcolor=transparent;
 rankdir=LR;
 size=&quot;&quot;;
-  &quot;pre.chute.DissipChute&quot; [URL=&quot;#woo.pre.chute.DissipChute&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Chute for studying dissipation of energy.&quot;];
-  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;pre.horse.FallingHorse&quot; [URL=&quot;#woo.pre.horse.FallingHorse&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Preprocessor for the falling horse simulation. The falling horse is historically the demo of Woo. IT shows importing triangulated surfaces, filling imported geometry with particle arrangement, selection of material model, export for VTK (Paraview) and the :obj:`woo.dem.FlowAnalysis` tool. &quot;];
+  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
   &quot;woo.core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;woo.core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
@@ -94,140 +94,189 @@ size=&quot;&quot;;
   &quot;woo.core.Object&quot; -&gt; &quot;woo.core.Preprocessor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;woo.pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
 }
-<span class="target" id="module-woo.pre.chute"></span><section class="html-toggle emphasized" id="dissipchute">
-<h3>DissipChute<a class="headerlink" href="#dissipchute" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.chute.DissipChute" title="woo.pre.chute.DissipChute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DissipChute</span></code></a></p>
+<span class="target" id="module-woo.pre.horse"></span><dl class="py function">
+<dt class="sig sig-object py" id="woo.pre.horse.finished">
+<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.finished" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pre.horse.plotBatchResults">
+<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">plotBatchResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#plotBatchResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.plotBatchResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook called from woo.batch.writeResults</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.pre.horse.prepareHorse">
+<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">prepareHorse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#prepareHorse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.prepareHorse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<section class="html-toggle emphasized" id="fallinghorse">
+<h3>FallingHorse<a class="headerlink" href="#fallinghorse" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FallingHorse</span></code></a></p>
 <dl class="py class">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.chute.</span></span><span class="sig-name descname"><span class="pre">DissipChute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Chute for studying dissipation of energy.</p>
-<p>Overloaded function.</p>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">FallingHorse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocessor for the falling horse simulation. The falling horse is historically the demo of Woo. IT shows importing triangulated surfaces, filling imported geometry with particle arrangement, selection of material model, export for VTK (Paraview) and the <a class="reference internal" href="woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FlowAnalysis</span></code></a> tool.</p>
+<iframe src="https://www.youtube.com/embed/LB3T6sBdwz0" style="border: 0; height: 345px; width: 560px">
+</iframe><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
 <li><p>__init__(self: woo.core.Preprocessor, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
-<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/chute.py#L6">py/pre/chute.py</a>]</p>
+<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/horse.py#L12">py/pre/horse.py</a>]</p>
+<p class="rubric">► General</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.dim">
-<span class="sig-name descname"><span class="pre">dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.dim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Chute dimensions: width, depth, height</p>
-<p>[type: Vector3, unit: m]</p>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.002</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius of spheres (fill of the upper horse)</p>
+<p>[type: float, unit: m, preferred unit: mm]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finNum">
-<span class="sig-name descname"><span class="pre">finNum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finNum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of fins protruding from the sides (alternating from left/right</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finLen">
-<span class="sig-name descname"><span class="pre">finLen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finLen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Length of fins</p>
-<p>[type: float, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finSlope">
-<span class="sig-name descname"><span class="pre">finSlope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.5235987755982988</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Slope of fins (positive downwards).</p>
-<p>[type: float, unit: rad, preferred unit: deg]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.gen">
-<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdSphereGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x2453580&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.gen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Particle generator, placed above the chute</p>
-<p>[type: ParticleGenerator]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146628801056</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contact model</p>
-<p>[type: ContactModelSelector]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.feedRate">
-<span class="sig-name descname"><span class="pre">feedRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.feedRate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Feed mass rate</p>
-<p>[type: float, unit: kg/s]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.feedTime">
-<span class="sig-name descname"><span class="pre">feedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.feedTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Time for which the feed is activated</p>
-<p>[type: float, unit: s]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.stopTime">
-<span class="sig-name descname"><span class="pre">stopTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.stopTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Time when to stop the simulation</p>
-<p>[type: float, unit: s]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.vtkStep">
-<span class="sig-name descname"><span class="pre">vtkStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.vtkStep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interval to run VTK export</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.vtkOut">
-<span class="sig-name descname"><span class="pre">vtkOut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.vtkOut" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.</p>
-<p>[type: str]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.dtSafety">
-<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.dtSafety" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="woo.core.html#woo.core.Scene.dtSafety" title="woo.core.Scene.dtSafety"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.dtSafety</span></code></a></p>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.relGap">
+<span class="sig-name descname"><span class="pre">relGap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.relGap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gap between particles in pattern, relative to <a class="reference internal" href="#woo.pre.horse.FallingHorse.radius" title="woo.pre.horse.FallingHorse.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a></p>
 <p>[type: float]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.saveDone">
-<span class="sig-name descname"><span class="pre">saveDone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.saveDone" title="Permalink to this definition">¶</a></dt>
-<dd><p>File to same simulation at the end; not saved if empty.</p>
-<p>[type: str]</p>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.halfThick">
+<span class="sig-name descname"><span class="pre">halfThick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.002</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.halfThick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Half-thickness of the mesh.</p>
+<p>[type: float, unit: m, preferred unit: mm]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.relEkStop">
+<span class="sig-name descname"><span class="pre">relEkStop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.relEkStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop when kinetic energy drops below this fraction of gravity work (and step number is greater than 100)</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.gravity">
+<span class="sig-name descname"><span class="pre">gravity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-9.81)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.gravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gravity acceleration vector</p>
+<p>[type: Vector3]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.dir">
+<span class="sig-name descname"><span class="pre">dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Direction of the upper horse from the lower one. The default is upwards. Will be normalized automatically.</p>
+<p>[type: Vector3]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.pattern">
+<span class="sig-name descname"><span class="pre">pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'hexa'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pattern to use when filling the volume with spheres</p>
+<p>[type: str, choices: hexa, ortho]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099113151760</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).</p>
+<p>[type: ContactModelSelector]</p>
+</dd></dl>
+
+<p class="rubric">► Deformability</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.deformable">
+<span class="sig-name descname"><span class="pre">deformable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.deformable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the meshed horse is deformable. Note that deformable horse does not track energy and disables plotting.</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.stand">
+<span class="sig-name descname"><span class="pre">stand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.stand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the bottoms of the legs should be fixed (applicable with <a class="reference internal" href="#woo.pre.horse.FallingHorse.deformable" title="woo.pre.horse.FallingHorse.deformable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deformable</span></code></a> only)</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.meshDamping">
+<span class="sig-name descname"><span class="pre">meshDamping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.03</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.meshDamping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Damping for mesh nodes; only used when then contact <a class="reference internal" href="#woo.pre.horse.FallingHorse.model" title="woo.pre.horse.FallingHorse.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a> sets zero <a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">damping</span></code></a>. In that case, <a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Leapfrog.damping</span></code></a> is set to <a class="reference internal" href="#woo.pre.horse.FallingHorse.meshDamping" title="woo.pre.horse.FallingHorse.meshDamping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meshDamping</span></code></a> and all other nodes set <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemData.dampingSkip</span></code>.</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<p class="rubric">► Tunables</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.dtSafety">
+<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.dtSafety" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safety factor for <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.pWaveDt</span></code> and <a class="reference internal" href="woo.dem.html#woo.dem.DynDt" title="woo.dem.DynDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DynDt</span></code></a>.</p>
+<p>[type: float]</p>
+</dd></dl>
+
+<p class="rubric">► Outputs</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.reportFmt">
+<span class="sig-name descname"><span class="pre">reportFmt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}.xhtml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.reportFmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report output format; <a class="reference internal" href="woo.core.html#woo.core.Scene.tags" title="woo.core.Scene.tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene.tags</span></code></a> can be used.</p>
+<p>[type: str, filename]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkStep">
+<span class="sig-name descname"><span class="pre">vtkStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>How often should <a class="reference internal" href="woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkExport</span></code></a> run. If non-positive, never run the export.</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkFlowStep">
+<span class="sig-name descname"><span class="pre">vtkFlowStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkFlowStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>How often should <code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkFlowExport</span></code> run. If non-positive, never run.</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkPrefix">
+<span class="sig-name descname"><span class="pre">vtkPrefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}-'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefix for saving <a class="reference internal" href="woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkExport</span></code></a> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkFlowExport</span></code> data; formatted with <code class="docutils literal notranslate"><span class="pre">format()</span></code> providing <a class="reference internal" href="woo.core.html#woo.core.Scene.tags" title="woo.core.Scene.tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.tags</span></code></a> as keys.</p>
+<p>[type: str, filename]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use grid collider (experimental)</p>
+<p>[type: bool]</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute.__call__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse.__call__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__new__">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute.__new__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse.__new__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.__repr__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.__str__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.__str__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.deepcopy">
-<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.deepcopy">
+<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.deepcopy" title="Permalink to this definition">¶</a></dt>
 <dd><p>The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
 is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.save" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -365,7 +414,7 @@ size=&quot;&quot;;
 <p class="rubric">► Materials</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.cylTriax.CylTriaxTest.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146629842800</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.cylTriax.CylTriaxTest.model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099113187584</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.cylTriax.CylTriaxTest.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select contact model. The first material is for particles; the second, optional, material, is for the membrane (the first material is used if there is no second one, but its friction is nevertheless reduced during the compaction phase to <a class="reference internal" href="#woo.pre.cylTriax.CylTriaxTest.suppTanPhi" title="woo.pre.cylTriax.CylTriaxTest.suppTanPhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">suppTanPhi</span></code></a>).</p>
 <p>[type: ContactModelSelector]</p>
 </dd></dl>
@@ -551,7 +600,7 @@ size=&quot;&quot;;
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.psdrender.PsdRender.gen">
-<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdSphereGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x204f170&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.psdrender.PsdRender.gen" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdSphereGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x2a3b790&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.psdrender.PsdRender.gen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particle generator</p>
 <p>[type: ParticleGenerator]</p>
 </dd></dl>
@@ -600,7 +649,7 @@ size=&quot;&quot;;
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.psdrender.PsdRender.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146628802496</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.psdrender.PsdRender.model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099112421712</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.psdrender.PsdRender.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.</p>
 <p>[type: ContactModelSelector]</p>
 </dd></dl>
@@ -683,15 +732,15 @@ is called from python, this function gets precedence over the c++ one. Additiona
 
 </section>
 </section>
-<section id="woo-pre-horse">
-<h2><a class="reference internal" href="#module-woo.pre.horse" title="woo.pre.horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><a class="headerlink" href="#woo-pre-horse" title="Permalink to this headline">¶</a></h2>
-digraph inheritance8af2cc835f {
+<section id="woo-pre-toys">
+<h2><a class="reference internal" href="#module-woo.pre.toys" title="woo.pre.toys"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.toys</span></code></a><a class="headerlink" href="#woo-pre-toys" title="Permalink to this headline">¶</a></h2>
+digraph inheritance749c61cec9 {
 bgcolor=transparent;
 rankdir=LR;
 size=&quot;&quot;;
-  &quot;pre.horse.FallingHorse&quot; [URL=&quot;#woo.pre.horse.FallingHorse&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Preprocessor for the falling horse simulation. The falling horse is historically the demo of Woo. IT shows importing triangulated surfaces, filling imported geometry with particle arrangement, selection of material model, export for VTK (Paraview) and the :obj:`woo.dem.FlowAnalysis` tool. &quot;];
-  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;pre.toys.NewtonsCradle&quot; [URL=&quot;#woo.pre.toys.NewtonsCradle&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Showcase for custom packing predicates, and importing surfaces from STL.&quot;];
+  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
   &quot;woo.core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;woo.core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
@@ -699,189 +748,275 @@ size=&quot;&quot;;
   &quot;woo.core.Object&quot; -&gt; &quot;woo.core.Preprocessor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;woo.pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
 }
-<span class="target" id="module-woo.pre.horse"></span><dl class="py function">
-<dt class="sig sig-object py" id="woo.pre.horse.finished">
-<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.finished" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="woo.pre.horse.plotBatchResults">
-<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">plotBatchResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#plotBatchResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.plotBatchResults" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook called from woo.batch.writeResults</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="woo.pre.horse.prepareHorse">
-<span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">prepareHorse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#prepareHorse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.prepareHorse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<section class="html-toggle emphasized" id="fallinghorse">
-<h3>FallingHorse<a class="headerlink" href="#fallinghorse" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.horse.FallingHorse" title="woo.pre.horse.FallingHorse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FallingHorse</span></code></a></p>
+<span class="target" id="module-woo.pre.toys"></span><section class="html-toggle emphasized" id="newtonscradle">
+<h3>NewtonsCradle<a class="headerlink" href="#newtonscradle" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.toys.NewtonsCradle" title="woo.pre.toys.NewtonsCradle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NewtonsCradle</span></code></a></p>
 <dl class="py class">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.horse.</span></span><span class="sig-name descname"><span class="pre">FallingHorse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocessor for the falling horse simulation. The falling horse is historically the demo of Woo. IT shows importing triangulated surfaces, filling imported geometry with particle arrangement, selection of material model, export for VTK (Paraview) and the <a class="reference internal" href="woo.dem.html#woo.dem.FlowAnalysis" title="woo.dem.FlowAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FlowAnalysis</span></code></a> tool.</p>
-<iframe src="https://www.youtube.com/embed/LB3T6sBdwz0" style="border: 0; height: 345px; width: 560px">
-</iframe><p>Overloaded function.</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.toys.</span></span><span class="sig-name descname"><span class="pre">NewtonsCradle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Showcase for custom packing predicates, and importing surfaces from STL.</p>
+<p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
 <li><p>__init__(self: woo.core.Preprocessor, <a href="#id14"><span class="problematic" id="id15">*</span></a>args, <a href="#id16"><span class="problematic" id="id17">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
-<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/horse.py#L12">py/pre/horse.py</a>]</p>
-<p class="rubric">► General</p>
+<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/toys.py#L25">py/pre/toys.py</a>]</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.002</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.radius" title="Permalink to this definition">¶</a></dt>
-<dd><p>Radius of spheres (fill of the upper horse)</p>
-<p>[type: float, unit: m, preferred unit: mm]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.nSpheres">
+<span class="sig-name descname"><span class="pre">nSpheres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.nSpheres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of spheres</p>
+<p>[type: int]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.relGap">
-<span class="sig-name descname"><span class="pre">relGap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.relGap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gap between particles in pattern, relative to <a class="reference internal" href="#woo.pre.horse.FallingHorse.radius" title="woo.pre.horse.FallingHorse.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a></p>
-<p>[type: float]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.nFall">
+<span class="sig-name descname"><span class="pre">nFall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.nFall" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of spheres which are out of the equilibrium position at the beginning.</p>
+<p>[type: int]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.halfThick">
-<span class="sig-name descname"><span class="pre">halfThick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.002</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.halfThick" title="Permalink to this definition">¶</a></dt>
-<dd><p>Half-thickness of the mesh.</p>
-<p>[type: float, unit: m, preferred unit: mm]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.fallAngle">
+<span class="sig-name descname"><span class="pre">fallAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7853981633974483</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.fallAngle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial angle of falling spheres.</p>
+<p>[type: float, unit: rad, preferred unit: deg]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.relEkStop">
-<span class="sig-name descname"><span class="pre">relEkStop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.relEkStop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stop when kinetic energy drops below this fraction of gravity work (and step number is greater than 100)</p>
-<p>[type: float]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.rad">
+<span class="sig-name descname"><span class="pre">rad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.rad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius of spheres</p>
+<p>[type: float, unit: m]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.gravity">
-<span class="sig-name descname"><span class="pre">gravity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-9.81)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.gravity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gravity acceleration vector</p>
-<p>[type: Vector3]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.cabHtWd">
+<span class="sig-name descname"><span class="pre">cabHtWd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.cabHtWd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height and width of the suspension</p>
+<p>[type: Vector2, unit: m]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.dir">
-<span class="sig-name descname"><span class="pre">dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Direction of the upper horse from the lower one. The default is upwards. Will be normalized automatically.</p>
-<p>[type: Vector3]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.cabRad">
+<span class="sig-name descname"><span class="pre">cabRad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.cabRad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius of the suspending cables</p>
+<p>[type: float, unit: m]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.pattern">
-<span class="sig-name descname"><span class="pre">pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'hexa'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.pattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pattern to use when filling the volume with spheres</p>
-<p>[type: str, choices: hexa, ortho]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146629802960</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099112422112</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.</p>
 <p>[type: ContactModelSelector]</p>
 </dd></dl>
 
-<p class="rubric">► Deformability</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.deformable">
-<span class="sig-name descname"><span class="pre">deformable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.deformable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the meshed horse is deformable. Note that deformable horse does not track energy and disables plotting.</p>
-<p>[type: bool]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.gravity">
+<span class="sig-name descname"><span class="pre">gravity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-9.81)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.gravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gravity acceleration</p>
+<p>[type: Vector3]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.stand">
-<span class="sig-name descname"><span class="pre">stand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.stand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the bottoms of the legs should be fixed (applicable with <a class="reference internal" href="#woo.pre.horse.FallingHorse.deformable" title="woo.pre.horse.FallingHorse.deformable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deformable</span></code></a> only)</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.meshDamping">
-<span class="sig-name descname"><span class="pre">meshDamping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.03</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.meshDamping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Damping for mesh nodes; only used when then contact <a class="reference internal" href="#woo.pre.horse.FallingHorse.model" title="woo.pre.horse.FallingHorse.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a> sets zero <a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">damping</span></code></a>. In that case, <a class="reference internal" href="woo.dem.html#woo.dem.Leapfrog.damping" title="woo.dem.Leapfrog.damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Leapfrog.damping</span></code></a> is set to <a class="reference internal" href="#woo.pre.horse.FallingHorse.meshDamping" title="woo.pre.horse.FallingHorse.meshDamping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meshDamping</span></code></a> and all other nodes set <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemData.dampingSkip</span></code>.</p>
-<p>[type: float]</p>
-</dd></dl>
-
-<p class="rubric">► Tunables</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.dtSafety">
-<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.dtSafety" title="Permalink to this definition">¶</a></dt>
-<dd><p>Safety factor for <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.utils.pWaveDt</span></code> and <a class="reference internal" href="woo.dem.html#woo.dem.DynDt" title="woo.dem.DynDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DynDt</span></code></a>.</p>
-<p>[type: float]</p>
-</dd></dl>
-
-<p class="rubric">► Outputs</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.reportFmt">
-<span class="sig-name descname"><span class="pre">reportFmt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}.xhtml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.reportFmt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Report output format; <a class="reference internal" href="woo.core.html#woo.core.Scene.tags" title="woo.core.Scene.tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene.tags</span></code></a> can be used.</p>
-<p>[type: str, filename]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkStep">
-<span class="sig-name descname"><span class="pre">vtkStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkStep" title="Permalink to this definition">¶</a></dt>
-<dd><p>How often should <a class="reference internal" href="woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkExport</span></code></a> run. If non-positive, never run the export.</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.plotEvery">
+<span class="sig-name descname"><span class="pre">plotEvery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.plotEvery" title="Permalink to this definition">¶</a></dt>
+<dd><p>How often to collect plot data</p>
 <p>[type: int]</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkFlowStep">
-<span class="sig-name descname"><span class="pre">vtkFlowStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkFlowStep" title="Permalink to this definition">¶</a></dt>
-<dd><p>How often should <code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkFlowExport</span></code> run. If non-positive, never run.</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.vtkPrefix">
-<span class="sig-name descname"><span class="pre">vtkPrefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}-'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.vtkPrefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prefix for saving <a class="reference internal" href="woo.dem.html#woo.dem.VtkExport" title="woo.dem.VtkExport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkExport</span></code></a> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.VtkFlowExport</span></code> data; formatted with <code class="docutils literal notranslate"><span class="pre">format()</span></code> providing <a class="reference internal" href="woo.core.html#woo.core.Scene.tags" title="woo.core.Scene.tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.tags</span></code></a> as keys.</p>
-<p>[type: str, filename]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.grid">
-<span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.grid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use grid collider (experimental)</p>
-<p>[type: bool]</p>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.dtSafety">
+<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.dtSafety" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="woo.core.html#woo.core.Scene.dtSafety" title="woo.core.Scene.dtSafety"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.dtSafety</span></code></a></p>
+<p>[type: float]</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse.__call__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__call__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__new__">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/horse.html#FallingHorse.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.horse.FallingHorse.__new__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__new__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.__repr__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.__str__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__str__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.deepcopy">
-<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.horse.FallingHorse.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.deepcopy">
+<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.deepcopy" title="Permalink to this definition">¶</a></dt>
 <dd><p>The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
 is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.horse.FallingHorse.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.horse.FallingHorse.save" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="woo-pre-chute">
+<h2><a class="reference internal" href="#module-woo.pre.chute" title="woo.pre.chute"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.chute</span></code></a><a class="headerlink" href="#woo-pre-chute" title="Permalink to this headline">¶</a></h2>
+digraph inheritance6147678fee {
+bgcolor=transparent;
+rankdir=LR;
+size=&quot;&quot;;
+  &quot;pre.chute.DissipChute&quot; [URL=&quot;#woo.pre.chute.DissipChute&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Chute for studying dissipation of energy.&quot;];
+  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
+  &quot;woo.core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
+  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;woo.core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;woo.core.Preprocessor&quot; [URL=&quot;woo.core.html#woo.core.Preprocessor&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Subclasses of this class generate a Scene object when called, based on their attributes.&quot;];
+  &quot;woo.core.Object&quot; -&gt; &quot;woo.core.Preprocessor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;woo.pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
+}
+<span class="target" id="module-woo.pre.chute"></span><section class="html-toggle emphasized" id="dissipchute">
+<h3>DissipChute<a class="headerlink" href="#dissipchute" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.chute.DissipChute" title="woo.pre.chute.DissipChute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DissipChute</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.chute.</span></span><span class="sig-name descname"><span class="pre">DissipChute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chute for studying dissipation of energy.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Preprocessor, <a href="#id18"><span class="problematic" id="id19">*</span></a>args, <a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/chute.py#L6">py/pre/chute.py</a>]</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chute dimensions: width, depth, height</p>
+<p>[type: Vector3, unit: m]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finNum">
+<span class="sig-name descname"><span class="pre">finNum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of fins protruding from the sides (alternating from left/right</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finLen">
+<span class="sig-name descname"><span class="pre">finLen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finLen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of fins</p>
+<p>[type: float, unit: m]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.finSlope">
+<span class="sig-name descname"><span class="pre">finSlope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.5235987755982988</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.finSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slope of fins (positive downwards).</p>
+<p>[type: float, unit: rad, preferred unit: deg]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.gen">
+<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdSphereGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x303ead0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.gen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Particle generator, placed above the chute</p>
+<p>[type: ParticleGenerator]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099112420272</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contact model</p>
+<p>[type: ContactModelSelector]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.feedRate">
+<span class="sig-name descname"><span class="pre">feedRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.feedRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feed mass rate</p>
+<p>[type: float, unit: kg/s]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.feedTime">
+<span class="sig-name descname"><span class="pre">feedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.feedTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time for which the feed is activated</p>
+<p>[type: float, unit: s]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.stopTime">
+<span class="sig-name descname"><span class="pre">stopTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.stopTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time when to stop the simulation</p>
+<p>[type: float, unit: s]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.vtkStep">
+<span class="sig-name descname"><span class="pre">vtkStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.vtkStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interval to run VTK export</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.vtkOut">
+<span class="sig-name descname"><span class="pre">vtkOut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'/tmp/{tid}'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.vtkOut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.</p>
+<p>[type: str]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.dtSafety">
+<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.dtSafety" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="woo.core.html#woo.core.Scene.dtSafety" title="woo.core.Scene.dtSafety"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.dtSafety</span></code></a></p>
+<p>[type: float]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.saveDone">
+<span class="sig-name descname"><span class="pre">saveDone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.saveDone" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to same simulation at the end; not saved if empty.</p>
+<p>[type: str]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/chute.html#DissipChute.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.chute.DissipChute.__new__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.deepcopy">
+<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.chute.DissipChute.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
+is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.pre.chute.DissipChute.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.chute.DissipChute.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -924,7 +1059,7 @@ size=&quot;&quot;;
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Preprocessor, <a href="#id18"><span class="problematic" id="id19">*</span></a>args, <a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Preprocessor, <a href="#id22"><span class="problematic" id="id23">*</span></a>args, <a href="#id24"><span class="problematic" id="id25">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/ell2d.py#L17">py/pre/ell2d.py</a>]</p>
 <dl class="py attribute">
@@ -971,7 +1106,7 @@ size=&quot;&quot;;
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.ell2d.EllGroup.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146633330752</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.ell2d.EllGroup.model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099116679712</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.ell2d.EllGroup.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).</p>
 <p>[type: ContactModelSelector]</p>
 </dd></dl>
@@ -1041,141 +1176,6 @@ is called from python, this function gets precedence over the c++ one. Additiona
 <dl class="py method">
 <dt class="sig sig-object py" id="woo.pre.ell2d.EllGroup.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.ell2d.EllGroup.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-<section id="woo-pre-toys">
-<h2><a class="reference internal" href="#module-woo.pre.toys" title="woo.pre.toys"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.toys</span></code></a><a class="headerlink" href="#woo-pre-toys" title="Permalink to this headline">¶</a></h2>
-digraph inheritance749c61cec9 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;&quot;;
-  &quot;pre.toys.NewtonsCradle&quot; [URL=&quot;#woo.pre.toys.NewtonsCradle&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Showcase for custom packing predicates, and importing surfaces from STL.&quot;];
-  &quot;woo.core.Preprocessor&quot; -&gt; &quot;pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;woo.pyderived.PyWooObject&quot; -&gt; &quot;pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
-  &quot;woo.core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;woo.core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;woo.core.Preprocessor&quot; [URL=&quot;woo.core.html#woo.core.Preprocessor&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Subclasses of this class generate a Scene object when called, based on their attributes.&quot;];
-  &quot;woo.core.Object&quot; -&gt; &quot;woo.core.Preprocessor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;woo.pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
-}
-<span class="target" id="module-woo.pre.toys"></span><section class="html-toggle emphasized" id="newtonscradle">
-<h3>NewtonsCradle<a class="headerlink" href="#newtonscradle" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a> → <a class="reference internal" href="#woo.pre.toys.NewtonsCradle" title="woo.pre.toys.NewtonsCradle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NewtonsCradle</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.pre.toys.</span></span><span class="sig-name descname"><span class="pre">NewtonsCradle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Showcase for custom packing predicates, and importing surfaces from STL.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Preprocessor, <a href="#id22"><span class="problematic" id="id23">*</span></a>args, <a href="#id24"><span class="problematic" id="id25">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<p>[<a class="reference external" href="https://github.com/woodem/woo/tree/master/py/pre/toys.py#L25">py/pre/toys.py</a>]</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.nSpheres">
-<span class="sig-name descname"><span class="pre">nSpheres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.nSpheres" title="Permalink to this definition">¶</a></dt>
-<dd><p>Total number of spheres</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.nFall">
-<span class="sig-name descname"><span class="pre">nFall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.nFall" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of spheres which are out of the equilibrium position at the beginning.</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.fallAngle">
-<span class="sig-name descname"><span class="pre">fallAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7853981633974483</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.fallAngle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initial angle of falling spheres.</p>
-<p>[type: float, unit: rad, preferred unit: deg]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.rad">
-<span class="sig-name descname"><span class="pre">rad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.rad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Radius of spheres</p>
-<p>[type: float, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.cabHtWd">
-<span class="sig-name descname"><span class="pre">cabHtWd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.cabHtWd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Height and width of the suspension</p>
-<p>[type: Vector2, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.cabRad">
-<span class="sig-name descname"><span class="pre">cabRad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.cabRad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Radius of the suspending cables</p>
-<p>[type: float, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146628802896</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.</p>
-<p>[type: ContactModelSelector]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.gravity">
-<span class="sig-name descname"><span class="pre">gravity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-9.81)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.gravity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gravity acceleration</p>
-<p>[type: Vector3]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.plotEvery">
-<span class="sig-name descname"><span class="pre">plotEvery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.plotEvery" title="Permalink to this definition">¶</a></dt>
-<dd><p>How often to collect plot data</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.dtSafety">
-<span class="sig-name descname"><span class="pre">dtSafety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.dtSafety" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="woo.core.html#woo.core.Scene.dtSafety" title="woo.core.Scene.dtSafety"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.dtSafety</span></code></a></p>
-<p>[type: float]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="woo.core.html#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__call__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__new__">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/pre/toys.html#NewtonsCradle.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__new__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.deepcopy">
-<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.deepcopy" title="Permalink to this definition">¶</a></dt>
-<dd><p>The c++ dedepcopy uses boost::serialization, we need to use pickle. As long as deepcopy
-is called from python, this function gets precedence over the c++ one. Additional keyword parameters are used to immediately set parameters on the copy before returning.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.pre.toys.NewtonsCradle.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.pre.toys.NewtonsCradle.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1291,14 +1291,14 @@ size=&quot;&quot;;
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.triax.TriaxTest.generator">
-<span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdCapsuleGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x1c7cb70&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.triax.TriaxTest.generator" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;PsdCapsuleGenerator</span> <span class="pre">&#64;</span> <span class="pre">0x2669550&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.triax.TriaxTest.generator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particle generator; partices are then randomly placed in the volume.</p>
 <p>[type: ParticleGenerator]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.pre.triax.TriaxTest.model">
-<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140146628609984</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.triax.TriaxTest.model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactModelSelector</span> <span class="pre">&#64;</span> <span class="pre">140099112225104</span> <span class="pre">(py)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.pre.triax.TriaxTest.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).</p>
 <p>[type: ContactModelSelector]</p>
 </dd></dl>
@@ -1409,8 +1409,8 @@ is called from python, this function gets precedence over the c++ one. Additiona
     <h3><a href="contents.html">Page contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre</span></code></a><ul>
-<li><a class="reference internal" href="#woo-pre-chute"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.chute</span></code></a><ul>
-<li><a class="reference internal" href="#dissipchute">DissipChute</a></li>
+<li><a class="reference internal" href="#woo-pre-horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><ul>
+<li><a class="reference internal" href="#fallinghorse">FallingHorse</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#woo-pre-cyltriax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.cylTriax</span></code></a><ul>
@@ -1421,16 +1421,16 @@ is called from python, this function gets precedence over the c++ one. Additiona
 <li><a class="reference internal" href="#psdrender">PsdRender</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#woo-pre-horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><ul>
-<li><a class="reference internal" href="#fallinghorse">FallingHorse</a></li>
+<li><a class="reference internal" href="#woo-pre-toys"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.toys</span></code></a><ul>
+<li><a class="reference internal" href="#newtonscradle">NewtonsCradle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#woo-pre-chute"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.chute</span></code></a><ul>
+<li><a class="reference internal" href="#dissipchute">DissipChute</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#woo-pre-ell2d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.ell2d</span></code></a><ul>
 <li><a class="reference internal" href="#ellgroup">EllGroup</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#woo-pre-toys"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.toys</span></code></a><ul>
-<li><a class="reference internal" href="#newtonscradle">NewtonsCradle</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#woo-pre-triax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.triax</span></code></a><ul>
@@ -1507,7 +1507,7 @@ is called from python, this function gets precedence over the c++ one. Additiona
         <li class="right" >
           <a href="woo.post2d.html" title="woo.post2d"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-bd4f65e documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-cfd23c6 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre</span></code></a></li> 
