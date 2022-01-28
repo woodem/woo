@@ -5,6 +5,20 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.pbc`
+---------------------------------
+
+.. automodule:: woo.tests.pbc
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.ellipsoid`
+---------------------------------------
+
+.. automodule:: woo.tests.ellipsoid
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.volumetric`
 ----------------------------------------
 
@@ -19,6 +33,13 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.grid`
+----------------------------------
+
+.. automodule:: woo.tests.grid
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.batch`
 -----------------------------------
 
@@ -26,10 +47,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.grid`
-----------------------------------
+:mod:`woo.tests.psd`
+---------------------------------
 
-.. automodule:: woo.tests.grid
+.. automodule:: woo.tests.psd
    :members:
    :undoc-members:
 
@@ -105,7 +126,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x235d360, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x2c0f720, at (1,1,1)>)
 
       node attr
 
@@ -117,7 +138,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x1b58530, at (1,1,1)>, <Node @ 0x226d3b0, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x2e13d80, at (1,1,1)>, <Node @ 0x2adcb10, at (2,2,2)>])
 
       List of nodes
 
@@ -211,30 +232,6 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.labels`
-------------------------------------
-
-.. automodule:: woo.tests.labels
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.psd`
----------------------------------
-
-.. automodule:: woo.tests.psd
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.hertz`
------------------------------------
-
-.. automodule:: woo.tests.hertz
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
 :mod:`woo.tests.io`
 --------------------------------
 
@@ -243,18 +240,18 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.pbc`
----------------------------------
+:mod:`woo.tests.labels`
+------------------------------------
 
-.. automodule:: woo.tests.pbc
+.. automodule:: woo.tests.labels
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.ellipsoid`
----------------------------------------
+:mod:`woo.tests.hertz`
+-----------------------------------
 
-.. automodule:: woo.tests.ellipsoid
+.. automodule:: woo.tests.hertz
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
