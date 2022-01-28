@@ -217,6 +217,7 @@ struct Scene: public Object{
 		\
 		((string,uiBuild,"",,"Command to run when a new main-panel UI should be built for this scene (called when the Controller is opened with this simulation, or the simulation is new to the controller).")) \
 		\
+		\
 		((vector<shared_ptr<Engine>>,engines,,,"Engines sequence in the simulation (direct access to the c++ sequence is shadowed by python property which access it indirectly).")) \
 		((vector<shared_ptr<Engine>>,_nextEngines,,AttrTrait<Attr::hidden>(),"Engines to be used from the next step on; is returned transparently by S.engines if in the middle of the loop (controlled by subStep>=0).")) \
 		((shared_ptr<EnergyTracker>,energy,make_shared<EnergyTracker>(),AttrTrait<Attr::readonly>().noGui(),"Energy values, if energy tracking is enabled.")) \

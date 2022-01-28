@@ -97,7 +97,6 @@ class TestObjectInstantiation(unittest.TestCase):
         self.assertTrue(id.geoDisp.__class__==CGeomDispatcher)
         self.assertTrue(id.phyDisp.functors[0].__class__==Cp2_FrictMat_FrictPhys)
         self.assertTrue(id.lawDisp.functors[0].__class__==Law2_L6Geom_FrictPhys_IdealElPl)
-    @unittest.skipIf('TRAVIS' in os.environ,'This test would fail at Travis-CI for unknown reason.')
     def testParallelEngineCtor(self):
         "Core: ParallelEngine special ctor"
         pe=ParallelEngine([InsertionSortCollider(),[BoundDispatcher(),ForceResetter()]])
@@ -388,6 +387,19 @@ class TestLoop(unittest.TestCase):
         S=woo.core.Scene(dt=1e-3,engines=[PyRunner(1,'import time; S.stop(); time.sleep(.3); S.lab.aa=True')])
         S.run(wait=True)
         self.assertTrue(hasattr(S.lab,'aa'))
+    def testWaitTimeout(self):
+        'Loop: Scene.wait(timeout=...)'
+        S=woo.core.Scene(dt=1,engines=[PyRunner(1,'import time; time.sleep(1)')])
+        S.run()
+        self.assertRaises(RuntimeError,lambda: S.wait(timeout=.01))
+    def testWaitException(self):
+        'Loop: Scene.wait() returns on exception'
+        # silence loggers
+        ll=dict([(l,woo.log.level(l)) for l in ('Engine','Scene')])
+        for l in ll.keys(): woo.log.setLevel(l,woo.log.OFF)
+        S=woo.core.Scene(dt=1,engines=[PyRunner(1,'raise ValueError("Some error error")')])
+        self.assertRaises(RuntimeError,lambda: S.run(wait=True))
+        for l,lev in ll.items(): woo.log.setLevel(l,lev)
     def testWaitForScenes(self):
         'Loop: Master.waitForScenes correctly handles reassignment of the master scene'
         S=woo.master.scene=woo.core.Scene(dt=1e-3,engines=[PyRunner(1,'import time; S.stop(); time.sleep(.3); woo.master.scene=woo.core.Scene(dt=1e-4,engines=[woo.core.PyRunner(1,"S.stop()")])')])

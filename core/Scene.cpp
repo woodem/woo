@@ -63,16 +63,19 @@ void Scene::pyOne(){
 
 void Scene::pyWait(float timeout){
 	if(!running()) return;
+	bool timeok=true;
 	auto t0=std::chrono::steady_clock::now();
 	Py_BEGIN_ALLOW_THREADS;
 		// if the running() flag was set off mid-step, finish the whole step first
 		// if exception happens, backgroundLoop unsets running() and sets subStep=SUBSTEP_INIT, so that will break out as well
-		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))){
-			if (timeout>0 && std::chrono::duration<float>(std::chrono::steady_clock::now()-t0).count()>timeout) throw std::runtime_error("Timeout {}s exceeded.");
+		while((running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT)))
+			&& (timeok=(timeout<=0 || std::chrono::duration<float>(std::chrono::steady_clock::now()-t0).count()<timeout))
+			){
 			std::this_thread::sleep_for(std::chrono::milliseconds(40));
 		}
 	Py_END_ALLOW_THREADS;
 	// handle possible exception: reset it and rethrow
+	if(!timeok) throw std::runtime_error("Timeout "+to_string(timeout)+"s exceeded.");
 	if(!except) return;
 	assert(subStep==SUBSTEP_INIT); // done in backgroundLoop
 	std::exception e(*except);
