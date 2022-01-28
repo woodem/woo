@@ -497,8 +497,6 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             else: print('WARN: prompt_toolkit not used by IPython, key bindings were not set.')
             ipshell.prompts=WooPrompt(ipshell)
         ipshell()
-        # similar to the workaround, as for 0.10 (perhaps not needed?)
-        ipshell.atexit_operations()
 
 
 def batch(sysArgv=None):
