@@ -71,6 +71,16 @@ class TestObjectInstantiation(unittest.TestCase):
         t.mass=0.
         t2=t.deepcopy(mass=1.0)    
         self.assertTrue(t2.mass==1.0 and t.mass==0.)
+    def testPyRunnerCtor(self):
+        "Core: PyRunner with positional args"
+        p1,p2,p3=PyRunner('one'),PyRunner(2,'two'),PyRunner(3,'three')
+        self.assertEqual((p1.command,p1.stepPeriod),('one',1))
+        self.assertEqual((p2.command,p2.stepPeriod),('two',2))
+        self.assertEqual((p3.command,p3.stepPeriod),('three',3))
+        self.assertRaises(ValueError,lambda: PyRunner(111)) # must be a string
+        self.assertRaises(ValueError,lambda: PyRunner(123,456)) # must be string and number
+        self.assertRaises(ValueError,lambda: PyRunner('ab','cd'))
+        self.assertRaises(ValueError,lambda: PyRunner(1,2,3))
     def testDispatcherCtor(self):
         "Core: dispatcher ctors with functors"
         # dispatchers take list of their functors in the ctor
