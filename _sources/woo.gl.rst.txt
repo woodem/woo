@@ -64,13 +64,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x20f3ca0>)
+   .. attribute:: range (= <ScalarRange @ 0x127fca0>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x20f3000>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x127f000>)
 
       Range for absolute value of shear force
 
@@ -129,7 +129,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x2147ca0>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x12d3ca0>)
 
       Range for disk damage coloring.
 
@@ -940,13 +940,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0x213a7f0>)
+   .. attribute:: uRange (= <ScalarRange @ 0x12c67f0>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0x213fc40>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x12cbc40>)
 
       Range for rotations (colors only)
 
@@ -1945,19 +1945,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x20e2b50>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x126eb50>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x20e2a70>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x126ea70>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x21151b0>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x12a11b0>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 

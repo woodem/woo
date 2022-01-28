@@ -204,7 +204,7 @@ Scene
 
       [type: StrStrMap, not accessible from python]
 
-   .. attribute:: labels (= <LabelMapper @ 0x1f0ecc0>)
+   .. attribute:: labels (= <LabelMapper @ 0x109acc0>)
 
       Atrbitrary key=object, key=list of objects, key=py::object associations which survive saving/loading. Labeled objects are automatically added to this container. This object is more conveniently accessed through the :obj:`lab` attribute, which exposes the mapping as attributes of that object rather than as a dictionary.
 
@@ -228,7 +228,7 @@ Scene
 
       [type: vector<shared_ptr<Engine>>, not accessible from python]
 
-   .. attribute:: energy (= <EnergyTracker @ 0x1e26200>)
+   .. attribute:: energy (= <EnergyTracker @ 0xfb2200>)
 
       Energy values, if energy tracking is enabled.
 
@@ -240,7 +240,7 @@ Scene
 
       [type: vector<shared_ptr<Field>>, not shown in the UI]
 
-   .. attribute:: cell (= <Cell @ 0x1f1b930>)
+   .. attribute:: cell (= <Cell @ 0x10a7930>)
 
       Information on periodicity; only should be used if Scene::isPeriodic.
 
@@ -300,7 +300,7 @@ Scene
 
       [type: py::object, not shown in the UI]
 
-   .. attribute:: plot (= <Plot @ 0x1f1a3e0>)
+   .. attribute:: plot (= <Plot @ 0x10a63e0>)
 
       Data and settings for plots.
 
@@ -523,9 +523,9 @@ NodeData
 		"woo.dem.ClumpData" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeData"];
 		"woo.dem.DemData" -> "woo.dem.ClumpData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.mesh.MeshData" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.mesh.html#woo.mesh.NodeData"];
 		"NodeData" -> "woo.mesh.MeshData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlData" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeData"];
-		"NodeData" -> "woo.gl.GlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DemData" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeData"];
-		"NodeData" -> "woo.dem.DemData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DemDataTagged" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeData"];
-		"woo.dem.DemData" -> "woo.dem.DemDataTagged" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"NodeData" -> "woo.gl.GlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DemDataTagged" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeData"];
+		"woo.dem.DemData" -> "woo.dem.DemDataTagged" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DemData" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeData"];
+		"NodeData" -> "woo.dem.DemData" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: NodeData
@@ -1424,7 +1424,7 @@ WooTestClass
 
       [type: shared_ptr<:obj:`Object <woo.core.Object>`>]
 
-   .. attribute:: objList (= ObjectList[0x1f2d110, 0x1f2d140])
+   .. attribute:: objList (= ObjectList[0x10b9110, 0x10b9140])
 
       Testing opaque object list.
 
@@ -1528,14 +1528,14 @@ Preprocessor
 		rankdir=LR;
 		margin=.2;
 		"Preprocessor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Preprocessor"];
-		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
-		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
-		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
+		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
+		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
+		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
+		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
+		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
 		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
-		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
-		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Preprocessor

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Basics &#8212; Woo 1.0+rev1-git-cfd23c6 documentation</title>
+    <title>Basics &#8212; Woo 1.0+rev1-git-e8101a5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="index.html" title="Tutorial"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-cfd23c6 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-e8101a5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Basics</a></li> 
@@ -102,10 +102,10 @@
 </div>
 <p>The DEM field can be accessed as <code class="docutils literal notranslate"><span class="pre">S.fields[0]</span></code>, but this is not very convenient. There is a shorthand defined, <code class="docutils literal notranslate"><span class="pre">S.dem</span></code>, which always returns the (first) DEM field attached to the scene object.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x546ff20</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x30a3340</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x546ff20</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x30a3340</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">gravity</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">9.81</span><span class="p">)</span>
@@ -139,10 +139,10 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#0 [Wall] @ 0x42a80b0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#0 [Wall] @ 0x380d570&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x468abb0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x3964b20&gt;</span>
 </pre></div>
 </div>
 <p>Besides creating the particles, it must also be said which nodes we actually want to have moving, i.e. subject to motion integration. <a class="reference internal" href="../woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a> tries to be smart by default, and only adds particles which have non-zero mass (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Wall</span></code> does not, as created by default) or velocity or something else (see <a class="reference internal" href="../woo.dem.html#woo.dem.ParticleContainer.add" title="woo.dem.ParticleContainer.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a> and <a class="reference internal" href="../woo.dem.html#woo.dem.DemData.guessMoving" title="woo.dem.DemData.guessMoving"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guessMoving</span></code></a> if you want to know more).</p>
@@ -151,7 +151,7 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="nb">list</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Node</span> <span class="err">@</span> <span class="mh">0x3f36ae0</span><span class="p">,</span> <span class="n">at</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Node</span> <span class="err">@</span> <span class="mh">0x34a6d20</span><span class="p">,</span> <span class="n">at</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
@@ -187,7 +187,7 @@
 </div>
 <p>One of the most flexible engines is <a class="reference internal" href="../woo.core.html#woo.core.PyRunner" title="woo.core.PyRunner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.PyRunner</span></code></a> which allows one to run arbitrary python code (given as string); we can use it here to print simulation time, just as an example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">S</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x4130670</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x45cc2d0</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">engines</span><span class="o">+</span><span class="p">[</span><span class="n">woo</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">PyRunner</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="s1">&#39;print(S.step,S.time,S.dt)&#39;</span><span class="p">)]</span>
 
@@ -271,7 +271,7 @@
 
 <span class="c1"># where are we at now?</span>
 <span class="n">Woo</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">step</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">dt</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0018000000000000002</span><span class="p">,</span> <span class="mf">0.0018000000000000002</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0036000000000000003</span><span class="p">,</span> <span class="mf">0.0018000000000000002</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>      <span class="c1"># run 200 steps in background</span>
 
@@ -284,13 +284,13 @@
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">26</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">woo</span><span class="p">;</span> <span class="n">S</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">;</span> <span class="n">S</span><span class="o">.</span><span class="n">saveTmp</span><span class="p">()</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">27</span><span class="p">]:</span> <span class="n">S</span><span class="p">,</span> <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>      <span class="c1">## both point to the same scene -- look at the address</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">27</span><span class="p">]:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x542a260</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x542a260</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">27</span><span class="p">]:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x37fa600</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x37fa600</span><span class="o">&gt;</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>      <span class="c1">## reload the master scene</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x4e29dd0</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x3f43820</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="n">S</span><span class="p">,</span> <span class="n">woo</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">scene</span>      <span class="c1">## two different scenes</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x542a260</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x4e29dd0</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x37fa600</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Scene</span> <span class="err">@</span> <span class="mh">0x3f43820</span><span class="o">&gt;</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>                  <span class="c1">## will run the OLD scene, but it won&#39;t be seen graphically :|</span>
 
@@ -304,7 +304,7 @@
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">woo.dem</span> <span class="kn">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">woo.core</span> <span class="kn">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">woo</span><span class="p">;</span> <span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">(</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">9.81</span><span class="p">),</span><span class="n">par</span><span class="o">=</span><span class="p">[</span><span class="n">Wall</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span><span class="n">Sphere</span><span class="o">.</span><span class="n">make</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),</span><span class="o">.</span><span class="mi">2</span><span class="p">)])],</span><span class="n">engines</span><span class="o">=</span><span class="n">DemField</span><span class="o">.</span><span class="n">minimalEngines</span><span class="p">(</span><span class="n">damping</span><span class="o">=.</span><span class="mi">2</span><span class="p">));</span> <span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span>                    <span class="c1"># the DEM field</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x411ecd0</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">DemField</span> <span class="err">@</span> <span class="mh">0x3813aa0</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">gravity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># set different gravity acceleration</span>
 
@@ -316,19 +316,19 @@
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span>                <span class="c1"># all engines</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> 
-<span class="p">[</span><span class="o">&lt;</span><span class="n">Leapfrog</span> <span class="err">@</span> <span class="mh">0x4713d20</span><span class="o">&gt;</span><span class="p">,</span>
- <span class="o">&lt;</span><span class="n">InsertionSortCollider</span> <span class="err">@</span> <span class="mh">0x468e300</span><span class="o">&gt;</span><span class="p">,</span>
- <span class="o">&lt;</span><span class="n">ContactLoop</span> <span class="err">@</span> <span class="mh">0x46825a0</span><span class="o">&gt;</span><span class="p">,</span>
- <span class="o">&lt;</span><span class="n">DynDt</span> <span class="err">@</span> <span class="mh">0x54277d0</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">Leapfrog</span> <span class="err">@</span> <span class="mh">0x1e3eb10</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">InsertionSortCollider</span> <span class="err">@</span> <span class="mh">0x38a2aa0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">ContactLoop</span> <span class="err">@</span> <span class="mh">0x3848ca0</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="n">DynDt</span> <span class="err">@</span> <span class="mh">0x398e9e0</span><span class="o">&gt;</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>             <span class="c1"># first particle (numbering starts from 0)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#0 [Wall] @ 0x42a7d70&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#0 [Wall] @ 0x3fb2690&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>             <span class="c1"># second particle</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x5442ca0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x44d80e0&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>            <span class="c1"># last particle; negative numbers from the end</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x5442ca0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Particle</span> <span class="c1">#1 [Sphere] @ 0x44d80e0&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">p1</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -336,7 +336,7 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.19989534871327705</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">shape</span>                 <span class="c1"># geometrical shape of particle #1</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Sphere</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.200000</span> <span class="err">@</span> <span class="mh">0x5442bc0</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Sphere</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.200000</span> <span class="err">@</span> <span class="mh">0x32c1320</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">f</span>                     <span class="c1"># force on the particle (only works for uninodal particles)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.035458285940762835</span><span class="p">)</span>
@@ -345,27 +345,27 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">contacts</span>              <span class="c1"># contacts of this particle (*real* contacts only), as mapping of id and contact object</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7f6b4813f5f0&gt;}</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7fc0e40cc690&gt;}</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">con</span>                   <span class="c1"># ids of contacting particles (shorthand for keys of p1.contacts)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">tacts</span>                 <span class="c1"># contact objects (shorthand for values of p1.contacts)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7f6b4813f5f0&gt;]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7fc0e40cc690&gt;]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">con</span><span class="p">)</span>              <span class="c1"># number of contacts of this particle</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="mi">1</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">p1</span><span class="o">.</span><span class="n">contacts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>           <span class="c1"># contact between 0 and 1</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7f6b4813f5f0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7fc0e40cc690&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>           <span class="c1"># the same contact, accessed differently</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7f6b4813f5f0&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Contact</span> <span class="c1">##0+1 @ 0x7fc0e40cc690&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="n">c01</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">dem</span><span class="o">.</span><span class="n">con</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">c01</span><span class="o">.</span><span class="n">geom</span>                 <span class="c1"># contact geometry</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">L6Geom</span> <span class="err">@</span> <span class="mh">0x7f6b4813f770</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">L6Geom</span> <span class="err">@</span> <span class="mh">0x7fc0e40e1850</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="n">c01</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">uN</span>              <span class="c1"># normal overlap</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="o">-</span><span class="mf">0.00010465128672296209</span>
@@ -469,7 +469,7 @@
         <li class="right" >
           <a href="index.html" title="Tutorial"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-cfd23c6 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-e8101a5 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Basics</a></li> 

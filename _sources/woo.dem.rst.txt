@@ -1117,7 +1117,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2117210, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x12a3210, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -1331,7 +1331,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0x206f2f0>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x11fb2f0>)
 
       Color range for coloring the trace line
 
@@ -1770,7 +1770,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x1f63720>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x10ef720>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -1863,7 +1863,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x1f11990>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x109d990>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -2545,14 +2545,14 @@ IntraFunctor
 		rankdir=LR;
 		margin=.2;
 		"IntraFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
-		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Tet4_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"IntraFunctor" -> "In2_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Tet4_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
 		"IntraFunctor" -> "woo.fem.In2_Tet4_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Truss_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
 		"IntraFunctor" -> "In2_Truss_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Sphere_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
 		"IntraFunctor" -> "In2_Sphere_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Wall_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Wall_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
-		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"IntraFunctor" -> "In2_Wall_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: IntraFunctor
@@ -2950,7 +2950,7 @@ ArcInlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1fb3440, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x113f440, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -3042,7 +3042,7 @@ BoxInlet
 
       [type: AlignedBox3r]
 
-   .. attribute:: node (= <Node @ 0x1facc50, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1138c50, at (0,0,0)>)
 
       Node defining local coordinate system (optional; if not given, global coordinates are used).
 
@@ -3258,7 +3258,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0x20da390, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1266390, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -3815,7 +3815,7 @@ ArcShooter
    :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1fb4640, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1140640, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -3858,9 +3858,9 @@ Outlet
 		margin=.2;
 		"Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
 		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"Outlet" -> "BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Outlet
@@ -4061,7 +4061,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1fec7b0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x11787b0, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -4555,9 +4555,9 @@ Shape
 		"Shape" -> "Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Rod" -> "Truss" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Rod" -> "Truss" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
 		"Shape" -> "woo.fem.Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]
@@ -5773,7 +5773,7 @@ POVRayExport
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0x2037860>)
+   .. attribute:: colorRange (= <ScalarRange @ 0x11c3860>)
 
       Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
 
@@ -5964,19 +5964,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x1f542c0>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x10e02c0>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x1f47200>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x10d3200>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0x1f541e0>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x10e01e0>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -6149,7 +6149,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1f3c3e0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x10c83e0, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -7431,9 +7431,9 @@ CData
 		rankdir=LR;
 		margin=.2;
 		"CData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"PelletCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"CData" -> "PelletCData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IdealElPlData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"CData" -> "IdealElPlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"G3GeomCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"IdealElPlData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"CData" -> "IdealElPlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"CData" -> "PelletCData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"G3GeomCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
 		"CData" -> "G3GeomCData" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -8249,13 +8249,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0x1ff87b0>)
+   .. attribute:: particles (= <ParticleContainer @ 0x11847b0>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0x1ff89d0>)
+   .. attribute:: contacts (= <ContactContainer @ 0x11849d0>)
 
       Linear view on particle contacts
 
