@@ -43,7 +43,7 @@ struct Scene: public Object{
 		void pyRun(long steps=-1, bool wait=false, Real time_=NaN);
 		void pyStop();         
 		void pyOne();         
-		void pyWait();         
+		void pyWait(float timeout=0);         
 		bool running(); 
 		void backgroundLoop();
 
@@ -256,7 +256,7 @@ struct Scene: public Object{
 		.def("run",&Scene::pyRun,WOO_PY_ARGS(py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN)) \
 		.def("stop",&Scene::pyStop) \
 		.def("one",&Scene::pyOne) \
-		.def("wait",&Scene::pyWait) \
+		.def("wait",&Scene::pyWait,py::arg("timeout")=0) \
 		.def("setLastSave",[](const shared_ptr<Scene>& self, const string& s){ self->lastSave=s; }) \
 		.add_property_readonly("running",&Scene::running) \
 		.def("paused",&Scene::pyPaused,WOO_PY_ARGS(py::arg("allowBg")=false),WOO_PY_RETURN__TAKE_OWNERSHIP,"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \

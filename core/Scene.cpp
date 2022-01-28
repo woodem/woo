@@ -7,8 +7,7 @@
 
 #include<woo/lib/base/Math.hpp>
 #include<boost/algorithm/string.hpp>
-//#include<boost/function.hpp>
-//#include<boost/bind.hpp>
+#include<chrono>
 
 #ifndef __MINGW64__
 	#include<unistd.h> // getpid
@@ -62,13 +61,20 @@ void Scene::pyOne(){
 	doOneStep();
 }
 
-void Scene::pyWait(){
+void Scene::pyWait(float timeout){
 	if(!running()) return;
+	auto t0=std::chrono::steady_clock::now();
 	Py_BEGIN_ALLOW_THREADS;
-		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))) std::this_thread::sleep_for(std::chrono::milliseconds(40));
+		// if the running() flag was set off mid-step, finish the whole step first
+		// if exception happens, backgroundLoop unsets running() and sets subStep=SUBSTEP_INIT, so that will break out as well
+		while(running() || ((!subStepping)&&(subStep!=SUBSTEP_INIT))){
+			if (timeout>0 && std::chrono::duration<float>(std::chrono::steady_clock::now()-t0).count()>timeout) throw std::runtime_error("Timeout {}s exceeded.");
+			std::this_thread::sleep_for(std::chrono::milliseconds(40));
+		}
 	Py_END_ALLOW_THREADS;
 	// handle possible exception: reset it and rethrow
 	if(!except) return;
+	assert(subStep==SUBSTEP_INIT); // done in backgroundLoop
 	std::exception e(*except);
 	except.reset();
 	throw e;
@@ -103,6 +109,7 @@ void Scene::backgroundLoop(){
 		// some compilers report ambiguity here...
 		except=std::make_shared<std::exception>(e);
 		{ std::scoped_lock l(runMutex); runningFlag=false; }
+		subStep=SUBSTEP_INIT; // makes pyWait() return after exception
 		return;
 	}
 }
