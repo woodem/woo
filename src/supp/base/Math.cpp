@@ -1,4 +1,4 @@
-#include<woo/lib/base/Math.hpp>
+#include"Math.hpp"
 
 template<> int ZeroInitializer<int>(){ return (int)0; }
 template<> Real ZeroInitializer<Real>(){ return (Real)0; }

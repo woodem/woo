@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Clustering.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"Clustering.hpp"
+#include"Contact.hpp"
 
 #include<boost/graph/adjacency_list.hpp>
 #include<boost/graph/connected_components.hpp>
@@ -10,8 +10,8 @@
 #include <boost/graph/stoer_wagner_min_cut.hpp>
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/GLUtils.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
+	#include"../supp/opengl/GLUtils.hpp"
+	#include"../supp/base/CompUtils.hpp"
 #endif
 
 

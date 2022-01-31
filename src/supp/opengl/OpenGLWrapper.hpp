@@ -12,8 +12,8 @@
 #error "This build doesn't support openGL. Therefore, this header must not be used."
 #endif
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Math.hpp>
+#include"../base/Types.hpp"
+#include"../base/Math.hpp"
 
 #if defined(__MINGW64__) && !defined(WIN32_LEAN_AND_MEAN)
 	// OpenGL includes windows stuff here, get rid of namespace pollution by this

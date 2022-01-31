@@ -1,8 +1,8 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz> 
 
-#include<woo/pkg/dem/InsertionSortCollider.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/core/Scene.hpp>
+#include"InsertionSortCollider.hpp"
+#include"ParticleContainer.hpp"
+#include"../core/Scene.hpp"
 
 #include<algorithm>
 #include<vector>

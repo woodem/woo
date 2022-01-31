@@ -4,7 +4,7 @@
 //
 #pragma once
 
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
+#include"OpenGLWrapper.hpp"
 #include<boost/lexical_cast.hpp>
 #include<sstream>
 #include<iomanip>

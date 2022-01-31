@@ -1,9 +1,9 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz> 
 
 #pragma once
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/Contact.hpp>
-#include<woo/core/Scene.hpp>
+#include"Collision.hpp"
+#include"Contact.hpp"
+#include"../core/Scene.hpp"
 
 
 /*! Periodic collider notes.

@@ -1,4 +1,4 @@
-#include<woo/core/Test.hpp>
+#include"Test.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_WooTestClass__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_core_WooTestPeriodicEngine__CLASS_BASE_DOC_ATTRS);

@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/Types.hpp>
+#include"../base/Math.hpp"
+#include"../base/Types.hpp"
 #include<boost/math/distributions/normal.hpp>
 
 

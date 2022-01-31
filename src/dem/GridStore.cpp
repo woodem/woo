@@ -1,7 +1,7 @@
 // © 2013 Václav Šmilauer <eu@doxos.eu>
 
-#include<woo/pkg/dem/GridStore.hpp>
-#include<woo/pkg/dem/GridCollider.hpp> // for timing macro GC_CHECKPOINT2
+#include"GridStore.hpp"
+#include"GridCollider.hpp" // for timing macro GC_CHECKPOINT2
 #include<boost/function_output_iterator.hpp>
 #include<boost/range/algorithm/set_algorithm.hpp>
 

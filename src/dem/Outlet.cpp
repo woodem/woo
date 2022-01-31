@@ -1,7 +1,7 @@
-#include<woo/pkg/dem/Outlet.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
+#include"Outlet.hpp"
+#include"Sphere.hpp"
+#include"Clump.hpp"
+#include"Funcs.hpp"
 WOO_PLUGIN(dem,(Outlet)(BoxOutlet)(StackedBoxOutlet)(ArcOutlet));
 WOO_IMPL_LOGGER(Outlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Outlet__CLASS_BASE_DOC_ATTRS_PY);

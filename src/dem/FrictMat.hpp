@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/core/MatchMaker.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
+#include"Particle.hpp"
+#include"../core/MatchMaker.hpp"
+#include"ContactLoop.hpp"
 
 class ElastMat: public Material{
 	#define woo_dem_ElastMat__CLASS_BASE_DOC_ATTRS_CTOR \

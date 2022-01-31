@@ -1,14 +1,14 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
+#include"Particle.hpp"
 #include<boost/range/numeric.hpp>
 #include<boost/range/algorithm/fill.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../supp/pyutil/converters.hpp"
 
 
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/GLUtils.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
+	#include"../supp/opengl/GLUtils.hpp"
+	#include"../supp/base/CompUtils.hpp"
 #endif
 
 struct Inlet: public PeriodicEngine{

@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
 
 class HertzMat: public FrictMat{
 	#define woo_dem_HertzMat__CLASS_BASE_DOC_ATTRS_CTOR \

@@ -1,13 +1,13 @@
-#include<woo/pkg/fem/Tetra.hpp>
+#include"Tetra.hpp"
 #include<Eigen/Eigenvalues>
-#include<woo/lib/base/Volumetric.hpp>
+#include"../supp/base/Volumetric.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
-	#include<woo/lib/opengl/GLUtils.hpp>
-	#include<woo/pkg/gl/Renderer.hpp>
-	#include<woo/pkg/gl/GlData.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
+	#include"../supp/opengl/OpenGLWrapper.hpp"
+	#include"../supp/opengl/GLUtils.hpp"
+	#include"../gl/Renderer.hpp"
+	#include"../gl/GlData.hpp"
+	#include"../supp/base/CompUtils.hpp"
 #endif
 
 

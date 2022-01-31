@@ -1,7 +1,7 @@
 #pragma once
 #ifdef WOO_VTK
 
-#include<woo/pkg/dem/Particle.hpp>
+#include"Particle.hpp"
 #include<vtkUniformGrid.h>
 #include<vtkDoubleArray.h>
 #include<vtkSmartPointer.h>

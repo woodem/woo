@@ -1,10 +1,10 @@
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/dem/Gl1_CPhys.hpp>
-#include<woo/pkg/gl/Renderer.hpp> // for GlData
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Gl1_CPhys.hpp"
+#include"../gl/Renderer.hpp" // for GlData
+#include"../supp/opengl/GLUtils.hpp"
+#include"Sphere.hpp"
 
 WOO_PLUGIN(gl,(Gl1_CPhys));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_CPhys__CLASS_BASE_DOC_ATTRS);

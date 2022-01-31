@@ -1,8 +1,8 @@
 #pragma once
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Gl1_DemField.hpp>
+#include"Particle.hpp"
+#include"Gl1_DemField.hpp"
 
 class Gl1_CPhys: public GlCPhysFunctor{	
 	public:

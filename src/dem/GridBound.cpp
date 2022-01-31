@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/GridBound.hpp>
+#include"GridBound.hpp"
 WOO_PLUGIN(dem,(GridBound)(GridBoundFunctor)(GridBoundDispatcher)(Grid1_Sphere)(Grid1_Wall)(Grid1_InfCylinder)(Grid1_Facet))
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,(Gl1_GridBound));
@@ -38,8 +38,8 @@ bool GridBound::insideNodePlay(const shared_ptr<Shape>& s) const {
 
 
 
-#include<woo/pkg/dem/GridCollider.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"GridCollider.hpp"
+#include"Sphere.hpp"
 
 void Grid1_Sphere::go(const shared_ptr<Shape>& sh, const Particle::id_t& id, const shared_ptr<GridCollider>& coll, const shared_ptr<GridStore>& grid){
 	if(scene->isPeriodic) throw std::logic_error("Grid1_Sphere: PBC not handled (yet)");

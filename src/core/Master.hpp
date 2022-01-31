@@ -14,13 +14,13 @@
 namespace py=pybind11;
 
 
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Logging.hpp>
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/lib/object/Object.hpp>
+#include"../supp/base/Math.hpp"
+#include"../supp/base/Types.hpp"
+#include"../supp/base/Logging.hpp"
+#include"../supp/pyutil/except.hpp"
+#include"../supp/object/Object.hpp"
 
-#include<woo/core/Timing.hpp>
+#include"Timing.hpp"
 
 #ifndef __MINGW64__
 	#include<signal.h>

@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
+#include"../dem/Particle.hpp"
+#include"../dem/Collision.hpp"
+#include"../dem/IntraForce.hpp"
+#include"../dem/FrictMat.hpp"
 
 struct Tetra: public Shape {
 	int numNodes() const override { return 4; }
@@ -103,7 +103,7 @@ WOO_REGISTER_OBJECT(In2_Tet4_ElastMat);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Tetra: public GlShapeFunctor{	
 	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	//void drawEdges(const Tetra& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire);

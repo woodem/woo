@@ -2,9 +2,9 @@
 // © 2013 Václav Šmilauer <eu@doxos.eu>
 
 
-#include<woo/lib/object/Object.hpp>
+#include"../supp/object/Object.hpp"
 #include<boost/multi_array.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"Particle.hpp"
 // http://stackoverflow.com/questions/8252909/how-to-define-a-vectorboostmutex-in-c
 #include<boost/ptr_container/ptr_vector.hpp>
 

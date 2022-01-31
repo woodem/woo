@@ -1,13 +1,13 @@
 #pragma once
-#include<woo/core/Dispatcher.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Inlet.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../core/Dispatcher.hpp"
+#include"Particle.hpp"
+#include"Inlet.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 
 #ifdef WOO_OPENGL
 // functor types
-#include<woo/pkg/dem/Gl1_DemField.hpp>
+#include"Gl1_DemField.hpp"
 #endif
 
 struct Aabb: public Bound{

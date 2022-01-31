@@ -1,7 +1,7 @@
 #pragma once
 
-#include<woo/core/Scene.hpp>
-#include<woo/core/Field.hpp>
+#include"Scene.hpp"
+#include"Field.hpp"
 
 
 template<typename FieldT> bool Field_sceneHasField(const shared_ptr<Scene>& scene)

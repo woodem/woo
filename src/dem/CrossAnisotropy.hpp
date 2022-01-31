@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/pkg/dem/ContactLoop.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-// #include<woo/pkg/dem/Cp2_FrictMat_FrictPhys.hpp>
+#include"ContactLoop.hpp"
+#include"FrictMat.hpp"
+// #include"Cp2_FrictMat_FrictPhys.hpp"
 
 struct Cp2_FrictMat_FrictPhys_CrossAnisotropic: CPhysFunctor {
 	virtual void go(const shared_ptr<Material>&, const shared_ptr<Material>&, const shared_ptr<Contact>&) override;
@@ -25,7 +25,7 @@ WOO_REGISTER_OBJECT(Cp2_FrictMat_FrictPhys_CrossAnisotropic);
 
 #if 0
 #ifdef WOO_OPENGL
-#include<woo/pkg/common/OpenGLRenderer.hpp>
+#include"../common/OpenGLRenderer.hpp"
 
 class GlExtra_LocalAxes: public GlExtraDrawer{
 	public:

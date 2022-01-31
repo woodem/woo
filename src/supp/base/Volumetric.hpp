@@ -1,6 +1,6 @@
 #pragma once
 
-#include<woo/lib/base/Math.hpp>
+#include"Math.hpp"
 
 namespace woo{
 	struct Volumetric{

@@ -1,11 +1,11 @@
-#include<woo/pkg/dem/Psd.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
+#include"Psd.hpp"
+#include"Funcs.hpp"
+#include"Sphere.hpp"
+#include"Capsule.hpp"
+#include"Ellipsoid.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/GlData.hpp>
+	#include"../gl/GlData.hpp"
 #endif
 
 

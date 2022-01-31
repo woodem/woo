@@ -1,12 +1,12 @@
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/NodeGlRep.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
+#include"NodeGlRep.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../core/Scene.hpp"
+#include"Renderer.hpp"
 
 
 #include<GL/gle.h>

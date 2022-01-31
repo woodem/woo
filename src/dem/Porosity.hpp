@@ -1,9 +1,9 @@
 #pragma once
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/core/Engine.hpp>
+#include"Particle.hpp"
+#include"../core/Engine.hpp"
 
-#include<woo/lib/sphere-pack/SpherePack.hpp>
+#include"../supp/sphere-pack/SpherePack.hpp"
 
 struct AnisoPorosityAnalyzer: public Engine {
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
@@ -41,7 +41,7 @@ WOO_REGISTER_OBJECT(AnisoPorosityAnalyzer);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Renderer.hpp>
+#include"../gl/Renderer.hpp"
 
 class GlExtra_AnisoPorosityAnalyzer: public GlExtraDrawer{
 	public:

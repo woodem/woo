@@ -1,11 +1,11 @@
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/base/Volumetric.hpp>
+#include"Facet.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/base/Volumetric.hpp"
 #include<boost/range/algorithm/count_if.hpp>
 #include<boost/range/algorithm/set_algorithm.hpp>
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/Renderer.hpp>
+	#include"../gl/Renderer.hpp"
 #endif
 
 WOO_PLUGIN(dem,(Facet)(Bo1_Facet_Aabb)(Cg2_Facet_Sphere_L6Geom)(Cg2_Facet_Facet_L6Geom)(Cg2_Facet_InfCylinder_L6Geom)(In2_Facet));
@@ -581,10 +581,10 @@ bool Cg2_Facet_InfCylinder_L6Geom::go(const shared_ptr<Shape>& sh1, const shared
 
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../gl/Renderer.hpp"
+#include"../supp/base/CompUtils.hpp"
 
 void halfCylinder(const Vector3r& A, const Vector3r& B, Real radius, const Vector3r& upVec, const Vector3r& color, bool wire, int slices=12, int stacks=1, Real connectorAngle=0.){
 	if(wire) {

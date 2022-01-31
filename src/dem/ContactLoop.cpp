@@ -1,8 +1,8 @@
-#include<woo/pkg/dem/ContactLoop.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
+#include"ContactLoop.hpp"
+#include"ParticleContainer.hpp"
 
 // temporary
-#include<woo/pkg/dem/G3Geom.hpp>
+#include"G3Geom.hpp"
 
 WOO_PLUGIN(dem,(CGeomFunctor)(CGeomDispatcher)(CPhysFunctor)(CPhysDispatcher)(LawFunctor)(LawDispatcher)(ContactLoop));
 WOO_IMPL_LOGGER(ContactLoop);

@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/multimethods/FunctorWrapper.hpp>
-#include<woo/core/Master.hpp>
+#include"../supp/object/Object.hpp"
+#include"../supp/multimethods/FunctorWrapper.hpp"
+#include"Master.hpp"
 
 namespace woo{ 
 	struct TimingDeltas;

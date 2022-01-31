@@ -4,7 +4,7 @@
 #include<vector>
 #include<iostream>
 #include<cassert>
-#include<woo/lib/base/Math.hpp>
+#include"../base/Math.hpp"
 
 /* Linear interpolation routine for sequential interpolation; in contrast to the version below,
    it only returns two endpoints and scalar value (timeT) in range (0,1) for interpolation between those two.

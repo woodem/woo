@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
+#include"ContactLoop.hpp"
 
 struct Law2_L6Geom_FrictPhys_IdealElPl: public LawFunctor{
 	bool go(const shared_ptr<CGeom>&, const shared_ptr<CPhys>&, const shared_ptr<Contact>&) override;

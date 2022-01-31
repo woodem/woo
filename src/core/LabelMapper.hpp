@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/object/Object.hpp>
+#include"../supp/base/Types.hpp"
+#include"../supp/object/Object.hpp"
 #
 
 struct LabelMapper: public Object{

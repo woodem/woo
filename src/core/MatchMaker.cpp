@@ -1,6 +1,6 @@
 // 2010 © Václav Šmilauer <eudoxos@arcig.cz>
-#include<woo/core/Master.hpp>
-#include<woo/core/MatchMaker.hpp>
+#include"Master.hpp"
+#include"MatchMaker.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_MatchMaker__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_PLUGIN(core,(MatchMaker));

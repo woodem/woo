@@ -1,5 +1,5 @@
-#include<woo/core/Cell.hpp>
-#include<woo/core/Master.hpp>
+#include"Cell.hpp"
+#include"Master.hpp"
 
 WOO_PLUGIN(core,(Cell));
 

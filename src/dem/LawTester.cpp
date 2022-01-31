@@ -1,8 +1,8 @@
-#include<woo/pkg/dem/LawTester.hpp>
-#include<woo/lib/pyutil/gil.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"LawTester.hpp"
+#include"../supp/pyutil/gil.hpp"
+#include"L6Geom.hpp"
+#include"FrictMat.hpp"
+#include"Sphere.hpp"
 
 WOO_PLUGIN(dem,(LawTesterStage)(LawTester));
 

@@ -1,8 +1,8 @@
-#include<woo/pkg/dem/DynDt.hpp>
+#include"DynDt.hpp"
 
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/Clump.hpp>
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
+#include"Clump.hpp"
 
 WOO_PLUGIN(dem,(DynDt));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_DynDt__CLASS_BASE_DOC_ATTRS_PY);

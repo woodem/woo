@@ -1,12 +1,12 @@
 #pragma once
-#include<woo/core/Engine.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../core/Engine.hpp"
+#include"Particle.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/GLUtils.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
+	#include"../supp/opengl/GLUtils.hpp"
+	#include"../supp/base/CompUtils.hpp"
 #endif
 
 struct Outlet: public PeriodicEngine{

@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Buoyancy.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"Buoyancy.hpp"
+#include"Contact.hpp"
 WOO_PLUGIN(dem,(HalfspaceBuoyancy));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_HalfspaceBuoyancy_CLASS_BASE_DOC_ATTRS);
 

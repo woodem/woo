@@ -1,12 +1,12 @@
 #pragma once
 
-#include<woo/core/Cell.hpp>
-#include<woo/core/Engine.hpp>
-#include<woo/core/EnergyTracker.hpp>
-#include<woo/core/Plot.hpp>
-#include<woo/core/LabelMapper.hpp>
-#include<woo/core/Preprocessor.hpp>
-#include<woo/core/ScalarRange.hpp>
+#include"Cell.hpp"
+#include"Engine.hpp"
+#include"EnergyTracker.hpp"
+#include"Plot.hpp"
+#include"LabelMapper.hpp"
+#include"Preprocessor.hpp"
+#include"ScalarRange.hpp"
 
 #ifdef WOO_OPENCL
 	#define __CL_ENABLE_EXCEPTIONS
@@ -14,10 +14,10 @@
 #endif
 
 #ifdef WOO_OPENGL
-	#include<woo/core/DisplayParameters.hpp>
+	#include"DisplayParameters.hpp"
 	struct Renderer;
 	// TODO? move GlSetup to core so that we keep modules neatly separated
-	#include<woo/pkg/gl/GlSetup.hpp>
+	#include"../gl/GlSetup.hpp"
 #endif
 
 #ifndef HOST_NAME_MAX

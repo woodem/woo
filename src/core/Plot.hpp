@@ -1,5 +1,5 @@
 #pragma once
-#include<woo/lib/object/Object.hpp>
+#include"../supp/object/Object.hpp"
 
 struct Scene;
 

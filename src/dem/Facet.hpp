@@ -1,9 +1,9 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/InfCylinder.hpp>
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"IntraForce.hpp"
+#include"Sphere.hpp"
+#include"InfCylinder.hpp"
 
 
 struct Facet: public Shape {
@@ -117,7 +117,7 @@ WOO_REGISTER_OBJECT(Cg2_Facet_InfCylinder_L6Geom);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Facet: public GlShapeFunctor{	
 	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	void drawEdges(const Facet& f, const Vector3r& facetNormal, const Vector3r shifts[3], bool wire);

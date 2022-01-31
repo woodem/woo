@@ -1,7 +1,7 @@
 #pragma once 
 
 // for ZeroInitializer template
-#include<woo/lib/base/Math.hpp>
+#include"Math.hpp"
 #include<string>
 
 #ifdef WOO_OPENMP

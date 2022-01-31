@@ -1,6 +1,6 @@
-#include<woo/core/LabelMapper.hpp>
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/core/Master.hpp>
+#include"LabelMapper.hpp"
+#include"../supp/pyutil/except.hpp"
+#include"Master.hpp"
 #include<regex>
 #include<boost/algorithm/string.hpp>
 

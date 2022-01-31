@@ -6,24 +6,24 @@
 #include"GLViewer.hpp"
 #include"OpenGLManager.hpp"
 
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/base/Types.hpp>
-#include<woo/core/Field.hpp>
-#include<woo/core/DisplayParameters.hpp>
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/base/Types.hpp"
+#include"../core/Field.hpp"
+#include"../core/DisplayParameters.hpp"
 #include<boost/algorithm/string.hpp>
 #include<boost/version.hpp>
 #include<boost/make_shared.hpp>
 #include<sstream>
 #include<iomanip>
 #include<boost/algorithm/string/case_conv.hpp>
-#include<woo/lib/object/ObjectIO.hpp>
-#include<woo/lib/pyutil/gil.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../supp/object/ObjectIO.hpp"
+#include"../supp/pyutil/gil.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/opengl/GLUtils.hpp"
 
 #include<boost/range/join.hpp>
 
-#include<woo/pkg/dem/Gl1_DemField.hpp>
+#include"../dem/Gl1_DemField.hpp"
 
 using boost::algorithm::iends_with;
 

@@ -6,7 +6,7 @@
 #include<iostream>
 #include<set>
 
-#include<woo/lib/eigen/pybind11/common.hpp>
+#include"../../eigen/pybind11/common.hpp"
 // classes dealing with exposing actual types, with many switches inside depending on template arguments
 
 // methods common for vectors and matrices

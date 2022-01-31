@@ -1,11 +1,11 @@
-#include<woo/pkg/dem/Conveyor.hpp>
-#include<woo/pkg/dem/Inlet.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/lib/smoothing/LinearInterpolate.hpp>
+#include"Conveyor.hpp"
+#include"Inlet.hpp"
+#include"Sphere.hpp"
+#include"Funcs.hpp"
+#include"../supp/smoothing/LinearInterpolate.hpp"
 
 // hack; check if that is really needed
-#include<woo/pkg/dem/InsertionSortCollider.hpp>
+#include"InsertionSortCollider.hpp"
 
 WOO_PLUGIN(dem,(ConveyorInlet)(InletMatState));
 WOO_IMPL_LOGGER(ConveyorInlet);

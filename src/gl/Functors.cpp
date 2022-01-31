@@ -1,4 +1,4 @@
-#include<woo/pkg/gl/Functors.hpp>
+#include"Functors.hpp"
 #ifdef WOO_OPENGL
 	WOO_PLUGIN(gl,
 		(GlNodeFunctor)(GlNodeDispatcher)

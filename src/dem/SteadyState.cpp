@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/SteadyState.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"SteadyState.hpp"
+#include"Contact.hpp"
 WOO_PLUGIN(dem,(DetectSteadyState));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_DetectSteadyState__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL_LOGGER(DetectSteadyState);

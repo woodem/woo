@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Ellipsoid.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Ellipsoid.hpp"
+#include"Sphere.hpp"
 
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/tuple.hpp>

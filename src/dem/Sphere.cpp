@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
+#include"Sphere.hpp"
+#include"ParticleContainer.hpp"
 
 WOO_PLUGIN(dem,(Sphere)(Cg2_Sphere_Sphere_L6Geom)(Bo1_Sphere_Aabb)(In2_Sphere_ElastMat));
 
@@ -153,10 +153,10 @@ WOO_PLUGIN(gl,(Gl1_Sphere));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Sphere__CLASS_BASE_DOC_ATTRS);
 
 
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../gl/Renderer.hpp"
+#include"../supp/base/CompUtils.hpp"
 
 vector<Vector3r> Gl1_Sphere::vertices, Gl1_Sphere::faces;
 int Gl1_Sphere::glStripedSphereList=-1;

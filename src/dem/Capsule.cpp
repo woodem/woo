@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Capsule.hpp"
+#include"Sphere.hpp"
 
 WOO_PLUGIN(dem,(Capsule)(Bo1_Capsule_Aabb)(Cg2_Sphere_Capsule_L6Geom)(Cg2_Wall_Capsule_L6Geom)(Cg2_Facet_Capsule_L6Geom)(Cg2_InfCylinder_Capsule_L6Geom)(Cg2_Capsule_Capsule_L6Geom));
 
@@ -403,11 +403,11 @@ bool Cg2_Facet_Capsule_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<
 }
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../gl/Functors.hpp"
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../gl/Renderer.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/opengl/GLUtils.hpp"
 
 void Gl1_Capsule::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo){
 	const shared_ptr<Node>& n=shape->nodes[0];

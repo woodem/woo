@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/pkg/dem/Inlet.hpp>
-#include<woo/pkg/dem/Clump.hpp>
+#include"Inlet.hpp"
+#include"Clump.hpp"
 
 
 struct InletMatState: public MatState{

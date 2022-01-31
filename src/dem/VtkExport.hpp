@@ -1,8 +1,8 @@
 #pragma once
 #ifdef WOO_VTK
 
-#include<woo/core/Engine.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"../core/Engine.hpp"
+#include"Particle.hpp"
 
 struct Capsule; // for triangulateCapsule decl
 struct Rod; // for triangulateRod decl

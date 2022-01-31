@@ -1,11 +1,11 @@
-#include<woo/core/Scene.hpp>
-#include<woo/core/Engine.hpp>
-#include<woo/core/Field.hpp>
-#include<woo/core/Timing.hpp>
-#include<woo/lib/object/ObjectIO.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"Scene.hpp"
+#include"Engine.hpp"
+#include"Field.hpp"
+#include"Timing.hpp"
+#include"../supp/object/ObjectIO.hpp"
+#include"../supp/pyutil/gil.hpp"
 
-#include<woo/lib/base/Math.hpp>
+#include"../supp/base/Math.hpp"
 #include<boost/algorithm/string.hpp>
 #include<chrono>
 

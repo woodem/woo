@@ -1,9 +1,9 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"FrictMat.hpp"
+#include"IntraForce.hpp"
+#include"L6Geom.hpp"
 
 // NB: workaround for https://bugs.launchpad.net/woo/+bug/528509 removed
 namespace woo{
@@ -75,7 +75,7 @@ WOO_REGISTER_OBJECT(Cg2_Sphere_Sphere_L6Geom);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 class Gl1_Sphere: public GlShapeFunctor{
 		// for stripes
 		static vector<Vector3r> vertices, faces;

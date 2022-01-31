@@ -1,8 +1,8 @@
 #pragma once
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/object/serialization.hpp>
+#include"../base/Types.hpp"
+#include"../base/Math.hpp"
+#include"../object/serialization.hpp"
 
 namespace woo{
 	class Pickler{

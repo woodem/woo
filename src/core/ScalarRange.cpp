@@ -1,5 +1,5 @@
-#include<woo/core/ScalarRange.hpp>
-#include<woo/core/Master.hpp>
+#include"ScalarRange.hpp"
+#include"Master.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_core_ScalarRange__CLASS_BASE_DOC_ATTRS_PY);
 WOO_PLUGIN(core,(ScalarRange));

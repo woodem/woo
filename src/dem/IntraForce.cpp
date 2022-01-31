@@ -1,6 +1,6 @@
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"IntraForce.hpp"
+#include"Particle.hpp"
+#include"Contact.hpp"
 #include<boost/range/algorithm/find_if.hpp>
 #include<cstdlib>
 

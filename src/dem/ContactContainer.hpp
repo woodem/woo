@@ -1,5 +1,5 @@
 #pragma once
-#include<woo/pkg/dem/ParticleContainer.hpp>
+#include"ParticleContainer.hpp"
 
 #include<boost/iterator/filter_iterator.hpp>
 

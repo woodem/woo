@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/base/openmp-accu.hpp>
-#include<woo/core/Engine.hpp>
+#include"../supp/object/Object.hpp"
+#include"../supp/base/openmp-accu.hpp"
+#include"Engine.hpp"
 
 namespace woo{
 	struct WooTestClass: public woo::Object{

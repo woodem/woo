@@ -1,6 +1,6 @@
-#include<woo/lib/pyutil/pickle.hpp>
-#include<woo/lib/pyutil/gil.hpp>
-#include<woo/lib/pyutil/compat.hpp>
+#include"pickle.hpp"
+#include"gil.hpp"
+#include"compat.hpp"
 
 namespace woo{
 	py::handle Pickler::cPickle_dumps;

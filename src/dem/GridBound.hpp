@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"Collision.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 
 struct GridCollider;
@@ -60,7 +60,7 @@ struct GridBoundDispatcher: public Dispatcher1D</* functor type*/GridBoundFuncto
 WOO_REGISTER_OBJECT(GridBoundDispatcher);
 
 
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Sphere.hpp"
 struct Grid1_Sphere: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Sphere);
@@ -70,7 +70,7 @@ struct Grid1_Sphere: public GridBoundFunctor{
 };
 WOO_REGISTER_OBJECT(Grid1_Sphere);
 
-#include<woo/pkg/dem/Wall.hpp>
+#include"Wall.hpp"
 struct Grid1_Wall: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Wall);
@@ -81,7 +81,7 @@ struct Grid1_Wall: public GridBoundFunctor{
 };
 WOO_REGISTER_OBJECT(Grid1_Wall);
 
-#include<woo/pkg/dem/InfCylinder.hpp>
+#include"InfCylinder.hpp"
 struct Grid1_InfCylinder: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(InfCylinder);
@@ -93,7 +93,7 @@ struct Grid1_InfCylinder: public GridBoundFunctor{
 WOO_REGISTER_OBJECT(Grid1_InfCylinder);
 
 
-#include<woo/pkg/dem/Facet.hpp>
+#include"Facet.hpp"
 struct Grid1_Facet: public GridBoundFunctor{
 	void go(const shared_ptr<Shape>&, const Particle::id_t&, const shared_ptr<GridCollider>&, const shared_ptr<GridStore>&) override;
 	FUNCTOR1D(Facet);

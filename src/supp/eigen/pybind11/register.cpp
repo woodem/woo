@@ -1,5 +1,5 @@
-#include<woo/lib/pyutil/doc_opts.hpp>
-#include<woo/lib/eigen/pybind11/visitors.hpp>
+#include"../../pyutil/doc_opts.hpp"
+#include"../../eigen/pybind11/visitors.hpp"
 // #include<pybind11/eigen.h>
 namespace woo{
 	void registerEigenClassesInPybind11(py::module& mod){

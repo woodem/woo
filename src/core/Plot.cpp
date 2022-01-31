@@ -1,7 +1,7 @@
-#include<woo/core/Master.hpp>
-#include<woo/core/Plot.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"Master.hpp"
+#include"Plot.hpp"
+#include"Scene.hpp"
+#include"../supp/pyutil/gil.hpp"
 
 
 WOO_PLUGIN(core,(SceneAttachedObject)(SceneCtrl)(Plot));

@@ -1,7 +1,7 @@
 #pragma once
 #ifdef WOO_OPENGL
-//#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/gl/Functors.hpp>
+//#include"Particle.hpp"
+#include"../gl/Functors.hpp"
 
 
 GL_FUNCTOR(GlShapeFunctor,TYPELIST_4(const shared_ptr<Shape>&, /*shift*/ const Vector3r&, /*wire*/bool,const GLViewInfo&),Shape);

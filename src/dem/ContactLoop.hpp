@@ -1,11 +1,11 @@
 // 2009 © Václav Šmilauer <eu@doxos.eu>
 #pragma once
-#include<woo/core/Engine.hpp>
-#include<woo/core/Functor.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/Contact.hpp>
-#include<woo/pkg/dem/ContactHook.hpp>
+#include"../core/Engine.hpp"
+#include"../core/Functor.hpp"
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"Contact.hpp"
+#include"ContactHook.hpp"
 
 /* ***************************************** */
 

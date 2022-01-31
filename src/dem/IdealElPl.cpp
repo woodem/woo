@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/IdealElPl.hpp>
+#include"IdealElPl.hpp"
 WOO_PLUGIN(dem,(Law2_L6Geom_FrictPhys_IdealElPl)(IdealElPlData)(Law2_L6Geom_FrictPhys_LinEl6));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Law2_L6Geom_FrictPhys_IdealElPl__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_IdealElPlData__CLASS_BASE_DOC_ATTRS);

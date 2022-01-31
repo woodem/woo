@@ -2,13 +2,13 @@
 // the code written after http://www.amillionpixels.us/bestfitobb.cpp
 // which is MIT-licensed
 
-#include<woo/lib/base/Logging.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/pyutil/doc_opts.hpp>
+#include"../src/supp/base/Logging.hpp"
+#include"../src/supp/base/Math.hpp"
+#include"../src/supp/pyutil/doc_opts.hpp"
 
-#include<woo/lib/base/Types.hpp>
+#include"../src/supp/base/Types.hpp"
 
-#include<woo/core/Master.hpp>
+#include"../core/Master.hpp"
 
 #include<vector>
 #include<stdexcept>

@@ -1,5 +1,5 @@
-#include<woo/core/EnergyTracker.hpp>
-#include<woo/core/Master.hpp>
+#include"EnergyTracker.hpp"
+#include"Master.hpp"
 #include<boost/algorithm/string.hpp>
 
 

@@ -1,11 +1,11 @@
 // © 2009 Václav Šmilauer <eudoxos@arcig.cz>
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Facet.hpp>
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"FrictMat.hpp"
+#include"IntraForce.hpp"
+#include"Sphere.hpp"
+#include"Facet.hpp"
 
 
 
@@ -73,7 +73,7 @@ WOO_REGISTER_OBJECT(Cg2_Wall_Facet_L6Geom);
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Wall: public GlShapeFunctor{	
 	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool,const GLViewInfo&) override;
 	WOO_DECL_LOGGER;

@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/POVRayExport.hpp>
+#include"POVRayExport.hpp"
 
 #include<boost/range/join.hpp>
 #include<boost/range/algorithm/sort.hpp>
@@ -13,16 +13,16 @@
 #include<boost/property_map/property_map.hpp>
 
 
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/pkg/dem/InfCylinder.hpp>
-#include<woo/pkg/dem/Cone.hpp>
-#include<woo/pkg/dem/Truss.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
+#include"Sphere.hpp"
+#include"Facet.hpp"
+#include"InfCylinder.hpp"
+#include"Cone.hpp"
+#include"Truss.hpp"
+#include"Ellipsoid.hpp"
+#include"Wall.hpp"
+#include"Capsule.hpp"
 
-#include<woo/pkg/mesh/Mesh.hpp>
+#include"../mesh/Mesh.hpp"
 
 #include<iomanip> // std::setprecision
 

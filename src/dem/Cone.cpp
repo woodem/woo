@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/Cone.hpp>
+#include"Cone.hpp"
 
 WOO_PLUGIN(dem,(Cone)(Bo1_Cone_Aabb)(Cg2_Cone_Sphere_L6Geom));
 
@@ -102,10 +102,10 @@ bool Cg2_Cone_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Sh
 WOO_PLUGIN(gl,(Gl1_Cone));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Cone__CLASS_BASE_DOC_ATTRS);
 
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/pkg/gl/GlData.hpp>
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../gl/GlData.hpp"
 void Gl1_Cone::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo&){
 	const Cone& c(shape->cast<Cone>());
 	assert(c.numNodesOk());

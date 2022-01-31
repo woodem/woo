@@ -1,7 +1,7 @@
 #pragma once
 // © 2013 Václav Šmilauer <eu@doxos.eu>
-#include<woo/pkg/dem/GridStore.hpp>
-#include<woo/pkg/dem/GridBound.hpp>
+#include"GridStore.hpp"
+#include"GridBound.hpp"
 
 // #define this macro to enable timing within this engine
 // #define GC_TIMING

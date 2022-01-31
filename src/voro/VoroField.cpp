@@ -1,13 +1,13 @@
 #ifdef WOO_VORO
 
-#include<woo/pkg/voro/VoroField.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
+#include"VoroField.hpp"
+#include"../dem/Particle.hpp"
+#include"../dem/Sphere.hpp"
+#include"../dem/Funcs.hpp"
 #include<iostream>
 
 // namespace voro{
-#include<woo/lib/voro++/voro++.cc>
+#include"../supp/voro++/voro++.cc"
 // };
 
 

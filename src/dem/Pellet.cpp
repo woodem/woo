@@ -1,6 +1,6 @@
-#include<woo/pkg/dem/Pellet.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
+#include"Pellet.hpp"
+#include"Sphere.hpp"
+#include"Capsule.hpp"
 WOO_PLUGIN(dem,(PelletMat)(PelletMatState)(PelletPhys)(Cp2_PelletMat_PelletPhys)(Law2_L6Geom_PelletPhys_Pellet)(PelletCData)(PelletAgglomerator));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_PelletMat__CLASS_BASE_DOC_ATTRS_CTOR);

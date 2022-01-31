@@ -1,12 +1,12 @@
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"../src/dem/Particle.hpp"
+#include"../src/dem/FrictMat.hpp"
+#include"../src/dem/Sphere.hpp"
+#include"../src/dem/ContactLoop.hpp"
+#include"../src/dem/L6Geom.hpp"
 
-#include<woo/pkg/dem/Funcs.hpp>
+#include"../src/dem/Funcs.hpp"
 
-#include<woo/lib/base/CompUtils.hpp>
+#include"../src/supp/base/CompUtils.hpp"
 
 Real pWaveDt(shared_ptr<Scene> _scene=shared_ptr<Scene>(), bool noClumps=false){
 	Scene* scene=(_scene?_scene.get():Master::instance().getScene().get());

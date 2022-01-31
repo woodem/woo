@@ -1,9 +1,9 @@
-#include<woo/core/Master.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/pyutil/caller.hpp>
-#include<woo/lib/multimethods/FunctorWrapper.hpp>
-#include<woo/lib/multimethods/Indexable.hpp>
+#include"Master.hpp"
+#include"Scene.hpp"
+#include"../supp/base/Math.hpp"
+#include"../supp/pyutil/caller.hpp"
+#include"../supp/multimethods/FunctorWrapper.hpp"
+#include"../supp/multimethods/Indexable.hpp"
 #include<cstdlib>
 #include<boost/algorithm/string.hpp>
 #include<mutex>
@@ -12,8 +12,8 @@
 
 
 
-#include<woo/lib/object/ObjectIO.hpp>
-#include<woo/core/Timing.hpp>
+#include"../supp/object/ObjectIO.hpp"
+#include"Timing.hpp"
 
 #ifdef __MINGW64__
 	#ifndef WIN32_LEAN_AND_MEAN

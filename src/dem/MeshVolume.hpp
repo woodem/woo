@@ -3,8 +3,8 @@
 
 #ifdef WOO_GTS
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Facet.hpp>
+#include"Particle.hpp"
+#include"Facet.hpp"
 
 #include<gts.h>
 

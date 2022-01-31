@@ -1,5 +1,5 @@
-#include<woo/pkg/dem/Contact.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"Contact.hpp"
+#include"Particle.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_CGeom__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_CPhys__CLASS_BASE_DOC_ATTRS_CTOR_PY);

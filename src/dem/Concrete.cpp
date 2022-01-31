@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/Concrete.hpp>
+#include"Concrete.hpp"
 
 WOO_PLUGIN(dem,(ConcreteMatState)(ConcreteMat)(ConcretePhys)(Cp2_ConcreteMat_ConcretePhys)(Law2_L6Geom_ConcretePhys));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ConcreteMatState__CLASS_BASE_DOC_ATTRS);
@@ -361,7 +361,7 @@ bool Law2_L6Geom_ConcretePhys::go(const shared_ptr<CGeom>& _geom, const shared_p
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Renderer.hpp> // for GlData
+#include"../gl/Renderer.hpp" // for GlData
 #include<GL/glu.h>
 
 WOO_PLUGIN(gl,(Gl1_ConcretePhys));

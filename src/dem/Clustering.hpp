@@ -1,6 +1,6 @@
 #pragma once
 
-#include<woo/pkg/dem/Particle.hpp>
+#include"Particle.hpp"
 
 
 struct ClusterMatState: public MatState {

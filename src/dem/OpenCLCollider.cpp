@@ -1,6 +1,6 @@
 #ifdef YADE_OPENCL
 
-#include<woo/pkg/dem/OpenCLCollider.hpp>
+#include"OpenCLCollider.hpp"
 #include<algorithm>
 
 WOO_PLUGIN(dem,(OpenCLCollider));

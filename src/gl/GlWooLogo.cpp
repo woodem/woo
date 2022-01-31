@@ -1,4 +1,4 @@
-#include<woo/pkg/gl/GlWooLogo.hpp>
+#include"GlWooLogo.hpp"
 
 namespace woo{
 	/* data obtained from exporting the SVG from inkscape to POV, then hand-editing */

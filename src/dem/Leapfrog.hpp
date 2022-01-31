@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/core/Engine.hpp>
-#include<woo/core/Field.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"../core/Engine.hpp"
+#include"../core/Field.hpp"
+#include"Particle.hpp"
 #ifdef WOO_OPENMP
 	#include<omp.h>
 #endif

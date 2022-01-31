@@ -1,16 +1,16 @@
 #pragma once
 
-#include<woo/lib/object/Object.hpp>
-#include<woo/core/Field.hpp>
-#include<woo/core/LabelMapper.hpp>
-#include<woo/core/Timing.hpp>
-#include<woo/lib/base/Logging.hpp>
+#include"../supp/object/Object.hpp"
+#include"Field.hpp"
+#include"LabelMapper.hpp"
+#include"Timing.hpp"
+#include"../supp/base/Logging.hpp"
 
 #include<stdexcept>
 
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/lib/pyutil/converters.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"../supp/pyutil/except.hpp"
+#include"../supp/pyutil/converters.hpp"
+#include"../supp/pyutil/gil.hpp"
 
 struct Scene;
 struct Field;

@@ -1,9 +1,9 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Particle.hpp"
+#include"IntraForce.hpp"
+#include"Collision.hpp"
+#include"FrictMat.hpp"
+#include"Sphere.hpp"
 
 
 struct Rod: public Shape{
@@ -46,7 +46,7 @@ WOO_REGISTER_OBJECT(Cg2_Rod_Sphere_L6Geom);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Rod: public GlShapeFunctor{
 	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	FUNCTOR1D(Rod);

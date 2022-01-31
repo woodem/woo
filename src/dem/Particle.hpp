@@ -1,12 +1,12 @@
 #pragma once
 
 #include<unordered_map>
-#include<woo/core/Field.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/core/Field-templates.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/ContactContainer.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../core/Field.hpp"
+#include"../core/Scene.hpp"
+#include"../core/Field-templates.hpp"
+#include"ParticleContainer.hpp"
+#include"ContactContainer.hpp"
+#include"../supp/pyutil/converters.hpp"
 #include<atomic>
 #include<boost/utility/binary.hpp>
 

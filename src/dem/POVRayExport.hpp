@@ -1,7 +1,7 @@
 #pragma once
 
-#include<woo/core/Engine.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"../core/Engine.hpp"
+#include"Particle.hpp"
 
 struct POVRayExport: public PeriodicEngine{
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }

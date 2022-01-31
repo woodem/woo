@@ -1,8 +1,8 @@
-#include<woo/core/Engine.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/core/Field.hpp>
+#include"Engine.hpp"
+#include"Scene.hpp"
+#include"Field.hpp"
 
-#include<woo/lib/pyutil/gil.hpp>
+#include"../supp/pyutil/gil.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Engine__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_core_ParallelEngine__CLASS_BASE_DOC_ATTRS_PY);

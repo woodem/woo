@@ -1,14 +1,14 @@
-#include<woo/pkg/dem/ShapePack.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/lib/base/Volumetric.hpp>
-#include<woo/lib/base/CrossPlatform.hpp>
+#include"ShapePack.hpp"
+#include"Clump.hpp"
+#include"../supp/base/Volumetric.hpp"
+#include"../supp/base/CrossPlatform.hpp"
 
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
+#include"Sphere.hpp"
+#include"Capsule.hpp"
+#include"Ellipsoid.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/GlData.hpp>
+	#include"../gl/GlData.hpp"
 #endif
 
 #include<boost/tokenizer.hpp>

@@ -1,8 +1,8 @@
 #pragma once
 
 #ifdef WOO_OPENGL
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/pyutil/except.hpp>
+#include"../supp/object/Object.hpp"
+#include"../supp/pyutil/except.hpp"
 #include<boost/algorithm/string/predicate.hpp>
 #include<typeindex>
 

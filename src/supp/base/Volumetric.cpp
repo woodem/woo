@@ -1,4 +1,4 @@
-#include<woo/lib/base/Volumetric.hpp>
+#include"Volumetric.hpp"
 #include<iostream>
 #include<fstream>
 

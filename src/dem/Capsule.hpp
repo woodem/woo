@@ -1,12 +1,12 @@
 // © 2014 Václav Šmilauer <eu@doxos.eu>
 #pragma once
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/InfCylinder.hpp>
-#include<woo/pkg/dem/Facet.hpp>
+#include"Particle.hpp"
+#include"L6Geom.hpp"
+#include"Sphere.hpp"
+#include"Wall.hpp"
+#include"InfCylinder.hpp"
+#include"Facet.hpp"
 
 
 struct Capsule: public Shape{
@@ -101,7 +101,7 @@ WOO_REGISTER_OBJECT(Cg2_Facet_Capsule_L6Geom);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Capsule: public Gl1_Sphere{
 	virtual void go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) override;
 	#define woo_dem_Gl1_Capsule__CLASS_BASE_DOC \

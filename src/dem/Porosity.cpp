@@ -1,6 +1,6 @@
-#include<woo/pkg/dem/Porosity.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Porosity.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"Sphere.hpp"
 
 WOO_PLUGIN(dem,(AnisoPorosityAnalyzer));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_AnisoPorosityAnalyzer__CLASS_BASE_DOC_ATTRS_PY);
@@ -149,7 +149,7 @@ void AnisoPorosityAnalyzer::run(){
 }
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../supp/opengl/GLUtils.hpp"
 
 void GlExtra_AnisoPorosityAnalyzer::render(const GLViewInfo& viewInfo){
 	const Scene* scene(viewInfo.scene);

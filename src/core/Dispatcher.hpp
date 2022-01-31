@@ -10,10 +10,10 @@
 
 #include<boost/lexical_cast.hpp>
 
-#include<woo/core/Master.hpp>
-#include<woo/core/Engine.hpp>
-#include<woo/core/Functor.hpp>
-#include<woo/lib/multimethods/DynLibDispatcher.hpp>
+#include"Master.hpp"
+#include"Engine.hpp"
+#include"Functor.hpp"
+#include"../supp/multimethods/DynLibDispatcher.hpp"
 
 #include<boost/preprocessor/cat.hpp>
 

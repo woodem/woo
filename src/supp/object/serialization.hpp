@@ -1,6 +1,6 @@
 #pragma once
 
-#include<woo/lib/base/Math.hpp>
+#include"../base/Math.hpp"
 #include<boost/multi_array.hpp>
 
 #ifdef WOO_CEREAL

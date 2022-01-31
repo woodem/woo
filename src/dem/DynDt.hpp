@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
+#include"Particle.hpp"
+#include"IntraForce.hpp"
 
 struct DynDt: public PeriodicEngine{
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }

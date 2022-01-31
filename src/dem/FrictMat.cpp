@@ -1,7 +1,7 @@
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/core/MatchMaker.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/G3Geom.hpp>
+#include"FrictMat.hpp"
+#include"../core/MatchMaker.hpp"
+#include"L6Geom.hpp"
+#include"G3Geom.hpp"
 
 WOO_PLUGIN(dem,(ElastMat)(FrictMat)(FrictPhys)(Cp2_FrictMat_FrictPhys));
 

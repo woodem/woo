@@ -1,7 +1,7 @@
 #ifdef WOO_OPENGL
 // use local includes, since MOC generated files do that as well
 #include"OpenGLManager.hpp"
-#include<woo/core/Timing.hpp>
+#include"../core/Timing.hpp"
 
 WOO_IMPL_LOGGER(OpenGLManager);
 

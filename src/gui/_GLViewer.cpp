@@ -3,8 +3,8 @@
 // use local includes, since MOC does the same
 #include"GLViewer.hpp"
 #include"OpenGLManager.hpp"
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/pyutil/doc_opts.hpp>
+#include"../gl/Renderer.hpp"
+#include"../supp/pyutil/doc_opts.hpp"
 
 #include<QApplication>
 #include<QCloseEvent>

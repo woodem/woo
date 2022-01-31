@@ -1,11 +1,11 @@
 #pragma once 
 
-#include<woo/lib/base/Math.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/lib/sphere-pack/SpherePack.hpp>
+#include"../supp/base/Math.hpp"
+#include"../core/Scene.hpp"
+#include"Particle.hpp"
+#include"Sphere.hpp"
+#include"Facet.hpp"
+#include"../supp/sphere-pack/SpherePack.hpp"
 
 #include <boost/iterator/zip_iterator.hpp>
 #include <boost/range.hpp>

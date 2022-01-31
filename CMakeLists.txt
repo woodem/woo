@@ -378,6 +378,7 @@ set(WOO_CXX_SOURCES
 	src/gl/NodeGlRep.cpp
 	src/gl/Renderer.cpp
 	src/voro/VoroField.cpp
+	src/mesh/Mesh.cpp
 )
 
 
@@ -438,7 +439,7 @@ if(WOO_SPDLOG_LOCAL)
 		src/lib/spdlog/src/spdlog.cpp
 		src/lib/spdlog/src/stdout_sinks.cpp
 	)
-	target_include_directories(spdlog_local PUBLIC lib/)
+	target_include_directories(spdlog_local PUBLIC src/lib/)
     add_definitions(-DSPDLOG_COMPILED_LIB)
 	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
 else()
@@ -471,7 +472,7 @@ install(PROGRAMS "${CMAKE_BINARY_DIR}/bin/${WOO_MAIN_SCRIPT}" "${CMAKE_BINARY_DI
 )
 
 install(FILES
-	core/main/wooMain.py
+	py/main/wooMain.py
 	DESTINATION ${WOO_TOP_MODULEDIR}
 )
 install(FILES

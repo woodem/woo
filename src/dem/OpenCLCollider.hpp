@@ -1,7 +1,7 @@
 #pragma once
 #ifdef YADE_OPENCL
 
-#include<woo/pkg/dem/InsertionSortCollider.hpp>
+#include"InsertionSortCollider.hpp"
 
 class OpenCLCollider: public InsertionSortCollider{
 

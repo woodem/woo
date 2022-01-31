@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/lib/sphere-pack/SpherePack.hpp>
-#include<woo/pkg/dem/ShapePack.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"Particle.hpp"
+#include"../supp/sphere-pack/SpherePack.hpp"
+#include"ShapePack.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 
 struct SphereClumpGeom: public ShapeClump {

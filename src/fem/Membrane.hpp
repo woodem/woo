@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
+#include"../dem/Facet.hpp"
+#include"../dem/FrictMat.hpp"
 
 // #define MEMBRANE_DEBUG_ROT
 struct Membrane: public Facet{
@@ -83,7 +83,7 @@ WOO_REGISTER_OBJECT(In2_Membrane_FrictMat);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Membrane: public Gl1_Facet{	
 	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
 	void drawLocalDisplacement(const Vector2r& nodePt, const Vector2r& xy, const shared_ptr<ScalarRange>& range, bool split, char arrow, int lineWd, const Real z=NaN);

@@ -1,14 +1,13 @@
 #pragma once
-#include<woo/lib/aabbcc/AABB.h>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"Collision.hpp"
+#include"Contact.hpp"
 
 #define WOO_ABBY
 
 #ifdef WOO_ABBY
-	#include<woo/lib/aabbcc/abby.hpp>
+	#include"../lib/aabbcc/abby.hpp"
 #else
-	#include<woo/lib/aabbcc/AABB.h>
+	#include"../lib/aabbcc/AABB.h"
 #endif
 
 namespace aabb{ struct Tree; };

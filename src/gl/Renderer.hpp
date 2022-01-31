@@ -3,16 +3,16 @@
 #pragma once
 #ifdef WOO_OPENGL
 
-#include<woo/lib/multimethods/DynLibDispatcher.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../supp/multimethods/DynLibDispatcher.hpp"
+#include"../supp/pyutil/converters.hpp"
 
-#include<woo/core/Dispatcher.hpp>
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
+#include"../core/Dispatcher.hpp"
+#include"../supp/opengl/OpenGLWrapper.hpp"
 
-#include<woo/pkg/gl/Functors.hpp>
-#include<woo/pkg/gl/NodeGlRep.hpp>
+#include"Functors.hpp"
+#include"NodeGlRep.hpp"
 
-#include<woo/pkg/gl/GlData.hpp>
+#include"GlData.hpp"
 
 struct GlExtraDrawer: public Object{
 	virtual void render(const GLViewInfo&);

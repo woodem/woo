@@ -1,6 +1,6 @@
-#include<woo/core/Field.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/core/Scene.hpp>
+#include"Field.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"Scene.hpp"
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Node__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Field__CLASS_BASE_DOC_ATTRS_CTOR_PY);

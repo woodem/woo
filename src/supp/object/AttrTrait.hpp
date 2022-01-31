@@ -1,9 +1,9 @@
 #pragma once
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"../base/Types.hpp"
+#include"../base/Math.hpp"
+#include"../base/CompUtils.hpp"
+#include"../pyutil/gil.hpp"
 
 // attribute flags
 namespace woo{

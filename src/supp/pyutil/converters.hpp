@@ -3,7 +3,7 @@
 #include<vector>
 #include<list>
 
-#include<woo/lib/base/openmp-accu.hpp>
+#include"../base/openmp-accu.hpp"
 
 #include<pybind11/stl.h>
 #include<pybind11/stl_bind.h>

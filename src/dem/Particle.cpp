@@ -1,12 +1,12 @@
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/Contact.hpp>
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
+#include"Particle.hpp"
+#include"ParticleContainer.hpp"
+#include"Contact.hpp"
+#include"../supp/pyutil/except.hpp"
+#include"Clump.hpp"
+#include"Funcs.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/GlData.hpp>
+	#include"../gl/GlData.hpp"
 #endif
 
 #include<boost/range/algorithm/count_if.hpp>

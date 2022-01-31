@@ -1,10 +1,10 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz>
-#include<woo/lib/base/Logging.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/pyutil/doc_opts.hpp>
-#include<woo/lib/sphere-pack/SpherePack.hpp>
-#include<woo/core/Master.hpp>
+#include"../src/supp/base/Logging.hpp"
+#include"../src/supp/base/Math.hpp"
+#include"../src/supp/base/Types.hpp"
+#include"../src/supp/pyutil/doc_opts.hpp"
+#include"../src/supp/sphere-pack/SpherePack.hpp"
+#include"../core/Master.hpp"
 
 /*
 This file contains various predicates that say whether a given point is within the solid,
@@ -366,7 +366,7 @@ public:
 // this is only activated in the SCons build
 #if defined(WOO_GTS)
 // HACK
-#include"3rd-party/pygts-0.3.1/pygts.h"
+#include"../src/lib/pygts-0.3.1/pygts.h"
 
 /* Helper function for inGtsSurface::aabb() */
 static void vertex_aabb(GtsVertex *vertex, pair<Vector3r,Vector3r> *bb)

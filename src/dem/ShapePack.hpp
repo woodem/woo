@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/lib/sphere-pack/SpherePack.hpp> // for Predicate
-#include<woo/lib/pyutil/converters.hpp>
+#include"Particle.hpp"
+#include"../supp/sphere-pack/SpherePack.hpp" // for Predicate
+#include"../supp/pyutil/converters.hpp"
 
 
 struct SphereClumpGeom;

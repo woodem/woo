@@ -1,5 +1,5 @@
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"except.hpp"
+#include"gil.hpp"
 
 
 namespace woo{

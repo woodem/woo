@@ -1,8 +1,8 @@
 // 2010 © Václav Šmilauer <eudoxos@arcig.cz>
 #pragma once
 
-#include<woo/lib/object/Object.hpp>
-#include<woo/core/Field.hpp>
+#include"../supp/object/Object.hpp"
+#include"../core/Field.hpp"
 
 #include<boost/iterator/filter_iterator.hpp>
 

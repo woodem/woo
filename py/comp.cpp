@@ -1,8 +1,8 @@
 
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/base/Volumetric.hpp>
-#include<woo/core/Master.hpp> // for WOO_PYTHON_MODULE
-#include<woo/lib/smoothing/LinearInterpolate.hpp>
+#include"../src/supp/base/CompUtils.hpp"
+#include"../src/supp/base/Volumetric.hpp"
+#include"../core/Master.hpp" // for WOO_PYTHON_MODULE
+#include"../src/supp/smoothing/LinearInterpolate.hpp"
 
 
 py::tuple computePrincipalAxes(const Real& V, const Vector3r& Sg, const Matrix3r& Ig){

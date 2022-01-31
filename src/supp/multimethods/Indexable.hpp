@@ -11,7 +11,7 @@
 #pragma once
 
 #include<boost/scoped_ptr.hpp>
-#include<woo/lib/base/Types.hpp>
+#include"../base/Types.hpp"
 #include<stdexcept>
 #include<string>
 

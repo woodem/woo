@@ -1,8 +1,8 @@
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"Collision.hpp"
+#include"ParticleContainer.hpp"
+#include"Contact.hpp"
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
+	#include"../supp/opengl/OpenGLWrapper.hpp"
 #endif
 
 WOO_PLUGIN(dem,(Aabb)(BoundFunctor)(BoundDispatcher)(Collider)(AabbCollider));

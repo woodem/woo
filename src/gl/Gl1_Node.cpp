@@ -1,9 +1,9 @@
 
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/gl/Gl1_Node.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
+#include"../supp/opengl/GLUtils.hpp"
+#include"Gl1_Node.hpp"
+#include"Renderer.hpp"
 
 WOO_PLUGIN(gl,(Gl1_Node));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Node__CLASS_BASE_DOC_ATTRS);

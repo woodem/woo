@@ -1,13 +1,13 @@
 
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 
-#include<woo/core/Scene.hpp>
-#include<woo/pkg/dem/PeriIsoCompressor.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/Leapfrog.hpp>
-#include<woo/lib/pyutil/gil.hpp>
+#include"../core/Scene.hpp"
+#include"PeriIsoCompressor.hpp"
+#include"Particle.hpp"
+#include"Funcs.hpp"
+#include"FrictMat.hpp"
+#include"Leapfrog.hpp"
+#include"../supp/pyutil/gil.hpp"
 
 WOO_IMPL_LOGGER(PeriIsoCompressor);
 

@@ -6,7 +6,7 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 
-#include<woo/lib/multimethods/Indexable.hpp>
+#include"Indexable.hpp"
 
 
 Indexable::Indexable () 

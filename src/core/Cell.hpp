@@ -13,9 +13,9 @@ The transformation is split between "normal" part and "rotation/shear" part for 
 
 #pragma once
 
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"../supp/object/Object.hpp"
+#include"../supp/base/Math.hpp"
+#include"../supp/base/CompUtils.hpp"
 
 struct Scene;
 

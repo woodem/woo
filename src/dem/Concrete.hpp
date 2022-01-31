@@ -1,7 +1,7 @@
 #pragma once
 
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
 
 struct ConcreteMatState: public MatState {
 	string getScalarName(int index) override {
@@ -175,7 +175,7 @@ WOO_REGISTER_OBJECT(Law2_L6Geom_ConcretePhys);
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/dem/Gl1_CPhys.hpp>
+#include"Gl1_CPhys.hpp"
 
 class GLUquadric;
 

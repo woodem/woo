@@ -1,6 +1,6 @@
 #pragma once
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Math.hpp>
+#include"Types.hpp"
+#include"Math.hpp"
 
 // various geometry-related trivial numerical functions
 struct CompUtils{

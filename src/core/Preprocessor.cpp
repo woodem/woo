@@ -1,6 +1,6 @@
-#include<woo/core/Preprocessor.hpp>
-#include<woo/core/Master.hpp>
-#include<woo/core/Scene.hpp>
+#include"Preprocessor.hpp"
+#include"Master.hpp"
+#include"Scene.hpp"
 #include<boost/algorithm/string.hpp>
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_core_Preprocessor_CLASS_BASE_DOC_ATTRS_PY);

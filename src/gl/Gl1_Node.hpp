@@ -2,7 +2,7 @@
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Functors.hpp>
+#include"Functors.hpp"
 struct Gl1_Node: public GlNodeFunctor{
 	virtual void go(const shared_ptr<Node>&, const GLViewInfo&) override;
 	RENDERS(Node);

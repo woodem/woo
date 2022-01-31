@@ -1,9 +1,9 @@
 #ifdef WOO_VORO
 
 #pragma once
-#include<woo/core/Field.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/lib/voro++/voro++.hh>
+#include"../core/Field.hpp"
+#include"../dem/Particle.hpp"
+#include"../supp/voro++/voro++.hh"
 
 struct VoroField: public Field{
 	// bool acceptsField(Field* f){ return dynamic_cast<VoroField*>(f); }

@@ -1,15 +1,15 @@
-#include<woo/pkg/dem/Inlet.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Psd.hpp> // PsdSphereGenerator::sanitizePsd
+#include"Inlet.hpp"
+#include"Collision.hpp"
+#include"Funcs.hpp"
+#include"Clump.hpp"
+#include"Sphere.hpp"
+#include"Psd.hpp" // PsdSphereGenerator::sanitizePsd
 
-#include<woo/lib/sphere-pack/SpherePack.hpp>
-#include<woo/lib/smoothing/LinearInterpolate.hpp>
+#include"../supp/sphere-pack/SpherePack.hpp"
+#include"../supp/smoothing/LinearInterpolate.hpp"
 
 // hack
-#include<woo/pkg/dem/InsertionSortCollider.hpp>
+#include"InsertionSortCollider.hpp"
 
 #include<boost/range/algorithm/lower_bound.hpp>
 

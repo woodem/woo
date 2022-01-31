@@ -1,9 +1,9 @@
 // 2010 © Václav Šmilauer <eudoxos@arcig.cz>
 
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
-#include<woo/pkg/dem/Clump.hpp>
+#include"ParticleContainer.hpp"
+#include"Particle.hpp"
+#include"ContactLoop.hpp"
+#include"Clump.hpp"
 
 #ifdef WOO_OPENMP
 	#include<omp.h>

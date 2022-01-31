@@ -1,7 +1,7 @@
 // © 2009 Václav Šmilauer <eudoxos@arcig.cz>
-#include<woo/pkg/dem/InfCylinder.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"InfCylinder.hpp"
+#include"ParticleContainer.hpp"
+#include"Sphere.hpp"
 #include<limits>
 
 WOO_PLUGIN(dem,(InfCylinder)(Bo1_InfCylinder_Aabb)(Cg2_InfCylinder_Sphere_L6Geom));
@@ -69,10 +69,10 @@ bool Cg2_InfCylinder_Sphere_L6Geom::go(const shared_ptr<Shape>& sh1, const share
 
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
-	#include<woo/pkg/gl/Renderer.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
-	#include<woo/lib/opengl/GLUtils.hpp>
+	#include"../supp/opengl/OpenGLWrapper.hpp"
+	#include"../gl/Renderer.hpp"
+	#include"../supp/base/CompUtils.hpp"
+	#include"../supp/opengl/GLUtils.hpp"
 
 	void Gl1_InfCylinder::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){
 		const InfCylinder& cyl=shape->cast<InfCylinder>();

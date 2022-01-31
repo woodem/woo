@@ -6,11 +6,11 @@
 #include<string>
 #include<limits>
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/Logging.hpp>
-#include<woo/lib/base/Math.hpp>
+#include"../base/Types.hpp"
+#include"../base/Logging.hpp"
+#include"../base/Math.hpp"
 
-#include<woo/lib/pyutil/except.hpp>
+#include"../pyutil/except.hpp"
 
 /* base class for filtering predicates */
 struct Predicate{

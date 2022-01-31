@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/GridCollider.hpp>
+#include"GridCollider.hpp"
 
 WOO_PLUGIN(dem,(GridCollider));
 WOO_IMPL_LOGGER(GridCollider);
@@ -235,7 +235,7 @@ void GridCollider::run(){
 }
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../supp/opengl/GLUtils.hpp"
 	void GridCollider::render(const GLViewInfo&){
 		// show domain with tics along all sides of the box
 		// GLUtils::AlignedBox(domain,color);

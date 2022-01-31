@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/lib/multimethods/Indexable.hpp>
-#include<woo/lib/object/Object.hpp>
-#include<woo/core/Master.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"../supp/multimethods/Indexable.hpp"
+#include"../supp/object/Object.hpp"
+#include"Master.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 #include<thread>
 

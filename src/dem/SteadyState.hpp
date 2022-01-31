@@ -1,7 +1,7 @@
 #pragma once
 
-#include<woo/pkg/dem/Inlet.hpp>
-#include<woo/pkg/dem/Outlet.hpp>
+#include"Inlet.hpp"
+#include"Outlet.hpp"
 
 struct DetectSteadyState: public PeriodicEngine{
 	WOO_DECL_LOGGER;

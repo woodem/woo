@@ -1,7 +1,7 @@
-#include<woo/pkg/dem/CrossAnisotropy.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"CrossAnisotropy.hpp"
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
+#include"Sphere.hpp"
 
 WOO_PLUGIN(dem,(Cp2_FrictMat_FrictPhys_CrossAnisotropic));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cp2_FrictMat_FrictPhys_CrossAnisotropic__CLASS_BASE_DOC_ATTRS);
@@ -55,7 +55,7 @@ void Cp2_FrictMat_FrictPhys_CrossAnisotropic::go(const shared_ptr<Material>& b1,
 WOO_PLUGIN(gl,(GlExtra_LocalAxes));
 #endif	
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../supp/opengl/GLUtils.hpp"
 
 void GlExtra_LocalAxes::render(const GlViewInfo& glInfo){
 	for(int ax=0; ax<3; ax++){

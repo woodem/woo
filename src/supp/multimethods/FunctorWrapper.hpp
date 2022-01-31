@@ -9,10 +9,10 @@
 #pragma once
 
 
-#include<woo/lib/object/Object.hpp>
+#include"../object/Object.hpp"
 
-#include<woo/lib/multimethods/loki/Typelist.h>
-#include<woo/lib/multimethods/loki/Functor.h>
+#include"loki/Typelist.h"
+#include"loki/Functor.h"
 // compat with former woo's local Loki
 #define TYPELIST_1 LOKI_TYPELIST_1
 #define TYPELIST_2 LOKI_TYPELIST_2

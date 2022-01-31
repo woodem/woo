@@ -1,5 +1,5 @@
-#include<woo/core/Engine.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"../core/Engine.hpp"
+#include"Particle.hpp"
 
 struct Suspicious: public PeriodicEngine {
 	WOO_DECL_LOGGER;

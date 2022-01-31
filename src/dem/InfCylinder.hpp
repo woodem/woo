@@ -1,10 +1,10 @@
 // © 2009 Václav Šmilauer <eudoxos@arcig.cz>
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/IntraForce.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"IntraForce.hpp"
+#include"L6Geom.hpp"
+#include"Sphere.hpp"
 
 /*! Object representing infinite plane aligned with the coordinate system (axis-aligned wall). */
 struct InfCylinder: public Shape{
@@ -48,7 +48,7 @@ WOO_REGISTER_OBJECT(Cg2_InfCylinder_Sphere_L6Geom);
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_InfCylinder: public GlShapeFunctor{	
 	virtual void go(const shared_ptr<Shape>&, const Vector3r&, bool,const GLViewInfo&) override;
 	#define woo_dem_Gl1_InfCylinder__CLASS_BASE_DOC_ATTRS \

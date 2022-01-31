@@ -1,10 +1,10 @@
-#include<woo/pkg/dem/Suspicious.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Contact.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"Suspicious.hpp"
+#include"Particle.hpp"
+#include"Contact.hpp"
+#include"L6Geom.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/dem/Gl1_DemField.hpp>
+	#include"Gl1_DemField.hpp"
 #endif
 
 WOO_IMPL_LOGGER(Suspicious);
@@ -74,7 +74,7 @@ void Suspicious::run(){
 
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../supp/opengl/GLUtils.hpp"
 void Suspicious::render(const GLViewInfo& viewInfo){
 	std::scoped_lock l(errMutex);
 	Vector3r size=.05*viewInfo.sceneRadius*Vector3r::Ones();

@@ -1,11 +1,11 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Collision.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
+#include"Particle.hpp"
+#include"Collision.hpp"
+#include"Sphere.hpp"
+#include"L6Geom.hpp"
 
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/Facet.hpp>
+#include"Wall.hpp"
+#include"Facet.hpp"
 
 namespace woo{
 	struct Ellipsoid: public Shape{
@@ -97,7 +97,7 @@ WOO_REGISTER_OBJECT(Cg2_Facet_Ellipsoid_L6Geom);
 
 
 #ifdef WOO_OPENGL
-#include<woo/pkg/gl/Functors.hpp>
+#include"../gl/Functors.hpp"
 struct Gl1_Ellipsoid: public Gl1_Sphere{
 	virtual void go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2,const GLViewInfo& glInfo) override {
 		Gl1_Sphere::renderScaledSphere(shape,shift,wire2,glInfo,/*radius*/1.0,shape->cast<Ellipsoid>().semiAxes);

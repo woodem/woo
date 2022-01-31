@@ -1,8 +1,8 @@
 #pragma once
 
-#include<woo/pkg/dem/Impose.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"Impose.hpp"
+#include"Particle.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 
 struct LawTesterStage: public Object{

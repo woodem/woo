@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Wall.hpp>
+#include"Particle.hpp"
+#include"ContactLoop.hpp"
+#include"Sphere.hpp"
+#include"Wall.hpp"
 
 struct G3Geom: public CGeom{
 	// rotates any contact-local vector expressed inglobal coordinates to keep track of local contact rotation in last step

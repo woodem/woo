@@ -1,7 +1,7 @@
 #if WOO_OPENGL
-#include<woo/pkg/gl/GlSetup.hpp>
-#include<woo/pkg/gl/Functors.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
+#include"GlSetup.hpp"
+#include"Functors.hpp"
+#include"Renderer.hpp"
 
 WOO_PLUGIN(gl,(GlSetup));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_GlSetup__CLASS_BASE_DOC_ATTRS_PY);

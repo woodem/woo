@@ -1,14 +1,14 @@
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/G3Geom.hpp>
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/fem/Membrane.hpp>
-#include<woo/pkg/dem/DynDt.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/base/CrossPlatform.hpp>
+#include"Funcs.hpp"
+#include"L6Geom.hpp"
+#include"G3Geom.hpp"
+#include"FrictMat.hpp"
+#include"Clump.hpp"
+#include"Ellipsoid.hpp"
+#include"Capsule.hpp"
+#include"../fem/Membrane.hpp"
+#include"DynDt.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/base/CrossPlatform.hpp"
 
 #include<cstdint>
 #include<iostream>
@@ -27,7 +27,7 @@
 #endif
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/Renderer.hpp>
+	#include"../gl/Renderer.hpp"
 #endif
 
 #include <boost/range/adaptor/filtered.hpp>
@@ -587,7 +587,7 @@ vector<shared_ptr<Particle>> DemFuncs::importSTL(const string& filename, const s
 #include<vtkSmartPointer.h>
 
 
-#include<woo/pkg/dem/Tracer.hpp>
+#include"Tracer.hpp"
 
 
 bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<DemField>& dem, const string& filename, const Vector2i& moduloOffset){
@@ -665,7 +665,7 @@ bool DemFuncs::vtkExportTraces(const shared_ptr<Scene>& scene, const shared_ptr<
 #endif /* WOO_VTK */
 
 
-#include<woo/lib/voro++/voro++.hh>
+#include"../lib/voro++/voro++.hh"
 
 
 // from voro++ example, http://math.lbl.gov/voro++/examples/irregular/

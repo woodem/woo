@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/Luding.hpp>
+#include"Luding.hpp"
 WOO_PLUGIN(dem,(LudingMat)(LudingMatState)(LudingPhys)(Cp2_LudingMat_LudingPhys)(Law2_L6Geom_LudingPhys));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_LudingMat__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_LudingMatState__CLASS_BASE_DOC_ATTRS);

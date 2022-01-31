@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/openmp-accu.hpp>
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/pyutil/except.hpp>
+#include"../supp/base/Types.hpp"
+#include"../supp/base/openmp-accu.hpp"
+#include"../supp/object/Object.hpp"
+#include"../supp/pyutil/except.hpp"
 
 
 // namespace py=boost::python;

@@ -1,4 +1,4 @@
-#include<woo/pkg/fem/Membrane.hpp>
+#include"Membrane.hpp"
 
 WOO_PLUGIN(fem,(Membrane)(In2_Membrane_ElastMat)(In2_Membrane_FrictMat));
 
@@ -424,8 +424,8 @@ void In2_Membrane_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Mat
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
+#include"../gl/Renderer.hpp"
+#include"../supp/opengl/GLUtils.hpp"
 
 WOO_PLUGIN(gl,(Gl1_Membrane));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS);

@@ -1,26 +1,26 @@
 #pragma once
 
-#include<woo/lib/base/Types.hpp>
+#include"../base/Types.hpp"
 
 #include<boost/any.hpp>
 #include<boost/version.hpp>
 #include<boost/type_traits.hpp>
 #include<boost/preprocessor.hpp>
 #include<boost/type_traits/integral_constant.hpp>
-#include<woo/lib/pyutil/doc_opts.hpp>
-#include<woo/lib/pyutil/except.hpp>
-#include<woo/lib/pyutil/pickle.hpp>
-#include<woo/lib/pyutil/compat.hpp>
+#include"../pyutil/doc_opts.hpp"
+#include"../pyutil/except.hpp"
+#include"../pyutil/pickle.hpp"
+#include"../pyutil/compat.hpp"
 
 #include<boost/preprocessor.hpp>
 #include<boost/version.hpp>
 
-#include<woo/lib/object/serialization.hpp>
-#include<woo/lib/object/ObjectIO.hpp>
+#include"serialization.hpp"
+#include"ObjectIO.hpp"
 
-#include<woo/lib/base/Math.hpp>
-#include<woo/lib/base/Logging.hpp>
-#include<woo/lib/object/AttrTrait.hpp>
+#include"../base/Math.hpp"
+#include"../base/Logging.hpp"
+#include"AttrTrait.hpp"
 
 
 

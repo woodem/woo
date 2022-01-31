@@ -1,15 +1,15 @@
 
-#include<woo/pkg/dem/Tracer.hpp>
+#include"Tracer.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
-	#include<woo/lib/opengl/GLUtils.hpp>
-	#include<woo/pkg/gl/Renderer.hpp> // for displacement scaling
+	#include"../supp/opengl/OpenGLWrapper.hpp"
+	#include"../supp/opengl/GLUtils.hpp"
+	#include"../gl/Renderer.hpp" // for displacement scaling
 #endif
 
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Gl1_DemField.hpp> // for setOurSceneRanges
+#include"Sphere.hpp"
+#include"Clump.hpp"
+#include"Gl1_DemField.hpp" // for setOurSceneRanges
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_TraceVisRep__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxTraceTimeSetter__CLASS_BASE_DOC_ATTRS);

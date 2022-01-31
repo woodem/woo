@@ -1,7 +1,7 @@
 #ifdef WOO_OPENGL
 
-#include<woo/core/DisplayParameters.hpp>
-#include<woo/core/Master.hpp>
+#include"DisplayParameters.hpp"
+#include"Master.hpp"
 
 WOO_PLUGIN(gl,(DisplayParameters));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_gl_DisplayParameters__CLASS_BASE_DOC_ATTRS_PY);

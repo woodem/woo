@@ -1,8 +1,8 @@
 #ifdef WOO_VTK
 
-#include<woo/pkg/dem/FlowAnalysis.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
+#include"FlowAnalysis.hpp"
+#include"Sphere.hpp"
+#include"Funcs.hpp"
 
 #include<vtkUniformGrid.h>
 #include<vtkPoints.h>
@@ -391,8 +391,8 @@ string FlowAnalysis::vtkExportVectorOps(const string& out, const vector<size_t>&
 }
 
 #ifdef WOO_OPENGL
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
+#include"../supp/opengl/GLUtils.hpp"
+#include"../gl/Renderer.hpp"
 	void FlowAnalysis::render(const GLViewInfo& glInfo){
 		if(std::isnan(color[0])) return;
 		glPushMatrix();

@@ -1,8 +1,8 @@
 #pragma once 
 
-#include<woo/core/Field.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/pkg/dem/Particle.hpp>
+#include"../core/Field.hpp"
+#include"../core/Scene.hpp"
+#include"Particle.hpp"
 
 struct Tracer;
 

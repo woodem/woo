@@ -4,7 +4,7 @@
 
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Renderer.hpp>
+#include"../gl/Renderer.hpp"
 
 #include<QGLViewer/qglviewer.h>
 #include<QGLViewer/constraint.h>
@@ -17,7 +17,7 @@
 #include<set>
 
 
-#include<woo/core/Engine.hpp>
+#include"../core/Engine.hpp"
 
 
 

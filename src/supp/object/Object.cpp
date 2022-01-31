@@ -1,5 +1,5 @@
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"Object.hpp"
+#include"../pyutil/converters.hpp"
 
 
 #if 0

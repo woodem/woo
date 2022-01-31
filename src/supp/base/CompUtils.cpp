@@ -1,4 +1,4 @@
-#include<woo/lib/base/CompUtils.hpp>
+#include"CompUtils.hpp"
 #include<stdexcept>
 #include<string>
 #include<boost/lexical_cast.hpp>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/core/Engine.hpp>
+#include"Particle.hpp"
+#include"../core/Engine.hpp"
 
 // not HDF5-specific (but not used elsewhere, either)
 struct DemDataTagged: public DemData{

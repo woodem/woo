@@ -1,6 +1,6 @@
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/lib/base/Volumetric.hpp>
+#include"Clump.hpp"
+#include"Funcs.hpp"
+#include"../supp/base/Volumetric.hpp"
 
 WOO_PLUGIN(dem,(ClumpData)(SphereClumpGeom));
 

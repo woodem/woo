@@ -1,6 +1,6 @@
 // © 2009 Václav Šmilauer <eudoxos@arcig.cz>
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/ParticleContainer.hpp>
+#include"Wall.hpp"
+#include"ParticleContainer.hpp"
 #include<limits>
 
 WOO_PLUGIN(dem,(Wall)(Bo1_Wall_Aabb)(In2_Wall_ElastMat)(Cg2_Wall_Sphere_L6Geom)(Cg2_Wall_Facet_L6Geom));
@@ -138,10 +138,10 @@ bool Cg2_Wall_Facet_L6Geom::go(const shared_ptr<Shape>& sh1, const shared_ptr<Sh
 
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
-	#include<woo/pkg/gl/Renderer.hpp>
-	#include<woo/lib/base/CompUtils.hpp>
-	#include<woo/lib/opengl/GLUtils.hpp>
+	#include"../supp/opengl/OpenGLWrapper.hpp"
+	#include"../gl/Renderer.hpp"
+	#include"../supp/base/CompUtils.hpp"
+	#include"../supp/opengl/GLUtils.hpp"
 	WOO_IMPL_LOGGER(Gl1_Wall);
 
 	void Gl1_Wall::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo& viewInfo){

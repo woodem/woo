@@ -2,7 +2,7 @@
 
 #include<string>
 #include<boost/preprocessor.hpp>
-#include<woo/lib/base/Logging.hpp> // for fmt (possibly bundled with spdlog)
+#include"../base/Logging.hpp" // for fmt (possibly bundled with spdlog)
 
 #include<pybind11/pybind11.h>
 namespace py=pybind11;

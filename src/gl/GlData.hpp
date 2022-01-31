@@ -2,8 +2,8 @@
 
 #ifdef WOO_OPENGL
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/core/Field.hpp>
+#include"../supp/base/Types.hpp"
+#include"../core/Field.hpp"
 
 struct GlData: public NodeData{
 	const char* getterName() const override { return "gl"; }

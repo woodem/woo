@@ -1,14 +1,14 @@
 #ifdef WOO_OPENGL
-#include<woo/pkg/dem/Gl1_DemField.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/InfCylinder.hpp>
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"Gl1_DemField.hpp"
+#include"Sphere.hpp"
+#include"Clump.hpp"
+#include"InfCylinder.hpp"
+#include"Wall.hpp"
+#include"Facet.hpp"
+#include"Funcs.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../gl/Renderer.hpp"
+#include"../supp/base/CompUtils.hpp"
 
 #if 0 // defined(WOO_QT4) || defined(WOO_QT5)
 	#include<QCoreApplication>

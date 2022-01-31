@@ -1,18 +1,18 @@
 #ifdef WOO_OPENGL
 
-#include<woo/pkg/gl/Renderer.hpp>
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/lib/pyutil/gil.hpp>
-#include<woo/core/Timing.hpp>
-#include<woo/core/Scene.hpp>
-#include<woo/core/Field.hpp>
+#include"Renderer.hpp"
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../supp/pyutil/gil.hpp"
+#include"../core/Timing.hpp"
+#include"../core/Scene.hpp"
+#include"../core/Field.hpp"
 
-#include<woo/pkg/gl/GlWooLogo.hpp>
-#include<woo/pkg/gl/GlSetup.hpp>
+#include"GlWooLogo.hpp"
+#include"GlSetup.hpp"
 
-// #include<woo/pkg/dem/Particle.hpp>
+// #include"../dem/Particle.hpp"
 
 #include <GL/glu.h>
 #include <GL/gl.h>

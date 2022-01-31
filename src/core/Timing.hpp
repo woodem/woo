@@ -7,8 +7,8 @@
 #include<thread>
 #include<mutex>
 
-#include<woo/lib/base/Types.hpp>
-#include<woo/lib/base/openmp-accu.hpp>
+#include"../supp/base/Types.hpp"
+#include"../supp/base/openmp-accu.hpp"
 
 namespace woo{
 

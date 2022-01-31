@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/Ice.hpp>
+#include"Ice.hpp"
 WOO_PLUGIN(dem,(IceMat)(IcePhys)(Cp2_IceMat_IcePhys)(Law2_L6Geom_IcePhys));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_IceMat__CLASS_BASE_DOC_ATTRS_CTOR);
 #if 0

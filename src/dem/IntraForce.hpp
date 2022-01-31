@@ -1,8 +1,8 @@
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/core/Functor.hpp>
-#include<woo/core/Dispatcher.hpp>
-#include<woo/lib/pyutil/converters.hpp>
+#include"Particle.hpp"
+#include"../core/Functor.hpp"
+#include"../core/Dispatcher.hpp"
+#include"../supp/pyutil/converters.hpp"
 
 struct IntraFunctor: public Functor2D<
 	/*dispatch types*/ Shape,Material,

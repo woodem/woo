@@ -1,7 +1,7 @@
 #pragma once
-#include<woo/pkg/dem/FrictMat.hpp>
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
+#include"FrictMat.hpp"
+#include"L6Geom.hpp"
+#include"ContactLoop.hpp"
 
 struct IceMat: public FrictMat{
 	#define woo_dem_IceMat__CLASS_BASE_DOC_ATTRS_CTOR \

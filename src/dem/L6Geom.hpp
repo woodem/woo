@@ -1,10 +1,10 @@
 
 #pragma once
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/ContactLoop.hpp>
+#include"Particle.hpp"
+#include"ContactLoop.hpp"
 
 #ifdef WOO_OPENGL
-	#include<woo/pkg/gl/Functors.hpp>
+	#include"../gl/Functors.hpp"
 #endif
 
 struct L6Geom: public CGeom{

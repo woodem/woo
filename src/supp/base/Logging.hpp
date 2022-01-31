@@ -36,10 +36,10 @@
 #else
 	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #endif
-#include<woo/lib/spdlog/spdlog.h>
-#include<woo/lib/spdlog/async_logger.h>
-#include<woo/lib/spdlog/sinks/stdout_color_sinks.h>
-#include<woo/lib/spdlog/fmt/ostr.h>
+#include"../../lib/spdlog/spdlog.h"
+#include"../../lib/spdlog/async_logger.h"
+#include"../../lib/spdlog/sinks/stdout_color_sinks.h"
+#include"../../lib/spdlog/fmt/ostr.h"
 
 #define LOG_TRACE(...) {SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__);}
 #define LOG_DEBUG(...) {SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__);}

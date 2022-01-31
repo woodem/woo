@@ -1,11 +1,11 @@
-#include<woo/core/Master.hpp>
-#include<woo/core/Timing.hpp>
-#include<woo/lib/object/Object.hpp>
-#include<woo/lib/base/Logging.hpp>
+#include"../core/Master.hpp"
+#include"../core/Timing.hpp"
+#include"../src/supp/object/Object.hpp"
+#include"../src/supp/base/Logging.hpp"
 
-#include<woo/lib/backward/backward.hpp>
+#include"../src/lib/backward/backward.hpp"
 
-#include<woo/lib/eigen/pybind11/register.hpp>
+#include"../src/supp/eigen/pybind11/register.hpp"
 
 #include<signal.h>
 #include<cstdlib>

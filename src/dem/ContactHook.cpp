@@ -1,6 +1,6 @@
-#include<woo/pkg/dem/ContactHook.hpp>
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Contact.hpp>
+#include"ContactHook.hpp"
+#include"Particle.hpp"
+#include"Contact.hpp"
 
 WOO_PLUGIN(dem,(ContactHook)(CountContactsHook));
 

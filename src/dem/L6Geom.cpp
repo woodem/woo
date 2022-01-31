@@ -1,12 +1,12 @@
-#include<woo/pkg/dem/L6Geom.hpp>
-#include<woo/core/Field.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"L6Geom.hpp"
+#include"../core/Field.hpp"
+#include"../supp/base/CompUtils.hpp"
 
 #include<sstream>
 
 #ifdef WOO_OPENGL
-	#include<woo/lib/opengl/OpenGLWrapper.hpp>
-	#include<woo/lib/opengl/GLUtils.hpp>
+	#include"../supp/opengl/OpenGLWrapper.hpp"
+	#include"../supp/opengl/GLUtils.hpp"
 	#include<GL/glu.h>
 #endif
 

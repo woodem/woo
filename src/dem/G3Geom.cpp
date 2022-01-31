@@ -2,7 +2,7 @@
 	This code was mostly written by original Yade authors, in particular Bruno Chareyre.
 	It was ported purely for pure comparison purposes.
 */
-#include<woo/pkg/dem/G3Geom.hpp>
+#include"G3Geom.hpp"
 
 WOO_PLUGIN(dem,(G3Geom)(Cg2_Sphere_Sphere_G3Geom)(Cg2_Wall_Sphere_G3Geom)(Law2_G3Geom_FrictPhys_IdealElPl)(G3GeomCData));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_G3Geom__CLASS_BASE_DOC_ATTRS_CTOR);

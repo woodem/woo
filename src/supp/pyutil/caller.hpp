@@ -1,7 +1,7 @@
 #pragma once
 // http://stackoverflow.com/questions/16933418/calling-c-functions-who-is-calling
 #include<frameobject.h>
-#include<woo/lib/pyutil/gil.hpp>
+#include"gil.hpp"
 
 namespace woo {
 	static bool pyCallerInfo(string& file, string& func, int& line){

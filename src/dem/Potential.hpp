@@ -1,8 +1,8 @@
 #pragma once
 
 #if 0
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/core/Dispatcher.hpp>
+#include"Particle.hpp"
+#include"../core/Dispatcher.hpp"
 
 
 struct PotentialFunctor: public Functor1D</*dispatch types*/ Shape,/*return type*/ Real, /*argument types*/ TYPELIST_2(const shared_ptr<Shape>&, const Vector3r&)>{
@@ -25,7 +25,7 @@ struct PotentialDispatcher: public Dispatcher1D</* functor type*/PotentialFuncto
 };
 WOO_REGISTER_OBJECT(PotentialDispatcher);
 
-#include<woo/pkg/dem/Sphere.hpp>
+#include"Sphere.hpp"
 struct Pot1_Sphere: public PotentialFunctor{
 	Real boundingSphereRadius(const shared_ptr<Shape>&) override;
 	Real pot(const shared_ptr<Shape>& s, const Vector3r& x);
@@ -36,7 +36,7 @@ struct Pot1_Sphere: public PotentialFunctor{
 };
 WOO_REGISTER_OBJECT(Pot1_Sphere);
 
-#include<woo/pkg/dem/Wall.hpp>
+#include"Wall.hpp"
 struct Pot1_Wall: public PotentialFunctor{
 	Real pot(const shared_ptr<Shape>& s, const Vector3r& x);
 	PotFuncType funcPotentialValue(const shared_ptr<Shape>&) override;

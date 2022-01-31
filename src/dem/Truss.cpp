@@ -1,4 +1,4 @@
-#include<woo/pkg/dem/Truss.hpp>
+#include"Truss.hpp"
 
 WOO_PLUGIN(dem,(Rod)(Truss)(Bo1_Rod_Aabb)(In2_Truss_ElastMat)(Cg2_Rod_Sphere_L6Geom));
 
@@ -152,10 +152,10 @@ bool Cg2_Rod_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Sha
 WOO_PLUGIN(gl,(Gl1_Rod));
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Rod__CLASS_BASE_DOC_ATTRS);
 
-#include<woo/lib/opengl/OpenGLWrapper.hpp>
-#include<woo/lib/opengl/GLUtils.hpp>
-#include<woo/lib/base/CompUtils.hpp>
-#include<woo/pkg/gl/GlData.hpp>
+#include"../supp/opengl/OpenGLWrapper.hpp"
+#include"../supp/opengl/GLUtils.hpp"
+#include"../supp/base/CompUtils.hpp"
+#include"../gl/GlData.hpp"
 void Gl1_Rod::go(const shared_ptr<Shape>& shape, const Vector3r& shift, bool wire2, const GLViewInfo&){
 	const Rod& t(shape->cast<Rod>());
 	assert(t.numNodesOk());

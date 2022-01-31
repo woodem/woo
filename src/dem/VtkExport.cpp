@@ -1,16 +1,16 @@
 #ifdef WOO_VTK
-#include<woo/pkg/dem/VtkExport.hpp>
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Facet.hpp>
-#include<woo/pkg/dem/InfCylinder.hpp>
-#include<woo/pkg/dem/Truss.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
-#include<woo/pkg/dem/Wall.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/dem/Cone.hpp>
-#include<woo/pkg/fem/Tetra.hpp>
-#include<woo/pkg/dem/Clump.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
+#include"VtkExport.hpp"
+#include"Sphere.hpp"
+#include"Facet.hpp"
+#include"InfCylinder.hpp"
+#include"Truss.hpp"
+#include"Ellipsoid.hpp"
+#include"Wall.hpp"
+#include"Capsule.hpp"
+#include"Cone.hpp"
+#include"../fem/Tetra.hpp"
+#include"Clump.hpp"
+#include"Funcs.hpp"
 
 
 WOO_PLUGIN(dem,(VtkExport));

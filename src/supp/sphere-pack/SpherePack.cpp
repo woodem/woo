@@ -1,8 +1,8 @@
 // © 2009 Václav Šmilauer <eudoxos@arcig.cz>
 
 
-#include<woo/lib/sphere-pack/SpherePack.hpp>
-#include<woo/lib/base/CrossPlatform.hpp>
+#include"SpherePack.hpp"
+#include"../base/CrossPlatform.hpp"
 
 #include<boost/random/linear_congruential.hpp>
 #include<boost/random/uniform_real.hpp>
