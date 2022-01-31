@@ -71,7 +71,7 @@ if("${PYTHON_VERSION_MAJOR}" STREQUAL "2")
 	message(FATAL_ERROR "Python 2.x is not supported.")
 endif()
 
-set(Backward_DIR ${PROJECT_SOURCE_DIR}/lib/backward/cmake)
+set(Backward_DIR ${PROJECT_SOURCE_DIR}/src/lib/backward/cmake)
 find_package(Backward REQUIRED)
 
 if(WOO_DEBUG)
@@ -138,16 +138,16 @@ if(WOO_GTS)
 	target_include_directories(GTS INTERFACE ${GTS_INCLUDE_DIRS})
 	target_link_libraries(GTS INTERFACE ${GTS_LIBRARIES})
 	set(WOO_CXX_GTS_SOURCES
-		py/3rd-party/pygts-0.3.1/cleanup.cpp
-		py/3rd-party/pygts-0.3.1/edge.cpp
-		py/3rd-party/pygts-0.3.1/face.cpp
-		py/3rd-party/pygts-0.3.1/object.cpp
-		py/3rd-party/pygts-0.3.1/point.cpp
-		py/3rd-party/pygts-0.3.1/pygts.cpp
-		py/3rd-party/pygts-0.3.1/segment.cpp
-		py/3rd-party/pygts-0.3.1/surface.cpp
-		py/3rd-party/pygts-0.3.1/triangle.cpp
-		py/3rd-party/pygts-0.3.1/vertex.cpp
+		src/lib/pygts-0.3.1/cleanup.cpp
+		src/lib/pygts-0.3.1/edge.cpp
+		src/lib/pygts-0.3.1/face.cpp
+		src/lib/pygts-0.3.1/object.cpp
+		src/lib/pygts-0.3.1/point.cpp
+		src/lib/pygts-0.3.1/pygts.cpp
+		src/lib/pygts-0.3.1/segment.cpp
+		src/lib/pygts-0.3.1/surface.cpp
+		src/lib/pygts-0.3.1/triangle.cpp
+		src/lib/pygts-0.3.1/vertex.cpp
 	)
 	add_definitions(-DPYGTS_HAS_NUMPY)
 endif()
@@ -199,10 +199,10 @@ if(WOO_QT5)
 		message(FATAL_ERROR "QGLViewer library/headers not found (headers: ${QGLVIEWER_INCLUDE_DIR}, lib: ${QGLVIEWER_LIBS}).")
 	endif()
 	set(WOO_CXX_GUI_SOURCES
-		gui/qt/GLViewer.qrc
-		gui/qt/GLViewer.cpp
-		gui/qt/_GLViewer.cpp
-		gui/qt/OpenGLManager.cpp
+		src/gui/GLViewer.qrc
+		src/gui/GLViewer.cpp
+		src/gui/_GLViewer.cpp
+		src/gui/OpenGLManager.cpp
 	)
 endif(WOO_QT5)
 
@@ -240,11 +240,13 @@ macro(create_symlink target linkname)
 		message(FATAL_ERROR "Symlinking headers failed:\n${HEADER_LINK_ERROR}")
 	endif()
 endmacro()
-MESSAGE(STATUS "Symlinking headers …")
-FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/include/woo")
-create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo")
-create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo")
-create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo")
+if(0)
+	MESSAGE(STATUS "Symlinking headers …")
+	FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/include/woo")
+	create_symlink("${CMAKE_SOURCE_DIR}/pkg" "${CMAKE_BINARY_DIR}/include/woo")
+	create_symlink("${CMAKE_SOURCE_DIR}/lib" "${CMAKE_BINARY_DIR}/include/woo")
+	create_symlink("${CMAKE_SOURCE_DIR}/core" "${CMAKE_BINARY_DIR}/include/woo")
+endif()
 
 if(NOT "${WOO_FLAVOR}" STREQUAL "")
 	set(WOO_MAIN_SCRIPT "woo-${WOO_FLAVOR}")
@@ -274,110 +276,108 @@ set(WOO_CXX_SOURCES
 	py/_utils2.cpp
 	py/WeightedAverage2d.cpp
 	# core
-	core/Cell.cpp
-	core/Dispatcher.cpp
-	core/DisplayParameters.cpp
-	core/EnergyTracker.cpp
-	core/Engine.cpp
-	core/Field.cpp
-	core/Functor.cpp
-	core/LabelMapper.cpp
-	core/Master.cpp
-	core/MatchMaker.cpp
-	core/Plot.cpp
-	core/Preprocessor.cpp
-	core/ScalarRange.cpp
-	core/Scene.cpp
-	core/Test.cpp
-	core/Timing.cpp
+	src/core/Cell.cpp
+	src/core/Dispatcher.cpp
+	src/core/DisplayParameters.cpp
+	src/core/EnergyTracker.cpp
+	src/core/Engine.cpp
+	src/core/Field.cpp
+	src/core/Functor.cpp
+	src/core/LabelMapper.cpp
+	src/core/Master.cpp
+	src/core/MatchMaker.cpp
+	src/core/Plot.cpp
+	src/core/Preprocessor.cpp
+	src/core/ScalarRange.cpp
+	src/core/Scene.cpp
+	src/core/Test.cpp
+	src/core/Timing.cpp
 	# lib
-	lib/aabbcc/AABB.cc
+	src/lib/aabbcc/AABB.cc
+	src/lib/voro++/voro++.cc
 	# lib/backward/backward.cpp
-	lib/base/CompUtils.cpp
-	lib/base/Math.cpp
-	lib/base/Volumetric.cpp
-	lib/multimethods/Indexable.cpp
-	lib/object/Object.cpp
-	lib/opengl/GLUtils.cpp
-	lib/pyutil/except.cpp
-	lib/pyutil/gil.cpp
-	lib/pyutil/pickle.cpp
-	lib/sphere-pack/SpherePack.cpp
-	lib/voro++/voro++.cc
-	lib/eigen/pybind11/register.cpp
+	# supp
+	src/supp/base/CompUtils.cpp
+	src/supp/base/Math.cpp
+	src/supp/base/Volumetric.cpp
+	src/supp/multimethods/Indexable.cpp
+	src/supp/object/Object.cpp
+	src/supp/opengl/GLUtils.cpp
+	src/supp/pyutil/except.cpp
+	src/supp/pyutil/gil.cpp
+	src/supp/pyutil/pickle.cpp
+	src/supp/sphere-pack/SpherePack.cpp
+	src/supp/eigen/pybind11/register.cpp
 	# pkg
-	pkg/clDem/CLDemField.cpp
-	pkg/dem/AabbTreeCollider.cpp
-	pkg/dem/Buoyancy.cpp
-	pkg/dem/Capsule.cpp
-	pkg/dem/Clump.cpp
-	pkg/dem/Clustering.cpp
-	pkg/dem/Collision.cpp
-	pkg/dem/Concrete.cpp
-	pkg/dem/Cone.cpp
-	pkg/dem/ContactContainer.cpp
-	pkg/dem/Contact.cpp
-	pkg/dem/ContactHook.cpp
-	pkg/dem/ContactLoop.cpp
-	pkg/dem/Conveyor.cpp
-	pkg/dem/CrossAnisotropy.cpp
-	pkg/dem/DynDt.cpp
-	pkg/dem/Ellipsoid.cpp
-	pkg/dem/Facet.cpp
-	pkg/dem/FlowAnalysis.cpp
-	pkg/dem/FrictMat.cpp
-	pkg/dem/Funcs.cpp
-	pkg/dem/G3Geom.cpp
-	pkg/dem/Gl1_CPhys.cpp
-	pkg/dem/Gl1_DemField.cpp
-	pkg/dem/Gravity.cpp
-	pkg/dem/GridBound.cpp
-	pkg/dem/GridCollider.cpp
-	pkg/dem/GridStore.cpp
-	pkg/dem/Hdf5Export.cpp
-	pkg/dem/Hertz.cpp
-	pkg/dem/Ice.cpp
-	pkg/dem/IdealElPl.cpp
-	pkg/dem/Impose.cpp
-	pkg/dem/InfCylinder.cpp
-	pkg/dem/Inlet.cpp
-	pkg/dem/InsertionSortCollider.cpp
-	pkg/dem/IntraForce.cpp
-	pkg/dem/L6Geom.cpp
-	pkg/dem/LawTester.cpp
-	pkg/dem/Leapfrog.cpp
-	pkg/dem/Luding.cpp
-	pkg/dem/MeshVolume.cpp
-	pkg/dem/OpenCLCollider.cpp
-	pkg/dem/Outlet.cpp
-	pkg/dem/ParticleContainer.cpp
-	pkg/dem/Particle.cpp
-	pkg/dem/Pellet.cpp
-	pkg/dem/PeriIsoCompressor.cpp
-	pkg/dem/Porosity.cpp
-	pkg/dem/Potential.cpp
-	pkg/dem/POVRayExport.cpp
-	pkg/dem/Psd.cpp
-	pkg/dem/ShapePack.cpp
-	pkg/dem/Sphere.cpp
-	pkg/dem/SteadyState.cpp
-	pkg/dem/Suspicious.cpp
-	pkg/dem/Tracer.cpp
-	pkg/dem/Truss.cpp
-	pkg/dem/VtkExport.cpp
-	pkg/dem/Wall.cpp
-	pkg/fem/Membrane.cpp
-	pkg/fem/Tetra.cpp
-	pkg/gl/Functors.cpp
-	pkg/gl/Gl1_Node.cpp
-	pkg/gl/GlData.cpp
-	pkg/gl/GlSetup.cpp
-	pkg/gl/GlWooLogo.cpp
-	pkg/gl/NodeGlRep.cpp
-	pkg/gl/Renderer.cpp
-	pkg/mesh/Mesh.cpp
-	pkg/sparc/SparcField.cpp
-	pkg/voro/VoroField.cpp
+	src/dem/AabbTreeCollider.cpp
+	src/dem/Buoyancy.cpp
+	src/dem/Capsule.cpp
+	src/dem/Clump.cpp
+	src/dem/Clustering.cpp
+	src/dem/Collision.cpp
+	src/dem/Concrete.cpp
+	src/dem/Cone.cpp
+	src/dem/ContactContainer.cpp
+	src/dem/Contact.cpp
+	src/dem/ContactHook.cpp
+	src/dem/ContactLoop.cpp
+	src/dem/Conveyor.cpp
+	src/dem/CrossAnisotropy.cpp
+	src/dem/DynDt.cpp
+	src/dem/Ellipsoid.cpp
+	src/dem/Facet.cpp
+	src/dem/FlowAnalysis.cpp
+	src/dem/FrictMat.cpp
+	src/dem/Funcs.cpp
+	src/dem/G3Geom.cpp
+	src/dem/Gl1_CPhys.cpp
+	src/dem/Gl1_DemField.cpp
+	src/dem/Gravity.cpp
+	src/dem/GridBound.cpp
+	src/dem/GridCollider.cpp
+	src/dem/GridStore.cpp
+	src/dem/Hdf5Export.cpp
+	src/dem/Hertz.cpp
+	src/dem/Ice.cpp
+	src/dem/IdealElPl.cpp
+	src/dem/Impose.cpp
+	src/dem/InfCylinder.cpp
+	src/dem/Inlet.cpp
+	src/dem/InsertionSortCollider.cpp
+	src/dem/IntraForce.cpp
+	src/dem/L6Geom.cpp
+	src/dem/LawTester.cpp
+	src/dem/Leapfrog.cpp
+	src/dem/Luding.cpp
+	src/dem/MeshVolume.cpp
+	src/dem/OpenCLCollider.cpp
+	src/dem/Outlet.cpp
+	src/dem/ParticleContainer.cpp
+	src/dem/Particle.cpp
+	src/dem/Pellet.cpp
+	src/dem/PeriIsoCompressor.cpp
+	src/dem/Porosity.cpp
+	src/dem/Potential.cpp
+	src/dem/POVRayExport.cpp
+	src/dem/Psd.cpp
+	src/dem/ShapePack.cpp
+	src/dem/Sphere.cpp
+	src/dem/SteadyState.cpp
+	src/dem/Suspicious.cpp
+	src/dem/Tracer.cpp
+	src/dem/Truss.cpp
+	src/dem/VtkExport.cpp
+	src/dem/Wall.cpp
+	src/fem/Membrane.cpp
+	src/fem/Tetra.cpp
+	src/gl/Functors.cpp
+	src/gl/Gl1_Node.cpp
+	src/gl/GlData.cpp
+	src/gl/GlSetup.cpp
+	src/gl/GlWooLogo.cpp
+	src/gl/NodeGlRep.cpp
+	src/gl/Renderer.cpp
+	src/voro/VoroField.cpp
 )
 
 
@@ -431,12 +431,12 @@ target_link_libraries(${CXX_INTERNAL} PRIVATE Backward::Backward)
 OPTION(WOO_SPDLOG_LOCAL "build using local spdlog version" ON)
 if(WOO_SPDLOG_LOCAL)
 	add_library(spdlog_local STATIC
-		lib/spdlog/src/async.cpp
-		lib/spdlog/src/color_sinks.cpp
-		lib/spdlog/src/file_sinks.cpp
-		lib/spdlog/src/fmt.cpp
-		lib/spdlog/src/spdlog.cpp
-		lib/spdlog/src/stdout_sinks.cpp
+		src/lib/spdlog/src/async.cpp
+		src/lib/spdlog/src/color_sinks.cpp
+		src/lib/spdlog/src/file_sinks.cpp
+		src/lib/spdlog/src/fmt.cpp
+		src/lib/spdlog/src/spdlog.cpp
+		src/lib/spdlog/src/stdout_sinks.cpp
 	)
 	target_include_directories(spdlog_local PUBLIC lib/)
     add_definitions(-DSPDLOG_COMPILED_LIB)
@@ -551,8 +551,8 @@ install(FILES
 
 if(WOO_GTS)
 	install(FILES
-		py/3rd-party/pygts-0.3.1/__init__.py
-		py/3rd-party/pygts-0.3.1/pygts.py
+		src/lib/pygts-0.3.1/__init__.py
+		src/lib/pygts-0.3.1/pygts.py
 		DESTINATION ${WOO_MODULEDIR}/gts
 	)
 endif(WOO_GTS)
@@ -574,8 +574,8 @@ if(WOO_QT5)
 			VERBATIM
 		)
 	endmacro()
-	PYQT_QRC(${CMAKE_SOURCE_DIR}/gui/qt/img.qrc img_rc.py)
-	PYQT_UI(${CMAKE_SOURCE_DIR}/gui/qt/controller.ui ui_controller.py)
+	PYQT_QRC(${CMAKE_SOURCE_DIR}/py/qt/img.qrc img_rc.py)
+	PYQT_UI(${CMAKE_SOURCE_DIR}/py/qt/controller.ui ui_controller.py)
 	#add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/ui_controller.py
 	#	COMMAND pyuic5 --from-imports -o ${CMAKE_BINARY_DIR}/ui_controller.py gui/qt/controller.ui
 	#	DEPENDS gui/qt/controller.ui
@@ -584,11 +584,11 @@ if(WOO_QT5)
 	install(FILES
 		${CMAKE_BINARY_DIR}/img_rc.py
 		${CMAKE_BINARY_DIR}/ui_controller.py
-		gui/qt/DisplayProfiles.py
-		gui/qt/ExceptionDialog.py
-		gui/qt/__init__.py
-		gui/qt/Inspector.py
-		gui/qt/ObjectEditor.py
+		py/qt/DisplayProfiles.py
+		py/qt/ExceptionDialog.py
+		py/qt/__init__.py
+		py/qt/Inspector.py
+		py/qt/ObjectEditor.py
 		DESTINATION ${WOO_MODULEDIR}/qt
 	)
 endif()
