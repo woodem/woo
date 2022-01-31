@@ -16,6 +16,9 @@
 #define WOO_PY_EXPOSE_COPY(classT,attr) [](const classT& o){return o.*(attr);},py::return_value_policy::copy
 #define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy::take_ownership
 
+#ifndef PYBIND11_VERSION_HEX
+	#define PYBIND11_VERSION_HEX ((PYBIND11_VERSION_MAJOR<<(3*8))|(PYBIND11_VERSION_MINOR<<(2*8))|(PYBIND11_VERSION_PATCH<<(1*8)))
+#endif
 // forward decl
 namespace woo { struct Object; }; 
 

@@ -2,6 +2,7 @@
 #include"../core/Timing.hpp"
 #include"../src/supp/object/Object.hpp"
 #include"../src/supp/base/Logging.hpp"
+#include"../src/supp/pyutil/compat.hpp"
 
 #include"../src/lib/backward/backward.hpp"
 
