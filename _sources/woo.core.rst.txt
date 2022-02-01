@@ -7,232 +7,7 @@
 .. automodule:: woo.core
    :members:
    :undoc-members:
-   :exclude-members: EnergyTracker,  PyRunner,  Preprocessor,  Plot,  ParallelEngine,  WooTestPeriodicEngine,  SceneCtrl,  Dispatcher,  SceneAttachedObject,  PeriodicEngine,  NodeData,  NodeVisRep,  Cell,  LabelMapper,  Functor,  Field,  Object,  Node,  WooTestClass,  Scene,  ScalarRange,  MatchMaker,  Engine,  EnergyTrackerGrid
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-NodeVisRep
-----------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep`
-
-.. graphviz::
-
-	digraph NodeVisRep {
-		rankdir=LR;
-		margin=.2;
-		"NodeVisRep" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.NodeVisRep"];
-		"woo.gl.VectorGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"NodeVisRep" -> "woo.gl.VectorGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.TensorGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"NodeVisRep" -> "woo.gl.TensorGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.CylGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"NodeVisRep" -> "woo.gl.CylGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.ScalarGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"NodeVisRep" -> "woo.gl.ScalarGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.TraceVisRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeVisRep"];
-		"NodeVisRep" -> "woo.dem.TraceVisRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.ActReactGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"woo.gl.VectorGlRep" -> "woo.gl.ActReactGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.LabelGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
-		"NodeVisRep" -> "woo.gl.LabelGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: NodeVisRep
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-MatchMaker
-----------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.MatchMaker`
-
-.. autoclass:: MatchMaker
-   :members:
-   :exclude-members: matches, algo, val, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: matches (= [])
-
-      Array of ``(id1,id2,value)`` items; queries matching ``id1`` + ``id2`` or ``id2`` + ``id1`` will return ``value``
-
-      [type: std::vector<Vector3r>]
-
-   .. attribute:: algo (= 'avg')
-
-      Alogorithm used to compute value when no match for ids is found. Possible values are
-      
-      * 'avg' (arithmetic average)
-      * 'min' (minimum value)
-      * 'max' (maximum value)
-      * 'harmAvg' (harmonic average)
-      
-      The following algo algorithms do *not* require meaningful input values in order to work:
-      
-      * 'val' (return value specified by :obj:`val`)
-      * 'zero' (always return 0.)
-      
-      
-
-      [type: std::string]
-
-   .. attribute:: val (= nan)
-
-      Constant value returned if there is no match and :obj:`algo` is ``val``
-
-      [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Preprocessor
-------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor`
-
-.. graphviz::
-
-	digraph Preprocessor {
-		rankdir=LR;
-		margin=.2;
-		"Preprocessor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Preprocessor"];
-		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
-		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
-		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
-		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
-		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
-		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Preprocessor
-   :members:
-   :exclude-members: title, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: title (= '')
-
-      Simulation title, will be assigned to the {title} tag, unless running in batch (where the batch title will be used.
-
-      [type: string]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-ScalarRange
------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.ScalarRange`
-
-.. autoclass:: ScalarRange
-   :members:
-   :exclude-members: mnmx, logMnmx, flags, dispPos, length, landscape, label, cmap, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: mnmx (= Vector2(inf,-inf))
-
-      Packed minimum and maximum values; adjusting from python sets :obj:`autoAdjust` to false automatically.
-
-      [type: Vector2r]
-
-   .. attribute:: logMnmx (= Vector2(1.2300495001352267e242,6.3259690378579e-310))
-
-      Logs of mnmx values, to avoid computing logarithms all the time; computed via cacheLogs.
-
-      [type: Vector2r, not saved, not accessible from python]
-
-   .. attribute:: flags (= 8)
-
-      Flags for this range.
-
-      [type: int, bit accessors: **log**, **reversed**, **symmetric**, **autoAdjust**, **hidden**, **clip**, **used**]
-
-   .. attribute:: dispPos (= Vector2i(-1000,-1000))
-
-      Where is this range displayed on the OpenGL canvas; initially out of range, will be reset automatically.
-
-      [type: Vector2i, not shown in the UI]
-
-   .. attribute:: length (= 200.0)
-
-      Length on the display; if negative, it is fractional relative to view width/height
-
-      [type: Real, not shown in the UI]
-
-   .. attribute:: landscape (= False)
-
-      Make the range display with landscape orientation
-
-      [type: bool, not shown in the UI]
-
-   .. attribute:: label (= '')
-
-      Short name of this range.
-
-      [type: std::string]
-
-   .. attribute:: cmap (= -1)
-
-      Colormap to be used.
-
-      [type: int, named enum, possible values are: **'default'** (*''*; -1), **'coolwarm'** (0), **'3gauss'** (1), **'3saw'** (2), **'banded'** (3), **'blue_red'** (4), **'blu_red'** (5), **'bright'** (6), **'bw'** (7), **'default'** (8), **'detail'** (9), **'extrema'** (10), **'helix2'** (11), **'helix'** (12), **'hotres'** (13), **'jaisn2'** (14), **'jaisnb'** (15), **'jaisnc'** (16), **'jaisnd'** (17), **'jaison'** (18), **'jet'** (19), **'manga'** (20), **'rainbow'** (21), **'roullet'** (22), **'ssec'** (23), **'wheel'** (24), **'red-green-blue'** (25), **'viridis'** (26)]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-EnergyTrackerGrid
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.EnergyTrackerGrid`
-
-.. autoclass:: EnergyTrackerGrid
-   :members:
-   :exclude-members: box, cellSize, boxCells, data, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
-
-      Part of space which we monitor.
-
-      [type: AlignedBox3r, read-only in python]
-
-   .. attribute:: cellSize (= nan)
-
-      Size of one cell in the box (in all directions); will be satisfied exactly, at the expense of slightly growing :obj:`box`. Do not change.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: boxCells (= Vector3i(0,0,0))
-
-      Number of cells in the box (computed automatically).
-
-      [type: Vector3i, read-only in python]
-
-   .. attribute:: data
-
-      Grid data -- 5d since each 3d point contains multiple energies, and there are multiple threads writing concurrently.
-
-      [type: boost_multi_array_real_5, not accessible from python]
+   :exclude-members: EnergyTracker,  PyRunner,  Preprocessor,  Plot,  ParallelEngine,  WooTestPeriodicEngine,  SceneCtrl,  Dispatcher,  SceneAttachedObject,  PeriodicEngine,  NodeData,  NodeVisRep,  Cell,  LabelMapper,  Functor,  Field,  Object,  Node,  WooTestClass,  Scene,  MatchMaker,  ScalarRange,  Engine,  EnergyTrackerGrid
 
 
 .. rst-class:: html-toggle
@@ -388,7 +163,7 @@ Scene
 
       [type: StrStrMap, not accessible from python]
 
-   .. attribute:: labels (= <LabelMapper @ 0x26bdbc0>)
+   .. attribute:: labels (= <LabelMapper @ 0x18c8bc0>)
 
       Atrbitrary key=object, key=list of objects, key=py::object associations which survive saving/loading. Labeled objects are automatically added to this container. This object is more conveniently accessed through the :obj:`lab` attribute, which exposes the mapping as attributes of that object rather than as a dictionary.
 
@@ -412,7 +187,7 @@ Scene
 
       [type: vector<shared_ptr<Engine>>, not accessible from python]
 
-   .. attribute:: energy (= <EnergyTracker @ 0x25d52f0>)
+   .. attribute:: energy (= <EnergyTracker @ 0x17e02f0>)
 
       Energy values, if energy tracking is enabled.
 
@@ -424,7 +199,7 @@ Scene
 
       [type: vector<shared_ptr<Field>>, not shown in the UI]
 
-   .. attribute:: cell (= <Cell @ 0x26ca900>)
+   .. attribute:: cell (= <Cell @ 0x18d5900>)
 
       Information on periodicity; only should be used if Scene::isPeriodic.
 
@@ -484,7 +259,7 @@ Scene
 
       [type: py::object, not shown in the UI]
 
-   .. attribute:: plot (= <Plot @ 0x26c93b0>)
+   .. attribute:: plot (= <Plot @ 0x18d43b0>)
 
       Data and settings for plots.
 
@@ -529,23 +304,6 @@ SceneAttachedObject
       Back-reference to the scene object, needed for python; set automatically in Scene::postLoad when the object is assigned.
 
       [type: weak_ptr<:obj:`Scene <woo.core.Scene>`>, not shown in the UI, not dumped, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-SceneCtrl
-"""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.SceneAttachedObject` → :obj:`~woo.core.SceneCtrl`
-
-.. autoclass:: SceneCtrl
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
 
 
 .. rst-class:: html-toggle
@@ -617,6 +375,23 @@ Plot
       Format for annotations in plots; if empty, no annotation is shown; has no impact on existing plots. *xy* is 2-tuple of the current point in data space.
 
       [type: string]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+SceneCtrl
+"""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.SceneAttachedObject` → :obj:`~woo.core.SceneCtrl`
+
+.. autoclass:: SceneCtrl
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
 
 
 .. rst-class:: html-toggle
@@ -927,16 +702,17 @@ Engine
 		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.LawTester" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.LawTester" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AnisoPorosityAnalyzer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.AnisoPorosityAnalyzer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlCPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
-		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.PelletAgglomerator" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.PelletAgglomerator" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.PelletAgglomerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.POVRayExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.POVRayExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.WeirdTriaxControl" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.WeirdTriaxControl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.VtkExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.VtkExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ClusterAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.ClusterAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Tracer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
-		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ContactLoop" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
+		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ContactLoop" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.ContactLoop" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
 		"Dispatcher" -> "woo.gl.GlBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DetectSteadyState" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.DetectSteadyState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
@@ -944,8 +720,7 @@ Engine
 		"PeriodicEngine" -> "woo.dem.ForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlShapeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
 		"Dispatcher" -> "woo.gl.GlShapeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraForce" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Dispatcher" -> "woo.dem.IntraForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"woo.dem.Outlet" -> "woo.dem.ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Suspicious" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"woo.dem.Outlet" -> "woo.dem.ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Suspicious" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.Suspicious" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AabbCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"woo.dem.Collider" -> "woo.dem.AabbCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AxialGravity" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
@@ -999,182 +774,6 @@ Engine
 
 .. rst-class:: emphasized
 
-PeriodicEngine
-++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine`
-
-.. graphviz::
-
-	digraph PeriodicEngine {
-		rankdir=LR;
-		margin=.2;
-		"PeriodicEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
-		"PyRunner" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
-		"PeriodicEngine" -> "PyRunner" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.BoxOutlet" -> "woo.dem.StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.RandomInlet" -> "woo.dem.BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.POVRayExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.POVRayExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.VtkExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.VtkExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ClusterAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.ClusterAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.Inlet" -> "woo.dem.RandomInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.MeshVolume" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.MeshVolume" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.BoxInlet" -> "woo.dem.BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DynDt" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.DynDt" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Tracer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"WooTestPeriodicEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
-		"PeriodicEngine" -> "WooTestPeriodicEngine" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DetectSteadyState" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.DetectSteadyState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.Outlet" -> "woo.dem.BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ForcesToHdf5" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.ForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxTraceTimeSetter" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.BoxTraceTimeSetter" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.Outlet" -> "woo.dem.ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.NodalForcesToHdf5" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.ForcesToHdf5" -> "woo.dem.NodalForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Suspicious" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.Suspicious" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo._qt.SnapshotEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo._qt.html#woo._qt.PeriodicEngine"];
-		"PeriodicEngine" -> "woo._qt.SnapshotEngine" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.Outlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.RandomInlet" -> "woo.dem.ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.Inlet" -> "woo.dem.ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.FlowAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.FlowAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: PeriodicEngine
-   :members:
-   :exclude-members: virtPeriod, realPeriod, stepPeriod, stepModulo, nDo, nDone, initRun, virtLast, realLast, stepLast, stepPrev, virtPrev, realPrev, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: virtPeriod (= 0.0)
-
-      Periodicity criterion using virtual (simulation) time (deactivated if <= 0)
-
-      [type: Real]
-
-   .. attribute:: realPeriod (= 0.0)
-
-      Periodicity criterion using real (wall clock, computation, human) time (deactivated if <=0)
-
-      [type: Real]
-
-   .. attribute:: stepPeriod (= 1)
-
-      Periodicity criterion using step number (deactivated if <= 0)
-
-      [type: long]
-
-   .. attribute:: stepModulo (= True)
-
-      If true, interpret :obj:`stepPeriod` as modulo value for :obj:`Scene.step`. This is useful to assure two engines will run within the same step regardless of when they were started. This may lead to Engine being run *earlier* than :obj:`stepPeriod` after the last run, in case :obj:`stepPeriod` is changed.
-
-      [type: bool]
-
-   .. attribute:: nDo (= -1)
-
-      Limit number of executions by this number (deactivated if negative)
-
-      [type: long]
-
-   .. attribute:: nDone (= 0)
-
-      Track number of executions (cumulative).
-
-      [type: long]
-
-   .. attribute:: initRun (= True)
-
-      Run the first time we are called as well.
-
-      [type: bool]
-
-   .. attribute:: virtLast (= nan)
-
-      Tracks virtual time of last run.
-
-      [type: Real]
-
-   .. attribute:: realLast (= nan)
-
-      Tracks real time of last run.
-
-      [type: Real]
-
-   .. attribute:: stepLast (= -1)
-
-      Tracks step number of last run.
-
-      [type: long]
-
-   .. attribute:: stepPrev (= -1)
-
-      Number of step when we run previously (stepLast is the current step when the engine runs)
-
-      [type: long, not shown in the UI]
-
-   .. attribute:: virtPrev (= -1.0)
-
-      Simulation time when run previously
-
-      [type: Real, not shown in the UI]
-
-   .. attribute:: realPrev (= -1.0)
-
-      Real time when run previously
-
-      [type: Real, not shown in the UI]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-PyRunner
-""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.core.PyRunner`
-
-.. autoclass:: PyRunner
-   :members:
-   :exclude-members: command, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: command (= '')
-
-      Command to be run by python interpreter. Not run if empty.
-
-      [type: string]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-WooTestPeriodicEngine
-"""""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.core.WooTestPeriodicEngine`
-
-.. autoclass:: WooTestPeriodicEngine
-   :members:
-   :exclude-members: deadCounter, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: deadCounter (= 0)
-
-      Count how many times :obj:`dead` was assigned to.
-
-      [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 Dispatcher
 ++++++++++
 
@@ -1190,15 +789,15 @@ Dispatcher
 		"woo.gl.GlBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlCPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.GridBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.GridBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
-		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlShapeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.dem.GridBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlShapeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlShapeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraForce" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.IntraForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlFieldDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlFieldDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.LawDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.LawDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Dispatcher
@@ -1344,6 +943,182 @@ ParallelEngine
       [will be overridden]
 
       [type: slaveContainer, not accessible from python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+PeriodicEngine
+++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine`
+
+.. graphviz::
+
+	digraph PeriodicEngine {
+		rankdir=LR;
+		margin=.2;
+		"PeriodicEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
+		"PyRunner" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
+		"PeriodicEngine" -> "PyRunner" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.BoxOutlet" -> "woo.dem.StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.RandomInlet" -> "woo.dem.BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.POVRayExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.POVRayExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.VtkExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.VtkExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ClusterAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.ClusterAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.Inlet" -> "woo.dem.RandomInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.MeshVolume" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.MeshVolume" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.BoxInlet" -> "woo.dem.BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DynDt" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.DynDt" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Tracer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"WooTestPeriodicEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
+		"PeriodicEngine" -> "WooTestPeriodicEngine" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DetectSteadyState" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.DetectSteadyState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.Outlet" -> "woo.dem.BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ForcesToHdf5" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.ForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxTraceTimeSetter" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.BoxTraceTimeSetter" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.Outlet" -> "woo.dem.ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.NodalForcesToHdf5" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.ForcesToHdf5" -> "woo.dem.NodalForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Suspicious" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.Suspicious" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo._qt.SnapshotEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo._qt.html#woo._qt.PeriodicEngine"];
+		"PeriodicEngine" -> "woo._qt.SnapshotEngine" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.Inlet" -> "woo.dem.ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.Outlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.RandomInlet" -> "woo.dem.ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.FlowAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.FlowAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: PeriodicEngine
+   :members:
+   :exclude-members: virtPeriod, realPeriod, stepPeriod, stepModulo, nDo, nDone, initRun, virtLast, realLast, stepLast, stepPrev, virtPrev, realPrev, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: virtPeriod (= 0.0)
+
+      Periodicity criterion using virtual (simulation) time (deactivated if <= 0)
+
+      [type: Real]
+
+   .. attribute:: realPeriod (= 0.0)
+
+      Periodicity criterion using real (wall clock, computation, human) time (deactivated if <=0)
+
+      [type: Real]
+
+   .. attribute:: stepPeriod (= 1)
+
+      Periodicity criterion using step number (deactivated if <= 0)
+
+      [type: long]
+
+   .. attribute:: stepModulo (= True)
+
+      If true, interpret :obj:`stepPeriod` as modulo value for :obj:`Scene.step`. This is useful to assure two engines will run within the same step regardless of when they were started. This may lead to Engine being run *earlier* than :obj:`stepPeriod` after the last run, in case :obj:`stepPeriod` is changed.
+
+      [type: bool]
+
+   .. attribute:: nDo (= -1)
+
+      Limit number of executions by this number (deactivated if negative)
+
+      [type: long]
+
+   .. attribute:: nDone (= 0)
+
+      Track number of executions (cumulative).
+
+      [type: long]
+
+   .. attribute:: initRun (= True)
+
+      Run the first time we are called as well.
+
+      [type: bool]
+
+   .. attribute:: virtLast (= nan)
+
+      Tracks virtual time of last run.
+
+      [type: Real]
+
+   .. attribute:: realLast (= nan)
+
+      Tracks real time of last run.
+
+      [type: Real]
+
+   .. attribute:: stepLast (= -1)
+
+      Tracks step number of last run.
+
+      [type: long]
+
+   .. attribute:: stepPrev (= -1)
+
+      Number of step when we run previously (stepLast is the current step when the engine runs)
+
+      [type: long, not shown in the UI]
+
+   .. attribute:: virtPrev (= -1.0)
+
+      Simulation time when run previously
+
+      [type: Real, not shown in the UI]
+
+   .. attribute:: realPrev (= -1.0)
+
+      Real time when run previously
+
+      [type: Real, not shown in the UI]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+PyRunner
+""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.core.PyRunner`
+
+.. autoclass:: PyRunner
+   :members:
+   :exclude-members: command, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: command (= '')
+
+      Command to be run by python interpreter. Not run if empty.
+
+      [type: string]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+WooTestPeriodicEngine
+"""""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.core.WooTestPeriodicEngine`
+
+.. autoclass:: WooTestPeriodicEngine
+   :members:
+   :exclude-members: deadCounter, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: deadCounter (= 0)
+
+      Count how many times :obj:`dead` was assigned to.
+
+      [type: int]
 
 
 .. rst-class:: html-toggle
@@ -1608,11 +1383,236 @@ WooTestClass
 
       [type: shared_ptr<:obj:`Object <woo.core.Object>`>]
 
-   .. attribute:: objList (= ObjectList[0x26dc0e0, 0x26dc110])
+   .. attribute:: objList (= ObjectList[0x18e70e0, 0x18e7110])
 
       Testing opaque object list.
 
       [type: vector<shared_ptr<Object>>, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+NodeVisRep
+----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep`
+
+.. graphviz::
+
+	digraph NodeVisRep {
+		rankdir=LR;
+		margin=.2;
+		"NodeVisRep" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.NodeVisRep"];
+		"woo.gl.VectorGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"NodeVisRep" -> "woo.gl.VectorGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.TensorGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"NodeVisRep" -> "woo.gl.TensorGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.CylGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"NodeVisRep" -> "woo.gl.CylGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.ScalarGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"NodeVisRep" -> "woo.gl.ScalarGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.TraceVisRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.NodeVisRep"];
+		"NodeVisRep" -> "woo.dem.TraceVisRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.ActReactGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"woo.gl.VectorGlRep" -> "woo.gl.ActReactGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.LabelGlRep" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.NodeVisRep"];
+		"NodeVisRep" -> "woo.gl.LabelGlRep" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: NodeVisRep
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+MatchMaker
+----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.MatchMaker`
+
+.. autoclass:: MatchMaker
+   :members:
+   :exclude-members: matches, algo, val, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: matches (= [])
+
+      Array of ``(id1,id2,value)`` items; queries matching ``id1`` + ``id2`` or ``id2`` + ``id1`` will return ``value``
+
+      [type: std::vector<Vector3r>]
+
+   .. attribute:: algo (= 'avg')
+
+      Alogorithm used to compute value when no match for ids is found. Possible values are
+      
+      * 'avg' (arithmetic average)
+      * 'min' (minimum value)
+      * 'max' (maximum value)
+      * 'harmAvg' (harmonic average)
+      
+      The following algo algorithms do *not* require meaningful input values in order to work:
+      
+      * 'val' (return value specified by :obj:`val`)
+      * 'zero' (always return 0.)
+      
+      
+
+      [type: std::string]
+
+   .. attribute:: val (= nan)
+
+      Constant value returned if there is no match and :obj:`algo` is ``val``
+
+      [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Preprocessor
+------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor`
+
+.. graphviz::
+
+	digraph Preprocessor {
+		rankdir=LR;
+		margin=.2;
+		"Preprocessor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Preprocessor"];
+		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
+		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
+		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
+		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
+		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
+		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Preprocessor
+   :members:
+   :exclude-members: title, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: title (= '')
+
+      Simulation title, will be assigned to the {title} tag, unless running in batch (where the batch title will be used.
+
+      [type: string]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+ScalarRange
+-----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.ScalarRange`
+
+.. autoclass:: ScalarRange
+   :members:
+   :exclude-members: mnmx, logMnmx, flags, dispPos, length, landscape, label, cmap, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: mnmx (= Vector2(inf,-inf))
+
+      Packed minimum and maximum values; adjusting from python sets :obj:`autoAdjust` to false automatically.
+
+      [type: Vector2r]
+
+   .. attribute:: logMnmx (= Vector2(1.2300495001352267e242,6.3259690378579e-310))
+
+      Logs of mnmx values, to avoid computing logarithms all the time; computed via cacheLogs.
+
+      [type: Vector2r, not saved, not accessible from python]
+
+   .. attribute:: flags (= 8)
+
+      Flags for this range.
+
+      [type: int, bit accessors: **log**, **reversed**, **symmetric**, **autoAdjust**, **hidden**, **clip**, **used**]
+
+   .. attribute:: dispPos (= Vector2i(-1000,-1000))
+
+      Where is this range displayed on the OpenGL canvas; initially out of range, will be reset automatically.
+
+      [type: Vector2i, not shown in the UI]
+
+   .. attribute:: length (= 200.0)
+
+      Length on the display; if negative, it is fractional relative to view width/height
+
+      [type: Real, not shown in the UI]
+
+   .. attribute:: landscape (= False)
+
+      Make the range display with landscape orientation
+
+      [type: bool, not shown in the UI]
+
+   .. attribute:: label (= '')
+
+      Short name of this range.
+
+      [type: std::string]
+
+   .. attribute:: cmap (= -1)
+
+      Colormap to be used.
+
+      [type: int, named enum, possible values are: **'default'** (*''*; -1), **'coolwarm'** (0), **'3gauss'** (1), **'3saw'** (2), **'banded'** (3), **'blue_red'** (4), **'blu_red'** (5), **'bright'** (6), **'bw'** (7), **'default'** (8), **'detail'** (9), **'extrema'** (10), **'helix2'** (11), **'helix'** (12), **'hotres'** (13), **'jaisn2'** (14), **'jaisnb'** (15), **'jaisnc'** (16), **'jaisnd'** (17), **'jaison'** (18), **'jet'** (19), **'manga'** (20), **'rainbow'** (21), **'roullet'** (22), **'ssec'** (23), **'wheel'** (24), **'red-green-blue'** (25), **'viridis'** (26)]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+EnergyTrackerGrid
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.EnergyTrackerGrid`
+
+.. autoclass:: EnergyTrackerGrid
+   :members:
+   :exclude-members: box, cellSize, boxCells, data, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
+
+      Part of space which we monitor.
+
+      [type: AlignedBox3r, read-only in python]
+
+   .. attribute:: cellSize (= nan)
+
+      Size of one cell in the box (in all directions); will be satisfied exactly, at the expense of slightly growing :obj:`box`. Do not change.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: boxCells (= Vector3i(0,0,0))
+
+      Number of cells in the box (computed automatically).
+
+      [type: Vector3i, read-only in python]
+
+   .. attribute:: data
+
+      Grid data -- 5d since each 3d point contains multiple energies, and there are multiple threads writing concurrently.
+
+      [type: boost_multi_array_real_5, not accessible from python]
 
 .. autoclass:: Object
    :members:

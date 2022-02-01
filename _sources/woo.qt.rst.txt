@@ -181,6 +181,14 @@ SnapshotEngine
    :undoc-members:
    :exclude-members: SnapshotEngine,  UiPrefs
 
+:mod:`woo.qt.ObjectEditor`
+---------------------------------------
+
+.. automodule:: woo.qt.ObjectEditor
+   :members:
+   :undoc-members:
+   :exclude-members: SnapshotEngine,  UiPrefs
+
 :mod:`woo.qt.Inspector`
 ------------------------------------
 
@@ -193,14 +201,6 @@ SnapshotEngine
 ---------------------------------
 
 .. automodule:: woo.qt.img_rc
-   :members:
-   :undoc-members:
-   :exclude-members: SnapshotEngine,  UiPrefs
-
-:mod:`woo.qt.ObjectEditor`
----------------------------------------
-
-.. automodule:: woo.qt.ObjectEditor
    :members:
    :undoc-members:
    :exclude-members: SnapshotEngine,  UiPrefs
