@@ -1,6 +1,6 @@
 // this file has the .cxx extension since we compile it separately, not
 // matching the py/*.cpp glob in the build system
-#include<woo/core/Master.hpp>
+#include"../src/core/Master.hpp"
 #include<boost/algorithm/string/predicate.hpp>
 #include<boost/preprocessor.hpp>
 

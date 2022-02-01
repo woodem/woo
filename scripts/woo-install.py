@@ -10,7 +10,7 @@ dist,linver=[l.decode('utf-8') for l in subprocess.check_output([b'lsb_release',
 if dist=='Ubuntu':
     if linver=='18.04':
         print('WARNING: while Ubuntu 18.04 is still somewhat supported, you might need higher version of pybind11-dev. Consider upgrading to 20.04 for better future maintenance.')
-    elif linver=='20.04': pass
+    elif linver in ('20.04','21.10','22.04'): pass
     else: raise RuntimeError('Ubuntu version %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%linver)
 else:
     raise RuntimeError('Linux distribution %s not supported by this script; see https://woodem.org/user/installation.html for other installation methods.'%dist)
@@ -45,7 +45,7 @@ def call(cmd,failOk=False,sudo=False,cwd=None):
 
 def gitprep(url,src,depth=-1):
     if os.path.exists(src):
-        if not os.path.exists(src+'/.git'): raise RuntimeError('Source directory %s exists, but is not a git repository.'%src)
+        if not os.path.exists(src+'/.git'): raise RuntimeError(f'Source directory {src} exists, but is not a git repository.')
         call(['git','-C',src,'pull'])
     else:
         call(['git','clone']+([] if depth<1 else ['--depth',str(depth)])+[url,src])
@@ -54,7 +54,6 @@ spdlogLocal=False
 
 if dist in ('Ubuntu','Debian'):
     if not args.aptNoUpdate: call(['apt-get','update'],sudo=True)
-    call(['apt-get','install','--yes','eatmydata'],sudo=True)
     if dist=='Ubuntu':
         if linver=='18.04':
             spdlogLocal=True
@@ -69,10 +68,15 @@ if dist in ('Ubuntu','Debian'):
             else:
                 aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
-        elif linver=='20.04':
+        elif linver in ('20.04','21.10','22.04'):
             aptCore='git cmake ninja-build python3-all python3-all-dev debhelper libboost-all-dev libvtk7-dev libgts-dev libeigen3-dev libhdf5-serial-dev mencoder ffmpeg libdouble-conversion-dev libspdlog-dev libtbb-dev pybind11-dev'.split()
             aptUI='python3-pyqt5 qtbase5-dev qtbase5-dev-tools pyqt5-dev-tools qt5-qmake qtchooser libgle3-dev libqglviewer-dev-qt5 libqt5opengl5-dev python3-pyqt5 python3-pyqt5.qtsvg freeglut3-dev python3-xlib'.split()
             pipCore='colour-runner xlwt'.split()
+            if linver=='21.10':
+                ldso='/usr/lib/x86_64-linux-gnu/libdl.so'
+                if not os.path.exists(ldso):
+                    print('Ubuntu 21.10: creating libdl.so symlink to libc.so as workaround (see https://github.com/woodem/woo/issues/38 for details)')
+                    call(['ln','-s','libc.so',ldso],sudo=True)
             pipUI=[]
             if venv:
                 pipCore+='numpy matplotlib xlrd xlsxwriter colorama genshi psutil pillow h5py lockfile ipython prettytable '.split()
@@ -81,10 +85,10 @@ if dist in ('Ubuntu','Debian'):
             else:
                 aptCore+='python3-setuptools python3-pip python3-distutils python3-prettytable python3-xlrd python3-xlsxwriter python3-numpy python3-matplotlib python3-scipy python3-colorama python3-genshi python3-psutil python3-pil python3-h5py python3-lockfile python3-coloredlogs ipython3'.split()
                 aptUI+='python3-pyqt5 python3-pyqt5.qtsvg python3-xlib'.split()
-        else: raise RuntimeError('Unsupported Ubuntu version %s.'%linver)
+        else: raise RuntimeError(f'Unsupported Ubuntu version {linver}.')
         if args.ccache: aptCore+=['ccache']
-    else: raise RuntimeError('Unsupported distribution %s'%dist)
-    call(['eatmydata','apt-get','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
+    else: raise RuntimeError(f'Unsupported distribution {dist}')
+    call(['apt-get','install','--yes']+aptCore+([] if args.headless else aptUI),sudo=True)
 
 # install what is not packaged -- distribution-agnostic
 call(['pip3','install','--upgrade']+pipCore+([] if args.headless else pipUI),sudo=True if not venv else False)
@@ -95,17 +99,16 @@ call(['pip3','install','--upgrade']+pipCore+([] if args.headless else pipUI),sud
 
 gitprep(args.git,args.src,depth=1)
 for key in (args.key if args.key else []):
-    gitprep('https://woodem.eu/private/%s/git'%key,args.src+'/wooExtra/'+key)
+    gitprep(f'https://woodem.eu/private/{key}/git',args.src+'/wooExtra/'+key)
 
 # compile
 if args.ccache: call(['ccache','-M50G','-F10000'])
 features=['gts','openmp','vtk','hdf5']+([] if args.headless else ['qt5'])
 
 os.makedirs(args.build_prefix,exist_ok=True)
-call(['cmake','-DWOO_SPDLOG_LOCAL='+('ON' if spdlogLocal else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),'-DWOO_BUILD_JOBS=%d'%args.jobs,'-DPYTHON_EXECUTABLE='+sys.executable]+['-DWOO_%s=ON'%f.upper() for f in features]+[args.src],cwd=args.build_prefix)
-call(['cmake','--build',args.build_prefix,'-j%d'%args.jobs,'-t','install'],cwd=args.build_prefix)
-# call(['scons','-C',args.src,'flavor=','features='+','.join(features),'jobs=%d'%args.jobs,'buildPrefix='+args.build_prefix,'CPPPATH='+cpppath,'CXX='+('ccache g++' if args.ccache else 'g++'),'brief=1','debug=0','PYTHON='+sys.executable])
-call(['woo','-j%d'%args.jobs,'--test'],failOk=True)
+call(['cmake','-DWOO_SPDLOG_LOCAL='+('ON' if spdlogLocal else 'OFF'),'-DWOO_FLAVOR=','-DWOO_CCACHE='+('ON' if args.ccache else 'OFF'),'-DWOO_QT5='+('OFF' if args.headless else 'ON'),f'-DWOO_BUILD_JOBS={args.jobs}','-DPYTHON_EXECUTABLE='+sys.executable]+[f'-DWOO_{f.upper()}=ON' for f in features]+[args.src],cwd=args.build_prefix)
+call(['cmake','--build',args.build_prefix,f'-j{args.jobs}','-t','install'],cwd=args.build_prefix)
+call(['woo',f'-j{args.jobs}','--test'],failOk=True)
 
 # testing only, not for system builds
 if not root:

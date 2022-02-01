@@ -376,7 +376,7 @@ if flowFile:
 
     _ex=_last=ExtractSubset(VOI=ext,SampleRateI=flowStride,SampleRateJ=flowStride,SampleRateK=flowStride)
 
-    tr=StreamTracer(SeedType='Point Source')
+    tr=StreamTracer(SeedType='Point Cloud')
     tr.SeedType.Center=midPt
     tr.SeedType.Radius=rad
     tr.SeedType.NumberOfPoints=200

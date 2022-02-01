@@ -1,0 +1,196 @@
+/*
+	This code was mostly written by original Yade authors, in particular Bruno Chareyre.
+	It was ported purely for pure comparison purposes.
+*/
+#include"G3Geom.hpp"
+
+WOO_PLUGIN(dem,(G3Geom)(Cg2_Sphere_Sphere_G3Geom)(Cg2_Wall_Sphere_G3Geom)(Law2_G3Geom_FrictPhys_IdealElPl)(G3GeomCData));
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_G3Geom__CLASS_BASE_DOC_ATTRS_CTOR);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Cg2_Sphere_Sphere_G3Geom__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Sphere_G3Geom__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_G3GeomCData__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Law2_G3Geom_FrictPhys_IdealElPl__CLASS_BASE_DOC_ATTRS);
+
+void G3Geom::rotateVectorWithContact(Vector3r& v){
+	assert(!isnan(orthonormalAxis.maxCoeff()) && !isnan(twistAxis.maxCoeff()));
+	v-=v.cross(orthonormalAxis);
+	v-=v.cross(twistAxis);
+	// v-=normal.dot(v)*normal;
+};
+
+bool Cg2_Sphere_Sphere_G3Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Shape>& s2, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){
+	assert(s1->numNodesOk()); assert(s2->numNodesOk());
+	assert(s1->nodes[0]->hasData<DemData>()); assert(s2->nodes[0]->hasData<DemData>());
+	const DemData& dyn1(s1->nodes[0]->getData<DemData>()); const DemData& dyn2(s2->nodes[0]->getData<DemData>());
+	const Vector3r& pos1(s1->nodes[0]->pos), pos2(s2->nodes[0]->pos);
+	const Real& r1=s1->cast<Sphere>().radius; const Real& r2=s2->cast<Sphere>().radius;
+	const Real& dt=scene->dt;
+
+	Vector3r normal=(pos2+shift2)-pos1;
+	if(!C->isReal() && !force && (pow2(r1+r2)-normal.squaredNorm()<0)){
+		// cerr<<"relPos="<<normal.transpose()<<", dist="<<normal.norm()<<", r1="<<r1<<", r2="<<r2<<endl;
+		return false;
+	}
+
+	shared_ptr<G3Geom> g3g;
+	bool isNew=!C->geom;
+	if(!isNew) g3g=WOO_PTR_CAST<G3Geom>(C->geom);
+	else { g3g=make_shared<G3Geom>(); C->geom=g3g; }
+	Real dist=normal.norm(); normal/=dist; // normal is unit vector now
+	g3g->uN=dist-(r1+r2);
+	C->geom->node->pos=pos1+(r1+.5*g3g->uN)*normal;
+	if(!isNew) {
+		const Vector3r& oldNormal=g3g->normal;
+		g3g->orthonormalAxis=oldNormal.cross(normal);
+		Real angle=dt*0.5*oldNormal.dot(dyn1.angVel+dyn2.angVel);
+		g3g->twistAxis=angle*oldNormal;
+	}
+	else{
+		g3g->twistAxis=g3g->orthonormalAxis=Vector3r(NaN,NaN,NaN);
+		// local and global orientation coincide
+		C->geom->node->ori=Quaternionr::Identity();
+	}
+	g3g->normal=normal;
+	
+	/* compute relative velocity */
+	Vector3r relVel;
+	Vector3r shiftVel=scene->isPeriodic?scene->cell->intrShiftVel(C->cellDist):Vector3r::Zero();
+
+	if(noRatch){
+		/* B.C. Comment :
+		Short explanation of what we want to avoid :
+		Numerical ratcheting is best understood considering a small elastic cycle at a contact between two grains : assuming b1 is fixed, impose this displacement to b2 :
+		1. translation "dx" in the normal direction
+		2. rotation "a"
+		3. translation "-dx" (back to initial position)
+		4. rotation "-a" (back to initial orientation)
+		If the branch vector used to define the relative shear in rotation×branch is not constant (typically if it is defined from the vector center→contactPoint), then the shear displacement at the end of this cycle is not zero: rotations *a* and *-a* are multiplied by branches of different lengths.
+		It results in a finite contact force at the end of the cycle even though the positions and orientations are unchanged, in total contradiction with the elastic nature of the problem. It could also be seen as an *inconsistent energy creation or loss*. Given that DEM simulations tend to generate oscillations around equilibrium (damped mass-spring), it can have a significant impact on the evolution of the packings, resulting for instance in slow creep in iterations under constant load.
+		The solution adopted here to avoid ratcheting is as proposed by McNamara and co-workers.
+		They analyzed the ratcheting problem in detail - even though they comment on the basis of a cycle that differs from the one shown above. One will find interesting discussions in e.g. DOI 10.1103/PhysRevE.77.031304, even though solution it suggests is not fully applied here (equations of motion are not incorporating alpha, in contradiction with what is suggested by McNamara et al.).
+		 */
+		// For sphere-facet contact this will give an erroneous value of relative velocity...
+		Real alpha=(useAlpha?(r1+r2)/(r1+r2+g3g->uN):1.);
+		relVel=(dyn2.vel-dyn1.vel)*alpha+dyn2.angVel.cross(-r2*normal)-dyn1.angVel.cross(r1*normal);
+		relVel+=alpha*shiftVel;
+	} else {
+		// It is correct for sphere-sphere and sphere-facet contact
+		Vector3r c1x=C->geom->node->pos-pos1;
+		Vector3r c2x=C->geom->node->pos-(pos2+shift2);
+		relVel=(dyn2.vel+dyn2.angVel.cross(c2x))-(dyn1.vel+dyn1.angVel.cross(c1x));
+		relVel+=shiftVel;
+	}
+	//keep the shear part only
+	relVel-=normal.dot(relVel)*normal;
+
+	// update shear displacement delta
+	g3g->dShear=-relVel*dt;
+
+	return true;
+}
+
+
+bool Cg2_Wall_Sphere_G3Geom::go(const shared_ptr<Shape>& wallSh, const shared_ptr<Shape>& sphereSh, const Vector3r& shift2, const bool& force, const shared_ptr<Contact>& C){
+	if(scene->isPeriodic) throw std::logic_error("Wall may not be used with periodic boundary conditions (how did you manage to persuade collider to handle this?!).");
+	const Wall& wall=wallSh->cast<Wall>(); const Sphere& sphere=sphereSh->cast<Sphere>();
+	assert(wall.numNodesOk()); assert(sphere.numNodesOk());
+	assert(wall.nodes[0]->hasData<DemData>()); assert(sphere.nodes[0]->hasData<DemData>());
+	const DemData& dynW(wall.nodes[0]->getData<DemData>()); const DemData& dynS(sphere.nodes[0]->getData<DemData>());
+	const Vector3r& posW(wall.nodes[0]->pos), posS(sphere.nodes[0]->pos);
+	const Real& radius=sphere.radius; const int& ax=wall.axis; const int& sense=wall.sense;
+	const Real& dt=scene->dt;
+
+	Real dist=posS[ax]-posW[ax]; // signed "distance" between centers
+	if(!C->isReal() && abs(dist)>radius && !force) { return false; }// wall and sphere too far from each other
+
+	// contact point is sphere center projected onto the wall
+	Vector3r contPt=posS; contPt[ax]=posW[ax];
+	Vector3r normal(Vector3r::Zero());
+	// wall interacting from both sides: normal depends on sphere's position
+	assert(sense==-1 || sense==0 || sense==1);
+	if(sense==0) normal[ax]=dist>0?1.:-1.;
+	else normal[ax]=sense==1?1.:-1;
+
+	shared_ptr<G3Geom> g3g;
+	bool isNew=!C->geom;
+	if(!isNew) g3g=static_pointer_cast<G3Geom>(C->geom);
+	else { g3g=make_shared<G3Geom>(); C->geom=g3g; }
+
+	g3g->uN=normal[ax]*dist-radius; // takes in account sense, radius and distance
+	g3g->node->pos=contPt;
+
+	if(!isNew) {
+		const Vector3r& oldNormal=g3g->normal;
+		g3g->orthonormalAxis=oldNormal.cross(normal);
+		Real angle=dt*0.5*oldNormal.dot(dynW.angVel+dynS.angVel);
+		g3g->twistAxis=angle*oldNormal;
+	}
+	else{
+		g3g->twistAxis=g3g->orthonormalAxis=Vector3r(NaN,NaN,NaN);
+		// local and global orientation coincide
+		C->geom->node->ori=Quaternionr::Identity();
+	}
+	g3g->normal=normal;
+	
+	/* compute relative velocity */
+	Vector3r cWx=contPt-posW;
+	Vector3r cSx=contPt-posS;
+	Vector3r relVel=(dynS.vel+dynS.angVel.cross(cSx))-(dynW.vel+dynW.angVel.cross(cWx));
+	//keep the shear part only
+	relVel-=normal.dot(relVel)*normal;
+	// update shear displacement delta
+	g3g->dShear=-relVel*dt;
+	return true;
+}
+
+
+
+#ifdef WOO_DEBUG
+	#define _WATCH_MSG(msg) if(watched) cerr<<msg;
+#else
+	#define _WATCH_MSG(msg)
+#endif
+
+
+bool Law2_G3Geom_FrictPhys_IdealElPl::go(const shared_ptr<CGeom>& cg, const shared_ptr<CPhys>& cp, const shared_ptr<Contact>&C){
+	G3Geom& geom=cg->cast<G3Geom>(); FrictPhys& phys=cp->cast<FrictPhys>();
+	#ifdef WOO_DEBUG
+		bool watched=(max(C->leakPA()->id,C->leakPB()->id)==watch.maxCoeff() && (watch.minCoeff()<0 || min(C->leakPA()->id,C->leakPB()->id)==watch.minCoeff()));
+	#endif
+	_WATCH_MSG("Step "<<scene->step<<", ##"<<C->leakPA()->id<<"+"<<C->leakPB()->id<<": "<<endl);
+	if(geom.uN>0){
+		if(!noBreak){ _WATCH_MSG("Contact being broken."<<endl); return false; }
+	}
+	Vector3r normalForce=phys.kn*geom.uN*geom.normal;
+	if(!C->data){ C->data=make_shared<G3GeomCData>(); }
+	G3GeomCData& dta=C->data->cast<G3GeomCData>();
+	// rotation axes are not computed if contact is new
+	if(!C->isFresh(scene)) geom.rotateVectorWithContact(dta.shearForce);
+	_WATCH_MSG("\trotated previous Fs="<<dta.shearForce.transpose());
+	dta.shearForce-=phys.kt*geom.dShear;
+	_WATCH_MSG("\t; incremented by "<<(phys.kt*geom.dShear).transpose()<<" to "<<dta.shearForce.transpose()<<endl);
+	Real maxFs=max(0.,normalForce.squaredNorm()*pow2(phys.tanPhi));
+	_WATCH_MSG("\tFn="<<normalForce.norm()<<", trial Fs="<<dta.shearForce.transpose()<<", max Fs="<<sqrt(maxFs)<<endl);
+	if(dta.shearForce.squaredNorm()>maxFs && !noSlip){
+		Real ratio=sqrt(maxFs)/dta.shearForce.norm();
+		Vector3r trialForce=dta.shearForce;//store prev force for definition of plastic slip
+		//define the plastic work input and increment the total plastic energy dissipated
+		dta.shearForce*=ratio;
+		_WATCH_MSG("\tPlastic slip by "<<((dta.shearForce/ratio)*(1-ratio)).transpose()<<", ratio="<<ratio<<", new Ft="<<dta.shearForce.transpose()<<endl);
+		if(scene->trackEnergy){
+			Vector3r dEpsPl=(1/phys.kt)*(trialForce-dta.shearForce);
+			//Real dissip=dEpsPl.dot(dta.shearForce) /*active force*/;
+			Real dissip=dEpsPl.dot(dta.shearForce+.5*(dta.shearForce-trialForce));
+			scene->energy->add(dissip,"plast",plastDissipIx,EnergyTracker::IsIncrement | EnergyTracker::ZeroDontCreate);
+		}
+	}
+	// elastic potential
+	if(scene->trackEnergy) scene->energy->add(0.5*(normalForce.squaredNorm()/phys.kn+dta.shearForce.squaredNorm()/phys.kt),"elast",elastPotIx,/*reset at every timestep*/EnergyTracker::IsResettable);
+	// this is the force in contact local coordinates, which will be applied
+	// local coordinates are not rotated, though
+	assert(C->geom->node->ori==Quaternionr::Identity());
+	phys.force=normalForce+dta.shearForce;
+
+	return true;
+}
+

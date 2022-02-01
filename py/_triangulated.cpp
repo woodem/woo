@@ -1,13 +1,13 @@
-#include<woo/core/Master.hpp>
+#include"../core/Master.hpp"
 
-#include<woo/pkg/dem/Particle.hpp>
-#include<woo/pkg/dem/Funcs.hpp>
-#include<woo/lib/base/CompUtils.hpp>
+#include"../src/dem/Particle.hpp"
+#include"../src/dem/Funcs.hpp"
+#include"../src/supp/base/CompUtils.hpp"
 
-#include<woo/pkg/dem/Sphere.hpp>
-#include<woo/pkg/dem/Capsule.hpp>
-#include<woo/pkg/dem/Ellipsoid.hpp>
-#include<woo/pkg/dem/VtkExport.hpp>
+#include"../src/dem/Sphere.hpp"
+#include"../src/dem/Capsule.hpp"
+#include"../src/dem/Ellipsoid.hpp"
+#include"../src/dem/VtkExport.hpp"
 
 #include<boost/graph/adjacency_list.hpp>
 #include<boost/graph/connected_components.hpp>

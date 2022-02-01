@@ -1,0 +1,109 @@
+#pragma once
+#include"../dem/Facet.hpp"
+#include"../dem/FrictMat.hpp"
+
+// #define MEMBRANE_DEBUG_ROT
+struct Membrane: public Facet{
+	bool hasRefConf() const { return node && refRot.size()==3; }
+	bool hasBending(){ return KKdkt.size()>0; }
+	void pyReset(){ refRot.clear(); }
+	void setRefConf(); // use the current configuration as the referential one
+	void ensureStiffnessMatrices(const Real& young, const Real& nu, const Real& thickness, bool bending, const Real& bendThickness);
+	void updateNode(); // update local coordinate system
+	void computeNodalDisplacements(Real dt, bool rotIncr); 
+	// called by functors to initialize (if necessary) and update
+	void stepUpdate(Real dt, bool rotIncr);
+	// called from DynDt for updating internal stiffness for given node
+	void addIntraStiffnesses(const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const;
+
+	py::object stressCst(bool global=false) const;
+	Vector6r stressDkt() const;
+
+	REGISTER_CLASS_INDEX(Membrane,Facet);
+	WOO_DECL_LOGGER;
+	#ifdef MEMBRANE_DEBUG_ROT
+		#define woo_dem_Membrane__ATTRS__MEMBRANE_DEBUG_ROT \
+			((Vector3r,drill,Vector3r::Zero(),AttrTrait<>().readonly(),"Dirilling rotation (debugging only)")) \
+			((vector<Quaternionr>,currRot,,AttrTrait<>().readonly(),"What would be the current value of refRot (debugging only!)")) \
+			((VectorXr,uDkt,,,"DKT displacement vector (saved for debugging only)"))
+		#else
+			#define woo_dem_Membrane__ATTRS__MEMBRANE_DEBUG_ROT
+		#endif
+	#define woo_dem_Membrane__CLASS_BASE_DOC_ATTRS_CTOR_PY \
+		Membrane,Facet,"Facet as triangular element, with 2 translational and 2 rotational degrees of freedom in each node.\n\n* The CST element is implemented using the formulation found in Felippa's `Introduction to FEM, chapter 15 <http://www.colorado.edu/engineering/cas/courses.d/IFEM.d/IFEM.Ch15.d/IFEM.Ch15.pdf>`_ (the $\\mat{B}$ matrix is given in (eq. 15.17)). The displacement vector is accessible as :obj:`uXy`, the stiffness matrix as :obj:`KKcst`.\n\n* The DKT element is implemented following the original paper by Batoz, Bathe and Ho `A Study of three-node triangular plate bending elmenets <http://web.mit.edu/kjb/www/Publications_Prior_to_1998/A_Study_of_Three-Node_Triangular_Plate_Bending_Elements.pdf>`_, section 3.1. DKT displacement vector (with $z$-displacements condensed away) is stored in :obj:`phiXy`, the stiffness matrix in :obj:`KKdkt`.\n\n* Local coordinate system is established using `Best Fit CD Frame <http://www.colorado.edu/engineering/cas/courses.d/NFEM.d/NFEM.AppC.d/NFEM.AppC.pdf>`_ in a non-incremental manner (with a slight improvement), and in the same way, nodal displacements and rotations are computed.\n\nSince positions of nodes determine the element's plane, the $z$ degrees of freedom have zero displacements and are condensed away from the :obj:`KKdkt` matrix (force reaction, however, is nonzero in that direction, so the matrix is not square).\n\nDrilling rotations can be computed, but are ignored; this can lead to instability in some cases -- wobbly rotation of nodes which does not decrease due to non-viscous damping.\n\nThe element is assumed to be under plane-stress conditions.\n\nMass of the element is lumped in to nodes, but this is not automatized in any way; it is your responsibility to assign proper values of :obj:`DemData.mass` and :obj:`DemData.inertia`.", \
+		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<>().readonly(),"Local coordinate system")) \
+		((vector<Quaternionr>,refRot,,AttrTrait<>().readonly(),"Rotation applied to nodes to obtain the local coordinate system, computed in the reference configuration. If this array is empty, it means that reference configuration has not yet been evaluated.")) \
+		((Vector6r,refPos,Vector6r::Zero(),AttrTrait<>().readonly(),"Nodal coordinates in the local coordinate system, in the reference configuration")) \
+		((Vector6r,uXy,Vector6r::Zero(),AttrTrait<>().readonly(),"Nodal displacements, stored as ux0, uy0, ux1, uy1, ux1, uy2.")) \
+		((Real,surfLoad,0.,AttrTrait<>().pressureUnit(),"Normal load applied to this facet (positive in the direction of the local normal); this value is multiplied by the current facet's area and equally distributed to nodes.")) \
+		((Vector6r,phiXy,Vector6r::Zero(),AttrTrait<>().readonly(),"Nodal rotations, only including in-plane rotations (drilling DOF not yet implemented)")) \
+		((MatrixXr,KKcst,,,"Stiffness matrix of the element (assembled from the reference configuration when needed for the first time)")) \
+		((MatrixXr,KKdkt,,,"Bending stiffness matrix of the element (assembled from the reference configuration when needed for the first time).")) \
+		((bool,enableStress,false,,"Set to evaluate :obj:`EBcst` and :obj:`DBdkt` when stiffness matricess are being computed. After than, using :obj:`sigCST` and :obj:`sigDKT` will return stresses.")) \
+		((MatrixXr,EBcst,,AttrTrait<>().readonly(),"CST displacement-stress matrix, for computation of stress tensor (see :obj:`stressCst`).")) \
+		((MatrixXr,DBdkt,,AttrTrait<>().readonly(),"DKT displacement-stress matrix, for computation of stress tensor (see :obj:`stressDkt`. \n\n.. warning:: This matrix is not computed correctly, therefore also :obj:`stressDkt` returns garbage.")) \
+		((bool,noWarnExcessRot,false,,"Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.")) \
+		woo_dem_Membrane__ATTRS__MEMBRANE_DEBUG_ROT \
+		,/*ctor*/ createIndex(); \
+		,/*py*/ \
+			.def("setRefConf",&Membrane::setRefConf,"Set the current configuration as the reference one.") \
+			.def("update",&Membrane::stepUpdate,WOO_PY_ARGS(py::arg("dt"),py::arg("rotIncr")=false),"Update current configuration; create reference configuration if it does not exist.") \
+			.def("reset",&Membrane::pyReset,"Reset reference configuration; this forces using the current config as reference when :obj:`update` is called again.") \
+			.def("stressCst",&Membrane::stressCst,WOO_PY_ARGS(py::arg("glob")=false),"Return CST stresses (product of :obj:`EBcst` and :obj:`uXy`), provided that :obj:`EBcst` was computed previously by setting :obj:`enableStress` when building stiffness matrices. The value returned is either :math:`(\\sigma_x,\\sigma_y,\\sigma_{xy})` (local stresses), or Matrix3 representing stress tensor in global coordinates (with *glob=True*).") \
+			.def("stressDkt",&Membrane::stressDkt,"Return Vector6 of DKT stresses (product of :obj:`DBdkt` and :obj:`phiXy`), see :obj:`stressCst` for conditions; additionaly, bending must have been enabled.\n\n.. warning:: This function returns nonsense currently and must be fixed!")
+
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Membrane__CLASS_BASE_DOC_ATTRS_CTOR_PY);
+};
+WOO_REGISTER_OBJECT(Membrane);
+
+struct In2_Membrane_ElastMat: public In2_Facet{
+	void addIntraStiffnesses(const shared_ptr<Particle>&, const shared_ptr<Node>&, Vector3r& ktrans, Vector3r& krot) const override;
+	void go(const shared_ptr<Shape>&, const shared_ptr<Material>&, const shared_ptr<Particle>&) override;
+	FUNCTOR2D(Membrane,ElastMat);
+	WOO_DECL_LOGGER;
+	#define woo_dem_In2_Membrane_ElastMat__CLASS_BASE_DOC_ATTRS \
+		In2_Membrane_ElastMat,In2_Facet,"Apply contact forces and compute internal response of a :obj:`Membrane`. Forces are distributed according to barycentric coordinates when :obj:`bending` is enabled; otherwise forces are distributed equally (thirds) to all nodes, to avoid contacts punching through the mesh which has no bending resistance. This can be overridden by setting :obj:`applyBary`, in which case forces will be always applied weighted by barycentric coords.\n\n.. note:: If your particles are made of ~:obj:`woo.dem.FrictMat`, use :obj:`In2_Membrane_FrictMat` instead, if you run into ambiguous dipatch errors.", \
+		((bool,contacts,true,,"Apply contact forces to facet's nodes (FIXME: very simply distributed in thirds now)")) \
+		((Real,nu,.25,,"Poisson's ratio used for assembling the $E$ matrix (Young's modulus is taken from :obj:`~woo.dem.ElastMat`). Will be moved to the material class at some point.")) \
+		((Real,thickness,NaN,,"Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick <woo.dem.Facet.halfThick>`.")) \
+		((Real,bendThickness,NaN,,"Thickness for DKT stiffness computation; if NaN, use :obj:`thickness`.")) \
+		((bool,bending,false,,"Consider also bending stiffness of elements (DKT)")) \
+		((bool,applyBary,false,,"Distribute force according to barycentric coordinate of the contact point; this is done normally with :obj:`bending` enabled, this forces the same also for particles without bending.")) \
+		((bool,rotIncr,false,,"Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise)."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_In2_Membrane_ElastMat__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(In2_Membrane_ElastMat);
+
+struct In2_Membrane_FrictMat: public In2_Membrane_ElastMat{
+	#define woo_dem_In2_Membrane_FrictMat__CLASS_BASE_DOC In2_Membrane_FrictMat,In2_Membrane_ElastMat,"Workaround for current dispatching mechanism limitations so that membrane with :obj:`woo.dem.FrictMat` is not matched by :obj:`woo.dem.In2_Facet`."
+	FUNCTOR2D(Membrane,FrictMat);
+	WOO_DECL__CLASS_BASE_DOC(woo_dem_In2_Membrane_FrictMat__CLASS_BASE_DOC);
+};
+WOO_REGISTER_OBJECT(In2_Membrane_FrictMat);
+
+
+#ifdef WOO_OPENGL
+#include"../gl/Functors.hpp"
+struct Gl1_Membrane: public Gl1_Facet{	
+	void go(const shared_ptr<Shape>&, const Vector3r&, bool, const GLViewInfo&) override;
+	void drawLocalDisplacement(const Vector2r& nodePt, const Vector2r& xy, const shared_ptr<ScalarRange>& range, bool split, char arrow, int lineWd, const Real z=NaN);
+	RENDERS(Membrane);
+	#define woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS \
+		Gl1_Membrane,Gl1_Facet,"Renders :obj:`Membrane` object; :obj:`Facet` itself is rendered via :obj:`Gl1_Facet`.", \
+		((bool,node,false,,"Show local frame node")) \
+		((bool,refConf,true,,"Show reference configuration, rotated to the current local frame")) \
+		((Vector3r,refColor,Vector3r(0,.5,0),AttrTrait<>().rgbColor(),"Color for the reference shape")) \
+		((int,refWd,1,,"Line width for the reference shape")) \
+		((Real,uScale,1.,,"Scale of displacement lines (zero to disable)")) \
+		((int,uWd,2,,"Width of displacement lines")) \
+		((bool,uSplit,false,,"Show x and y displacement components separately")) \
+		((Real,relPhi,.2,,"Length of unit rotation (one radian), relative to scene radius (zero to disable)")) \
+		((int,phiWd,2,,"Width of rotation lines")) \
+		((bool,phiSplit,true,,"Show x and y displacement components separately")) \
+		((bool,arrows,false,,"Show displacements and rotations as arrows rather than lines")) \
+		((shared_ptr<ScalarRange>,uRange,make_shared<ScalarRange>(),,"Range for displacements (colors only)")) \
+		((shared_ptr<ScalarRange>,phiRange,make_shared<ScalarRange>(),,"Range for rotations (colors only)"))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Gl1_Membrane__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(Gl1_Membrane);
+#endif
