@@ -29,8 +29,6 @@ struct Rod; // for triangulateRod decl
 	#include<vtkZLibDataCompressor.h>
 	#include<vtkTriangle.h>
 	#include<vtkLine.h>
-	#include<vtkXMLMultiBlockDataWriter.h>
-	#include<vtkMultiBlockDataSet.h>
 #pragma GCC diagnostic pop
 
 struct VtkExport: public PeriodicEngine{
@@ -64,6 +62,8 @@ struct VtkExport: public PeriodicEngine{
 	static std::tuple<vector<Vector3r>,vector<Vector3i>> triangulateCylinderLikeObject(const Vector3r& cA, const Vector3r& cB, const Quaternionr& ori, const Vector2r& radii, int subdiv);
 
 
+	void writeVtu(const vtkSmartPointer<vtkUnstructuredGrid>&, const string& out);
+	void writeVtp(const vtkSmartPointer<vtkPolyData>&, const string& out);
 
 	void postLoad(VtkExport&,void*){
 		if(what>WHAT_ALL || what<0) throw std::runtime_error("VtkExport.what="+to_string(what)+", but should be at most "+to_string(WHAT_ALL)+".");
@@ -80,7 +80,7 @@ struct VtkExport: public PeriodicEngine{
 		((string,out,,AttrTrait<>().buttons({"Open in Paraview","import woo.paraviewscript\nwith self.scene.paused(): woo.paraviewscript.fromVtkExport(self,launch=True)",""},/*showBefore*/true),"Filename prefix to write into; :obj:`woo.core.Scene.tags` written as {tagName} are expanded at the first run.")) \
 		((bool,compress,true,,"Compress output XML files")) \
 		((bool,ascii,false,,"Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``")) \
-		((bool,multiblock,false,,"Write to multi-block VTK files, rather than separate files; currently borken, do not use.")) \
+		((bool,hdf5,false,,"Write to HDF5 files rather than VTU XML files. Experimental.")) \
 		((int,mask,0,,"If non-zero, only particles matching the mask will be exported.")) \
 		((int,what,WHAT_ALL_EXCEPT_CON,AttrTrait<Attr::triggerPostLoad>(),"Select data to be saved (e.g. VtkExport.spheres|VtkExport.mesh, or use VtkExport.all for everything)")) \
 		((bool,sphereSphereOnly,false,,"Only export contacts between two spheres (not sphere+facet and such)")) \

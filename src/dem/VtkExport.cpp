@@ -17,9 +17,9 @@ WOO_PLUGIN(dem,(VtkExport));
 WOO_IMPL_LOGGER(VtkExport);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_VtkExport__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 
-#if VTK_MAJOR_VERSION>=7
+#if VTK_MAJOR_VERSION<7
 	/* undef'd below */
-	#define InsertNextTupleValue InsertNextTypedTuple
+	#define InsertNextTypedTuple InsertNextTupleValue
 #endif
 
 
@@ -437,15 +437,15 @@ void VtkExport::run(){
 			if(what&WHAT_MATSTATE) exportMatState(p->matState,sMatStates,sMask->GetNumberOfTuples()-1,/*divisor*/1.);
 			// sClumpId->InsertNextValue(dyn.isClumped()?sphere->nodes[0]->getData<DemData>().cast<ClumpData>().clumpLinIx:-1);
 			sColor->InsertNextValue(sphere->color);
-			if(savePos) savedPos->InsertNextTupleValue(pos.data());
-			sVel->InsertNextTupleValue(dyn.vel.data());
-			sAngVel->InsertNextTupleValue(dyn.angVel.data());
+			if(savePos) savedPos->InsertNextTypedTuple(pos.data());
+			sVel->InsertNextTypedTuple(dyn.vel.data());
+			sAngVel->InsertNextTypedTuple(dyn.angVel.data());
 			sMatId->InsertNextValue(p->material->id);
 			Vector3r sigT,sigN;
 			__attribute__((unused)) bool sig=DemFuncs::particleStress(p,sigT,sigN); 
 			assert(sig); // should not fail for spheres
-			sSigN->InsertNextTupleValue(sigN.data());
-			sSigT->InsertNextTupleValue(sigT.data());
+			sSigN->InsertNextTypedTuple(sigN.data());
+			sSigT->InsertNextTypedTuple(sigT.data());
 			continue;
 		}
 		// no more spheres, just meshes now
@@ -585,49 +585,6 @@ void VtkExport::run(){
 			Vector3r cA(p0+Vector3r::Unit(ax0)*infCyl->glAB[0]), cB(p0+Vector3r::Unit(ax0)*infCyl->glAB[1]);
 			vector<Vector3r> vert; vector<Vector3i> tri;
 			std::tie(vert,tri)=triangulateCylinderLikeObject(cA,cB,infCyl->nodes[0]->ori,Vector2r(infCyl->radius,infCyl->radius),subdiv);
-			#if 0
-				int ax0=infCyl->axis,ax1=(infCyl->axis+1)%3,ax2=(infCyl->axis+2)%3;
-				//Vector cA,cB; cA=cB=p->shape->nodes[0]->pos;
-				//cA[ax0]=infCyl->glAB[0]; cB[ax0]=infCyl->glAB[1];
-				const Vector3r& p0(infCyl->nodes[0]->pos);
-
-				Vector2r c2(p0[ax1],p0[ax2]);
-				AngleAxisr aa(infCyl->nodes[0]->ori);
-				Real phi0=(aa.axis()*aa.angle()).dot(Vector3r::Unit(ax0)); // current rotation
-				vector<Vector3r> vert; vector<Vector3i> tri;
-				vert.reserve(2*subdiv+(cylCaps?2:0)); tri.reserve((cylCaps?3:2)*subdiv);
-				// centers have indices after points at circumference, and are added after the loop
-				int centA=2*subdiv, centB=2*subdiv+1;
-				for(int i=0;i<subdiv;i++){
-					// triangle strip around cylinder
-					//
-					//           J   K    
-					// ax    1---3---5...
-					// ^     | / | / |...
-					// |     0---2---4...
-					// |     L   M
-					// |      i=^^^  
-					// +------> φ (i)
-					int J=2*i+1, K=(i==(subdiv-1))?1:2*i+3, L=(i==0)?2*(subdiv-1):2*i-2, M=2*i;
-					tri.push_back(Vector3i(M,J,L));
-					tri.push_back(Vector3i(J,M,K));
-					if(cylCaps){ tri.push_back(Vector3i(M,L,centA)); tri.push_back(Vector3i(J,K,centB)); }
-					Real phi=phi0+i*2*M_PI/subdiv;
-					Vector2r c=c2+infCyl->radius*Vector2r(sin(phi),cos(phi));
-					Vector3r A,B;
-					A[ax0]=p0[ax0]+infCyl->glAB[0]; B[ax0]=p0[ax0]+infCyl->glAB[1];
-					A[ax1]=B[ax1]=c[0];
-					A[ax2]=B[ax2]=c[1];
-					vert.push_back(A); vert.push_back(B);
-				}
-				if(cylCaps){
-					Vector3r cA, cB;
-					cA[ax0]=p0[ax0]+infCyl->glAB[0]; cB[ax0]=p0[ax0]+infCyl->glAB[1];
-					cA[ax1]=cB[ax1]=c2[0];
-					cA[ax2]=cB[ax2]=c2[1];
-					vert.push_back(cA); vert.push_back(cB);
-				}
-			#endif
 			_mCellNum=addTriangulatedObject(vert,tri,_mPos,_mCells,_mCellTypes);
 		} else if(cone){
 			vector<Vector3r> vert; vector<Vector3i> tri;
@@ -652,8 +609,8 @@ void VtkExport::run(){
 			mColor->InsertNextValue(p->shape->color);
 			mMatId->InsertNextValue(p->material->id);
 			// velocity values are erroneous for multi-nodal particles (facets), don't care now
-			mVel->InsertNextTupleValue(dyn.vel.data());
-			mAngVel->InsertNextTupleValue(dyn.angVel.data());
+			mVel->InsertNextTypedTuple(dyn.vel.data());
+			mAngVel->InsertNextTypedTuple(dyn.angVel.data());
 			if(what&WHAT_MATSTATE) exportMatState(p->matState,mMatStates,mAngVel->GetNumberOfTuples()-1,/*divisor*/(facet?p->shape->cast<Facet>().getArea():1));
 			mSigNorm->InsertNextValue(sigNorm);
 		}
@@ -670,8 +627,8 @@ void VtkExport::run(){
 			tColor->InsertNextValue(p->shape->color);
 			tMatId->InsertNextValue(p->material->id);
 			// velocity values are erroneous for multi-nodal particles (facets), don't care now
-			tVel->InsertNextTupleValue(dyn.vel.data());
-			tAngVel->InsertNextTupleValue(dyn.angVel.data());
+			tVel->InsertNextTypedTuple(dyn.vel.data());
+			tAngVel->InsertNextTypedTuple(dyn.angVel.data());
 			if(what&WHAT_MATSTATE) exportMatState(p->matState,tMatStates,tAngVel->GetNumberOfTuples()-1,/*divisor*/(facet?p->shape->cast<Facet>().getArea():1));
 		}
 	}
@@ -702,105 +659,44 @@ void VtkExport::run(){
 		}
 	}
 
-	if(!multiblock){
-		if(what&WHAT_CON){
-			vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
-			if(compress) writer->SetCompressor(compressor);
-			if(ascii) writer->SetDataModeToAscii();
-			string fn=out+"con."+to_string(scene->step)+".vtp";
-			writer->SetFileName(fn.c_str());
-			#if VTK_MAJOR_VERSION==5
-				writer->SetInput(cPoly);
-			#else
-				writer->SetInputData(cPoly);
-			#endif
-			writer->Write();
-			outFiles["con"].push_back(fn);
-		} 
-		if(what&WHAT_SPHERES){
-			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
-			if(compress) writer->SetCompressor(compressor);
-			if(ascii) writer->SetDataModeToAscii();
-			string fn=out+"spheres."+to_string(scene->step)+".vtu";
-			writer->SetFileName(fn.c_str());
-			#if VTK_MAJOR_VERSION==5
-				writer->SetInput(sGrid);
-			#else
-				writer->SetInputData(sGrid);
-			#endif
-			writer->Write();
-			outFiles["spheres"].push_back(fn);
-		}
-		if(what&WHAT_MESH){
-			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
-			if(compress) writer->SetCompressor(compressor);
-			if(ascii) writer->SetDataModeToAscii();
-			string fn=out+"mesh."+to_string(scene->step)+".vtu";
-			writer->SetFileName(fn.c_str());
-			#if VTK_MAJOR_VERSION==5
-				writer->SetInput(mGrid);
-			#else
-				writer->SetInputData(mGrid);
-			#endif
-			writer->Write();
-			outFiles["mesh"].push_back(fn);
-		}
-		if(!staticMeshDone && (what&WHAT_STATIC)){
-			staticMeshDone=true;
-			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
-			if(compress) writer->SetCompressor(compressor);
-			if(ascii) writer->SetDataModeToAscii();
-			string fn=out+"static."+to_string(scene->step)+".vtu";
-			writer->SetFileName(fn.c_str());
-			#if VTK_MAJOR_VERSION==5
-				writer->SetInput(smGrid);
-			#else
-				writer->SetInputData(smGrid);
-			#endif
-			writer->Write();
-			outFiles["static"].push_back(fn);
-		}
-		if(what&WHAT_TRI){
-			auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
-			if(compress) writer->SetCompressor(compressor);
-			if(ascii) writer->SetDataModeToAscii();
-			string fn=out+"tri."+to_string(scene->step)+".vtu";
-			writer->SetFileName(fn.c_str());
-			#if VTK_MAJOR_VERSION==5
-				writer->SetInput(tGrid);
-			#else
-				writer->SetInputData(tGrid);
-			#endif
-			writer->Write();
-			outFiles["tri"].push_back(fn);
-		}
+	if(!hdf5){
+		if(what&WHAT_CON) writeVtp(cPoly,"con");
+		if(what&WHAT_SPHERES) writeVtu(sGrid,"spheres");
+		if(what&WHAT_MESH) writeVtu(mGrid,"mesh");
+		if(!staticMeshDone && (what&WHAT_STATIC)) writeVtu(smGrid,"static");
+		if(what&WHAT_TRI) writeVtu(tGrid,"tri");
 	} else {
-		// multiblock
-		auto multi=vtkSmartPointer<vtkMultiBlockDataSet>::New();
-		int i=0;
-		if(what&WHAT_SPHERES) multi->SetBlock(i++,sGrid);
-		if(what&WHAT_MESH) multi->SetBlock(i++,mGrid);
-		if(!staticMeshDone && (what&WHAT_STATIC)) multi->SetBlock(i++,smGrid);
-		if(what&WHAT_CON) multi->SetBlock(i++,cPoly);
-		if(what&WHAT_TRI) multi->SetBlock(i++,tGrid);
-		auto writer=vtkSmartPointer<vtkXMLMultiBlockDataWriter>::New();
-		if(compress) writer->SetCompressor(compressor);
-		if(ascii) writer->SetDataModeToAscii();
-		string fn=out+to_string(scene->step)+".vtm";
-		writer->SetFileName(fn.c_str());
-		#if VTK_MAJOR_VERSION==5
-			writer->SetInput(multi);
-		#else
-			writer->SetInputData(multi);
-		#endif
-		writer->Write();	
+		throw std::runtime_error("VtkExport::hdf5: not yet implemented");
 	}
 
 	outTimes.push_back(scene->time);
 	outSteps.push_back(scene->step);
 };
 
-#if VTK_MAJOR_VERSION>=8
+
+void VtkExport::writeVtu(const vtkSmartPointer<vtkUnstructuredGrid>& grid, const string& what){
+	auto writer=vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
+	if(compress) writer->SetCompressor(vtkSmartPointer<vtkZLibDataCompressor>::New());
+	if(ascii) writer->SetDataModeToAscii();
+	std::string f=out+what+"."+to_string(scene->step)+".vtu";
+	writer->SetFileName(f.c_str());
+	writer->SetInputData(grid);
+	writer->Write();
+	outFiles[what].push_back(f);
+}
+
+void VtkExport::writeVtp(const vtkSmartPointer<vtkPolyData>& grid, const string& what){
+	auto writer=vtkSmartPointer<vtkXMLPolyDataWriter>::New();
+	if(compress) writer->SetCompressor(vtkSmartPointer<vtkZLibDataCompressor>::New());
+	if(ascii) writer->SetDataModeToAscii();
+	std::string f=out+what+"."+to_string(scene->step)+".vtp";
+	writer->SetFileName(f.c_str());
+	writer->SetInputData(grid);
+	writer->Write();
+	outFiles[what].push_back(f);
+}
+
+#if VTK_MAJOR_VERSION<7
 	#undef InsertNextTupleValue
 #endif
 
