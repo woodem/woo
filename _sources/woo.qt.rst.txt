@@ -7,7 +7,7 @@
 .. automodule:: woo.qt
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 
 .. rst-class:: html-toggle
@@ -133,7 +133,7 @@ UiPrefs
 .. automodule:: woo._qt
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 
 .. rst-class:: html-toggle
@@ -155,7 +155,7 @@ SnapshotEngine
 .. automodule:: woo._GLViewer
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.DisplayProfiles`
 ------------------------------------------
@@ -163,7 +163,7 @@ SnapshotEngine
 .. automodule:: woo.qt.DisplayProfiles
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.ui_controller`
 ----------------------------------------
@@ -171,7 +171,7 @@ SnapshotEngine
 .. automodule:: woo.qt.ui_controller
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.Inspector`
 ------------------------------------
@@ -179,7 +179,7 @@ SnapshotEngine
 .. automodule:: woo.qt.Inspector
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.img_rc`
 ---------------------------------
@@ -187,7 +187,7 @@ SnapshotEngine
 .. automodule:: woo.qt.img_rc
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.ExceptionDialog`
 ------------------------------------------
@@ -195,7 +195,7 @@ SnapshotEngine
 .. automodule:: woo.qt.ExceptionDialog
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 
 :mod:`woo.qt.ObjectEditor`
 ---------------------------------------
@@ -203,5 +203,5 @@ SnapshotEngine
 .. automodule:: woo.qt.ObjectEditor
    :members:
    :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
+   :exclude-members: SnapshotEngine,  UiPrefs
 

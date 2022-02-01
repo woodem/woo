@@ -5,6 +5,13 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.test_shapepack`
+--------------------------------------------
+
+.. automodule:: woo.tests.test_shapepack
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.test_hertz`
 ----------------------------------------
 
@@ -19,6 +26,13 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.test_io`
+-------------------------------------
+
+.. automodule:: woo.tests.test_io
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.test_tetra`
 ----------------------------------------
 
@@ -30,13 +44,6 @@
 --------------------------------------------
 
 .. automodule:: woo.tests.test_ellipsoid
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_energy`
------------------------------------------
-
-.. automodule:: woo.tests.test_energy
    :members:
    :undoc-members:
 
@@ -112,7 +119,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x265b5c0, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x2676070, at (1,1,1)>)
 
       node attr
 
@@ -124,7 +131,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x269ef20, at (1,1,1)>, <Node @ 0x25d17b0, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x1f62450, at (1,1,1)>, <Node @ 0x25e0ea0, at (2,2,2)>])
 
       List of nodes
 
@@ -202,26 +209,10 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.test_grid`
----------------------------------------
-
-.. automodule:: woo.tests.test_grid
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
 :mod:`woo.tests.test_demfield`
 -------------------------------------------
 
 .. automodule:: woo.tests.test_demfield
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_shapepack`
---------------------------------------------
-
-.. automodule:: woo.tests.test_shapepack
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
@@ -234,14 +225,6 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.test_io`
--------------------------------------
-
-.. automodule:: woo.tests.test_io
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
 :mod:`woo.tests.test_labels`
 -----------------------------------------
 
@@ -250,10 +233,26 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
+:mod:`woo.tests.test_energy`
+-----------------------------------------
+
+.. automodule:: woo.tests.test_energy
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.test_pbc`
 --------------------------------------
 
 .. automodule:: woo.tests.test_pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_grid`
+---------------------------------------
+
+.. automodule:: woo.tests.test_grid
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
