@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.dem &#8212; Woo 1.0+rev1-git-6fe7896 documentation</title>
+    <title>woo.dem &#8212; Woo 1.0+rev1-git-c9b8694 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="woo.core.html" title="woo.core"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-c9b8694 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.dem</span></code></a></li> 
@@ -1300,15 +1300,15 @@ digraph Impose {
         rankdir=LR;
         margin=.2;
         &quot;Impose&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
-        &quot;VariableVelocity3d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
-        &quot;Impose&quot; -&gt; &quot;VariableVelocity3d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;HarmonicOscillation&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
+        &quot;HarmonicOscillation&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;HarmonicOscillation&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;VelocityAndReadForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;VelocityAndReadForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;AlignedHarmonicOscillations&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;AlignedHarmonicOscillations&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;ConstantForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;ConstantForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;RadialForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;RadialForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Local6Dofs&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;Local6Dofs&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;StableCircularOrbit&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
-        &quot;CircularOrbit&quot; -&gt; &quot;StableCircularOrbit&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;ReadForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
+        &quot;CircularOrbit&quot; -&gt; &quot;StableCircularOrbit&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;VariableVelocity3d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
+        &quot;Impose&quot; -&gt; &quot;VariableVelocity3d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;ReadForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;ReadForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;VariableAlignedRotation&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;VariableAlignedRotation&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;CombinedImpose&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
         &quot;Impose&quot; -&gt; &quot;CombinedImpose&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;InterpolatedMotion&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Impose&quot;];
@@ -1689,7 +1689,7 @@ digraph CircularOrbit {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.CircularOrbit.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1ee75b0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CircularOrbit.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1d1d5b0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CircularOrbit.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local coordinate system.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -1965,7 +1965,7 @@ digraph CircularOrbit {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.Tracer.lineColor">
-<span class="sig-name descname"><span class="pre">lineColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x1e3f6e0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Tracer.lineColor" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lineColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x1c756e0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Tracer.lineColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Color range for coloring the trace line</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -2443,7 +2443,7 @@ digraph Collider {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.GridCollider.boundDispatcher">
-<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GridBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1d337a0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.GridCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GridBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1b697a0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.GridCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispatches <a class="reference internal" href="#woo.dem.GridBound" title="woo.dem.GridBound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBound</span></code></a> creation to <code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBoundFuctor</span></code> based on <a class="reference internal" href="#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> type.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.GridBoundDispatcher" title="woo.dem.GridBoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBoundDispatcher</span></code></a>&gt;]</p>
 </dd></dl>
@@ -2613,7 +2613,7 @@ digraph AabbCollider {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.AabbCollider.boundDispatcher">
-<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;BoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1ce1940&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.AabbCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;BoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1b17940&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.AabbCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.BoundDispatcher" title="woo.dem.BoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundDispatcher</span></code></a> object that is used for creating <code class="xref py py-obj docutils literal notranslate"><span class="pre">bounds</span></code> on collider’s request as necessary.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.BoundDispatcher" title="woo.dem.BoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -2916,14 +2916,14 @@ digraph BoundFunctor {
         rankdir=LR;
         margin=.2;
         &quot;BoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
-        &quot;Bo1_Wall_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
-        &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Wall_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Bo1_InfCylinder_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
+        &quot;Bo1_InfCylinder_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_InfCylinder_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;Bo1_Capsule_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Capsule_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Bo1_Cone_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Cone_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Bo1_Ellipsoid_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;Bo1_Sphere_Aabb&quot; -&gt; &quot;Bo1_Ellipsoid_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Bo1_Rod_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Rod_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.fem.Bo1_Tetra_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.BoundFunctor&quot;];
-        &quot;BoundFunctor&quot; -&gt; &quot;woo.fem.Bo1_Tetra_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Bo1_Sphere_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
+        &quot;BoundFunctor&quot; -&gt; &quot;woo.fem.Bo1_Tetra_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Bo1_Wall_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
+        &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Wall_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Bo1_Sphere_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Sphere_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;Bo1_Facet_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoundFunctor&quot;];
         &quot;BoundFunctor&quot; -&gt; &quot;Bo1_Facet_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }<dl class="py class">
@@ -3605,7 +3605,7 @@ digraph BoxInlet {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.BoxInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1d7ccd0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1bb2cd0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinate system (optional; if not given, global coordinates are used).</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -3649,7 +3649,7 @@ digraph BoxInlet {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ArcInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1d834c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1bb94c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinate system. <em>Must</em> be given.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -3929,7 +3929,7 @@ digraph BoxInlet {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ConveyorInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1eaa730</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ConveyorInlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1ce0730</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ConveyorInlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Position and orientation of the factory; local x-axis is the feed direction.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -4598,7 +4598,7 @@ digraph ParticleShooter {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ArcShooter.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1d846c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcShooter.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1bba6c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcShooter.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinate system. <em>Must</em> be given.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -4915,7 +4915,7 @@ digraph BoxOutlet {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ArcOutlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1dbc830</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcOutlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1bf2830</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcOutlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinates system. <em>Must</em> be given.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -5513,21 +5513,21 @@ digraph In2_Facet {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.geoDisp">
-<span class="sig-name descname"><span class="pre">geoDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CGeomDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1d24340&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.geoDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">geoDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CGeomDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1b5a340&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.geoDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.CGeomDispatcher" title="woo.dem.CGeomDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomDispatcher</span></code></a> object that is used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.CGeomDispatcher" title="woo.dem.CGeomDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.phyDisp">
-<span class="sig-name descname"><span class="pre">phyDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1d17280&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.phyDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">phyDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1b4d280&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.phyDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.CPhysDispatcher" title="woo.dem.CPhysDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhysDispatcher</span></code></a> object used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.CPhysDispatcher" title="woo.dem.CPhysDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhysDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.lawDisp">
-<span class="sig-name descname"><span class="pre">lawDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LawDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1d24260&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.lawDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lawDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LawDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1b5a260&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.lawDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.LawDispatcher" title="woo.dem.LawDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawDispatcher</span></code></a> object used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.LawDispatcher" title="woo.dem.LawDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -5693,7 +5693,7 @@ digraph CGeom {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.CGeom.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1d0c460</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CGeom.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1b42460</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CGeom.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local coordinates definition.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -6086,21 +6086,6 @@ digraph Cg2_Ellipsoid_Ellipsoid_L6Geom {
 
 </section>
 </section>
-<section id="cg2-sphere-capsule-l6geom">
-<h6>Cg2_Sphere_Capsule_L6Geom<a class="headerlink" href="#cg2-sphere-capsule-l6geom" title="Permalink to this headline">¶</a></h6>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Any_Any_L6Geom__Base" title="woo.dem.Cg2_Any_Any_L6Geom__Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Any_Any_L6Geom__Base</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="woo.dem.Cg2_Sphere_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Sphere_Capsule_L6Geom</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.Cg2_Sphere_Capsule_L6Geom">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">Cg2_Sphere_Capsule_L6Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute <a class="reference internal" href="#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a> for contact of <a class="reference internal" href="#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> and <a class="reference internal" href="#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.Cg2_Sphere_Capsule_L6Geom) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.Cg2_Sphere_Capsule_L6Geom, <a href="#id436"><span class="problematic" id="id437">*</span></a>args, <a href="#id438"><span class="problematic" id="id439">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-</section>
 <section id="cg2-facet-sphere-l6geom">
 <h6>Cg2_Facet_Sphere_L6Geom<a class="headerlink" href="#cg2-facet-sphere-l6geom" title="Permalink to this headline">¶</a></h6>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Any_Any_L6Geom__Base" title="woo.dem.Cg2_Any_Any_L6Geom__Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Any_Any_L6Geom__Base</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Facet_Sphere_L6Geom" title="woo.dem.Cg2_Facet_Sphere_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Facet_Sphere_L6Geom</span></code></a></p>
@@ -6111,7 +6096,22 @@ digraph Cg2_Ellipsoid_Ellipsoid_L6Geom {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.dem.Cg2_Facet_Sphere_L6Geom) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.Cg2_Facet_Sphere_L6Geom, <a href="#id440"><span class="problematic" id="id441">*</span></a>args, <a href="#id442"><span class="problematic" id="id443">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.Cg2_Facet_Sphere_L6Geom, <a href="#id436"><span class="problematic" id="id437">*</span></a>args, <a href="#id438"><span class="problematic" id="id439">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+</section>
+<section id="cg2-sphere-capsule-l6geom">
+<h6>Cg2_Sphere_Capsule_L6Geom<a class="headerlink" href="#cg2-sphere-capsule-l6geom" title="Permalink to this headline">¶</a></h6>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Any_Any_L6Geom__Base" title="woo.dem.Cg2_Any_Any_L6Geom__Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Any_Any_L6Geom__Base</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="woo.dem.Cg2_Sphere_Capsule_L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Sphere_Capsule_L6Geom</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.Cg2_Sphere_Capsule_L6Geom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">Cg2_Sphere_Capsule_L6Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Cg2_Sphere_Capsule_L6Geom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <a class="reference internal" href="#woo.dem.L6Geom" title="woo.dem.L6Geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L6Geom</span></code></a> for contact of <a class="reference internal" href="#woo.dem.Capsule" title="woo.dem.Capsule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Capsule</span></code></a> and <a class="reference internal" href="#woo.dem.Sphere" title="woo.dem.Sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sphere</span></code></a>.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.Cg2_Sphere_Capsule_L6Geom) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.Cg2_Sphere_Capsule_L6Geom, <a href="#id440"><span class="problematic" id="id441">*</span></a>args, <a href="#id442"><span class="problematic" id="id443">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
@@ -10454,7 +10454,7 @@ digraph MatState {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.POVRayExport.colorRange">
-<span class="sig-name descname"><span class="pre">colorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x1e07c50&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.POVRayExport.colorRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">colorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x1c3dc50&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.POVRayExport.colorRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range to map <a class="reference internal" href="#woo.dem.Shape.color" title="woo.dem.Shape.color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Shape.color</span></code></a> to RGB for pigment specification.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
@@ -10572,14 +10572,14 @@ digraph MatState {
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.DemField.particles">
-<span class="sig-name descname"><span class="pre">particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ParticleContainer</span> <span class="pre">&#64;</span> <span class="pre">0x1dc8ba0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ParticleContainer</span> <span class="pre">&#64;</span> <span class="pre">0x1bfeba0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particles (each particle holds its contacts, and references associated nodes)</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleContainer" title="woo.dem.ParticleContainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleContainer</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.DemField.contacts">
-<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactContainer</span> <span class="pre">&#64;</span> <span class="pre">0x1dc8dc0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.contacts" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactContainer</span> <span class="pre">&#64;</span> <span class="pre">0x1bfedc0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.contacts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear view on particle contacts</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ContactContainer" title="woo.dem.ContactContainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactContainer</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -11095,8 +11095,8 @@ digraph MatState {
 <li><a class="reference internal" href="#cg2-sphere-ellipsoid-l6geom">Cg2_Sphere_Ellipsoid_L6Geom</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#cg2-sphere-capsule-l6geom">Cg2_Sphere_Capsule_L6Geom</a></li>
 <li><a class="reference internal" href="#cg2-facet-sphere-l6geom">Cg2_Facet_Sphere_L6Geom</a></li>
+<li><a class="reference internal" href="#cg2-sphere-capsule-l6geom">Cg2_Sphere_Capsule_L6Geom</a></li>
 <li><a class="reference internal" href="#cg2-capsule-capsule-l6geom">Cg2_Capsule_Capsule_L6Geom</a></li>
 <li><a class="reference internal" href="#cg2-facet-ellipsoid-l6geom">Cg2_Facet_Ellipsoid_L6Geom</a></li>
 <li><a class="reference internal" href="#cg2-infcylinder-sphere-l6geom">Cg2_InfCylinder_Sphere_L6Geom</a></li>
@@ -11302,7 +11302,7 @@ digraph MatState {
         <li class="right" >
           <a href="woo.core.html" title="woo.core"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-c9b8694 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.dem</span></code></a></li> 

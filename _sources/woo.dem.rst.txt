@@ -7,7 +7,7 @@
 .. automodule:: woo.dem
    :members:
    :undoc-members:
-   :exclude-members: Law2_G3Geom_FrictPhys_IdealElPl,  PsdEllipsoidGenerator,  StackedBoxOutlet,  Bo1_Cone_Aabb,  Law2_L6Geom_ConcretePhys,  ClumpData,  Shape,  PeriIsoCompressor,  Cg2_Sphere_Ellipsoid_L6Geom,  MatState,  Sphere,  LawFunctor,  VariableVelocity3d,  LawTester,  MinMaxSphereGenerator,  LudingMatState,  Cg2_Wall_Facet_L6Geom,  Grid1_InfCylinder,  AlignedHarmonicOscillations,  AabbTreeCollider,  Law2_L6Geom_LudingPhys,  Wall,  IntraFunctor,  Cp2_PelletMat_PelletPhys,  ClusterAnalysis,  GridStore,  Cp2_FrictMat_FrictPhys,  CPhysDispatcher,  PsdSphereGenerator,  ContactHook,  TraceVisRep,  Cg2_Facet_InfCylinder_L6Geom,  Cp2_HertzMat_HertzPhys,  Bo1_Ellipsoid_Aabb,  SpatialBias,  IdealElPlData,  AxialGravity,  ArcOutlet,  In2_Truss_ElastMat,  ContactContainer,  Local6Dofs,  GridBound,  Cg2_Facet_Capsule_L6Geom,  BoundFunctor,  DemData,  G3GeomCData,  Material,  SphereClumpGeom,  NonuniformAxisPlacementBias,  Leapfrog,  CircularOrbit,  BoxInlet2d,  ShapeClump,  ParticleShooter,  Bo1_InfCylinder_Aabb,  InfCylinder,  Cg2_Sphere_Sphere_L6Geom,  MeshVolume,  Capsule,  Law2_L6Geom_HertzPhys_DMT,  G3Geom,  PelletMat,  Bo1_Facet_Aabb,  Bo1_Wall_Aabb,  Law2_L6Geom_PelletPhys_Pellet,  ConcreteMatState,  LawDispatcher,  Grid1_Facet,  Cone,  In2_Facet,  PsdClumpGenerator,  CountContactsHook,  GridBoundDispatcher,  BoxTraceTimeSetter,  Cg2_Wall_Ellipsoid_L6Geom,  CPhys,  ContactLoop,  GridBoundFunctor,  WeirdTriaxControl,  ForcesToHdf5,  StableCircularOrbit,  IcePhys,  AxialBias,  Law2_L6Geom_FrictPhys_LinEl6,  VariableAlignedRotation,  Cg2_InfCylinder_Capsule_L6Geom,  CylinderInlet,  Bound,  ClusterMatState,  RawShapeClump,  DemDataTagged,  L6Geom,  DetectSteadyState,  ForceResetter,  Facet,  Outlet,  Collider,  CGeom,  Cg2_Any_Any_L6Geom__Base,  ConveyorInlet,  VelocityAndReadForce,  Cg2_Rod_Sphere_L6Geom,  Bo1_Capsule_Aabb,  Cg2_Sphere_Sphere_G3Geom,  Cg2_Cone_Sphere_L6Geom,  AlignedMinMaxShooter,  PelletCData,  Rod,  Cg2_InfCylinder_Sphere_L6Geom,  Bo1_Sphere_Aabb,  CGeomFunctor,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  ConcretePhys,  Cp2_IceMat_IcePhys,  HertzMat,  ConstantForce,  In2_Wall_ElastMat,  Cg2_Facet_Ellipsoid_L6Geom,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Impose,  ParticleContainer,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  CData,  Aabb,  Grid1_Sphere,  LawTesterStage,  ReadForce,  AabbCollider,  Inlet,  InterpolatedMotion,  PelletMatState,  PsdAxialBias,  ArcInlet,  BoxOutlet,  LudingPhys,  InletMatState,  FlowAnalysis,  IceMat,  Suspicious,  Cg2_Sphere_Capsule_L6Geom,  Cg2_Facet_Sphere_L6Geom,  RandomInlet,  Truss,  IntraForce,  ElastMat,  DynDt,  GridCollider,  Law2_L6Geom_IcePhys,  Cg2_Wall_Sphere_G3Geom,  In2_Sphere_ElastMat,  HalfspaceBuoyancy,  RadialForce,  Contact,  NodalForcesToHdf5,  PharmaCapsuleGenerator,  CombinedImpose,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cp2_ConcreteMat_ConcretePhys,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  CPhysFunctor,  PelletAgglomerator,  ConcreteMat,  PelletPhys,  Grid1_Wall,  Particle,  ParticleGenerator,  HarmonicOscillation,  Cp2_LudingMat_LudingPhys,  LudingMat,  POVRayExport,  FrictPhys,  BoundDispatcher,  HertzPhys,  VtkExport,  Ellipsoid,  Tracer,  Cg2_Facet_Facet_L6Geom,  CGeomDispatcher,  Cg2_Wall_Capsule_L6Geom,  LayeredAxialBias,  ArcShooter,  Bo1_Rod_Aabb,  BoxInlet,  Law2_L6Geom_FrictPhys_IdealElPl,  FrictMat,  InsertionSortCollider,  DemField
+   :exclude-members: Law2_G3Geom_FrictPhys_IdealElPl,  PsdEllipsoidGenerator,  StackedBoxOutlet,  Bo1_Cone_Aabb,  Law2_L6Geom_ConcretePhys,  ClumpData,  Shape,  PeriIsoCompressor,  Cg2_Sphere_Ellipsoid_L6Geom,  MatState,  Sphere,  LawFunctor,  VariableVelocity3d,  LawTester,  MinMaxSphereGenerator,  LudingMatState,  Cg2_Wall_Facet_L6Geom,  Grid1_InfCylinder,  AlignedHarmonicOscillations,  AabbTreeCollider,  Law2_L6Geom_LudingPhys,  Wall,  IntraFunctor,  Cp2_PelletMat_PelletPhys,  ClusterAnalysis,  GridStore,  Cp2_FrictMat_FrictPhys,  CPhysDispatcher,  PsdSphereGenerator,  ContactHook,  TraceVisRep,  Cg2_Facet_InfCylinder_L6Geom,  Cp2_HertzMat_HertzPhys,  Bo1_Ellipsoid_Aabb,  SpatialBias,  IdealElPlData,  AxialGravity,  ArcOutlet,  In2_Truss_ElastMat,  ContactContainer,  Local6Dofs,  GridBound,  Cg2_Facet_Capsule_L6Geom,  BoundFunctor,  DemData,  G3GeomCData,  Material,  SphereClumpGeom,  NonuniformAxisPlacementBias,  Leapfrog,  CircularOrbit,  BoxInlet2d,  ShapeClump,  ParticleShooter,  Bo1_InfCylinder_Aabb,  InfCylinder,  Cg2_Sphere_Sphere_L6Geom,  MeshVolume,  Capsule,  Law2_L6Geom_HertzPhys_DMT,  G3Geom,  PelletMat,  Bo1_Facet_Aabb,  Bo1_Wall_Aabb,  Law2_L6Geom_PelletPhys_Pellet,  ConcreteMatState,  LawDispatcher,  Grid1_Facet,  Cone,  In2_Facet,  PsdClumpGenerator,  CountContactsHook,  GridBoundDispatcher,  BoxTraceTimeSetter,  Cg2_Wall_Ellipsoid_L6Geom,  CPhys,  ContactLoop,  GridBoundFunctor,  WeirdTriaxControl,  ForcesToHdf5,  StableCircularOrbit,  IcePhys,  AxialBias,  Law2_L6Geom_FrictPhys_LinEl6,  VariableAlignedRotation,  Cg2_InfCylinder_Capsule_L6Geom,  CylinderInlet,  Bound,  ClusterMatState,  RawShapeClump,  DemDataTagged,  L6Geom,  DetectSteadyState,  ForceResetter,  Facet,  Outlet,  Collider,  CGeom,  Cg2_Any_Any_L6Geom__Base,  ConveyorInlet,  VelocityAndReadForce,  Cg2_Rod_Sphere_L6Geom,  Bo1_Capsule_Aabb,  Cg2_Sphere_Sphere_G3Geom,  Cg2_Cone_Sphere_L6Geom,  AlignedMinMaxShooter,  PelletCData,  Rod,  Cg2_InfCylinder_Sphere_L6Geom,  Bo1_Sphere_Aabb,  CGeomFunctor,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  ConcretePhys,  Cp2_IceMat_IcePhys,  HertzMat,  ConstantForce,  In2_Wall_ElastMat,  Cg2_Facet_Ellipsoid_L6Geom,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Impose,  ParticleContainer,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  CData,  Aabb,  Grid1_Sphere,  LawTesterStage,  ReadForce,  AabbCollider,  Inlet,  InterpolatedMotion,  PelletMatState,  PsdAxialBias,  ArcInlet,  BoxOutlet,  LudingPhys,  InletMatState,  FlowAnalysis,  IceMat,  Suspicious,  Cg2_Facet_Sphere_L6Geom,  Cg2_Sphere_Capsule_L6Geom,  RandomInlet,  Truss,  IntraForce,  ElastMat,  DynDt,  GridCollider,  Law2_L6Geom_IcePhys,  Cg2_Wall_Sphere_G3Geom,  In2_Sphere_ElastMat,  HalfspaceBuoyancy,  RadialForce,  Contact,  NodalForcesToHdf5,  PharmaCapsuleGenerator,  CombinedImpose,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cp2_ConcreteMat_ConcretePhys,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  CPhysFunctor,  PelletAgglomerator,  ConcreteMat,  PelletPhys,  Grid1_Wall,  Particle,  ParticleGenerator,  HarmonicOscillation,  Cp2_LudingMat_LudingPhys,  LudingMat,  POVRayExport,  FrictPhys,  BoundDispatcher,  HertzPhys,  VtkExport,  Ellipsoid,  Tracer,  Cg2_Facet_Facet_L6Geom,  CGeomDispatcher,  Cg2_Wall_Capsule_L6Geom,  LayeredAxialBias,  ArcShooter,  Bo1_Rod_Aabb,  BoxInlet,  Law2_L6Geom_FrictPhys_IdealElPl,  FrictMat,  InsertionSortCollider,  DemField
 
 
 .. rst-class:: html-toggle
@@ -712,15 +712,15 @@ Impose
 		rankdir=LR;
 		margin=.2;
 		"Impose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "VariableVelocity3d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HarmonicOscillation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"HarmonicOscillation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "HarmonicOscillation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VelocityAndReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "VelocityAndReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AlignedHarmonicOscillations" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "AlignedHarmonicOscillations" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConstantForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "ConstantForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"RadialForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "RadialForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Local6Dofs" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "Local6Dofs" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StableCircularOrbit" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"CircularOrbit" -> "StableCircularOrbit" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"CircularOrbit" -> "StableCircularOrbit" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "VariableVelocity3d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "ReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableAlignedRotation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "VariableAlignedRotation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CombinedImpose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "CombinedImpose" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InterpolatedMotion" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
@@ -1082,7 +1082,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1ee75b0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1d1d5b0, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -1331,7 +1331,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0x1e3f6e0>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x1c756e0>)
 
       Color range for coloring the trace line
 
@@ -1770,7 +1770,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x1d337a0>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x1b697a0>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -1863,7 +1863,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x1ce1940>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x1b17940>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -2109,14 +2109,14 @@ BoundFunctor
 		rankdir=LR;
 		margin=.2;
 		"BoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"Bo1_Wall_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Wall_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_InfCylinder_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"Bo1_InfCylinder_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_InfCylinder_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Capsule_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Capsule_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Cone_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Cone_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Ellipsoid_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"Bo1_Sphere_Aabb" -> "Bo1_Ellipsoid_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Rod_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Rod_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Bo1_Tetra_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.BoundFunctor"];
-		"BoundFunctor" -> "woo.fem.Bo1_Tetra_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Sphere_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "woo.fem.Bo1_Tetra_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Wall_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_Wall_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Sphere_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Sphere_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Facet_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Facet_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -2743,7 +2743,7 @@ BoxInlet
 
       [type: AlignedBox3r]
 
-   .. attribute:: node (= <Node @ 0x1d7ccd0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1bb2cd0, at (0,0,0)>)
 
       Node defining local coordinate system (optional; if not given, global coordinates are used).
 
@@ -2783,7 +2783,7 @@ ArcInlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1d834c0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1bb94c0, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -3035,7 +3035,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0x1eaa730, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1ce0730, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -3563,7 +3563,7 @@ ArcShooter
    :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1d846c0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1bba6c0, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -3838,7 +3838,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1dbc830, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1bf2830, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -4344,19 +4344,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x1d24340>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x1b5a340>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x1d17280>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x1b4d280>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0x1d24260>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x1b5a260>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -4529,7 +4529,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1d0c460, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1b42460, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -4865,17 +4865,6 @@ Cg2_Sphere_Ellipsoid_L6Geom
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
 
-Cg2_Sphere_Capsule_L6Geom
-'''''''''''''''''''''''''
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Sphere_Capsule_L6Geom`
-
-.. autoclass:: Cg2_Sphere_Capsule_L6Geom
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
 Cg2_Facet_Sphere_L6Geom
 '''''''''''''''''''''''
 
@@ -4883,6 +4872,17 @@ Cg2_Facet_Sphere_L6Geom
 :obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Facet_Sphere_L6Geom`
 
 .. autoclass:: Cg2_Facet_Sphere_L6Geom
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+Cg2_Sphere_Capsule_L6Geom
+'''''''''''''''''''''''''
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Sphere_Capsule_L6Geom`
+
+.. autoclass:: Cg2_Sphere_Capsule_L6Geom
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
@@ -8141,7 +8141,7 @@ POVRayExport
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0x1e07c50>)
+   .. attribute:: colorRange (= <ScalarRange @ 0x1c3dc50>)
 
       Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
 
@@ -8249,13 +8249,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0x1dc8ba0>)
+   .. attribute:: particles (= <ParticleContainer @ 0x1bfeba0>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0x1dc8dc0>)
+   .. attribute:: contacts (= <ContactContainer @ 0x1bfedc0>)
 
       Linear view on particle contacts
 

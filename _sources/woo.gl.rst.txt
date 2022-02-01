@@ -7,7 +7,7 @@
 .. automodule:: woo.gl
    :members:
    :undoc-members:
-   :exclude-members: Gl1_Ellipsoid,  TensorGlRep,  GlNodeDispatcher,  Gl1_Node,  GlExtra_AnisoPorosityAnalyzer,  Gl1_DemField,  Gl1_Facet,  GlBoundFunctor,  GlExtraDrawer,  Gl1_GridBound,  GlNodeFunctor,  GlFieldFunctor,  DisplayParameters,  Gl1_Capsule,  VectorGlRep,  Gl1_Aabb,  GlFieldDispatcher,  ScalarGlRep,  Renderer,  Gl1_CPhys,  GlSetup,  Gl1_ConcretePhys,  Gl1_Tet4,  LabelGlRep,  CylGlRep,  GlData,  GlCPhysDispatcher,  GlExtra_EnergyTrackerGrid,  Gl1_Tetra,  Gl1_Membrane,  GlShapeDispatcher,  Gl1_Rod,  Gl1_InfCylinder,  ActReactGlRep,  Gl1_Cone,  GlCPhysFunctor,  GlBoundDispatcher,  GlShapeFunctor,  Gl1_Wall,  Gl1_Sphere
+   :exclude-members: Gl1_Ellipsoid,  TensorGlRep,  GlNodeDispatcher,  Gl1_Node,  GlExtra_AnisoPorosityAnalyzer,  Gl1_DemField,  Gl1_Facet,  Gl1_GridBound,  GlExtraDrawer,  GlNodeFunctor,  GlFieldFunctor,  DisplayParameters,  Gl1_Capsule,  VectorGlRep,  Gl1_Aabb,  GlFieldDispatcher,  ScalarGlRep,  Renderer,  Gl1_CPhys,  GlBoundFunctor,  GlSetup,  Gl1_ConcretePhys,  Gl1_Tet4,  LabelGlRep,  CylGlRep,  GlData,  GlCPhysDispatcher,  GlExtra_EnergyTrackerGrid,  Gl1_Tetra,  Gl1_Membrane,  GlShapeDispatcher,  Gl1_Rod,  Gl1_InfCylinder,  ActReactGlRep,  Gl1_Cone,  GlCPhysFunctor,  GlBoundDispatcher,  GlShapeFunctor,  Gl1_Wall,  Gl1_Sphere
 
 
 .. rst-class:: html-toggle
@@ -738,13 +738,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0x1f0ab90>)
+   .. attribute:: uRange (= <ScalarRange @ 0x1d40b90>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0x1f0ffe0>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x1d45fe0>)
 
       Range for rotations (colors only)
 
@@ -1457,19 +1457,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x1eb2ef0>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x1ce8ef0>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x1eb2e10>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x1ce8e10>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x1ee5550>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x1d1b550>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 
@@ -1880,13 +1880,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x1ec4040>)
+   .. attribute:: range (= <ScalarRange @ 0x1cfa040>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x1ec33a0>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x1cf93a0>)
 
       Range for absolute value of shear force
 
@@ -1945,7 +1945,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x1f18040>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x1d4e040>)
 
       Range for disk damage coloring.
 

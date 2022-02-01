@@ -5,20 +5,6 @@
    :members:
    :undoc-members:
 
-:mod:`woo._monkey.io`
-----------------------------------
-
-.. automodule:: woo._monkey.io
-   :members:
-   :undoc-members:
-
-:mod:`woo._monkey.gts`
------------------------------------
-
-.. automodule:: woo._monkey.gts
-   :members:
-   :undoc-members:
-
 :mod:`woo._monkey.compat`
 --------------------------------------
 
@@ -37,6 +23,20 @@
 ---------------------------------------
 
 .. automodule:: woo._monkey.aliases
+   :members:
+   :undoc-members:
+
+:mod:`woo._monkey.gts`
+-----------------------------------
+
+.. automodule:: woo._monkey.gts
+   :members:
+   :undoc-members:
+
+:mod:`woo._monkey.io`
+----------------------------------
+
+.. automodule:: woo._monkey.io
    :members:
    :undoc-members:
 

@@ -55,7 +55,7 @@ Membrane
    :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1f08150, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1d3e150, at (0,0,0)>)
 
       Local coordinate system
 
