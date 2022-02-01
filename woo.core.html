@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.core &#8212; Woo 1.0+rev1-git-8bbb0e2 documentation</title>
+    <title>woo.core &#8212; Woo 1.0+rev1-git-6fe7896 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="woo.config.html" title="woo.config"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-8bbb0e2 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.core</span></code></a></li> 
@@ -822,271 +822,11 @@ size=&quot;&quot;;
 
 </dd></dl>
 
-<section class="html-toggle emphasized" id="nodevisrep">
-<h2>NodeVisRep<a class="headerlink" href="#nodevisrep" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.NodeVisRep" title="woo.core.NodeVisRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeVisRep</span></code></a></p>
-digraph NodeVisRep {
-        rankdir=LR;
-        margin=.2;
-        &quot;NodeVisRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.NodeVisRep&quot;];
-        &quot;woo.dem.TraceVisRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.dem.TraceVisRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.ActReactGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;woo.gl.VectorGlRep&quot; -&gt; &quot;woo.gl.ActReactGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.VectorGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.VectorGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.TensorGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.TensorGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.LabelGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.LabelGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.CylGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.CylGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.ScalarGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
-        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.ScalarGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.NodeVisRep">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">NodeVisRep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.NodeVisRep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object representing what should be rendered at associated node (abstract base class).</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.NodeVisRep) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.NodeVisRep, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="matchmaker">
-<h2>MatchMaker<a class="headerlink" href="#matchmaker" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchMaker</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.MatchMaker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">MatchMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class matching pair of ids to return pre-defined (for a pair of ids defined in <a class="reference internal" href="#woo.core.MatchMaker.matches" title="woo.core.MatchMaker.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matches</span></code></a>) or derived value (computed using <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>) of a scalar parameter. It can be called (<code class="docutils literal notranslate"><span class="pre">id1</span></code>, <code class="docutils literal notranslate"><span class="pre">id2</span></code>, <code class="docutils literal notranslate"><span class="pre">val1=NaN</span></code>, <code class="docutils literal notranslate"><span class="pre">val2=NaN</span></code>) in both python and c++.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>There is a <code class="xref py py-obj docutils literal notranslate"><span class="pre">converter</span></code> from python number defined for this class, which creates a new <a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchMaker</span></code></a> returning the value of that number; instead of giving the object instance therefore, you can only pass the number value and it will be converted automatically.</p>
-</div>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.MatchMaker) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.MatchMaker, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.MatchMaker.matches">
-<span class="sig-name descname"><span class="pre">matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.matches" title="Permalink to this definition">¶</a></dt>
-<dd><p>Array of <code class="docutils literal notranslate"><span class="pre">(id1,id2,value)</span></code> items; queries matching <code class="docutils literal notranslate"><span class="pre">id1</span></code> + <code class="docutils literal notranslate"><span class="pre">id2</span></code> or <code class="docutils literal notranslate"><span class="pre">id2</span></code> + <code class="docutils literal notranslate"><span class="pre">id1</span></code> will return <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
-<p>[type: std::vector&lt;Vector3r&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.MatchMaker.algo">
-<span class="sig-name descname"><span class="pre">algo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'avg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.algo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alogorithm used to compute value when no match for ids is found. Possible values are</p>
-<ul class="simple">
-<li><p>‘avg’ (arithmetic average)</p></li>
-<li><p>‘min’ (minimum value)</p></li>
-<li><p>‘max’ (maximum value)</p></li>
-<li><p>‘harmAvg’ (harmonic average)</p></li>
-</ul>
-<p>The following algo algorithms do <em>not</em> require meaningful input values in order to work:</p>
-<ul class="simple">
-<li><p>‘val’ (return value specified by <a class="reference internal" href="#woo.core.MatchMaker.val" title="woo.core.MatchMaker.val"><code class="xref py py-obj docutils literal notranslate"><span class="pre">val</span></code></a>)</p></li>
-<li><p>‘zero’ (always return 0.)</p></li>
-</ul>
-<p>[type: std::string]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.MatchMaker.val">
-<span class="sig-name descname"><span class="pre">val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.val" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constant value returned if there is no match and <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a> is <code class="docutils literal notranslate"><span class="pre">val</span></code></p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.MatchMaker.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><span class="pre">woo.core.MatchMaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.MatchMaker.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ask the instance for scalar value for given pair <em>id1</em>,*id2* (the order is irrelevant). Optionally, <em>val1</em>, <em>val2</em> can be given so that if there is no <a class="reference internal" href="#woo.core.MatchMaker.matches" title="woo.core.MatchMaker.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match</span></code></a>, return value can be computed using given <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>. If there is no match and <em>val1</em>, <em>val2</em> are not given, an exception is raised.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.MatchMaker.computeFallback">
-<span class="sig-name descname"><span class="pre">computeFallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><span class="pre">woo.core.MatchMaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.MatchMaker.computeFallback" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute algo value for <em>val1</em> and <em>val2</em>, using algorithm specified by <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="preprocessor">
-<h2>Preprocessor<a class="headerlink" href="#preprocessor" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a></p>
-digraph Preprocessor {
-        rankdir=LR;
-        margin=.2;
-        &quot;Preprocessor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Preprocessor&quot;];
-        &quot;woo.pre.horse.FallingHorse&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.horse.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.pre.triax.TriaxTest&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.triax.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.triax.TriaxTest&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.pre.toys.NewtonsCradle&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.toys.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.pre.chute.DissipChute&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.chute.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.pre.cylTriax.CylTriaxTest&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.cylTriax.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.cylTriax.CylTriaxTest&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.pre.psdrender.PsdRender&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.psdrender.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.psdrender.PsdRender&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.pre.ell2d.EllGroup&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.ell2d.Preprocessor&quot;];
-        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.ell2d.EllGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.Preprocessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Preprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Preprocessor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subclasses of this class generate a Scene object when called, based on their attributes.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Preprocessor, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.Preprocessor.title">
-<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Preprocessor.title" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simulation title, will be assigned to the {title} tag, unless running in batch (where the batch title will be used.</p>
-<p>[type: string]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.Preprocessor.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="headerlink" href="#woo.core.Preprocessor.__call__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="scalarrange">
-<h2>ScalarRange<a class="headerlink" href="#scalarrange" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.ScalarRange">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">ScalarRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store and share range of scalar values</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.ScalarRange) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.ScalarRange, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.mnmx">
-<span class="sig-name descname"><span class="pre">mnmx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-inf)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.mnmx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Packed minimum and maximum values; adjusting from python sets <code class="xref py py-obj docutils literal notranslate"><span class="pre">autoAdjust</span></code> to false automatically.</p>
-<p>[type: Vector2r]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.logMnmx">
-<span class="sig-name descname"><span class="pre">logMnmx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(1.2300495001352267e242</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">6.3259690378579e-310)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.logMnmx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logs of mnmx values, to avoid computing logarithms all the time; computed via cacheLogs.</p>
-<p>[type: Vector2r, not saved, not accessible from python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.flags">
-<span class="sig-name descname"><span class="pre">flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.flags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flags for this range.</p>
-<p>[type: int, bit accessors: <strong>log</strong>, <strong>reversed</strong>, <strong>symmetric</strong>, <strong>autoAdjust</strong>, <strong>hidden</strong>, <strong>clip</strong>, <strong>used</strong>]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.dispPos">
-<span class="sig-name descname"><span class="pre">dispPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2i(-1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1000)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.dispPos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Where is this range displayed on the OpenGL canvas; initially out of range, will be reset automatically.</p>
-<p>[type: Vector2i, not shown in the UI]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.length">
-<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">200.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Length on the display; if negative, it is fractional relative to view width/height</p>
-<p>[type: Real, not shown in the UI]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.landscape">
-<span class="sig-name descname"><span class="pre">landscape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.landscape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the range display with landscape orientation</p>
-<p>[type: bool, not shown in the UI]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.label">
-<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Short name of this range.</p>
-<p>[type: std::string]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.cmap">
-<span class="sig-name descname"><span class="pre">cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.cmap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Colormap to be used.</p>
-<p>[type: int, named enum, possible values are: <strong>‘default’</strong> (<em>‘’</em>; -1), <strong>‘coolwarm’</strong> (0), <strong>‘3gauss’</strong> (1), <strong>‘3saw’</strong> (2), <strong>‘banded’</strong> (3), <strong>‘blue_red’</strong> (4), <strong>‘blu_red’</strong> (5), <strong>‘bright’</strong> (6), <strong>‘bw’</strong> (7), <strong>‘default’</strong> (8), <strong>‘detail’</strong> (9), <strong>‘extrema’</strong> (10), <strong>‘helix2’</strong> (11), <strong>‘helix’</strong> (12), <strong>‘hotres’</strong> (13), <strong>‘jaisn2’</strong> (14), <strong>‘jaisnb’</strong> (15), <strong>‘jaisnc’</strong> (16), <strong>‘jaisnd’</strong> (17), <strong>‘jaison’</strong> (18), <strong>‘jet’</strong> (19), <strong>‘manga’</strong> (20), <strong>‘rainbow’</strong> (21), <strong>‘roullet’</strong> (22), <strong>‘ssec’</strong> (23), <strong>‘wheel’</strong> (24), <strong>‘red-green-blue’</strong> (25), <strong>‘viridis’</strong> (26)]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.norm">
-<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><span class="pre">woo.core.ScalarRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">clamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.ScalarRange.norm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return value of the argument normalized to 0..1 range; the value is not clamped to 0..1 however: if autoAdjust is false, it can fall outside.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.ScalarRange.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><span class="pre">woo.core.ScalarRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.core.ScalarRange.reset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="energytrackergrid">
-<h2>EnergyTrackerGrid<a class="headerlink" href="#energytrackergrid" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.EnergyTrackerGrid" title="woo.core.EnergyTrackerGrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnergyTrackerGrid</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">EnergyTrackerGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage of spatially located energy values.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.EnergyTrackerGrid) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.EnergyTrackerGrid, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.box">
-<span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Part of space which we monitor.</p>
-<p>[type: AlignedBox3r, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.cellSize">
-<span class="sig-name descname"><span class="pre">cellSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.cellSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Size of one cell in the box (in all directions); will be satisfied exactly, at the expense of slightly growing <a class="reference internal" href="#woo.core.EnergyTrackerGrid.box" title="woo.core.EnergyTrackerGrid.box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">box</span></code></a>. Do not change.</p>
-<p>[type: Real, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.boxCells">
-<span class="sig-name descname"><span class="pre">boxCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3i(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.boxCells" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of cells in the box (computed automatically).</p>
-<p>[type: Vector3i, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid data – 5d since each 3d point contains multiple energies, and there are multiple threads writing concurrently.</p>
-<p>[type: boost_multi_array_real_5, not accessible from python]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.vtkExport">
-<span class="sig-name descname"><span class="pre">vtkExport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.EnergyTrackerGrid" title="woo.core.EnergyTrackerGrid"><span class="pre">woo.core.EnergyTrackerGrid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.vtkExport" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export data into VTK grid file <em>out</em>, using <em>names</em> to name the arrays exported.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section class="html-toggle emphasized" id="scene">
 <h2>Scene<a class="headerlink" href="#scene" title="Permalink to this headline">¶</a></h2>
 <p>TODO</p>
-<section class="html-toggle emphasized" id="id21">
-<h3>Scene<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<section class="html-toggle emphasized" id="id1">
+<h3>Scene<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Scene" title="woo.core.Scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene</span></code></a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="woo.core.Scene">
@@ -1095,7 +835,7 @@ digraph Preprocessor {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Scene) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Scene, <a href="#id22"><span class="problematic" id="id23">*</span></a>args, <a href="#id24"><span class="problematic" id="id25">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Scene, <a href="#id2"><span class="problematic" id="id3">*</span></a>args, <a href="#id4"><span class="problematic" id="id5">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Scene.dt">
@@ -1253,7 +993,7 @@ digraph Preprocessor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Scene.labels">
-<span class="sig-name descname"><span class="pre">labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LabelMapper</span> <span class="pre">&#64;</span> <span class="pre">0x14a3c70&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.labels" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LabelMapper</span> <span class="pre">&#64;</span> <span class="pre">0x1cdec70&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Atrbitrary key=object, key=list of objects, key=py::object associations which survive saving/loading. Labeled objects are automatically added to this container. This object is more conveniently accessed through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">lab</span></code> attribute, which exposes the mapping as attributes of that object rather than as a dictionary.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.core.LabelMapper" title="woo.core.LabelMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LabelMapper</span></code></a>&gt;, not shown in the UI, read-only in python]</p>
 </dd></dl>
@@ -1281,7 +1021,7 @@ digraph Preprocessor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Scene.energy">
-<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;EnergyTracker</span> <span class="pre">&#64;</span> <span class="pre">0x13bb850&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.energy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;EnergyTracker</span> <span class="pre">&#64;</span> <span class="pre">0x1bf6850&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Energy values, if energy tracking is enabled.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.core.EnergyTracker" title="woo.core.EnergyTracker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnergyTracker</span></code></a>&gt;, not shown in the UI, read-only in python]</p>
 </dd></dl>
@@ -1295,7 +1035,7 @@ digraph Preprocessor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Scene.cell">
-<span class="sig-name descname"><span class="pre">cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Cell</span> <span class="pre">&#64;</span> <span class="pre">0x14b09b0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.cell" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Cell</span> <span class="pre">&#64;</span> <span class="pre">0x1ceb9b0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.cell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Information on periodicity; only should be used if Scene::isPeriodic.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.core.Cell" title="woo.core.Cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code></a>&gt;, not accessible from python]</p>
 </dd></dl>
@@ -1365,7 +1105,7 @@ digraph Preprocessor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Scene.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Plot</span> <span class="pre">&#64;</span> <span class="pre">0x14af460&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.plot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Plot</span> <span class="pre">&#64;</span> <span class="pre">0x1cea460&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Scene.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Data and settings for plots.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.core.Plot" title="woo.core.Plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plot</span></code></a>&gt;, not shown in the UI]</p>
 </dd></dl>
@@ -1470,7 +1210,7 @@ digraph SceneAttachedObject {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.SceneAttachedObject) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.SceneAttachedObject, <a href="#id26"><span class="problematic" id="id27">*</span></a>args, <a href="#id28"><span class="problematic" id="id29">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.SceneAttachedObject, <a href="#id6"><span class="problematic" id="id7">*</span></a>args, <a href="#id8"><span class="problematic" id="id9">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.SceneAttachedObject.scene">
@@ -1491,7 +1231,7 @@ digraph SceneAttachedObject {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Plot) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Plot, <a href="#id30"><span class="problematic" id="id31">*</span></a>args, <a href="#id32"><span class="problematic" id="id33">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Plot, <a href="#id10"><span class="problematic" id="id11">*</span></a>args, <a href="#id12"><span class="problematic" id="id13">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Plot.data">
@@ -1749,7 +1489,7 @@ This way, equal length of all data is assured so that they can be plotted one ag
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.SceneCtrl) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.SceneCtrl, <a href="#id34"><span class="problematic" id="id35">*</span></a>args, <a href="#id36"><span class="problematic" id="id37">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.SceneCtrl, <a href="#id14"><span class="problematic" id="id15">*</span></a>args, <a href="#id16"><span class="problematic" id="id17">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
@@ -1771,7 +1511,7 @@ digraph Field {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Field) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Field, <a href="#id38"><span class="problematic" id="id39">*</span></a>args, <a href="#id40"><span class="problematic" id="id41">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Field, <a href="#id18"><span class="problematic" id="id19">*</span></a>args, <a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Field.nodes">
@@ -1822,7 +1562,7 @@ digraph Field {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Node) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Node, <a href="#id42"><span class="problematic" id="id43">*</span></a>args, <a href="#id44"><span class="problematic" id="id45">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Node, <a href="#id22"><span class="problematic" id="id23">*</span></a>args, <a href="#id24"><span class="problematic" id="id25">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Node.pos">
@@ -1916,10 +1656,10 @@ digraph NodeData {
         margin=.2;
         &quot;NodeData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.NodeData&quot;];
         &quot;woo.dem.ClumpData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeData&quot;];
-        &quot;woo.dem.DemData&quot; -&gt; &quot;woo.dem.ClumpData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.DemDataTagged&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeData&quot;];
-        &quot;woo.dem.DemData&quot; -&gt; &quot;woo.dem.DemDataTagged&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.DemData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeData&quot;];
+        &quot;woo.dem.DemData&quot; -&gt; &quot;woo.dem.ClumpData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.DemData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeData&quot;];
         &quot;NodeData&quot; -&gt; &quot;woo.dem.DemData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.mesh.MeshData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.mesh.html#woo.mesh.NodeData&quot;];
-        &quot;NodeData&quot; -&gt; &quot;woo.mesh.MeshData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeData&quot;];
+        &quot;NodeData&quot; -&gt; &quot;woo.mesh.MeshData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.DemDataTagged&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeData&quot;];
+        &quot;woo.dem.DemData&quot; -&gt; &quot;woo.dem.DemDataTagged&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.GlData&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeData&quot;];
         &quot;NodeData&quot; -&gt; &quot;woo.gl.GlData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }<dl class="py class">
 <dt class="sig sig-object py" id="woo.core.NodeData">
@@ -1928,7 +1668,7 @@ digraph NodeData {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.NodeData) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.NodeData, <a href="#id46"><span class="problematic" id="id47">*</span></a>args, <a href="#id48"><span class="problematic" id="id49">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.NodeData, <a href="#id26"><span class="problematic" id="id27">*</span></a>args, <a href="#id28"><span class="problematic" id="id29">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 </dd></dl>
 
@@ -1945,7 +1685,7 @@ digraph NodeData {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.LabelMapper) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.LabelMapper, <a href="#id50"><span class="problematic" id="id51">*</span></a>args, <a href="#id52"><span class="problematic" id="id53">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.LabelMapper, <a href="#id30"><span class="problematic" id="id31">*</span></a>args, <a href="#id32"><span class="problematic" id="id33">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.LabelMapper.pyMap">
@@ -2035,7 +1775,7 @@ digraph NodeData {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Cell) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Cell, <a href="#id54"><span class="problematic" id="id55">*</span></a>args, <a href="#id56"><span class="problematic" id="id57">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Cell, <a href="#id34"><span class="problematic" id="id35">*</span></a>args, <a href="#id36"><span class="problematic" id="id37">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Cell.trsfUpperTriangular">
@@ -2199,7 +1939,7 @@ digraph NodeData {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.EnergyTracker) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.EnergyTracker, <a href="#id58"><span class="problematic" id="id59">*</span></a>args, <a href="#id60"><span class="problematic" id="id61">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.EnergyTracker, <a href="#id38"><span class="problematic" id="id39">*</span></a>args, <a href="#id40"><span class="problematic" id="id41">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.EnergyTracker.energies">
@@ -2339,7 +2079,8 @@ digraph Engine {
         &quot;woo.dem.ForcesToHdf5&quot; -&gt; &quot;woo.dem.NodalForcesToHdf5&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.LawTester&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;Engine&quot; -&gt; &quot;woo.dem.LawTester&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.LawDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;Dispatcher&quot; -&gt; &quot;woo.dem.LawDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;PeriodicEngine&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Engine&quot;];
-        &quot;Engine&quot; -&gt; &quot;PeriodicEngine&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Dispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Engine&quot;];
+        &quot;Engine&quot; -&gt; &quot;PeriodicEngine&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Collider&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
+        &quot;Engine&quot; -&gt; &quot;woo.dem.Collider&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Dispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Engine&quot;];
         &quot;Engine&quot; -&gt; &quot;Dispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.GridBoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;Dispatcher&quot; -&gt; &quot;woo.dem.GridBoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.AabbTreeCollider&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;woo.dem.AabbCollider&quot; -&gt; &quot;woo.dem.AabbTreeCollider&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.PelletAgglomerator&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
@@ -2353,8 +2094,7 @@ digraph Engine {
         &quot;Engine&quot; -&gt; &quot;woo.dem.ContactLoop&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.POVRayExport&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;PeriodicEngine&quot; -&gt; &quot;woo.dem.POVRayExport&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.WeirdTriaxControl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;Engine&quot; -&gt; &quot;woo.dem.WeirdTriaxControl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.ForcesToHdf5&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
-        &quot;PeriodicEngine&quot; -&gt; &quot;woo.dem.ForcesToHdf5&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Collider&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
-        &quot;Engine&quot; -&gt; &quot;woo.dem.Collider&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.VtkExport&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
+        &quot;PeriodicEngine&quot; -&gt; &quot;woo.dem.ForcesToHdf5&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.VtkExport&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;PeriodicEngine&quot; -&gt; &quot;woo.dem.VtkExport&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.BoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;Dispatcher&quot; -&gt; &quot;woo.dem.BoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.AabbCollider&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Engine&quot;];
         &quot;woo.dem.Collider&quot; -&gt; &quot;woo.dem.AabbCollider&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.GlCPhysDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Engine&quot;];
@@ -2387,7 +2127,7 @@ digraph Engine {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.Engine) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Engine, <a href="#id62"><span class="problematic" id="id63">*</span></a>args, <a href="#id64"><span class="problematic" id="id65">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Engine, <a href="#id42"><span class="problematic" id="id43">*</span></a>args, <a href="#id44"><span class="problematic" id="id45">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.Engine.dead">
@@ -2467,6 +2207,186 @@ digraph Engine {
 
 </dd></dl>
 
+<section class="html-toggle emphasized" id="dispatcher">
+<h3>Dispatcher<a class="headerlink" href="#dispatcher" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="#woo.core.Dispatcher" title="woo.core.Dispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dispatcher</span></code></a></p>
+digraph Dispatcher {
+        rankdir=LR;
+        margin=.2;
+        &quot;Dispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Dispatcher&quot;];
+        &quot;woo.dem.IntraForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.IntraForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.LawDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.LawDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.CGeomDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.CGeomDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlNodeDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlNodeDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlShapeDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlShapeDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.GridBoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.GridBoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.BoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.BoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlBoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlBoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.GlFieldDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlFieldDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.CPhysDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.CPhysDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlCPhysDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
+        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlCPhysDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.Dispatcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Dispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Dispatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.Dispatcher) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Dispatcher, <a href="#id46"><span class="problematic" id="id47">*</span></a>args, <a href="#id48"><span class="problematic" id="id49">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+<section class="html-toggle emphasized" id="functor">
+<h4>Functor<a class="headerlink" href="#functor" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a></p>
+digraph Functor {
+        rankdir=LR;
+        margin=.2;
+        &quot;Functor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Functor&quot;];
+        &quot;woo.dem.Law2_G3Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_G3Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.Gl1_Node&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlNodeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Node&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_Rod_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Rod_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_Capsule_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Capsule_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Sphere_Sphere_G3Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Sphere_G3Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Bo1_Cone_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Cone_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Cone_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Cone_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_DemField&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlFieldFunctor&quot; -&gt; &quot;woo.gl.Gl1_DemField&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Law2_L6Geom_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.Gl1_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.Gl1_GridBound&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlBoundFunctor&quot; -&gt; &quot;woo.gl.Gl1_GridBound&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Sphere_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.fem.In2_Tet4_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
+        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.fem.In2_Tet4_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_Sphere_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Sphere_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_InfCylinder_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_InfCylinder_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.GlNodeFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.gl.GlNodeFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.LawFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.LawFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.CGeomFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.CGeomFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_FrictMat_FrictPhys_CrossAnisotropic&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_FrictMat_FrictPhys_CrossAnisotropic&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_IceMat_IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_IceMat_IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Grid1_InfCylinder&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_InfCylinder&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Law2_L6Geom_LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.In2_Wall_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Wall_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.IntraFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.IntraFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_PelletMat_PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_PelletMat_PelletPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlBoundFunctor&quot; -&gt; &quot;woo.gl.Gl1_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Facet_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Capsule_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Capsule_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Facet_InfCylinder_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_InfCylinder_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cp2_HertzMat_HertzPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_HertzMat_HertzPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.Gl1_CPhys&quot; -&gt; &quot;woo.gl.Gl1_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Bo1_Ellipsoid_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Bo1_Sphere_Aabb&quot; -&gt; &quot;woo.dem.Bo1_Ellipsoid_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Grid1_Sphere&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Sphere&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Tetra&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Tetra&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.Gl1_Membrane&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.Gl1_Facet&quot; -&gt; &quot;woo.gl.Gl1_Membrane&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.In2_Truss_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Truss_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Rod&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Rod&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_Facet_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.BoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.BoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.Gl1_Cone&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Cone&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Sphere_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Facet_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.gl.GlBoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.gl.GlBoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Wall&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Wall&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.fem.In2_Membrane_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
+        &quot;woo.dem.In2_Facet&quot; -&gt; &quot;woo.fem.In2_Membrane_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Ellipsoid&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.Gl1_Sphere&quot; -&gt; &quot;woo.gl.Gl1_Ellipsoid&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Law2_L6Geom_IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_InfCylinder_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_InfCylinder_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Sphere_G3Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Wall_Sphere_G3Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.In2_Sphere_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Sphere_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Cg2_Sphere_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Law2_L6Geom_HertzPhys_DMT&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_HertzPhys_DMT&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Bo1_Wall_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Wall_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Law2_L6Geom_PelletPhys_Pellet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_PelletPhys_Pellet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Bo1_Facet_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Facet_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.GlFieldFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.gl.GlFieldFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Grid1_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.Gl1_Capsule&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.Gl1_Sphere&quot; -&gt; &quot;woo.gl.Gl1_Capsule&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.In2_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cp2_ConcreteMat_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_ConcreteMat_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.CPhysFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.CPhysFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Grid1_Wall&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Wall&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.Gl1_CPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlCPhysFunctor&quot; -&gt; &quot;woo.gl.Gl1_CPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Cg2_Wall_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cp2_LudingMat_LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_LudingMat_LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.GridBoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.dem.GridBoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Law2_L6Geom_FrictPhys_LinEl6&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_FrictPhys_LinEl6&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.fem.Bo1_Tetra_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.fem.Bo1_Tetra_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.Gl1_Tet4&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.Gl1_Tetra&quot; -&gt; &quot;woo.gl.Gl1_Tet4&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Cg2_InfCylinder_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_InfCylinder_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cg2_Facet_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cg2_Wall_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.gl.Gl1_InfCylinder&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_InfCylinder&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Law2_L6Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Bo1_Rod_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
+        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Rod_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.gl.GlCPhysFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.gl.GlCPhysFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.fem.In2_Membrane_FrictMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
+        &quot;woo.fem.In2_Membrane_ElastMat&quot; -&gt; &quot;woo.fem.In2_Membrane_FrictMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.GlShapeFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;Functor&quot; -&gt; &quot;woo.gl.GlShapeFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Sphere&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
+        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Sphere&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.Functor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Functor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Functor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function-like object that is called by Dispatcher, if types of arguments match those the Functor declares to accept.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.Functor) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Functor, <a href="#id50"><span class="problematic" id="id51">*</span></a>args, <a href="#id52"><span class="problematic" id="id53">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.Functor.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Functor.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Textual label for this object; must be valid python identifier, you can refer to it directly fron python (must be a valid python identifier).</p>
+<p>[type: string, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo.core.Functor.bases">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bases</span></span><a class="headerlink" href="#woo.core.Functor.bases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ordered list of types (as strings) this functor accepts.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="woo.core.Functor.timingDeltas">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timingDeltas</span></span><a class="headerlink" href="#woo.core.Functor.timingDeltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and <a class="reference internal" href="#woo.core.Master.timingEnabled" title="woo.core.Master.timingEnabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Master.timingEnabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section class="html-toggle emphasized" id="parallelengine">
+<h3>ParallelEngine<a class="headerlink" href="#parallelengine" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="#woo.core.ParallelEngine" title="woo.core.ParallelEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParallelEngine</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.ParallelEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">ParallelEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ParallelEngine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Engine for running other Engine in parallel.</p>
+<div class="admonition-special-constructor admonition">
+<p class="admonition-title">Special constructor</p>
+<p>Possibly nested list of engines, where each top-level item (engine or list) will be run in parallel; nested lists will be run sequentially.</p>
+</div>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.ParallelEngine) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.ParallelEngine, <a href="#id54"><span class="problematic" id="id55">*</span></a>args, <a href="#id56"><span class="problematic" id="id57">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ParallelEngine.slaves">
+<span class="sig-name descname"><span class="pre">slaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ParallelEngine.slaves" title="Permalink to this definition">¶</a></dt>
+<dd><p>[will be overridden]</p>
+<p>[type: slaveContainer, not accessible from python]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section class="html-toggle emphasized" id="periodicengine">
 <h3>PeriodicEngine<a class="headerlink" href="#periodicengine" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a></p>
@@ -2518,7 +2438,7 @@ digraph PeriodicEngine {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.PeriodicEngine) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.PeriodicEngine, <a href="#id66"><span class="problematic" id="id67">*</span></a>args, <a href="#id68"><span class="problematic" id="id69">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.PeriodicEngine, <a href="#id58"><span class="problematic" id="id59">*</span></a>args, <a href="#id60"><span class="problematic" id="id61">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.PeriodicEngine.virtPeriod">
@@ -2632,7 +2552,7 @@ digraph PeriodicEngine {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.PyRunner) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.PyRunner, <a href="#id70"><span class="problematic" id="id71">*</span></a>args, <a href="#id72"><span class="problematic" id="id73">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.PyRunner, <a href="#id62"><span class="problematic" id="id63">*</span></a>args, <a href="#id64"><span class="problematic" id="id65">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.PyRunner.command">
@@ -2654,7 +2574,7 @@ digraph PeriodicEngine {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.WooTestPeriodicEngine) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.WooTestPeriodicEngine, <a href="#id74"><span class="problematic" id="id75">*</span></a>args, <a href="#id76"><span class="problematic" id="id77">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.WooTestPeriodicEngine, <a href="#id66"><span class="problematic" id="id67">*</span></a>args, <a href="#id68"><span class="problematic" id="id69">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.WooTestPeriodicEngine.deadCounter">
@@ -2667,186 +2587,6 @@ digraph PeriodicEngine {
 
 </section>
 </section>
-<section class="html-toggle emphasized" id="dispatcher">
-<h3>Dispatcher<a class="headerlink" href="#dispatcher" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="#woo.core.Dispatcher" title="woo.core.Dispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dispatcher</span></code></a></p>
-digraph Dispatcher {
-        rankdir=LR;
-        margin=.2;
-        &quot;Dispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Dispatcher&quot;];
-        &quot;woo.dem.IntraForce&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.IntraForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.LawDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.LawDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.CGeomDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.CGeomDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlNodeDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlNodeDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlShapeDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlShapeDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.GridBoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.GridBoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.BoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.BoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlBoundDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlBoundDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.GlFieldDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlFieldDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.CPhysDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.dem.CPhysDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlCPhysDispatcher&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Dispatcher&quot;];
-        &quot;Dispatcher&quot; -&gt; &quot;woo.gl.GlCPhysDispatcher&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.Dispatcher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Dispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Dispatcher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.Dispatcher) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Dispatcher, <a href="#id78"><span class="problematic" id="id79">*</span></a>args, <a href="#id80"><span class="problematic" id="id81">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-<section class="html-toggle emphasized" id="functor">
-<h4>Functor<a class="headerlink" href="#functor" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a></p>
-digraph Functor {
-        rankdir=LR;
-        margin=.2;
-        &quot;Functor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Functor&quot;];
-        &quot;woo.dem.Law2_G3Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_G3Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.Gl1_Node&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlNodeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Node&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_Rod_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Rod_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_Capsule_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Capsule_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Sphere_Sphere_G3Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Sphere_G3Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Bo1_Cone_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Cone_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Cone_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Cone_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_DemField&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlFieldFunctor&quot; -&gt; &quot;woo.gl.Gl1_DemField&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Law2_L6Geom_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.Gl1_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.Gl1_GridBound&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlBoundFunctor&quot; -&gt; &quot;woo.gl.Gl1_GridBound&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Sphere_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.fem.In2_Tet4_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
-        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.fem.In2_Tet4_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_Sphere_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Sphere_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_InfCylinder_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_InfCylinder_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.GlNodeFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.gl.GlNodeFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.LawFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.LawFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.CGeomFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.CGeomFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_FrictMat_FrictPhys_CrossAnisotropic&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_FrictMat_FrictPhys_CrossAnisotropic&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_IceMat_IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_IceMat_IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Grid1_InfCylinder&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_InfCylinder&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.In2_Wall_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Wall_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Law2_L6Geom_LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.IntraFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.IntraFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cp2_PelletMat_PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_PelletMat_PelletPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlBoundFunctor&quot; -&gt; &quot;woo.gl.Gl1_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Facet_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Capsule_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Capsule_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Cg2_Facet_InfCylinder_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_InfCylinder_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cp2_HertzMat_HertzPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_HertzMat_HertzPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.Gl1_CPhys&quot; -&gt; &quot;woo.gl.Gl1_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Bo1_Ellipsoid_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Bo1_Sphere_Aabb&quot; -&gt; &quot;woo.dem.Bo1_Ellipsoid_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Grid1_Sphere&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Sphere&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Tetra&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Tetra&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.Gl1_Membrane&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.Gl1_Facet&quot; -&gt; &quot;woo.gl.Gl1_Membrane&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.In2_Truss_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Truss_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Rod&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Rod&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Facet_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.BoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.BoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.Gl1_Cone&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Cone&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Cg2_Sphere_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cg2_Facet_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.gl.GlBoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.gl.GlBoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Wall&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Wall&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.fem.In2_Membrane_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
-        &quot;woo.dem.In2_Facet&quot; -&gt; &quot;woo.fem.In2_Membrane_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Ellipsoid&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.Gl1_Sphere&quot; -&gt; &quot;woo.gl.Gl1_Ellipsoid&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Law2_L6Geom_IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Bo1_InfCylinder_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_InfCylinder_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Sphere_G3Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CGeomFunctor&quot; -&gt; &quot;woo.dem.Cg2_Wall_Sphere_G3Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.In2_Sphere_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Sphere_ElastMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Cg2_Sphere_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Sphere_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Law2_L6Geom_HertzPhys_DMT&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_HertzPhys_DMT&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Bo1_Wall_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Wall_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Bo1_Facet_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Facet_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Law2_L6Geom_PelletPhys_Pellet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_PelletPhys_Pellet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.gl.GlFieldFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.gl.GlFieldFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.dem.Grid1_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.Gl1_Capsule&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.Gl1_Sphere&quot; -&gt; &quot;woo.gl.Gl1_Capsule&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.In2_Facet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.IntraFunctor&quot; -&gt; &quot;woo.dem.In2_Facet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cp2_ConcreteMat_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.CPhysFunctor&quot; -&gt; &quot;woo.dem.Cp2_ConcreteMat_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Cg2_Wall_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.CPhysFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.CPhysFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Grid1_Wall&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.GridBoundFunctor&quot; -&gt; &quot;woo.dem.Grid1_Wall&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.Gl1_CPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlCPhysFunctor&quot; -&gt; &quot;woo.gl.Gl1_CPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.dem.Cg2_Wall_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.dem.Cp2_LudingMat_LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cp2_FrictMat_FrictPhys&quot; -&gt; &quot;woo.dem.Cp2_LudingMat_LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.GridBoundFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.dem.GridBoundFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.fem.Bo1_Tetra_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.fem.Bo1_Tetra_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.dem.Law2_L6Geom_FrictPhys_LinEl6&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_FrictPhys_LinEl6&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.Gl1_Tet4&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.Gl1_Tetra&quot; -&gt; &quot;woo.gl.Gl1_Tet4&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.dem.Cg2_InfCylinder_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_InfCylinder_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cg2_Facet_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Facet_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.dem.Cg2_Wall_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;woo.dem.Cg2_Wall_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.gl.Gl1_InfCylinder&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_InfCylinder&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.dem.Bo1_Rod_Aabb&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.BoundFunctor&quot; -&gt; &quot;woo.dem.Bo1_Rod_Aabb&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;woo.dem.Law2_L6Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.Functor&quot;];
-        &quot;woo.dem.LawFunctor&quot; -&gt; &quot;woo.dem.Law2_L6Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.GlCPhysFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.gl.GlCPhysFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.fem.In2_Membrane_FrictMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.fem.html#woo.fem.Functor&quot;];
-        &quot;woo.fem.In2_Membrane_ElastMat&quot; -&gt; &quot;woo.fem.In2_Membrane_FrictMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.gl.GlShapeFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;Functor&quot; -&gt; &quot;woo.gl.GlShapeFunctor&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.Gl1_Sphere&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.Functor&quot;];
-        &quot;woo.gl.GlShapeFunctor&quot; -&gt; &quot;woo.gl.Gl1_Sphere&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.Functor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Functor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Functor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function-like object that is called by Dispatcher, if types of arguments match those the Functor declares to accept.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.Functor) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.Functor, <a href="#id82"><span class="problematic" id="id83">*</span></a>args, <a href="#id84"><span class="problematic" id="id85">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.Functor.label">
-<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Functor.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Textual label for this object; must be valid python identifier, you can refer to it directly fron python (must be a valid python identifier).</p>
-<p>[type: string, not shown in the UI]</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="woo.core.Functor.bases">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bases</span></span><a class="headerlink" href="#woo.core.Functor.bases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ordered list of types (as strings) this functor accepts.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="woo.core.Functor.timingDeltas">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timingDeltas</span></span><a class="headerlink" href="#woo.core.Functor.timingDeltas" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and <a class="reference internal" href="#woo.core.Master.timingEnabled" title="woo.core.Master.timingEnabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Master.timingEnabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-<section class="html-toggle emphasized" id="parallelengine">
-<h3>ParallelEngine<a class="headerlink" href="#parallelengine" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="#woo.core.ParallelEngine" title="woo.core.ParallelEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParallelEngine</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.core.ParallelEngine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">ParallelEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ParallelEngine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Engine for running other Engine in parallel.</p>
-<div class="admonition-special-constructor admonition">
-<p class="admonition-title">Special constructor</p>
-<p>Possibly nested list of engines, where each top-level item (engine or list) will be run in parallel; nested lists will be run sequentially.</p>
-</div>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.core.ParallelEngine) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.ParallelEngine, <a href="#id86"><span class="problematic" id="id87">*</span></a>args, <a href="#id88"><span class="problematic" id="id89">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.core.ParallelEngine.slaves">
-<span class="sig-name descname"><span class="pre">slaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ParallelEngine.slaves" title="Permalink to this definition">¶</a></dt>
-<dd><p>[will be overridden]</p>
-<p>[type: slaveContainer, not accessible from python]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 </section>
 <section class="html-toggle emphasized" id="wootestclass">
 <h2>WooTestClass<a class="headerlink" href="#wootestclass" title="Permalink to this headline">¶</a></h2>
@@ -2858,7 +2598,7 @@ digraph Functor {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.core.WooTestClass) -&gt; None</p></li>
-<li><p>__init__(self: woo.core.WooTestClass, <a href="#id90"><span class="problematic" id="id91">*</span></a>args, <a href="#id92"><span class="problematic" id="id93">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.WooTestClass, <a href="#id70"><span class="problematic" id="id71">*</span></a>args, <a href="#id72"><span class="problematic" id="id73">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.WooTestClass.angle">
@@ -3149,7 +2889,7 @@ digraph Functor {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.core.WooTestClass.objList">
-<span class="sig-name descname"><span class="pre">objList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">ObjectList[0x14c2190,</span> <span class="pre">0x14c21c0]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.WooTestClass.objList" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">objList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">ObjectList[0x1cfd190,</span> <span class="pre">0x1cfd1c0]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.WooTestClass.objList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Testing opaque object list.</p>
 <p>[type: vector&lt;shared_ptr&lt;Object&gt;&gt;, read-only in python]</p>
 </dd></dl>
@@ -3170,6 +2910,266 @@ digraph Functor {
 <dt class="sig sig-object py" id="woo.core.WooTestClass.arr3d_set">
 <span class="sig-name descname"><span class="pre">arr3d_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.WooTestClass" title="woo.core.WooTestClass"><span class="pre">woo.core.WooTestClass</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_wooEigen11.Vector3i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.core.WooTestClass.arr3d_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set arr3d to have <em>shape</em> and fill it with <em>data</em> (must have the corresponding number of elements).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="nodevisrep">
+<h2>NodeVisRep<a class="headerlink" href="#nodevisrep" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.NodeVisRep" title="woo.core.NodeVisRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeVisRep</span></code></a></p>
+digraph NodeVisRep {
+        rankdir=LR;
+        margin=.2;
+        &quot;NodeVisRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.NodeVisRep&quot;];
+        &quot;woo.dem.TraceVisRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.dem.html#woo.dem.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.dem.TraceVisRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.gl.ActReactGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;woo.gl.VectorGlRep&quot; -&gt; &quot;woo.gl.ActReactGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.gl.VectorGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.VectorGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.TensorGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.TensorGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;woo.gl.LabelGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.LabelGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;woo.gl.CylGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.CylGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.gl.ScalarGlRep&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.gl.html#woo.gl.NodeVisRep&quot;];
+        &quot;NodeVisRep&quot; -&gt; &quot;woo.gl.ScalarGlRep&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.NodeVisRep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">NodeVisRep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.NodeVisRep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object representing what should be rendered at associated node (abstract base class).</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.NodeVisRep) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.NodeVisRep, <a href="#id74"><span class="problematic" id="id75">*</span></a>args, <a href="#id76"><span class="problematic" id="id77">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="matchmaker">
+<h2>MatchMaker<a class="headerlink" href="#matchmaker" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchMaker</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.MatchMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">MatchMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class matching pair of ids to return pre-defined (for a pair of ids defined in <a class="reference internal" href="#woo.core.MatchMaker.matches" title="woo.core.MatchMaker.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matches</span></code></a>) or derived value (computed using <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>) of a scalar parameter. It can be called (<code class="docutils literal notranslate"><span class="pre">id1</span></code>, <code class="docutils literal notranslate"><span class="pre">id2</span></code>, <code class="docutils literal notranslate"><span class="pre">val1=NaN</span></code>, <code class="docutils literal notranslate"><span class="pre">val2=NaN</span></code>) in both python and c++.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is a <code class="xref py py-obj docutils literal notranslate"><span class="pre">converter</span></code> from python number defined for this class, which creates a new <a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchMaker</span></code></a> returning the value of that number; instead of giving the object instance therefore, you can only pass the number value and it will be converted automatically.</p>
+</div>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.MatchMaker) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.MatchMaker, <a href="#id78"><span class="problematic" id="id79">*</span></a>args, <a href="#id80"><span class="problematic" id="id81">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.MatchMaker.matches">
+<span class="sig-name descname"><span class="pre">matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of <code class="docutils literal notranslate"><span class="pre">(id1,id2,value)</span></code> items; queries matching <code class="docutils literal notranslate"><span class="pre">id1</span></code> + <code class="docutils literal notranslate"><span class="pre">id2</span></code> or <code class="docutils literal notranslate"><span class="pre">id2</span></code> + <code class="docutils literal notranslate"><span class="pre">id1</span></code> will return <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
+<p>[type: std::vector&lt;Vector3r&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.MatchMaker.algo">
+<span class="sig-name descname"><span class="pre">algo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">'avg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.algo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alogorithm used to compute value when no match for ids is found. Possible values are</p>
+<ul class="simple">
+<li><p>‘avg’ (arithmetic average)</p></li>
+<li><p>‘min’ (minimum value)</p></li>
+<li><p>‘max’ (maximum value)</p></li>
+<li><p>‘harmAvg’ (harmonic average)</p></li>
+</ul>
+<p>The following algo algorithms do <em>not</em> require meaningful input values in order to work:</p>
+<ul class="simple">
+<li><p>‘val’ (return value specified by <a class="reference internal" href="#woo.core.MatchMaker.val" title="woo.core.MatchMaker.val"><code class="xref py py-obj docutils literal notranslate"><span class="pre">val</span></code></a>)</p></li>
+<li><p>‘zero’ (always return 0.)</p></li>
+</ul>
+<p>[type: std::string]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.MatchMaker.val">
+<span class="sig-name descname"><span class="pre">val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.MatchMaker.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant value returned if there is no match and <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a> is <code class="docutils literal notranslate"><span class="pre">val</span></code></p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.MatchMaker.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><span class="pre">woo.core.MatchMaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.MatchMaker.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask the instance for scalar value for given pair <em>id1</em>,*id2* (the order is irrelevant). Optionally, <em>val1</em>, <em>val2</em> can be given so that if there is no <a class="reference internal" href="#woo.core.MatchMaker.matches" title="woo.core.MatchMaker.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match</span></code></a>, return value can be computed using given <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>. If there is no match and <em>val1</em>, <em>val2</em> are not given, an exception is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.MatchMaker.computeFallback">
+<span class="sig-name descname"><span class="pre">computeFallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.MatchMaker" title="woo.core.MatchMaker"><span class="pre">woo.core.MatchMaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.MatchMaker.computeFallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute algo value for <em>val1</em> and <em>val2</em>, using algorithm specified by <a class="reference internal" href="#woo.core.MatchMaker.algo" title="woo.core.MatchMaker.algo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algo</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="preprocessor">
+<h2>Preprocessor<a class="headerlink" href="#preprocessor" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.Preprocessor" title="woo.core.Preprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprocessor</span></code></a></p>
+digraph Preprocessor {
+        rankdir=LR;
+        margin=.2;
+        &quot;Preprocessor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.core.html#woo.core.Preprocessor&quot;];
+        &quot;woo.pre.ell2d.EllGroup&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.ell2d.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.ell2d.EllGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;woo.pre.chute.DissipChute&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.chute.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.chute.DissipChute&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;woo.pre.toys.NewtonsCradle&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.toys.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.toys.NewtonsCradle&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.pre.horse.FallingHorse&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.horse.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.horse.FallingHorse&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;woo.pre.psdrender.PsdRender&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.psdrender.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.psdrender.PsdRender&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;woo.pre.cylTriax.CylTriaxTest&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.cylTriax.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.cylTriax.CylTriaxTest&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;woo.pre.triax.TriaxTest&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),filled&quot;,fillcolor=grey,height=0.2,URL=&quot;woo.pre.html#woo.pre.triax.Preprocessor&quot;];
+        &quot;Preprocessor&quot; -&gt; &quot;woo.pre.triax.TriaxTest&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.Preprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">Preprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Preprocessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclasses of this class generate a Scene object when called, based on their attributes.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.Preprocessor) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.Preprocessor, <a href="#id82"><span class="problematic" id="id83">*</span></a>args, <a href="#id84"><span class="problematic" id="id85">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.Preprocessor.title">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.Preprocessor.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation title, will be assigned to the {title} tag, unless running in batch (where the batch title will be used.</p>
+<p>[type: string]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.Preprocessor.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.Preprocessor" title="woo.core.Preprocessor"><span class="pre">woo.core.Preprocessor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#woo.core.Scene" title="woo.core.Scene"><span class="pre">woo.core.Scene</span></a></span></span><a class="headerlink" href="#woo.core.Preprocessor.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="scalarrange">
+<h2>ScalarRange<a class="headerlink" href="#scalarrange" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.ScalarRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">ScalarRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store and share range of scalar values</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.ScalarRange) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.ScalarRange, <a href="#id86"><span class="problematic" id="id87">*</span></a>args, <a href="#id88"><span class="problematic" id="id89">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.mnmx">
+<span class="sig-name descname"><span class="pre">mnmx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-inf)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.mnmx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Packed minimum and maximum values; adjusting from python sets <code class="xref py py-obj docutils literal notranslate"><span class="pre">autoAdjust</span></code> to false automatically.</p>
+<p>[type: Vector2r]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.logMnmx">
+<span class="sig-name descname"><span class="pre">logMnmx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2(1.2300495001352267e242</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">6.3259690378579e-310)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.logMnmx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs of mnmx values, to avoid computing logarithms all the time; computed via cacheLogs.</p>
+<p>[type: Vector2r, not saved, not accessible from python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flags for this range.</p>
+<p>[type: int, bit accessors: <strong>log</strong>, <strong>reversed</strong>, <strong>symmetric</strong>, <strong>autoAdjust</strong>, <strong>hidden</strong>, <strong>clip</strong>, <strong>used</strong>]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.dispPos">
+<span class="sig-name descname"><span class="pre">dispPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector2i(-1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1000)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.dispPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Where is this range displayed on the OpenGL canvas; initially out of range, will be reset automatically.</p>
+<p>[type: Vector2i, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.length">
+<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">200.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length on the display; if negative, it is fractional relative to view width/height</p>
+<p>[type: Real, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.landscape">
+<span class="sig-name descname"><span class="pre">landscape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.landscape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the range display with landscape orientation</p>
+<p>[type: bool, not shown in the UI]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Short name of this range.</p>
+<p>[type: std::string]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.ScalarRange.cmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colormap to be used.</p>
+<p>[type: int, named enum, possible values are: <strong>‘default’</strong> (<em>‘’</em>; -1), <strong>‘coolwarm’</strong> (0), <strong>‘3gauss’</strong> (1), <strong>‘3saw’</strong> (2), <strong>‘banded’</strong> (3), <strong>‘blue_red’</strong> (4), <strong>‘blu_red’</strong> (5), <strong>‘bright’</strong> (6), <strong>‘bw’</strong> (7), <strong>‘default’</strong> (8), <strong>‘detail’</strong> (9), <strong>‘extrema’</strong> (10), <strong>‘helix2’</strong> (11), <strong>‘helix’</strong> (12), <strong>‘hotres’</strong> (13), <strong>‘jaisn2’</strong> (14), <strong>‘jaisnb’</strong> (15), <strong>‘jaisnc’</strong> (16), <strong>‘jaisnd’</strong> (17), <strong>‘jaison’</strong> (18), <strong>‘jet’</strong> (19), <strong>‘manga’</strong> (20), <strong>‘rainbow’</strong> (21), <strong>‘roullet’</strong> (22), <strong>‘ssec’</strong> (23), <strong>‘wheel’</strong> (24), <strong>‘red-green-blue’</strong> (25), <strong>‘viridis’</strong> (26)]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><span class="pre">woo.core.ScalarRange</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">clamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.core.ScalarRange.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value of the argument normalized to 0..1 range; the value is not clamped to 0..1 however: if autoAdjust is false, it can fall outside.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.ScalarRange.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.ScalarRange" title="woo.core.ScalarRange"><span class="pre">woo.core.ScalarRange</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.core.ScalarRange.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="energytrackergrid">
+<h2>EnergyTrackerGrid<a class="headerlink" href="#energytrackergrid" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.core.EnergyTrackerGrid" title="woo.core.EnergyTrackerGrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnergyTrackerGrid</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.core.</span></span><span class="sig-name descname"><span class="pre">EnergyTrackerGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Storage of spatially located energy values.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.core.EnergyTrackerGrid) -&gt; None</p></li>
+<li><p>__init__(self: woo.core.EnergyTrackerGrid, <a href="#id90"><span class="problematic" id="id91">*</span></a>args, <a href="#id92"><span class="problematic" id="id93">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.box">
+<span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part of space which we monitor.</p>
+<p>[type: AlignedBox3r, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.cellSize">
+<span class="sig-name descname"><span class="pre">cellSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.cellSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of one cell in the box (in all directions); will be satisfied exactly, at the expense of slightly growing <a class="reference internal" href="#woo.core.EnergyTrackerGrid.box" title="woo.core.EnergyTrackerGrid.box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">box</span></code></a>. Do not change.</p>
+<p>[type: Real, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.boxCells">
+<span class="sig-name descname"><span class="pre">boxCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3i(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.boxCells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of cells in the box (computed automatically).</p>
+<p>[type: Vector3i, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid data – 5d since each 3d point contains multiple energies, and there are multiple threads writing concurrently.</p>
+<p>[type: boost_multi_array_real_5, not accessible from python]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.core.EnergyTrackerGrid.vtkExport">
+<span class="sig-name descname"><span class="pre">vtkExport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.core.EnergyTrackerGrid" title="woo.core.EnergyTrackerGrid"><span class="pre">woo.core.EnergyTrackerGrid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.core.EnergyTrackerGrid.vtkExport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export data into VTK grid file <em>out</em>, using <em>names</em> to name the arrays exported.</p>
 </dd></dl>
 
 </dd></dl>
@@ -3257,13 +3257,8 @@ digraph Functor {
     <h3><a href="contents.html">Page contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.core</span></code></a><ul>
-<li><a class="reference internal" href="#nodevisrep">NodeVisRep</a></li>
-<li><a class="reference internal" href="#matchmaker">MatchMaker</a></li>
-<li><a class="reference internal" href="#preprocessor">Preprocessor</a></li>
-<li><a class="reference internal" href="#scalarrange">ScalarRange</a></li>
-<li><a class="reference internal" href="#energytrackergrid">EnergyTrackerGrid</a></li>
 <li><a class="reference internal" href="#scene">Scene</a><ul>
-<li><a class="reference internal" href="#id21">Scene</a></li>
+<li><a class="reference internal" href="#id1">Scene</a></li>
 <li><a class="reference internal" href="#sceneattachedobject">SceneAttachedObject</a><ul>
 <li><a class="reference internal" href="#plot">Plot</a></li>
 <li><a class="reference internal" href="#scenectrl">SceneCtrl</a></li>
@@ -3282,19 +3277,24 @@ digraph Functor {
 </ul>
 </li>
 <li><a class="reference internal" href="#engine">Engine</a><ul>
-<li><a class="reference internal" href="#periodicengine">PeriodicEngine</a><ul>
-<li><a class="reference internal" href="#pyrunner">PyRunner</a></li>
-<li><a class="reference internal" href="#wootestperiodicengine">WooTestPeriodicEngine</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#dispatcher">Dispatcher</a><ul>
 <li><a class="reference internal" href="#functor">Functor</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#parallelengine">ParallelEngine</a></li>
+<li><a class="reference internal" href="#periodicengine">PeriodicEngine</a><ul>
+<li><a class="reference internal" href="#pyrunner">PyRunner</a></li>
+<li><a class="reference internal" href="#wootestperiodicengine">WooTestPeriodicEngine</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wootestclass">WooTestClass</a></li>
+<li><a class="reference internal" href="#nodevisrep">NodeVisRep</a></li>
+<li><a class="reference internal" href="#matchmaker">MatchMaker</a></li>
+<li><a class="reference internal" href="#preprocessor">Preprocessor</a></li>
+<li><a class="reference internal" href="#scalarrange">ScalarRange</a></li>
+<li><a class="reference internal" href="#energytrackergrid">EnergyTrackerGrid</a></li>
 </ul>
 </li>
 </ul>
@@ -3365,7 +3365,7 @@ digraph Functor {
         <li class="right" >
           <a href="woo.config.html" title="woo.config"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-8bbb0e2 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.core</span></code></a></li> 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.fem &#8212; Woo 1.0+rev1-git-8bbb0e2 documentation</title>
+    <title>woo.fem &#8212; Woo 1.0+rev1-git-6fe7896 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -62,7 +62,7 @@
         <li class="right" >
           <a href="woo.document.html" title="woo.document"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-8bbb0e2 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.fem</span></code></a></li> 
@@ -112,240 +112,7 @@ size=&quot;&quot;;
   &quot;dem.Shape&quot; -&gt; &quot;fem.Tetra&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
   &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
 }
-<span class="target" id="module-woo.fem"></span><section class="html-toggle emphasized" id="tetra">
-<h2>Tetra<a class="headerlink" href="#tetra" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> → <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a></p>
-digraph Tetra {
-        rankdir=LR;
-        margin=.2;
-        &quot;Tetra&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.Tetra&quot;];
-        &quot;Tet4&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.Tetra&quot;];
-        &quot;Tetra&quot; -&gt; &quot;Tet4&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.fem.Tetra">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Tetra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tetra" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tetra (triangle in 3d) particle.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.fem.Tetra) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.Tetra, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tetra.canonicalizeVertexOrder">
-<span class="sig-name descname"><span class="pre">canonicalizeVertexOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tetra.canonicalizeVertexOrder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Order vertices so that signed volume is positive.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tetra.getCentroid">
-<span class="sig-name descname"><span class="pre">getCentroid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Vector3</span></span></span><a class="headerlink" href="#woo.fem.Tetra.getCentroid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return centroid of the tetrahedron</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tetra.getVolume">
-<span class="sig-name descname"><span class="pre">getVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.fem.Tetra.getVolume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return volume of the tetrahedron.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tetra.make">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__class=&lt;class</span> <span class="pre">'woo.fem.Tetra'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tetra.make" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create tetrahedral particle</p>
-</dd></dl>
-
-</dd></dl>
-
-<section class="html-toggle emphasized" id="tet4">
-<h3>Tet4<a class="headerlink" href="#tet4" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> → <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a> → <a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tet4</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.fem.Tet4">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Tet4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4" title="Permalink to this definition">¶</a></dt>
-<dd><p>4-node linear interpolation tetrahedron element with best-fit co-rotated coordinates.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.fem.Tet4) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.Tet4, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.Tet4.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Local coordinate system</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.Tet4.refPos">
-<span class="sig-name descname"><span class="pre">refPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.refPos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reference nodal positions in local coordinates</p>
-<p>[type: MatrixXr, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.Tet4.uXyz">
-<span class="sig-name descname"><span class="pre">uXyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">VectorX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.uXyz" title="Permalink to this definition">¶</a></dt>
-<dd><p>Nodal displacements in local coordinates</p>
-<p>[type: VectorXr, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.Tet4.KK">
-<span class="sig-name descname"><span class="pre">KK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.KK" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stiffness matrix</p>
-<p>[type: MatrixXr, not shown in the UI, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.Tet4.EB">
-<span class="sig-name descname"><span class="pre">EB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.EB" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate nohighlight">\(E B\)</span> matrix, used to compute stresses from displacements.</p>
-<p>[type: MatrixXr, not shown in the UI, read-only in python]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.ensureStiffnessMatrix">
-<span class="sig-name descname"><span class="pre">ensureStiffnessMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">young</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.ensureStiffnessMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ensure that stiffness matrix is initialized; internally also sets reference configuration. The <em>young</em> parameter should match <a class="reference internal" href="woo.dem.html#woo.dem.ElastMat.young" title="woo.dem.ElastMat.young"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ElastMat.young</span></code></a> attached to the particle.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.getStressTensor">
-<span class="sig-name descname"><span class="pre">getStressTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Matrix3</span></span></span><a class="headerlink" href="#woo.fem.Tet4.getStressTensor" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.make">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.make" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create tetrahedral particle</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.reset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.setRefConf">
-<span class="sig-name descname"><span class="pre">setRefConf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.setRefConf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the current configuration as the reference one</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.fem.Tet4.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update current configuration; creates reference configuration if not existing</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-<section class="html-toggle emphasized" id="in2-membrane-elastmat">
-<h2>In2_Membrane_ElastMat<a class="headerlink" href="#in2-membrane-elastmat" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.IntraFunctor" title="woo.dem.IntraFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntraFunctor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Facet</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat" title="woo.fem.In2_Membrane_ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_ElastMat</span></code></a></p>
-digraph In2_Membrane_ElastMat {
-        rankdir=LR;
-        margin=.2;
-        &quot;In2_Membrane_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.In2_Membrane_ElastMat&quot;];
-        &quot;In2_Membrane_FrictMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.In2_Membrane_ElastMat&quot;];
-        &quot;In2_Membrane_ElastMat&quot; -&gt; &quot;In2_Membrane_FrictMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">In2_Membrane_ElastMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply contact forces and compute internal response of a <a class="reference internal" href="#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a>. Forces are distributed according to barycentric coordinates when <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.bending" title="woo.fem.In2_Membrane_ElastMat.bending"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bending</span></code></a> is enabled; otherwise forces are distributed equally (thirds) to all nodes, to avoid contacts punching through the mesh which has no bending resistance. This can be overridden by setting <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.applyBary" title="woo.fem.In2_Membrane_ElastMat.applyBary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyBary</span></code></a>, in which case forces will be always applied weighted by barycentric coords.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If your particles are made of ~:obj:<cite>woo.dem.FrictMat</cite>, use <a class="reference internal" href="#woo.fem.In2_Membrane_FrictMat" title="woo.fem.In2_Membrane_FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_FrictMat</span></code></a> instead, if you run into ambiguous dipatch errors.</p>
-</div>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.fem.In2_Membrane_ElastMat) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.In2_Membrane_ElastMat, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.contacts">
-<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.contacts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply contact forces to facet’s nodes (FIXME: very simply distributed in thirds now)</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.nu">
-<span class="sig-name descname"><span class="pre">nu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.nu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Poisson’s ratio used for assembling the <span class="math notranslate nohighlight">\(E\)</span> matrix (Young’s modulus is taken from <a class="reference internal" href="woo.dem.html#woo.dem.ElastMat" title="woo.dem.ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElastMat</span></code></a>). Will be moved to the material class at some point.</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.thickness">
-<span class="sig-name descname"><span class="pre">thickness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.thickness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thickness for CST stiffness computation; if NaN, try to use the double of <a class="reference internal" href="woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet.halfThick</span></code></a>.</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.bendThickness">
-<span class="sig-name descname"><span class="pre">bendThickness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.bendThickness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thickness for DKT stiffness computation; if NaN, use <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.thickness" title="woo.fem.In2_Membrane_ElastMat.thickness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thickness</span></code></a>.</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.bending">
-<span class="sig-name descname"><span class="pre">bending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.bending" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consider also bending stiffness of elements (DKT)</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.applyBary">
-<span class="sig-name descname"><span class="pre">applyBary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.applyBary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Distribute force according to barycentric coordinate of the contact point; this is done normally with <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.bending" title="woo.fem.In2_Membrane_ElastMat.bending"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bending</span></code></a> enabled, this forces the same also for particles without bending.</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.rotIncr">
-<span class="sig-name descname"><span class="pre">rotIncr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.rotIncr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise).</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-</dd></dl>
-
-<section class="html-toggle emphasized" id="in2-membrane-frictmat">
-<h3>In2_Membrane_FrictMat<a class="headerlink" href="#in2-membrane-frictmat" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.IntraFunctor" title="woo.dem.IntraFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntraFunctor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Facet</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat" title="woo.fem.In2_Membrane_ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_ElastMat</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_FrictMat" title="woo.fem.In2_Membrane_FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_FrictMat</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.fem.In2_Membrane_FrictMat">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">In2_Membrane_FrictMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_FrictMat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Workaround for current dispatching mechanism limitations so that membrane with <a class="reference internal" href="woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FrictMat</span></code></a> is not matched by <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.In2_Facet</span></code></a>.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.fem.In2_Membrane_FrictMat) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.In2_Membrane_FrictMat, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-</section>
-</section>
-<section class="html-toggle emphasized" id="bo1-tetra-aabb">
-<h2>Bo1_Tetra_Aabb<a class="headerlink" href="#bo1-tetra-aabb" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.BoundFunctor" title="woo.dem.BoundFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundFunctor</span></code></a> → <a class="reference internal" href="#woo.fem.Bo1_Tetra_Aabb" title="woo.fem.Bo1_Tetra_Aabb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bo1_Tetra_Aabb</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.fem.Bo1_Tetra_Aabb">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Bo1_Tetra_Aabb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Bo1_Tetra_Aabb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates/updates an <code class="xref py py-obj docutils literal notranslate"><span class="pre">Aabb</span></code> of a <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a>.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.fem.Bo1_Tetra_Aabb) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.Bo1_Tetra_Aabb, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="in2-tet4-elastmat">
+<span class="target" id="module-woo.fem"></span><section class="html-toggle emphasized" id="in2-tet4-elastmat">
 <h2>In2_Tet4_ElastMat<a class="headerlink" href="#in2-tet4-elastmat" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.IntraFunctor" title="woo.dem.IntraFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntraFunctor</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Tet4_ElastMat" title="woo.fem.In2_Tet4_ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Tet4_ElastMat</span></code></a></p>
 <dl class="py class">
@@ -355,7 +122,7 @@ digraph In2_Membrane_ElastMat {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.fem.In2_Tet4_ElastMat) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.In2_Tet4_ElastMat, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.In2_Tet4_ElastMat, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.fem.In2_Tet4_ElastMat.contacts">
@@ -393,11 +160,11 @@ digraph In2_Membrane_ElastMat {
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.fem.Membrane) -&gt; None</p></li>
-<li><p>__init__(self: woo.fem.Membrane, <a href="#id25"><span class="problematic" id="id26">*</span></a>args, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.Membrane, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.fem.Membrane.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x16cd190</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Membrane.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1f08150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Membrane.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local coordinate system</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -534,6 +301,239 @@ digraph In2_Membrane_ElastMat {
 
 </dd></dl>
 
+</section>
+<section class="html-toggle emphasized" id="tetra">
+<h2>Tetra<a class="headerlink" href="#tetra" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> → <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a></p>
+digraph Tetra {
+        rankdir=LR;
+        margin=.2;
+        &quot;Tetra&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.Tetra&quot;];
+        &quot;Tet4&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.Tetra&quot;];
+        &quot;Tetra&quot; -&gt; &quot;Tet4&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.fem.Tetra">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Tetra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tetra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetra (triangle in 3d) particle.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.fem.Tetra) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.Tetra, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tetra.canonicalizeVertexOrder">
+<span class="sig-name descname"><span class="pre">canonicalizeVertexOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tetra.canonicalizeVertexOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order vertices so that signed volume is positive.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tetra.getCentroid">
+<span class="sig-name descname"><span class="pre">getCentroid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Vector3</span></span></span><a class="headerlink" href="#woo.fem.Tetra.getCentroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return centroid of the tetrahedron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tetra.getVolume">
+<span class="sig-name descname"><span class="pre">getVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><span class="pre">woo.fem.Tetra</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#woo.fem.Tetra.getVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return volume of the tetrahedron.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tetra.make">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat=&lt;function</span> <span class="pre">defaultMaterial&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__class=&lt;class</span> <span class="pre">'woo.fem.Tetra'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tetra.make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create tetrahedral particle</p>
+</dd></dl>
+
+</dd></dl>
+
+<section class="html-toggle emphasized" id="tet4">
+<h3>Tet4<a class="headerlink" href="#tet4" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> → <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a> → <a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tet4</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.fem.Tet4">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Tet4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4" title="Permalink to this definition">¶</a></dt>
+<dd><p>4-node linear interpolation tetrahedron element with best-fit co-rotated coordinates.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.fem.Tet4) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.Tet4, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.Tet4.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local coordinate system</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.Tet4.refPos">
+<span class="sig-name descname"><span class="pre">refPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.refPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference nodal positions in local coordinates</p>
+<p>[type: MatrixXr, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.Tet4.uXyz">
+<span class="sig-name descname"><span class="pre">uXyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">VectorX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.uXyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nodal displacements in local coordinates</p>
+<p>[type: VectorXr, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.Tet4.KK">
+<span class="sig-name descname"><span class="pre">KK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.KK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stiffness matrix</p>
+<p>[type: MatrixXr, not shown in the UI, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.Tet4.EB">
+<span class="sig-name descname"><span class="pre">EB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">MatrixX()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.EB" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(E B\)</span> matrix, used to compute stresses from displacements.</p>
+<p>[type: MatrixXr, not shown in the UI, read-only in python]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.ensureStiffnessMatrix">
+<span class="sig-name descname"><span class="pre">ensureStiffnessMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">young</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.ensureStiffnessMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that stiffness matrix is initialized; internally also sets reference configuration. The <em>young</em> parameter should match <a class="reference internal" href="woo.dem.html#woo.dem.ElastMat.young" title="woo.dem.ElastMat.young"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ElastMat.young</span></code></a> attached to the particle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.getStressTensor">
+<span class="sig-name descname"><span class="pre">getStressTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Matrix3</span></span></span><a class="headerlink" href="#woo.fem.Tet4.getStressTensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.make">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Tet4.make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create tetrahedral particle</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.setRefConf">
+<span class="sig-name descname"><span class="pre">setRefConf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.setRefConf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current configuration as the reference one</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.fem.Tet4.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.fem.Tet4" title="woo.fem.Tet4"><span class="pre">woo.fem.Tet4</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.fem.Tet4.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update current configuration; creates reference configuration if not existing</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section class="html-toggle emphasized" id="in2-membrane-elastmat">
+<h2>In2_Membrane_ElastMat<a class="headerlink" href="#in2-membrane-elastmat" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.IntraFunctor" title="woo.dem.IntraFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntraFunctor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Facet</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat" title="woo.fem.In2_Membrane_ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_ElastMat</span></code></a></p>
+digraph In2_Membrane_ElastMat {
+        rankdir=LR;
+        margin=.2;
+        &quot;In2_Membrane_ElastMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.In2_Membrane_ElastMat&quot;];
+        &quot;In2_Membrane_FrictMat&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.fem.html#woo.fem.In2_Membrane_ElastMat&quot;];
+        &quot;In2_Membrane_ElastMat&quot; -&gt; &quot;In2_Membrane_FrictMat&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}<dl class="py class">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">In2_Membrane_ElastMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply contact forces and compute internal response of a <a class="reference internal" href="#woo.fem.Membrane" title="woo.fem.Membrane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Membrane</span></code></a>. Forces are distributed according to barycentric coordinates when <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.bending" title="woo.fem.In2_Membrane_ElastMat.bending"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bending</span></code></a> is enabled; otherwise forces are distributed equally (thirds) to all nodes, to avoid contacts punching through the mesh which has no bending resistance. This can be overridden by setting <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.applyBary" title="woo.fem.In2_Membrane_ElastMat.applyBary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyBary</span></code></a>, in which case forces will be always applied weighted by barycentric coords.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your particles are made of ~:obj:<cite>woo.dem.FrictMat</cite>, use <a class="reference internal" href="#woo.fem.In2_Membrane_FrictMat" title="woo.fem.In2_Membrane_FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_FrictMat</span></code></a> instead, if you run into ambiguous dipatch errors.</p>
+</div>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.fem.In2_Membrane_ElastMat) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.In2_Membrane_ElastMat, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.contacts">
+<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.contacts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply contact forces to facet’s nodes (FIXME: very simply distributed in thirds now)</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.nu">
+<span class="sig-name descname"><span class="pre">nu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.nu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Poisson’s ratio used for assembling the <span class="math notranslate nohighlight">\(E\)</span> matrix (Young’s modulus is taken from <a class="reference internal" href="woo.dem.html#woo.dem.ElastMat" title="woo.dem.ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElastMat</span></code></a>). Will be moved to the material class at some point.</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.thickness">
+<span class="sig-name descname"><span class="pre">thickness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.thickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thickness for CST stiffness computation; if NaN, try to use the double of <a class="reference internal" href="woo.dem.html#woo.dem.Facet.halfThick" title="woo.dem.Facet.halfThick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Facet.halfThick</span></code></a>.</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.bendThickness">
+<span class="sig-name descname"><span class="pre">bendThickness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.bendThickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thickness for DKT stiffness computation; if NaN, use <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.thickness" title="woo.fem.In2_Membrane_ElastMat.thickness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thickness</span></code></a>.</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.bending">
+<span class="sig-name descname"><span class="pre">bending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.bending" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consider also bending stiffness of elements (DKT)</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.applyBary">
+<span class="sig-name descname"><span class="pre">applyBary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.applyBary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute force according to barycentric coordinate of the contact point; this is done normally with <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat.bending" title="woo.fem.In2_Membrane_ElastMat.bending"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bending</span></code></a> enabled, this forces the same also for particles without bending.</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_ElastMat.rotIncr">
+<span class="sig-name descname"><span class="pre">rotIncr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_ElastMat.rotIncr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise).</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+</dd></dl>
+
+<section class="html-toggle emphasized" id="in2-membrane-frictmat">
+<h3>In2_Membrane_FrictMat<a class="headerlink" href="#in2-membrane-frictmat" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.IntraFunctor" title="woo.dem.IntraFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntraFunctor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Facet</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_ElastMat" title="woo.fem.In2_Membrane_ElastMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_ElastMat</span></code></a> → <a class="reference internal" href="#woo.fem.In2_Membrane_FrictMat" title="woo.fem.In2_Membrane_FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">In2_Membrane_FrictMat</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.fem.In2_Membrane_FrictMat">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">In2_Membrane_FrictMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.In2_Membrane_FrictMat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workaround for current dispatching mechanism limitations so that membrane with <a class="reference internal" href="woo.dem.html#woo.dem.FrictMat" title="woo.dem.FrictMat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.FrictMat</span></code></a> is not matched by <a class="reference internal" href="woo.dem.html#woo.dem.In2_Facet" title="woo.dem.In2_Facet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.In2_Facet</span></code></a>.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.fem.In2_Membrane_FrictMat) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.In2_Membrane_FrictMat, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+</section>
+</section>
+<section class="html-toggle emphasized" id="bo1-tetra-aabb">
+<h2>Bo1_Tetra_Aabb<a class="headerlink" href="#bo1-tetra-aabb" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="woo.dem.html#woo.dem.BoundFunctor" title="woo.dem.BoundFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundFunctor</span></code></a> → <a class="reference internal" href="#woo.fem.Bo1_Tetra_Aabb" title="woo.fem.Bo1_Tetra_Aabb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bo1_Tetra_Aabb</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.fem.Bo1_Tetra_Aabb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.fem.</span></span><span class="sig-name descname"><span class="pre">Bo1_Tetra_Aabb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.fem.Bo1_Tetra_Aabb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates/updates an <code class="xref py py-obj docutils literal notranslate"><span class="pre">Aabb</span></code> of a <a class="reference internal" href="#woo.fem.Tetra" title="woo.fem.Tetra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tetra</span></code></a>.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.fem.Bo1_Tetra_Aabb) -&gt; None</p></li>
+<li><p>__init__(self: woo.fem.Bo1_Tetra_Aabb, <a href="#id25"><span class="problematic" id="id26">*</span></a>args, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
@@ -551,6 +551,8 @@ digraph In2_Membrane_ElastMat {
     <h3><a href="contents.html">Page contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.fem</span></code></a><ul>
+<li><a class="reference internal" href="#in2-tet4-elastmat">In2_Tet4_ElastMat</a></li>
+<li><a class="reference internal" href="#membrane">Membrane</a></li>
 <li><a class="reference internal" href="#tetra">Tetra</a><ul>
 <li><a class="reference internal" href="#tet4">Tet4</a></li>
 </ul>
@@ -560,8 +562,6 @@ digraph In2_Membrane_ElastMat {
 </ul>
 </li>
 <li><a class="reference internal" href="#bo1-tetra-aabb">Bo1_Tetra_Aabb</a></li>
-<li><a class="reference internal" href="#in2-tet4-elastmat">In2_Tet4_ElastMat</a></li>
-<li><a class="reference internal" href="#membrane">Membrane</a></li>
 </ul>
 </li>
 </ul>
@@ -632,7 +632,7 @@ digraph In2_Membrane_ElastMat {
         <li class="right" >
           <a href="woo.document.html" title="woo.document"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-8bbb0e2 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-6fe7896 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.fem</span></code></a></li> 
