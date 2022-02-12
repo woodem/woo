@@ -1,5 +1,5 @@
 #include"../src/supp/smoothing/WeightedAverage2d.hpp"
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 
 /* Tell whether point is inside polygon
  *

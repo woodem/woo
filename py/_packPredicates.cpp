@@ -4,7 +4,7 @@
 #include"../src/supp/base/Types.hpp"
 #include"../src/supp/pyutil/doc_opts.hpp"
 #include"../src/supp/sphere-pack/SpherePack.hpp"
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 
 /*
 This file contains various predicates that say whether a given point is within the solid,

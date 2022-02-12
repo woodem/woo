@@ -2,7 +2,7 @@
 #include"../src/supp/base/Logging.hpp"
 #include"../src/supp/base/Types.hpp"
 #include"../src/supp/pyutil/doc_opts.hpp"
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 
 static std::shared_ptr<spdlog::logger> logLogger=spdlog::stdout_color_mt("woo.log");
 int logGetLevel(std::string loggerName){

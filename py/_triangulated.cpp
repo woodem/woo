@@ -1,4 +1,4 @@
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 
 #include"../src/dem/Particle.hpp"
 #include"../src/dem/Funcs.hpp"

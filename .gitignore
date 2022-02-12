@@ -6,3 +6,4 @@ build-*
 *.perifeed
 *.triax-compact
 *.randomdense
+*.pyc

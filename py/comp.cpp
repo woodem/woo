@@ -1,7 +1,7 @@
 
 #include"../src/supp/base/CompUtils.hpp"
 #include"../src/supp/base/Volumetric.hpp"
-#include"../core/Master.hpp" // for WOO_PYTHON_MODULE
+#include"../src/core/Master.hpp" // for WOO_PYTHON_MODULE
 #include"../src/supp/smoothing/LinearInterpolate.hpp"
 
 

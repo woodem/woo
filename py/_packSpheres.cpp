@@ -3,7 +3,7 @@
 #include"../src/supp/sphere-pack/SpherePack.hpp"
 #include"../src/supp/pyutil/doc_opts.hpp"
 #include"../src/supp/base/Math.hpp"
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 #include"../src/dem/Funcs.hpp"
 
 vector<Particle::id_t> SpherePack_toSimulation_fast(const shared_ptr<SpherePack>& self, const shared_ptr<Scene>& scene, const shared_ptr<Material>& mat, int mask=0, Real color=NaN){

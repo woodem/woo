@@ -8,7 +8,7 @@
 
 #include"../src/supp/base/Types.hpp"
 
-#include"../core/Master.hpp"
+#include"../src/core/Master.hpp"
 
 #include<vector>
 #include<stdexcept>

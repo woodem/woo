@@ -1,5 +1,5 @@
-#include"../core/Master.hpp"
-#include"../core/Timing.hpp"
+#include"../src/core/Master.hpp"
+#include"../src/core/Timing.hpp"
 #include"../src/supp/object/Object.hpp"
 #include"../src/supp/base/Logging.hpp"
 #include"../src/supp/pyutil/compat.hpp"
