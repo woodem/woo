@@ -64,13 +64,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x1aadc30>)
+   .. attribute:: range (= <ScalarRange @ 0x2343c30>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x1aacf90>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x2342f90>)
 
       Range for absolute value of shear force
 
@@ -129,7 +129,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x1b01c60>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x2397c60>)
 
       Range for disk damage coloring.
 
@@ -567,12 +567,12 @@ GlShapeFunctor
 		margin=.2;
 		"GlShapeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
@@ -689,6 +689,41 @@ Gl1_Ellipsoid
 
 .. rst-class:: emphasized
 
+Gl1_Cone
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
+
+.. autoclass:: Gl1_Cone
+   :members:
+   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: slices (= 12)
+
+      Number of slices, controls quality
+
+      [type: int]
+
+   .. attribute:: stacks (= 6)
+
+      Number of stacks, controls quality
+
+      [type: int]
+
+   .. attribute:: wire (= False)
+
+      Render all shapes with wireframe only
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 Gl1_Rod
 +++++++
 
@@ -729,41 +764,6 @@ Gl1_Rod
       Stress range, to set color appropriately
 
       [type: Vector2r]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Cone
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
-
-.. autoclass:: Gl1_Cone
-   :members:
-   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: slices (= 12)
-
-      Number of slices, controls quality
-
-      [type: int]
-
-   .. attribute:: stacks (= 6)
-
-      Number of stacks, controls quality
-
-      [type: int]
-
-   .. attribute:: wire (= False)
-
-      Render all shapes with wireframe only
-
-      [type: bool]
 
 
 .. rst-class:: html-toggle
@@ -899,13 +899,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0x1af47b0>)
+   .. attribute:: uRange (= <ScalarRange @ 0x238a7b0>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0x1af9c00>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x238fc00>)
 
       Range for rotations (colors only)
 
@@ -1945,19 +1945,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x1a9cae0>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x2332ae0>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x1a9ca00>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x2332a00>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x1acf140>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x2365140>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 

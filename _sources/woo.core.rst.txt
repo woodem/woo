@@ -163,7 +163,7 @@ Scene
 
       [type: StrStrMap, not accessible from python]
 
-   .. attribute:: labels (= <LabelMapper @ 0x18c8bc0>)
+   .. attribute:: labels (= <LabelMapper @ 0x215ebc0>)
 
       Atrbitrary key=object, key=list of objects, key=py::object associations which survive saving/loading. Labeled objects are automatically added to this container. This object is more conveniently accessed through the :obj:`lab` attribute, which exposes the mapping as attributes of that object rather than as a dictionary.
 
@@ -187,7 +187,7 @@ Scene
 
       [type: vector<shared_ptr<Engine>>, not accessible from python]
 
-   .. attribute:: energy (= <EnergyTracker @ 0x17e02f0>)
+   .. attribute:: energy (= <EnergyTracker @ 0x20762f0>)
 
       Energy values, if energy tracking is enabled.
 
@@ -199,7 +199,7 @@ Scene
 
       [type: vector<shared_ptr<Field>>, not shown in the UI]
 
-   .. attribute:: cell (= <Cell @ 0x18d5900>)
+   .. attribute:: cell (= <Cell @ 0x216b900>)
 
       Information on periodicity; only should be used if Scene::isPeriodic.
 
@@ -259,7 +259,7 @@ Scene
 
       [type: py::object, not shown in the UI]
 
-   .. attribute:: plot (= <Plot @ 0x18d43b0>)
+   .. attribute:: plot (= <Plot @ 0x216a3b0>)
 
       Data and settings for plots.
 
@@ -702,17 +702,16 @@ Engine
 		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.LawTester" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.LawTester" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AnisoPorosityAnalyzer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.AnisoPorosityAnalyzer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlCPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
-		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.PelletAgglomerator" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"Dispatcher" -> "woo.gl.GlCPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.PelletAgglomerator" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.PelletAgglomerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.POVRayExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.POVRayExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.WeirdTriaxControl" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.WeirdTriaxControl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.VtkExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.VtkExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ClusterAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.ClusterAnalysis" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Tracer" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
-		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ContactLoop" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"PeriodicEngine" -> "woo.dem.Tracer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
+		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ContactLoop" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"Engine" -> "woo.dem.ContactLoop" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlBoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Engine"];
 		"Dispatcher" -> "woo.gl.GlBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.DetectSteadyState" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.DetectSteadyState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
@@ -724,7 +723,8 @@ Engine
 		"PeriodicEngine" -> "woo.dem.Suspicious" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AabbCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"woo.dem.Collider" -> "woo.dem.AabbCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.AxialGravity" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
-		"Engine" -> "woo.dem.AxialGravity" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"Engine" -> "woo.dem.AxialGravity" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
+		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"woo.dem.Inlet" -> "woo.dem.ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"PeriodicEngine" -> "woo.dem.Outlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
 		"woo.dem.RandomInlet" -> "woo.dem.ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ForceResetter" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Engine"];
@@ -792,12 +792,12 @@ Dispatcher
 		"Dispatcher" -> "woo.dem.GridBoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlShapeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlShapeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.IntraForce" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.IntraForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoundDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlFieldDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.dem.BoundDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
+		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlFieldDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
 		"Dispatcher" -> "woo.gl.GlFieldDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CPhysDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.CPhysDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.LawDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
 		"Dispatcher" -> "woo.dem.LawDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CGeomDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.Dispatcher"];
-		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.gl.GlNodeDispatcher" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.gl.html#woo.gl.Dispatcher"];
-		"Dispatcher" -> "woo.gl.GlNodeDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Dispatcher" -> "woo.dem.CGeomDispatcher" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Dispatcher
@@ -963,8 +963,7 @@ PeriodicEngine
 		margin=.2;
 		"PeriodicEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
 		"PyRunner" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.PeriodicEngine"];
-		"PeriodicEngine" -> "PyRunner" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "PyRunner" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"woo.dem.BoxOutlet" -> "woo.dem.StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"woo.dem.RandomInlet" -> "woo.dem.BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.POVRayExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"PeriodicEngine" -> "woo.dem.POVRayExport" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.VtkExport" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
@@ -984,7 +983,8 @@ PeriodicEngine
 		"woo.dem.ForcesToHdf5" -> "woo.dem.NodalForcesToHdf5" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Suspicious" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"PeriodicEngine" -> "woo.dem.Suspicious" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo._qt.SnapshotEngine" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo._qt.html#woo._qt.PeriodicEngine"];
 		"PeriodicEngine" -> "woo._qt.SnapshotEngine" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
-		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"PeriodicEngine" -> "woo.dem.Inlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
+		"woo.dem.RandomInlet" -> "woo.dem.CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"woo.dem.Inlet" -> "woo.dem.ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"PeriodicEngine" -> "woo.dem.Outlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
 		"woo.dem.RandomInlet" -> "woo.dem.ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.dem.FlowAnalysis" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.dem.html#woo.dem.PeriodicEngine"];
@@ -1383,7 +1383,7 @@ WooTestClass
 
       [type: shared_ptr<:obj:`Object <woo.core.Object>`>]
 
-   .. attribute:: objList (= ObjectList[0x18e70e0, 0x18e7110])
+   .. attribute:: objList (= ObjectList[0x217d0e0, 0x217d110])
 
       Testing opaque object list.
 
@@ -1487,14 +1487,14 @@ Preprocessor
 		rankdir=LR;
 		margin=.2;
 		"Preprocessor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.core.html#woo.core.Preprocessor"];
-		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
-		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
-		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
-		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
+		"woo.pre.toys.NewtonsCradle" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.toys.Preprocessor"];
 		"Preprocessor" -> "woo.pre.toys.NewtonsCradle" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.triax.TriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.triax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
-		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
-		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Preprocessor" -> "woo.pre.triax.TriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.psdrender.PsdRender" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.psdrender.Preprocessor"];
+		"Preprocessor" -> "woo.pre.psdrender.PsdRender" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.horse.FallingHorse" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.horse.Preprocessor"];
+		"Preprocessor" -> "woo.pre.horse.FallingHorse" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.ell2d.EllGroup" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.ell2d.Preprocessor"];
+		"Preprocessor" -> "woo.pre.ell2d.EllGroup" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.chute.DissipChute" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.chute.Preprocessor"];
+		"Preprocessor" -> "woo.pre.chute.DissipChute" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.pre.cylTriax.CylTriaxTest" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.pre.html#woo.pre.cylTriax.Preprocessor"];
+		"Preprocessor" -> "woo.pre.cylTriax.CylTriaxTest" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Preprocessor
