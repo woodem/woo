@@ -5,10 +5,31 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_io`
--------------------------------------
+:mod:`woo.tests.test_hertz`
+----------------------------------------
 
-.. automodule:: woo.tests.test_io
+.. automodule:: woo.tests.test_hertz
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_clump`
+----------------------------------------
+
+.. automodule:: woo.tests.test_clump
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_labels`
+-----------------------------------------
+
+.. automodule:: woo.tests.test_labels
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_ellipsoid`
+--------------------------------------------
+
+.. automodule:: woo.tests.test_ellipsoid
    :members:
    :undoc-members:
 
@@ -16,6 +37,13 @@
 -----------------------------------------
 
 .. automodule:: woo.tests.test_energy
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_pbc`
+--------------------------------------
+
+.. automodule:: woo.tests.test_pbc
    :members:
    :undoc-members:
 
@@ -84,7 +112,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x3420f20, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x3b68900, at (1,1,1)>)
 
       node attr
 
@@ -96,7 +124,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x2c1c360, at (1,1,1)>, <Node @ 0x3317340, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x3cacd20, at (1,1,1)>, <Node @ 0x39f4e10, at (2,2,2)>])
 
       List of nodes
 
@@ -158,6 +186,22 @@ _TestPyClass2
 
       [type: int]
 
+:mod:`woo.tests.test_psd`
+--------------------------------------
+
+.. automodule:: woo.tests.test_psd
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_batch`
+----------------------------------------
+
+.. automodule:: woo.tests.test_batch
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.test_grid`
 ---------------------------------------
 
@@ -174,26 +218,18 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.test_hertz`
-----------------------------------------
-
-.. automodule:: woo.tests.test_hertz
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_clump`
-----------------------------------------
-
-.. automodule:: woo.tests.test_clump
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
 :mod:`woo.tests.test_clustering`
 ---------------------------------------------
 
 .. automodule:: woo.tests.test_clustering
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_io`
+-------------------------------------
+
+.. automodule:: woo.tests.test_io
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
@@ -206,50 +242,10 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
-:mod:`woo.tests.test_labels`
------------------------------------------
-
-.. automodule:: woo.tests.test_labels
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_ellipsoid`
---------------------------------------------
-
-.. automodule:: woo.tests.test_ellipsoid
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_pbc`
---------------------------------------
-
-.. automodule:: woo.tests.test_pbc
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
 :mod:`woo.tests.test_volumetric`
 ---------------------------------------------
 
 .. automodule:: woo.tests.test_volumetric
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_psd`
---------------------------------------
-
-.. automodule:: woo.tests.test_psd
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_batch`
-----------------------------------------
-
-.. automodule:: woo.tests.test_batch
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
