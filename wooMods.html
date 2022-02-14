@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Woo modules &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
+    <title>Woo modules &#8212; Woo 1.0+rev1-git-e42662b documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="gallery/vis.html" title="Visualization"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-e42662b documentation</a> &#187;</li>
 
         <li class="nav-item nav-item-this"><a href="">Woo modules</a></li> 
       </ul>
@@ -80,11 +80,11 @@
 <li class="toctree-l1"><a class="reference internal" href="woo._cxxInternal_ci.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._cxxInternal_ci</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="woo._gts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._gts</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="woo._monkey.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.compat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.compat</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.io</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.extraDocs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.extraDocs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.aliases</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo._monkey.html#module-woo._monkey.gts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._monkey.gts</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woo._units.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._units</span></code></a></li>
@@ -139,8 +139,8 @@
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#weirdtriaxcontrol">WeirdTriaxControl</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#clusteranalysis">ClusterAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#tracevisrep">TraceVisRep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#clusteranalysis">ClusterAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#motion-integration">Motion integration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#leapfrog">Leapfrog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#forceresetter">ForceResetter</a></li>
@@ -202,8 +202,8 @@
 </li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-capsule-aabb">Bo1_Capsule_Aabb</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-facet-aabb">Bo1_Facet_Aabb</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-wall-aabb">Bo1_Wall_Aabb</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-infcylinder-aabb">Bo1_InfCylinder_Aabb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-wall-aabb">Bo1_Wall_Aabb</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#bo1-cone-aabb">Bo1_Cone_Aabb</a></li>
 </ul>
 </li>
@@ -219,41 +219,53 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#anisoporosityanalyzer">AnisoPorosityAnalyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#internal-forces">Internal forces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#intraforce">IntraForce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#intrafunctor">IntraFunctor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-sphere-elastmat">In2_Sphere_ElastMat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-wall-elastmat">In2_Wall_ElastMat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-facet">In2_Facet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-truss-elastmat">In2_Truss_ElastMat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#suspicious">Suspicious</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#inlets-outlets">Inlets &amp; Outlets</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#inlet">Inlet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#randominlet">RandomInlet</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#arcinlet">ArcInlet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#cylinderinlet">CylinderInlet</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#boxinlet">BoxInlet</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#boxinlet2d">BoxInlet2d</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#arcinlet">ArcInlet</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#cylinderinlet">CylinderInlet</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#conveyorinlet">ConveyorInlet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#particlegenerator">ParticleGenerator</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#pharmacapsulegenerator">PharmaCapsuleGenerator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#minmaxspheregenerator">MinMaxSphereGenerator</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#psdspheregenerator">PsdSphereGenerator</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#psdellipsoidgenerator">PsdEllipsoidGenerator</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#psdcapsulegenerator">PsdCapsuleGenerator</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#psdclumpgenerator">PsdClumpGenerator</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#psdellipsoidgenerator">PsdEllipsoidGenerator</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#minmaxspheregenerator">MinMaxSphereGenerator</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#spatialbias">SpatialBias</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#axialbias">AxialBias</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#layeredaxialbias">LayeredAxialBias</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#psdaxialbias">PsdAxialBias</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#layeredaxialbias">LayeredAxialBias</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#nonuniformaxisplacementbias">NonuniformAxisPlacementBias</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#particleshooter">ParticleShooter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#arcshooter">ArcShooter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#alignedminmaxshooter">AlignedMinMaxShooter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#arcshooter">ArcShooter</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#outlet">Outlet</a><ul>
@@ -267,19 +279,67 @@
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#detectsteadystate">DetectSteadyState</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#suspicious">Suspicious</a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#internal-forces">Internal forces</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#intraforce">IntraForce</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#intrafunctor">IntraFunctor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-sphere-elastmat">In2_Sphere_ElastMat</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-wall-elastmat">In2_Wall_ElastMat</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-facet">In2_Facet</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#in2-truss-elastmat">In2_Truss_ElastMat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#packings">Packings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shapepack">ShapePack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#rawshape">RawShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shapeclump">ShapeClump</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#rawshapeclump">RawShapeClump</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#sphereclumpgeom">SphereClumpGeom</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#halfspacebuoyancy">HalfspaceBuoyancy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#particle">Particle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#id389">Particle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shape">Shape</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#ellipsoid">Ellipsoid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#rod">Rod</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#truss">Truss</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#facet">Facet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#cone">Cone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#capsule">Capsule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#infcylinder">InfCylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#wall">Wall</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#sphere">Sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#material-properties">Material properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#material">Material</a></li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#elastmat">ElastMat</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#frictmat">FrictMat</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#ludingmat">LudingMat</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#concretemat">ConcreteMat</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#icemat">IceMat</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#hertzmat">HertzMat</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#pelletmat">PelletMat</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="woo.dem.html#pelletagglomerator">PelletAgglomerator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#matstate">MatState</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#pelletmatstate">PelletMatState</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#inletmatstate">InletMatState</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#clustermatstate">ClusterMatState</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#concretematstate">ConcreteMatState</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#ludingmatstate">LudingMatState</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#export">Export</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#vtkexport">VtkExport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#flowanalysis">FlowAnalysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#povrayexport">POVRayExport</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#contacts">Contacts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#contact">Contact</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.dem.html#contactloop">ContactLoop</a></li>
@@ -302,13 +362,13 @@
 <li class="toctree-l7"><a class="reference internal" href="woo.dem.html#cg2-sphere-ellipsoid-l6geom">Cg2_Sphere_Ellipsoid_L6Geom</a></li>
 </ul>
 </li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-sphere-capsule-l6geom">Cg2_Sphere_Capsule_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-facet-sphere-l6geom">Cg2_Facet_Sphere_L6Geom</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-sphere-capsule-l6geom">Cg2_Sphere_Capsule_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-capsule-capsule-l6geom">Cg2_Capsule_Capsule_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-facet-ellipsoid-l6geom">Cg2_Facet_Ellipsoid_L6Geom</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-infcylinder-sphere-l6geom">Cg2_InfCylinder_Sphere_L6Geom</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-cone-sphere-l6geom">Cg2_Cone_Sphere_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-rod-sphere-l6geom">Cg2_Rod_Sphere_L6Geom</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-cone-sphere-l6geom">Cg2_Cone_Sphere_L6Geom</a></li>
+<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-infcylinder-sphere-l6geom">Cg2_InfCylinder_Sphere_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-infcylinder-capsule-l6geom">Cg2_InfCylinder_Capsule_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-wall-ellipsoid-l6geom">Cg2_Wall_Ellipsoid_L6Geom</a></li>
 <li class="toctree-l6"><a class="reference internal" href="woo.dem.html#cg2-sphere-sphere-l6geom">Cg2_Sphere_Sphere_L6Geom</a></li>
@@ -353,14 +413,14 @@
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#g3geomcdata">G3GeomCData</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#idealelpldata">IdealElPlData</a></li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#lawfunctor">LawFunctor</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-frictphys-idealelpl">Law2_L6Geom_FrictPhys_IdealElPl</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-icephys">Law2_L6Geom_IcePhys</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-frictphys-linel6">Law2_L6Geom_FrictPhys_LinEl6</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-pelletphys-pellet">Law2_L6Geom_PelletPhys_Pellet</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-hertzphys-dmt">Law2_L6Geom_HertzPhys_DMT</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-ludingphys">Law2_L6Geom_LudingPhys</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-concretephys">Law2_L6Geom_ConcretePhys</a></li>
 <li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-g3geom-frictphys-idealelpl">Law2_G3Geom_FrictPhys_IdealElPl</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-concretephys">Law2_L6Geom_ConcretePhys</a></li>
+<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#law2-l6geom-frictphys-idealelpl">Law2_L6Geom_FrictPhys_IdealElPl</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="woo.dem.html#lawdispatcher">LawDispatcher</a></li>
@@ -371,66 +431,6 @@
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#packings">Packings</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shapepack">ShapePack</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#rawshape">RawShape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shapeclump">ShapeClump</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#rawshapeclump">RawShapeClump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#sphereclumpgeom">SphereClumpGeom</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#particle">Particle</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#id645">Particle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#shape">Shape</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#ellipsoid">Ellipsoid</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#rod">Rod</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#truss">Truss</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#facet">Facet</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#cone">Cone</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#capsule">Capsule</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#infcylinder">InfCylinder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#wall">Wall</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#sphere">Sphere</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#material-properties">Material properties</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#material">Material</a></li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#elastmat">ElastMat</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#frictmat">FrictMat</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#ludingmat">LudingMat</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#concretemat">ConcreteMat</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#icemat">IceMat</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#hertzmat">HertzMat</a></li>
-<li class="toctree-l6"><a class="reference internal" href="woo.dem.html#pelletmat">PelletMat</a><ul>
-<li class="toctree-l7"><a class="reference internal" href="woo.dem.html#pelletagglomerator">PelletAgglomerator</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="woo.dem.html#matstate">MatState</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#inletmatstate">InletMatState</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#pelletmatstate">PelletMatState</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#clustermatstate">ClusterMatState</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#concretematstate">ConcreteMatState</a></li>
-<li class="toctree-l5"><a class="reference internal" href="woo.dem.html#ludingmatstate">LudingMatState</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="woo.dem.html#export">Export</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#vtkexport">VtkExport</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#flowanalysis">FlowAnalysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woo.dem.html#povrayexport">POVRayExport</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.dem.html#dem-field">DEM field</a><ul>
@@ -457,6 +457,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woo.gl.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.gl</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glcphysfunctor">GlCPhysFunctor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-cphys">Gl1_CPhys</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="woo.gl.html#gl1-concretephys">Gl1_ConcretePhys</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glextradrawer">GlExtraDrawer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#glextra-anisoporosityanalyzer">GlExtra_AnisoPorosityAnalyzer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#glextra-energytrackergrid">GlExtra_EnergyTrackerGrid</a></li>
@@ -469,6 +476,7 @@
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#gldata">GlData</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#tensorglrep">TensorGlRep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glsetup">GlSetup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glnodedispatcher">GlNodeDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glbounddispatcher">GlBoundDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glshapefunctor">GlShapeFunctor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-sphere">Gl1_Sphere</a><ul>
@@ -476,8 +484,8 @@
 <li class="toctree-l4"><a class="reference internal" href="woo.gl.html#gl1-ellipsoid">Gl1_Ellipsoid</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-cone">Gl1_Cone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-rod">Gl1_Rod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-cone">Gl1_Cone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-facet">Gl1_Facet</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="woo.gl.html#gl1-membrane">Gl1_Membrane</a></li>
 </ul>
@@ -490,33 +498,25 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glnodedispatcher">GlNodeDispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#displayparameters">DisplayParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glfielddispatcher">GlFieldDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glnodefunctor">GlNodeFunctor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-node">Gl1_Node</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#displayparameters">DisplayParameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glfielddispatcher">GlFieldDispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glcphysdispatcher">GlCPhysDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#labelglrep">LabelGlRep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#cylglrep">CylGlRep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glcphysdispatcher">GlCPhysDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glshapedispatcher">GlShapeDispatcher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glboundfunctor">GlBoundFunctor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-gridbound">Gl1_GridBound</a></li>
 <li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-aabb">Gl1_Aabb</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glfieldfunctor">GlFieldFunctor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-demfield">Gl1_DemField</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#scalarglrep">ScalarGlRep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.gl.html#renderer">Renderer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glcphysfunctor">GlCPhysFunctor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-cphys">Gl1_CPhys</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="woo.gl.html#gl1-concretephys">Gl1_ConcretePhys</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="woo.gl.html#glfieldfunctor">GlFieldFunctor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.gl.html#gl1-demfield">Gl1_DemField</a></li>
 </ul>
 </li>
 </ul>
@@ -549,14 +549,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woo.pre.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-ell2d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.ell2d</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#ellgroup">EllGroup</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#fallinghorse">FallingHorse</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-toys"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.toys</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.pre.html#newtonscradle">NewtonsCradle</a></li>
 </ul>
@@ -565,16 +557,24 @@
 <li class="toctree-l3"><a class="reference internal" href="woo.pre.html#dissipchute">DissipChute</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-psdrender"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.psdrender</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#psdrender">PsdRender</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-horse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.horse</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#fallinghorse">FallingHorse</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-ell2d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.ell2d</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#ellgroup">EllGroup</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-triax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.triax</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.pre.html#triaxtest">TriaxTest</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-cyltriax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.cylTriax</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.pre.html#cyltriaxtest">CylTriaxTest</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="woo.pre.html#woo-pre-psdrender"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.pre.psdrender</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="woo.pre.html#psdrender">PsdRender</a></li>
 </ul>
 </li>
 </ul>
@@ -588,25 +588,19 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#woo-glviewer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo._GLViewer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.ExceptionDialog"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.ExceptionDialog</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.ObjectEditor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.ObjectEditor</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.ui_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.ui_controller</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.Inspector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.Inspector</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.img_rc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.img_rc</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.DisplayProfiles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.DisplayProfiles</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.qt.html#module-woo.qt.ObjectEditor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.qt.ObjectEditor</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woo.remote.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.remote</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="woo.runtime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.runtime</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="woo.system.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.system</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="woo.tests.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_labels"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_labels</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_energy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_energy</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_ellipsoid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_ellipsoid</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_pbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_pbc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_energy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_energy</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_volumetric"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_volumetric</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#woo-tests-test-core"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_core</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="woo.tests.html#testpyclass">_TestPyClass</a><ul>
@@ -617,10 +611,16 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_psd"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_psd</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_batch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_batch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_demfield"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_demfield</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_shapepack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_shapepack</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_clump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clump</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clustering</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_labels"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_labels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="woo.tests.html#module-woo.tests.test_pbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_pbc</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woo.timing.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.timing</span></code></a></li>
@@ -713,7 +713,7 @@
         <li class="right" >
           <a href="gallery/vis.html" title="Visualization"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-e42662b documentation</a> &#187;</li>
 
         <li class="nav-item nav-item-this"><a href="">Woo modules</a></li> 
       </ul>

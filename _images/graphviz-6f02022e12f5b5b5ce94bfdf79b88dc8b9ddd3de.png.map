@@ -1,7 +1,0 @@
-<map id="GridBoundFunctor" name="GridBoundFunctor">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.GridBoundFunctor" title="GridBoundFunctor" alt="" coords="25,95,147,118"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.GridBoundFunctor" title="Grid1_InfCylinder" alt="" coords="195,25,314,47"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.GridBoundFunctor" title="Grid1_Wall" alt="" coords="214,71,295,94"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.GridBoundFunctor" title="Grid1_Facet" alt="" coords="211,118,298,141"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.GridBoundFunctor" title="Grid1_Sphere" alt="" coords="207,165,303,187"/>
-</map>
