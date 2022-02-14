@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.mesh &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>woo.mesh &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="woo.manpage.html" title="woo.manpage"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.mesh</span></code></a></li> 
@@ -75,19 +75,12 @@
             
   <section id="woo-mesh">
 <h1><a class="reference internal" href="#module-woo.mesh" title="woo.mesh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.mesh</span></code></a><a class="headerlink" href="#woo-mesh" title="Permalink to this headline">¶</a></h1>
-digraph inheritance94227ac8b8 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;&quot;;
-  &quot;core.NodeData&quot; [URL=&quot;woo.core.html#woo.core.NodeData&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Data associated with some node.&quot;];
-  &quot;core.Object&quot; -&gt; &quot;core.NodeData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;mesh.MeshData&quot; [URL=&quot;#woo.mesh.MeshData&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Nodal data related to mesh objects (which are comprised of many nodes and associated topology).&quot;];
-  &quot;core.NodeData&quot; -&gt; &quot;mesh.MeshData&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
-}
-<span class="target" id="module-woo.mesh"></span><section class="html-toggle emphasized" id="meshdata">
+<div class="graphviz"><img src="_images/inheritance-7e0278eb166c0507baacd95c97161820aae7a1c7.png" alt="Inheritance diagram of woo.mesh" usemap="#inheritance94227ac8b8" class="inheritance graphviz" /></div>
+<map id="inheritance94227ac8b8" name="inheritance94227ac8b8">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.NodeData" target="_top" title="Data associated with some node." alt="" coords="445,5,564,31"/>
+<area shape="rect" id="node4" href="#woo.mesh.MeshData" target="_top" title="Nodal data related to mesh objects (which are comprised of many nodes and associated topology)." alt="" coords="612,5,740,31"/>
+<area shape="rect" id="node2" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,5,397,31"/>
+</map><span class="target" id="module-woo.mesh"></span><section class="html-toggle emphasized" id="meshdata">
 <h2>MeshData<a class="headerlink" href="#meshdata" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.NodeData" title="woo.core.NodeData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeData</span></code></a> → <a class="reference internal" href="#woo.mesh.MeshData" title="woo.mesh.MeshData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeshData</span></code></a></p>
 <dl class="py class">
@@ -203,7 +196,7 @@ size=&quot;&quot;;
         <li class="right" >
           <a href="woo.manpage.html" title="woo.manpage"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.mesh</span></code></a></li> 

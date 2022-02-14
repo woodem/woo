@@ -1,0 +1,10 @@
+<map id="inheritancec52fb715a3" name="inheritancec52fb715a3">
+<area shape="rect" id="node1" title="QObject(parent: QObject = None)" alt="" coords="541,104,663,129"/>
+<area shape="rect" id="node5" title="QWidget(parent: QWidget = None, flags: Union[Qt.WindowFlags, Qt.WindowType] = Qt.WindowFlags())" alt="" coords="745,129,896,155"/>
+<area shape="rect" id="node3" title="QPaintDevice()" alt="" coords="527,153,677,179"/>
+<area shape="rect" id="node9" href="#woo.qt.ControllerClass" target="_top" title="qt.ControllerClass" alt="" coords="964,105,1103,131"/>
+<area shape="rect" id="node6" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="342,55,438,80"/>
+<area shape="rect" id="node11" href="#woo.qt.UiPrefs" target="_top" title="Storage for local user interface preferences. This class is always instantiated as ``woo.qt.uiPrefs``; if the file :obj:`prefsFile` exists at startup, it is loaded automatically." alt="" coords="559,55,645,80"/>
+<area shape="rect" id="node8" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="301,5,479,31"/>
+<area shape="rect" id="node10" href="#woo.qt.ui_controller.Ui_Controller" target="_top" title="ui_controller.Ui_Controller" alt="" coords="725,80,916,105"/>
+</map>

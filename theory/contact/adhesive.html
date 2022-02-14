@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Adhesive models &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>Adhesive models &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -18,9 +18,7 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
-    <script>window.MathJax = {"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     
     
@@ -62,7 +60,7 @@
         <li class="right" >
           <a href="hertzian.html" title="Hertzian contact models"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">DEM contact models</a> &#187;</li>
@@ -212,7 +210,10 @@
 <p>Given known penetration <span class="math notranslate nohighlight">\(\delta\)</span>, we can find the corresponding value of <span class="math notranslate nohighlight">\(a\)</span> with <a class="reference external" href="http://en.wikipedia.org/wiki/Newton-Raphson">Newton-Raphson</a> or <a class="reference external" href="http://en.wikipedia.org/wiki/Halley%27s_method">Halley’s</a> methods. There are two solutions for all <span class="math notranslate nohighlight">\(\delta\in(\delta_{\min}\dots 0\rangle\)</span>. The solution for the ascending branch (<span class="math notranslate nohighlight">\(\delta'(a&lt;a_{\min})&gt;0\)</span>) is energetically unstable and we can ignore it in dynamic simulations.</p>
 <p>As the initial solution for iteration, we can use the (stable) value for zero overlap (satisfying <span class="math notranslate nohighlight">\(\delta(a_0)=0\)</span>) expressed from <a class="reference internal" href="#equation-schwarz-delta-a">(13)</a> as <span class="math notranslate nohighlight">\(a_0=(4\xi R)^{\frac{2}{3}}\)</span> for <a class="reference internal" href="../../woo.dem.html#woo.dem.Contact.isFresh" title="woo.dem.Contact.isFresh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fresh</span></code></a> contacts (where the overlap is likely close to zero); for previously existing contacts, the previous value of <span class="math notranslate nohighlight">\(a\)</span> is a good initial guess.</p>
 <p>This plot shows both loading and unloading (unstable) branches, obtained via Newton iteration (bisection for the unstable branch for simplicity); this plot reproduces <span id="id14">[<a class="reference internal" href="../../references.html#id8" title="Daniel Maugis. Adhesion of spheres: the jkr-dmt transition using a dugdale model. Journal of Colloid and Interface Science, 150(1):243–269, 1992.">Mau92</a>]</span>, Fig. 6.:</p>
-<p>(<a class="reference external" href="../../theory/contact/adhesive-2.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../../theory/contact/adhesive-2.py">Source code</a>, <a class="reference external" href="../../theory/contact/adhesive-2.png">png</a>, <a class="reference external" href="../../theory/contact/adhesive-2.hires.png">hires.png</a>, <a class="reference external" href="../../theory/contact/adhesive-2.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../_images/adhesive-2.png" src="../../_images/adhesive-2.png" />
+</figure>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Values bracketing possible solutions, <span class="math notranslate nohighlight">\(a\in\langle a_{\mathrm{lo}}, a_{\mathrm{hi}}\rangle\)</span> (lower and upper brackets) are to be defined for guarded iterative methods.</p>
@@ -231,7 +232,10 @@
 <p>The upper bracket is shown in the plot above for <span class="math notranslate nohighlight">\(\alpha=0.5\)</span>.</p>
 </div>
 <p>By composing <span class="math notranslate nohighlight">\(P_n(a)\)</span> and (numerically evaluated) <span class="math notranslate nohighlight">\(a(\delta)\)</span>, we obtain the displacement-force relationship (<span id="id15">[<a class="reference internal" href="../../references.html#id8" title="Daniel Maugis. Adhesion of spheres: the jkr-dmt transition using a dugdale model. Journal of Colloid and Interface Science, 150(1):243–269, 1992.">Mau92</a>]</span>, Fig. 7.)</p>
-<p>(<a class="reference external" href="../../theory/contact/adhesive-3.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../../theory/contact/adhesive-3.py">Source code</a>, <a class="reference external" href="../../theory/contact/adhesive-3.png">png</a>, <a class="reference external" href="../../theory/contact/adhesive-3.hires.png">hires.png</a>, <a class="reference external" href="../../theory/contact/adhesive-3.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../_images/adhesive-3.png" src="../../_images/adhesive-3.png" />
+</figure>
 <div class="admonition-implementation-note admonition">
 <p class="admonition-title">Implementation note:</p>
 <p>DMT/Schwarz contact models can be used via <a class="reference internal" href="../../woo.dem.html#woo.dem.Law2_L6Geom_HertzPhys_DMT" title="woo.dem.Law2_L6Geom_HertzPhys_DMT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Law2_L6Geom_HertzPhys_DMT</span></code></a>, when <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.gamma</span></code> (surface energy <span class="math notranslate nohighlight">\(\gamma\)</span>) is non-zero; <code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Cp2_FrictMat_HertzPhys.alpha</span></code> (Carpick-Ogletree-Salmeron transition parameter <span class="math notranslate nohighlight">\(\alpha\)</span>) determines the model behavior on the continuous DMT (<span class="math notranslate nohighlight">\(\alpha=0\)</span>) – JKR (<span class="math notranslate nohighlight">\(\alpha=1\)</span>) range. Appropriate engines are returned from <a class="reference internal" href="../../woo.dem.html#woo.dem.DemField.minimalEngines" title="woo.dem.DemField.minimalEngines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.DemField.minimalEngines</span></code></a> when <code class="docutils literal notranslate"><span class="pre">model</span></code> is an instance of <a class="reference internal" href="../../woo.models.html#woo.models.ContactModelSelector" title="woo.models.ContactModelSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.models.ContactModelSelector</span></code></a> with <code class="docutils literal notranslate"><span class="pre">name</span></code> equal to <code class="docutils literal notranslate"><span class="pre">&quot;DMT&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Schwarz&quot;</span></code>.</p>
@@ -331,7 +335,7 @@
         <li class="right" >
           <a href="hertzian.html" title="Hertzian contact models"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >DEM contact models</a> &#187;</li>

@@ -1,0 +1,6 @@
+<map id="inheritance3a98ba823e" name="inheritance3a98ba823e">
+<area shape="rect" id="node1" href="#woo.pre.psdrender.PsdRender" target="_top" title="Preprocessor for creating layer with given PSD and passing it to POV&#45;Ray for rendering." alt="" coords="732,31,916,56"/>
+<area shape="rect" id="node2" href="woo.core.html#woo.core.Preprocessor" target="_top" title="Subclasses of this class generate a Scene object when called, based on their attributes." alt="" coords="495,5,665,31"/>
+<area shape="rect" id="node3" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="476,55,684,80"/>
+<area shape="rect" id="node5" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,5,428,31"/>
+</map>

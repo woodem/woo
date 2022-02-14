@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.triangulated &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>woo.triangulated &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -18,9 +18,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
-    <script>window.MathJax = {"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     
     
@@ -62,7 +60,7 @@
         <li class="right" >
           <a href="woo.timing.html" title="woo.timing"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.triangulated</span></code></a></li> 
@@ -78,19 +76,12 @@
             
   <section id="woo-triangulated">
 <h1><a class="reference internal" href="#module-woo.triangulated" title="woo.triangulated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.triangulated</span></code></a><a class="headerlink" href="#woo-triangulated" title="Permalink to this headline">¶</a></h1>
-digraph inheritance03c648352b {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;&quot;;
-  &quot;core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
-  &quot;pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
-  &quot;triangulated.MeshImport&quot; [URL=&quot;#woo.triangulated.MeshImport&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;User interface for importing meshes from external files , so that all import parameters are kept together. Currently supported formats are:&quot;];
-  &quot;core.Object&quot; -&gt; &quot;triangulated.MeshImport&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pyderived.PyWooObject&quot; -&gt; &quot;triangulated.MeshImport&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<span class="target" id="module-woo.triangulated"></span><dl class="py function">
+<div class="graphviz"><img src="_images/inheritance-66769d9d9f12c64082c388207c8a9f9745ee3dac.png" alt="Inheritance diagram of woo.triangulated" usemap="#inheritance03c648352b" class="inheritance graphviz" /></div>
+<map id="inheritance03c648352b" name="inheritance03c648352b">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="342,55,438,80"/>
+<area shape="rect" id="node4" href="#woo.triangulated.MeshImport" target="_top" title="User interface for importing meshes from external files , so that all import parameters are kept together. Currently supported formats are:" alt="" coords="527,31,709,56"/>
+<area shape="rect" id="node3" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="301,5,479,31"/>
+</map><span class="target" id="module-woo.triangulated"></span><dl class="py function">
 <dt class="sig sig-object py" id="woo.triangulated.box">
 <span class="sig-prename descclassname"><span class="pre">woo.triangulated.</span></span><span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Vector6i(1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/triangulated.html#box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.triangulated.box" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return box created from facets. <code class="docutils literal notranslate"><span class="pre">**kw</span></code> args are passed to <a class="reference internal" href="woo.dem.html#woo.dem.Facet.make" title="woo.dem.Facet.make"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Facet.make</span></code></a>. If facets have thickness, node masses and inertia will be computed automatically.</p>
@@ -394,7 +385,7 @@ is called from python, this function gets precedence over the c++ one. Additiona
         <li class="right" >
           <a href="woo.timing.html" title="woo.timing"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.triangulated</span></code></a></li> 

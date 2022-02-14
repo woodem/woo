@@ -1,0 +1,5 @@
+<map id="inheritance94227ac8b8" name="inheritance94227ac8b8">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.NodeData" target="_top" title="Data associated with some node." alt="" coords="445,5,564,31"/>
+<area shape="rect" id="node4" href="#woo.mesh.MeshData" target="_top" title="Nodal data related to mesh objects (which are comprised of many nodes and associated topology)." alt="" coords="612,5,740,31"/>
+<area shape="rect" id="node2" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,5,397,31"/>
+</map>

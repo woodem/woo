@@ -1,0 +1,16 @@
+<map id="inheritance5019243417" name="inheritance5019243417">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.Functor" target="_top" title="Function&#45;like object that is called by Dispatcher, if types of arguments match those the Functor declares to accept." alt="" coords="445,80,548,105"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.BoundFunctor" target="_top" title="Functor for creating/updating :obj:`woo.dem.Bound`." alt="" coords="596,19,740,44"/>
+<area shape="rect" id="node8" href="woo.dem.html#woo.dem.IntraFunctor" target="_top" title="Functor appying internal forces" alt="" coords="601,80,735,105"/>
+<area shape="rect" id="node2" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,129,397,155"/>
+<area shape="rect" id="node6" href="woo.dem.html#woo.dem.Shape" target="_top" title="Particle geometry" alt="" coords="449,153,544,179"/>
+<area shape="rect" id="node9" href="#woo.fem.Bo1_Tetra_Aabb" target="_top" title="Creates/updates an :obj:`Aabb` of a :obj:`Tetra`." alt="" coords="795,5,951,31"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Facet" target="_top" title="Facet (triangle in 3d) particle." alt="" coords="623,153,713,179"/>
+<area shape="rect" id="node13" href="#woo.fem.Membrane" target="_top" title="Facet as triangular element, with 2 translational and 2 rotational degrees of freedom in each node." alt="" coords="812,153,935,179"/>
+<area shape="rect" id="node15" href="#woo.fem.Tetra" target="_top" title="Tetra (triangle in 3d) particle." alt="" coords="626,203,710,228"/>
+<area shape="rect" id="node7" href="woo.dem.html#woo.dem.In2_Facet" target="_top" title="Distribute frce on :obj:`Facet` to its nodes; the algorithm is purely geometrical since :obj:`Facet` has no internal forces, therefore can accept any kind of material." alt="" coords="815,55,931,80"/>
+<area shape="rect" id="node10" href="#woo.fem.In2_Membrane_ElastMat" target="_top" title="Apply contact forces and compute internal response of a :obj:`Membrane`. Forces are distributed according to barycentric coordinates when :obj:`bending` is enabled; otherwise forces are distributed equally (thirds) to all nodes, to avoid contacts punching through the mesh which has no bending resistance. This can be overridden by setting :obj:`applyBary`, in which case forces will be always applied weighted by barycentric coords." alt="" coords="1007,55,1220,80"/>
+<area shape="rect" id="node12" href="#woo.fem.In2_Tet4_ElastMat" target="_top" title="Apply contact forces and compute internal response of a :obj:`Tet4`." alt="" coords="788,104,959,129"/>
+<area shape="rect" id="node11" href="#woo.fem.In2_Membrane_FrictMat" target="_top" title="Workaround for current dispatching mechanism limitations so that membrane with :obj:`woo.dem.FrictMat` is not matched by :obj:`woo.dem.In2_Facet`." alt="" coords="1268,55,1477,80"/>
+<area shape="rect" id="node14" href="#woo.fem.Tet4" target="_top" title="4&#45;node linear interpolation tetrahedron element with best&#45;fit co&#45;rotated coordinates." alt="" coords="834,203,913,228"/>
+</map>

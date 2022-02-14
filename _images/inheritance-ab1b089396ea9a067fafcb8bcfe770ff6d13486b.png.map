@@ -1,0 +1,48 @@
+<map id="inheritancee5f959ef8c" name="inheritancee5f959ef8c">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.Dispatcher" target="_top" title="Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself." alt="" coords="712,129,836,155"/>
+<area shape="rect" id="node34" href="#woo.gl.GlBoundDispatcher" target="_top" title="Dispatcher calling :obj:`functors&lt;GlBoundFunctor&gt;` based on received argument type(s)." alt="" coords="941,5,1104,31"/>
+<area shape="rect" id="node35" href="#woo.gl.GlCPhysDispatcher" target="_top" title="Dispatcher calling :obj:`functors&lt;GlCPhysFunctor&gt;` based on received argument type(s)." alt="" coords="941,55,1104,80"/>
+<area shape="rect" id="node40" href="#woo.gl.GlFieldDispatcher" target="_top" title="Dispatcher calling :obj:`functors&lt;GlFieldFunctor&gt;` based on received argument type(s)." alt="" coords="946,104,1099,129"/>
+<area shape="rect" id="node41" href="#woo.gl.GlNodeDispatcher" target="_top" title="Dispatcher calling :obj:`functors&lt;GlNodeFunctor&gt;` based on received argument type(s)." alt="" coords="945,153,1101,179"/>
+<area shape="rect" id="node43" href="#woo.gl.GlShapeDispatcher" target="_top" title="Dispatcher calling :obj:`functors&lt;GlShapeFunctor&gt;` based on received argument type(s)." alt="" coords="941,203,1104,228"/>
+<area shape="rect" id="node2" href="woo.core.html#woo.core.Engine" target="_top" title="Basic execution unit of simulation, called from the simulation loop (O.engines)" alt="" coords="477,327,575,352"/>
+<area shape="rect" id="node3" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,844,397,869"/>
+<area shape="rect" id="node4" href="woo.core.html#woo.core.Functor" target="_top" title="Function&#45;like object that is called by Dispatcher, if types of arguments match those the Functor declares to accept." alt="" coords="475,573,577,599"/>
+<area shape="rect" id="node5" href="woo.core.html#woo.core.NodeData" target="_top" title="Data associated with some node." alt="" coords="467,732,585,757"/>
+<area shape="rect" id="node6" href="woo.core.html#woo.core.NodeVisRep" target="_top" title="Object representing what should be rendered at associated node (abstract base class)." alt="" coords="459,819,593,844"/>
+<area shape="rect" id="node11" href="#woo.gl.DisplayParameters" target="_top" title="Store display parameters." alt="" coords="445,868,607,893"/>
+<area shape="rect" id="node37" href="#woo.gl.GlExtraDrawer" target="_top" title="Performing arbitrary OpenGL drawing commands; called from :obj:`Renderer` (see :obj:`Renderer.extraDrawers`) once regular rendering routines will have finished." alt="" coords="459,917,593,943"/>
+<area shape="rect" id="node42" href="#woo.gl.GlSetup" target="_top" title="Proxy object for accessing all GL&#45;related settings uniformly from the scene." alt="" coords="481,967,571,992"/>
+<area shape="rect" id="node45" href="#woo.gl.Renderer" target="_top" title="Class responsible for rendering scene on OpenGL devices." alt="" coords="477,1016,575,1041"/>
+<area shape="rect" id="node13" href="#woo.gl.GlBoundFunctor" target="_top" title="Abstract functor for rendering :obj:`Bound` objects." alt="" coords="703,301,845,327"/>
+<area shape="rect" id="node15" href="#woo.gl.GlCPhysFunctor" target="_top" title="Abstract functor for rendering :obj:`CPhys` objects." alt="" coords="704,424,844,449"/>
+<area shape="rect" id="node20" href="#woo.gl.GlShapeFunctor" target="_top" title="Abstract functor for rendering :obj:`Shape` objects." alt="" coords="704,548,844,573"/>
+<area shape="rect" id="node22" href="#woo.gl.GlFieldFunctor" target="_top" title="Abstract functor for rendering :obj:`Field` objects." alt="" coords="709,597,839,623"/>
+<area shape="rect" id="node29" href="#woo.gl.GlNodeFunctor" target="_top" title="Abstract functor for rendering :obj:`Node` objects." alt="" coords="707,647,841,672"/>
+<area shape="rect" id="node36" href="#woo.gl.GlData" target="_top" title="Nodal data used for rendering." alt="" coords="733,696,815,721"/>
+<area shape="rect" id="node9" href="#woo.gl.VectorGlRep" target="_top" title="Render vector value at associated node, as an arrow" alt="" coords="715,745,833,771"/>
+<area shape="rect" id="node10" href="#woo.gl.CylGlRep" target="_top" title="Render cylinder aligned with local x&#45;axis, with color and radius given by val (and optionally val2)." alt="" coords="725,795,823,820"/>
+<area shape="rect" id="node44" href="#woo.gl.LabelGlRep" target="_top" title="Render scalar value at associated node" alt="" coords="718,844,830,869"/>
+<area shape="rect" id="node46" href="#woo.gl.ScalarGlRep" target="_top" title="Render scalar value at associated node" alt="" coords="715,893,833,919"/>
+<area shape="rect" id="node47" href="#woo.gl.TensorGlRep" target="_top" title="Render tensor (given as 3x3 matrix) as its principal components." alt="" coords="715,943,833,968"/>
+<area shape="rect" id="node8" href="#woo.gl.ActReactGlRep" target="_top" title="Render action and reaction vectors as opposing arrows, with offset and optionally separate normal/shear components. The value is always given in node&#45;local coordinates!" alt="" coords="955,844,1090,869"/>
+<area shape="rect" id="node12" href="#woo.gl.Gl1_Aabb" target="_top" title="Render Axis&#45;aligned bounding box (:obj:`woo.dem.Aabb`)." alt="" coords="973,252,1073,277"/>
+<area shape="rect" id="node25" href="#woo.gl.Gl1_GridBound" target="_top" title="Render :obj:`GridBound` objects)." alt="" coords="955,301,1090,327"/>
+<area shape="rect" id="node14" href="#woo.gl.Gl1_CPhys" target="_top" title="Renders :obj:`CPhys` objects as cylinders of which diameter and color depends on :obj:`CPhys:force` normal (:math:`x`) component." alt="" coords="969,351,1076,376"/>
+<area shape="rect" id="node18" href="#woo.gl.Gl1_ConcretePhys" target="_top" title="Renders :obj:`ConcretePhys` objects with discs representing damage. :obj:`Gl1_CPhys` may be requested to do other rendering based on :obj:`doCPhys`." alt="" coords="1152,351,1308,376"/>
+<area shape="rect" id="node16" href="#woo.gl.Gl1_Capsule" target="_top" title="Renders :obj:`woo.dem.Capsule` object" alt="" coords="1171,400,1289,425"/>
+<area shape="rect" id="node17" href="#woo.gl.Gl1_Sphere" target="_top" title="Renders :obj:`Sphere` object" alt="" coords="967,400,1079,425"/>
+<area shape="rect" id="node23" href="#woo.gl.Gl1_Ellipsoid" target="_top" title="Renders :obj:`woo.dem.Ellipsoid` object" alt="" coords="1169,449,1291,475"/>
+<area shape="rect" id="node19" href="#woo.gl.Gl1_Cone" target="_top" title="Render cone particles" alt="" coords="973,449,1073,475"/>
+<area shape="rect" id="node24" href="#woo.gl.Gl1_Facet" target="_top" title="Renders :obj:`Facet` object" alt="" coords="972,499,1073,524"/>
+<area shape="rect" id="node26" href="#woo.gl.Gl1_InfCylinder" target="_top" title="Renders :obj:`InfCylinder` object" alt="" coords="953,548,1092,573"/>
+<area shape="rect" id="node30" href="#woo.gl.Gl1_Rod" target="_top" title="Render truss particles" alt="" coords="977,597,1069,623"/>
+<area shape="rect" id="node32" href="#woo.gl.Gl1_Tetra" target="_top" title="Renders :obj:`Tetra` object" alt="" coords="973,647,1072,672"/>
+<area shape="rect" id="node33" href="#woo.gl.Gl1_Wall" target="_top" title="Renders :obj:`woo.dem.Wall` object" alt="" coords="975,696,1070,721"/>
+<area shape="rect" id="node21" href="#woo.gl.Gl1_DemField" target="_top" title="Render DEM field." alt="" coords="958,745,1087,771"/>
+<area shape="rect" id="node27" href="#woo.gl.Gl1_Membrane" target="_top" title="Renders :obj:`Membrane` object; :obj:`Facet` itself is rendered via :obj:`Gl1_Facet`." alt="" coords="1161,499,1299,524"/>
+<area shape="rect" id="node28" href="#woo.gl.Gl1_Node" target="_top" title="Render generic :obj:`woo.dem.Node`." alt="" coords="972,795,1073,820"/>
+<area shape="rect" id="node31" href="#woo.gl.Gl1_Tet4" target="_top" title="Renders :obj:`Tet4` object; :obj:`Tetra` itself is rendered via :obj:`Gl1_Tetra`." alt="" coords="1183,647,1277,672"/>
+<area shape="rect" id="node38" href="#woo.gl.GlExtra_AnisoPorosityAnalyzer" target="_top" title="Find an instance of :obj:`LawTester` and show visually its data." alt="" coords="655,992,893,1017"/>
+<area shape="rect" id="node39" href="#woo.gl.GlExtra_EnergyTrackerGrid" target="_top" title="Draw :obj:`S.energy.grid &lt;woo.core.Scene.EnergyTrackerGrid&gt;`, if used." alt="" coords="669,1041,879,1067"/>
+</map>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.models &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>woo.models &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -18,9 +18,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
-    <script>window.MathJax = {"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     
     
@@ -62,7 +60,7 @@
         <li class="right" >
           <a href="woo.mesh.html" title="woo.mesh"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a></li> 
@@ -78,24 +76,15 @@
             
   <section id="woo-models">
 <h1><a class="reference internal" href="#module-woo.models" title="woo.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a><a class="headerlink" href="#woo-models" title="Permalink to this headline">¶</a></h1>
-digraph inheritancec80da1a5ff {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;&quot;;
-  &quot;core.Object&quot; [URL=&quot;woo.core.html#woo.core.Object&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; -&gt; &quot;core.Object&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;models.ContactModelSelector&quot; [URL=&quot;#woo.models.ContactModelSelector&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;User interface for humanely selecting contact model and all its features, plus functions returning respective :obj:`woo.dem.CPhysFunctor` and :obj:`woo.dem.LawFunctor` objects.&quot;];
-  &quot;core.Object&quot; -&gt; &quot;models.ContactModelSelector&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pyderived.PyWooObject&quot; -&gt; &quot;models.ContactModelSelector&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;models.CundallModel&quot; [URL=&quot;#woo.models.CundallModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Linear model :cite:`Cundall1979`.&quot;];
-  &quot;models.HertzModel&quot; [URL=&quot;#woo.models.HertzModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Purely elastic Hertz contact model; base class for :obj:`SchwarzModel`. For details, see :ref:`hertzian_contact_models`.&quot;];
-  &quot;models.CundallModel&quot; -&gt; &quot;models.HertzModel&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;models.SchwarzModel&quot; [URL=&quot;#woo.models.SchwarzModel&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Schwarz contact model, following :cite:`Schwarz2003`. Details are given in :ref:`adhesive_contact_models`.&quot;];
-  &quot;models.HertzModel&quot; -&gt; &quot;models.SchwarzModel&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;pybind11_builtins.pybind11_object&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;];
-  &quot;pyderived.PyWooObject&quot; [URL=&quot;woo.pyderived.html#woo.pyderived.PyWooObject&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Define some c++-compatibility functions for python classes. Derived class is created as::&quot;];
-}
-<span class="target" id="module-woo.models"></span><p>Collection of classes providing python-only implementation of various implementation models, mostly for testing or plotting in documentation. Plus a class for selecting material model along with all its parameters for use in preprocessors.</p>
+<div class="graphviz"><img src="_images/inheritance-b548e3e2a74c72d128720895ceb6fbff52616a84.png" alt="Inheritance diagram of woo.models" usemap="#inheritancec80da1a5ff" class="inheritance graphviz" /></div>
+<map id="inheritancec80da1a5ff" name="inheritancec80da1a5ff">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="342,104,438,129"/>
+<area shape="rect" id="node3" href="#woo.models.ContactModelSelector" target="_top" title="User interface for humanely selecting contact model and all its features, plus functions returning respective :obj:`woo.dem.CPhysFunctor` and :obj:`woo.dem.LawFunctor` objects." alt="" coords="527,80,744,105"/>
+<area shape="rect" id="node4" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="301,55,479,80"/>
+<area shape="rect" id="node5" href="#woo.models.CundallModel" target="_top" title="Linear model :cite:`Cundall1979`." alt="" coords="48,5,211,31"/>
+<area shape="rect" id="node6" href="#woo.models.HertzModel" target="_top" title="Purely elastic Hertz contact model; base class for :obj:`SchwarzModel`. For details, see :ref:`hertzian_contact_models`." alt="" coords="315,5,465,31"/>
+<area shape="rect" id="node7" href="#woo.models.SchwarzModel" target="_top" title="Schwarz contact model, following :cite:`Schwarz2003`. Details are given in :ref:`adhesive_contact_models`." alt="" coords="551,5,719,31"/>
+</map><span class="target" id="module-woo.models"></span><p>Collection of classes providing python-only implementation of various implementation models, mostly for testing or plotting in documentation. Plus a class for selecting material model along with all its parameters for use in preprocessors.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="woo.models.CundallModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.models.</span></span><span class="sig-name descname"><span class="pre">CundallModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ktDivKn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/models.html#CundallModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.models.CundallModel" title="Permalink to this definition">¶</a></dt>
@@ -307,7 +296,7 @@ size=&quot;&quot;;
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.models.ContactModelSelector.mats">
-<span class="sig-name descname"><span class="pre">mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">[&lt;FrictMat</span> <span class="pre">&#64;</span> <span class="pre">0x3872d80&gt;]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.mats" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">[&lt;FrictMat</span> <span class="pre">&#64;</span> <span class="pre">0x1ecb8b0&gt;]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.models.ContactModelSelector.mats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Material definitions</p>
 <p>[type: [Material, …]]</p>
 </dd></dl>
@@ -530,7 +519,7 @@ is called from python, this function gets precedence over the c++ one. Additiona
         <li class="right" >
           <a href="woo.mesh.html" title="woo.mesh"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.models</span></code></a></li> 

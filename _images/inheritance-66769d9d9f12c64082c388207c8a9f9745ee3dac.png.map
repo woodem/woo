@@ -1,0 +1,5 @@
+<map id="inheritance03c648352b" name="inheritance03c648352b">
+<area shape="rect" id="node1" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="342,55,438,80"/>
+<area shape="rect" id="node4" href="#woo.triangulated.MeshImport" target="_top" title="User interface for importing meshes from external files , so that all import parameters are kept together. Currently supported formats are:" alt="" coords="527,31,709,56"/>
+<area shape="rect" id="node3" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="301,5,479,31"/>
+</map>

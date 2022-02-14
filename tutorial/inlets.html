@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Inlets &amp; outlets &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>Inlets &amp; outlets &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -18,9 +18,7 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}})</script>
-    <script>window.MathJax = {"loader": {"load": ["[tex]/boldsymbol"]}, "tex": {"macros": {"prev": ["#1^-", 1], "pprev": ["#1^{\\ominus}", 1], "curr": ["#1^{\\circ}", 1], "nnext": ["#1^{\\oplus}", 1], "next": ["#1^{+}", 1], "Dt": "\\Delta t", "tens": ["{\\bf #1}", 1], "vec": ["{\\bf #1}", 1], "quat": ["{\\bf #1}", 1], "mat": ["{\\bf #1}", 1], "u": ["\\,\\mathrm{#1}", 1], "normalized": ["\\frac{#1}{|\\cdot|}", 1], "d": "\\mathrm{d}\\,", "phi": "\\varphi", "eps": "\\varepsilon", "epsilon": "\\varepsilon", "tr": "\\mathop{\\rm tr}\\nolimits"}, "packages": {"[+]": ["boldsymbol"]}}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     
     
@@ -62,7 +60,7 @@
         <li class="right" >
           <a href="impose.html" title="Impose force/velocity"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Inlets &amp; outlets</a></li> 
@@ -91,10 +89,7 @@
 <h3>PSD<a class="headerlink" href="#psd" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://en.wikipedia.org/wiki/Particle-size_distribution">Particle size distribution (PSD)</a> is an important characteristics of granular materials – <a class="reference external" href="http://en.wikipedia.org/wiki/Cumulative_distribution_function">cumulative distribution function (CDF)</a> statistically describing distribution of grain sizes. In Woo, PSD is given as points <a class="reference internal" href="../woo.dem.html#woo.dem.PsdSphereGenerator.psdPts" title="woo.dem.PsdSphereGenerator.psdPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psdPts</span></code></a> of a piecewise-linear function. The <span class="math notranslate nohighlight">\(x\)</span>-values should be increasing and <span class="math notranslate nohighlight">\(y\)</span>-values should be non-decreasing (increasing or equal). The <span class="math notranslate nohighlight">\(y\)</span>-value used for the last point is always taken as 100%, and all other <span class="math notranslate nohighlight">\(y\)</span>-values are re-scaled accordingly.</p>
 <p>For example, let’s have the following PSD:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\begin{axis}[area style, enlarge x limits=false, xlabel=d,ylabel={$P(D\leq d)$},grid=major]\addplot[mark=o,very thick,red] coordinates { (.2, 0) (.3, .2) (.4, .9) (.5, 1.) }; \end{axis}</span>)</p>
-<p>!pdflatex command cannot be run</p>
-</div>
+<div class="figure" style="text-align: center"><p><img  src="None" alt="Figure made with TikZ" /></p>
 </div><p>Let’s play with the generator now:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">gen</span><span class="o">=</span><span class="n">PsdSphereGenerator</span><span class="p">(</span><span class="n">psdPts</span><span class="o">=</span><span class="p">[(</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),(</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="o">.</span><span class="mi">9</span><span class="p">),(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="mf">1.</span><span class="p">)])</span>
 
@@ -541,7 +536,7 @@
         <li class="right" >
           <a href="impose.html" title="Impose force/velocity"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Inlets &amp; outlets</a></li> 

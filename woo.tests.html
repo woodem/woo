@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.tests &#8212; Woo 1.0+rev1-git-2f4f277 documentation</title>
+    <title>woo.tests &#8212; Woo 1.0+rev1-git-3898baf documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -59,7 +59,7 @@
         <li class="right" >
           <a href="woo.system.html" title="woo.system"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests</span></code></a></li> 
@@ -94,103 +94,199 @@ for further processing.</p>
 <p>&#64;param module: fully-qualified module name, e.g. woo.tests.core</p>
 </dd></dl>
 
-<section id="module-woo.tests.test_hertz">
-<span id="woo-tests-test-hertz"></span><h2><a class="reference internal" href="#module-woo.tests.test_hertz" title="woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a><a class="headerlink" href="#module-woo.tests.test_hertz" title="Permalink to this headline">¶</a></h2>
+<section id="module-woo.tests.test_io">
+<span id="woo-tests-test-io"></span><h2><a class="reference internal" href="#module-woo.tests.test_io" title="woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a><a class="headerlink" href="#module-woo.tests.test_io" title="Permalink to this headline">¶</a></h2>
+<p>Test loading and saving woo objects in various formats</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_hertz.</span></span><span class="sig-name descname"><span class="pre">TestHertz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test <code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_HertzPhys_DMT</span></code>.</p>
-<p>Create an instance of the class that will use the named test
+<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestArraySerialization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization.testBoostMultiArray">
+<span class="sig-name descname"><span class="pre">testBoostMultiArray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization.testBoostMultiArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization.testBoostMultiArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: serialization of boost::multi_array</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz.testElasticCollisionTime">
-<span class="sig-name descname"><span class="pre">testElasticCollisionTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz.testElasticCollisionTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz.testElasticCollisionTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hertz: elastic collision time for different impact velocities (simulation/analytic)</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_clump">
-<span id="woo-tests-test-clump"></span><h2><a class="reference internal" href="#module-woo.tests.test_clump" title="woo.tests.test_clump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clump</span></code></a><a class="headerlink" href="#module-woo.tests.test_clump" title="Permalink to this headline">¶</a></h2>
-<p>Various computations affected by the periodic boundary conditions.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">TestSimpleClump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test things on a simple clump composed of 2 spheres.</p>
-<p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testConsistency">
-<span class="sig-name descname"><span class="pre">testConsistency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testConsistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testConsistency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: ids and flags consistency</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testNoCollide">
-<span class="sig-name descname"><span class="pre">testNoCollide</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testNoCollide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testNoCollide" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: particles inside one clump don’t collide with each other</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testStaticProperties">
-<span class="sig-name descname"><span class="pre">testStaticProperties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testStaticProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testStaticProperties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: mass, centroid, intertia</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testVelocity">
-<span class="sig-name descname"><span class="pre">testVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testVelocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testVelocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: velocities of member assigned by Leapfrog</p>
+<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization.testMatrixX">
+<span class="sig-name descname"><span class="pre">testMatrixX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization.testMatrixX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization.testMatrixX" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: serialization of arrays</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">TestSphereClumpGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: geometry of clumps composed of spheres only</p>
-<p>Create an instance of the class that will use the named test
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestFormatsAndDetection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.setUp" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.setUp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hook method for setting up the test fixture before exercising it.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.testSampling">
-<span class="sig-name descname"><span class="pre">testSampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.testSampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.testSampling" title="Permalink to this definition">¶</a></dt>
-<dd><p>SphereClumpGeom: properties via grid sampling</p>
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testBin">
+<span class="sig-name descname"><span class="pre">testBin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testBin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testBin" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: binary save/load &amp; format detection</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.testSteiner">
-<span class="sig-name descname"><span class="pre">testSteiner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.testSteiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.testSteiner" title="Permalink to this definition">¶</a></dt>
-<dd><p>SphereClumpGeom: properties via Steiner’s theorem</p>
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testBinGz">
+<span class="sig-name descname"><span class="pre">testBinGz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testBinGz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testBinGz" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: binary save/load (gzip compressed) &amp; format detection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testDeepcopy">
+<span class="sig-name descname"><span class="pre">testDeepcopy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testDeepcopy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testDeepcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: temporary store (Object.deepcopy)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExpr">
+<span class="sig-name descname"><span class="pre">testExpr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExpr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExpr" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: expression dump/load &amp; format detection (file+string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExprHashColonOverride">
+<span class="sig-name descname"><span class="pre">testExprHashColonOverride</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExprHashColonOverride"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExprHashColonOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: special comments #% inside expr dumps</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExprSpecialComments">
+<span class="sig-name descname"><span class="pre">testExprSpecialComments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExprSpecialComments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExprSpecialComments" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: special comments #: inside expr dumps</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testHtml">
+<span class="sig-name descname"><span class="pre">testHtml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testHtml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testHtml" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: HTML dump (file+string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testInvalidExtension">
+<span class="sig-name descname"><span class="pre">testInvalidExtension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testInvalidExtension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testInvalidExtension" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: unrecognized extension rejected with format=’auto’</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testInvalidFormat">
+<span class="sig-name descname"><span class="pre">testInvalidFormat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testInvalidFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testInvalidFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: invalid formats rejected</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testJson">
+<span class="sig-name descname"><span class="pre">testJson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: JSON dump/load &amp; format detection (file+string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testPickle">
+<span class="sig-name descname"><span class="pre">testPickle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testPickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testPickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: pickle dump/load &amp; format detection (file+string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testRefuseDerivedPyObject">
+<span class="sig-name descname"><span class="pre">testRefuseDerivedPyObject</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testRefuseDerivedPyObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testRefuseDerivedPyObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: python-derived objects refuse to save via boost::serialization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testStrFile">
+<span class="sig-name descname"><span class="pre">testStrFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testStrFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testStrFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: file can be given as str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testTmpStore">
+<span class="sig-name descname"><span class="pre">testTmpStore</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testTmpStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testTmpStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: temporary store (loadTmp, saveTmp)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testUnicodeFile">
+<span class="sig-name descname"><span class="pre">testUnicodeFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testUnicodeFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testUnicodeFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: filename can be given as unicode</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testXml">
+<span class="sig-name descname"><span class="pre">testXml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testXml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testXml" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: XML save/load &amp; format detection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testXmlBz2">
+<span class="sig-name descname"><span class="pre">testXmlBz2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testXmlBz2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testXmlBz2" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: XML save/load (bzip2 compressed) &amp; format detection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.tryDumpLoad">
+<span class="sig-name descname"><span class="pre">tryDumpLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.tryDumpLoad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.tryDumpLoad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.tryDumpLoadStr">
+<span class="sig-name descname"><span class="pre">tryDumpLoadStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.tryDumpLoadStr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.tryDumpLoadStr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestNoDumpAttributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.testCond">
+<span class="sig-name descname"><span class="pre">testCond</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.testCond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.testCond" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: conditional dumping to expr and JSON</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.testUncond">
+<span class="sig-name descname"><span class="pre">testUncond</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.testUncond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.testUncond" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: unconditional noDump attribute (template param)</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="woo.tests.test_clump.sphereClumpPrincipalAxes">
-<span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">sphereClumpPrincipalAxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#sphereClumpPrincipalAxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.sphereClumpPrincipalAxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clump: return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestSpecialDumpMethods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods.testSceneLastDump_direct">
+<span class="sig-name descname"><span class="pre">testSceneLastDump_direct</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods.testSceneLastDump_direct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods.testSceneLastDump_direct" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO: Scene.lastSave set (Object._boostSave overridden)</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -295,42 +391,6 @@ not have a method with the specified name.</p>
 </dd></dl>
 
 </section>
-<section id="module-woo.tests.test_ellipsoid">
-<span id="woo-tests-test-ellipsoid"></span><h2><a class="reference internal" href="#module-woo.tests.test_ellipsoid" title="woo.tests.test_ellipsoid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_ellipsoid</span></code></a><a class="headerlink" href="#module-woo.tests.test_ellipsoid" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_ellipsoid.</span></span><span class="sig-name descname"><span class="pre">TestEllipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test <code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Ellipsoid_Ellipsoid_L6Geom</span></code>.</p>
-<p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testMassInertia">
-<span class="sig-name descname"><span class="pre">testMassInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testMassInertia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testMassInertia" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ellipsoid: mass and inertia computation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid">
-<span class="sig-name descname"><span class="pre">testNormalDisplacementEllipsoid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testNormalDisplacementEllipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ellipsoid: normal displacement on contact with ellipsoid.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementWall">
-<span class="sig-name descname"><span class="pre">testNormalDisplacementWall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testNormalDisplacementWall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementWall" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ellipsoid: normal displacement on contact with wall</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="module-woo.tests.test_energy">
 <span id="woo-tests-test-energy"></span><h2><a class="reference internal" href="#module-woo.tests.test_energy" title="woo.tests.test_energy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_energy</span></code></a><a class="headerlink" href="#module-woo.tests.test_energy" title="Permalink to this headline">¶</a></h2>
 <p>Test some parts of energy conservation in DEM simulations.</p>
@@ -382,6 +442,145 @@ not have a method with the specified name.</p>
 <dt class="sig sig-object py" id="woo.tests.test_energy.TestLeapfrog.testGravitySkip">
 <span class="sig-name descname"><span class="pre">testGravitySkip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_energy.html#TestLeapfrog.testGravitySkip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_energy.TestLeapfrog.testGravitySkip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Energy: DemData.gravitySkip</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_grid">
+<span id="woo-tests-test-grid"></span><h2><a class="reference internal" href="#module-woo.tests.test_grid" title="woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a><a class="headerlink" href="#module-woo.tests.test_grid" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridColliderBasics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_grid.</span></span><span class="sig-name descname"><span class="pre">TestGridColliderBasics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridColliderBasics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridColliderBasics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridColliderBasics.testParams">
+<span class="sig-name descname"><span class="pre">testParams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridColliderBasics.testParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridColliderBasics.testParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>GridCollider: used-definable parameters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_grid.</span></span><span class="sig-name descname"><span class="pre">TestGridStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testAppend">
+<span class="sig-name descname"><span class="pre">testAppend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testAppend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testAppend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid: storage: appending data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testComplement">
+<span class="sig-name descname"><span class="pre">testComplement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testComplement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testComplement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid: storage: complements</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testEx">
+<span class="sig-name descname"><span class="pre">testEx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testEx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid: storage: dense and extra data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testPyAcces">
+<span class="sig-name descname"><span class="pre">testPyAcces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testPyAcces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testPyAcces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid: storage: python access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testStorageOrder">
+<span class="sig-name descname"><span class="pre">testStorageOrder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testStorageOrder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testStorageOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid: storage: storage order</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_hertz">
+<span id="woo-tests-test-hertz"></span><h2><a class="reference internal" href="#module-woo.tests.test_hertz" title="woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a><a class="headerlink" href="#module-woo.tests.test_hertz" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_hertz.</span></span><span class="sig-name descname"><span class="pre">TestHertz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test <code class="xref py py-obj docutils literal notranslate"><span class="pre">Law2_L6Geom_HertzPhys_DMT</span></code>.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_hertz.TestHertz.testElasticCollisionTime">
+<span class="sig-name descname"><span class="pre">testElasticCollisionTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_hertz.html#TestHertz.testElasticCollisionTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_hertz.TestHertz.testElasticCollisionTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hertz: elastic collision time for different impact velocities (simulation/analytic)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_tetra">
+<span id="woo-tests-test-tetra"></span><h2><a class="reference internal" href="#module-woo.tests.test_tetra" title="woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a><a class="headerlink" href="#module-woo.tests.test_tetra" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_tetra.TestTet4">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_tetra.</span></span><span class="sig-name descname"><span class="pre">TestTet4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_tetra.html#TestTet4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_tetra.TestTet4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test <a class="reference internal" href="woo.fem.html#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Tet4</span></code></a>.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_tetra.TestTet4.testStiffnessMatrix">
+<span class="sig-name descname"><span class="pre">testStiffnessMatrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_tetra.html#TestTet4.testStiffnessMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_tetra.TestTet4.testStiffnessMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tet4: stiffness matrix</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_ellipsoid">
+<span id="woo-tests-test-ellipsoid"></span><h2><a class="reference internal" href="#module-woo.tests.test_ellipsoid" title="woo.tests.test_ellipsoid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_ellipsoid</span></code></a><a class="headerlink" href="#module-woo.tests.test_ellipsoid" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_ellipsoid.</span></span><span class="sig-name descname"><span class="pre">TestEllipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test <code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Ellipsoid_Ellipsoid_L6Geom</span></code>.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testMassInertia">
+<span class="sig-name descname"><span class="pre">testMassInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testMassInertia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testMassInertia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ellipsoid: mass and inertia computation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid">
+<span class="sig-name descname"><span class="pre">testNormalDisplacementEllipsoid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testNormalDisplacementEllipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementEllipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ellipsoid: normal displacement on contact with ellipsoid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementWall">
+<span class="sig-name descname"><span class="pre">testNormalDisplacementWall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_ellipsoid.html#TestEllipsoid.testNormalDisplacementWall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_ellipsoid.TestEllipsoid.testNormalDisplacementWall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ellipsoid: normal displacement on contact with wall</p>
 </dd></dl>
 
 </dd></dl>
@@ -503,37 +702,58 @@ not have a method with the specified name.</p>
 </dd></dl>
 
 </section>
+<section id="module-woo.tests.test_volumetric">
+<span id="woo-tests-test-volumetric"></span><h2><a class="reference internal" href="#module-woo.tests.test_volumetric" title="woo.tests.test_volumetric"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_volumetric</span></code></a><a class="headerlink" href="#module-woo.tests.test_volumetric" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_volumetric.</span></span><span class="sig-name descname"><span class="pre">TestVolumetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Volumetric properties</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraCanon">
+<span class="sig-name descname"><span class="pre">testTetraCanon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraCanon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraCanon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetra: mass, centrer, inertia of canonical tetrahedron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraGeneric">
+<span class="sig-name descname"><span class="pre">testTetraGeneric</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraGeneric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraGeneric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetra: inertia and principal axes of generic tetrahedron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraUnit">
+<span class="sig-name descname"><span class="pre">testTetraUnit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraUnit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tetra: principal axes of unit tetrahedron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTriCanon">
+<span class="sig-name descname"><span class="pre">testTriCanon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTriCanon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTriCanon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triangle: area, inertia of canonical triangle</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="woo-tests-test-core">
 <h2><a class="reference internal" href="#module-woo.tests.test_core" title="woo.tests.test_core"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_core</span></code></a><a class="headerlink" href="#woo-tests-test-core" title="Permalink to this headline">¶</a></h2>
-digraph inheritance6dd26aa87c {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;&quot;;
-  &quot;tests.test_core.TestArrayAccu&quot; [URL=&quot;#woo.tests.test_core.TestArrayAccu&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestArrayAccu&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestContact&quot; [URL=&quot;#woo.tests.test_core.TestContact&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestContact&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestForce&quot; [URL=&quot;#woo.tests.test_core.TestForce&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestForce&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestIO&quot; [URL=&quot;#woo.tests.test_core.TestIO&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestIO&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestInteractions&quot; [URL=&quot;#woo.tests.test_core.TestInteractions&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestInteractions&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestLoop&quot; [URL=&quot;#woo.tests.test_core.TestLoop&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestLoop&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestObjectInstantiation&quot; [URL=&quot;#woo.tests.test_core.TestObjectInstantiation&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestObjectInstantiation&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestParticles&quot; [URL=&quot;#woo.tests.test_core.TestParticles&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestParticles&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestPyDerived&quot; [URL=&quot;#woo.tests.test_core.TestPyDerived&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestPyDerived&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestScene&quot; [URL=&quot;#woo.tests.test_core.TestScene&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestScene&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;tests.test_core.TestTags&quot; [URL=&quot;#woo.tests.test_core.TestTags&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;];
-  &quot;unittest.case.TestCase&quot; -&gt; &quot;tests.test_core.TestTags&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;unittest.case.TestCase&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;A class whose instances are single test cases.&quot;];
-}
-<span class="target" id="module-woo.tests.test_core"></span><p>Core functionality (Scene in c++), such as accessing bodies, materials, interactions. Specific functionality tests should go to engines.py or elsewhere, not here.</p>
+<div class="graphviz"><img src="_images/inheritance-45a0d06311d8af785955e517ec25aad48f0fa153.png" alt="Inheritance diagram of woo.tests.test_core" usemap="#inheritance6dd26aa87c" class="inheritance graphviz" /></div>
+<map id="inheritance6dd26aa87c" name="inheritance6dd26aa87c">
+<area shape="rect" id="node1" href="#woo.tests.test_core.TestArrayAccu" target="_top" title="tests.test_core.TestArrayAccu" alt="" coords="250,5,465,31"/>
+<area shape="rect" id="node3" href="#woo.tests.test_core.TestContact" target="_top" title="tests.test_core.TestContact" alt="" coords="258,55,457,80"/>
+<area shape="rect" id="node4" href="#woo.tests.test_core.TestForce" target="_top" title="tests.test_core.TestForce" alt="" coords="266,104,449,129"/>
+<area shape="rect" id="node5" href="#woo.tests.test_core.TestIO" target="_top" title="tests.test_core.TestIO" alt="" coords="276,153,439,179"/>
+<area shape="rect" id="node6" href="#woo.tests.test_core.TestInteractions" target="_top" title="tests.test_core.TestInteractions" alt="" coords="245,203,470,228"/>
+<area shape="rect" id="node7" href="#woo.tests.test_core.TestLoop" target="_top" title="tests.test_core.TestLoop" alt="" coords="268,252,447,277"/>
+<area shape="rect" id="node8" href="#woo.tests.test_core.TestObjectInstantiation" target="_top" title="tests.test_core.TestObjectInstantiation" alt="" coords="221,301,493,327"/>
+<area shape="rect" id="node9" href="#woo.tests.test_core.TestParticles" target="_top" title="tests.test_core.TestParticles" alt="" coords="256,351,459,376"/>
+<area shape="rect" id="node10" href="#woo.tests.test_core.TestPyDerived" target="_top" title="tests.test_core.TestPyDerived" alt="" coords="250,400,465,425"/>
+<area shape="rect" id="node11" href="#woo.tests.test_core.TestScene" target="_top" title="tests.test_core.TestScene" alt="" coords="264,449,451,475"/>
+<area shape="rect" id="node12" href="#woo.tests.test_core.TestTags" target="_top" title="tests.test_core.TestTags" alt="" coords="269,499,446,524"/>
+</map><span class="target" id="module-woo.tests.test_core"></span><p>Core functionality (Scene in c++), such as accessing bodies, materials, interactions. Specific functionality tests should go to engines.py or elsewhere, not here.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="woo.tests.test_core.TestArrayAccu">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_core.</span></span><span class="sig-name descname"><span class="pre">TestArrayAccu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_core.html#TestArrayAccu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_core.TestArrayAccu" title="Permalink to this definition">¶</a></dt>
@@ -1038,13 +1258,17 @@ not have a method with the specified name.</p>
 <section class="html-toggle emphasized" id="testpyclass">
 <h3>_TestPyClass<a class="headerlink" href="#testpyclass" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.tests.test_core._TestPyClass" title="woo.tests.test_core._TestPyClass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_TestPyClass</span></code></a></p>
-digraph _TestPyClass {
+<div class="graphviz"><img src="_images/graphviz-e834b6ddf1e2d179983e3af73fbd70569685f6a5.png" alt="digraph _TestPyClass {
         rankdir=LR;
         margin=.2;
         &quot;_TestPyClass&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.tests.html#woo.tests.test_core._TestPyClass&quot;];
         &quot;_TestPyClass2&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.tests.html#woo.tests.test_core._TestPyClass&quot;];
         &quot;_TestPyClass&quot; -&gt; &quot;_TestPyClass2&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}<dl class="py class">
+}" usemap="#_TestPyClass" class="graphviz" /></div>
+<map id="_TestPyClass" name="_TestPyClass">
+<area shape="rect" id="node1" href="woo.tests.html#woo.tests.test_core._TestPyClass" title="_TestPyClass" alt="" coords="25,25,114,47"/>
+<area shape="rect" id="node2" href="woo.tests.html#woo.tests.test_core._TestPyClass" title="_TestPyClass2" alt="" coords="162,25,258,47"/>
+</map><dl class="py class">
 <dt class="sig sig-object py" id="woo.tests.test_core._TestPyClass">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_core.</span></span><span class="sig-name descname"><span class="pre">_TestPyClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><span class="pre">woo.core.Object</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/woo/tests/test_core.html#_TestPyClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_core._TestPyClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample pure-python class integrated into woo (mainly used with preprocessors), for use with <a class="reference internal" href="#woo.tests.test_core.TestPyDerived" title="woo.tests.test_core.TestPyDerived"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TestPyDerived</span></code></a>.</p>
@@ -1079,7 +1303,7 @@ digraph _TestPyClass {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.tests.test_core._TestPyClass.aNode">
-<span class="sig-name descname"><span class="pre">aNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x3b68900</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.tests.test_core._TestPyClass.aNode" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">aNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x181d510</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.tests.test_core._TestPyClass.aNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>node attr</p>
 <p>[type: Node]</p>
 </dd></dl>
@@ -1093,7 +1317,7 @@ digraph _TestPyClass {
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.tests.test_core._TestPyClass.aNNode">
-<span class="sig-name descname"><span class="pre">aNNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">[&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x3cacd20,</span> <span class="pre">at</span> <span class="pre">(1,1,1)&gt;,</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x39f4e10,</span> <span class="pre">at</span> <span class="pre">(2,2,2)&gt;]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.tests.test_core._TestPyClass.aNNode" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">aNNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">=</span> <span class="pre">[&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1861a90,</span> <span class="pre">at</span> <span class="pre">(1,1,1)&gt;,</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1feb380,</span> <span class="pre">at</span> <span class="pre">(2,2,2)&gt;]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.tests.test_core._TestPyClass.aNNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of nodes</p>
 <p>[type: [Node, …]]</p>
 </dd></dl>
@@ -1323,381 +1547,6 @@ not have a method with the specified name.</p>
 </dd></dl>
 
 </section>
-<section id="module-woo.tests.test_grid">
-<span id="woo-tests-test-grid"></span><h2><a class="reference internal" href="#module-woo.tests.test_grid" title="woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a><a class="headerlink" href="#module-woo.tests.test_grid" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridColliderBasics">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_grid.</span></span><span class="sig-name descname"><span class="pre">TestGridColliderBasics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridColliderBasics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridColliderBasics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridColliderBasics.testParams">
-<span class="sig-name descname"><span class="pre">testParams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridColliderBasics.testParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridColliderBasics.testParams" title="Permalink to this definition">¶</a></dt>
-<dd><p>GridCollider: used-definable parameters</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_grid.</span></span><span class="sig-name descname"><span class="pre">TestGridStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testAppend">
-<span class="sig-name descname"><span class="pre">testAppend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testAppend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testAppend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid: storage: appending data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testComplement">
-<span class="sig-name descname"><span class="pre">testComplement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testComplement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testComplement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid: storage: complements</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testEx">
-<span class="sig-name descname"><span class="pre">testEx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testEx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testEx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid: storage: dense and extra data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testPyAcces">
-<span class="sig-name descname"><span class="pre">testPyAcces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testPyAcces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testPyAcces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid: storage: python access</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_grid.TestGridStore.testStorageOrder">
-<span class="sig-name descname"><span class="pre">testStorageOrder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_grid.html#TestGridStore.testStorageOrder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_grid.TestGridStore.testStorageOrder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grid: storage: storage order</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_shapepack">
-<span id="woo-tests-test-shapepack"></span><h2><a class="reference internal" href="#module-woo.tests.test_shapepack" title="woo.tests.test_shapepack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_shapepack</span></code></a><a class="headerlink" href="#module-woo.tests.test_shapepack" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_shapepack.</span></span><span class="sig-name descname"><span class="pre">TestShapePack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.assertAlmostEqualRel">
-<span class="sig-name descname"><span class="pre">assertAlmostEqualRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relerr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abserr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.assertAlmostEqualRel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.assertAlmostEqualRel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testFromSim">
-<span class="sig-name descname"><span class="pre">testFromSim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testFromSim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testFromSim" title="Permalink to this definition">¶</a></dt>
-<dd><p>ShapePack: from/to simulation with particles</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testGridSamping">
-<span class="sig-name descname"><span class="pre">testGridSamping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testGridSamping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testGridSamping" title="Permalink to this definition">¶</a></dt>
-<dd><p>ShapePack: grid samping gives good approximations of mass+inertia</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testLineEndings">
-<span class="sig-name descname"><span class="pre">testLineEndings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testLineEndings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testLineEndings" title="Permalink to this definition">¶</a></dt>
-<dd><p>ShapePack: handle different line endings (LF, CR+LF, CR) gracefully</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testLoadSampleTxt">
-<span class="sig-name descname"><span class="pre">testLoadSampleTxt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testLoadSampleTxt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testLoadSampleTxt" title="Permalink to this definition">¶</a></dt>
-<dd><p>ShapePack: load sample text file</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testSingle">
-<span class="sig-name descname"><span class="pre">testSingle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testSingle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testSingle" title="Permalink to this definition">¶</a></dt>
-<dd><p>ShapePack: single particles not clumped when inserted into simulation</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_clustering">
-<span id="woo-tests-test-clustering"></span><h2><a class="reference internal" href="#module-woo.tests.test_clustering" title="woo.tests.test_clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clustering</span></code></a><a class="headerlink" href="#module-woo.tests.test_clustering" title="Permalink to this headline">¶</a></h2>
-<p>Tests for the new <a class="reference internal" href="woo.dem.html#woo.dem.ClusterAnalysis" title="woo.dem.ClusterAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ClusterAnalysis</span></code></a>.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_clustering.TestClusterAnalysis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clustering.</span></span><span class="sig-name descname"><span class="pre">TestClusterAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clustering.html#TestClusterAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clustering.TestClusterAnalysis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_clustering.TestClusterAnalysis.testZeroConnClustering">
-<span class="sig-name descname"><span class="pre">testZeroConnClustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clustering.html#TestClusterAnalysis.testZeroConnClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clustering.TestClusterAnalysis.testZeroConnClustering" title="Permalink to this definition">¶</a></dt>
-<dd><p>clustering: simple zero-connectivity clustering</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_io">
-<span id="woo-tests-test-io"></span><h2><a class="reference internal" href="#module-woo.tests.test_io" title="woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a><a class="headerlink" href="#module-woo.tests.test_io" title="Permalink to this headline">¶</a></h2>
-<p>Test loading and saving woo objects in various formats</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestArraySerialization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization.testBoostMultiArray">
-<span class="sig-name descname"><span class="pre">testBoostMultiArray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization.testBoostMultiArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization.testBoostMultiArray" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: serialization of boost::multi_array</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestArraySerialization.testMatrixX">
-<span class="sig-name descname"><span class="pre">testMatrixX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestArraySerialization.testMatrixX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestArraySerialization.testMatrixX" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: serialization of arrays</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestFormatsAndDetection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testBin">
-<span class="sig-name descname"><span class="pre">testBin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testBin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testBin" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: binary save/load &amp; format detection</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testBinGz">
-<span class="sig-name descname"><span class="pre">testBinGz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testBinGz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testBinGz" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: binary save/load (gzip compressed) &amp; format detection</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testDeepcopy">
-<span class="sig-name descname"><span class="pre">testDeepcopy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testDeepcopy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testDeepcopy" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: temporary store (Object.deepcopy)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExpr">
-<span class="sig-name descname"><span class="pre">testExpr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExpr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExpr" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: expression dump/load &amp; format detection (file+string)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExprHashColonOverride">
-<span class="sig-name descname"><span class="pre">testExprHashColonOverride</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExprHashColonOverride"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExprHashColonOverride" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: special comments #% inside expr dumps</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testExprSpecialComments">
-<span class="sig-name descname"><span class="pre">testExprSpecialComments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testExprSpecialComments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testExprSpecialComments" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: special comments #: inside expr dumps</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testHtml">
-<span class="sig-name descname"><span class="pre">testHtml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testHtml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testHtml" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: HTML dump (file+string)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testInvalidExtension">
-<span class="sig-name descname"><span class="pre">testInvalidExtension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testInvalidExtension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testInvalidExtension" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: unrecognized extension rejected with format=’auto’</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testInvalidFormat">
-<span class="sig-name descname"><span class="pre">testInvalidFormat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testInvalidFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testInvalidFormat" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: invalid formats rejected</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testJson">
-<span class="sig-name descname"><span class="pre">testJson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testJson" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: JSON dump/load &amp; format detection (file+string)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testPickle">
-<span class="sig-name descname"><span class="pre">testPickle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testPickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testPickle" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: pickle dump/load &amp; format detection (file+string)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testRefuseDerivedPyObject">
-<span class="sig-name descname"><span class="pre">testRefuseDerivedPyObject</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testRefuseDerivedPyObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testRefuseDerivedPyObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: python-derived objects refuse to save via boost::serialization.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testStrFile">
-<span class="sig-name descname"><span class="pre">testStrFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testStrFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testStrFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: file can be given as str</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testTmpStore">
-<span class="sig-name descname"><span class="pre">testTmpStore</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testTmpStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testTmpStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: temporary store (loadTmp, saveTmp)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testUnicodeFile">
-<span class="sig-name descname"><span class="pre">testUnicodeFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testUnicodeFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testUnicodeFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: filename can be given as unicode</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testXml">
-<span class="sig-name descname"><span class="pre">testXml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testXml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testXml" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: XML save/load &amp; format detection</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.testXmlBz2">
-<span class="sig-name descname"><span class="pre">testXmlBz2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.testXmlBz2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.testXmlBz2" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: XML save/load (bzip2 compressed) &amp; format detection</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.tryDumpLoad">
-<span class="sig-name descname"><span class="pre">tryDumpLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.tryDumpLoad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.tryDumpLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestFormatsAndDetection.tryDumpLoadStr">
-<span class="sig-name descname"><span class="pre">tryDumpLoadStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestFormatsAndDetection.tryDumpLoadStr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestFormatsAndDetection.tryDumpLoadStr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestNoDumpAttributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.testCond">
-<span class="sig-name descname"><span class="pre">testCond</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.testCond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.testCond" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: conditional dumping to expr and JSON</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestNoDumpAttributes.testUncond">
-<span class="sig-name descname"><span class="pre">testUncond</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestNoDumpAttributes.testUncond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestNoDumpAttributes.testUncond" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: unconditional noDump attribute (template param)</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_io.</span></span><span class="sig-name descname"><span class="pre">TestSpecialDumpMethods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods.setUp">
-<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_io.TestSpecialDumpMethods.testSceneLastDump_direct">
-<span class="sig-name descname"><span class="pre">testSceneLastDump_direct</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_io.html#TestSpecialDumpMethods.testSceneLastDump_direct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_io.TestSpecialDumpMethods.testSceneLastDump_direct" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO: Scene.lastSave set (Object._boostSave overridden)</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_tetra">
-<span id="woo-tests-test-tetra"></span><h2><a class="reference internal" href="#module-woo.tests.test_tetra" title="woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a><a class="headerlink" href="#module-woo.tests.test_tetra" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_tetra.TestTet4">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_tetra.</span></span><span class="sig-name descname"><span class="pre">TestTet4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_tetra.html#TestTet4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_tetra.TestTet4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test <a class="reference internal" href="woo.fem.html#woo.fem.Tet4" title="woo.fem.Tet4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.fem.Tet4</span></code></a>.</p>
-<p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_tetra.TestTet4.testStiffnessMatrix">
-<span class="sig-name descname"><span class="pre">testStiffnessMatrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_tetra.html#TestTet4.testStiffnessMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_tetra.TestTet4.testStiffnessMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tet4: stiffness matrix</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-woo.tests.test_volumetric">
-<span id="woo-tests-test-volumetric"></span><h2><a class="reference internal" href="#module-woo.tests.test_volumetric" title="woo.tests.test_volumetric"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_volumetric</span></code></a><a class="headerlink" href="#module-woo.tests.test_volumetric" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_volumetric.</span></span><span class="sig-name descname"><span class="pre">TestVolumetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric" title="Permalink to this definition">¶</a></dt>
-<dd><p>Volumetric properties</p>
-<p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraCanon">
-<span class="sig-name descname"><span class="pre">testTetraCanon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraCanon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraCanon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tetra: mass, centrer, inertia of canonical tetrahedron</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraGeneric">
-<span class="sig-name descname"><span class="pre">testTetraGeneric</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraGeneric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraGeneric" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tetra: inertia and principal axes of generic tetrahedron</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTetraUnit">
-<span class="sig-name descname"><span class="pre">testTetraUnit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTetraUnit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTetraUnit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tetra: principal axes of unit tetrahedron</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.tests.test_volumetric.TestVolumetric.testTriCanon">
-<span class="sig-name descname"><span class="pre">testTriCanon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_volumetric.html#TestVolumetric.testTriCanon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_volumetric.TestVolumetric.testTriCanon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Triangle: area, inertia of canonical triangle</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="module-woo.tests.test_demfield">
 <span id="woo-tests-test-demfield"></span><h2><a class="reference internal" href="#module-woo.tests.test_demfield" title="woo.tests.test_demfield"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_demfield</span></code></a><a class="headerlink" href="#module-woo.tests.test_demfield" title="Permalink to this headline">¶</a></h2>
 <p>Test loading and saving woo objects in various formats</p>
@@ -1767,6 +1616,146 @@ not have a method with the specified name.</p>
 
 </dd></dl>
 
+</section>
+<section id="module-woo.tests.test_shapepack">
+<span id="woo-tests-test-shapepack"></span><h2><a class="reference internal" href="#module-woo.tests.test_shapepack" title="woo.tests.test_shapepack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_shapepack</span></code></a><a class="headerlink" href="#module-woo.tests.test_shapepack" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_shapepack.</span></span><span class="sig-name descname"><span class="pre">TestShapePack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.assertAlmostEqualRel">
+<span class="sig-name descname"><span class="pre">assertAlmostEqualRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relerr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abserr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.assertAlmostEqualRel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.assertAlmostEqualRel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testFromSim">
+<span class="sig-name descname"><span class="pre">testFromSim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testFromSim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testFromSim" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShapePack: from/to simulation with particles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testGridSamping">
+<span class="sig-name descname"><span class="pre">testGridSamping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testGridSamping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testGridSamping" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShapePack: grid samping gives good approximations of mass+inertia</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testLineEndings">
+<span class="sig-name descname"><span class="pre">testLineEndings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testLineEndings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testLineEndings" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShapePack: handle different line endings (LF, CR+LF, CR) gracefully</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testLoadSampleTxt">
+<span class="sig-name descname"><span class="pre">testLoadSampleTxt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testLoadSampleTxt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testLoadSampleTxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShapePack: load sample text file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_shapepack.TestShapePack.testSingle">
+<span class="sig-name descname"><span class="pre">testSingle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_shapepack.html#TestShapePack.testSingle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_shapepack.TestShapePack.testSingle" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShapePack: single particles not clumped when inserted into simulation</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_clump">
+<span id="woo-tests-test-clump"></span><h2><a class="reference internal" href="#module-woo.tests.test_clump" title="woo.tests.test_clump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clump</span></code></a><a class="headerlink" href="#module-woo.tests.test_clump" title="Permalink to this headline">¶</a></h2>
+<p>Various computations affected by the periodic boundary conditions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">TestSimpleClump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test things on a simple clump composed of 2 spheres.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testConsistency">
+<span class="sig-name descname"><span class="pre">testConsistency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testConsistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testConsistency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: ids and flags consistency</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testNoCollide">
+<span class="sig-name descname"><span class="pre">testNoCollide</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testNoCollide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testNoCollide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: particles inside one clump don’t collide with each other</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testStaticProperties">
+<span class="sig-name descname"><span class="pre">testStaticProperties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testStaticProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testStaticProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: mass, centroid, intertia</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSimpleClump.testVelocity">
+<span class="sig-name descname"><span class="pre">testVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSimpleClump.testVelocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSimpleClump.testVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: velocities of member assigned by Leapfrog</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">TestSphereClumpGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: geometry of clumps composed of spheres only</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.testSampling">
+<span class="sig-name descname"><span class="pre">testSampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.testSampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.testSampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>SphereClumpGeom: properties via grid sampling</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clump.TestSphereClumpGeom.testSteiner">
+<span class="sig-name descname"><span class="pre">testSteiner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#TestSphereClumpGeom.testSteiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.TestSphereClumpGeom.testSteiner" title="Permalink to this definition">¶</a></dt>
+<dd><p>SphereClumpGeom: properties via Steiner’s theorem</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="woo.tests.test_clump.sphereClumpPrincipalAxes">
+<span class="sig-prename descclassname"><span class="pre">woo.tests.test_clump.</span></span><span class="sig-name descname"><span class="pre">sphereClumpPrincipalAxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clump.html#sphereClumpPrincipalAxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clump.sphereClumpPrincipalAxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clump: return vol,pos,ori,inertia of sphere clump defined by centers and radii of spheres</p>
+</dd></dl>
+
+</section>
+<section id="module-woo.tests.test_clustering">
+<span id="woo-tests-test-clustering"></span><h2><a class="reference internal" href="#module-woo.tests.test_clustering" title="woo.tests.test_clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clustering</span></code></a><a class="headerlink" href="#module-woo.tests.test_clustering" title="Permalink to this headline">¶</a></h2>
+<p>Tests for the new <a class="reference internal" href="woo.dem.html#woo.dem.ClusterAnalysis" title="woo.dem.ClusterAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ClusterAnalysis</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.tests.test_clustering.TestClusterAnalysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.tests.test_clustering.</span></span><span class="sig-name descname"><span class="pre">TestClusterAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clustering.html#TestClusterAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clustering.TestClusterAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.tests.test_clustering.TestClusterAnalysis.testZeroConnClustering">
+<span class="sig-name descname"><span class="pre">testZeroConnClustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/woo/tests/test_clustering.html#TestClusterAnalysis.testZeroConnClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#woo.tests.test_clustering.TestClusterAnalysis.testZeroConnClustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>clustering: simple zero-connectivity clustering</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Report issues or inclarities to <a class="reference external" href="https://github.com/woodem/woo/issues">github</a>.</p>
@@ -1784,12 +1773,15 @@ not have a method with the specified name.</p>
     <h3><a href="contents.html">Page contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests</span></code></a><ul>
-<li><a class="reference internal" href="#module-woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_clump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clump</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a></li>
 <li><a class="reference internal" href="#module-woo.tests.test_labels"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_labels</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_ellipsoid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_ellipsoid</span></code></a></li>
 <li><a class="reference internal" href="#module-woo.tests.test_energy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_energy</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_hertz"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_hertz</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_ellipsoid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_ellipsoid</span></code></a></li>
 <li><a class="reference internal" href="#module-woo.tests.test_pbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_pbc</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_volumetric"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_volumetric</span></code></a></li>
 <li><a class="reference internal" href="#woo-tests-test-core"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_core</span></code></a><ul>
 <li><a class="reference internal" href="#testpyclass">_TestPyClass</a><ul>
 <li><a class="reference internal" href="#testpyclass2">_TestPyClass2</a></li>
@@ -1799,13 +1791,10 @@ not have a method with the specified name.</p>
 </li>
 <li><a class="reference internal" href="#module-woo.tests.test_psd"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_psd</span></code></a></li>
 <li><a class="reference internal" href="#module-woo.tests.test_batch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_batch</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_grid</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_shapepack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_shapepack</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clustering</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_io</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_tetra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_tetra</span></code></a></li>
-<li><a class="reference internal" href="#module-woo.tests.test_volumetric"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_volumetric</span></code></a></li>
 <li><a class="reference internal" href="#module-woo.tests.test_demfield"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_demfield</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_shapepack"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_shapepack</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_clump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clump</span></code></a></li>
+<li><a class="reference internal" href="#module-woo.tests.test_clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests.test_clustering</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1876,7 +1865,7 @@ not have a method with the specified name.</p>
         <li class="right" >
           <a href="woo.system.html" title="woo.system"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-2f4f277 documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-3898baf documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.tests</span></code></a></li> 
