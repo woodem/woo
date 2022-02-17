@@ -1,9 +1,0 @@
-<map id="Inlet" name="Inlet">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.Inlet" title="Inlet" alt="" coords="25,95,97,118"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.Inlet" title="RandomInlet" alt="" coords="147,71,238,94"/>
-<area shape="rect" id="node6" href="woo.dem.html#woo.dem.Inlet" title="ConveyorInlet" alt="" coords="145,118,241,141"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.Inlet" title="CylinderInlet" alt="" coords="289,25,379,47"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Inlet" title="BoxInlet" alt="" coords="298,71,370,94"/>
-<area shape="rect" id="node7" href="woo.dem.html#woo.dem.Inlet" title="ArcInlet" alt="" coords="298,118,370,141"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.Inlet" title="BoxInlet2d" alt="" coords="427,71,507,94"/>
-</map>

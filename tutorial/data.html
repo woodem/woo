@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Internal data &#8212; Woo 1.0+rev1-git-e42662b documentation</title>
+    <title>Internal data &#8212; Woo 1.0+rev1-git-0bcfb02 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -61,7 +61,7 @@
         <li class="right" >
           <a href="prep.html" title="Preprocessors"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-e42662b documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-0bcfb02 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Internal data</a></li> 
@@ -217,10 +217,10 @@
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">S</span><span class="o">=</span><span class="n">Scene</span><span class="p">(</span><span class="n">engines</span><span class="o">=</span><span class="p">[</span><span class="n">PyRunner</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;print(&quot;Step number </span><span class="si">%d</span><span class="s1">&quot;%S.step)&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)],</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">DemField</span><span class="p">()])</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">engines</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">PyRunner</span> <span class="err">@</span> <span class="mh">0x54e6290</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">PyRunner</span> <span class="err">@</span> <span class="mh">0x3937f70</span><span class="o">&gt;</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">foo</span>            <span class="c1"># the same engine accessed using the label</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">PyRunner</span> <span class="err">@</span> <span class="mh">0x54e6290</span><span class="o">&gt;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">PyRunner</span> <span class="err">@</span> <span class="mh">0x3937f70</span><span class="o">&gt;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">lab</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">command</span>    <span class="c1"># its properties can be accessed</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="s1">&#39;print(&quot;Step number </span><span class="si">%d</span><span class="s1">&quot;%S.step)&#39;</span>
@@ -247,13 +247,13 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;idt&#39;</span><span class="p">,</span> <span class="s1">&#39;isoTime&#39;</span><span class="p">,</span> <span class="s1">&#39;tid&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">]</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;isoTime&#39;</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="s1">&#39;2022-02-14T09:47:24&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="s1">&#39;2022-02-17T10:47:11&#39;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;idt&#39;</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="s1">&#39;2022-02-14T09:47:24p16560&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="s1">&#39;2022-02-17T10:47:11p16504&#39;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="s1">&#39;2022-02-14T09:47:24p16560&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="s1">&#39;2022-02-17T10:47:11p16504&#39;</span>
 
 <span class="n">Woo</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;whatever&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;whatever you want&#39;</span>
 
@@ -263,7 +263,7 @@
 </div>
 <p>Tags can be embedded in some parameters in <code class="docutils literal notranslate"><span class="pre">{}</span></code> and are expanded by <a class="reference internal" href="../woo.core.html#woo.core.Scene.expandTags" title="woo.core.Scene.expandTags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Scene.expandTags</span></code></a> (e.g. <a class="reference internal" href="../woo.dem.html#woo.dem.VtkExport.out" title="woo.dem.VtkExport.out"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VtkExport.out</span></code></a> can contain <code class="docutils literal notranslate"><span class="pre">{tid}</span></code>, ensuring output data will not overwrite each other):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">Woo</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">S</span><span class="o">.</span><span class="n">expandTags</span><span class="p">(</span><span class="s1">&#39;/this/is/some/filename-{tid}&#39;</span><span class="p">)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="s1">&#39;/this/is/some/filename-2022-02-14T09:47:24p16560&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="s1">&#39;/this/is/some/filename-2022-02-17T10:47:11p16504&#39;</span>
 </pre></div>
 </div>
 <div class="admonition tip">
@@ -365,7 +365,7 @@
         <li class="right" >
           <a href="prep.html" title="Preprocessors"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-e42662b documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-0bcfb02 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorial</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Internal data</a></li> 
