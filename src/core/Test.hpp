@@ -25,7 +25,7 @@ namespace woo{
 			_WOO_UNIT_ATTR(angle) \
 			_WOO_UNIT_ATTR(time) \
 			_WOO_UNIT_ATTR(len) \
-			((Real,length_with_inches,0.,AttrTrait<>().lenUnit().altUnits({{"in",1/0.0254}}),"Variable with length, but also showing inches in the UI")) \
+			((Real,length_with_inches,0.,AttrTrait<>().lenUnit().altUnits({{"in",1/0.0254},{"ft",1/0.3048}}),"Variable with length, but also showing inches in the UI")) \
 			_WOO_UNIT_ATTR(area) \
 			_WOO_UNIT_ATTR(vol) \
 			_WOO_UNIT_ATTR(vel) \
