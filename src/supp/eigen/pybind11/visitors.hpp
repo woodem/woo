@@ -6,7 +6,8 @@
 #include<iostream>
 #include<set>
 
-#include"../../eigen/pybind11/common.hpp"
+#include"common.hpp"
+#include"../../base/demangle.hpp"
 // classes dealing with exposing actual types, with many switches inside depending on template arguments
 
 // methods common for vectors and matrices
@@ -176,8 +177,10 @@ class VectorVisitor {
 		if(VectorT::RowsAtCompileTime!=Eigen::Dynamic){
 			if(len!=VectorT::RowsAtCompileTime) throw py::type_error("Wrong tuple size "+std::to_string(len)+" (should be "+std::to_string(VectorT::RowsAtCompileTime)+")");
 		}
-		for(size_t i=0; i<len; i++) if(!pySeqItemCheck<typename VectorT::Scalar>(src.ptr(),i)){
-			throw py::type_error(std::to_string(i)+"-th tuple element not convertible to required number type.");
+		for(size_t i=0; i<len; i++){
+			if(!pySeqItemCheck<typename VectorT::Scalar>(src.ptr(),i)){
+				throw py::type_error(std::to_string(i)+"-th "+std::to_string(len)+"-tuple element ("+py::cast<std::string>(py::repr(src))+") not convertible to the required number type "+_cxx_demangle<typename VectorT::Scalar>()+" (when constructing a "+_cxx_demangle<VectorT>()+" from list/tuple).");
+			}
 		}
 		VectorT ret;
 		if(VectorT::RowsAtCompileTime==Eigen::Dynamic) ret.resize(py::len(src));
@@ -297,8 +300,8 @@ class VectorVisitor {
 			case 6: return py::make_tuple(x[0],x[1],x[2],x[3],x[4],x[5]);
 			default: {
 				py::list ret;
-				for(Index i=0; i<Dim; i++) ret.append(x[i]);
-				return py::make_tuple(ret);
+				for(Index i=0; i<x.size(); i++) ret.append(x[i]);
+				return py::tuple(ret);
 			}
 		}
 
@@ -601,7 +604,11 @@ class MatrixVisitor{
 			// should return list of rows, which are VectorX
 			default:{
 				py::list ret;
-				for(Index r=0; r<x.rows(); r++){ ret.append(py::cast(x.row(r))); }
+				for(Index r=0; r<x.rows(); r++){
+					py::list inner;
+					for(Index c=0; c<x.cols(); c++) inner.append(x(r,c));
+					ret.append(py::tuple(inner));
+				}
 				return py::tuple(ret);
 			}
 		}

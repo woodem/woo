@@ -61,6 +61,20 @@ class TestFormatsAndDetection(unittest.TestCase):
         'IO: pickle dump/load & format detection (file+string)'
         self.tryDumpLoad(fmt='pickle')
         self.tryDumpLoadStr(fmt='pickle',load=True)
+    def testPickleEigen(self):
+        'IO: pickling/unpickling Eigen objects'
+        import pickle
+        for o in [
+            woo.Vector2(1,2),
+            woo.Vector3(1,2,3),
+            # woo.Vector4(1,2,3,4),
+            woo.Vector6(1,2,3,4,5,6),
+            woo.VectorX([1,2,3,4,5,6,7,8]),
+            woo.VectorX([]),
+            woo.Matrix3([[1,2,3],[4,5,6],[7,8,9]]),
+            woo.MatrixX([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]])
+        ]:
+            self.assertEqual(o,pickle.loads(pickle.dumps(o)))
     @unittest.skipIf('noxml' in woo.config.features,"Built without the 'xml' feature")
     def testXml(self):
         'IO: XML save/load & format detection'
