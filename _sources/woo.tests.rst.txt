@@ -12,17 +12,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_tetra`
-----------------------------------------
+:mod:`woo.tests.test_io`
+-------------------------------------
 
-.. automodule:: woo.tests.test_tetra
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_ellipsoid`
---------------------------------------------
-
-.. automodule:: woo.tests.test_ellipsoid
+.. automodule:: woo.tests.test_io
    :members:
    :undoc-members:
 
@@ -33,10 +26,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_volumetric`
----------------------------------------------
+:mod:`woo.tests.test_pbc`
+--------------------------------------
 
-.. automodule:: woo.tests.test_volumetric
+.. automodule:: woo.tests.test_pbc
    :members:
    :undoc-members:
 
@@ -47,13 +40,6 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_batch`
-----------------------------------------
-
-.. automodule:: woo.tests.test_batch
-   :members:
-   :undoc-members:
-
 :mod:`woo.tests.test_grid`
 ---------------------------------------
 
@@ -61,17 +47,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_demfield`
--------------------------------------------
+:mod:`woo.tests.test_hertz`
+----------------------------------------
 
-.. automodule:: woo.tests.test_demfield
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_shapepack`
---------------------------------------------
-
-.. automodule:: woo.tests.test_shapepack
+.. automodule:: woo.tests.test_hertz
    :members:
    :undoc-members:
 
@@ -82,10 +61,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_io`
--------------------------------------
+:mod:`woo.tests.test_tetra`
+----------------------------------------
 
-.. automodule:: woo.tests.test_io
+.. automodule:: woo.tests.test_tetra
    :members:
    :undoc-members:
 
@@ -96,10 +75,17 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_pbc`
---------------------------------------
+:mod:`woo.tests.test_ellipsoid`
+--------------------------------------------
 
-.. automodule:: woo.tests.test_pbc
+.. automodule:: woo.tests.test_ellipsoid
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_volumetric`
+---------------------------------------------
+
+.. automodule:: woo.tests.test_volumetric
    :members:
    :undoc-members:
 
@@ -168,7 +154,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x1922600, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x28633d0, at (1,1,1)>)
 
       node attr
 
@@ -180,7 +166,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x1917930, at (1,1,1)>, <Node @ 0x18f2270, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x23673d0, at (1,1,1)>, <Node @ 0x2323620, at (2,2,2)>])
 
       List of nodes
 
@@ -242,10 +228,26 @@ _TestPyClass2
 
       [type: int]
 
-:mod:`woo.tests.test_hertz`
+:mod:`woo.tests.test_batch`
 ----------------------------------------
 
-.. automodule:: woo.tests.test_hertz
+.. automodule:: woo.tests.test_batch
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_demfield`
+-------------------------------------------
+
+.. automodule:: woo.tests.test_demfield
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_shapepack`
+--------------------------------------------
+
+.. automodule:: woo.tests.test_shapepack
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
