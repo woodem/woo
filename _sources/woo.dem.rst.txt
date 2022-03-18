@@ -7,7 +7,7 @@
 .. automodule:: woo.dem
    :members:
    :undoc-members:
-   :exclude-members: Cg2_InfCylinder_Sphere_L6Geom,  Bo1_Capsule_Aabb,  Cg2_Rod_Sphere_L6Geom,  Cg2_Cone_Sphere_L6Geom,  Rod,  Bo1_Sphere_Aabb,  Collider,  Cg2_Any_Any_L6Geom__Base,  ConcretePhys,  HertzMat,  Cg2_Sphere_Sphere_G3Geom,  ConstantForce,  In2_Wall_ElastMat,  AlignedMinMaxShooter,  PelletCData,  CGeom,  Cg2_Facet_Ellipsoid_L6Geom,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Cp2_IceMat_IcePhys,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  RawShape,  CGeomFunctor,  Cg2_Capsule_Capsule_L6Geom,  Aabb,  Impose,  ReadForce,  ParticleContainer,  InterpolatedMotion,  InletMatState,  IceMat,  Grid1_Sphere,  BoxOutlet,  LawTesterStage,  IntraForce,  LudingPhys,  Cg2_Sphere_Capsule_L6Geom,  Cg2_Facet_Sphere_L6Geom,  Suspicious,  AabbCollider,  Inlet,  PelletMatState,  PsdAxialBias,  Truss,  ElastMat,  ArcInlet,  FlowAnalysis,  ForceResetter,  In2_Sphere_ElastMat,  RadialForce,  CData,  VelocityAndReadForce,  RandomInlet,  PharmaCapsuleGenerator,  GridCollider,  DynDt,  Law2_L6Geom_IcePhys,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cg2_Wall_Sphere_G3Geom,  Cp2_ConcreteMat_ConcretePhys,  CombinedImpose,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  HalfspaceBuoyancy,  ConcreteMat,  NodalForcesToHdf5,  LudingMat,  Particle,  HarmonicOscillation,  Bound,  PelletAgglomerator,  POVRayExport,  CPhysFunctor,  BoundDispatcher,  Cp2_LudingMat_LudingPhys,  VtkExport,  PelletPhys,  Grid1_Wall,  Ellipsoid,  ParticleGenerator,  Cg2_Facet_Facet_L6Geom,  Tracer,  CGeomDispatcher,  Cg2_Wall_Capsule_L6Geom,  FrictPhys,  HertzPhys,  Bo1_Rod_Aabb,  FrictMat,  Contact,  DemField,  PsdEllipsoidGenerator,  InsertionSortCollider,  LayeredAxialBias,  ArcShooter,  BoxInlet,  StackedBoxOutlet,  LudingMatState,  Law2_L6Geom_ConcretePhys,  Law2_L6Geom_FrictPhys_IdealElPl,  ClumpData,  VariableVelocity3d,  Cg2_Sphere_Ellipsoid_L6Geom,  Sphere,  Law2_G3Geom_FrictPhys_IdealElPl,  Shape,  Cg2_Wall_Facet_L6Geom,  MatState,  AlignedHarmonicOscillations,  AabbTreeCollider,  Bo1_Cone_Aabb,  Wall,  PeriIsoCompressor,  Law2_L6Geom_LudingPhys,  CPhysDispatcher,  LawFunctor,  MinMaxSphereGenerator,  PsdSphereGenerator,  LawTester,  IntraFunctor,  Cg2_Facet_InfCylinder_L6Geom,  TraceVisRep,  Grid1_InfCylinder,  Bo1_Ellipsoid_Aabb,  Cp2_PelletMat_PelletPhys,  GridStore,  Cp2_FrictMat_FrictPhys,  ClusterAnalysis,  Cp2_HertzMat_HertzPhys,  In2_Truss_ElastMat,  GridBound,  ArcOutlet,  SpatialBias,  Cg2_Facet_Capsule_L6Geom,  Local6Dofs,  IdealElPlData,  SphereClumpGeom,  InfCylinder,  AxialGravity,  CircularOrbit,  ShapeClump,  PelletMat,  ContactHook,  DemData,  ContactContainer,  Capsule,  BoundFunctor,  Material,  Cg2_Sphere_Sphere_L6Geom,  G3GeomCData,  Leapfrog,  NonuniformAxisPlacementBias,  MeshVolume,  BoxInlet2d,  Bo1_Wall_Aabb,  ConcreteMatState,  LawDispatcher,  ParticleShooter,  In2_Facet,  Bo1_InfCylinder_Aabb,  Cone,  PsdClumpGenerator,  GridBoundDispatcher,  Law2_L6Geom_HertzPhys_DMT,  BoxTraceTimeSetter,  G3Geom,  Bo1_Facet_Aabb,  Law2_L6Geom_PelletPhys_Pellet,  Grid1_Facet,  Cg2_Wall_Ellipsoid_L6Geom,  WeirdTriaxControl,  StableCircularOrbit,  Cg2_InfCylinder_Capsule_L6Geom,  CountContactsHook,  VariableAlignedRotation,  CPhys,  ClusterMatState,  GridBoundFunctor,  RawShapeClump,  ContactLoop,  DemDataTagged,  DetectSteadyState,  IcePhys,  Law2_L6Geom_FrictPhys_LinEl6,  ForcesToHdf5,  AxialBias,  Facet,  L6Geom,  CylinderInlet,  Outlet,  ConveyorInlet
+   :exclude-members: Cg2_InfCylinder_Sphere_L6Geom,  Bo1_Capsule_Aabb,  Cg2_Rod_Sphere_L6Geom,  Cg2_Cone_Sphere_L6Geom,  Rod,  Bo1_Sphere_Aabb,  Collider,  Cg2_Any_Any_L6Geom__Base,  ConcretePhys,  HertzMat,  Cg2_Sphere_Sphere_G3Geom,  ConstantForce,  In2_Wall_ElastMat,  AlignedMinMaxShooter,  PelletCData,  CGeom,  Cg2_Facet_Ellipsoid_L6Geom,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  Cp2_IceMat_IcePhys,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  RawShape,  CGeomFunctor,  Cg2_Capsule_Capsule_L6Geom,  Aabb,  Impose,  ReadForce,  ParticleContainer,  InterpolatedMotion,  InletMatState,  IceMat,  Grid1_Sphere,  BoxOutlet,  LawTesterStage,  IntraForce,  LudingPhys,  Cg2_Sphere_Capsule_L6Geom,  Cg2_Facet_Sphere_L6Geom,  Suspicious,  AabbCollider,  Inlet,  PelletMatState,  PsdAxialBias,  Truss,  ElastMat,  ArcInlet,  FlowAnalysis,  In2_Sphere_ElastMat,  RadialForce,  CylinderInlet,  CData,  RandomInlet,  PharmaCapsuleGenerator,  GridCollider,  DynDt,  Law2_L6Geom_IcePhys,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cg2_Wall_Sphere_G3Geom,  Cp2_ConcreteMat_ConcretePhys,  CombinedImpose,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  HalfspaceBuoyancy,  ConcreteMat,  NodalForcesToHdf5,  LudingMat,  Particle,  HarmonicOscillation,  PelletAgglomerator,  POVRayExport,  CPhysFunctor,  BoundDispatcher,  Cp2_LudingMat_LudingPhys,  VtkExport,  PelletPhys,  Grid1_Wall,  Ellipsoid,  ParticleGenerator,  Cg2_Facet_Facet_L6Geom,  Tracer,  CGeomDispatcher,  Cg2_Wall_Capsule_L6Geom,  FrictPhys,  HertzPhys,  Bo1_Rod_Aabb,  FrictMat,  Contact,  VelocityAndReadForce,  DemField,  PsdEllipsoidGenerator,  InsertionSortCollider,  LayeredAxialBias,  ArcShooter,  BoxInlet,  StackedBoxOutlet,  LudingMatState,  Law2_L6Geom_ConcretePhys,  Law2_L6Geom_FrictPhys_IdealElPl,  ClumpData,  VariableVelocity3d,  Cg2_Sphere_Ellipsoid_L6Geom,  Sphere,  Law2_G3Geom_FrictPhys_IdealElPl,  Shape,  Cg2_Wall_Facet_L6Geom,  MatState,  Bound,  AlignedHarmonicOscillations,  AabbTreeCollider,  Bo1_Cone_Aabb,  Wall,  PeriIsoCompressor,  Law2_L6Geom_LudingPhys,  CPhysDispatcher,  LawFunctor,  MinMaxSphereGenerator,  PsdSphereGenerator,  LawTester,  IntraFunctor,  Cg2_Facet_InfCylinder_L6Geom,  TraceVisRep,  Grid1_InfCylinder,  Bo1_Ellipsoid_Aabb,  Cp2_PelletMat_PelletPhys,  GridStore,  Cp2_FrictMat_FrictPhys,  ClusterAnalysis,  Cp2_HertzMat_HertzPhys,  In2_Truss_ElastMat,  GridBound,  ArcOutlet,  SpatialBias,  Cg2_Facet_Capsule_L6Geom,  Local6Dofs,  IdealElPlData,  SphereClumpGeom,  InfCylinder,  AxialGravity,  CircularOrbit,  ShapeClump,  PelletMat,  ContactHook,  DemData,  ContactContainer,  Capsule,  BoundFunctor,  Material,  Cg2_Sphere_Sphere_L6Geom,  G3GeomCData,  Leapfrog,  NonuniformAxisPlacementBias,  MeshVolume,  BoxInlet2d,  Bo1_Wall_Aabb,  ConcreteMatState,  LawDispatcher,  ParticleShooter,  In2_Facet,  Bo1_InfCylinder_Aabb,  Cone,  PsdClumpGenerator,  GridBoundDispatcher,  Law2_L6Geom_HertzPhys_DMT,  BoxTraceTimeSetter,  G3Geom,  Bo1_Facet_Aabb,  Law2_L6Geom_PelletPhys_Pellet,  Grid1_Facet,  Cg2_Wall_Ellipsoid_L6Geom,  WeirdTriaxControl,  StableCircularOrbit,  Cg2_InfCylinder_Capsule_L6Geom,  CountContactsHook,  VariableAlignedRotation,  CPhys,  ClusterMatState,  GridBoundFunctor,  RawShapeClump,  ContactLoop,  DemDataTagged,  DetectSteadyState,  IcePhys,  Law2_L6Geom_FrictPhys_LinEl6,  ForcesToHdf5,  AxialBias,  Facet,  L6Geom,  ConveyorInlet,  Outlet,  ForceResetter
 
 
 .. rst-class:: html-toggle
@@ -209,7 +209,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x18ba720>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x1846720>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -302,7 +302,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x1868890>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x17f4890>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -1264,6 +1264,252 @@ Inlet
 
 .. rst-class:: emphasized
 
+RandomInlet
++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet`
+
+.. graphviz::
+
+	digraph RandomInlet {
+		rankdir=LR;
+		margin=.2;
+		"RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"RandomInlet" -> "CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"RandomInlet" -> "ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: RandomInlet
+   :members:
+   :exclude-members: massRate, materials, matStates, generator, shooter, spatialBias, maxAttempts, attemptPar, atMaxAttempts, padDist, kinEnergyIx, color, stepGoalMass, collideExisting, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: massRate (= nan)
+
+      Mass flow rate; if non-positive, keep generating and placing new particles  until :obj:`maxAttempts` is exhausted and :obj:`atMaxAttempts` is used to decide what to do next.
+
+      [type: Real, unit: kg/s]
+
+   .. attribute:: materials (= [])
+
+      Set of materials for new particles, randomly picked from
+
+      [type: vector<shared_ptr<Material>>]
+
+   .. attribute:: matStates (= [])
+
+      Set of material states; when material is picked from :obj:`materials`, :obj:`MatState` at the same index is assigned to the particle; if it is ``None`` or :obj:`matStates` is shorter than requested index, no material state will be assigned.
+
+      [type: vector<shared_ptr<MatState>>]
+
+   .. attribute:: generator (= None)
+
+      Particle generator instance
+
+      [type: shared_ptr<:obj:`ParticleGenerator <woo.dem.ParticleGenerator>`>]
+
+   .. attribute:: shooter (= None)
+
+      Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.
+
+      [type: shared_ptr<:obj:`ParticleShooter <woo.dem.ParticleShooter>`>]
+
+   .. attribute:: spatialBias (= None)
+
+      Make random position biased based on the radius of the current particle; if unset, distribute uniformly.
+
+      [type: shared_ptr<:obj:`SpatialBias <woo.dem.SpatialBias>`>]
+
+   .. attribute:: maxAttempts (= 5000)
+
+      Maximum attempts to position new particles randomly, without collision. If 0, no limit is imposed. When reached, :obj:`atMaxAttempts` determines, what will be done. Each particle is tried maxAttempts/maxMetaAttempts times, then a new particle is tried.
+
+      [type: int]
+
+   .. attribute:: attemptPar (= 5)
+
+      Number of trying a different particle to position (each will be tried maxAttempts/attemptPar times)
+
+      [type: int]
+
+   .. attribute:: atMaxAttempts (= 0)
+
+      What to do when maxAttempts is reached.
+
+      [type: int, named enum, possible values are: **'error'** (0), **'dead'** (1), **'warn'** (2), **'silent'** (*'nothing'*, *'ignore'*, *''*; 3), **'doneHook'** (*'done'*; 4)]
+
+   .. attribute:: padDist (= 0.0)
+
+      Pad geometry by this distance inside; random points will be chosen inside the shrunk geometry, whereas boxes will be validated in the larger one. This attribute must be set by the generator.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: kinEnergyIx (= -1)
+
+      Index for kinetic energy in scene.energy
+
+      [type: int, not saved, not accessible from python]
+
+   .. attribute:: color (= nan)
+
+      Color for new particles (NaN for random; negative for keeping color assigned by the generator).
+
+      [type: Real]
+
+   .. attribute:: stepGoalMass (= 0.0)
+
+      Mass to be attained in this step
+
+      [type: Real, read-only in python]
+
+   .. attribute:: collideExisting (= True)
+
+      Consider collisions with pre-existing particle; this is generally a good idea, though if e.g. there are no pre-existing particles, it is useful to set to ``False`` to avoid having to define collider for no other reason than make :obj:`RandomInlet` happy.
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+CylinderInlet
+"""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.CylinderInlet`
+
+.. autoclass:: CylinderInlet
+   :members:
+   :exclude-members: node, height, radius, glSlices, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= None)
+
+      Node defining local coordinate system. If not given, global coordinates are used.
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+   .. attribute:: height (= nan)
+
+      Height along the local :math:`x`-axis.
+
+      [type: Real, unit: m]
+
+   .. attribute:: radius (= nan)
+
+      Radius of the cylinder (perpendicular to the local :math:`x`-axis).
+
+      [type: Real, unit: m]
+
+   .. attribute:: glSlices (= 16)
+
+      Number of subdivision slices for rendering.
+
+      [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+BoxInlet
+""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet`
+
+.. graphviz::
+
+	digraph BoxInlet {
+		rankdir=LR;
+		margin=.2;
+		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
+		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
+		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: BoxInlet
+   :members:
+   :exclude-members: box, node, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: box (= AlignedBox3((nan,nan,nan), (nan,nan,nan)))
+
+      Box volume specification (lower and upper corners)
+
+      [type: AlignedBox3r]
+
+   .. attribute:: node (= <Node @ 0x188fc50, at (0,0,0)>)
+
+      Node defining local coordinate system (optional; if not given, global coordinates are used).
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+BoxInlet2d
+%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet` → :obj:`~woo.dem.BoxInlet2d`
+
+.. autoclass:: BoxInlet2d
+   :members:
+   :exclude-members: axis, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: axis (= 2)
+
+      Axis normal to the plane in which particles are generated.
+
+      [type: short]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+ArcInlet
+""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.ArcInlet`
+
+.. autoclass:: ArcInlet
+   :members:
+   :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= <Node @ 0x1896440, at (0,0,0)>)
+
+      Node defining local coordinate system. *Must* be given.
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+   .. attribute:: cylBox (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
+
+      Box in cylindrical coordinates, as: (ρ₀,φ₀,z₀),(ρ₁,φ₁,z₁). ρ must be non-negative, (φ₁-φ₀)≤2π.
+
+      [type: AlignedBox3r]
+
+   .. attribute:: glSlices (= 32)
+
+      Number of slices for rendering circle (the arc takes the proportionate value
+
+      [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 ConveyorInlet
 +++++++++++++
 
@@ -1451,7 +1697,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0x1a31340, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x19bd340, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -1498,252 +1744,6 @@ ConveyorInlet
       List of generated diameters, masses and times (for making granulometry)
 
       [type: vector<Vector3r>, not shown in the UI, not dumped, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-RandomInlet
-+++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet`
-
-.. graphviz::
-
-	digraph RandomInlet {
-		rankdir=LR;
-		margin=.2;
-		"RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"RandomInlet" -> "CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"RandomInlet" -> "ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: RandomInlet
-   :members:
-   :exclude-members: massRate, materials, matStates, generator, shooter, spatialBias, maxAttempts, attemptPar, atMaxAttempts, padDist, kinEnergyIx, color, stepGoalMass, collideExisting, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: massRate (= nan)
-
-      Mass flow rate; if non-positive, keep generating and placing new particles  until :obj:`maxAttempts` is exhausted and :obj:`atMaxAttempts` is used to decide what to do next.
-
-      [type: Real, unit: kg/s]
-
-   .. attribute:: materials (= [])
-
-      Set of materials for new particles, randomly picked from
-
-      [type: vector<shared_ptr<Material>>]
-
-   .. attribute:: matStates (= [])
-
-      Set of material states; when material is picked from :obj:`materials`, :obj:`MatState` at the same index is assigned to the particle; if it is ``None`` or :obj:`matStates` is shorter than requested index, no material state will be assigned.
-
-      [type: vector<shared_ptr<MatState>>]
-
-   .. attribute:: generator (= None)
-
-      Particle generator instance
-
-      [type: shared_ptr<:obj:`ParticleGenerator <woo.dem.ParticleGenerator>`>]
-
-   .. attribute:: shooter (= None)
-
-      Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.
-
-      [type: shared_ptr<:obj:`ParticleShooter <woo.dem.ParticleShooter>`>]
-
-   .. attribute:: spatialBias (= None)
-
-      Make random position biased based on the radius of the current particle; if unset, distribute uniformly.
-
-      [type: shared_ptr<:obj:`SpatialBias <woo.dem.SpatialBias>`>]
-
-   .. attribute:: maxAttempts (= 5000)
-
-      Maximum attempts to position new particles randomly, without collision. If 0, no limit is imposed. When reached, :obj:`atMaxAttempts` determines, what will be done. Each particle is tried maxAttempts/maxMetaAttempts times, then a new particle is tried.
-
-      [type: int]
-
-   .. attribute:: attemptPar (= 5)
-
-      Number of trying a different particle to position (each will be tried maxAttempts/attemptPar times)
-
-      [type: int]
-
-   .. attribute:: atMaxAttempts (= 0)
-
-      What to do when maxAttempts is reached.
-
-      [type: int, named enum, possible values are: **'error'** (0), **'dead'** (1), **'warn'** (2), **'silent'** (*'nothing'*, *'ignore'*, *''*; 3), **'doneHook'** (*'done'*; 4)]
-
-   .. attribute:: padDist (= 0.0)
-
-      Pad geometry by this distance inside; random points will be chosen inside the shrunk geometry, whereas boxes will be validated in the larger one. This attribute must be set by the generator.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: kinEnergyIx (= -1)
-
-      Index for kinetic energy in scene.energy
-
-      [type: int, not saved, not accessible from python]
-
-   .. attribute:: color (= nan)
-
-      Color for new particles (NaN for random; negative for keeping color assigned by the generator).
-
-      [type: Real]
-
-   .. attribute:: stepGoalMass (= 0.0)
-
-      Mass to be attained in this step
-
-      [type: Real, read-only in python]
-
-   .. attribute:: collideExisting (= True)
-
-      Consider collisions with pre-existing particle; this is generally a good idea, though if e.g. there are no pre-existing particles, it is useful to set to ``False`` to avoid having to define collider for no other reason than make :obj:`RandomInlet` happy.
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-CylinderInlet
-"""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.CylinderInlet`
-
-.. autoclass:: CylinderInlet
-   :members:
-   :exclude-members: node, height, radius, glSlices, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= None)
-
-      Node defining local coordinate system. If not given, global coordinates are used.
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: height (= nan)
-
-      Height along the local :math:`x`-axis.
-
-      [type: Real, unit: m]
-
-   .. attribute:: radius (= nan)
-
-      Radius of the cylinder (perpendicular to the local :math:`x`-axis).
-
-      [type: Real, unit: m]
-
-   .. attribute:: glSlices (= 16)
-
-      Number of subdivision slices for rendering.
-
-      [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-BoxInlet
-""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet`
-
-.. graphviz::
-
-	digraph BoxInlet {
-		rankdir=LR;
-		margin=.2;
-		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
-		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
-		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: BoxInlet
-   :members:
-   :exclude-members: box, node, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: box (= AlignedBox3((nan,nan,nan), (nan,nan,nan)))
-
-      Box volume specification (lower and upper corners)
-
-      [type: AlignedBox3r]
-
-   .. attribute:: node (= <Node @ 0x1903c50, at (0,0,0)>)
-
-      Node defining local coordinate system (optional; if not given, global coordinates are used).
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-BoxInlet2d
-%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet` → :obj:`~woo.dem.BoxInlet2d`
-
-.. autoclass:: BoxInlet2d
-   :members:
-   :exclude-members: axis, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: axis (= 2)
-
-      Axis normal to the plane in which particles are generated.
-
-      [type: short]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-ArcInlet
-""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.ArcInlet`
-
-.. autoclass:: ArcInlet
-   :members:
-   :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= <Node @ 0x190a440, at (0,0,0)>)
-
-      Node defining local coordinate system. *Must* be given.
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: cylBox (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
-
-      Box in cylindrical coordinates, as: (ρ₀,φ₀,z₀),(ρ₁,φ₁,z₁). ρ must be non-negative, (φ₁-φ₀)≤2π.
-
-      [type: AlignedBox3r]
-
-   .. attribute:: glSlices (= 32)
-
-      Number of slices for rendering circle (the arc takes the proportionate value
-
-      [type: int]
 
 
 .. rst-class:: html-toggle
@@ -2225,7 +2225,7 @@ ArcShooter
    :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x190b640, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1897640, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -2426,7 +2426,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x19437b0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x18cf7b0, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -3745,9 +3745,9 @@ MatState
 		"InletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
 		"MatState" -> "InletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
 		"MatState" -> "LudingMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "ConcreteMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "PelletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ClusterMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "ClusterMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"MatState" -> "ConcreteMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ClusterMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"MatState" -> "ClusterMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"MatState" -> "PelletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: MatState
@@ -4212,7 +4212,7 @@ POVRayExport
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0x198e860>)
+   .. attribute:: colorRange (= <ScalarRange @ 0x191a860>)
 
       Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
 
@@ -4403,19 +4403,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x18ab2c0>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x18372c0>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x189e200>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x182a200>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0x18ab1e0>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x18371e0>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -4588,7 +4588,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x18933e0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x181f3e0, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -4719,7 +4719,8 @@ CGeomFunctor
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Any_Any_L6Geom__Base" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"CGeomFunctor" -> "Cg2_Any_Any_L6Geom__Base" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"CGeomFunctor" -> "Cg2_Any_Any_L6Geom__Base" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"CGeomFunctor" -> "Cg2_Wall_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
@@ -4730,8 +4731,7 @@ CGeomFunctor
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -4790,12 +4790,12 @@ Cg2_Any_Any_L6Geom__Base
 		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
@@ -5125,12 +5125,12 @@ CPhys
 		rankdir=LR;
 		margin=.2;
 		"CPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
 		"FrictPhys" -> "IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"CPhys" -> "FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"CPhys" -> "FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
 		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -5169,11 +5169,11 @@ FrictPhys
 		rankdir=LR;
 		margin=.2;
 		"FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
 		"FrictPhys" -> "IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
 		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
 		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -5974,9 +5974,9 @@ LawFunctor
 		rankdir=LR;
 		margin=.2;
 		"LawFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_HertzPhys_DMT" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
 		"LawFunctor" -> "Law2_L6Geom_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_PelletPhys_Pellet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
@@ -6688,13 +6688,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0x194f7b0>)
+   .. attribute:: particles (= <ParticleContainer @ 0x18db7b0>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0x194f9d0>)
+   .. attribute:: contacts (= <ContactContainer @ 0x18db9d0>)
 
       Linear view on particle contacts
 
@@ -7610,7 +7610,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1a6e1c0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x19fa1c0, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -7788,6 +7788,71 @@ VariableVelocity3d
 
 .. rst-class:: emphasized
 
+VelocityAndReadForce
+""""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.VelocityAndReadForce`
+
+.. autoclass:: VelocityAndReadForce
+   :members:
+   :exclude-members: dir, vel, latBlock, sumF, invF, dist, energyName, workIx, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: dir (= Vector3(1,0,0))
+
+      Direction (automatically normalized) for prescribed velocity and force readings.
+
+      [type: Vector3r]
+
+   .. attribute:: vel (= 0.0)
+
+      Prescribed velocity magnitude.
+
+      [type: Real]
+
+   .. attribute:: latBlock (= True)
+
+      Whether lateral velocity (perpendicular to :obj:`vel`) is set to zero, or left free.
+
+      [type: bool]
+
+   .. attribute:: sumF
+
+      Summary force on nodes with this imposition, in the direction of :obj:`vel`.
+
+      [type: OpenMPAccumulator<Real>, read-only in python]
+
+   .. attribute:: invF (= False)
+
+      Invert force value (so that it has the meaning of reactin rather than force exerted).
+
+      [type: bool]
+
+   .. attribute:: dist (= 0.0)
+
+      Cumulative displacement of this imposition.
+
+      [type: Real]
+
+   .. attribute:: energyName (= '')
+
+      If given, and :obj:`~woo.core.Scene.trackEnergy` is ``True``, cumulate work done by this imposition under this name
+
+      [type: string]
+
+   .. attribute:: workIx (= -1)
+
+      Index for fast access to the energy.
+
+      [type: int, not saved, not accessible from python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 HarmonicOscillation
 """""""""""""""""""
 
@@ -7851,71 +7916,6 @@ CombinedImpose
       Impositions which are combined together, always called in this order.
 
       [type: vector<shared_ptr<Impose>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-VelocityAndReadForce
-""""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.VelocityAndReadForce`
-
-.. autoclass:: VelocityAndReadForce
-   :members:
-   :exclude-members: dir, vel, latBlock, sumF, invF, dist, energyName, workIx, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: dir (= Vector3(1,0,0))
-
-      Direction (automatically normalized) for prescribed velocity and force readings.
-
-      [type: Vector3r]
-
-   .. attribute:: vel (= 0.0)
-
-      Prescribed velocity magnitude.
-
-      [type: Real]
-
-   .. attribute:: latBlock (= True)
-
-      Whether lateral velocity (perpendicular to :obj:`vel`) is set to zero, or left free.
-
-      [type: bool]
-
-   .. attribute:: sumF
-
-      Summary force on nodes with this imposition, in the direction of :obj:`vel`.
-
-      [type: OpenMPAccumulator<Real>, read-only in python]
-
-   .. attribute:: invF (= False)
-
-      Invert force value (so that it has the meaning of reactin rather than force exerted).
-
-      [type: bool]
-
-   .. attribute:: dist (= 0.0)
-
-      Cumulative displacement of this imposition.
-
-      [type: Real]
-
-   .. attribute:: energyName (= '')
-
-      If given, and :obj:`~woo.core.Scene.trackEnergy` is ``True``, cumulate work done by this imposition under this name
-
-      [type: string]
-
-   .. attribute:: workIx (= -1)
-
-      Index for fast access to the energy.
-
-      [type: int, not saved, not accessible from python]
 
 
 .. rst-class:: html-toggle
@@ -8128,7 +8128,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0x19c62f0>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x19522f0>)
 
       Color range for coloring the trace line
 

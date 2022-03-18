@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>woo.dem &#8212; Woo 1.0+rev1-git-681f22d documentation</title>
+    <title>woo.dem &#8212; Woo 1.0+rev1-git-f6fbd0c documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -61,7 +61,7 @@
         <li class="right" >
           <a href="woo.core.html" title="woo.core"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-681f22d documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-f6fbd0c documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" accesskey="U">Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.dem</span></code></a></li> 
@@ -499,7 +499,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.GridCollider.boundDispatcher">
-<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GridBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x18ba720&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.GridCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;GridBoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1846720&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.GridCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispatches <a class="reference internal" href="#woo.dem.GridBound" title="woo.dem.GridBound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBound</span></code></a> creation to <code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBoundFuctor</span></code> based on <a class="reference internal" href="#woo.dem.Shape" title="woo.dem.Shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shape</span></code></a> type.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.GridBoundDispatcher" title="woo.dem.GridBoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridBoundDispatcher</span></code></a>&gt;]</p>
 </dd></dl>
@@ -674,7 +674,7 @@
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.AabbCollider.boundDispatcher">
-<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;BoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x1868890&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.AabbCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">boundDispatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;BoundDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x17f4890&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.AabbCollider.boundDispatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.BoundDispatcher" title="woo.dem.BoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundDispatcher</span></code></a> object that is used for creating <code class="xref py py-obj docutils literal notranslate"><span class="pre">bounds</span></code> on collider’s request as necessary.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.BoundDispatcher" title="woo.dem.BoundDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoundDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -1772,6 +1772,290 @@
 </dd></dl>
 
 </section>
+<section class="html-toggle emphasized" id="randominlet">
+<h3>RandomInlet<a class="headerlink" href="#randominlet" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a></p>
+<div class="graphviz"><img src="_images/graphviz-58c555580e4508989751fcba9ce0534c1791d8e6.png" alt="digraph RandomInlet {
+        rankdir=LR;
+        margin=.2;
+        &quot;RandomInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
+        &quot;CylinderInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
+        &quot;RandomInlet&quot; -&gt; &quot;CylinderInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;BoxInlet2d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
+        &quot;BoxInlet&quot; -&gt; &quot;BoxInlet2d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;ArcInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
+        &quot;RandomInlet&quot; -&gt; &quot;ArcInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;BoxInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
+        &quot;RandomInlet&quot; -&gt; &quot;BoxInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}" usemap="#RandomInlet" class="graphviz" /></div>
+<map id="RandomInlet" name="RandomInlet">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.RandomInlet" title="RandomInlet" alt="" coords="25,71,115,94"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.RandomInlet" title="CylinderInlet" alt="" coords="163,25,254,47"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet" alt="" coords="173,71,245,94"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.RandomInlet" title="ArcInlet" alt="" coords="173,118,245,141"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet2d" alt="" coords="302,71,382,94"/>
+</map><dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">RandomInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inlet generating new particles. This class overrides <a class="reference internal" href="woo.core.html#woo.core.Engine.critDt" title="woo.core.Engine.critDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Engine.critDt</span></code></a>, which in turn calls <a class="reference internal" href="#woo.dem.ParticleGenerator.critDt" title="woo.dem.ParticleGenerator.critDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleGenerator.critDt</span></code></a> with all possible <a class="reference internal" href="#woo.dem.RandomInlet.materials" title="woo.dem.RandomInlet.materials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span></code></a> one by one.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.RandomInlet) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.RandomInlet, <a href="#id138"><span class="problematic" id="id139">*</span></a>args, <a href="#id140"><span class="problematic" id="id141">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.massRate">
+<span class="sig-name descname"><span class="pre">massRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.massRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass flow rate; if non-positive, keep generating and placing new particles  until <a class="reference internal" href="#woo.dem.RandomInlet.maxAttempts" title="woo.dem.RandomInlet.maxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxAttempts</span></code></a> is exhausted and <a class="reference internal" href="#woo.dem.RandomInlet.atMaxAttempts" title="woo.dem.RandomInlet.atMaxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atMaxAttempts</span></code></a> is used to decide what to do next.</p>
+<p>[type: Real, unit: kg/s]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.materials">
+<span class="sig-name descname"><span class="pre">materials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of materials for new particles, randomly picked from</p>
+<p>[type: vector&lt;shared_ptr&lt;Material&gt;&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.matStates">
+<span class="sig-name descname"><span class="pre">matStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.matStates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of material states; when material is picked from <a class="reference internal" href="#woo.dem.RandomInlet.materials" title="woo.dem.RandomInlet.materials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span></code></a>, <a class="reference internal" href="#woo.dem.MatState" title="woo.dem.MatState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatState</span></code></a> at the same index is assigned to the particle; if it is <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="#woo.dem.RandomInlet.matStates" title="woo.dem.RandomInlet.matStates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matStates</span></code></a> is shorter than requested index, no material state will be assigned.</p>
+<p>[type: vector&lt;shared_ptr&lt;MatState&gt;&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.generator">
+<span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Particle generator instance</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleGenerator" title="woo.dem.ParticleGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleGenerator</span></code></a>&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.shooter">
+<span class="sig-name descname"><span class="pre">shooter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.shooter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleShooter" title="woo.dem.ParticleShooter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleShooter</span></code></a>&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.spatialBias">
+<span class="sig-name descname"><span class="pre">spatialBias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.spatialBias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make random position biased based on the radius of the current particle; if unset, distribute uniformly.</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.SpatialBias" title="woo.dem.SpatialBias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpatialBias</span></code></a>&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.maxAttempts">
+<span class="sig-name descname"><span class="pre">maxAttempts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.maxAttempts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum attempts to position new particles randomly, without collision. If 0, no limit is imposed. When reached, <a class="reference internal" href="#woo.dem.RandomInlet.atMaxAttempts" title="woo.dem.RandomInlet.atMaxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atMaxAttempts</span></code></a> determines, what will be done. Each particle is tried maxAttempts/maxMetaAttempts times, then a new particle is tried.</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.attemptPar">
+<span class="sig-name descname"><span class="pre">attemptPar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.attemptPar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of trying a different particle to position (each will be tried maxAttempts/attemptPar times)</p>
+<p>[type: int]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.atMaxAttempts">
+<span class="sig-name descname"><span class="pre">atMaxAttempts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.atMaxAttempts" title="Permalink to this definition">¶</a></dt>
+<dd><p>What to do when maxAttempts is reached.</p>
+<p>[type: int, named enum, possible values are: <strong>‘error’</strong> (0), <strong>‘dead’</strong> (1), <strong>‘warn’</strong> (2), <strong>‘silent’</strong> (<em>‘nothing’</em>, <em>‘ignore’</em>, <em>‘’</em>; 3), <strong>‘doneHook’</strong> (<em>‘done’</em>; 4)]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.padDist">
+<span class="sig-name descname"><span class="pre">padDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.padDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad geometry by this distance inside; random points will be chosen inside the shrunk geometry, whereas boxes will be validated in the larger one. This attribute must be set by the generator.</p>
+<p>[type: Real, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.kinEnergyIx">
+<span class="sig-name descname"><span class="pre">kinEnergyIx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.kinEnergyIx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index for kinetic energy in scene.energy</p>
+<p>[type: int, not saved, not accessible from python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color for new particles (NaN for random; negative for keeping color assigned by the generator).</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.stepGoalMass">
+<span class="sig-name descname"><span class="pre">stepGoalMass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.stepGoalMass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass to be attained in this step</p>
+<p>[type: Real, read-only in python]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.collideExisting">
+<span class="sig-name descname"><span class="pre">collideExisting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.collideExisting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consider collisions with pre-existing particle; this is generally a good idea, though if e.g. there are no pre-existing particles, it is useful to set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to avoid having to define collider for no other reason than make <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> happy.</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.dem.RandomInlet.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.randomPosition">
+<span class="sig-name descname"><span class="pre">randomPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Vector3</span></span></span><a class="headerlink" href="#woo.dem.RandomInlet.randomPosition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="woo.dem.RandomInlet.validateBox">
+<span class="sig-name descname"><span class="pre">validateBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_wooEigen11.AlignedBox3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#woo.dem.RandomInlet.validateBox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<section class="html-toggle emphasized" id="cylinderinlet">
+<h4>CylinderInlet<a class="headerlink" href="#cylinderinlet" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.CylinderInlet" title="woo.dem.CylinderInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CylinderInlet</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.CylinderInlet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">CylinderInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate particle inside an arbitrarily oriented cylinder.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.CylinderInlet) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.CylinderInlet, <a href="#id142"><span class="problematic" id="id143">*</span></a>args, <a href="#id144"><span class="problematic" id="id145">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.CylinderInlet.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node defining local coordinate system. If not given, global coordinates are used.</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.CylinderInlet.height">
+<span class="sig-name descname"><span class="pre">height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height along the local <span class="math notranslate nohighlight">\(x\)</span>-axis.</p>
+<p>[type: Real, unit: m]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.CylinderInlet.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius of the cylinder (perpendicular to the local <span class="math notranslate nohighlight">\(x\)</span>-axis).</p>
+<p>[type: Real, unit: m]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.CylinderInlet.glSlices">
+<span class="sig-name descname"><span class="pre">glSlices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.glSlices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of subdivision slices for rendering.</p>
+<p>[type: int]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="boxinlet">
+<h4>BoxInlet<a class="headerlink" href="#boxinlet" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet" title="woo.dem.BoxInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet</span></code></a></p>
+<div class="graphviz"><img src="_images/graphviz-02a14948774aa5f9a3174a1eb584062e3b659646.png" alt="digraph BoxInlet {
+        rankdir=LR;
+        margin=.2;
+        &quot;BoxInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoxInlet&quot;];
+        &quot;BoxInlet2d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoxInlet&quot;];
+        &quot;BoxInlet&quot; -&gt; &quot;BoxInlet2d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+}" usemap="#BoxInlet" class="graphviz" /></div>
+<map id="BoxInlet" name="BoxInlet">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.BoxInlet" title="BoxInlet" alt="" coords="25,25,97,47"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.BoxInlet" title="BoxInlet2d" alt="" coords="145,25,225,47"/>
+</map><dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.BoxInlet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">BoxInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate particle inside axis-aligned box volume.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.BoxInlet) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.BoxInlet, <a href="#id146"><span class="problematic" id="id147">*</span></a>args, <a href="#id148"><span class="problematic" id="id149">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.BoxInlet.box">
+<span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Box volume specification (lower and upper corners)</p>
+<p>[type: AlignedBox3r]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.BoxInlet.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x188fc50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node defining local coordinate system (optional; if not given, global coordinates are used).</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="boxinlet2d">
+<h5>BoxInlet2d<a class="headerlink" href="#boxinlet2d" title="Permalink to this headline">¶</a></h5>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet" title="woo.dem.BoxInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet2d" title="woo.dem.BoxInlet2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet2d</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.BoxInlet2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">BoxInlet2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate particles inside axis-aligned plane (its normal axis is given via the <a class="reference internal" href="#woo.dem.BoxInlet2d.axis" title="woo.dem.BoxInlet2d.axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axis</span></code></a> attribute; particles are allowed to stick out of that plane.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.BoxInlet2d) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.BoxInlet2d, <a href="#id150"><span class="problematic" id="id151">*</span></a>args, <a href="#id152"><span class="problematic" id="id153">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.BoxInlet2d.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet2d.axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axis normal to the plane in which particles are generated.</p>
+<p>[type: short]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section class="html-toggle emphasized" id="arcinlet">
+<h4>ArcInlet<a class="headerlink" href="#arcinlet" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.ArcInlet" title="woo.dem.ArcInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcInlet</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.ArcInlet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">ArcInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inlet generating particles in prismatic arc (revolved rectangle) specified using <a class="reference external" href="http://en.wikipedia.org/wiki/Cylindrical_coordinate_system">cylindrical coordinates</a> (with the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">31-11</span></code> convention, as mentioned at the Wikipedia page) in a local system.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.ArcInlet) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.ArcInlet, <a href="#id154"><span class="problematic" id="id155">*</span></a>args, <a href="#id156"><span class="problematic" id="id157">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.ArcInlet.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1896440</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node defining local coordinate system. <em>Must</em> be given.</p>
+<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.ArcInlet.cylBox">
+<span class="sig-name descname"><span class="pre">cylBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.cylBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Box in cylindrical coordinates, as: (ρ₀,φ₀,z₀),(ρ₁,φ₁,z₁). ρ must be non-negative, (φ₁-φ₀)≤2π.</p>
+<p>[type: AlignedBox3r]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.ArcInlet.glSlices">
+<span class="sig-name descname"><span class="pre">glSlices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.glSlices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of slices for rendering circle (the arc takes the proportionate value</p>
+<p>[type: int]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
 <section class="html-toggle emphasized" id="conveyorinlet">
 <h3>ConveyorInlet<a class="headerlink" href="#conveyorinlet" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.ConveyorInlet" title="woo.dem.ConveyorInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConveyorInlet</span></code></a></p>
@@ -1782,7 +2066,7 @@
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.dem.ConveyorInlet) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.ConveyorInlet, <a href="#id138"><span class="problematic" id="id139">*</span></a>args, <a href="#id140"><span class="problematic" id="id141">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.ConveyorInlet, <a href="#id158"><span class="problematic" id="id159">*</span></a>args, <a href="#id160"><span class="problematic" id="id161">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <p class="rubric">► Particles</p>
 <dl class="py attribute">
@@ -1986,7 +2270,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ConveyorInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1a31340</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ConveyorInlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x19bd340</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ConveyorInlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Position and orientation of the factory; local x-axis is the feed direction.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -2065,290 +2349,6 @@
 
 </dd></dl>
 
-</section>
-<section class="html-toggle emphasized" id="randominlet">
-<h3>RandomInlet<a class="headerlink" href="#randominlet" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-58c555580e4508989751fcba9ce0534c1791d8e6.png" alt="digraph RandomInlet {
-        rankdir=LR;
-        margin=.2;
-        &quot;RandomInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
-        &quot;CylinderInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
-        &quot;RandomInlet&quot; -&gt; &quot;CylinderInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;BoxInlet2d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
-        &quot;BoxInlet&quot; -&gt; &quot;BoxInlet2d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;ArcInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
-        &quot;RandomInlet&quot; -&gt; &quot;ArcInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;BoxInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.RandomInlet&quot;];
-        &quot;RandomInlet&quot; -&gt; &quot;BoxInlet&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}" usemap="#RandomInlet" class="graphviz" /></div>
-<map id="RandomInlet" name="RandomInlet">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.RandomInlet" title="RandomInlet" alt="" coords="25,71,115,94"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.RandomInlet" title="CylinderInlet" alt="" coords="163,25,254,47"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet" alt="" coords="173,71,245,94"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.RandomInlet" title="ArcInlet" alt="" coords="173,118,245,141"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet2d" alt="" coords="302,71,382,94"/>
-</map><dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">RandomInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inlet generating new particles. This class overrides <a class="reference internal" href="woo.core.html#woo.core.Engine.critDt" title="woo.core.Engine.critDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.core.Engine.critDt</span></code></a>, which in turn calls <a class="reference internal" href="#woo.dem.ParticleGenerator.critDt" title="woo.dem.ParticleGenerator.critDt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.ParticleGenerator.critDt</span></code></a> with all possible <a class="reference internal" href="#woo.dem.RandomInlet.materials" title="woo.dem.RandomInlet.materials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span></code></a> one by one.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.RandomInlet) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.RandomInlet, <a href="#id142"><span class="problematic" id="id143">*</span></a>args, <a href="#id144"><span class="problematic" id="id145">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.massRate">
-<span class="sig-name descname"><span class="pre">massRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.massRate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mass flow rate; if non-positive, keep generating and placing new particles  until <a class="reference internal" href="#woo.dem.RandomInlet.maxAttempts" title="woo.dem.RandomInlet.maxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxAttempts</span></code></a> is exhausted and <a class="reference internal" href="#woo.dem.RandomInlet.atMaxAttempts" title="woo.dem.RandomInlet.atMaxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atMaxAttempts</span></code></a> is used to decide what to do next.</p>
-<p>[type: Real, unit: kg/s]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.materials">
-<span class="sig-name descname"><span class="pre">materials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.materials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set of materials for new particles, randomly picked from</p>
-<p>[type: vector&lt;shared_ptr&lt;Material&gt;&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.matStates">
-<span class="sig-name descname"><span class="pre">matStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.matStates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set of material states; when material is picked from <a class="reference internal" href="#woo.dem.RandomInlet.materials" title="woo.dem.RandomInlet.materials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span></code></a>, <a class="reference internal" href="#woo.dem.MatState" title="woo.dem.MatState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatState</span></code></a> at the same index is assigned to the particle; if it is <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="#woo.dem.RandomInlet.matStates" title="woo.dem.RandomInlet.matStates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matStates</span></code></a> is shorter than requested index, no material state will be assigned.</p>
-<p>[type: vector&lt;shared_ptr&lt;MatState&gt;&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.generator">
-<span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.generator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Particle generator instance</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleGenerator" title="woo.dem.ParticleGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleGenerator</span></code></a>&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.shooter">
-<span class="sig-name descname"><span class="pre">shooter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.shooter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Particle shooter instance (assigns velocities to generated particles. If not given, particles have zero velocities initially.</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleShooter" title="woo.dem.ParticleShooter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleShooter</span></code></a>&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.spatialBias">
-<span class="sig-name descname"><span class="pre">spatialBias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.spatialBias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make random position biased based on the radius of the current particle; if unset, distribute uniformly.</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.SpatialBias" title="woo.dem.SpatialBias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpatialBias</span></code></a>&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.maxAttempts">
-<span class="sig-name descname"><span class="pre">maxAttempts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.maxAttempts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maximum attempts to position new particles randomly, without collision. If 0, no limit is imposed. When reached, <a class="reference internal" href="#woo.dem.RandomInlet.atMaxAttempts" title="woo.dem.RandomInlet.atMaxAttempts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atMaxAttempts</span></code></a> determines, what will be done. Each particle is tried maxAttempts/maxMetaAttempts times, then a new particle is tried.</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.attemptPar">
-<span class="sig-name descname"><span class="pre">attemptPar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.attemptPar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of trying a different particle to position (each will be tried maxAttempts/attemptPar times)</p>
-<p>[type: int]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.atMaxAttempts">
-<span class="sig-name descname"><span class="pre">atMaxAttempts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.atMaxAttempts" title="Permalink to this definition">¶</a></dt>
-<dd><p>What to do when maxAttempts is reached.</p>
-<p>[type: int, named enum, possible values are: <strong>‘error’</strong> (0), <strong>‘dead’</strong> (1), <strong>‘warn’</strong> (2), <strong>‘silent’</strong> (<em>‘nothing’</em>, <em>‘ignore’</em>, <em>‘’</em>; 3), <strong>‘doneHook’</strong> (<em>‘done’</em>; 4)]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.padDist">
-<span class="sig-name descname"><span class="pre">padDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.padDist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pad geometry by this distance inside; random points will be chosen inside the shrunk geometry, whereas boxes will be validated in the larger one. This attribute must be set by the generator.</p>
-<p>[type: Real, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.kinEnergyIx">
-<span class="sig-name descname"><span class="pre">kinEnergyIx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.kinEnergyIx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index for kinetic energy in scene.energy</p>
-<p>[type: int, not saved, not accessible from python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Color for new particles (NaN for random; negative for keeping color assigned by the generator).</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.stepGoalMass">
-<span class="sig-name descname"><span class="pre">stepGoalMass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.stepGoalMass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mass to be attained in this step</p>
-<p>[type: Real, read-only in python]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.collideExisting">
-<span class="sig-name descname"><span class="pre">collideExisting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.RandomInlet.collideExisting" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consider collisions with pre-existing particle; this is generally a good idea, though if e.g. there are no pre-existing particles, it is useful to set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to avoid having to define collider for no other reason than make <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> happy.</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.clear">
-<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#woo.dem.RandomInlet.clear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.randomPosition">
-<span class="sig-name descname"><span class="pre">randomPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_wooEigen11.Vector3</span></span></span><a class="headerlink" href="#woo.dem.RandomInlet.randomPosition" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="woo.dem.RandomInlet.validateBox">
-<span class="sig-name descname"><span class="pre">validateBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><span class="pre">woo.dem.RandomInlet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_wooEigen11.AlignedBox3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#woo.dem.RandomInlet.validateBox" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<section class="html-toggle emphasized" id="cylinderinlet">
-<h4>CylinderInlet<a class="headerlink" href="#cylinderinlet" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.CylinderInlet" title="woo.dem.CylinderInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CylinderInlet</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.CylinderInlet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">CylinderInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate particle inside an arbitrarily oriented cylinder.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.CylinderInlet) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.CylinderInlet, <a href="#id146"><span class="problematic" id="id147">*</span></a>args, <a href="#id148"><span class="problematic" id="id149">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.CylinderInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Node defining local coordinate system. If not given, global coordinates are used.</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.CylinderInlet.height">
-<span class="sig-name descname"><span class="pre">height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.height" title="Permalink to this definition">¶</a></dt>
-<dd><p>Height along the local <span class="math notranslate nohighlight">\(x\)</span>-axis.</p>
-<p>[type: Real, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.CylinderInlet.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.radius" title="Permalink to this definition">¶</a></dt>
-<dd><p>Radius of the cylinder (perpendicular to the local <span class="math notranslate nohighlight">\(x\)</span>-axis).</p>
-<p>[type: Real, unit: m]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.CylinderInlet.glSlices">
-<span class="sig-name descname"><span class="pre">glSlices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CylinderInlet.glSlices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of subdivision slices for rendering.</p>
-<p>[type: int]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="boxinlet">
-<h4>BoxInlet<a class="headerlink" href="#boxinlet" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet" title="woo.dem.BoxInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-02a14948774aa5f9a3174a1eb584062e3b659646.png" alt="digraph BoxInlet {
-        rankdir=LR;
-        margin=.2;
-        &quot;BoxInlet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoxInlet&quot;];
-        &quot;BoxInlet2d&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.BoxInlet&quot;];
-        &quot;BoxInlet&quot; -&gt; &quot;BoxInlet2d&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
-}" usemap="#BoxInlet" class="graphviz" /></div>
-<map id="BoxInlet" name="BoxInlet">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.BoxInlet" title="BoxInlet" alt="" coords="25,25,97,47"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.BoxInlet" title="BoxInlet2d" alt="" coords="145,25,225,47"/>
-</map><dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.BoxInlet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">BoxInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate particle inside axis-aligned box volume.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.BoxInlet) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.BoxInlet, <a href="#id150"><span class="problematic" id="id151">*</span></a>args, <a href="#id152"><span class="problematic" id="id153">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.BoxInlet.box">
-<span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Box volume specification (lower and upper corners)</p>
-<p>[type: AlignedBox3r]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.BoxInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1903c50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet.node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Node defining local coordinate system (optional; if not given, global coordinates are used).</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
-</dd></dl>
-
-</dd></dl>
-
-<section id="boxinlet2d">
-<h5>BoxInlet2d<a class="headerlink" href="#boxinlet2d" title="Permalink to this headline">¶</a></h5>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet" title="woo.dem.BoxInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet</span></code></a> → <a class="reference internal" href="#woo.dem.BoxInlet2d" title="woo.dem.BoxInlet2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BoxInlet2d</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.BoxInlet2d">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">BoxInlet2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate particles inside axis-aligned plane (its normal axis is given via the <a class="reference internal" href="#woo.dem.BoxInlet2d.axis" title="woo.dem.BoxInlet2d.axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axis</span></code></a> attribute; particles are allowed to stick out of that plane.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.BoxInlet2d) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.BoxInlet2d, <a href="#id154"><span class="problematic" id="id155">*</span></a>args, <a href="#id156"><span class="problematic" id="id157">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.BoxInlet2d.axis">
-<span class="sig-name descname"><span class="pre">axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.BoxInlet2d.axis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axis normal to the plane in which particles are generated.</p>
-<p>[type: short]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-<section class="html-toggle emphasized" id="arcinlet">
-<h4>ArcInlet<a class="headerlink" href="#arcinlet" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Engine" title="woo.core.Engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Engine</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.PeriodicEngine" title="woo.core.PeriodicEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicEngine</span></code></a> → <a class="reference internal" href="#woo.dem.Inlet" title="woo.dem.Inlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Inlet</span></code></a> → <a class="reference internal" href="#woo.dem.RandomInlet" title="woo.dem.RandomInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomInlet</span></code></a> → <a class="reference internal" href="#woo.dem.ArcInlet" title="woo.dem.ArcInlet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcInlet</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.ArcInlet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">ArcInlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inlet generating particles in prismatic arc (revolved rectangle) specified using <a class="reference external" href="http://en.wikipedia.org/wiki/Cylindrical_coordinate_system">cylindrical coordinates</a> (with the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">31-11</span></code> convention, as mentioned at the Wikipedia page) in a local system.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.ArcInlet) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.ArcInlet, <a href="#id158"><span class="problematic" id="id159">*</span></a>args, <a href="#id160"><span class="problematic" id="id161">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.ArcInlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x190a440</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Node defining local coordinate system. <em>Must</em> be given.</p>
-<p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.ArcInlet.cylBox">
-<span class="sig-name descname"><span class="pre">cylBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">AlignedBox3((1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.7976931348623157e308)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-1.7976931348623157e308))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.cylBox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Box in cylindrical coordinates, as: (ρ₀,φ₀,z₀),(ρ₁,φ₁,z₁). ρ must be non-negative, (φ₁-φ₀)≤2π.</p>
-<p>[type: AlignedBox3r]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.ArcInlet.glSlices">
-<span class="sig-name descname"><span class="pre">glSlices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcInlet.glSlices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of slices for rendering circle (the arc takes the proportionate value</p>
-<p>[type: int]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 </section>
 <section class="html-toggle emphasized" id="particlegenerator">
 <h3>ParticleGenerator<a class="headerlink" href="#particlegenerator" title="Permalink to this headline">¶</a></h3>
@@ -2959,7 +2959,7 @@
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ArcShooter.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x190b640</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcShooter.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1897640</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcShooter.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinate system. <em>Must</em> be given.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -3204,7 +3204,7 @@
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ArcOutlet.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x19437b0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcOutlet.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x18cf7b0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ArcOutlet.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node defining local coordinates system. <em>Must</em> be given.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -5125,24 +5125,24 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section class="html-toggle emphasized" id="matstate">
 <h4>MatState<a class="headerlink" href="#matstate" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.MatState" title="woo.dem.MatState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatState</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-069ef987cac680bf4d529291fa98389b305e23d0.png" alt="digraph MatState {
+<div class="graphviz"><img src="_images/graphviz-4cfafe39aec70d6611435b03f7295b430a29973e.png" alt="digraph MatState {
         rankdir=LR;
         margin=.2;
         &quot;MatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
         &quot;InletMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
         &quot;MatState&quot; -&gt; &quot;InletMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;LudingMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
         &quot;MatState&quot; -&gt; &quot;LudingMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;ConcreteMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
-        &quot;MatState&quot; -&gt; &quot;ConcreteMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;PelletMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
-        &quot;MatState&quot; -&gt; &quot;PelletMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;ClusterMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
-        &quot;MatState&quot; -&gt; &quot;ClusterMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
+        &quot;MatState&quot; -&gt; &quot;ConcreteMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;ClusterMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
+        &quot;MatState&quot; -&gt; &quot;ClusterMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;PelletMatState&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.MatState&quot;];
+        &quot;MatState&quot; -&gt; &quot;PelletMatState&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }" usemap="#MatState" class="graphviz" /></div>
 <map id="MatState" name="MatState">
 <area shape="rect" id="node1" href="woo.dem.html#woo.dem.MatState" title="MatState" alt="" coords="25,118,97,141"/>
 <area shape="rect" id="node2" href="woo.dem.html#woo.dem.MatState" title="InletMatState" alt="" coords="157,25,251,47"/>
 <area shape="rect" id="node3" href="woo.dem.html#woo.dem.MatState" title="LudingMatState" alt="" coords="150,71,258,94"/>
 <area shape="rect" id="node4" href="woo.dem.html#woo.dem.MatState" title="ConcreteMatState" alt="" coords="145,118,263,141"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.MatState" title="PelletMatState" alt="" coords="155,165,253,187"/>
-<area shape="rect" id="node6" href="woo.dem.html#woo.dem.MatState" title="ClusterMatState" alt="" coords="150,211,258,234"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.MatState" title="ClusterMatState" alt="" coords="150,165,258,187"/>
+<area shape="rect" id="node6" href="woo.dem.html#woo.dem.MatState" title="PelletMatState" alt="" coords="155,211,253,234"/>
 </map><dl class="py class">
 <dt class="sig sig-object py" id="woo.dem.MatState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">MatState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.MatState" title="Permalink to this definition">¶</a></dt>
@@ -5731,7 +5731,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.POVRayExport.colorRange">
-<span class="sig-name descname"><span class="pre">colorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x198e860&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.POVRayExport.colorRange" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">colorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x191a860&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.POVRayExport.colorRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Range to map <a class="reference internal" href="#woo.dem.Shape.color" title="woo.dem.Shape.color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">woo.dem.Shape.color</span></code></a> to RGB for pigment specification.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;]</p>
 </dd></dl>
@@ -6002,21 +6002,21 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.geoDisp">
-<span class="sig-name descname"><span class="pre">geoDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CGeomDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x18ab2c0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.geoDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">geoDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CGeomDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x18372c0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.geoDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.CGeomDispatcher" title="woo.dem.CGeomDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomDispatcher</span></code></a> object that is used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.CGeomDispatcher" title="woo.dem.CGeomDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.phyDisp">
-<span class="sig-name descname"><span class="pre">phyDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x189e200&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.phyDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">phyDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;CPhysDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x182a200&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.phyDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.CPhysDispatcher" title="woo.dem.CPhysDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhysDispatcher</span></code></a> object used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.CPhysDispatcher" title="woo.dem.CPhysDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhysDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.ContactLoop.lawDisp">
-<span class="sig-name descname"><span class="pre">lawDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LawDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x18ab1e0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.lawDisp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lawDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;LawDispatcher</span> <span class="pre">&#64;</span> <span class="pre">0x18371e0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.ContactLoop.lawDisp" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#woo.dem.LawDispatcher" title="woo.dem.LawDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawDispatcher</span></code></a> object used for dispatch.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.LawDispatcher" title="woo.dem.LawDispatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawDispatcher</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -6191,7 +6191,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.CGeom.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x18933e0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CGeom.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x181f3e0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CGeom.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local coordinates definition.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -6321,7 +6321,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section class="html-toggle emphasized" id="cgeomfunctor">
 <h4>CGeomFunctor<a class="headerlink" href="#cgeomfunctor" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-c216c58b9526a7fffd5760ba0165c26efce977ba.png" alt="digraph CGeomFunctor {
+<div class="graphviz"><img src="_images/graphviz-e2ec3915921060a07e7d9087b6c0bfe4085b1aa9.png" alt="digraph CGeomFunctor {
         rankdir=LR;
         margin=.2;
         &quot;CGeomFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
@@ -6332,7 +6332,8 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Sphere_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;Cg2_Sphere_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; -&gt; &quot;Cg2_Sphere_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Cg2_InfCylinder_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_InfCylinder_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Any_Any_L6Geom__Base&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
-        &quot;CGeomFunctor&quot; -&gt; &quot;Cg2_Any_Any_L6Geom__Base&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Cg2_Facet_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
+        &quot;CGeomFunctor&quot; -&gt; &quot;Cg2_Any_Any_L6Geom__Base&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Cg2_Facet_InfCylinder_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
+        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_InfCylinder_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Cg2_Facet_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Wall_Sphere_G3Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;CGeomFunctor&quot; -&gt; &quot;Cg2_Wall_Sphere_G3Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Cg2_Wall_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
@@ -6343,31 +6344,30 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;Cg2_Sphere_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Sphere_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Cg2_Facet_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;Cg2_Facet_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
-        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Cg2_Facet_InfCylinder_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
-        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_InfCylinder_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]          &quot;Cg2_Capsule_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
+        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Cg2_Capsule_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Capsule_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CGeomFunctor&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }" usemap="#CGeomFunctor" class="graphviz" /></div>
 <map id="CGeomFunctor" name="CGeomFunctor">
 <area shape="rect" id="node1" href="woo.dem.html#woo.dem.CGeomFunctor" title="CGeomFunctor" alt="" coords="25,445,127,467"/>
 <area shape="rect" id="node3" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Any_Any_L6Geom__Base" alt="" coords="176,398,357,421"/>
-<area shape="rect" id="node11" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Sphere_G3Geom" alt="" coords="183,445,350,467"/>
-<area shape="rect" id="node14" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Sphere_G3Geom" alt="" coords="175,491,358,514"/>
+<area shape="rect" id="node12" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Sphere_G3Geom" alt="" coords="183,445,350,467"/>
+<area shape="rect" id="node15" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Sphere_G3Geom" alt="" coords="175,491,358,514"/>
 <area shape="rect" id="node2" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_InfCylinder_Sphere_L6Geom" alt="" coords="408,25,611,47"/>
 <area shape="rect" id="node4" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Rod_Sphere_L6Geom" alt="" coords="428,71,591,94"/>
 <area shape="rect" id="node5" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Cone_Sphere_L6Geom" alt="" coords="425,118,594,141"/>
 <area shape="rect" id="node6" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Sphere_L6Geom" alt="" coords="419,165,599,187"/>
 <area shape="rect" id="node8" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Ellipsoid_Ellipsoid_L6Geom" alt="" coords="412,211,607,234"/>
 <area shape="rect" id="node9" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_InfCylinder_Capsule_L6Geom" alt="" coords="406,258,613,281"/>
-<area shape="rect" id="node10" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Facet_L6Geom" alt="" coords="428,305,591,327"/>
-<area shape="rect" id="node12" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Capsule_L6Geom" alt="" coords="425,351,594,374"/>
-<area shape="rect" id="node13" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Facet_L6Geom" alt="" coords="431,398,587,421"/>
-<area shape="rect" id="node15" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Sphere_L6Geom" alt="" coords="427,445,592,467"/>
-<area shape="rect" id="node16" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Capsule_L6Geom" alt="" coords="422,491,597,514"/>
-<area shape="rect" id="node17" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Capsule_L6Geom" alt="" coords="417,538,601,561"/>
-<area shape="rect" id="node18" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Sphere_L6Geom" alt="" coords="424,585,595,607"/>
-<area shape="rect" id="node19" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Ellipsoid_L6Geom" alt="" coords="420,631,599,654"/>
-<area shape="rect" id="node20" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_InfCylinder_L6Geom" alt="" coords="413,678,606,701"/>
+<area shape="rect" id="node10" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_InfCylinder_L6Geom" alt="" coords="413,305,606,327"/>
+<area shape="rect" id="node11" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Facet_L6Geom" alt="" coords="428,351,591,374"/>
+<area shape="rect" id="node13" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Capsule_L6Geom" alt="" coords="425,398,594,421"/>
+<area shape="rect" id="node14" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Facet_L6Geom" alt="" coords="431,445,587,467"/>
+<area shape="rect" id="node16" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Sphere_L6Geom" alt="" coords="427,491,592,514"/>
+<area shape="rect" id="node17" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Capsule_L6Geom" alt="" coords="422,538,597,561"/>
+<area shape="rect" id="node18" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Capsule_L6Geom" alt="" coords="417,585,601,607"/>
+<area shape="rect" id="node19" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Sphere_L6Geom" alt="" coords="424,631,595,654"/>
+<area shape="rect" id="node20" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Facet_Ellipsoid_L6Geom" alt="" coords="420,678,599,701"/>
 <area shape="rect" id="node21" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Capsule_Capsule_L6Geom" alt="" coords="415,725,603,747"/>
 <area shape="rect" id="node22" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Wall_Ellipsoid_L6Geom" alt="" coords="423,771,595,794"/>
 <area shape="rect" id="node7" href="woo.dem.html#woo.dem.CGeomFunctor" title="Cg2_Sphere_Ellipsoid_L6Geom" alt="" coords="661,211,847,234"/>
@@ -6429,19 +6429,19 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section id="cg2-any-any-l6geom-base">
 <h5>Cg2_Any_Any_L6Geom__Base<a class="headerlink" href="#cg2-any-any-l6geom-base" title="Permalink to this headline">¶</a></h5>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.CGeomFunctor" title="woo.dem.CGeomFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGeomFunctor</span></code></a> → <a class="reference internal" href="#woo.dem.Cg2_Any_Any_L6Geom__Base" title="woo.dem.Cg2_Any_Any_L6Geom__Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cg2_Any_Any_L6Geom__Base</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-6e8ce7e9170aba1f68adf5449ca3dd1fb8bd62c4.png" alt="digraph Cg2_Any_Any_L6Geom__Base {
+<div class="graphviz"><img src="_images/graphviz-f0e9736d8a947e9fa0d084cf46f9a5f8cd65ca57.png" alt="digraph Cg2_Any_Any_L6Geom__Base {
         rankdir=LR;
         margin=.2;
         &quot;Cg2_Any_Any_L6Geom__Base&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_InfCylinder_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_InfCylinder_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;Cg2_Rod_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Rod_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;Cg2_Cone_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
-        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Cone_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Sphere_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
+        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Cone_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
+        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Cg2_Sphere_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Sphere_Sphere_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;Cg2_Sphere_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; -&gt; &quot;Cg2_Sphere_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Cg2_InfCylinder_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_InfCylinder_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Facet_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
-        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
-        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Wall_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
+        &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Facet_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Ellipsoid_Ellipsoid_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Cg2_Wall_Capsule_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Wall_Capsule_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]               &quot;Cg2_Wall_Facet_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
         &quot;Cg2_Any_Any_L6Geom__Base&quot; -&gt; &quot;Cg2_Wall_Facet_L6Geom&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;Cg2_Wall_Sphere_L6Geom&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base&quot;];
@@ -6458,11 +6458,11 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <area shape="rect" id="node2" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_InfCylinder_Sphere_L6Geom" alt="" coords="256,25,459,47"/>
 <area shape="rect" id="node3" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Rod_Sphere_L6Geom" alt="" coords="276,71,439,94"/>
 <area shape="rect" id="node4" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Cone_Sphere_L6Geom" alt="" coords="273,118,442,141"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Sphere_Sphere_L6Geom" alt="" coords="267,165,447,187"/>
-<area shape="rect" id="node7" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Ellipsoid_Ellipsoid_L6Geom" alt="" coords="260,211,455,234"/>
-<area shape="rect" id="node8" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_InfCylinder_Capsule_L6Geom" alt="" coords="254,258,461,281"/>
-<area shape="rect" id="node9" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Facet_Facet_L6Geom" alt="" coords="276,305,439,327"/>
-<area shape="rect" id="node10" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Wall_Ellipsoid_L6Geom" alt="" coords="271,351,443,374"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Wall_Ellipsoid_L6Geom" alt="" coords="271,165,443,187"/>
+<area shape="rect" id="node6" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Sphere_Sphere_L6Geom" alt="" coords="267,211,447,234"/>
+<area shape="rect" id="node8" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Ellipsoid_Ellipsoid_L6Geom" alt="" coords="260,258,455,281"/>
+<area shape="rect" id="node9" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_InfCylinder_Capsule_L6Geom" alt="" coords="254,305,461,327"/>
+<area shape="rect" id="node10" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Facet_Facet_L6Geom" alt="" coords="276,351,439,374"/>
 <area shape="rect" id="node11" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Wall_Capsule_L6Geom" alt="" coords="273,398,442,421"/>
 <area shape="rect" id="node12" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Wall_Facet_L6Geom" alt="" coords="279,445,435,467"/>
 <area shape="rect" id="node13" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Wall_Sphere_L6Geom" alt="" coords="275,491,440,514"/>
@@ -6472,7 +6472,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <area shape="rect" id="node17" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Facet_Ellipsoid_L6Geom" alt="" coords="268,678,447,701"/>
 <area shape="rect" id="node18" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Capsule_Capsule_L6Geom" alt="" coords="263,725,451,747"/>
 <area shape="rect" id="node19" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Facet_InfCylinder_L6Geom" alt="" coords="261,771,454,794"/>
-<area shape="rect" id="node6" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Sphere_Ellipsoid_L6Geom" alt="" coords="509,211,695,234"/>
+<area shape="rect" id="node7" href="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Cg2_Sphere_Ellipsoid_L6Geom" alt="" coords="509,258,695,281"/>
 </map><dl class="py class">
 <dt class="sig sig-object py" id="woo.dem.Cg2_Any_Any_L6Geom__Base">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">Cg2_Any_Any_L6Geom__Base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Cg2_Any_Any_L6Geom__Base" title="Permalink to this definition">¶</a></dt>
@@ -6928,25 +6928,25 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section class="html-toggle emphasized" id="cphys">
 <h4>CPhys<a class="headerlink" href="#cphys" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-e21b94ee65103d600f5b44553162a1354de12a10.png" alt="digraph CPhys {
+<div class="graphviz"><img src="_images/graphviz-231fa15740e5324094500218724e83da08191e13.png" alt="digraph CPhys {
         rankdir=LR;
         margin=.2;
         &quot;CPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
-        &quot;IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
+        &quot;HertzPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
+        &quot;FrictPhys&quot; -&gt; &quot;HertzPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
         &quot;FrictPhys&quot; -&gt; &quot;IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;FrictPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
-        &quot;CPhys&quot; -&gt; &quot;FrictPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;HertzPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
-        &quot;FrictPhys&quot; -&gt; &quot;HertzPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
-        &quot;FrictPhys&quot; -&gt; &quot;LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
-        &quot;FrictPhys&quot; -&gt; &quot;ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
+        &quot;CPhys&quot; -&gt; &quot;FrictPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
+        &quot;FrictPhys&quot; -&gt; &quot;ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
+        &quot;FrictPhys&quot; -&gt; &quot;LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.CPhys&quot;];
         &quot;FrictPhys&quot; -&gt; &quot;PelletPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }" usemap="#CPhys" class="graphviz" /></div>
 <map id="CPhys" name="CPhys">
 <area shape="rect" id="node1" href="woo.dem.html#woo.dem.CPhys" title="CPhys" alt="" coords="25,118,97,141"/>
 <area shape="rect" id="node3" href="woo.dem.html#woo.dem.CPhys" title="FrictPhys" alt="" coords="145,118,217,141"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.CPhys" title="IcePhys" alt="" coords="276,25,348,47"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.CPhys" title="HertzPhys" alt="" coords="273,71,351,94"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.CPhys" title="LudingPhys" alt="" coords="269,118,355,141"/>
-<area shape="rect" id="node6" href="woo.dem.html#woo.dem.CPhys" title="ConcretePhys" alt="" coords="265,165,359,187"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.CPhys" title="HertzPhys" alt="" coords="273,25,351,47"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.CPhys" title="IcePhys" alt="" coords="276,71,348,94"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.CPhys" title="ConcretePhys" alt="" coords="265,118,359,141"/>
+<area shape="rect" id="node6" href="woo.dem.html#woo.dem.CPhys" title="LudingPhys" alt="" coords="269,165,355,187"/>
 <area shape="rect" id="node7" href="woo.dem.html#woo.dem.CPhys" title="PelletPhys" alt="" coords="274,211,350,234"/>
 </map><dl class="py class">
 <dt class="sig sig-object py" id="woo.dem.CPhys">
@@ -6989,23 +6989,23 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section class="html-toggle emphasized" id="frictphys">
 <h4>FrictPhys<a class="headerlink" href="#frictphys" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.CPhys" title="woo.dem.CPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPhys</span></code></a> → <a class="reference internal" href="#woo.dem.FrictPhys" title="woo.dem.FrictPhys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrictPhys</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-1978b83df37174c38d3dddd7a43b120edcd67539.png" alt="digraph FrictPhys {
+<div class="graphviz"><img src="_images/graphviz-e4d4a3cbff6fec3fcbbbfd0f1b8fc7cb19b2b4e5.png" alt="digraph FrictPhys {
         rankdir=LR;
         margin=.2;
         &quot;FrictPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
-        &quot;IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
+        &quot;ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
+        &quot;FrictPhys&quot; -&gt; &quot;ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;IcePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
         &quot;FrictPhys&quot; -&gt; &quot;IcePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;HertzPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
         &quot;FrictPhys&quot; -&gt; &quot;HertzPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
-        &quot;FrictPhys&quot; -&gt; &quot;LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
-        &quot;FrictPhys&quot; -&gt; &quot;ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]         &quot;PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
+        &quot;FrictPhys&quot; -&gt; &quot;LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;PelletPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.FrictPhys&quot;];
         &quot;FrictPhys&quot; -&gt; &quot;PelletPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]
 }" usemap="#FrictPhys" class="graphviz" /></div>
 <map id="FrictPhys" name="FrictPhys">
 <area shape="rect" id="node1" href="woo.dem.html#woo.dem.FrictPhys" title="FrictPhys" alt="" coords="25,118,97,141"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.FrictPhys" title="IcePhys" alt="" coords="156,25,228,47"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.FrictPhys" title="HertzPhys" alt="" coords="153,71,231,94"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.FrictPhys" title="LudingPhys" alt="" coords="149,118,235,141"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.FrictPhys" title="ConcretePhys" alt="" coords="145,165,239,187"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.FrictPhys" title="ConcretePhys" alt="" coords="145,25,239,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.FrictPhys" title="IcePhys" alt="" coords="156,71,228,94"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.FrictPhys" title="HertzPhys" alt="" coords="153,118,231,141"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.FrictPhys" title="LudingPhys" alt="" coords="149,165,235,187"/>
 <area shape="rect" id="node6" href="woo.dem.html#woo.dem.FrictPhys" title="PelletPhys" alt="" coords="154,211,230,234"/>
 </map><dl class="py class">
 <dt class="sig sig-object py" id="woo.dem.FrictPhys">
@@ -7971,13 +7971,13 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <section class="html-toggle emphasized" id="lawfunctor">
 <h4>LawFunctor<a class="headerlink" href="#lawfunctor" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="woo.core.html#woo.core.Functor" title="woo.core.Functor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Functor</span></code></a> → <a class="reference internal" href="#woo.dem.LawFunctor" title="woo.dem.LawFunctor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LawFunctor</span></code></a></p>
-<div class="graphviz"><img src="_images/graphviz-2d040cec3b1edfdc07aa4c870e39665c2d6d798f.png" alt="digraph LawFunctor {
+<div class="graphviz"><img src="_images/graphviz-cccceb4fff619cfdd9ecc74eee819830c0b925c7.png" alt="digraph LawFunctor {
         rankdir=LR;
         margin=.2;
         &quot;LawFunctor&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
-        &quot;Law2_L6Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
-        &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Law2_L6Geom_FrictPhys_LinEl6&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
-        &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_FrictPhys_LinEl6&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Law2_L6Geom_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
+        &quot;Law2_L6Geom_FrictPhys_LinEl6&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
+        &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_FrictPhys_LinEl6&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]                &quot;Law2_L6Geom_FrictPhys_IdealElPl&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
+        &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_FrictPhys_IdealElPl&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]             &quot;Law2_L6Geom_ConcretePhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
         &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_ConcretePhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]            &quot;Law2_L6Geom_HertzPhys_DMT&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
         &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_HertzPhys_DMT&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]           &quot;Law2_L6Geom_LudingPhys&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
         &quot;LawFunctor&quot; -&gt; &quot;Law2_L6Geom_LudingPhys&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;]              &quot;Law2_L6Geom_PelletPhys_Pellet&quot; [shape=&quot;box&quot;,fontsize=8,style=&quot;setlinewidth(0.5),solid&quot;,height=0.2,URL=&quot;woo.dem.html#woo.dem.LawFunctor&quot;];
@@ -7987,8 +7987,8 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 }" usemap="#LawFunctor" class="graphviz" /></div>
 <map id="LawFunctor" name="LawFunctor">
 <area shape="rect" id="node1" href="woo.dem.html#woo.dem.LawFunctor" title="LawFunctor" alt="" coords="25,189,111,211"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_FrictPhys_IdealElPl" alt="" coords="161,25,369,47"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_FrictPhys_LinEl6" alt="" coords="167,71,363,94"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_FrictPhys_LinEl6" alt="" coords="167,25,363,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_FrictPhys_IdealElPl" alt="" coords="161,71,369,94"/>
 <area shape="rect" id="node4" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_ConcretePhys" alt="" coords="175,118,354,141"/>
 <area shape="rect" id="node5" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_HertzPhys_DMT" alt="" coords="168,165,361,187"/>
 <area shape="rect" id="node6" href="woo.dem.html#woo.dem.LawFunctor" title="Law2_L6Geom_LudingPhys" alt="" coords="180,211,349,234"/>
@@ -8898,14 +8898,14 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.DemField.particles">
-<span class="sig-name descname"><span class="pre">particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ParticleContainer</span> <span class="pre">&#64;</span> <span class="pre">0x194f7b0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ParticleContainer</span> <span class="pre">&#64;</span> <span class="pre">0x18db7b0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particles (each particle holds its contacts, and references associated nodes)</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ParticleContainer" title="woo.dem.ParticleContainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParticleContainer</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.DemField.contacts">
-<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactContainer</span> <span class="pre">&#64;</span> <span class="pre">0x194f9d0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.contacts" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ContactContainer</span> <span class="pre">&#64;</span> <span class="pre">0x18db9d0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.DemField.contacts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear view on particle contacts</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="#woo.dem.ContactContainer" title="woo.dem.ContactContainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactContainer</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -10190,7 +10190,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.CircularOrbit.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x1a6e1c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CircularOrbit.node" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;Node</span> <span class="pre">&#64;</span> <span class="pre">0x19fa1c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CircularOrbit.node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local coordinate system.</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.Node" title="woo.core.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>&gt;]</p>
 </dd></dl>
@@ -10381,78 +10381,6 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 </dd></dl>
 
 </section>
-<section class="html-toggle emphasized" id="harmonicoscillation">
-<h4>HarmonicOscillation<a class="headerlink" href="#harmonicoscillation" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.Impose" title="woo.dem.Impose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Impose</span></code></a> → <a class="reference internal" href="#woo.dem.HarmonicOscillation" title="woo.dem.HarmonicOscillation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HarmonicOscillation</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">HarmonicOscillation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Impose <a class="reference external" href="http://en.wikipedia.org/wiki/Harmonic_oscillation#Simple_harmonic_oscillator">harmonic oscillation</a> around initial center position, with given frequency <a class="reference internal" href="#woo.dem.HarmonicOscillation.freq" title="woo.dem.HarmonicOscillation.freq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">freq</span></code></a> (<span class="math notranslate nohighlight">\(f\)</span>) and amplitude <a class="reference internal" href="#woo.dem.HarmonicOscillation.amp" title="woo.dem.HarmonicOscillation.amp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amp</span></code></a> (<span class="math notranslate nohighlight">\(A\)</span>), by prescribing velocity. Nodal velocity magnitude along <a class="reference internal" href="#woo.dem.HarmonicOscillation.dir" title="woo.dem.HarmonicOscillation.dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dir</span></code></a> is <span class="math notranslate nohighlight">\(x'(t)=A\omega\cos(\omega(t-t_0))\)</span> (with <span class="math notranslate nohighlight">\(\omega=2\pi f\)</span>), which is the derivative of the harmonic motion equation <span class="math notranslate nohighlight">\(x(t)=A\sin(\omega(t-t_0))\)</span>. The motion starts in zero (for <span class="math notranslate nohighlight">\(t_0=0\)</span>); to reverse the direction, either reverse <a class="reference internal" href="#woo.dem.HarmonicOscillation.dir" title="woo.dem.HarmonicOscillation.dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dir</span></code></a> or assign <span class="math notranslate nohighlight">\(t_0=\frac{1}{2f}=\frac{\pi}{\omega}\)</span>.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.HarmonicOscillation) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.HarmonicOscillation, <a href="#id725"><span class="problematic" id="id726">*</span></a>args, <a href="#id727"><span class="problematic" id="id728">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.freq">
-<span class="sig-name descname"><span class="pre">freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.freq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Frequence of oscillation</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.amp">
-<span class="sig-name descname"><span class="pre">amp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.amp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Amplitude of oscillation</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.dir">
-<span class="sig-name descname"><span class="pre">dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Direcrtion of oscillation (normalized automatically)</p>
-<p>[type: Vector3r]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.t0">
-<span class="sig-name descname"><span class="pre">t0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.t0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Time when the oscillator is in the center position (phase)</p>
-<p>[type: Real]</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.perpFree">
-<span class="sig-name descname"><span class="pre">perpFree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.perpFree" title="Permalink to this definition">¶</a></dt>
-<dd><p>If true, only velocity in the <em>dir</em> sense will be prescribed, velocity in the perpendicular sense will be preserved.</p>
-<p>[type: bool]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section class="html-toggle emphasized" id="combinedimpose">
-<h4>CombinedImpose<a class="headerlink" href="#combinedimpose" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.Impose" title="woo.dem.Impose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Impose</span></code></a> → <a class="reference internal" href="#woo.dem.CombinedImpose" title="woo.dem.CombinedImpose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CombinedImpose</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="woo.dem.CombinedImpose">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">CombinedImpose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CombinedImpose" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combine several impositions and apply them one after another.</p>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: woo.dem.CombinedImpose) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.CombinedImpose, <a href="#id729"><span class="problematic" id="id730">*</span></a>args, <a href="#id731"><span class="problematic" id="id732">**</span></a>kwargs) -&gt; None</p></li>
-</ol>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="woo.dem.CombinedImpose.imps">
-<span class="sig-name descname"><span class="pre">imps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CombinedImpose.imps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Impositions which are combined together, always called in this order.</p>
-<p>[type: vector&lt;shared_ptr&lt;Impose&gt;&gt;]</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section class="html-toggle emphasized" id="velocityandreadforce">
 <h4>VelocityAndReadForce<a class="headerlink" href="#velocityandreadforce" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.Impose" title="woo.dem.Impose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Impose</span></code></a> → <a class="reference internal" href="#woo.dem.VelocityAndReadForce" title="woo.dem.VelocityAndReadForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VelocityAndReadForce</span></code></a></p>
@@ -10463,7 +10391,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: woo.dem.VelocityAndReadForce) -&gt; None</p></li>
-<li><p>__init__(self: woo.dem.VelocityAndReadForce, <a href="#id733"><span class="problematic" id="id734">*</span></a>args, <a href="#id735"><span class="problematic" id="id736">**</span></a>kwargs) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.VelocityAndReadForce, <a href="#id725"><span class="problematic" id="id726">*</span></a>args, <a href="#id727"><span class="problematic" id="id728">**</span></a>kwargs) -&gt; None</p></li>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.VelocityAndReadForce.dir">
@@ -10519,6 +10447,78 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <span class="sig-name descname"><span class="pre">workIx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.VelocityAndReadForce.workIx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Index for fast access to the energy.</p>
 <p>[type: int, not saved, not accessible from python]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="harmonicoscillation">
+<h4>HarmonicOscillation<a class="headerlink" href="#harmonicoscillation" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.Impose" title="woo.dem.Impose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Impose</span></code></a> → <a class="reference internal" href="#woo.dem.HarmonicOscillation" title="woo.dem.HarmonicOscillation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HarmonicOscillation</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">HarmonicOscillation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Impose <a class="reference external" href="http://en.wikipedia.org/wiki/Harmonic_oscillation#Simple_harmonic_oscillator">harmonic oscillation</a> around initial center position, with given frequency <a class="reference internal" href="#woo.dem.HarmonicOscillation.freq" title="woo.dem.HarmonicOscillation.freq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">freq</span></code></a> (<span class="math notranslate nohighlight">\(f\)</span>) and amplitude <a class="reference internal" href="#woo.dem.HarmonicOscillation.amp" title="woo.dem.HarmonicOscillation.amp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amp</span></code></a> (<span class="math notranslate nohighlight">\(A\)</span>), by prescribing velocity. Nodal velocity magnitude along <a class="reference internal" href="#woo.dem.HarmonicOscillation.dir" title="woo.dem.HarmonicOscillation.dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dir</span></code></a> is <span class="math notranslate nohighlight">\(x'(t)=A\omega\cos(\omega(t-t_0))\)</span> (with <span class="math notranslate nohighlight">\(\omega=2\pi f\)</span>), which is the derivative of the harmonic motion equation <span class="math notranslate nohighlight">\(x(t)=A\sin(\omega(t-t_0))\)</span>. The motion starts in zero (for <span class="math notranslate nohighlight">\(t_0=0\)</span>); to reverse the direction, either reverse <a class="reference internal" href="#woo.dem.HarmonicOscillation.dir" title="woo.dem.HarmonicOscillation.dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dir</span></code></a> or assign <span class="math notranslate nohighlight">\(t_0=\frac{1}{2f}=\frac{\pi}{\omega}\)</span>.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.HarmonicOscillation) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.HarmonicOscillation, <a href="#id729"><span class="problematic" id="id730">*</span></a>args, <a href="#id731"><span class="problematic" id="id732">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.freq">
+<span class="sig-name descname"><span class="pre">freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frequence of oscillation</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.amp">
+<span class="sig-name descname"><span class="pre">amp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.amp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amplitude of oscillation</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.dir">
+<span class="sig-name descname"><span class="pre">dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">Vector3(1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Direcrtion of oscillation (normalized automatically)</p>
+<p>[type: Vector3r]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.t0">
+<span class="sig-name descname"><span class="pre">t0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.t0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time when the oscillator is in the center position (phase)</p>
+<p>[type: Real]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.HarmonicOscillation.perpFree">
+<span class="sig-name descname"><span class="pre">perpFree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.HarmonicOscillation.perpFree" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, only velocity in the <em>dir</em> sense will be prescribed, velocity in the perpendicular sense will be preserved.</p>
+<p>[type: bool]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section class="html-toggle emphasized" id="combinedimpose">
+<h4>CombinedImpose<a class="headerlink" href="#combinedimpose" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="woo.core.html#woo.core.Object" title="woo.core.Object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Object</span></code></a> → <a class="reference internal" href="#woo.dem.Impose" title="woo.dem.Impose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Impose</span></code></a> → <a class="reference internal" href="#woo.dem.CombinedImpose" title="woo.dem.CombinedImpose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CombinedImpose</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="woo.dem.CombinedImpose">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">woo.dem.</span></span><span class="sig-name descname"><span class="pre">CombinedImpose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CombinedImpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine several impositions and apply them one after another.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: woo.dem.CombinedImpose) -&gt; None</p></li>
+<li><p>__init__(self: woo.dem.CombinedImpose, <a href="#id733"><span class="problematic" id="id734">*</span></a>args, <a href="#id735"><span class="problematic" id="id736">**</span></a>kwargs) -&gt; None</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="woo.dem.CombinedImpose.imps">
+<span class="sig-name descname"><span class="pre">imps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.CombinedImpose.imps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Impositions which are combined together, always called in this order.</p>
+<p>[type: vector&lt;shared_ptr&lt;Impose&gt;&gt;]</p>
 </dd></dl>
 
 </dd></dl>
@@ -10747,7 +10747,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="woo.dem.Tracer.lineColor">
-<span class="sig-name descname"><span class="pre">lineColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x19c62f0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Tracer.lineColor" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lineColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">=</span> <span class="pre">&lt;ScalarRange</span> <span class="pre">&#64;</span> <span class="pre">0x19522f0&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#woo.dem.Tracer.lineColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Color range for coloring the trace line</p>
 <p>[type: shared_ptr&lt;<a class="reference internal" href="woo.core.html#woo.core.ScalarRange" title="woo.core.ScalarRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarRange</span></code></a>&gt;, read-only in python]</p>
 </dd></dl>
@@ -11085,7 +11085,6 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <li><a class="reference internal" href="#suspicious">Suspicious</a></li>
 <li><a class="reference internal" href="#inlets-outlets">Inlets &amp; Outlets</a><ul>
 <li><a class="reference internal" href="#inlet">Inlet</a></li>
-<li><a class="reference internal" href="#conveyorinlet">ConveyorInlet</a></li>
 <li><a class="reference internal" href="#randominlet">RandomInlet</a><ul>
 <li><a class="reference internal" href="#cylinderinlet">CylinderInlet</a></li>
 <li><a class="reference internal" href="#boxinlet">BoxInlet</a><ul>
@@ -11095,6 +11094,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <li><a class="reference internal" href="#arcinlet">ArcInlet</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#conveyorinlet">ConveyorInlet</a></li>
 <li><a class="reference internal" href="#particlegenerator">ParticleGenerator</a><ul>
 <li><a class="reference internal" href="#minmaxspheregenerator">MinMaxSphereGenerator</a></li>
 <li><a class="reference internal" href="#psdspheregenerator">PsdSphereGenerator</a><ul>
@@ -11316,9 +11316,9 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
 <li><a class="reference internal" href="#local6dofs">Local6Dofs</a></li>
 <li><a class="reference internal" href="#alignedharmonicoscillations">AlignedHarmonicOscillations</a></li>
 <li><a class="reference internal" href="#variablevelocity3d">VariableVelocity3d</a></li>
+<li><a class="reference internal" href="#velocityandreadforce">VelocityAndReadForce</a></li>
 <li><a class="reference internal" href="#harmonicoscillation">HarmonicOscillation</a></li>
 <li><a class="reference internal" href="#combinedimpose">CombinedImpose</a></li>
-<li><a class="reference internal" href="#velocityandreadforce">VelocityAndReadForce</a></li>
 <li><a class="reference internal" href="#radialforce">RadialForce</a></li>
 <li><a class="reference internal" href="#interpolatedmotion">InterpolatedMotion</a></li>
 <li><a class="reference internal" href="#readforce">ReadForce</a></li>
@@ -11405,7 +11405,7 @@ only 1 <em>material</em> parameter, but you don’t want material to be shared.<
         <li class="right" >
           <a href="woo.core.html" title="woo.core"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">Woo 1.0+rev1-git-681f22d documentation</a> &#187;</li>
+    <li><a href="index.html">Woo 1.0+rev1-git-f6fbd0c documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="wooMods.html" >Woo modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">woo.dem</span></code></a></li> 
