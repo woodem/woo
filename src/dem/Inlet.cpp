@@ -214,6 +214,7 @@ bool Inlet::everythingDone(){
 	if((maxMass>0 && mass>=maxMass) || (maxNum>0 && num>=maxNum)){
 		LOG_INFO("mass or number reached, making myself dead.");
 		dead=true;
+		notifyDead();
 		if(zeroRateAtStop) currRate=0.;
 		if(!doneHook.empty()){ LOG_DEBUG("Running doneHook: {}",doneHook); Engine::runPy("Inlet",doneHook); }
 		return true;
