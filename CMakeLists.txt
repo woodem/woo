@@ -115,7 +115,10 @@ else()
 endif()
 
 # for parallel STL algotithms
-find_package(TBB REQUIRED)
+find_package(TBB) # newer installations provide their own CMake files
+if(NOT TBB_FOUND)
+	find_package(TBB_LOCAL REQUIRED) # older installations: use cmake/FindTBB_LOCAL.cmake we supply
+endif()
 
 if(WOO_CEREAL)
 	# requires -DWOO_NOXML but that is set by default already
@@ -400,9 +403,11 @@ pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
 target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
+
 if(WOO_QT5)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml OpenGL::GL GLUT::GLUT GLEW::GLEW QGLViewer GLE)
 endif(WOO_QT5)
+
 if(WOO_OPENMP)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC OpenMP::OpenMP_CXX)
 endif(WOO_OPENMP)
