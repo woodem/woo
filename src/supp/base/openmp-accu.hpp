@@ -2,6 +2,7 @@
 
 // for ZeroInitializer template
 #include"Math.hpp"
+#include"Types.hpp"
 #include<string>
 
 #ifdef WOO_OPENMP
@@ -37,20 +38,28 @@
 // each chunk belonging to one thread
 template<typename T>
 class OpenMPArrayAccumulator{
-	int CLS;
-	size_t nThreads;
-	int perCL; // number of elements fitting inside cache line
+	const int CLS;
+	const size_t nThreads;
+	const int perCL; // number of elements fitting inside cache line
 	std::vector<T*> chunks; // array with pointers to the chunks of memory we have allocated; each item for one thread
 	size_t sz; // current number of elements
 	size_t nCL; // current number of allocated cache lines
 	int nCL_for_N(size_t n){ return n/perCL+(n%perCL==0 ? 0 : 1); } // return number of cache lines to allocate for given number of elements
 	public:
 		OpenMPArrayAccumulator()        : CLS(_WOO_L1_CACHE_LINESIZE), nThreads(omp_get_max_threads()), perCL(CLS/sizeof(T)), chunks(nThreads,NULL), sz(0), nCL(0) { }
-		OpenMPArrayAccumulator(const OpenMPArrayAccumulator& a): OpenMPArrayAccumulator() {
-			this->resize(a.sz);
-			for(size_t th=0; th<nThreads; th++) memcpy((void*)(chunks[th]),(void*)(a.chunks[th]),nCL_for_N(sz));
+		OpenMPArrayAccumulator(const OpenMPArrayAccumulator& other): OpenMPArrayAccumulator() {
+			this->operator=(other);
+			//this->resize(a.sz);
+			//for(size_t th=0; th<nThreads; th++) memcpy((void*)(chunks[th]),(void*)(a.chunks[th]),nCL_for_N(sz)*CLS);
 		}
 		OpenMPArrayAccumulator(size_t n): CLS(_WOO_L1_CACHE_LINESIZE), nThreads(omp_get_max_threads()), perCL(CLS/sizeof(T)), chunks(nThreads,NULL), sz(0), nCL(0) { resize(n); }
+		void operator=(const OpenMPArrayAccumulator& other){
+			this->resize(other.sz);
+			assert(this->CLS==other->CLS);
+			assert(this->nThreads==other->nThreads);
+			assert(this->perCL==other->perCL);
+			for(size_t th=0; th<nThreads; th++) memcpy((void*)(chunks[th]),(void*)(other.chunks[th]),nCL_for_N(sz)*CLS);
+		}
 		// change number of elements
 		void resize(size_t n){
 			if(n==sz) return; // nothing to do
@@ -215,6 +224,10 @@ public:
 	std::vector<T> getPerThreadData() const { std::vector<T> ret; ret.push_back(data); return ret; }
 };
 #endif
+
+namespace woo{
+	void registerOpenMPAccuClassesInPybind11(py::module&);
+}
 
 #ifdef WOO_CEREAL
 	#include<cereal/cereal.hpp>

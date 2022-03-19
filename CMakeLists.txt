@@ -310,6 +310,7 @@ set(WOO_CXX_SOURCES
 	src/supp/base/CompUtils.cpp
 	src/supp/base/Math.cpp
 	src/supp/base/Volumetric.cpp
+	src/supp/base/openmp-accu.cpp
 	src/supp/multimethods/Indexable.cpp
 	src/supp/object/Object.cpp
 	src/supp/opengl/GLUtils.cpp
