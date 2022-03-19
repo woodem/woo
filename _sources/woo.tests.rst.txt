@@ -5,10 +5,24 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.test_clump`
+----------------------------------------
+
+.. automodule:: woo.tests.test_clump
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.test_clustering`
 ---------------------------------------------
 
 .. automodule:: woo.tests.test_clustering
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_psd`
+--------------------------------------
+
+.. automodule:: woo.tests.test_psd
    :members:
    :undoc-members:
 
@@ -26,6 +40,13 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.test_labels`
+-----------------------------------------
+
+.. automodule:: woo.tests.test_labels
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.test_ellipsoid`
 --------------------------------------------
 
@@ -33,17 +54,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_pbc`
---------------------------------------
+:mod:`woo.tests.test_energy`
+-----------------------------------------
 
-.. automodule:: woo.tests.test_pbc
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_volumetric`
----------------------------------------------
-
-.. automodule:: woo.tests.test_volumetric
+.. automodule:: woo.tests.test_energy
    :members:
    :undoc-members:
 
@@ -86,7 +100,7 @@ _TestPyClass
    :special-members:
 
 
-   [:woosrc:`py/tests/test_core.py <py/tests/test_core.py#L527>`]
+   [:woosrc:`py/tests/test_core.py <py/tests/test_core.py#L531>`]
 
    .. attribute:: aF (= 1.0)
 
@@ -112,7 +126,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x2d7a3e0, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x18dd250, at (1,1,1)>)
 
       node attr
 
@@ -124,7 +138,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x2664780, at (1,1,1)>, <Node @ 0x2c65c10, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x1921810, at (1,1,1)>, <Node @ 0x1fd97d0, at (2,2,2)>])
 
       List of nodes
 
@@ -172,7 +186,7 @@ _TestPyClass2
    :special-members:
 
 
-   [:woosrc:`py/tests/test_core.py <py/tests/test_core.py#L559>`]
+   [:woosrc:`py/tests/test_core.py <py/tests/test_core.py#L563>`]
 
    .. attribute:: f2 (= 0)
 
@@ -186,10 +200,26 @@ _TestPyClass2
 
       [type: int]
 
+:mod:`woo.tests.test_volumetric`
+---------------------------------------------
+
+.. automodule:: woo.tests.test_volumetric
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.test_batch`
 ----------------------------------------
 
 .. automodule:: woo.tests.test_batch
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_grid`
+---------------------------------------
+
+.. automodule:: woo.tests.test_grid
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
@@ -202,50 +232,18 @@ _TestPyClass2
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass
 
+:mod:`woo.tests.test_pbc`
+--------------------------------------
+
+.. automodule:: woo.tests.test_pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
 :mod:`woo.tests.test_shapepack`
 --------------------------------------------
 
 .. automodule:: woo.tests.test_shapepack
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_clump`
-----------------------------------------
-
-.. automodule:: woo.tests.test_clump
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_labels`
------------------------------------------
-
-.. automodule:: woo.tests.test_labels
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_energy`
------------------------------------------
-
-.. automodule:: woo.tests.test_energy
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_psd`
---------------------------------------
-
-.. automodule:: woo.tests.test_psd
-   :members:
-   :undoc-members:
-   :exclude-members: _TestPyClass2,  _TestPyClass
-
-:mod:`woo.tests.test_grid`
----------------------------------------
-
-.. automodule:: woo.tests.test_grid
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass

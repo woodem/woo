@@ -1,0 +1,6 @@
+<map id="Outlet" name="Outlet">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.Outlet" title="Outlet" alt="" coords="25,49,97,71"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.Outlet" title="ArcOutlet" alt="" coords="145,25,219,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.Outlet" title="BoxOutlet" alt="" coords="145,71,219,94"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.Outlet" title="StackedBoxOutlet" alt="" coords="267,71,385,94"/>
+</map>
