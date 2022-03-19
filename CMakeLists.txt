@@ -103,6 +103,13 @@ endif()
 # this will use pybind11_DIR automatically, if defined
 find_package(pybind11 2.4 REQUIRED)
 
+
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} "-cimport numpy; print(numpy.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 find_path(DOUBLECONVERSION_INCLUDE_DIR NAMES double-conversion/double-conversion.h PATHS /usr/include /usr/local/include)
 find_library(DOUBLECONVERSION_LIB NAMES double-conversion)
 if(DOUBLECONVERSION_INCLUDE_DIR AND DOUBLECONVERSION_LIB)
@@ -138,7 +145,7 @@ if(WOO_GTS)
 	pkg_check_modules(GTS REQUIRED gts)
 	# create interface: https://foonathan.net/2016/07/cmake-dependency-handling/
 	add_library(GTS INTERFACE)
-	target_include_directories(GTS INTERFACE ${GTS_INCLUDE_DIRS})
+	target_include_directories(GTS INTERFACE ${GTS_INCLUDE_DIRS} ${NUMPY_INCLUDE_DIRS})
 	target_link_libraries(GTS INTERFACE ${GTS_LIBRARIES})
 	set(WOO_CXX_GTS_SOURCES
 		src/lib/pygts-0.3.1/cleanup.cpp
@@ -421,11 +428,6 @@ if(WOO_HDF5)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC ${HDF5_CXX_LIBRARIES} ${HDF5_HL_LIBRARIES})
 endif(WOO_HDF5)
 
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} "-cimport numpy; print(numpy.get_include())"
-    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
 target_include_directories(${CXX_INTERNAL} PRIVATE ${NUMPY_INCLUDE_DIR})
 
 set_source_files_properties(py/config.cxx
