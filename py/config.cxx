@@ -16,6 +16,9 @@ static string prettyVersion(bool lead=true){
 WOO_PYTHON_MODULE(config)
 PYBIND11_MODULE(config,mod){
 	py::list features;
+		#ifdef WOO_DEBUG
+			features.append("debug");
+		#endif
 		#ifdef WOO_OPENMP
 			features.append("openmp");
 		#endif

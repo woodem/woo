@@ -46,12 +46,11 @@ namespace pybind11::detail {
 			PYBIND11_TYPE_CASTER(OpenMPAccumulator<T>,_("OpenMPAccumulator"));
 		#endif
 		static handle cast(const OpenMPAccumulator<T>& src, return_value_policy policy, handle parent){
-			return py::cast(src.get());
-			#if 0
-				if constexpr(std::is_integral<T>()) return PyLong_FromLong((long)src.get());
-				if constexpr(std::is_floating_point<T>()) return PyFloat_FromDouble((double)src.get());
-				else throw std::runtime_error("Error converting OpenMPAccu to number.");
-			#endif
+			// return py::cast(src.get(),py::return_value_policy::copy);
+			// py::cast uses existing to-python converters (including Vector3 and others) and returns py::object
+			// .release() will invalidate the object (refcount+pointer) and return just the pointer (handle)
+			// see cheatsheet on that: https://github.com/pybind/pybind11/issues/1201
+			return py::cast(src.get()).release();
 		}
 		bool load(handle src, bool){
 			// setting array value not supported
@@ -69,14 +68,17 @@ namespace pybind11::detail {
 
 		static handle cast(const OpenMPArrayAccumulator<T>& src, return_value_policy policy, handle parent){
 			PyObject *ret=PyList_New(src.size());
-			auto data=src.getPerThreadData();
 			#if 0
+				auto data=src.getPerThreadData();
 				for(size_t i=0; i<data.size(); i++){ for(size_t j=0; j<data[i].size(); j++){ std::cerr<<" "<<data[i][j]; } std::cerr<<";"; } std::cerr<<endl;
 			#endif
-			for(size_t i=0; i<src.size(); i++){
-				if constexpr(std::is_integral<T>()) PyList_SetItem(ret,i,PyLong_FromLong((long)src.get(i)));
-				else if constexpr(std::is_floating_point<T>()) PyList_SetItem(ret,i,PyFloat_FromDouble((double)src.get(i)));
-				else throw std::runtime_error("Error converting OpenMPArrayAccu to sequence?");
+			for(size_t ix=0; ix<src.size(); ix++){
+				PyList_SetItem(ret,ix,py::cast(src.get(ix)).release().ptr());
+				#if 0
+					if constexpr(std::is_integral<T>()) PyList_SetItem(ret,i,PyLong_FromLong((long)src.get(i)));
+					else if constexpr(std::is_floating_point<T>()) PyList_SetItem(ret,i,PyFloat_FromDouble((double)src.get(i)));
+					else throw std::runtime_error("Error converting OpenMPArrayAccu to sequence?");
+				#endif
 			}
 			return ret;
 			//std::vector<T> ret(src.size());

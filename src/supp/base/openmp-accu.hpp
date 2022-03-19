@@ -55,9 +55,9 @@ class OpenMPArrayAccumulator{
 		OpenMPArrayAccumulator(size_t n): CLS(_WOO_L1_CACHE_LINESIZE), nThreads(omp_get_max_threads()), perCL(CLS/sizeof(T)), chunks(nThreads,NULL), sz(0), nCL(0) { resize(n); }
 		void operator=(const OpenMPArrayAccumulator& other){
 			this->resize(other.sz);
-			assert(this->CLS==other->CLS);
-			assert(this->nThreads==other->nThreads);
-			assert(this->perCL==other->perCL);
+			assert(this->CLS==other.CLS);
+			assert(this->nThreads==other.nThreads);
+			assert(this->perCL==other.perCL);
 			for(size_t th=0; th<nThreads; th++) memcpy((void*)(chunks[th]),(void*)(other.chunks[th]),nCL_for_N(sz)*CLS);
 		}
 		// change number of elements
@@ -146,10 +146,10 @@ class OpenMPArrayAccumulator{
 */
 template<typename T>
 class OpenMPAccumulator{
-		int CLS; // cache line size
-		int nThreads;
-		int eSize; // size of an element, computed from cache line size and sizeof(T)
-		T* data; // with T*, the pointer arithmetics has sizeof(T) as unit, so watch out!
+		const int CLS; // cache line size
+		const int nThreads;
+		const int eSize; // size of an element, computed from cache line size and sizeof(T)
+		T* data=nullptr; // with T*, the pointer arithmetics has sizeof(T) as unit, so watch out!
 	public:
 	// initialize storage with _zeroValue, depending on nuber of threads
 	OpenMPAccumulator(): CLS(_WOO_L1_CACHE_LINESIZE), nThreads(omp_get_max_threads()), eSize(CLS*(sizeof(T)/CLS+(sizeof(T)%CLS==0 ? 0 :1))), data(NULL) {
@@ -166,9 +166,10 @@ class OpenMPAccumulator{
 				throw std::runtime_error("OpenMPAccumulator: posix_memalign/_aligned_malloc failed to allocate memory.");
 		reset();
 	}
-	OpenMPAccumulator(const OpenMPAccumulator& a): OpenMPAccumulator() {
-		assert(a.nThreads==nThreads); assert(a.eSize==eSize);
-		memcpy((void*)data,(void*)a.data,nThreads*eSize); // copy data over
+	OpenMPAccumulator(const OpenMPAccumulator& other): OpenMPAccumulator() { this->operator=(other); }
+	void operator=(const OpenMPAccumulator& other){
+		assert(other.nThreads==nThreads); assert(other.eSize==eSize);
+		memcpy((void*)data,(void*)other.data,nThreads*eSize); // copy data over
 	}
 	~OpenMPAccumulator() {
 		assert(data); // would've failed in the ctor already
