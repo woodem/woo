@@ -523,6 +523,10 @@ class TestArrayAccu(unittest.TestCase):
         self.t.aaccuWriteThreads(0,list(range(self.N)))
         for i in range(0,self.N):
             self.assertEqual(self.t.aaccuRaw[0][i],i) # each thread has written its own index
+    def testPyConverter(self):
+        'OpenMP array accu: to-python conversion'
+        self.t.aaccuRaw=[1,2,3]
+        self.assertEqual(self.t.aaccu,[1,2,3])
 
 class _TestPyClass(woo.core.Object,woo.pyderived.PyWooObject):
     'Sample pure-python class integrated into woo (mainly used with preprocessors), for use with :obj:`TestPyDerived`.'
