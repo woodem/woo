@@ -2,6 +2,7 @@
 #include"../src/core/Timing.hpp"
 #include"../src/supp/object/Object.hpp"
 #include"../src/supp/base/Logging.hpp"
+#include"../src/supp/base/openmp-accu.hpp"
 #include"../src/supp/pyutil/compat.hpp"
 
 #include"../src/lib/backward/backward.hpp"
@@ -97,6 +98,7 @@ static void wooInitialize(){
 		#endif
 	);
 	woo::registerEigenClassesInPybind11(m);
+	woo::registerOpenMPAccuClassesInPybind11(m);
 	auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
 	if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
 	sysModules["_wooEigen11"]=m;
