@@ -5,17 +5,17 @@
    :members:
    :undoc-members:
 
-:mod:`woo._monkey.io`
-----------------------------------
-
-.. automodule:: woo._monkey.io
-   :members:
-   :undoc-members:
-
 :mod:`woo._monkey.compat`
 --------------------------------------
 
 .. automodule:: woo._monkey.compat
+   :members:
+   :undoc-members:
+
+:mod:`woo._monkey.io`
+----------------------------------
+
+.. automodule:: woo._monkey.io
    :members:
    :undoc-members:
 

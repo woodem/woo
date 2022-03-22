@@ -1,5 +1,0 @@
-<map id="ParticleShooter" name="ParticleShooter">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.ParticleShooter" title="ParticleShooter" alt="" coords="25,49,127,71"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.ParticleShooter" title="AlignedMinMaxShooter" alt="" coords="175,25,323,47"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.ParticleShooter" title="ArcShooter" alt="" coords="208,71,291,94"/>
-</map>

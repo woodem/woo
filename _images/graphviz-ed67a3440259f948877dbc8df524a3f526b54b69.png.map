@@ -1,0 +1,14 @@
+<map id="GlShapeFunctor" name="GlShapeFunctor">
+<area shape="rect" id="node1" href="woo.gl.html#woo.gl.GlShapeFunctor" title="GlShapeFunctor" alt="" coords="25,165,134,187"/>
+<area shape="rect" id="node2" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Wall" alt="" coords="199,25,271,47"/>
+<area shape="rect" id="node3" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Sphere" alt="" coords="193,71,277,94"/>
+<area shape="rect" id="node4" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Tetra" alt="" coords="198,118,273,141"/>
+<area shape="rect" id="node7" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Facet" alt="" coords="198,165,273,187"/>
+<area shape="rect" id="node10" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_InfCylinder" alt="" coords="182,211,289,234"/>
+<area shape="rect" id="node11" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Rod" alt="" coords="199,258,271,281"/>
+<area shape="rect" id="node12" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Cone" alt="" coords="199,305,272,327"/>
+<area shape="rect" id="node5" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Capsule" alt="" coords="345,25,433,47"/>
+<area shape="rect" id="node8" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Ellipsoid" alt="" coords="343,71,434,94"/>
+<area shape="rect" id="node9" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Tet4" alt="" coords="353,118,425,141"/>
+<area shape="rect" id="node6" href="woo.gl.html#woo.gl.GlShapeFunctor" title="Gl1_Membrane" alt="" coords="337,165,441,187"/>
+</map>

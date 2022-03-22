@@ -5,16 +5,16 @@
    :members:
    :undoc-members:
 
-:mod:`woo.pre.toys`
---------------------------------
+:mod:`woo.pre.horse`
+---------------------------------
 
-.. inheritance-diagram:: woo.pre.toys
+.. inheritance-diagram:: woo.pre.horse
    :parts: 3
 
-.. automodule:: woo.pre.toys
+.. automodule:: woo.pre.horse
    :members:
    :undoc-members:
-   :exclude-members: NewtonsCradle
+   :exclude-members: FallingHorse
 
 
 .. rst-class:: html-toggle
@@ -22,79 +22,129 @@
 
 .. rst-class:: emphasized
 
-NewtonsCradle
-+++++++++++++
+FallingHorse
+++++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.horse.FallingHorse`
 
-.. autoclass:: NewtonsCradle
+.. autoclass:: FallingHorse
    :members:
-   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :exclude-members: radius, relGap, halfThick, relEkStop, gravity, dir, pattern, model, deformable, stand, meshDamping, dtSafety, reportFmt, vtkStep, vtkFlowStep, vtkPrefix, grid, __init__, __getstate__, __setstate__
    :special-members:
 
 
-   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+   [:woosrc:`py/pre/horse.py <py/pre/horse.py#L12>`]
 
-   .. attribute:: nSpheres (= 5)
+   .. rubric:: ► General
 
-      Total number of spheres
+   .. attribute:: radius (= 0.002)
 
-      [type: int]
+      Radius of spheres (fill of the upper horse)
 
-   .. attribute:: nFall (= 1)
+      [type: float, unit: m, preferred unit: mm]
 
-      The number of spheres which are out of the equilibrium position at the beginning.
+   .. attribute:: relGap (= 0.25)
 
-      [type: int]
+      Gap between particles in pattern, relative to :obj:`radius`
 
-   .. attribute:: fallAngle (= 0.7853981633974483)
+      [type: float]
 
-      Initial angle of falling spheres.
+   .. attribute:: halfThick (= 0.002)
 
-      [type: float, unit: rad, preferred unit: deg]
+      Half-thickness of the mesh.
 
-   .. attribute:: rad (= 0.005)
+      [type: float, unit: m, preferred unit: mm]
 
-      Radius of spheres
+   .. attribute:: relEkStop (= 0.02)
 
-      [type: float, unit: m]
+      Stop when kinetic energy drops below this fraction of gravity work (and step number is greater than 100)
 
-   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
-
-      Height and width of the suspension
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: cabRad (= 0.0005)
-
-      Radius of the suspending cables
-
-      [type: float, unit: m]
-
-   .. attribute:: model (= <ContactModelSelector @ 140525163669040 (py)>)
-
-      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
-
-      [type: ContactModelSelector]
+      [type: float]
 
    .. attribute:: gravity (= Vector3(0,0,-9.81))
 
-      Gravity acceleration
+      Gravity acceleration vector
 
       [type: Vector3]
 
-   .. attribute:: plotEvery (= 10)
+   .. attribute:: dir (= Vector3(0,0,1))
 
-      How often to collect plot data
+      Direction of the upper horse from the lower one. The default is upwards. Will be normalized automatically.
+
+      [type: Vector3]
+
+   .. attribute:: pattern (= 'hexa')
+
+      Pattern to use when filling the volume with spheres
+
+      [type: str, choices: hexa, ortho]
+
+   .. attribute:: model (= <ContactModelSelector @ 140612497566032 (py)>)
+
+      Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).
+
+      [type: ContactModelSelector]
+
+   .. rubric:: ► Deformability
+
+   .. attribute:: deformable (= False)
+
+      Whether the meshed horse is deformable. Note that deformable horse does not track energy and disables plotting.
+
+      [type: bool]
+
+   .. attribute:: stand (= False)
+
+      Whether the bottoms of the legs should be fixed (applicable with :obj:`deformable` only)
+
+      [type: bool]
+
+   .. attribute:: meshDamping (= 0.03)
+
+      Damping for mesh nodes; only used when then contact :obj:`model` sets zero :obj:`~woo.dem.Leapfrog.damping`. In that case, :obj:`Leapfrog.damping <woo.dem.Leapfrog.damping>` is set to :obj:`meshDamping` and all other nodes set :obj:`woo.dem.DemData.dampingSkip`.
+
+      [type: float]
+
+   .. rubric:: ► Tunables
+
+   .. attribute:: dtSafety (= 0.3)
+
+      Safety factor for :obj:`woo.utils.pWaveDt` and :obj:`woo.dem.DynDt`.
+
+      [type: float]
+
+   .. rubric:: ► Outputs
+
+   .. attribute:: reportFmt (= '/tmp/{tid}.xhtml')
+
+      Report output format; :obj:`Scene.tags <woo.core.Scene.tags>` can be used.
+
+      [type: str, filename]
+
+   .. attribute:: vtkStep (= 40)
+
+      How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export.
 
       [type: int]
 
-   .. attribute:: dtSafety (= 0.7)
+   .. attribute:: vtkFlowStep (= 40)
 
-      :obj:`woo.core.Scene.dtSafety`
+      How often should :obj:`VtkFlowExport` run. If non-positive, never run.
 
-      [type: float]
+      [type: int]
+
+   .. attribute:: vtkPrefix (= '/tmp/{tid}-')
+
+      Prefix for saving :obj:`woo.dem.VtkExport` and :obj:`woo.dem.VtkFlowExport` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys.
+
+      [type: str, filename]
+
+   .. attribute:: grid (= False)
+
+      Use grid collider (experimental)
+
+      [type: bool]
 
 :mod:`woo.pre.cylTriax`
 ------------------------------------
@@ -105,7 +155,7 @@ NewtonsCradle
 .. automodule:: woo.pre.cylTriax
    :members:
    :undoc-members:
-   :exclude-members: NewtonsCradle,  CylTriaxTest
+   :exclude-members: FallingHorse,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -167,7 +217,7 @@ CylTriaxTest
 
    .. rubric:: ► Materials
 
-   .. attribute:: model (= <ContactModelSelector @ 140525163000992 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140612497642816 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the membrane (the first material is used if there is no second one, but its friction is nevertheless reduced during the compaction phase to :obj:`suppTanPhi`).
 
@@ -251,16 +301,16 @@ CylTriaxTest
 
       [type: float]
 
-:mod:`woo.pre.horse`
----------------------------------
+:mod:`woo.pre.psdrender`
+-------------------------------------
 
-.. inheritance-diagram:: woo.pre.horse
+.. inheritance-diagram:: woo.pre.psdrender
    :parts: 3
 
-.. automodule:: woo.pre.horse
+.. automodule:: woo.pre.psdrender
    :members:
    :undoc-members:
-   :exclude-members: NewtonsCradle,  CylTriaxTest,  FallingHorse
+   :exclude-members: FallingHorse,  PsdRender,  CylTriaxTest
 
 
 .. rst-class:: html-toggle
@@ -268,129 +318,315 @@ CylTriaxTest
 
 .. rst-class:: emphasized
 
-FallingHorse
-++++++++++++
+PsdRender
++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.horse.FallingHorse`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.psdrender.PsdRender`
 
-.. autoclass:: FallingHorse
+.. autoclass:: PsdRender
    :members:
-   :exclude-members: radius, relGap, halfThick, relEkStop, gravity, dir, pattern, model, deformable, stand, meshDamping, dtSafety, reportFmt, vtkStep, vtkFlowStep, vtkPrefix, grid, __init__, __getstate__, __setstate__
+   :exclude-members: size, sizeExtraRel, gen, relHt, gravity, porosity, stepPeriod, dtSafety, maxUnbalanced, model, povEnable, camPos, out, imgDim, povLights, saveShapePack, __init__, __getstate__, __setstate__
    :special-members:
 
 
-   [:woosrc:`py/pre/horse.py <py/pre/horse.py#L12>`]
+   [:woosrc:`py/pre/psdrender.py <py/pre/psdrender.py#L12>`]
 
-   .. rubric:: ► General
+   .. attribute:: size (= Vector2(0.2,0.3))
 
-   .. attribute:: radius (= 0.002)
+      Region to be rendered (the particle area will be larger by :obj:`sizeExtraRel`
 
-      Radius of spheres (fill of the upper horse)
+      [type: Vector2, unit: m]
 
-      [type: float, unit: m, preferred unit: mm]
+   .. attribute:: sizeExtraRel (= 0.2)
 
-   .. attribute:: relGap (= 0.25)
-
-      Gap between particles in pattern, relative to :obj:`radius`
+      Enlarge particle area by this much, relative to size.
 
       [type: float]
 
-   .. attribute:: halfThick (= 0.002)
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x192ae80>)
 
-      Half-thickness of the mesh.
+      Particle generator
 
-      [type: float, unit: m, preferred unit: mm]
+      [type: ParticleGenerator]
 
-   .. attribute:: relEkStop (= 0.02)
+   .. attribute:: relHt (= 2.0)
 
-      Stop when kinetic energy drops below this fraction of gravity work (and step number is greater than 100)
+      Bed height relative to largest particle diameter (computed via mass, supposing porosity of :obj:`porosity`)
 
       [type: float]
 
    .. attribute:: gravity (= Vector3(0,0,-9.81))
 
-      Gravity acceleration vector
+      Gravity acceleration.
 
       [type: Vector3]
 
-   .. attribute:: dir (= Vector3(0,0,1))
+   .. attribute:: porosity (= 0.4)
 
-      Direction of the upper horse from the lower one. The default is upwards. Will be normalized automatically.
+      Approximate porosity to convert bed height (:obj:`relHt`) to mass; it will not influence porosity itself, which is given almost exclusively geometrically.
 
-      [type: Vector3]
+      [type: float]
 
-   .. attribute:: pattern (= 'hexa')
+   .. attribute:: stepPeriod (= 200)
 
-      Pattern to use when filling the volume with spheres
+      Periodicity for the factory.
 
-      [type: str, choices: hexa, ortho]
+      [type: int]
 
-   .. attribute:: model (= <ContactModelSelector @ 140525162928384 (py)>)
+   .. attribute:: dtSafety (= 0.7)
 
-      Select contact model. The first material is for particles; the second, optional, material, is for the meshed horse (the first material is used if there is no second one).
+      Safety factor for timestep.
+
+      [type: float]
+
+   .. attribute:: maxUnbalanced (= 0.5)
+
+      Unbalanced force/energy to wait for before declared settled.
+
+      [type: float]
+
+   .. attribute:: model (= <ContactModelSelector @ 140612498073056 (py)>)
+
+      Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
 
       [type: ContactModelSelector]
 
-   .. rubric:: ► Deformability
+   .. attribute:: povEnable (= True)
 
-   .. attribute:: deformable (= False)
-
-      Whether the meshed horse is deformable. Note that deformable horse does not track energy and disables plotting.
+      Enable POV-Ray export.
 
       [type: bool]
 
-   .. attribute:: stand (= False)
+   .. attribute:: camPos (= Vector3(0,0,0.5))
 
-      Whether the bottoms of the legs should be fixed (applicable with :obj:`deformable` only)
+      Camera position; x, y components determine offset from bed normal; z is height above the highest particle center.
 
-      [type: bool]
+      [type: Vector3]
 
-   .. attribute:: meshDamping (= 0.03)
+   .. attribute:: out (= '/tmp/{tid}')
 
-      Damping for mesh nodes; only used when then contact :obj:`model` sets zero :obj:`~woo.dem.Leapfrog.damping`. In that case, :obj:`Leapfrog.damping <woo.dem.Leapfrog.damping>` is set to :obj:`meshDamping` and all other nodes set :obj:`woo.dem.DemData.dampingSkip`.
+      Prefix for outputs (:obj:`woo.core.Scene.tags` are expanded).
 
-      [type: float]
+      [type: str]
 
-   .. rubric:: ► Tunables
+   .. attribute:: imgDim (= 2000)
 
-   .. attribute:: dtSafety (= 0.3)
-
-      Safety factor for :obj:`woo.utils.pWaveDt` and :obj:`woo.dem.DynDt`.
-
-      [type: float]
-
-   .. rubric:: ► Outputs
-
-   .. attribute:: reportFmt (= '/tmp/{tid}.xhtml')
-
-      Report output format; :obj:`Scene.tags <woo.core.Scene.tags>` can be used.
-
-      [type: str, filename]
-
-   .. attribute:: vtkStep (= 40)
-
-      How often should :obj:`woo.dem.VtkExport` run. If non-positive, never run the export.
+      Larger image dimension when the scene is rendered; the scene can be re-rendered by calling POV-Ray by hand anytime with arbitrary resolution.
 
       [type: int]
 
-   .. attribute:: vtkFlowStep (= 40)
+   .. attribute:: povLights (= '// light_source{<-8,-20,30> color rgb .75}\n        // light_source{<25,-12,12> color rgb .44}\n        light_source{<-.5,-.5,10> color White area_light <1,0,0>,<0,1,0>, 5, 5 adaptive 1 jitter }\n        ')
 
-      How often should :obj:`VtkFlowExport` run. If non-positive, never run.
+      Default light specifications for POV-Ray
+
+      [type: str]
+
+   .. attribute:: saveShapePack (= True)
+
+      Create a .shapepack file with particle geometries.
+
+      [type: bool]
+
+:mod:`woo.pre.toys`
+--------------------------------
+
+.. inheritance-diagram:: woo.pre.toys
+   :parts: 3
+
+.. automodule:: woo.pre.toys
+   :members:
+   :undoc-members:
+   :exclude-members: NewtonsCradle,  FallingHorse,  PsdRender,  CylTriaxTest
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+NewtonsCradle
++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.toys.NewtonsCradle`
+
+.. autoclass:: NewtonsCradle
+   :members:
+   :exclude-members: nSpheres, nFall, fallAngle, rad, cabHtWd, cabRad, model, gravity, plotEvery, dtSafety, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/toys.py <py/pre/toys.py#L25>`]
+
+   .. attribute:: nSpheres (= 5)
+
+      Total number of spheres
 
       [type: int]
 
-   .. attribute:: vtkPrefix (= '/tmp/{tid}-')
+   .. attribute:: nFall (= 1)
 
-      Prefix for saving :obj:`woo.dem.VtkExport` and :obj:`woo.dem.VtkFlowExport` data; formatted with ``format()`` providing :obj:`woo.core.Scene.tags` as keys.
+      The number of spheres which are out of the equilibrium position at the beginning.
 
-      [type: str, filename]
+      [type: int]
 
-   .. attribute:: grid (= False)
+   .. attribute:: fallAngle (= 0.7853981633974483)
 
-      Use grid collider (experimental)
+      Initial angle of falling spheres.
 
-      [type: bool]
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: rad (= 0.005)
+
+      Radius of spheres
+
+      [type: float, unit: m]
+
+   .. attribute:: cabHtWd (= Vector2(0.1,0.1))
+
+      Height and width of the suspension
+
+      [type: Vector2, unit: m]
+
+   .. attribute:: cabRad (= 0.0005)
+
+      Radius of the suspending cables
+
+      [type: float, unit: m]
+
+   .. attribute:: model (= <ContactModelSelector @ 140612498073296 (py)>)
+
+      Select contact model. The first material is for spheres; the second, optional, material, is for the suspension cables.
+
+      [type: ContactModelSelector]
+
+   .. attribute:: gravity (= Vector3(0,0,-9.81))
+
+      Gravity acceleration
+
+      [type: Vector3]
+
+   .. attribute:: plotEvery (= 10)
+
+      How often to collect plot data
+
+      [type: int]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
+:mod:`woo.pre.chute`
+---------------------------------
+
+.. inheritance-diagram:: woo.pre.chute
+   :parts: 3
+
+.. automodule:: woo.pre.chute
+   :members:
+   :undoc-members:
+   :exclude-members: FallingHorse,  PsdRender,  DissipChute,  NewtonsCradle,  CylTriaxTest
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+DissipChute
++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.chute.DissipChute`
+
+.. autoclass:: DissipChute
+   :members:
+   :exclude-members: dim, finNum, finLen, finSlope, gen, model, feedRate, feedTime, stopTime, vtkStep, vtkOut, dtSafety, saveDone, __init__, __getstate__, __setstate__
+   :special-members:
+
+
+   [:woosrc:`py/pre/chute.py <py/pre/chute.py#L6>`]
+
+   .. attribute:: dim (= Vector3(0.2,0.2,2))
+
+      Chute dimensions: width, depth, height
+
+      [type: Vector3, unit: m]
+
+   .. attribute:: finNum (= 5)
+
+      Number of fins protruding from the sides (alternating from left/right
+
+      [type: int]
+
+   .. attribute:: finLen (= 0.15)
+
+      Length of fins
+
+      [type: float, unit: m]
+
+   .. attribute:: finSlope (= 0.5235987755982988)
+
+      Slope of fins (positive downwards).
+
+      [type: float, unit: rad, preferred unit: deg]
+
+   .. attribute:: gen (= <PsdSphereGenerator @ 0x1d2cb20>)
+
+      Particle generator, placed above the chute
+
+      [type: ParticleGenerator]
+
+   .. attribute:: model (= <ContactModelSelector @ 140612498071616 (py)>)
+
+      Contact model
+
+      [type: ContactModelSelector]
+
+   .. attribute:: feedRate (= 5.0)
+
+      Feed mass rate
+
+      [type: float, unit: kg/s]
+
+   .. attribute:: feedTime (= 0.5)
+
+      Time for which the feed is activated
+
+      [type: float, unit: s]
+
+   .. attribute:: stopTime (= 2.0)
+
+      Time when to stop the simulation
+
+      [type: float, unit: s]
+
+   .. attribute:: vtkStep (= 400)
+
+      Interval to run VTK export
+
+      [type: int]
+
+   .. attribute:: vtkOut (= '/tmp/{tid}')
+
+      Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.
+
+      [type: str]
+
+   .. attribute:: dtSafety (= 0.7)
+
+      :obj:`woo.core.Scene.dtSafety`
+
+      [type: float]
+
+   .. attribute:: saveDone (= '')
+
+      File to same simulation at the end; not saved if empty.
+
+      [type: str]
 
 :mod:`woo.pre.ell2d`
 ---------------------------------
@@ -401,7 +637,7 @@ FallingHorse
 .. automodule:: woo.pre.ell2d
    :members:
    :undoc-members:
-   :exclude-members: NewtonsCradle,  EllGroup,  CylTriaxTest,  FallingHorse
+   :exclude-members: FallingHorse,  PsdRender,  DissipChute,  NewtonsCradle,  CylTriaxTest,  EllGroup
 
 
 .. rst-class:: html-toggle
@@ -459,7 +695,7 @@ EllGroup
 
       [type: float, unit: m/s]
 
-   .. attribute:: model (= <ContactModelSelector @ 140525163002672 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140612498773392 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material is for walls at the boundary (the first material is used if there is no second one).
 
@@ -495,133 +731,6 @@ EllGroup
 
       [type: float]
 
-:mod:`woo.pre.psdrender`
--------------------------------------
-
-.. inheritance-diagram:: woo.pre.psdrender
-   :parts: 3
-
-.. automodule:: woo.pre.psdrender
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  FallingHorse,  NewtonsCradle,  PsdRender,  EllGroup
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-PsdRender
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.psdrender.PsdRender`
-
-.. autoclass:: PsdRender
-   :members:
-   :exclude-members: size, sizeExtraRel, gen, relHt, gravity, porosity, stepPeriod, dtSafety, maxUnbalanced, model, povEnable, camPos, out, imgDim, povLights, saveShapePack, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/psdrender.py <py/pre/psdrender.py#L12>`]
-
-   .. attribute:: size (= Vector2(0.2,0.3))
-
-      Region to be rendered (the particle area will be larger by :obj:`sizeExtraRel`
-
-      [type: Vector2, unit: m]
-
-   .. attribute:: sizeExtraRel (= 0.2)
-
-      Enlarge particle area by this much, relative to size.
-
-      [type: float]
-
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x1928250>)
-
-      Particle generator
-
-      [type: ParticleGenerator]
-
-   .. attribute:: relHt (= 2.0)
-
-      Bed height relative to largest particle diameter (computed via mass, supposing porosity of :obj:`porosity`)
-
-      [type: float]
-
-   .. attribute:: gravity (= Vector3(0,0,-9.81))
-
-      Gravity acceleration.
-
-      [type: Vector3]
-
-   .. attribute:: porosity (= 0.4)
-
-      Approximate porosity to convert bed height (:obj:`relHt`) to mass; it will not influence porosity itself, which is given almost exclusively geometrically.
-
-      [type: float]
-
-   .. attribute:: stepPeriod (= 200)
-
-      Periodicity for the factory.
-
-      [type: int]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      Safety factor for timestep.
-
-      [type: float]
-
-   .. attribute:: maxUnbalanced (= 0.5)
-
-      Unbalanced force/energy to wait for before declared settled.
-
-      [type: float]
-
-   .. attribute:: model (= <ContactModelSelector @ 140525163668640 (py)>)
-
-      Contact model and material type; since the simulation is trivial, this has practically no influence, except of friction: less (or zero) friction will make the packing more compact.
-
-      [type: ContactModelSelector]
-
-   .. attribute:: povEnable (= True)
-
-      Enable POV-Ray export.
-
-      [type: bool]
-
-   .. attribute:: camPos (= Vector3(0,0,0.5))
-
-      Camera position; x, y components determine offset from bed normal; z is height above the highest particle center.
-
-      [type: Vector3]
-
-   .. attribute:: out (= '/tmp/{tid}')
-
-      Prefix for outputs (:obj:`woo.core.Scene.tags` are expanded).
-
-      [type: str]
-
-   .. attribute:: imgDim (= 2000)
-
-      Larger image dimension when the scene is rendered; the scene can be re-rendered by calling POV-Ray by hand anytime with arbitrary resolution.
-
-      [type: int]
-
-   .. attribute:: povLights (= '// light_source{<-8,-20,30> color rgb .75}\n        // light_source{<25,-12,12> color rgb .44}\n        light_source{<-.5,-.5,10> color White area_light <1,0,0>,<0,1,0>, 5, 5 adaptive 1 jitter }\n        ')
-
-      Default light specifications for POV-Ray
-
-      [type: str]
-
-   .. attribute:: saveShapePack (= True)
-
-      Create a .shapepack file with particle geometries.
-
-      [type: bool]
-
 :mod:`woo.pre.triax`
 ---------------------------------
 
@@ -631,7 +740,7 @@ PsdRender
 .. automodule:: woo.pre.triax
    :members:
    :undoc-members:
-   :exclude-members: CylTriaxTest,  FallingHorse,  TriaxTest,  NewtonsCradle,  PsdRender,  EllGroup
+   :exclude-members: TriaxTest,  FallingHorse,  PsdRender,  DissipChute,  NewtonsCradle,  CylTriaxTest,  EllGroup
 
 
 .. rst-class:: html-toggle
@@ -699,13 +808,13 @@ TriaxTest
 
       [type: Vector3, unit: m]
 
-   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x1580cb0>)
+   .. attribute:: generator (= <PsdCapsuleGenerator @ 0x1a981c0>)
 
       Particle generator; partices are then randomly placed in the volume.
 
       [type: ParticleGenerator]
 
-   .. attribute:: model (= <ContactModelSelector @ 140525163091424 (py)>)
+   .. attribute:: model (= <ContactModelSelector @ 140612497712608 (py)>)
 
       Select contact model. The first material is for particles; the second, optional, material, is for the boundary (the first material is used if there is no second one).
 
@@ -760,113 +869,4 @@ TriaxTest
       Increase strain rate by this relative amount at the beginning of the triaxial phase, until the value given in :obj:`maxRates` is reached.
 
       [type: float]
-
-:mod:`woo.pre.chute`
----------------------------------
-
-.. inheritance-diagram:: woo.pre.chute
-   :parts: 3
-
-.. automodule:: woo.pre.chute
-   :members:
-   :undoc-members:
-   :exclude-members: CylTriaxTest,  FallingHorse,  TriaxTest,  DissipChute,  NewtonsCradle,  PsdRender,  EllGroup
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-DissipChute
-+++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Preprocessor` → :obj:`~woo.pre.chute.DissipChute`
-
-.. autoclass:: DissipChute
-   :members:
-   :exclude-members: dim, finNum, finLen, finSlope, gen, model, feedRate, feedTime, stopTime, vtkStep, vtkOut, dtSafety, saveDone, __init__, __getstate__, __setstate__
-   :special-members:
-
-
-   [:woosrc:`py/pre/chute.py <py/pre/chute.py#L6>`]
-
-   .. attribute:: dim (= Vector3(0.2,0.2,2))
-
-      Chute dimensions: width, depth, height
-
-      [type: Vector3, unit: m]
-
-   .. attribute:: finNum (= 5)
-
-      Number of fins protruding from the sides (alternating from left/right
-
-      [type: int]
-
-   .. attribute:: finLen (= 0.15)
-
-      Length of fins
-
-      [type: float, unit: m]
-
-   .. attribute:: finSlope (= 0.5235987755982988)
-
-      Slope of fins (positive downwards).
-
-      [type: float, unit: rad, preferred unit: deg]
-
-   .. attribute:: gen (= <PsdSphereGenerator @ 0x1d562d0>)
-
-      Particle generator, placed above the chute
-
-      [type: ParticleGenerator]
-
-   .. attribute:: model (= <ContactModelSelector @ 140525163093824 (py)>)
-
-      Contact model
-
-      [type: ContactModelSelector]
-
-   .. attribute:: feedRate (= 5.0)
-
-      Feed mass rate
-
-      [type: float, unit: kg/s]
-
-   .. attribute:: feedTime (= 0.5)
-
-      Time for which the feed is activated
-
-      [type: float, unit: s]
-
-   .. attribute:: stopTime (= 2.0)
-
-      Time when to stop the simulation
-
-      [type: float, unit: s]
-
-   .. attribute:: vtkStep (= 400)
-
-      Interval to run VTK export
-
-      [type: int]
-
-   .. attribute:: vtkOut (= '/tmp/{tid}')
-
-      Output for VTK files. Tags will be expanded. If empty, VTK export will be disabled.
-
-      [type: str]
-
-   .. attribute:: dtSafety (= 0.7)
-
-      :obj:`woo.core.Scene.dtSafety`
-
-      [type: float]
-
-   .. attribute:: saveDone (= '')
-
-      File to same simulation at the end; not saved if empty.
-
-      [type: str]
 
