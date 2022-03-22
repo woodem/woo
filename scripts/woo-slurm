@@ -8,6 +8,7 @@ import logging
 import woo.batch
 import sys
 import os
+import re
 import prettytable
 import tempfile
 import subprocess
@@ -49,12 +50,13 @@ for line in allLines:
     if timelimit is None:
         log.warning(f'Line {line}: no timelimit (!TIME column) specified, using 3:00:00 (3 hours)')
         timelimit='3:00:00'
+    title=re.sub('\W+','',params[line]['title']) # remove special chars from the title
     script=f'''#!/bin/bash
 echo 'Hello, job script running'
 source ~/woo-prepare # loads modules, sets up the virtual env.
 cd {mypath}
 export PYTHONIOENCODING=utf_8
-woo -xn --threads={threads} --batch-table={table} --batch-line={line} --batch-results={table}.{line}.hdf5 {preprocessor}
+woo -xn --threads={threads} --batch-table={table} --batch-line={line} --batch-results={title}.hdf5 {preprocessor}
 '''
     log.debug('This is the job script:\n'+script)
     tmp=tempfile.NamedTemporaryFile('w',delete=False)
@@ -62,7 +64,7 @@ woo -xn --threads={threads} --batch-table={table} --batch-line={line} --batch-re
     tmpName=tmp.name
     tmp.close()
     os.chmod(tmpName,0o744)
-    out=f'{table}.{line}.out'
+    out=f'{title}.out'
     cmd=['sbatch',f'--job-name={table}.{line}','--ntasks=1',f'--cpus-per-task={threads}',f'--time={timelimit}',f'--error={out}',f'--output={out}',tmpName]
     log.info(f'Invoking: {" ".join(cmd)}')
     subprocess.call(cmd)
