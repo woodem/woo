@@ -53,6 +53,9 @@ PYBIND11_MODULE(config,mod){
 		#ifdef WOO_HDF5
 			features.append("hdf5");
 		#endif
+		#ifdef WOO_CATALYST
+			features.append("catalyst");
+		#endif
 		features.append("pybind11");
 		features.append("spdlog");
 

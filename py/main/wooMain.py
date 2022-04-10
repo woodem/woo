@@ -123,7 +123,7 @@ def main(sysArgv=None):
     # par.add_argument('--generate-manpage',help="Generate man page documenting this program and exit",dest='manpage',metavar='FILE')
     if not WIN: par.add_argument('-R','--rebuild',help="Re-run build in the source directory, then run the updated woo with the same command line except --rebuild. The build flavor for this build and its stored parameters will be used. If given twice, update from the repository will be attempted before recompilation.",dest='rebuild',action='count')
     par.add_argument('--test',help="Run regression test suite and exit; the exists status is 0 if all tests pass, 1 if a test fails and 2 for an unspecified exception.",dest="test",action='store_true')
-    par.add_argument('--no-gdb',help='Do not show backtrace when Woo crashes (only effective with \-\-debug).',dest='noGdb',action='store_true',)
+    par.add_argument('--no-gdb',help=r'Do not show backtrace when Woo crashes (only effective with --debug).',dest='noGdb',action='store_true',)
     par.add_argument('--in-gdb',help='Run Woo inside gdb (must be in $PATH).',dest='inGdb',action='store_true')
     par.add_argument('--in-lldb',help='Run Woo inside lldb (must be in $PATH; executables tried are lldb, lldb-7, lldb-8, lddb-9 in this order).',dest='inLldb',action='store_true')
     par.add_argument('--in-pdb',help='Run Woo inside pdb',dest='inPdb',action='store_true')

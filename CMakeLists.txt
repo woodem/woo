@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.14 FATAL_ERROR)
 PROJECT(woo VERSION 1.2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -9,6 +9,7 @@ OPTION(WOO_HDF5 "Use HDF5, enable related functionality" ON)
 OPTION(WOO_GTS "Use GTS (and build internal pygts), enable related functionality" ON)
 OPTION(WOO_QT5 "Build Qt5-based user interface (implies also OpenGL)" ON)
 OPTION(WOO_OPENMP "Enable parallel computing based on OpenMP" ON)
+OPTION(WOO_CATALYST "Enable Catalyst client support" OFF)
 SET(WOO_FLAVOR "" CACHE STRING "Named configuration flavor; flavors may be installed in parallel.")
 SET(WOO_INSTALL_SCHEME "posix_user" CACHE STRING "Python installation scheme, see https://docs.python.org/3/library/sysconfig.html#installation-paths")
 SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, when building with woo -R; 0 is to use the default (all cores)")
@@ -70,6 +71,7 @@ find_package(PythonLibs REQUIRED)
 if("${PYTHON_VERSION_MAJOR}" STREQUAL "2")
 	message(FATAL_ERROR "Python 2.x is not supported.")
 endif()
+#find_package(Python3 Interpreter Development NumPy)
 
 set(Backward_DIR ${PROJECT_SOURCE_DIR}/src/lib/backward/cmake)
 find_package(Backward REQUIRED)
@@ -163,8 +165,17 @@ if(WOO_GTS)
 endif()
 
 if(WOO_VTK)
-	find_package(VTK REQUIRED)
+	find_package(VTK REQUIRED) # COMPONENTS CommonCore)
+	#if(VTK_VERSION VERSION_LESS "8.90")
+	#find_package(VTK COMPONENTS vtkCommonCore vtkCommonDataModel vtkIOXML vtkUniformGrid vtkUnstructuredGrid)
+	#else()
+	#endif()
 	add_definitions(-DWOO_VTK)
+endif()
+
+if(WOO_CATALYST)
+	#find_package(ParaView COMPONENTS Catalyst REQUIRED)
+	add_definitions(-DWOO_CATALYST)
 endif()
 
 if(WOO_HDF5)
@@ -428,6 +439,32 @@ if(WOO_HDF5)
 	target_link_libraries(${CXX_INTERNAL} PUBLIC ${HDF5_CXX_LIBRARIES} ${HDF5_HL_LIBRARIES})
 endif(WOO_HDF5)
 
+if(WOO_VTK)
+	# target_link_libraries(${CXX_INTERNAL} PUBLIC VTK::CommonDataModel VTK::IOCore) 
+	target_link_libraries(${CXX_INTERNAL} PUBLIC ${VTK_LIBRARIES})
+	target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})
+endif()
+
+if(WOO_CATALYST)
+	#find_package(ParaView REQUIRED)
+	#target_link_libraries(${CXX_INTERNAL} PRIVATE ParaView::Catalyst VTK::CommonDataModel VTK::IOCore)
+	# see https://dev.my-gate.net/2021/08/04/understanding-rpath-with-cmake/
+	#set(CMAKE_SKIP_BUILD_RPATH FALSE)
+	#set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+	#set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+	#set_target_properties(${CXX_INTERNAL} PROPERTIES INSTALL_RPATH "${ParaView_DIR}/../..")
+	# add_subdirectory(/home/eudoxos/build/catalyst catalyst)
+	# set -Dcatalyst_DIR=...
+	find_package(catalyst 2.0 REQUIRED)
+	target_link_libraries(${CXX_INTERNAL} PRIVATE catalyst::catalyst)
+endif()
+
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} "-cimport numpy; print(numpy.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+>>>>>>> 487f7f61a (foundation for Catalyst client support; set font in GLViewer explicitly)
 target_include_directories(${CXX_INTERNAL} PRIVATE ${NUMPY_INCLUDE_DIR})
 
 set_source_files_properties(py/config.cxx
@@ -463,9 +500,7 @@ target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Boost::boost
 	Boost::system
 	stdc++fs
-	${VTK_LIBRARIES}
 )
-target_include_directories(${CXX_INTERNAL} SYSTEM PUBLIC ${VTK_INCLUDE_DIRS})
 install(TARGETS ${CXX_INTERNAL}
 	LIBRARY DESTINATION ${WOO_MODULEDIR}
 )

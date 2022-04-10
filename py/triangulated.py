@@ -251,7 +251,8 @@ def sweep2d(pts,zz,node=None,fakeVel=0.,halfThick=0.,shift=True,shorten=False,**
             assert len(nn)>=4 # there must be at least 4 points already
             # fakeVel
             if fakeVel==0.: fv=Vector3.Zero
-            else: fv=(right[0].pos-left[0].pos).normalized()*fakeVel
+            else:
+                fv=(right[0].pos-left[0].pos).normalized()*fakeVel
             for i in range(stacks-1):
                 for verts in [(left[i],right[i],right[i+1]),(left[i],right[i+1],left[i+1])]:
                     ff.append(woo.dem.Facet.make(verts,halfThick=halfThick,fakeVel=fv,**kw))

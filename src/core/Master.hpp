@@ -26,6 +26,11 @@ namespace py=pybind11;
 	#include<signal.h>
 #endif
 
+#ifdef WOO_CATALYST
+	#include<catalyst.hpp>
+#endif
+
+
 struct Scene;
 using namespace woo;
 
@@ -53,6 +58,12 @@ class Master{
 	// register class from plugin in python
 	// store class hierarchy for quick lookup (might be removed in the future)
 	void pyRegisterAllClasses(); 
+
+	#ifdef WOO_CATALYST
+		conduit_node* catalyst_node=nullptr;
+		void catalystInit();
+		void catalystFini();
+	#endif
 
 	// compiled python modules
 	list<string> compiledPyModules;

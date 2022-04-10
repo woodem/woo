@@ -32,6 +32,9 @@ using boost::algorithm::iends_with;
 #include<QtCore/qdir.h>
 #include<QtGui/QIcon>
 #include<QtCore/QTextStream>
+#include<QApplication>
+#include<QtGui/QFont>
+
 #if QT_VERSION<=0x050000
 	#include<QtGui/qfiledialog.h>
 	#include<QtGui/QMessageBox>
@@ -166,6 +169,9 @@ GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QW
 	else setWindowTitle(("Secondary view #"+to_string(viewId)).c_str());
 
 	setWindowIcon(QIcon(":/woo-logo.svg"));
+
+	QApplication::setFont(QFont("Sans Serif"));
+
 
 	show();
 

@@ -811,11 +811,8 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 :param mat: material for particles
 :param gravity: gravity acceleration (as Vector3)
 '''
-    # log.info('woo.pack.makeBandFeedPack(dim=%s,psd=%s,mat=%s,gravity=%s,excessWd=%s,damping=%s,dontBlock=True,botLine=%s,leftLine=%s,rightLine=%s,clumps=%s,gen=%s,bias=%s)'%(repr(dim),repr(psd),mat.dumps(format='expr',width=-1,noMagic=True),repr(gravity),repr(excessWd),repr(damping),repr(botLine),repr(leftLine),repr(rightLine),repr(clumps),(gen.dumps(format='expr',width=-1,noMagic=True) if gen is not None else 'None'),(bias.dumps(format='expr',width=-1,noMagic=True) if bias is not None else 'None')))
     log.info(f'woo.pack.makeBandFeedPack(dim={dim},psd={psd},mat={mat.dumps(format="expr",width=-1,noMagic=True)},gravity={gravity},excessWd={excessWd},damping={damping},dontBlock={dontBlock},botLine={botLine},leftLine={leftLine},rightLine={rightLine},clumps={clumps},gen={gen.dumps(format="expr",width=-1,noMagic=True)},bias={bias.dumps(format="expr",width=-1,noMagic=True) if bias else None})')
     dim=list(dim) # make modifiable in case of excess width
-
-
 
     retWd=dim[1]
     nRepeatCells=0 # if 0, repetition is disabled

@@ -111,7 +111,60 @@ void Master::pyWaitForScenes(){
 	}
 }
 
-Master::~Master(){ }
+
+#ifdef WOO_CATALYST
+
+const char* _catalyst_enum_to_str(enum catalyst_status s){
+	#define _CS(nn) case catalyst_status_##nn: return #nn
+	switch(s){
+		_CS(ok);
+		_CS(error_no_implementation);
+		_CS(error_already_loaded);
+		_CS(error_not_found);
+		_CS(error_not_catalyst);
+		_CS(error_incomplete);
+		_CS(error_unsupported_version);
+		default: return "[unrecognized-error-code]";
+	}
+	#undef _CS
+}
+
+void Master::catalystInit(){
+	if(catalyst_node) throw std::runtime_error("Catalyst already initialized; call woo.master.catalystFini() before initializing again.");
+	catalyst_node=conduit_node_create();
+	// conduit_node_set_path_char8_str(init,"catalyst_load/implementation","WooDEM.org_catalyst_adaptor");
+	// conduit_node_set_path_char8_str(init, "catalyst_load/search_paths/example", argv[1]);
+	enum catalyst_status err=catalyst_initialize(catalyst_node);
+	conduit_node_destroy(catalyst_node);
+	if(err!=catalyst_status_ok){ throw std::runtime_error(fmt::format("Catalyst initialization failed with code {}.",_catalyst_enum_to_str(err))); }
+	LOG_INFO("Catalyst initialization done.");
+	auto about=conduit_node_create();
+	catalyst_about(about);
+	auto impl=conduit_node_fetch_path_as_char8_str(about,"catalyst/implementation");
+	auto ver=conduit_node_fetch_path_as_char8_str(about,"catalyst/version");
+	auto abiVer=conduit_node_fetch_path_as_char8_str(about,"catalyst/abi_version");
+	LOG_INFO("Catalyst: implementation '{}', version '{}', ABI '{}'.",impl,ver,abiVer);
+	conduit_node_destroy(about);
+}
+
+void Master::catalystFini(){
+	if(!catalyst_node) return;
+	enum catalyst_status err=catalyst_finalize(catalyst_node);
+	if(err!=catalyst_status_ok){
+		LOG_ERROR(fmt::format("Catalyst finalization failed with code {}.",_catalyst_enum_to_str(err)));
+		return;
+	}
+	conduit_node_destroy(catalyst_node);
+	catalyst_node=nullptr;
+}
+
+#endif
+
+Master::~Master(){
+	#ifdef WOO_CATALYST
+		catalystFini();
+	#endif
+}
 
 
 void Master::pyRegisterClass(py::module_& mod){
@@ -127,6 +180,10 @@ void Master::pyRegisterClass(py::module_& mod){
 		.def("rmTmp",&Master::rmTmp,py::arg("name"),"Remove memory-saved simulation.")
 		.def("tmpToFile",&Master::pyTmpToFile,WOO_PY_ARGS(py::arg("mark"),py::arg("fileName")),"Save XML of :obj:`saveTmp`'d simulation into *fileName*.")
 		.def("tmpToString",&Master::pyTmpToString,WOO_PY_ARGS(py::arg("mark")=""),"Return XML of :obj:`saveTmp <Master.saveTmp>`'d simulation as string.")
+		#ifdef WOO_CATALYST
+			.def("catalystInit",&Master::catalystInit,"Initialize catalyst; set CATALYST_IMPLEMENTATION_PATHS and CATALYST_IMPLEMENTATION_NAME environment variables to change the course of action.")
+			.def("catalystFini",&Master::catalystFini,"Finalize catalyst; this is normally caleld from Master desctructor automatically.")
+		#endif
 
 		.def("plugins",&Master::pyPlugins,"Return list of all plugins registered in the class factory.")
 		#ifdef WOO_OPENCL
