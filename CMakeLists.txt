@@ -464,7 +464,6 @@ execute_process(
     OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
->>>>>>> 487f7f61a (foundation for Catalyst client support; set font in GLViewer explicitly)
 target_include_directories(${CXX_INTERNAL} PRIVATE ${NUMPY_INCLUDE_DIR})
 
 set_source_files_properties(py/config.cxx
