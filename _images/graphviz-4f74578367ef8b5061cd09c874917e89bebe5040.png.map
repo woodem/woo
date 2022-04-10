@@ -1,5 +1,0 @@
-<map id="In2_Facet" name="In2_Facet">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.In2_Facet" title="In2_Facet" alt="" coords="25,25,99,47"/>
-<area shape="rect" id="node2" href="woo.fem.html#woo.fem.In2_Facet" title="woo.fem.In2_Membrane_ElastMat" alt="" coords="147,25,350,47"/>
-<area shape="rect" id="node3" href="woo.fem.html#woo.fem.In2_Facet" title="woo.fem.In2_Membrane_FrictMat" alt="" coords="398,25,599,47"/>
-</map>

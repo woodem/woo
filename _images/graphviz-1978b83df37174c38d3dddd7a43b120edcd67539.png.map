@@ -1,8 +1,0 @@
-<map id="FrictPhys" name="FrictPhys">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.FrictPhys" title="FrictPhys" alt="" coords="25,118,97,141"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.FrictPhys" title="IcePhys" alt="" coords="156,25,228,47"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.FrictPhys" title="HertzPhys" alt="" coords="153,71,231,94"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.FrictPhys" title="LudingPhys" alt="" coords="149,118,235,141"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.FrictPhys" title="ConcretePhys" alt="" coords="145,165,239,187"/>
-<area shape="rect" id="node6" href="woo.dem.html#woo.dem.FrictPhys" title="PelletPhys" alt="" coords="154,211,230,234"/>
-</map>
