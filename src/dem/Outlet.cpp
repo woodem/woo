@@ -2,12 +2,14 @@
 #include"Sphere.hpp"
 #include"Clump.hpp"
 #include"Funcs.hpp"
-WOO_PLUGIN(dem,(Outlet)(BoxOutlet)(StackedBoxOutlet)(ArcOutlet));
+WOO_PLUGIN(dem,(Outlet)(BoxOutlet)(StackedBoxOutlet)(ArcOutlet)(CrazyOutlet));
 WOO_IMPL_LOGGER(Outlet);
+WOO_IMPL_LOGGER(CrazyOutlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Outlet__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_BoxOutlet__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcOutlet__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_CrazyOutlet__CLASS_BASE_DOC_ATTRS);
 
 
 void Outlet::run(){
@@ -20,7 +22,7 @@ void Outlet::run(){
 	for(size_t i=0; i<dem->nodes.size(); i++){
 		const auto& n=dem->nodes[i];
 		int loc=-1, loc2=-1; // loc2 is for other nodes and ignored
-		if(inside!=isInside(canonPt(n->pos),loc)) continue; // node inside, do nothing
+		if(inside!=isInside(n,canonPt(n->pos),loc)) continue; // node inside, do nothing
 		if(!n->hasData<DemData>()) continue;
 		const auto& dyn=n->getData<DemData>();
 		// check all particles attached to this node
@@ -34,7 +36,7 @@ void Outlet::run(){
 			bool otherOk=true;
 			for(const auto& nn: p->shape->nodes){
 				// useless to check n again
-				if(nn.get()!=n.get() && !(inside!=isInside(canonPt(nn->pos),loc2))){ otherOk=false; break; }
+				if(nn.get()!=n.get() && !(inside!=isInside(n,canonPt(nn->pos),loc2))){ otherOk=false; break; }
 			}
 			if(!otherOk) continue;
 			LOG_TRACE("DemField.par[{}] marked for deletion.",i);
@@ -45,7 +47,7 @@ void Outlet::run(){
 			assert(dynamic_pointer_cast<ClumpData>(n->getDataPtr<DemData>()));
 			const auto& cd=n->getDataPtr<DemData>()->cast<ClumpData>();
 			for(const auto& nn: cd.nodes){
-				if(inside!=isInside(canonPt(nn->pos),loc2)) goto otherNotOk;
+				if(inside!=isInside(n,canonPt(nn->pos),loc2)) goto otherNotOk;
 				for(const Particle* p: nn->getData<DemData>().parRef){
 					assert(p);
 					if(mask && !(mask & p->mask)) goto otherNotOk;
@@ -223,7 +225,7 @@ void StackedBoxOutlet::postLoad(StackedBoxOutlet&, void* attr){
 	}
 }
 
-bool StackedBoxOutlet::isInside(const Vector3r& p, int& loc){
+bool StackedBoxOutlet::isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc){
 	Vector3r pp(node?node->glob2loc(p):p);
 	if(!box.contains(pp)) return false;
 	// find which stack in the box
@@ -238,7 +240,7 @@ void ArcOutlet::postLoad(ArcOutlet&, void* attr){
 	if(!node){ node=make_shared<Node>(); throw std::runtime_error("ArcOutlet.node: must not be None (dummy node created)."); }
 };
 
-bool ArcOutlet::isInside(const Vector3r& p, int& loc){ return CompUtils::cylCoordBox_contains_cartesian(cylBox,node->glob2loc(p)); }
+bool ArcOutlet::isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc){ return CompUtils::cylCoordBox_contains_cartesian(cylBox,node->glob2loc(p)); }
 #ifdef WOO_OPENGL
 	void ArcOutlet::render(const GLViewInfo&){
 		if(isnan(glColor)) return;
@@ -249,3 +251,11 @@ bool ArcOutlet::isInside(const Vector3r& p, int& loc){ return CompUtils::cylCoor
 		Outlet::renderMassAndRate(node->loc2glob(CompUtils::cyl2cart(cylBox.center())));
 	}
 #endif
+
+bool CrazyOutlet::isInside(const shared_ptr<Node>& node, const Vector3r& pos, int& loc){
+	const auto& vel=node->getData<DemData>().vel;
+	if(vel.squaredNorm()<=limVelNorm*limVelNorm) return true;
+	LOG_WARN("Will remove crazy node: velocity norm {} exceeds limVelNorm={}.",vel.norm(),limVelNorm);
+	return false;
+}
+

@@ -12,7 +12,7 @@
 struct Outlet: public PeriodicEngine{
 	WOO_DECL_LOGGER;
 	bool acceptsField(Field* f) override { return dynamic_cast<DemField*>(f); }
-	virtual bool isInside(const Vector3r& p, int& loc) { throw std::runtime_error(pyStr()+" did not override Outlet::isInside."); }
+	virtual bool isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc) { throw std::runtime_error(pyStr()+" did not override Outlet::isInside."); }
 	void run() override;
 	py::object pyPsd(bool mass, bool cumulative, bool normalize, int num, const Vector2r& dRange, const Vector2r& tRange, bool zip, bool emptyOk, const py::list& locs__);
 	py::object pyDiamMass(bool zipped=false) const;
@@ -59,7 +59,7 @@ struct BoxOutlet: public Outlet{
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override;
 	#endif
-	bool isInside(const Vector3r& p, int& loc) override { return box.contains(node?node->glob2loc(p):p); }
+	bool isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc) override { return box.contains(node?node->glob2loc(p):p); }
 	#define woo_dem_BoxOutlet__CLASS_BASE_DOC_ATTRS \
 		BoxOutlet,Outlet,"Outlet with box geometry", \
 		((AlignedBox3r,box,AlignedBox3r(),,"Box volume specification (lower and upper corners). If :obj:`node` is specified, the box is in local coordinates; otherwise, global coorinates are used.")) \
@@ -68,12 +68,22 @@ struct BoxOutlet: public Outlet{
 };
 WOO_REGISTER_OBJECT(BoxOutlet);
 
+struct CrazyOutlet: public Outlet{
+	WOO_DECL_LOGGER;
+	bool isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc) override;
+	#define woo_dem_CrazyOutlet__CLASS_BASE_DOC_ATTRS \
+		CrazyOutlet,Outlet,"Outlet without geometry which removes particles gone crazy", \
+		((Real,limVelNorm,1000,,"Absolute velocity norm threshold."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_CrazyOutlet__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(CrazyOutlet);
+
 struct StackedBoxOutlet: public BoxOutlet{
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override;
 	#endif
 	void postLoad(StackedBoxOutlet&, void* attr);
-	bool isInside(const Vector3r& p, int& loc) override;
+	bool isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc) override;
 	#define woo_dem_StackedBoxOutlet__CLASS_BASE_DOC_ATTRS \
 		StackedBoxOutlet,BoxOutlet,"Box outlet with subdivision along one axis, so that more precise location can be obtained; this is functionally equivalent to multiple adjacent :obj:`BoxOutlet's <BoxOutlet>`, but faster since it is a single engine.", \
 		((vector<Real>,divs,,,"Coordinates of division between boxes in the stack; must be an increasing sequence.")) \
@@ -85,7 +95,7 @@ struct StackedBoxOutlet: public BoxOutlet{
 WOO_REGISTER_OBJECT(StackedBoxOutlet);
 
 struct ArcOutlet: public Outlet{
-	bool isInside(const Vector3r& p, int& loc) override;
+	bool isInside(const shared_ptr<Node>&, const Vector3r& p, int& loc) override;
 	void postLoad(ArcOutlet&, void* attr);
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override;
