@@ -7,110 +7,7 @@
 .. automodule:: woo.fem
    :members:
    :undoc-members:
-   :exclude-members: In2_Membrane_FrictMat,  Tetra,  Membrane,  Tet4,  In2_Membrane_ElastMat,  Bo1_Tetra_Aabb,  In2_Tet4_ElastMat
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Membrane_ElastMat
----------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat`
-
-.. graphviz::
-
-	digraph In2_Membrane_ElastMat {
-		rankdir=LR;
-		margin=.2;
-		"In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
-		"In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
-		"In2_Membrane_ElastMat" -> "In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: In2_Membrane_ElastMat
-   :members:
-   :exclude-members: contacts, nu, thickness, bendThickness, bending, applyBary, rotIncr, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: contacts (= True)
-
-      Apply contact forces to facet's nodes (FIXME: very simply distributed in thirds now)
-
-      [type: bool]
-
-   .. attribute:: nu (= 0.25)
-
-      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`~woo.dem.ElastMat`). Will be moved to the material class at some point.
-
-      [type: Real]
-
-   .. attribute:: thickness (= nan)
-
-      Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick <woo.dem.Facet.halfThick>`.
-
-      [type: Real]
-
-   .. attribute:: bendThickness (= nan)
-
-      Thickness for DKT stiffness computation; if NaN, use :obj:`thickness`.
-
-      [type: Real]
-
-   .. attribute:: bending (= False)
-
-      Consider also bending stiffness of elements (DKT)
-
-      [type: bool]
-
-   .. attribute:: applyBary (= False)
-
-      Distribute force according to barycentric coordinate of the contact point; this is done normally with :obj:`bending` enabled, this forces the same also for particles without bending.
-
-      [type: bool]
-
-   .. attribute:: rotIncr (= False)
-
-      Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise).
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Membrane_FrictMat
-+++++++++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat` → :obj:`~woo.fem.In2_Membrane_FrictMat`
-
-.. autoclass:: In2_Membrane_FrictMat
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Bo1_Tetra_Aabb
---------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.fem.Bo1_Tetra_Aabb`
-
-.. autoclass:: Bo1_Tetra_Aabb
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
+   :exclude-members: Bo1_Tetra_Aabb,  In2_Membrane_ElastMat,  Tetra,  In2_Membrane_FrictMat,  Tet4,  Membrane,  In2_Tet4_ElastMat
 
 
 .. rst-class:: html-toggle
@@ -158,7 +55,7 @@ Membrane
    :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x1beb320, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x1ea0e90, at (0,0,0)>)
 
       Local coordinate system
 
@@ -305,4 +202,107 @@ Tet4
       :math:`E B` matrix, used to compute stresses from displacements.
 
       [type: MatrixXr, not shown in the UI, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Bo1_Tetra_Aabb
+--------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.fem.Bo1_Tetra_Aabb`
+
+.. autoclass:: Bo1_Tetra_Aabb
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Membrane_ElastMat
+---------------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat`
+
+.. graphviz::
+
+	digraph In2_Membrane_ElastMat {
+		rankdir=LR;
+		margin=.2;
+		"In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
+		"In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.In2_Membrane_ElastMat"];
+		"In2_Membrane_ElastMat" -> "In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: In2_Membrane_ElastMat
+   :members:
+   :exclude-members: contacts, nu, thickness, bendThickness, bending, applyBary, rotIncr, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: contacts (= True)
+
+      Apply contact forces to facet's nodes (FIXME: very simply distributed in thirds now)
+
+      [type: bool]
+
+   .. attribute:: nu (= 0.25)
+
+      Poisson's ratio used for assembling the \ :math:`E`\  matrix (Young's modulus is taken from :obj:`~woo.dem.ElastMat`). Will be moved to the material class at some point.
+
+      [type: Real]
+
+   .. attribute:: thickness (= nan)
+
+      Thickness for CST stiffness computation; if NaN, try to use the double of :obj:`Facet.halfThick <woo.dem.Facet.halfThick>`.
+
+      [type: Real]
+
+   .. attribute:: bendThickness (= nan)
+
+      Thickness for DKT stiffness computation; if NaN, use :obj:`thickness`.
+
+      [type: Real]
+
+   .. attribute:: bending (= False)
+
+      Consider also bending stiffness of elements (DKT)
+
+      [type: bool]
+
+   .. attribute:: applyBary (= False)
+
+      Distribute force according to barycentric coordinate of the contact point; this is done normally with :obj:`bending` enabled, this forces the same also for particles without bending.
+
+      [type: bool]
+
+   .. attribute:: rotIncr (= False)
+
+      Compute nodal rotation incrementally (by integration of angular velocities) rather than by subtracting from reference rotations (the advantage of incremental is that it is numerically stable even for huge rotations, but perhaps less precise).
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Membrane_FrictMat
++++++++++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet` → :obj:`~woo.fem.In2_Membrane_ElastMat` → :obj:`~woo.fem.In2_Membrane_FrictMat`
+
+.. autoclass:: In2_Membrane_FrictMat
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
 

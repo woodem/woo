@@ -1,0 +1,7 @@
+<map id="RandomInlet" name="RandomInlet">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.RandomInlet" title="RandomInlet" alt="" coords="25,71,115,94"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.RandomInlet" title="ArcInlet" alt="" coords="173,25,245,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet" alt="" coords="173,71,245,94"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.RandomInlet" title="CylinderInlet" alt="" coords="163,118,254,141"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.RandomInlet" title="BoxInlet2d" alt="" coords="302,71,382,94"/>
+</map>

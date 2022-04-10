@@ -5,6 +5,13 @@
    :members:
    :undoc-members:
 
+:mod:`woo.tests.test_volumetric`
+---------------------------------------------
+
+.. automodule:: woo.tests.test_volumetric
+   :members:
+   :undoc-members:
+
 :mod:`woo.tests.test_batch`
 ----------------------------------------
 
@@ -33,10 +40,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_clump`
+:mod:`woo.tests.test_hertz`
 ----------------------------------------
 
-.. automodule:: woo.tests.test_clump
+.. automodule:: woo.tests.test_hertz
    :members:
    :undoc-members:
 
@@ -61,52 +68,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_volumetric`
----------------------------------------------
-
-.. automodule:: woo.tests.test_volumetric
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_psd`
---------------------------------------
-
-.. automodule:: woo.tests.test_psd
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_hertz`
-----------------------------------------
-
-.. automodule:: woo.tests.test_hertz
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_io`
--------------------------------------
-
-.. automodule:: woo.tests.test_io
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_pbc`
---------------------------------------
-
-.. automodule:: woo.tests.test_pbc
-   :members:
-   :undoc-members:
-
 :mod:`woo.tests.test_ellipsoid`
 --------------------------------------------
 
 .. automodule:: woo.tests.test_ellipsoid
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_energy`
------------------------------------------
-
-.. automodule:: woo.tests.test_energy
    :members:
    :undoc-members:
 
@@ -175,7 +140,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x2b7ce20, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x2e36820, at (1,1,1)>)
 
       node attr
 
@@ -187,7 +152,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x2be0ae0, at (1,1,1)>, <Node @ 0x2b815f0, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x2e32050, at (1,1,1)>, <Node @ 0x2c65960, at (2,2,2)>])
 
       List of nodes
 
@@ -248,4 +213,44 @@ _TestPyClass2
       Count how many times was f2 manipulated (to test triggerPostLoad in class with python parent)
 
       [type: int]
+
+:mod:`woo.tests.test_psd`
+--------------------------------------
+
+.. automodule:: woo.tests.test_psd
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_clump`
+----------------------------------------
+
+.. automodule:: woo.tests.test_clump
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_io`
+-------------------------------------
+
+.. automodule:: woo.tests.test_io
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_pbc`
+--------------------------------------
+
+.. automodule:: woo.tests.test_pbc
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
+
+:mod:`woo.tests.test_energy`
+-----------------------------------------
+
+.. automodule:: woo.tests.test_energy
+   :members:
+   :undoc-members:
+   :exclude-members: _TestPyClass2,  _TestPyClass
 

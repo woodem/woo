@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wooMain &#8212; Woo 1.0+rev1-git-6a4ccd2 documentation</title>
+    <title>wooMain &#8212; Woo 1.0+rev1-git-920dbe8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-6a4ccd2 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-920dbe8 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">wooMain</a></li> 
@@ -190,7 +190,7 @@
     <span class="c1"># par.add_argument(&#39;--generate-manpage&#39;,help=&quot;Generate man page documenting this program and exit&quot;,dest=&#39;manpage&#39;,metavar=&#39;FILE&#39;)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">WIN</span><span class="p">:</span> <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span><span class="s1">&#39;--rebuild&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Re-run build in the source directory, then run the updated woo with the same command line except --rebuild. The build flavor for this build and its stored parameters will be used. If given twice, update from the repository will be attempted before recompilation.&quot;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;rebuild&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
     <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--test&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run regression test suite and exit; the exists status is 0 if all tests pass, 1 if a test fails and 2 for an unspecified exception.&quot;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--no-gdb&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Do not show backtrace when Woo crashes (only effective with \-\-debug).&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;noGdb&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,)</span>
+    <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--no-gdb&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;Do not show backtrace when Woo crashes (only effective with --debug).&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;noGdb&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,)</span>
     <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--in-gdb&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run Woo inside gdb (must be in $PATH).&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;inGdb&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
     <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--in-lldb&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run Woo inside lldb (must be in $PATH; executables tried are lldb, lldb-7, lldb-8, lddb-9 in this order).&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;inLldb&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
     <span class="n">par</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--in-pdb&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run Woo inside pdb&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;inPdb&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
@@ -1280,7 +1280,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">Woo 1.0+rev1-git-6a4ccd2 documentation</a> &#187;</li>
+    <li><a href="../index.html">Woo 1.0+rev1-git-920dbe8 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">wooMain</a></li> 

@@ -1,0 +1,7 @@
+<map id="SpatialBias" name="SpatialBias">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.SpatialBias" title="SpatialBias" alt="" coords="25,49,105,71"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.SpatialBias" title="NonuniformAxisPlacementBias" alt="" coords="153,25,338,47"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.SpatialBias" title="AxialBias" alt="" coords="209,71,281,94"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.SpatialBias" title="LayeredAxialBias" alt="" coords="386,47,499,70"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.SpatialBias" title="PsdAxialBias" alt="" coords="398,94,487,117"/>
+</map>
