@@ -7,81 +7,7 @@
 .. automodule:: woo.fem
    :members:
    :undoc-members:
-   :exclude-members: In2_Membrane_ElastMat,  Bo1_Tetra_Aabb,  In2_Tet4_ElastMat,  Tetra,  In2_Membrane_FrictMat,  Membrane,  Tet4
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Tetra
------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra`
-
-.. graphviz::
-
-	digraph Tetra {
-		rankdir=LR;
-		margin=.2;
-		"Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
-		"Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
-		"Tetra" -> "Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Tetra
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Tet4
-++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra` → :obj:`~woo.fem.Tet4`
-
-.. autoclass:: Tet4
-   :members:
-   :exclude-members: node, refPos, uXyz, KK, EB, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= None)
-
-      Local coordinate system
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
-
-   .. attribute:: refPos (= MatrixX())
-
-      Reference nodal positions in local coordinates
-
-      [type: MatrixXr, read-only in python]
-
-   .. attribute:: uXyz (= VectorX())
-
-      Nodal displacements in local coordinates
-
-      [type: VectorXr, read-only in python]
-
-   .. attribute:: KK (= MatrixX())
-
-      Stiffness matrix
-
-      [type: MatrixXr, not shown in the UI, read-only in python]
-
-   .. attribute:: EB (= MatrixX())
-
-      :math:`E B` matrix, used to compute stresses from displacements.
-
-      [type: MatrixXr, not shown in the UI, read-only in python]
+   :exclude-members: Tet4,  In2_Membrane_ElastMat,  Bo1_Tetra_Aabb,  In2_Tet4_ElastMat,  Tetra,  In2_Membrane_FrictMat,  Membrane
 
 
 .. rst-class:: html-toggle
@@ -232,7 +158,7 @@ Membrane
    :exclude-members: node, refRot, refPos, uXy, surfLoad, phiXy, KKcst, KKdkt, enableStress, EBcst, DBdkt, noWarnExcessRot, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2ef1cb0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x290b080, at (0,0,0)>)
 
       Local coordinate system
 
@@ -305,4 +231,78 @@ Membrane
       Set to disable warning about excessive in-plane rotation. Only do this if you know what you're doing.
 
       [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Tetra
+-----
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra`
+
+.. graphviz::
+
+	digraph Tetra {
+		rankdir=LR;
+		margin=.2;
+		"Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
+		"Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.fem.html#woo.fem.Tetra"];
+		"Tetra" -> "Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Tetra
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Tet4
+++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Shape` → :obj:`~woo.fem.Tetra` → :obj:`~woo.fem.Tet4`
+
+.. autoclass:: Tet4
+   :members:
+   :exclude-members: node, refPos, uXyz, KK, EB, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= None)
+
+      Local coordinate system
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>, read-only in python]
+
+   .. attribute:: refPos (= MatrixX())
+
+      Reference nodal positions in local coordinates
+
+      [type: MatrixXr, read-only in python]
+
+   .. attribute:: uXyz (= VectorX())
+
+      Nodal displacements in local coordinates
+
+      [type: VectorXr, read-only in python]
+
+   .. attribute:: KK (= MatrixX())
+
+      Stiffness matrix
+
+      [type: MatrixXr, not shown in the UI, read-only in python]
+
+   .. attribute:: EB (= MatrixX())
+
+      :math:`E B` matrix, used to compute stresses from displacements.
+
+      [type: MatrixXr, not shown in the UI, read-only in python]
 
