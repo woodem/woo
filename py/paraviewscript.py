@@ -335,7 +335,7 @@ if splitFile:
     rep=Show()
     rep.Representation='Outline'
     rep.Visibility=1
-    rep.CubeAxesVisibility=1
+    # rep.CubeAxesVisibility=1 # PV 5.10
 
     for arr,name,rgb in [('cross','Segregation',(0,0,1)),('diffA','Small fraction',(0,1,0)),('diffB','Big fraction',(1,0,0))]:
         SetActiveSource(_last)
@@ -345,15 +345,19 @@ if splitFile:
         scale=_avgcell/denom
         scale*=2*splitStride # biggest vector spans about 2 cells (including stride)
         if name=='Segregation': scale*=4
-        gl=Glyph(GlyphType="Arrow",GlyphTransform="Transform2",Vectors=['POINTS',arr])
+        gl=Glyph(GlyphType="Arrow",GlyphTransform="Transform2",OrientationArray=['POINTS',arr])
         if hasattr(gl,'MaskPoints'): # PV 4.0
             gl.MaskPoints=0 
             gl.SetScaleFactor=scale
             gl.RandomMode=0
-        elif hasattr(gl,'GlyphMode'): # PV>=4.3
+        elif hasattr(gl,'GlyphMode') and hasattr(gl,'ScaleMode'): # PV>=4.3
             gl.GlyphMode='All Points'
             gl.ScaleMode='vector'
             gl.ScaleFactor=scale
+        else: # PV 5.x
+            gl.GlyphMode='All Points'
+            gl.ScaleArray=['POINTS',arr]
+
         RenameSource(name,gl)
         rep=Show()
         rep.ColorArrayName=('POINT_DATA','') # solid color
