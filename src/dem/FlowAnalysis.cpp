@@ -36,7 +36,7 @@ void FlowAnalysis::setupGrid(){
 	if(!(cellSize>0)) throw std::runtime_error("FlowAnalysis.cellSize: must be positive.");
 	if(!(box.volume()>0)) throw std::runtime_error("FlowAnalysis.box: invalid box (volume not positive).");
 	for(int ax:{0,1,2}){
-		boxCells[ax]=std::round(box.sizes()[ax]/cellSize);
+		boxCells[ax]=int(std::ceil(box.sizes()[ax]/cellSize));
 		box.max()[ax]=box.min()[ax]+boxCells[ax]*cellSize;
 	}
 	if(!dLim.empty() && !masks.empty()) throw std::runtime_error("FlowAnalysis: only one of dLim and masks may be given, not both.");
@@ -155,13 +155,14 @@ void FlowAnalysis::addCurrentData(){
 	if(porosity) poroData=DemFuncs::boxPorosity(static_pointer_cast<DemField>(field),enlargedBox);
 	for(const auto& p: *(dem->particles)){
 		if(mask!=0 && (p->mask&mask)==0) continue;
-		//if(!p->shape->isA<Sphere>()) continue;
 		Real radius=p->shape->equivRadius();
 		if(isnan(radius)) continue;
-		Vector3r parPosLocal=node?node->glob2loc(p->shape->nodes[0]->pos):p->shape->nodes[0]->pos;
-		if(!enlargedBox.contains(parPosLocal)) continue;
+		Vector3r pos=p->shape->nodes[0]->pos;
+		if(scene->isPeriodic) pos=scene->cell->canonicalizePt(pos);
+		if(node) pos=node->glob2loc(pos);
+		if(!enlargedBox.contains(pos)) continue;
 		assert(!(porosity && (int)poroData.size()<=p->id));
-		addOneParticle(p,parPosLocal,radius*2.,(porosity?1-poroData[p->id]:NaN));
+		addOneParticle(p,pos,radius*2.,(porosity?1-poroData[p->id]:NaN));
 	}
 };
 
