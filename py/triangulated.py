@@ -283,6 +283,7 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         _PAT(float,'tessMaxBox',0,unit='mm',doc='Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.'),
         _PAT(bool,'tagged',False,doc='Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)'),
         _PAT(float,'color',float('nan'),'Pass resulting particle color (scalar) when importing; only effective for formats which support it (STL). *nan* disables'),
+        _PAT(bool,'smooth',False,doc='Automatically call :obj:`woo.dem.Facet.computeNeighborAngles` for smoother contact transitions.'),
     ]
     def __new__(klass,**kw):
         self=super().__new__(klass)
@@ -299,11 +300,6 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
         else: raise ValueError('Unknown mesh file extension (must be .stl, .nas).')
         if 'thickness' in kw: raise ValueError('Use MeshImport.halfThick attribute to set thickness, instead of passing MeshImport.doImport(thickness=...).')
 
-        # called after import for each format, before returning
-        def applyFakeVel(tri):
-            if self.fakeVel!=Vector3.Zero:
-                for t in tri: t.shape.fakeVel=self.fakeVel
-
         if fmt=='stl':
             if self.tagged: raise ValueError('MeshImport.tagged: not supported (meaningless) with STL format.')
             kw2={}
@@ -314,8 +310,8 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                 log.warn('Using user-defined color %g for STL import'%self.color)
                 kw2['color']=self.color
             tri=woo.utils.importSTL(self.file,mat=mat,mask=mask,scale=self.preScale,shift=(self.node.pos if self.node else Vector3.Zero),ori=(self.node.ori if self.node else Quaternion.Identity),maxBox=self.tessMaxBox,thickness=2*self.halfThick,**kw2)
-            applyFakeVel(tri)
-            return tri
+            if 'wire' in kw:
+                for t in tri: t.shape.wire=kw['wire']
         elif fmt=='nastran':
             nodeMap={} # mapping of nodes numbers (tags) to Node objects
             tri=[]
@@ -338,7 +334,11 @@ class MeshImport(woo.core.Object,woo.pyderived.PyWooObject):
                     # lines we know to ignore
                     elif l.startswith('BEGIN BULK') or l.startswith('PSHELL') or l.startswith('MAT') or l.startswith('ENDDATA') or len(l.strip())==0: continue
                     else: log.error('%s:%d: unparsed line skipped: %s'%self.file,lineno+1,l)
-            applyFakeVel(tri)
-            return tri
         else: raise RuntimeError('Programming error: unhandled value fmt=="%s".'%(str(fmt)))
+
+        if self.fakeVel!=Vector3.Zero:
+            for t in tri: t.shape.fakeVel=self.fakeVel
+        if self.smooth:
+            for t in tri: t.shape.computeNeighborAngles()
+        return tri
 
