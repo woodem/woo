@@ -7,7 +7,954 @@
 .. automodule:: woo.gl
    :members:
    :undoc-members:
-   :exclude-members: DisplayParameters,  Gl1_Node,  Gl1_Capsule,  GlNodeFunctor,  GlCPhysFunctor,  GlNodeDispatcher,  Gl1_DemField,  GlShapeFunctor,  Gl1_Wall,  GlFieldFunctor,  GlBoundFunctor,  Gl1_Aabb,  Gl1_Tet4,  GlFieldDispatcher,  Gl1_Tetra,  Renderer,  ScalarGlRep,  Gl1_ConcretePhys,  Gl1_GridBound,  CylGlRep,  Gl1_CPhys,  GlExtra_EnergyTrackerGrid,  Gl1_Membrane,  GlSetup,  ActReactGlRep,  Gl1_Rod,  Gl1_Cone,  LabelGlRep,  GlData,  TensorGlRep,  GlCPhysDispatcher,  Gl1_Sphere,  GlBoundDispatcher,  Gl1_Ellipsoid,  GlExtra_AnisoPorosityAnalyzer,  Gl1_Facet,  GlExtraDrawer,  Gl1_InfCylinder,  GlShapeDispatcher,  VectorGlRep
+   :exclude-members: Gl1_Node,  GlNodeFunctor,  Gl1_Facet,  GlExtraDrawer,  Gl1_InfCylinder,  DisplayParameters,  GlCPhysFunctor,  GlExtra_AnisoPorosityAnalyzer,  GlBoundDispatcher,  Gl1_Capsule,  GlShapeFunctor,  GlFieldFunctor,  GlBoundFunctor,  VectorGlRep,  Gl1_Tet4,  Gl1_DemField,  Gl1_Aabb,  GlFieldDispatcher,  GlShapeDispatcher,  Gl1_GridBound,  ScalarGlRep,  Renderer,  Gl1_ConcretePhys,  GlSetup,  Gl1_CPhys,  CylGlRep,  LabelGlRep,  GlExtra_EnergyTrackerGrid,  GlData,  Gl1_Tetra,  Gl1_Membrane,  Gl1_Rod,  Gl1_Cone,  ActReactGlRep,  Gl1_Wall,  Gl1_Sphere,  GlCPhysDispatcher,  Gl1_Ellipsoid,  TensorGlRep,  GlNodeDispatcher
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+DisplayParameters
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.gl.DisplayParameters`
+
+.. autoclass:: DisplayParameters
+   :members:
+   :exclude-members: values, displayTypes, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: values (= [])
+
+      
+
+      [type: vector<string>, read-only in python]
+
+   .. attribute:: displayTypes (= [])
+
+      
+
+      [type: vector<string>, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlBoundDispatcher
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlBoundDispatcher`
+
+.. autoclass:: GlBoundDispatcher
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<GlBoundFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlShapeFunctor
+--------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor`
+
+.. graphviz::
+
+	digraph GlShapeFunctor {
+		rankdir=LR;
+		margin=.2;
+		"GlShapeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Sphere" -> "Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: GlShapeFunctor
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Wall
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Wall`
+
+.. autoclass:: Gl1_Wall
+   :members:
+   :exclude-members: div, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: div (= 20)
+
+      Number of divisions of the wall inside visible scene part.
+
+      [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Tetra
++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Tetra`
+
+.. graphviz::
+
+	digraph Gl1_Tetra {
+		rankdir=LR;
+		margin=.2;
+		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Tetra"];
+		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Tetra"];
+		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Gl1_Tetra
+   :members:
+   :exclude-members: wire, wd, fastDrawLim, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: wire (= False)
+
+      Only show wireframe.
+
+      [type: bool]
+
+   .. attribute:: wd (= 1)
+
+      Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)
+
+      [type: int, range: 1−20]
+
+   .. attribute:: fastDrawLim (= 0.001)
+
+      If performing fast draw (during camera manipulation) and the distance of centroid to the first node is smaller than *fastDrawLim* times scene radius, skip rendering of that tetra.
+
+      [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Tet4
+""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Tetra` → :obj:`~woo.gl.Gl1_Tet4`
+
+.. autoclass:: Gl1_Tet4
+   :members:
+   :exclude-members: node, rep, refConf, refColor, refWd, uWd, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= False)
+
+      Show local frame node
+
+      [type: bool]
+
+   .. attribute:: rep (= True)
+
+      Show GlRep of the frame node (without showing the node itself)
+
+      [type: bool]
+
+   .. attribute:: refConf (= False)
+
+      Show reference configuration, rotated to the current local frame
+
+      [type: bool]
+
+   .. attribute:: refColor (= Vector3(0,0.5,0))
+
+      Color for the reference shape
+
+      [type: Vector3r]
+
+   .. attribute:: refWd (= 1)
+
+      Line width for the reference shape
+
+      [type: int]
+
+   .. attribute:: uWd (= 2)
+
+      Width of displacement lines
+
+      [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Sphere
+++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere`
+
+.. graphviz::
+
+	digraph Gl1_Sphere {
+		rankdir=LR;
+		margin=.2;
+		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
+		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
+		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
+		"Gl1_Sphere" -> "Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Gl1_Sphere
+   :members:
+   :exclude-members: quality, wire, smooth, scale, glutSlices, glutStacks, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: quality (= 1.0)
+
+      Change discretization level of spheres. quality>1 for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color sphres are displayed (:obj:`stripes` = `False`), quality mutiplies :obj:`glutSlices` and :obj:`glutStacks`. If striped spheres are displayed (:obj:`stripes = `True`), only integer increments are meaningful: quality=1 and quality=1.9 will give the same result, quality=2 will give a finer result.
+
+      [type: Real, range: 0−8]
+
+   .. attribute:: wire (= False)
+
+      Only show wireframe (controlled by :obj:`glutSlices` and :obj:`glutStacks`.
+
+      [type: bool]
+
+   .. attribute:: smooth (= False)
+
+      Render lines smooth (it makes them thicker and less clear if there are many spheres.)
+
+      [type: bool]
+
+   .. attribute:: scale (= 1.0)
+
+      Scale sphere radii
+
+      [type: Real, range: 0.1−2]
+
+   .. attribute:: glutSlices (= 12)
+
+      Base number of sphere slices, multiplied by :obj:`Gl1_Sphere.quality` before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)
+
+      [type: int, not saved, read-only in python]
+
+   .. attribute:: glutStacks (= 6)
+
+      Base number of sphere stacks, multiplied by :obj:`Gl1_Sphere.quality` before use; not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)
+
+      [type: int, not saved, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Ellipsoid
+"""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere` → :obj:`~woo.gl.Gl1_Ellipsoid`
+
+.. autoclass:: Gl1_Ellipsoid
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Capsule
+"""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere` → :obj:`~woo.gl.Gl1_Capsule`
+
+.. autoclass:: Gl1_Capsule
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Cone
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
+
+.. autoclass:: Gl1_Cone
+   :members:
+   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: slices (= 12)
+
+      Number of slices, controls quality
+
+      [type: int]
+
+   .. attribute:: stacks (= 6)
+
+      Number of stacks, controls quality
+
+      [type: int]
+
+   .. attribute:: wire (= False)
+
+      Render all shapes with wireframe only
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Rod
++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Rod`
+
+.. autoclass:: Gl1_Rod
+   :members:
+   :exclude-members: slices, stacks, wire, colorStress, stressRange, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: slices (= 12)
+
+      Number of slices, controls quality
+
+      [type: int]
+
+   .. attribute:: stacks (= 6)
+
+      Number of stacks, controls quality
+
+      [type: int]
+
+   .. attribute:: wire (= False)
+
+      Render all shapes with wireframe only
+
+      [type: bool]
+
+   .. attribute:: colorStress (= True)
+
+      Set color based on axial stress rather than :obj:`woo.dem.Shape.color`
+
+      [type: bool]
+
+   .. attribute:: stressRange (= Vector2(-1,1))
+
+      Stress range, to set color appropriately
+
+      [type: Vector2r]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Facet
++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Facet`
+
+.. graphviz::
+
+	digraph Gl1_Facet {
+		rankdir=LR;
+		margin=.2;
+		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Facet"];
+		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Facet"];
+		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Gl1_Facet
+   :members:
+   :exclude-members: wire, slices, fastDrawLim, wd, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: wire (= False)
+
+      Only show wireframe.
+
+      [type: bool]
+
+   .. attribute:: slices (= 8)
+
+      Number of half-cylinder subdivision for rounded edges with halfThick>=0 (for whole circle); if smaller than 4, rounded edges are not drawn; if negative, only mid-plane is drawn.
+
+      [type: int, range: -1−16]
+
+   .. attribute:: fastDrawLim (= 0.001)
+
+      If performing fast draw (during camera manipulation) and the facet's perimeter is smaller than *fastDrawLim* times scene radius, skip rendering of that facet.
+
+      [type: Real]
+
+   .. attribute:: wd (= 1)
+
+      Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)
+
+      [type: int, range: 1−20]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Membrane
+""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Facet` → :obj:`~woo.gl.Gl1_Membrane`
+
+.. autoclass:: Gl1_Membrane
+   :members:
+   :exclude-members: node, refConf, refColor, refWd, uScale, uWd, uSplit, relPhi, phiWd, phiSplit, arrows, uRange, phiRange, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= False)
+
+      Show local frame node
+
+      [type: bool]
+
+   .. attribute:: refConf (= True)
+
+      Show reference configuration, rotated to the current local frame
+
+      [type: bool]
+
+   .. attribute:: refColor (= Vector3(0,0.5,0))
+
+      Color for the reference shape
+
+      [type: Vector3r]
+
+   .. attribute:: refWd (= 1)
+
+      Line width for the reference shape
+
+      [type: int]
+
+   .. attribute:: uScale (= 1.0)
+
+      Scale of displacement lines (zero to disable)
+
+      [type: Real]
+
+   .. attribute:: uWd (= 2)
+
+      Width of displacement lines
+
+      [type: int]
+
+   .. attribute:: uSplit (= False)
+
+      Show x and y displacement components separately
+
+      [type: bool]
+
+   .. attribute:: relPhi (= 0.2)
+
+      Length of unit rotation (one radian), relative to scene radius (zero to disable)
+
+      [type: Real]
+
+   .. attribute:: phiWd (= 2)
+
+      Width of rotation lines
+
+      [type: int]
+
+   .. attribute:: phiSplit (= True)
+
+      Show x and y displacement components separately
+
+      [type: bool]
+
+   .. attribute:: arrows (= False)
+
+      Show displacements and rotations as arrows rather than lines
+
+      [type: bool]
+
+   .. attribute:: uRange (= <ScalarRange @ 0x2ef46f0>)
+
+      Range for displacements (colors only)
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+   .. attribute:: phiRange (= <ScalarRange @ 0x2ef9b40>)
+
+      Range for rotations (colors only)
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_InfCylinder
++++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_InfCylinder`
+
+.. autoclass:: Gl1_InfCylinder
+   :members:
+   :exclude-members: wire, spokes, slices, stacks, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: wire (= False)
+
+      Render Cylinders with wireframe
+
+      [type: bool]
+
+   .. attribute:: spokes (= True)
+
+      Render spokes between the cylinder axis and edge, at the position of :obj:`InfCylinder.glAB`.
+
+      [type: bool]
+
+   .. attribute:: slices (= 12)
+
+      Number of circumferential division of circular sections
+
+      [type: int]
+
+   .. attribute:: stacks (= 20)
+
+      Number of rings on the cylinder inside the visible scene part.
+
+      [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlSetup
+-------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.gl.GlSetup`
+
+.. autoclass:: GlSetup
+   :members:
+   :exclude-members: objs, dirty, qglviewerState, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: objs (= ObjectList[])
+
+      List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.
+
+      [type: vector<shared_ptr<Object>>, not shown in the UI, read-only in python]
+
+   .. attribute:: dirty (= False)
+
+      Set after modifying functors, so that they can be regenerated.
+
+      [type: bool, not shown in the UI, not dumped, read-only in python]
+
+   .. attribute:: qglviewerState (= '')
+
+      XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).
+
+      [type: string, not shown in the UI, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlNodeDispatcher
+----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlNodeDispatcher`
+
+.. autoclass:: GlNodeDispatcher
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<GlNodeFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlNodeFunctor
+-------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlNodeFunctor`
+
+.. graphviz::
+
+	digraph GlNodeFunctor {
+		rankdir=LR;
+		margin=.2;
+		"GlNodeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlNodeFunctor"];
+		"Gl1_Node" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlNodeFunctor"];
+		"GlNodeFunctor" -> "Gl1_Node" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: GlNodeFunctor
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Node
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlNodeFunctor` → :obj:`~woo.gl.Gl1_Node`
+
+.. autoclass:: Gl1_Node
+   :members:
+   :exclude-members: wd, wd_range, len, len_range, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: wd (= 1)
+
+      Local axes line width in pixels
+
+      [type: int]
+
+   .. attribute:: wd_range (= Vector2i(0,5))
+
+      Range for width
+
+      [type: Vector2i, not shown in the UI]
+
+   .. attribute:: len (= 0.05)
+
+      Relative local axes line length in pixels, relative to scene radius; if non-positive, only points are drawn
+
+      [type: Real]
+
+   .. attribute:: len_range (= Vector2(0,0.1))
+
+      Range for len
+
+      [type: Vector2r, not shown in the UI]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlBoundFunctor
+--------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor`
+
+.. graphviz::
+
+	digraph GlBoundFunctor {
+		rankdir=LR;
+		margin=.2;
+		"GlBoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
+		"Gl1_GridBound" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
+		"GlBoundFunctor" -> "Gl1_GridBound" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
+		"GlBoundFunctor" -> "Gl1_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: GlBoundFunctor
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_Aabb
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor` → :obj:`~woo.gl.Gl1_Aabb`
+
+.. autoclass:: Gl1_Aabb
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Gl1_GridBound
++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor` → :obj:`~woo.gl.Gl1_GridBound`
+
+.. autoclass:: Gl1_GridBound
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlFieldDispatcher
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlFieldDispatcher`
+
+.. autoclass:: GlFieldDispatcher
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<GlFieldFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+TensorGlRep
+-----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.TensorGlRep`
+
+.. autoclass:: TensorGlRep
+   :members:
+   :exclude-members: val, eigVec, eigVal, skew, relSz, skewRelSz, scaleExp, range, skewRange, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: val (= Matrix3(0,0,0, 0,0,0, 0,0,0))
+
+      Value to be rendered.
+
+      [type: Matrix3r]
+
+   .. attribute:: eigVec (= Matrix3(0,0,0, 0,0,0, 0,0,0))
+
+      eigenvectors as columns, updated in postLoad.
+
+      [type: Matrix3r, not saved, read-only in python]
+
+   .. attribute:: eigVal (= Vector3(0,0,0))
+
+      eigenvalues of corresponding eigenvectors, updated in postLoad.
+
+      [type: Vector3r, not saved, read-only in python]
+
+   .. attribute:: skew (= Vector3(0,0,0))
+
+      skew (asymmetric) components of the tensor
+
+      [type: Vector3r, not saved]
+
+   .. attribute:: relSz (= 0.1)
+
+      Size of maximum-length arrows, relative to scene radius
+
+      [type: Real]
+
+   .. attribute:: skewRelSz (= -1.0)
+
+      Size of maximum-length skew curved arrows; if negative, use relSz instead.
+
+      [type: Real]
+
+   .. attribute:: scaleExp (= 1.0)
+
+      Exponent for scaling arrow sizem kuje wutg VectorGlRep. NaN disables scaling, making all arrows the same size.
+
+      [type: Real]
+
+   .. attribute:: range (= None)
+
+      Extrema values for symmetric components.
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+   .. attribute:: skewRange (= None)
+
+      Extrema values for skew components
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+CylGlRep
+--------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.CylGlRep`
+
+.. autoclass:: CylGlRep
+   :members:
+   :exclude-members: rad, col, xx, relSz, rangeRad, rangeCol, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: rad (= nan)
+
+      Scalar determining radius; 1 if NaN
+
+      [type: Real]
+
+   .. attribute:: col (= nan)
+
+      Scalar determining color; *rad* is used if NaN.
+
+      [type: Real]
+
+   .. attribute:: xx (= Vector2(0,0))
+
+      End positions on the local x-axis
+
+      [type: Vector2r]
+
+   .. attribute:: relSz (= 0.05)
+
+      Maximum cylinder radius, relative to scene radius
+
+      [type: Real]
+
+   .. attribute:: rangeRad (= None)
+
+      Range for rad (only used if rad is not NaN)
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+   .. attribute:: rangeCol (= None)
+
+      Range for col (or for rad, if *col* is NaN)
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+LabelGlRep
+----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.LabelGlRep`
+
+.. autoclass:: LabelGlRep
+   :members:
+   :exclude-members: text, color, center, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: text (= '')
+
+      Text to be rendered at the node's position
+
+      [type: string]
+
+   .. attribute:: color (= Vector3(1,1,1))
+
+      Color for rendering the text
+
+      [type: Vector3r]
+
+   .. attribute:: center (= False)
+
+      Whether the text should be centered around the node
+
+      [type: bool]
 
 
 .. rst-class:: html-toggle
@@ -27,9 +974,9 @@ GlCPhysFunctor
 		rankdir=LR;
 		margin=.2;
 		"GlCPhysFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlCPhysFunctor"];
-		"Gl1_CPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlCPhysFunctor"];
-		"GlCPhysFunctor" -> "Gl1_CPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlCPhysFunctor"];
-		"Gl1_CPhys" -> "Gl1_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Gl1_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlCPhysFunctor"];
+		"Gl1_CPhys" -> "Gl1_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_CPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlCPhysFunctor"];
+		"GlCPhysFunctor" -> "Gl1_CPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: GlCPhysFunctor
@@ -64,13 +1011,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x1e5d2a0>)
+   .. attribute:: range (= <ScalarRange @ 0x2eae0c0>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x1e5c1e0>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x2ead000>)
 
       Range for absolute value of shear force
 
@@ -129,7 +1076,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x1eb0c50>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x2f01a70>)
 
       Range for disk damage coloring.
 
@@ -353,23 +1300,70 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x1e4c380>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x2e9d1a0>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x1e4c2a0>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x2e9d0c0>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x1e76d40>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x2ec7b60>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlCPhysDispatcher <woo.gl.GlCPhysDispatcher>`>, not shown in the UI, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+ScalarGlRep
+-----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.ScalarGlRep`
+
+.. autoclass:: ScalarGlRep
+   :members:
+   :exclude-members: val, how, prec, relSz, range, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: val (= 0.0)
+
+      Value to be rendered
+
+      [type: Real]
+
+   .. attribute:: how (= 0)
+
+      Different ways to render given value; 0=number, 1=colored point, 2=colored sphere
+
+      [type: int]
+
+   .. attribute:: prec (= 5)
+
+      Precision for rendering numbers
+
+      [type: int]
+
+   .. attribute:: relSz (= 0.05)
+
+      Size of rendered spheres (if selected), relative to scene radius
+
+      [type: Real]
+
+   .. attribute:: range (= None)
+
+      Extrema values for the scalar, to determine colors.
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
 
 .. rst-class:: html-toggle
@@ -680,53 +1674,6 @@ Renderer
 
 .. rst-class:: emphasized
 
-ScalarGlRep
------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.ScalarGlRep`
-
-.. autoclass:: ScalarGlRep
-   :members:
-   :exclude-members: val, how, prec, relSz, range, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: val (= 0.0)
-
-      Value to be rendered
-
-      [type: Real]
-
-   .. attribute:: how (= 0)
-
-      Different ways to render given value; 0=number, 1=colored point, 2=colored sphere
-
-      [type: int]
-
-   .. attribute:: prec (= 5)
-
-      Precision for rendering numbers
-
-      [type: int]
-
-   .. attribute:: relSz (= 0.05)
-
-      Size of rendered spheres (if selected), relative to scene radius
-
-      [type: Real]
-
-   .. attribute:: range (= None)
-
-      Extrema values for the scalar, to determine colors.
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 GlCPhysDispatcher
 -----------------
 
@@ -762,9 +1709,9 @@ GlExtraDrawer
 		rankdir=LR;
 		margin=.2;
 		"GlExtraDrawer" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlExtraDrawer"];
-		"GlExtra_EnergyTrackerGrid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlExtraDrawer"];
-		"GlExtraDrawer" -> "GlExtra_EnergyTrackerGrid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"GlExtra_AnisoPorosityAnalyzer" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlExtraDrawer"];
-		"GlExtraDrawer" -> "GlExtra_AnisoPorosityAnalyzer" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"GlExtra_AnisoPorosityAnalyzer" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlExtraDrawer"];
+		"GlExtraDrawer" -> "GlExtra_AnisoPorosityAnalyzer" [arrowsize=0.5,style="setlinewidth(0.5)"]		"GlExtra_EnergyTrackerGrid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlExtraDrawer"];
+		"GlExtraDrawer" -> "GlExtra_EnergyTrackerGrid" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: GlExtraDrawer
@@ -777,6 +1724,29 @@ GlExtraDrawer
       Deactivate the object (on error/exception).
 
       [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+GlExtra_EnergyTrackerGrid
++++++++++++++++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.gl.GlExtraDrawer` → :obj:`~woo.gl.GlExtra_EnergyTrackerGrid`
+
+.. autoclass:: GlExtra_EnergyTrackerGrid
+   :members:
+   :exclude-members: color, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: color (= Vector3(1,0.5,0.5))
+
+      Color to render the box.
+
+      [type: Vector3r]
 
 
 .. rst-class:: html-toggle
@@ -830,29 +1800,6 @@ GlExtra_AnisoPorosityAnalyzer
       Modulate particle id by this number to get segment color
 
       [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlExtra_EnergyTrackerGrid
-+++++++++++++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.gl.GlExtraDrawer` → :obj:`~woo.gl.GlExtra_EnergyTrackerGrid`
-
-.. autoclass:: GlExtra_EnergyTrackerGrid
-   :members:
-   :exclude-members: color, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: color (= Vector3(1,0.5,0.5))
-
-      Color to render the box.
-
-      [type: Vector3r]
 
 
 .. rst-class:: html-toggle
@@ -952,6 +1899,29 @@ ActReactGlRep
 
 .. rst-class:: emphasized
 
+GlShapeDispatcher
+-----------------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlShapeDispatcher`
+
+.. autoclass:: GlShapeDispatcher
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<GlShapeFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 GlData
 ------
 
@@ -992,974 +1962,4 @@ GlData
       How much is canonicalized point from the real one.
 
       [type: Vector3i]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-TensorGlRep
------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.TensorGlRep`
-
-.. autoclass:: TensorGlRep
-   :members:
-   :exclude-members: val, eigVec, eigVal, skew, relSz, skewRelSz, scaleExp, range, skewRange, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: val (= Matrix3(0,0,0, 0,0,0, 0,0,0))
-
-      Value to be rendered.
-
-      [type: Matrix3r]
-
-   .. attribute:: eigVec (= Matrix3(0,0,0, 0,0,0, 0,0,0))
-
-      eigenvectors as columns, updated in postLoad.
-
-      [type: Matrix3r, not saved, read-only in python]
-
-   .. attribute:: eigVal (= Vector3(0,0,0))
-
-      eigenvalues of corresponding eigenvectors, updated in postLoad.
-
-      [type: Vector3r, not saved, read-only in python]
-
-   .. attribute:: skew (= Vector3(0,0,0))
-
-      skew (asymmetric) components of the tensor
-
-      [type: Vector3r, not saved]
-
-   .. attribute:: relSz (= 0.1)
-
-      Size of maximum-length arrows, relative to scene radius
-
-      [type: Real]
-
-   .. attribute:: skewRelSz (= -1.0)
-
-      Size of maximum-length skew curved arrows; if negative, use relSz instead.
-
-      [type: Real]
-
-   .. attribute:: scaleExp (= 1.0)
-
-      Exponent for scaling arrow sizem kuje wutg VectorGlRep. NaN disables scaling, making all arrows the same size.
-
-      [type: Real]
-
-   .. attribute:: range (= None)
-
-      Extrema values for symmetric components.
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-   .. attribute:: skewRange (= None)
-
-      Extrema values for skew components
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlShapeDispatcher
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlShapeDispatcher`
-
-.. autoclass:: GlShapeDispatcher
-   :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: functors (= [])
-
-      Functors active in the dispatch mechanism [overridden below].
-
-      [type: vector<shared_ptr<GlShapeFunctor>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-DisplayParameters
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.gl.DisplayParameters`
-
-.. autoclass:: DisplayParameters
-   :members:
-   :exclude-members: values, displayTypes, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: values (= [])
-
-      
-
-      [type: vector<string>, read-only in python]
-
-   .. attribute:: displayTypes (= [])
-
-      
-
-      [type: vector<string>, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlShapeFunctor
---------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor`
-
-.. graphviz::
-
-	digraph GlShapeFunctor {
-		rankdir=LR;
-		margin=.2;
-		"GlShapeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Sphere" -> "Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: GlShapeFunctor
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Cone
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Cone`
-
-.. autoclass:: Gl1_Cone
-   :members:
-   :exclude-members: slices, stacks, wire, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: slices (= 12)
-
-      Number of slices, controls quality
-
-      [type: int]
-
-   .. attribute:: stacks (= 6)
-
-      Number of stacks, controls quality
-
-      [type: int]
-
-   .. attribute:: wire (= False)
-
-      Render all shapes with wireframe only
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Rod
-+++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Rod`
-
-.. autoclass:: Gl1_Rod
-   :members:
-   :exclude-members: slices, stacks, wire, colorStress, stressRange, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: slices (= 12)
-
-      Number of slices, controls quality
-
-      [type: int]
-
-   .. attribute:: stacks (= 6)
-
-      Number of stacks, controls quality
-
-      [type: int]
-
-   .. attribute:: wire (= False)
-
-      Render all shapes with wireframe only
-
-      [type: bool]
-
-   .. attribute:: colorStress (= True)
-
-      Set color based on axial stress rather than :obj:`woo.dem.Shape.color`
-
-      [type: bool]
-
-   .. attribute:: stressRange (= Vector2(-1,1))
-
-      Stress range, to set color appropriately
-
-      [type: Vector2r]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Facet
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Facet`
-
-.. graphviz::
-
-	digraph Gl1_Facet {
-		rankdir=LR;
-		margin=.2;
-		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Facet"];
-		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Facet"];
-		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Gl1_Facet
-   :members:
-   :exclude-members: wire, slices, fastDrawLim, wd, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: wire (= False)
-
-      Only show wireframe.
-
-      [type: bool]
-
-   .. attribute:: slices (= 8)
-
-      Number of half-cylinder subdivision for rounded edges with halfThick>=0 (for whole circle); if smaller than 4, rounded edges are not drawn; if negative, only mid-plane is drawn.
-
-      [type: int, range: -1−16]
-
-   .. attribute:: fastDrawLim (= 0.001)
-
-      If performing fast draw (during camera manipulation) and the facet's perimeter is smaller than *fastDrawLim* times scene radius, skip rendering of that facet.
-
-      [type: Real]
-
-   .. attribute:: wd (= 1)
-
-      Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)
-
-      [type: int, range: 1−20]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Membrane
-""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Facet` → :obj:`~woo.gl.Gl1_Membrane`
-
-.. autoclass:: Gl1_Membrane
-   :members:
-   :exclude-members: node, refConf, refColor, refWd, uScale, uWd, uSplit, relPhi, phiWd, phiSplit, arrows, uRange, phiRange, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= False)
-
-      Show local frame node
-
-      [type: bool]
-
-   .. attribute:: refConf (= True)
-
-      Show reference configuration, rotated to the current local frame
-
-      [type: bool]
-
-   .. attribute:: refColor (= Vector3(0,0.5,0))
-
-      Color for the reference shape
-
-      [type: Vector3r]
-
-   .. attribute:: refWd (= 1)
-
-      Line width for the reference shape
-
-      [type: int]
-
-   .. attribute:: uScale (= 1.0)
-
-      Scale of displacement lines (zero to disable)
-
-      [type: Real]
-
-   .. attribute:: uWd (= 2)
-
-      Width of displacement lines
-
-      [type: int]
-
-   .. attribute:: uSplit (= False)
-
-      Show x and y displacement components separately
-
-      [type: bool]
-
-   .. attribute:: relPhi (= 0.2)
-
-      Length of unit rotation (one radian), relative to scene radius (zero to disable)
-
-      [type: Real]
-
-   .. attribute:: phiWd (= 2)
-
-      Width of rotation lines
-
-      [type: int]
-
-   .. attribute:: phiSplit (= True)
-
-      Show x and y displacement components separately
-
-      [type: bool]
-
-   .. attribute:: arrows (= False)
-
-      Show displacements and rotations as arrows rather than lines
-
-      [type: bool]
-
-   .. attribute:: uRange (= <ScalarRange @ 0x1ea38d0>)
-
-      Range for displacements (colors only)
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-   .. attribute:: phiRange (= <ScalarRange @ 0x1ea8d20>)
-
-      Range for rotations (colors only)
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_InfCylinder
-+++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_InfCylinder`
-
-.. autoclass:: Gl1_InfCylinder
-   :members:
-   :exclude-members: wire, spokes, slices, stacks, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: wire (= False)
-
-      Render Cylinders with wireframe
-
-      [type: bool]
-
-   .. attribute:: spokes (= True)
-
-      Render spokes between the cylinder axis and edge, at the position of :obj:`InfCylinder.glAB`.
-
-      [type: bool]
-
-   .. attribute:: slices (= 12)
-
-      Number of circumferential division of circular sections
-
-      [type: int]
-
-   .. attribute:: stacks (= 20)
-
-      Number of rings on the cylinder inside the visible scene part.
-
-      [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Tetra
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Tetra`
-
-.. graphviz::
-
-	digraph Gl1_Tetra {
-		rankdir=LR;
-		margin=.2;
-		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Tetra"];
-		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Tetra"];
-		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Gl1_Tetra
-   :members:
-   :exclude-members: wire, wd, fastDrawLim, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: wire (= False)
-
-      Only show wireframe.
-
-      [type: bool]
-
-   .. attribute:: wd (= 1)
-
-      Line width when drawing with wireframe (only applies to the triangle, not to rounded corners)
-
-      [type: int, range: 1−20]
-
-   .. attribute:: fastDrawLim (= 0.001)
-
-      If performing fast draw (during camera manipulation) and the distance of centroid to the first node is smaller than *fastDrawLim* times scene radius, skip rendering of that tetra.
-
-      [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Tet4
-""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Tetra` → :obj:`~woo.gl.Gl1_Tet4`
-
-.. autoclass:: Gl1_Tet4
-   :members:
-   :exclude-members: node, rep, refConf, refColor, refWd, uWd, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= False)
-
-      Show local frame node
-
-      [type: bool]
-
-   .. attribute:: rep (= True)
-
-      Show GlRep of the frame node (without showing the node itself)
-
-      [type: bool]
-
-   .. attribute:: refConf (= False)
-
-      Show reference configuration, rotated to the current local frame
-
-      [type: bool]
-
-   .. attribute:: refColor (= Vector3(0,0.5,0))
-
-      Color for the reference shape
-
-      [type: Vector3r]
-
-   .. attribute:: refWd (= 1)
-
-      Line width for the reference shape
-
-      [type: int]
-
-   .. attribute:: uWd (= 2)
-
-      Width of displacement lines
-
-      [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Wall
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Wall`
-
-.. autoclass:: Gl1_Wall
-   :members:
-   :exclude-members: div, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: div (= 20)
-
-      Number of divisions of the wall inside visible scene part.
-
-      [type: int]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Sphere
-++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere`
-
-.. graphviz::
-
-	digraph Gl1_Sphere {
-		rankdir=LR;
-		margin=.2;
-		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
-		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
-		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.Gl1_Sphere"];
-		"Gl1_Sphere" -> "Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Gl1_Sphere
-   :members:
-   :exclude-members: quality, wire, smooth, scale, glutSlices, glutStacks, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: quality (= 1.0)
-
-      Change discretization level of spheres. quality>1 for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color sphres are displayed (:obj:`stripes` = `False`), quality mutiplies :obj:`glutSlices` and :obj:`glutStacks`. If striped spheres are displayed (:obj:`stripes = `True`), only integer increments are meaningful: quality=1 and quality=1.9 will give the same result, quality=2 will give a finer result.
-
-      [type: Real, range: 0−8]
-
-   .. attribute:: wire (= False)
-
-      Only show wireframe (controlled by :obj:`glutSlices` and :obj:`glutStacks`.
-
-      [type: bool]
-
-   .. attribute:: smooth (= False)
-
-      Render lines smooth (it makes them thicker and less clear if there are many spheres.)
-
-      [type: bool]
-
-   .. attribute:: scale (= 1.0)
-
-      Scale sphere radii
-
-      [type: Real, range: 0.1−2]
-
-   .. attribute:: glutSlices (= 12)
-
-      Base number of sphere slices, multiplied by :obj:`Gl1_Sphere.quality` before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)
-
-      [type: int, not saved, read-only in python]
-
-   .. attribute:: glutStacks (= 6)
-
-      Base number of sphere stacks, multiplied by :obj:`Gl1_Sphere.quality` before use; not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)
-
-      [type: int, not saved, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Ellipsoid
-"""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere` → :obj:`~woo.gl.Gl1_Ellipsoid`
-
-.. autoclass:: Gl1_Ellipsoid
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Capsule
-"""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlShapeFunctor` → :obj:`~woo.gl.Gl1_Sphere` → :obj:`~woo.gl.Gl1_Capsule`
-
-.. autoclass:: Gl1_Capsule
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlSetup
--------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.gl.GlSetup`
-
-.. autoclass:: GlSetup
-   :members:
-   :exclude-members: objs, dirty, qglviewerState, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: objs (= ObjectList[])
-
-      List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.
-
-      [type: vector<shared_ptr<Object>>, not shown in the UI, read-only in python]
-
-   .. attribute:: dirty (= False)
-
-      Set after modifying functors, so that they can be regenerated.
-
-      [type: bool, not shown in the UI, not dumped, read-only in python]
-
-   .. attribute:: qglviewerState (= '')
-
-      XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).
-
-      [type: string, not shown in the UI, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlBoundDispatcher
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlBoundDispatcher`
-
-.. autoclass:: GlBoundDispatcher
-   :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: functors (= [])
-
-      Functors active in the dispatch mechanism [overridden below].
-
-      [type: vector<shared_ptr<GlBoundFunctor>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlNodeDispatcher
-----------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlNodeDispatcher`
-
-.. autoclass:: GlNodeDispatcher
-   :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: functors (= [])
-
-      Functors active in the dispatch mechanism [overridden below].
-
-      [type: vector<shared_ptr<GlNodeFunctor>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlNodeFunctor
--------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlNodeFunctor`
-
-.. graphviz::
-
-	digraph GlNodeFunctor {
-		rankdir=LR;
-		margin=.2;
-		"GlNodeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlNodeFunctor"];
-		"Gl1_Node" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlNodeFunctor"];
-		"GlNodeFunctor" -> "Gl1_Node" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: GlNodeFunctor
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Node
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlNodeFunctor` → :obj:`~woo.gl.Gl1_Node`
-
-.. autoclass:: Gl1_Node
-   :members:
-   :exclude-members: wd, wd_range, len, len_range, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: wd (= 1)
-
-      Local axes line width in pixels
-
-      [type: int]
-
-   .. attribute:: wd_range (= Vector2i(0,5))
-
-      Range for width
-
-      [type: Vector2i, not shown in the UI]
-
-   .. attribute:: len (= 0.05)
-
-      Relative local axes line length in pixels, relative to scene radius; if non-positive, only points are drawn
-
-      [type: Real]
-
-   .. attribute:: len_range (= Vector2(0,0.1))
-
-      Range for len
-
-      [type: Vector2r, not shown in the UI]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlBoundFunctor
---------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor`
-
-.. graphviz::
-
-	digraph GlBoundFunctor {
-		rankdir=LR;
-		margin=.2;
-		"GlBoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
-		"Gl1_GridBound" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
-		"GlBoundFunctor" -> "Gl1_GridBound" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlBoundFunctor"];
-		"GlBoundFunctor" -> "Gl1_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: GlBoundFunctor
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_GridBound
-+++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor` → :obj:`~woo.gl.Gl1_GridBound`
-
-.. autoclass:: Gl1_GridBound
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Gl1_Aabb
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.gl.GlBoundFunctor` → :obj:`~woo.gl.Gl1_Aabb`
-
-.. autoclass:: Gl1_Aabb
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-GlFieldDispatcher
------------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.gl.GlFieldDispatcher`
-
-.. autoclass:: GlFieldDispatcher
-   :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: functors (= [])
-
-      Functors active in the dispatch mechanism [overridden below].
-
-      [type: vector<shared_ptr<GlFieldFunctor>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-CylGlRep
---------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.CylGlRep`
-
-.. autoclass:: CylGlRep
-   :members:
-   :exclude-members: rad, col, xx, relSz, rangeRad, rangeCol, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: rad (= nan)
-
-      Scalar determining radius; 1 if NaN
-
-      [type: Real]
-
-   .. attribute:: col (= nan)
-
-      Scalar determining color; *rad* is used if NaN.
-
-      [type: Real]
-
-   .. attribute:: xx (= Vector2(0,0))
-
-      End positions on the local x-axis
-
-      [type: Vector2r]
-
-   .. attribute:: relSz (= 0.05)
-
-      Maximum cylinder radius, relative to scene radius
-
-      [type: Real]
-
-   .. attribute:: rangeRad (= None)
-
-      Range for rad (only used if rad is not NaN)
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-   .. attribute:: rangeCol (= None)
-
-      Range for col (or for rad, if *col* is NaN)
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-LabelGlRep
-----------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.LabelGlRep`
-
-.. autoclass:: LabelGlRep
-   :members:
-   :exclude-members: text, color, center, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: text (= '')
-
-      Text to be rendered at the node's position
-
-      [type: string]
-
-   .. attribute:: color (= Vector3(1,1,1))
-
-      Color for rendering the text
-
-      [type: Vector3r]
-
-   .. attribute:: center (= False)
-
-      Whether the text should be centered around the node
-
-      [type: bool]
 

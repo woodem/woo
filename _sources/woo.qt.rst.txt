@@ -165,26 +165,18 @@ SnapshotEngine
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
 
-:mod:`woo.qt.img_rc`
----------------------------------
-
-.. automodule:: woo.qt.img_rc
-   :members:
-   :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
-
-:mod:`woo.qt.ui_controller`
-----------------------------------------
-
-.. automodule:: woo.qt.ui_controller
-   :members:
-   :undoc-members:
-   :exclude-members: UiPrefs,  SnapshotEngine
-
 :mod:`woo.qt.DisplayProfiles`
 ------------------------------------------
 
 .. automodule:: woo.qt.DisplayProfiles
+   :members:
+   :undoc-members:
+   :exclude-members: UiPrefs,  SnapshotEngine
+
+:mod:`woo.qt.img_rc`
+---------------------------------
+
+.. automodule:: woo.qt.img_rc
    :members:
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine
@@ -201,6 +193,14 @@ SnapshotEngine
 ------------------------------------------
 
 .. automodule:: woo.qt.ExceptionDialog
+   :members:
+   :undoc-members:
+   :exclude-members: UiPrefs,  SnapshotEngine
+
+:mod:`woo.qt.ui_controller`
+----------------------------------------
+
+.. automodule:: woo.qt.ui_controller
    :members:
    :undoc-members:
    :exclude-members: UiPrefs,  SnapshotEngine

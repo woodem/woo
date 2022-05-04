@@ -11,7 +11,7 @@
 
 .. autoclass:: MeshImport
    :members:
-   :exclude-members: file, preScale, node, halfThick, fakeVel, tessMaxBox, tagged, color, __init__, __getstate__, __setstate__
+   :exclude-members: file, preScale, node, halfThick, fakeVel, tessMaxBox, tagged, color, smooth, __init__, __getstate__, __setstate__
    :special-members:
 
 
@@ -64,6 +64,12 @@
       Pass resulting particle color (scalar) when importing; only effective for formats which support it (STL). *nan* disables
 
       [type: float]
+
+   .. attribute:: smooth (= False)
+
+      Automatically call :obj:`woo.dem.Facet.computeNeighborAngles` for smoother contact transitions.
+
+      [type: bool]
 
 :mod:`woo._triangulated`
 -------------------------------------

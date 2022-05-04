@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.triangulated &#8212; Woo 1.0+rev1-git-920dbe8 documentation</title>
+    <title>woo.triangulated &#8212; Woo 1.0+rev1-git-1065587 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-920dbe8 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-1065587 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.triangulated</a></li> 
@@ -350,6 +350,7 @@
         <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;tessMaxBox&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Some importers (STL) can tesselated triangles so that their bounding box dimension does not exceed :obj:`tessMaxBox`. If non-positive, no tesselation will be done.&#39;</span><span class="p">),</span>
         <span class="n">_PAT</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span><span class="s1">&#39;tagged&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Use :obj:`woo.dem.DemDataTagged` to keep information about node number at input; this is only supported for some formats, and exception will be raise if used with format not supporting it }e.g. STL does not store vertices)&#39;</span><span class="p">),</span>
         <span class="n">_PAT</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">),</span><span class="s1">&#39;Pass resulting particle color (scalar) when importing; only effective for formats which support it (STL). *nan* disables&#39;</span><span class="p">),</span>
+        <span class="n">_PAT</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span><span class="s1">&#39;smooth&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Automatically call :obj:`woo.dem.Facet.computeNeighborAngles` for smoother contact transitions.&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 <div class="viewcode-block" id="MeshImport.__new__"><a class="viewcode-back" href="../../woo.triangulated.html#woo.triangulated.MeshImport.__new__">[docs]</a>    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
@@ -366,11 +367,6 @@
         <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown mesh file extension (must be .stl, .nas).&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;thickness&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Use MeshImport.halfThick attribute to set thickness, instead of passing MeshImport.doImport(thickness=...).&#39;</span><span class="p">)</span>
 
-        <span class="c1"># called after import for each format, before returning</span>
-        <span class="k">def</span> <span class="nf">applyFakeVel</span><span class="p">(</span><span class="n">tri</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fakeVel</span><span class="o">!=</span><span class="n">Vector3</span><span class="o">.</span><span class="n">Zero</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tri</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">fakeVel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fakeVel</span>
-
         <span class="k">if</span> <span class="n">fmt</span><span class="o">==</span><span class="s1">&#39;stl&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tagged</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;MeshImport.tagged: not supported (meaningless) with STL format.&#39;</span><span class="p">)</span>
             <span class="n">kw2</span><span class="o">=</span><span class="p">{}</span>
@@ -381,8 +377,8 @@
                 <span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Using user-defined color </span><span class="si">%g</span><span class="s1"> for STL import&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
                 <span class="n">kw2</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span>
             <span class="n">tri</span><span class="o">=</span><span class="n">woo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">importSTL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="n">mat</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">preScale</span><span class="p">,</span><span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">pos</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="k">else</span> <span class="n">Vector3</span><span class="o">.</span><span class="n">Zero</span><span class="p">),</span><span class="n">ori</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">ori</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="k">else</span> <span class="n">Quaternion</span><span class="o">.</span><span class="n">Identity</span><span class="p">),</span><span class="n">maxBox</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tessMaxBox</span><span class="p">,</span><span class="n">thickness</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">halfThick</span><span class="p">,</span><span class="o">**</span><span class="n">kw2</span><span class="p">)</span>
-            <span class="n">applyFakeVel</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">tri</span>
+            <span class="k">if</span> <span class="s1">&#39;wire&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tri</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">wire</span><span class="o">=</span><span class="n">kw</span><span class="p">[</span><span class="s1">&#39;wire&#39;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">fmt</span><span class="o">==</span><span class="s1">&#39;nastran&#39;</span><span class="p">:</span>
             <span class="n">nodeMap</span><span class="o">=</span><span class="p">{}</span> <span class="c1"># mapping of nodes numbers (tags) to Node objects</span>
             <span class="n">tri</span><span class="o">=</span><span class="p">[]</span>
@@ -405,9 +401,13 @@
                     <span class="c1"># lines we know to ignore</span>
                     <span class="k">elif</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;BEGIN BULK&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;PSHELL&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;MAT&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ENDDATA&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
                     <span class="k">else</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">: unparsed line skipped: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span><span class="n">lineno</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="p">)</span>
-            <span class="n">applyFakeVel</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">tri</span>
-        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Programming error: unhandled value fmt==&quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fmt</span><span class="p">)))</span></div></div>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Programming error: unhandled value fmt==&quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fmt</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fakeVel</span><span class="o">!=</span><span class="n">Vector3</span><span class="o">.</span><span class="n">Zero</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tri</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">fakeVel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fakeVel</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tri</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">computeNeighborAngles</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tri</span></div></div>
 
 </pre></div>
 
@@ -459,7 +459,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-920dbe8 documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-1065587 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.triangulated</a></li> 
