@@ -7,7 +7,7 @@
 .. automodule:: woo.dem
    :members:
    :undoc-members:
-   :exclude-members: Law2_L6Geom_FrictPhys_IdealElPl,  IntraForce,  In2_Sphere_ElastMat,  LawFunctor,  StackedBoxOutlet,  ElastMat,  Law2_G3Geom_FrictPhys_IdealElPl,  CombinedImpose,  PharmaCapsuleGenerator,  HarmonicOscillation,  Particle,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cp2_ConcreteMat_ConcretePhys,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  ClusterAnalysis,  LawTester,  MinMaxSphereGenerator,  ContactHook,  PelletAgglomerator,  ConcreteMat,  Law2_L6Geom_LudingPhys,  PelletPhys,  IntraFunctor,  ContactContainer,  Grid1_InfCylinder,  RadialForce,  GridStore,  POVRayExport,  BoundDispatcher,  VtkExport,  LudingMat,  Cp2_FrictMat_FrictPhys,  Cp2_HertzMat_HertzPhys,  Ellipsoid,  Cg2_Facet_Facet_L6Geom,  Tracer,  CGeomDispatcher,  SpatialBias,  Cg2_Wall_Capsule_L6Geom,  IdealElPlData,  BoundFunctor,  Bo1_Rod_Aabb,  AxialGravity,  ArcOutlet,  CPhys,  PsdEllipsoidGenerator,  Leapfrog,  Shape,  NonuniformAxisPlacementBias,  AlignedHarmonicOscillations,  BoxInlet2d,  MatState,  ClumpData,  G3GeomCData,  Law2_L6Geom_ConcretePhys,  ParticleShooter,  Cg2_Sphere_Ellipsoid_L6Geom,  PeriIsoCompressor,  Bo1_InfCylinder_Aabb,  MeshVolume,  Sphere,  CountContactsHook,  VariableVelocity3d,  Cg2_Wall_Facet_L6Geom,  AabbTreeCollider,  Law2_L6Geom_HertzPhys_DMT,  LudingMatState,  Wall,  Cp2_PelletMat_PelletPhys,  CPhysDispatcher,  GridBound,  Grid1_Facet,  PsdSphereGenerator,  ContactLoop,  G3Geom,  Bo1_Facet_Aabb,  TraceVisRep,  Cg2_Facet_InfCylinder_L6Geom,  CGeom,  Local6Dofs,  FrictMat,  Bo1_Ellipsoid_Aabb,  Law2_L6Geom_FrictPhys_LinEl6,  GridBoundFunctor,  AxialBias,  IcePhys,  ForcesToHdf5,  L6Geom,  In2_Truss_ElastMat,  DemData,  CircularOrbit,  CylinderInlet,  Cg2_Facet_Capsule_L6Geom,  Collider,  GridBoundDispatcher,  Material,  ForceResetter,  SphereClumpGeom,  ShapeClump,  Outlet,  Cg2_Any_Any_L6Geom__Base,  InfCylinder,  Capsule,  CGeomFunctor,  Cg2_Sphere_Sphere_L6Geom,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  ConcreteMatState,  Bo1_Wall_Aabb,  AlignedMinMaxShooter,  Law2_L6Geom_PelletPhys_Pellet,  Cone,  In2_Facet,  InterpolatedMotion,  PelletMat,  Cg2_Sphere_Sphere_G3Geom,  LawDispatcher,  CData,  PsdClumpGenerator,  DemDataTagged,  VariableAlignedRotation,  BoxTraceTimeSetter,  Cp2_IceMat_IcePhys,  Cg2_Wall_Ellipsoid_L6Geom,  CrazyOutlet,  StableCircularOrbit,  WeirdTriaxControl,  AabbCollider,  Cg2_InfCylinder_Capsule_L6Geom,  LawTesterStage,  ClusterMatState,  Bound,  RawShapeClump,  Grid1_Sphere,  HertzMat,  Inlet,  DetectSteadyState,  VelocityAndReadForce,  PsdAxialBias,  LudingPhys,  ArcInlet,  Facet,  BoxOutlet,  DynDt,  ConveyorInlet,  HalfspaceBuoyancy,  Contact,  RandomInlet,  Bo1_Capsule_Aabb,  FlowAnalysis,  Cg2_Rod_Sphere_L6Geom,  Cg2_Cone_Sphere_L6Geom,  PelletCData,  Rod,  Bo1_Sphere_Aabb,  GridCollider,  Law2_L6Geom_IcePhys,  Cg2_InfCylinder_Sphere_L6Geom,  Cg2_Wall_Sphere_G3Geom,  ConcretePhys,  CPhysFunctor,  ConstantForce,  In2_Wall_ElastMat,  NodalForcesToHdf5,  Impose,  Cg2_Facet_Ellipsoid_L6Geom,  PsdCapsuleGenerator,  AnisoPorosityAnalyzer,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  ReadForce,  IceMat,  Aabb,  ParticleGenerator,  Cp2_LudingMat_LudingPhys,  Grid1_Wall,  DemField,  PelletMatState,  ParticleContainer,  InletMatState,  HertzPhys,  FrictPhys,  Cg2_Sphere_Capsule_L6Geom,  Cg2_Facet_Sphere_L6Geom,  Suspicious,  LayeredAxialBias,  ArcShooter,  BoxInlet,  Truss,  InsertionSortCollider,  Bo1_Cone_Aabb
+   :exclude-members: ParticleContainer,  PelletAgglomerator,  POVRayExport,  VtkExport,  BoundDispatcher,  LayeredAxialBias,  PelletPhys,  ArcShooter,  BoxInlet,  Law2_L6Geom_FrictPhys_IdealElPl,  LudingMat,  Bo1_Cone_Aabb,  InsertionSortCollider,  Ellipsoid,  Tracer,  Cg2_Facet_Facet_L6Geom,  CGeomDispatcher,  Cg2_Wall_Capsule_L6Geom,  LawFunctor,  Law2_G3Geom_FrictPhys_IdealElPl,  Bo1_Rod_Aabb,  StackedBoxOutlet,  Particle,  ClusterAnalysis,  PsdEllipsoidGenerator,  LawTester,  MinMaxSphereGenerator,  ContactHook,  AlignedHarmonicOscillations,  Grid1_InfCylinder,  ClumpData,  Law2_L6Geom_LudingPhys,  Law2_L6Geom_ConcretePhys,  Cg2_Sphere_Ellipsoid_L6Geom,  IntraFunctor,  Sphere,  GridStore,  Cp2_FrictMat_FrictPhys,  RadialForce,  Shape,  VariableVelocity3d,  Cg2_Wall_Facet_L6Geom,  AabbTreeCollider,  Cp2_HertzMat_HertzPhys,  Wall,  PeriIsoCompressor,  LudingMatState,  ContactContainer,  CPhysDispatcher,  GridBound,  PsdSphereGenerator,  SpatialBias,  TraceVisRep,  BoundFunctor,  Cg2_Facet_InfCylinder_L6Geom,  IdealElPlData,  AxialGravity,  Cp2_PelletMat_PelletPhys,  Bo1_Ellipsoid_Aabb,  ArcOutlet,  G3GeomCData,  Leapfrog,  NonuniformAxisPlacementBias,  BoxInlet2d,  MatState,  In2_Truss_ElastMat,  ParticleShooter,  Bo1_InfCylinder_Aabb,  CircularOrbit,  Cg2_Facet_Capsule_L6Geom,  MeshVolume,  GridBoundDispatcher,  CountContactsHook,  SphereClumpGeom,  Law2_L6Geom_HertzPhys_DMT,  ShapeClump,  G3Geom,  Bo1_Facet_Aabb,  Grid1_Facet,  InfCylinder,  Material,  Cg2_Sphere_Sphere_L6Geom,  Capsule,  CPhys,  ContactLoop,  Bo1_Wall_Aabb,  ConcreteMatState,  LawDispatcher,  Cone,  In2_Facet,  InterpolatedMotion,  FrictMat,  PelletMat,  Local6Dofs,  PsdClumpGenerator,  BoxTraceTimeSetter,  DemDataTagged,  GridBoundFunctor,  IcePhys,  ForcesToHdf5,  Law2_L6Geom_PelletPhys_Pellet,  Law2_L6Geom_FrictPhys_LinEl6,  AxialBias,  Cg2_Wall_Ellipsoid_L6Geom,  L6Geom,  DemData,  Collider,  CylinderInlet,  CGeom,  WeirdTriaxControl,  StableCircularOrbit,  ForceResetter,  Cg2_InfCylinder_Capsule_L6Geom,  Outlet,  ClusterMatState,  RawShapeClump,  Cg2_Any_Any_L6Geom__Base,  DetectSteadyState,  CGeomFunctor,  HertzMat,  Cp2_FrictMat_FrictPhys_CrossAnisotropic,  VelocityAndReadForce,  Cg2_Sphere_Sphere_G3Geom,  Facet,  AlignedMinMaxShooter,  Bound,  ConveyorInlet,  Cp2_IceMat_IcePhys,  Cg2_Rod_Sphere_L6Geom,  VariableAlignedRotation,  Bo1_Capsule_Aabb,  Cg2_Cone_Sphere_L6Geom,  Rod,  CrazyOutlet,  CData,  Bo1_Sphere_Aabb,  Cg2_InfCylinder_Sphere_L6Geom,  ConcretePhys,  AabbCollider,  ConstantForce,  In2_Wall_ElastMat,  PelletCData,  Grid1_Sphere,  Cg2_Facet_Ellipsoid_L6Geom,  AnisoPorosityAnalyzer,  PsdCapsuleGenerator,  LawTesterStage,  RawShape,  Cg2_Capsule_Capsule_L6Geom,  ReadForce,  IceMat,  Inlet,  PsdAxialBias,  LudingPhys,  Impose,  Aabb,  ArcInlet,  FlowAnalysis,  DynDt,  BoxOutlet,  HalfspaceBuoyancy,  Contact,  RandomInlet,  InletMatState,  GridCollider,  Law2_L6Geom_IcePhys,  Cg2_Wall_Sphere_G3Geom,  Suspicious,  Cg2_Sphere_Capsule_L6Geom,  Cg2_Facet_Sphere_L6Geom,  CPhysFunctor,  PelletMatState,  Truss,  NodalForcesToHdf5,  ElastMat,  IntraForce,  In2_Sphere_ElastMat,  PharmaCapsuleGenerator,  CombinedImpose,  HarmonicOscillation,  Grid1_Wall,  Cg2_Ellipsoid_Ellipsoid_L6Geom,  Cp2_ConcreteMat_ConcretePhys,  ShapePack,  Cg2_Wall_Sphere_L6Geom,  ParticleGenerator,  Cp2_LudingMat_LudingPhys,  DemField,  ConcreteMat,  FrictPhys,  HertzPhys
 
 
 .. rst-class:: html-toggle
@@ -15,8 +15,8 @@
 
 .. rst-class:: emphasized
 
-Internal forces
----------------
+Export
+------
 
 TODO
 
@@ -26,146 +26,398 @@ TODO
 
 .. rst-class:: emphasized
 
-IntraForce
-++++++++++
+VtkExport
++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.dem.IntraForce`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.VtkExport`
 
-.. autoclass:: IntraForce
+.. autoclass:: VtkExport
    :members:
-   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :exclude-members: out, compress, ascii, hdf5, mask, what, sphereSphereOnly, infError, skipInvisible, savePos, clip, staticMeshBit, staticMeshDone, subdiv, ellLev, thickFacetDiv, cylCaps, rodSurf, nanValue, outFiles, outTimes, outSteps, mkDir, prevCellNum, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: functors (= [])
+   .. attribute:: out (= '')
 
-      Functors active in the dispatch mechanism [overridden below].
+      Filename prefix to write into; :obj:`woo.core.Scene.tags` written as {tagName} are expanded at the first run.
 
-      [type: vector<shared_ptr<IntraFunctor>>]
+      [type: string]
 
+   .. attribute:: compress (= True)
 
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-IntraFunctor
-++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor`
-
-.. graphviz::
-
-	digraph IntraFunctor {
-		rankdir=LR;
-		margin=.2;
-		"IntraFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"woo.fem.In2_Tet4_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
-		"IntraFunctor" -> "woo.fem.In2_Tet4_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Truss_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Truss_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Sphere_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Sphere_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Wall_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Wall_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
-		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
-		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
-		"IntraFunctor" -> "In2_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: IntraFunctor
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Wall_ElastMat
-"""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Wall_ElastMat`
-
-.. autoclass:: In2_Wall_ElastMat
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Facet
-"""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet`
-
-.. graphviz::
-
-	digraph In2_Facet {
-		rankdir=LR;
-		margin=.2;
-		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.In2_Facet"];
-		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.In2_Facet"];
-		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.In2_Facet"];
-		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: In2_Facet
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-In2_Truss_ElastMat
-""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Truss_ElastMat`
-
-.. autoclass:: In2_Truss_ElastMat
-   :members:
-   :exclude-members: setL0, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: setL0 (= True)
-
-      Automatically set equilibrium length of truss, when first encountered.
+      Compress output XML files
 
       [type: bool]
 
+   .. attribute:: ascii (= False)
+
+      Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``
+
+      [type: bool]
+
+   .. attribute:: hdf5 (= False)
+
+      Write to HDF5 files rather than VTU XML files. Experimental.
+
+      [type: bool]
+
+   .. attribute:: mask (= 0)
+
+      If non-zero, only particles matching the mask will be exported.
+
+      [type: int]
+
+   .. attribute:: what (= 47)
+
+      Select data to be saved (e.g. VtkExport.spheres|VtkExport.mesh, or use VtkExport.all for everything)
+
+      [type: int]
+
+   .. attribute:: sphereSphereOnly (= False)
+
+      Only export contacts between two spheres (not sphere+facet and such)
+
+      [type: bool]
+
+   .. attribute:: infError (= True)
+
+      Raise exception for infinite objects which don't have the glAB attribute set properly.
+
+      [type: bool]
+
+   .. attribute:: skipInvisible (= True)
+
+      Skip invisible particles
+
+      [type: bool]
+
+   .. attribute:: savePos (= False)
+
+      Save positions of spheres (redundant information, but useful for coloring by position in Paraview.
+
+      [type: bool]
+
+   .. attribute:: clip (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
+
+      Only export particles of which first node is in the clip box (if given).
+
+      [type: AlignedBox3r]
+
+   .. attribute:: staticMeshBit (= 8)
+
+      Bit for identifying static mesh particles (:obj:`Facet`, :obj:`Wall`, :obj:`InfCylinder` only) which will be exported only once.
+
+      [type: int]
+
+   .. attribute:: staticMeshDone (= False)
+
+      Whether static mesh was already exported
+
+      [type: bool]
+
+   .. attribute:: subdiv (= 16)
+
+      Subdivision fineness for circular objects (such as cylinders).
+      
+      .. note:: :obj:`Facets <woo.dem.Facet>` are rendered without rounded edges (they are closed flat).
+      
+      .. note:: :obj:`Ellipsoids <woo.dem.Ellipsoid>` triangulation is controlled via the :obj:`ellLev` parameter.
+
+      [type: int]
+
+   .. attribute:: ellLev (= 0)
+
+      Tesselation level for exporting ellipsoids (0 = icosahedron, each level subdivides one triangle into three.
+
+      [type: int, range: 0−3]
+
+   .. attribute:: thickFacetDiv (= 1)
+
+      Subdivision for :obj:`woo.dem.Facet` objects with non-zero :obj:`woo.dem.Facet.halfThick`; the value of -1 will use :obj:`subdiv`; 0 will render only faces, without edges; 1 will close the edge flat; higher values mean the number of subdivisions.
+
+      [type: int]
+
+   .. attribute:: cylCaps (= True)
+
+      Render caps of :obj:`InfCylinder` (at :obj:`InfCylinder.glAB`).
+
+      [type: bool]
+
+   .. attribute:: rodSurf (= False)
+
+      Export rods (and derived classes) as capsule-shaped triangulated surfaces; without this option, rods are exported as plain connecting lines.
+
+      [type: bool]
+
+   .. attribute:: nanValue (= 0.0)
+
+      Use this number instead of NaN in entries, since VTK cannot read NaNs properly
+
+      [type: Real]
+
+   .. attribute:: outFiles (= {})
+
+      Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.
+
+      [type: map_string_vector_string, not shown in the UI, read-only in python]
+
+   .. attribute:: outTimes (= [])
+
+      Times at which files were written.
+
+      [type: vector<Real>, not shown in the UI, read-only in python]
+
+   .. attribute:: outSteps (= [])
+
+      Steps at which files were written.
+
+      [type: vector<int>, not shown in the UI, read-only in python]
+
+   .. attribute:: mkDir (= False)
+
+      Attempt to create directory for output files, if not present.
+
+      [type: bool]
+
+   .. attribute:: prevCellNum (= Vector3i(0,0,0))
+
+      Previous cell array sized, for pre-allocation.
+
+      [type: Vector3i, not shown in the UI, not saved, read-only in python]
+
 
 .. rst-class:: html-toggle
 
 
 .. rst-class:: emphasized
 
-In2_Sphere_ElastMat
-"""""""""""""""""""
+FlowAnalysis
+++++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Sphere_ElastMat`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.FlowAnalysis`
 
-.. autoclass:: In2_Sphere_ElastMat
+.. autoclass:: FlowAnalysis
    :members:
-   :exclude-members: alreadyWarned_ContactLoopWithApplyForces, __init__, __getstate__, __setstate__
+   :exclude-members: box, node, data, dLim, masks, nFractions, cellSize, boxCells, mask, cellData, porosity, matStateScalar, matStateName, timeSpan, color, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: alreadyWarned_ContactLoopWithApplyForces (= False)
+   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
 
-      Keep track of whether the warning on ContactLoop already applying forces was issued.
+      Domain in which the flow is to be analyzed; the box may glow slightly to accomodate integer number of cells. Do not change once there is some data alread. Do not change once there is some data already.
 
-      [type: bool, not shown in the UI]
+      [type: AlignedBox3r]
+
+   .. attribute:: node (= None)
+
+      Defines local coordinates system; it undefined, uses global coordinates.
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+   .. attribute:: data
+
+      Grid data -- 5d since each 3d point contains multiple entries, and there are multiple grids.
+
+      [type: boost_multi_array_real_5, not accessible from python]
+
+   .. attribute:: dLim (= [])
+
+      Limiting diameter values, for defining fractions which are analyzed separately. Do not change when there is some data already.
+
+      [type: vector<Real>]
+
+   .. attribute:: masks (= [])
+
+      Mask values for fractions; it is an error if a particle matches multiple masks. Do not change when there is some data already.
+
+      [type: vector<int>]
+
+   .. attribute:: nFractions (= -1)
+
+      Number of fractions, defined via :obj:`dLim` or :obj:`masks`; set automatically.
+
+      [type: int, read-only in python]
+
+   .. attribute:: cellSize (= nan)
+
+      Size of one cell in the box (in all directions); will be satisfied exactly at the expense of perhaps slightly growing :obj:`box`. Do not change once there is some data already.
+
+      [type: Real]
+
+   .. attribute:: boxCells (= Vector3i(0,0,0))
+
+      Number of cells in the box (computed automatically)
+
+      [type: Vector3i, read-only in python]
+
+   .. attribute:: mask (= 0)
+
+      Particles to consider in the flow analysis (0 to consider everything).
+
+      [type: int]
+
+   .. attribute:: cellData (= False)
+
+      Write flow rate as cell data rather than point data.
+
+      [type: bool]
+
+   .. attribute:: porosity (= False)
+
+      Compute (and export) solid ratio (1-porosity) for all spheroidal particles (requires triangulation of the domain at every step, hence slow and not enabled by default.
+
+      [type: bool]
+
+   .. attribute:: matStateScalar (= -1)
+
+      If non-negative, index of material state to analyze.
+
+      [type: int]
+
+   .. attribute:: matStateName (= '')
+
+      If given, used for VTK-export of the scalar; if not given, is filled form the first instance encountered automatically.
+
+      [type: string]
+
+   .. attribute:: timeSpan (= 0.0)
+
+      Total time that the analysis has been running.
+
+      [type: Real]
+
+   .. attribute:: color (= Vector3(1,1,0))
+
+      Color for rendering the domain
+
+      [type: Vector3r]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+POVRayExport
+++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.POVRayExport`
+
+.. autoclass:: POVRayExport
+   :members:
+   :exclude-members: out, mask, skipInvisible, clip, frameCounter, colorRange, colorFuzz, staticMask, masks, textures, cylCapTexture, wallTexture, texturesInc, extraInc, camLocation, camLookAt, camAngle, connMesh, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: out (= '')
+
+      Filename prefix to write into; :obj:`woo.core.Scene.tags` written as ``{tagName}`` are expanded at the first run.
+
+      [type: string]
+
+   .. attribute:: mask (= 0)
+
+      If non-zero, only particles matching the mask will be exported.
+
+      [type: int]
+
+   .. attribute:: skipInvisible (= True)
+
+      Skip invisible particles
+
+      [type: bool]
+
+   .. attribute:: clip (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
+
+      Only export particles of which first node is in the clip box (if given).
+
+      [type: AlignedBox3r]
+
+   .. attribute:: frameCounter (= 0)
+
+      Counts exported frames and uses the number to name output files.
+
+      [type: int]
+
+   .. attribute:: colorRange (= <ScalarRange @ 0x21ee8e0>)
+
+      Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+   .. attribute:: colorFuzz (= 0.2)
+
+      Relative fuzz for particle color; the texture is called with RGB colors mapped (via :obj:`colorRange`) from :obj:`Shape.color` - colorFuzz and :obj:`Shape.color` + colorFuzz, clamped to (0,1)).
+
+      [type: Real]
+
+   .. attribute:: staticMask (= 8)
+
+      Mask for static particles, which will be exported only once into a special incude file separate from the per-frame include files.
+
+      [type: int]
+
+   .. attribute:: masks (= [8, 4, 1])
+
+      Masks which will be tried one after another (first match counts) on each particle to determine which texture will be applied to it. Texture names are taken from :obj:`textures` and must be defined in the master file.
+
+      [type: vector<int>]
+
+   .. attribute:: textures (= ['static', 'outlet', 'movable'])
+
+      Texture names applied to particles matching :obj:`masks` -- the first matching mask counts, textures are named ``woo_tex_*`` and must be modified in the master file by the user (only an example definition is written by Woo). Particles not matching any mask will be assigned texture ``default`` (``woo_tex_default``). Each texture receives two rgb arguments which are colormapped from :obj:`woo.dem.Shape.color` using :obj:`colorRange` and :obj:`colorFuzz`. 
+
+      [type: vector<string>]
+
+   .. attribute:: cylCapTexture (= '')
+
+      If non-empty, :obj:`InfCylinder` objects will be drawn as several objects, with caps having this separate texture type.
+
+      [type: string]
+
+   .. attribute:: wallTexture (= '')
+
+      If non-empty, :obj:`Wall` objects will have this texture applied, regardless of their mask. Meant for easily assigning checkerboard texture to wall objects.
+
+      [type: string]
+
+   .. attribute:: texturesInc (= '')
+
+      Better textures, conditionally included in every step; if not provided, default filename will be generated.
+
+      [type: string]
+
+   .. attribute:: extraInc (= ['woo-logo.inc'])
+
+      If set, these files will be conditionally included at the end of every step.
+
+      [type: vector<string>]
+
+   .. attribute:: camLocation (= Vector3(15,10,0))
+
+      Default location of the camera
+
+      [type: Vector3r]
+
+   .. attribute:: camLookAt (= Vector3(0,0,0))
+
+      Default look direction of the camera
+
+      [type: Vector3r]
+
+   .. attribute:: camAngle (= 45.0)
+
+      Default camera angle (in degrees)
+
+      [type: float]
+
+   .. attribute:: connMesh (= 1)
+
+      Whether to export facets (:obj:`Facet` and derived classes) as connected meshes, and in what cases. This entails building topology and determining connected components of the topology graph, which can demand non-negligible computation; the default is to do it for static mesh only, which is done only once, but not at every simulations steps. It is however necessary to set to ``always`` if non-static mesh is moving and should be exported.
+      
+      .. note:: Facets are normally exported one-by-one. Mesh allows for more efficient processing in POV-Ray and for things like texture covering more facets.
+
+      [type: int, named enum, possible values are: **'none'** (*''*, *'never'*; 0), **'static'** (*'stat'*, *'static only'*; 1), **'always'** (*'yes'*; 2)]
 
 
 .. rst-class:: html-toggle
@@ -249,19 +501,19 @@ Shape
 		rankdir=LR;
 		margin=.2;
 		"Shape" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"woo.fem.Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
-		"woo.fem.Tetra" -> "woo.fem.Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
-		"Shape" -> "woo.fem.Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Rod" -> "Truss" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
 		"Facet" -> "woo.fem.Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"Shape" -> "Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Shape" -> "Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
+		"woo.fem.Tetra" -> "woo.fem.Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
+		"Shape" -> "woo.fem.Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Shape
@@ -594,14 +846,14 @@ Material
 		rankdir=LR;
 		margin=.2;
 		"Material" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"FrictMat" -> "LudingMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
 		"ElastMat" -> "FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"Material" -> "ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
-		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Material" -> "ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" -> "LudingMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Material"];
+		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Material
@@ -639,13 +891,13 @@ ElastMat
 		rankdir=LR;
 		margin=.2;
 		"ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"ElastMat" -> "FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
 		"FrictMat" -> "LudingMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"ElastMat" -> "FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: ElastMat
@@ -671,12 +923,12 @@ FrictMat
 		rankdir=LR;
 		margin=.2;
 		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
-		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
+		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
+		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
+		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
+		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
 		"FrictMat" -> "LudingMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
-		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
-		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
-		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictMat"];
-		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: FrictMat
@@ -693,6 +945,77 @@ FrictMat
    .. attribute:: ktDivKn (= 0.2)
 
       Ratio of tangent and shear modulus on contact.
+
+      [type: Real]
+
+ConcreteMat
+'''''''''''
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Material` → :obj:`~woo.dem.ElastMat` → :obj:`~woo.dem.FrictMat` → :obj:`~woo.dem.ConcreteMat`
+
+.. autoclass:: ConcreteMat
+   :members:
+   :exclude-members: sigmaT, neverDamage, epsCrackOnset, relDuctility, damLaw, dmgTau, dmgRateExp, plTau, plRateExp, isoPrestress, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: sigmaT (= nan)
+
+      Initial cohesion [Pa]
+
+      [type: Real]
+
+   .. attribute:: neverDamage (= False)
+
+      If true, no damage will occur (for testing only).
+
+      [type: bool]
+
+   .. attribute:: epsCrackOnset (= nan)
+
+      Limit elastic strain [-]
+
+      [type: Real]
+
+   .. attribute:: relDuctility (= nan)
+
+      relative ductility of bonds in normal direction
+
+      [type: Real]
+
+   .. attribute:: damLaw (= 1)
+
+      Law for damage evolution in uniaxial tension. 0 for linear stress-strain softening branch, 1 (default) for exponential damage evolution law
+
+      [type: int, named enum, possible values are: **'linear softening'** (*'lin'*; 0), **'exponential softening'** (*'exp'*; 1)]
+
+   .. attribute:: dmgTau (= -1.0)
+
+      Characteristic time for normal viscosity. [s]
+
+      [type: Real]
+
+   .. attribute:: dmgRateExp (= 0.0)
+
+      Exponent for normal viscosity function. [-]
+
+      [type: Real]
+
+   .. attribute:: plTau (= -1.0)
+
+      Characteristic time for visco-plasticity. [s]
+
+      [type: Real]
+
+   .. attribute:: plRateExp (= 0.0)
+
+      Exponent for visco-plasticity function. [-]
+
+      [type: Real]
+
+   .. attribute:: isoPrestress (= 0.0)
+
+      Isotropic prestress of the whole specimen. [P a]
 
       [type: Real]
 
@@ -915,77 +1238,6 @@ LudingMat
 
       [type: Real]
 
-ConcreteMat
-'''''''''''
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Material` → :obj:`~woo.dem.ElastMat` → :obj:`~woo.dem.FrictMat` → :obj:`~woo.dem.ConcreteMat`
-
-.. autoclass:: ConcreteMat
-   :members:
-   :exclude-members: sigmaT, neverDamage, epsCrackOnset, relDuctility, damLaw, dmgTau, dmgRateExp, plTau, plRateExp, isoPrestress, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: sigmaT (= nan)
-
-      Initial cohesion [Pa]
-
-      [type: Real]
-
-   .. attribute:: neverDamage (= False)
-
-      If true, no damage will occur (for testing only).
-
-      [type: bool]
-
-   .. attribute:: epsCrackOnset (= nan)
-
-      Limit elastic strain [-]
-
-      [type: Real]
-
-   .. attribute:: relDuctility (= nan)
-
-      relative ductility of bonds in normal direction
-
-      [type: Real]
-
-   .. attribute:: damLaw (= 1)
-
-      Law for damage evolution in uniaxial tension. 0 for linear stress-strain softening branch, 1 (default) for exponential damage evolution law
-
-      [type: int, named enum, possible values are: **'linear softening'** (*'lin'*; 0), **'exponential softening'** (*'exp'*; 1)]
-
-   .. attribute:: dmgTau (= -1.0)
-
-      Characteristic time for normal viscosity. [s]
-
-      [type: Real]
-
-   .. attribute:: dmgRateExp (= 0.0)
-
-      Exponent for normal viscosity function. [-]
-
-      [type: Real]
-
-   .. attribute:: plTau (= -1.0)
-
-      Characteristic time for visco-plasticity. [s]
-
-      [type: Real]
-
-   .. attribute:: plRateExp (= 0.0)
-
-      Exponent for visco-plasticity function. [-]
-
-      [type: Real]
-
-   .. attribute:: isoPrestress (= 0.0)
-
-      Isotropic prestress of the whole specimen. [P a]
-
-      [type: Real]
-
 
 .. rst-class:: html-toggle
 
@@ -1004,35 +1256,18 @@ MatState
 		rankdir=LR;
 		margin=.2;
 		"MatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"InletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "InletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"ConcreteMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
 		"MatState" -> "ConcreteMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "LudingMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "PelletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ClusterMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
-		"MatState" -> "ClusterMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"MatState" -> "LudingMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ClusterMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"MatState" -> "ClusterMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"MatState" -> "InletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMatState" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.MatState"];
+		"MatState" -> "PelletMatState" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: MatState
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
-
-InletMatState
-%%%%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.MatState` → :obj:`~woo.dem.InletMatState`
-
-.. autoclass:: InletMatState
-   :members:
-   :exclude-members: timeNew, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: timeNew (= -1.0)
-
-      Step at which this particle was created by the inlet.
-
-      [type: Real]
 
 PelletMatState
 %%%%%%%%%%%%%%
@@ -1078,6 +1313,23 @@ PelletMatState
    .. attribute:: cumAgglomAngle (= 0.0)
 
       Cumulative length of rolling when agglomeration was active.
+
+      [type: Real]
+
+InletMatState
+%%%%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.MatState` → :obj:`~woo.dem.InletMatState`
+
+.. autoclass:: InletMatState
+   :members:
+   :exclude-members: timeNew, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: timeNew (= -1.0)
+
+      Step at which this particle was created by the inlet.
 
       [type: Real]
 
@@ -1150,239 +1402,6 @@ LudingMatState
 
 .. rst-class:: emphasized
 
-Packings
---------
-
-TODO
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-ShapePack
-+++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapePack`
-
-.. autoclass:: ShapePack
-   :members:
-   :exclude-members: cellSize, movable, div, raws, userData, loadFrom, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: cellSize (= Vector3(0,0,0))
-
-      Positive components signify periodic boundary along the respective axis.
-
-      [type: Vector3r]
-
-   .. attribute:: movable (= False)
-
-      Whether the packing is movable, i.e. should be automatically recentered after filtered with a predicate.
-
-      [type: bool]
-
-   .. attribute:: div (= 5)
-
-      Default value for recomputing properties of clumps (relative to the smallest equivalent radius)
-
-      [type: int]
-
-   .. attribute:: raws (= [])
-
-      Raw shapes of particles/clumps.
-
-      [type: vector<shared_ptr<ShapeClump>>]
-
-   .. attribute:: userData (= '')
-
-      String of arbitrary user data to be loaded/saved with the ShapePack.
-
-      [type: string]
-
-   .. attribute:: loadFrom (= '')
-
-      If given when constructing the instance, the file is loaded immediately and the attribute is reset.
-
-      [type: string]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-RawShape
-++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.RawShape`
-
-.. autoclass:: RawShape
-   :members:
-   :exclude-members: className, center, radius, raw, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: className (= '')
-
-      Name of the Shape subclass.
-
-      [type: string]
-
-   .. attribute:: center (= Vector3(0,0,0))
-
-      Center of the bounding sphere.
-
-      [type: Vector3r]
-
-   .. attribute:: radius (= 0.0)
-
-      Radius of the bounding sphere.
-
-      [type: Real]
-
-   .. attribute:: raw (= [])
-
-      Raw data for shape reconstruction; the size of the array is shape-specific.
-
-      [type: vector<Real>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-ShapeClump
-++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump`
-
-.. graphviz::
-
-	digraph ShapeClump {
-		rankdir=LR;
-		margin=.2;
-		"ShapeClump" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
-		"RawShapeClump" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
-		"ShapeClump" -> "RawShapeClump" [arrowsize=0.5,style="setlinewidth(0.5)"]		"SphereClumpGeom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
-		"ShapeClump" -> "SphereClumpGeom" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: ShapeClump
-   :members:
-   :exclude-members: scaleProb, pos, ori, volume, equivRad, inertia, div, clumped, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: scaleProb (= [])
-
-      Used by particle generators: piecewise-linear function probability(equivRad) given as a sequence of x,y coordinates. If not given, constant function \ :math:`p(d)=1`\  is assumed. See the documentation of :obj:`woo.dem.PsdClumpGenerator` for details.
-
-      [type: vector<Vector2r>]
-
-   .. attribute:: pos (= Vector3(0,0,0))
-
-      Centroid position (computed automatically)
-
-      [type: Vector3r, not dumped, read-only in python]
-
-   .. attribute:: ori (= Quaternion((1,0,0),0))
-
-      Principal axes orientation (computed automatically)
-
-      [type: Quaternionr, not dumped, read-only in python]
-
-   .. attribute:: volume (= nan)
-
-      Volume (computed automatically)
-
-      [type: Real, unit: m³, not dumped, read-only in python]
-
-   .. attribute:: equivRad (= nan)
-
-      Equivalent radius of the clump (computed automatically) -- mean of radii of gyration, i.e. \ :math:`\frac{1}{3}\sum \sqrt{I_{ii}/V}`\ .
-
-      [type: Real, unit: m, not dumped, read-only in python]
-
-   .. attribute:: inertia (= Vector3(nan,nan,nan))
-
-      Geometrical inertia (computed with unit density)
-
-      [type: Vector3r, not dumped, read-only in python]
-
-   .. attribute:: div (= 5)
-
-      Sampling grid fineness, when computing volume and other properties, relative to the smallest sphere's radius. When zero or negative, assume spheres don't intersect and use a different algorithm (Steiner's theorem).
-
-      [type: int, not dumped]
-
-   .. attribute:: clumped (= True)
-
-      Whether nodes of this shape are clumped together when the particle is created (so far, clumped shapes *only* are produced).
-
-      [type: bool, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-RawShapeClump
-"""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump` → :obj:`~woo.dem.RawShapeClump`
-
-.. autoclass:: RawShapeClump
-   :members:
-   :exclude-members: rawShapes, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: rawShapes (= [])
-
-      Data for creating primitive shapes
-
-      [type: vector<shared_ptr<RawShape>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-SphereClumpGeom
-"""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump` → :obj:`~woo.dem.SphereClumpGeom`
-
-.. autoclass:: SphereClumpGeom
-   :members:
-   :exclude-members: centers, radii, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: centers (= [])
-
-      Centers of constituent spheres, in clump-local coordinates.
-
-      [type: vector<Vector3r>]
-
-   .. attribute:: radii (= [])
-
-      Radii of constituent spheres
-
-      [type: vector<Real>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 ClusterAnalysis
 ---------------
 
@@ -1442,8 +1461,8 @@ ClusterAnalysis
 
 .. rst-class:: emphasized
 
-Export
-------
+Stress/strain control
+---------------------
 
 TODO
 
@@ -1453,271 +1472,82 @@ TODO
 
 .. rst-class:: emphasized
 
-VtkExport
-+++++++++
+PeriIsoCompressor
++++++++++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.VtkExport`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.PeriIsoCompressor`
 
-.. autoclass:: VtkExport
+.. autoclass:: PeriIsoCompressor
    :members:
-   :exclude-members: out, compress, ascii, hdf5, mask, what, sphereSphereOnly, infError, skipInvisible, savePos, clip, staticMeshBit, staticMeshDone, subdiv, ellLev, thickFacetDiv, cylCaps, rodSurf, nanValue, outFiles, outTimes, outSteps, mkDir, prevCellNum, __init__, __getstate__, __setstate__
+   :exclude-members: stresses, charLen, maxSpan, maxUnbalanced, globalUpdateInt, state, doneHook, keepProportions, currUnbalanced, avgStiffness, sigma, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: out (= '')
+   .. attribute:: stresses (= [])
 
-      Filename prefix to write into; :obj:`woo.core.Scene.tags` written as {tagName} are expanded at the first run.
-
-      [type: string]
-
-   .. attribute:: compress (= True)
-
-      Compress output XML files
-
-      [type: bool]
-
-   .. attribute:: ascii (= False)
-
-      Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``
-
-      [type: bool]
-
-   .. attribute:: hdf5 (= False)
-
-      Write to HDF5 files rather than VTU XML files. Experimental.
-
-      [type: bool]
-
-   .. attribute:: mask (= 0)
-
-      If non-zero, only particles matching the mask will be exported.
-
-      [type: int]
-
-   .. attribute:: what (= 47)
-
-      Select data to be saved (e.g. VtkExport.spheres|VtkExport.mesh, or use VtkExport.all for everything)
-
-      [type: int]
-
-   .. attribute:: sphereSphereOnly (= False)
-
-      Only export contacts between two spheres (not sphere+facet and such)
-
-      [type: bool]
-
-   .. attribute:: infError (= True)
-
-      Raise exception for infinite objects which don't have the glAB attribute set properly.
-
-      [type: bool]
-
-   .. attribute:: skipInvisible (= True)
-
-      Skip invisible particles
-
-      [type: bool]
-
-   .. attribute:: savePos (= False)
-
-      Save positions of spheres (redundant information, but useful for coloring by position in Paraview.
-
-      [type: bool]
-
-   .. attribute:: clip (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
-
-      Only export particles of which first node is in the clip box (if given).
-
-      [type: AlignedBox3r]
-
-   .. attribute:: staticMeshBit (= 8)
-
-      Bit for identifying static mesh particles (:obj:`Facet`, :obj:`Wall`, :obj:`InfCylinder` only) which will be exported only once.
-
-      [type: int]
-
-   .. attribute:: staticMeshDone (= False)
-
-      Whether static mesh was already exported
-
-      [type: bool]
-
-   .. attribute:: subdiv (= 16)
-
-      Subdivision fineness for circular objects (such as cylinders).
-      
-      .. note:: :obj:`Facets <woo.dem.Facet>` are rendered without rounded edges (they are closed flat).
-      
-      .. note:: :obj:`Ellipsoids <woo.dem.Ellipsoid>` triangulation is controlled via the :obj:`ellLev` parameter.
-
-      [type: int]
-
-   .. attribute:: ellLev (= 0)
-
-      Tesselation level for exporting ellipsoids (0 = icosahedron, each level subdivides one triangle into three.
-
-      [type: int, range: 0−3]
-
-   .. attribute:: thickFacetDiv (= 1)
-
-      Subdivision for :obj:`woo.dem.Facet` objects with non-zero :obj:`woo.dem.Facet.halfThick`; the value of -1 will use :obj:`subdiv`; 0 will render only faces, without edges; 1 will close the edge flat; higher values mean the number of subdivisions.
-
-      [type: int]
-
-   .. attribute:: cylCaps (= True)
-
-      Render caps of :obj:`InfCylinder` (at :obj:`InfCylinder.glAB`).
-
-      [type: bool]
-
-   .. attribute:: rodSurf (= False)
-
-      Export rods (and derived classes) as capsule-shaped triangulated surfaces; without this option, rods are exported as plain connecting lines.
-
-      [type: bool]
-
-   .. attribute:: nanValue (= 0.0)
-
-      Use this number instead of NaN in entries, since VTK cannot read NaNs properly
-
-      [type: Real]
-
-   .. attribute:: outFiles (= {})
-
-      Files which have been written out, keyed by what they contain: 'spheres','mesh','con'.
-
-      [type: map_string_vector_string, not shown in the UI, read-only in python]
-
-   .. attribute:: outTimes (= [])
-
-      Times at which files were written.
-
-      [type: vector<Real>, not shown in the UI, read-only in python]
-
-   .. attribute:: outSteps (= [])
-
-      Steps at which files were written.
-
-      [type: vector<int>, not shown in the UI, read-only in python]
-
-   .. attribute:: mkDir (= False)
-
-      Attempt to create directory for output files, if not present.
-
-      [type: bool]
-
-   .. attribute:: prevCellNum (= Vector3i(0,0,0))
-
-      Previous cell array sized, for pre-allocation.
-
-      [type: Vector3i, not shown in the UI, not saved, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-FlowAnalysis
-++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.FlowAnalysis`
-
-.. autoclass:: FlowAnalysis
-   :members:
-   :exclude-members: box, node, data, dLim, masks, nFractions, cellSize, boxCells, mask, cellData, porosity, matStateScalar, matStateName, timeSpan, color, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
-
-      Domain in which the flow is to be analyzed; the box may glow slightly to accomodate integer number of cells. Do not change once there is some data alread. Do not change once there is some data already.
-
-      [type: AlignedBox3r]
-
-   .. attribute:: node (= None)
-
-      Defines local coordinates system; it undefined, uses global coordinates.
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: data
-
-      Grid data -- 5d since each 3d point contains multiple entries, and there are multiple grids.
-
-      [type: boost_multi_array_real_5, not accessible from python]
-
-   .. attribute:: dLim (= [])
-
-      Limiting diameter values, for defining fractions which are analyzed separately. Do not change when there is some data already.
+      Stresses that should be reached, one after another
 
       [type: vector<Real>]
 
-   .. attribute:: masks (= [])
+   .. attribute:: charLen (= -1.0)
 
-      Mask values for fractions; it is an error if a particle matches multiple masks. Do not change when there is some data already.
-
-      [type: vector<int>]
-
-   .. attribute:: nFractions (= -1)
-
-      Number of fractions, defined via :obj:`dLim` or :obj:`masks`; set automatically.
-
-      [type: int, read-only in python]
-
-   .. attribute:: cellSize (= nan)
-
-      Size of one cell in the box (in all directions); will be satisfied exactly at the expense of perhaps slightly growing :obj:`box`. Do not change once there is some data already.
+      Characteristic length, should be something like mean particle diameter (default -1=invalid value))
 
       [type: Real]
 
-   .. attribute:: boxCells (= Vector3i(0,0,0))
+   .. attribute:: maxSpan (= -1.0)
 
-      Number of cells in the box (computed automatically)
+      Maximum body span in terms of bbox, to prevent periodic cell getting too small.
 
-      [type: Vector3i, read-only in python]
+      [type: Real, read-only in python]
 
-   .. attribute:: mask (= 0)
+   .. attribute:: maxUnbalanced (= 0.0001)
 
-      Particles to consider in the flow analysis (0 to consider everything).
+      if actual unbalanced force is smaller than this number, the packing is considered stable,
 
-      [type: int]
+      [type: Real]
 
-   .. attribute:: cellData (= False)
+   .. attribute:: globalUpdateInt (= 20)
 
-      Write flow rate as cell data rather than point data.
-
-      [type: bool]
-
-   .. attribute:: porosity (= False)
-
-      Compute (and export) solid ratio (1-porosity) for all spheroidal particles (requires triangulation of the domain at every step, hence slow and not enabled by default.
-
-      [type: bool]
-
-   .. attribute:: matStateScalar (= -1)
-
-      If non-negative, index of material state to analyze.
+      how often to recompute average stress, stiffness and unbalanced force
 
       [type: int]
 
-   .. attribute:: matStateName (= '')
+   .. attribute:: state (= 0)
 
-      If given, used for VTK-export of the scalar; if not given, is filled form the first instance encountered automatically.
+      Where are we at in the stress series
+
+      [type: size_t]
+
+   .. attribute:: doneHook (= '')
+
+      Python command to be run when reaching the last specified stress
 
       [type: string]
 
-   .. attribute:: timeSpan (= 0.0)
+   .. attribute:: keepProportions (= True)
 
-      Total time that the analysis has been running.
+      Exactly keep proportions of the cell (stress is controlled based on average, not its components
 
-      [type: Real]
+      [type: bool]
 
-   .. attribute:: color (= Vector3(1,1,0))
+   .. attribute:: currUnbalanced (= nan)
 
-      Color for rendering the domain
+      Current unbalanced force (updated internally)
 
-      [type: Vector3r]
+      [type: Real, read-only in python]
+
+   .. attribute:: avgStiffness (= nan)
+
+      Value of average stiffness (updated internally)
+
+      [type: Real, read-only in python]
+
+   .. attribute:: sigma (= Vector3(nan,nan,nan))
+
+      Current value of average stress (update internally)
+
+      [type: Vector3r, read-only in python]
 
 
 .. rst-class:: html-toggle
@@ -1725,126 +1555,197 @@ FlowAnalysis
 
 .. rst-class:: emphasized
 
-POVRayExport
-++++++++++++
+WeirdTriaxControl
++++++++++++++++++
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.POVRayExport`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.WeirdTriaxControl`
 
-.. autoclass:: POVRayExport
+.. autoclass:: WeirdTriaxControl
    :members:
-   :exclude-members: out, mask, skipInvisible, clip, frameCounter, colorRange, colorFuzz, staticMask, masks, textures, cylCapTexture, wallTexture, texturesInc, extraInc, camLocation, camLookAt, camAngle, connMesh, __init__, __getstate__, __setstate__
+   :exclude-members: goal, stressMask, maxStrainRate, maxUnbalanced, absStressTol, relStressTol, maxStrainedStress, growDamping, relVol, globUpdate, doneHook, stress, strain, strainRate, currUnbalanced, prevGrow, mass, externalWork, gradVWorkIx, leapfrogChecked, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: out (= '')
+   .. attribute:: goal (= Vector3(0,0,0))
 
-      Filename prefix to write into; :obj:`woo.core.Scene.tags` written as ``{tagName}`` are expanded at the first run.
+      Desired stress or strain values (depending on stressMask), strains defined as ``strain(i)=log(Fii)``.
+      
+      .. warning:: Strains are relative to the :obj:`woo.core.Scene.cell.refSize` (reference cell size), not the current one (e.g. at the moment when the new strain value is set).
 
-      [type: string]
+      [type: Vector3r]
 
-   .. attribute:: mask (= 0)
+   .. attribute:: stressMask (= 0)
 
-      If non-zero, only particles matching the mask will be exported.
-
-      [type: int]
-
-   .. attribute:: skipInvisible (= True)
-
-      Skip invisible particles
-
-      [type: bool]
-
-   .. attribute:: clip (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
-
-      Only export particles of which first node is in the clip box (if given).
-
-      [type: AlignedBox3r]
-
-   .. attribute:: frameCounter (= 0)
-
-      Counts exported frames and uses the number to name output files.
+      mask determining strain/stress (0/1) meaning for goal components
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0x280ac70>)
+   .. attribute:: maxStrainRate (= Vector3(1,1,1))
 
-      Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
+      Maximum strain rate of the periodic cell.
 
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+      [type: Vector3r]
 
-   .. attribute:: colorFuzz (= 0.2)
+   .. attribute:: maxUnbalanced (= 0.0001)
 
-      Relative fuzz for particle color; the texture is called with RGB colors mapped (via :obj:`colorRange`) from :obj:`Shape.color` - colorFuzz and :obj:`Shape.color` + colorFuzz, clamped to (0,1)).
+      maximum unbalanced force.
 
       [type: Real]
 
-   .. attribute:: staticMask (= 8)
+   .. attribute:: absStressTol (= 1000.0)
 
-      Mask for static particles, which will be exported only once into a special incude file separate from the per-frame include files.
+      Absolute stress tolerance
+
+      [type: Real]
+
+   .. attribute:: relStressTol (= 3e-05)
+
+      Relative stress tolerance; if negative, it is relative to the largest stress value along all axes, where strain is prescribed.
+
+      [type: Real]
+
+   .. attribute:: maxStrainedStress (= nan)
+
+      Current abs-maximum stress in strain-controlled directions; useda as reference when :obj:`relStressTol` is negative.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: growDamping (= 0.25)
+
+      Damping of cell resizing (0=perfect control, 1=no control at all).
+
+      [type: Real]
+
+   .. attribute:: relVol (= 1.0)
+
+      For stress computation, use volume of the periodic cell multiplied by this constant.
+
+      [type: Real]
+
+   .. attribute:: globUpdate (= 5)
+
+      How often to recompute average stress, stiffness and unbalaced force.
 
       [type: int]
 
-   .. attribute:: masks (= [8, 4, 1])
+   .. attribute:: doneHook (= '')
 
-      Masks which will be tried one after another (first match counts) on each particle to determine which texture will be applied to it. Texture names are taken from :obj:`textures` and must be defined in the master file.
-
-      [type: vector<int>]
-
-   .. attribute:: textures (= ['static', 'outlet', 'movable'])
-
-      Texture names applied to particles matching :obj:`masks` -- the first matching mask counts, textures are named ``woo_tex_*`` and must be modified in the master file by the user (only an example definition is written by Woo). Particles not matching any mask will be assigned texture ``default`` (``woo_tex_default``). Each texture receives two rgb arguments which are colormapped from :obj:`woo.dem.Shape.color` using :obj:`colorRange` and :obj:`colorFuzz`. 
-
-      [type: vector<string>]
-
-   .. attribute:: cylCapTexture (= '')
-
-      If non-empty, :obj:`InfCylinder` objects will be drawn as several objects, with caps having this separate texture type.
+      python command to be run when the desired state is reached
 
       [type: string]
 
-   .. attribute:: wallTexture (= '')
+   .. attribute:: stress (= Matrix3(0,0,0, 0,0,0, 0,0,0))
 
-      If non-empty, :obj:`Wall` objects will have this texture applied, regardless of their mask. Meant for easily assigning checkerboard texture to wall objects.
+      Stress tensor
 
-      [type: string]
+      [type: Matrix3r]
 
-   .. attribute:: texturesInc (= '')
+   .. attribute:: strain (= Vector3(0,0,0))
 
-      Better textures, conditionally included in every step; if not provided, default filename will be generated.
-
-      [type: string]
-
-   .. attribute:: extraInc (= ['woo-logo.inc'])
-
-      If set, these files will be conditionally included at the end of every step.
-
-      [type: vector<string>]
-
-   .. attribute:: camLocation (= Vector3(15,10,0))
-
-      Default location of the camera
+      cell strain, updated automatically
 
       [type: Vector3r]
 
-   .. attribute:: camLookAt (= Vector3(0,0,0))
+   .. attribute:: strainRate (= Vector3(0,0,0))
 
-      Default look direction of the camera
+      cell strain rate, updated automatically
 
       [type: Vector3r]
 
-   .. attribute:: camAngle (= 45.0)
+   .. attribute:: currUnbalanced (= nan)
 
-      Default camera angle (in degrees)
+      current unbalanced force (updated every globUpdate)
 
-      [type: float]
+      [type: Real]
 
-   .. attribute:: connMesh (= 1)
+   .. attribute:: prevGrow (= Vector3(0,0,0))
 
-      Whether to export facets (:obj:`Facet` and derived classes) as connected meshes, and in what cases. This entails building topology and determining connected components of the topology graph, which can demand non-negligible computation; the default is to do it for static mesh only, which is done only once, but not at every simulations steps. It is however necessary to set to ``always`` if non-static mesh is moving and should be exported.
-      
-      .. note:: Facets are normally exported one-by-one. Mesh allows for more efficient processing in POV-Ray and for things like texture covering more facets.
+      previous cell grow
 
-      [type: int, named enum, possible values are: **'none'** (*''*, *'never'*; 0), **'static'** (*'stat'*, *'static only'*; 1), **'always'** (*'yes'*; 2)]
+      [type: Vector3r]
+
+   .. attribute:: mass (= nan)
+
+      mass of the cell (user set); if not set, it will be computed as sum of masses of all particles.
+
+      [type: Real]
+
+   .. attribute:: externalWork (= 0.0)
+
+      Work input from boundary controller.
+
+      [type: Real]
+
+   .. attribute:: gradVWorkIx (= -1)
+
+      Index for work done by velocity gradient, if tracking energy
+
+      [type: int, not saved, not accessible from python]
+
+   .. attribute:: leapfrogChecked (= False)
+
+      Whether we already checked that we come before :obj:`Leapfrog` (otherwise setting nextGradV will have no effect.
+
+      [type: bool, not accessible from python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+TraceVisRep
+-----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.dem.TraceVisRep`
+
+.. autoclass:: TraceVisRep
+   :members:
+   :exclude-members: pts, scalars, times, t0, tracer, writeIx, flags, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: pts (= [])
+
+      History points
+
+      [type: vector<Vector3r>, not shown in the UI, read-only in python]
+
+   .. attribute:: scalars (= [])
+
+      History scalars
+
+      [type: vector<Real>, not shown in the UI, read-only in python]
+
+   .. attribute:: times (= [])
+
+      History times (only saved with :obj:`Tracer.saveTime`).
+
+      [type: vector<Real>, not shown in the UI, read-only in python]
+
+   .. attribute:: t0 (= nan)
+
+      Time the trace was created/reset, for plotting relative time; does not change with compression.
+
+      [type: Real]
+
+   .. attribute:: tracer (= None)
+
+      :obj:`Tracer` which created (and is, presumably, managing) this object; it is necessary for getting rendering parameters, and is updated automatically.
+
+      [type: shared_ptr<:obj:`Tracer <woo.dem.Tracer>`>, read-only in python]
+
+   .. attribute:: writeIx (= 0)
+
+      Index where next data will be written
+
+      [type: size_t]
+
+   .. attribute:: flags (= 0)
+
+      Flags for this instance
+
+      [type: short]
 
 
 .. rst-class:: html-toggle
@@ -2199,19 +2100,19 @@ Impose
 		margin=.2;
 		"Impose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"RadialForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "RadialForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConstantForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "ConstantForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Local6Dofs" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "Local6Dofs" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AlignedHarmonicOscillations" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "RadialForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "VariableVelocity3d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "ReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Local6Dofs" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "Local6Dofs" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InterpolatedMotion" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "InterpolatedMotion" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableAlignedRotation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "VariableAlignedRotation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConstantForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "ConstantForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AlignedHarmonicOscillations" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "AlignedHarmonicOscillations" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VelocityAndReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "VelocityAndReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StableCircularOrbit" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"CircularOrbit" -> "StableCircularOrbit" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CircularOrbit" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "CircularOrbit" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableAlignedRotation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "VariableAlignedRotation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CombinedImpose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "CircularOrbit" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CombinedImpose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "CombinedImpose" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HarmonicOscillation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "HarmonicOscillation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "VariableVelocity3d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "ReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InterpolatedMotion" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "InterpolatedMotion" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Impose" -> "HarmonicOscillation" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Impose
@@ -2236,6 +2137,76 @@ Impose
       Time in which this imposition was last used; updated automatically bu callers from c++ via ``isFirstStepRun``, just like :obj:`stepLast`.
 
       [type: Real, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+HarmonicOscillation
+"""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.HarmonicOscillation`
+
+.. autoclass:: HarmonicOscillation
+   :members:
+   :exclude-members: freq, amp, dir, t0, perpFree, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: freq (= nan)
+
+      Frequence of oscillation
+
+      [type: Real]
+
+   .. attribute:: amp (= nan)
+
+      Amplitude of oscillation
+
+      [type: Real]
+
+   .. attribute:: dir (= Vector3(1,0,0))
+
+      Direcrtion of oscillation (normalized automatically)
+
+      [type: Vector3r]
+
+   .. attribute:: t0 (= 0.0)
+
+      Time when the oscillator is in the center position (phase)
+
+      [type: Real]
+
+   .. attribute:: perpFree (= False)
+
+      If true, only velocity in the *dir* sense will be prescribed, velocity in the perpendicular sense will be preserved.
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+CombinedImpose
+""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.CombinedImpose`
+
+.. autoclass:: CombinedImpose
+   :members:
+   :exclude-members: imps, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: imps (= [])
+
+      Impositions which are combined together, always called in this order.
+
+      [type: vector<shared_ptr<Impose>>]
 
 
 .. rst-class:: html-toggle
@@ -2294,6 +2265,41 @@ ConstantForce
       Applied force (in global coordinates)
 
       [type: Vector3r]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+VariableAlignedRotation
+"""""""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.VariableAlignedRotation`
+
+.. autoclass:: VariableAlignedRotation
+   :members:
+   :exclude-members: axis, timeAngVel, wrap, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: axis (= 0)
+
+      Rotation axis.
+
+      [type: int]
+
+   .. attribute:: timeAngVel (= [])
+
+      Angular velocity values in time. Time values must be increasing.
+
+      [type: vector<Vector2r>]
+
+   .. attribute:: wrap (= False)
+
+      Wrap time around the last time value (float modulo), if greater.
+
+      [type: bool]
 
 
 .. rst-class:: html-toggle
@@ -2366,41 +2372,6 @@ VelocityAndReadForce
 
 .. rst-class:: emphasized
 
-VariableAlignedRotation
-"""""""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.VariableAlignedRotation`
-
-.. autoclass:: VariableAlignedRotation
-   :members:
-   :exclude-members: axis, timeAngVel, wrap, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: axis (= 0)
-
-      Rotation axis.
-
-      [type: int]
-
-   .. attribute:: timeAngVel (= [])
-
-      Angular velocity values in time. Time values must be increasing.
-
-      [type: vector<Vector2r>]
-
-   .. attribute:: wrap (= False)
-
-      Wrap time around the last time value (float modulo), if greater.
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 InterpolatedMotion
 """"""""""""""""""
 
@@ -2442,6 +2413,41 @@ InterpolatedMotion
 
 .. rst-class:: emphasized
 
+Local6Dofs
+""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.Local6Dofs`
+
+.. autoclass:: Local6Dofs
+   :members:
+   :exclude-members: ori, values, whats, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: ori (= Quaternion((1,0,0),0))
+
+      Local coordinates rotation
+
+      [type: Quaternionr]
+
+   .. attribute:: values (= Vector6(0,0,0, 0,0,0))
+
+      Imposed values; their meaning depends on the *whats* vector
+
+      [type: Vector6r]
+
+   .. attribute:: whats (= Vector6i(0,0,0, 0,0,0))
+
+      Meaning of *values* components: 0 for nothing imposed (i.e. zero force), 1 for velocity, 2 for force values
+
+      [type: Vector6i]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 CircularOrbit
 """""""""""""
 
@@ -2463,7 +2469,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x28eb270, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x22ceed0, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -2510,34 +2516,34 @@ StableCircularOrbit
 
 .. rst-class:: emphasized
 
-Local6Dofs
-""""""""""
+RadialForce
+"""""""""""
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.Local6Dofs`
+:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.RadialForce`
 
-.. autoclass:: Local6Dofs
+.. autoclass:: RadialForce
    :members:
-   :exclude-members: ori, values, whats, __init__, __getstate__, __setstate__
+   :exclude-members: nodeA, nodeB, F, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: ori (= Quaternion((1,0,0),0))
+   .. attribute:: nodeA (= None)
 
-      Local coordinates rotation
+      First node defining the axis
 
-      [type: Quaternionr]
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
 
-   .. attribute:: values (= Vector6(0,0,0, 0,0,0))
+   .. attribute:: nodeB (= None)
 
-      Imposed values; their meaning depends on the *whats* vector
+      Second node defining the axis
 
-      [type: Vector6r]
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
 
-   .. attribute:: whats (= Vector6i(0,0,0, 0,0,0))
+   .. attribute:: F (= 0.0)
 
-      Meaning of *values* components: 0 for nothing imposed (i.e. zero force), 1 for velocity, 2 for force values
+      Magnitude of the force applied. Positive value means away from the axis given by *nodeA* and *nodeB*.
 
-      [type: Vector6i]
+      [type: Real]
 
 
 .. rst-class:: html-toggle
@@ -2641,111 +2647,6 @@ AlignedHarmonicOscillations
 
 .. rst-class:: emphasized
 
-RadialForce
-"""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.RadialForce`
-
-.. autoclass:: RadialForce
-   :members:
-   :exclude-members: nodeA, nodeB, F, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: nodeA (= None)
-
-      First node defining the axis
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: nodeB (= None)
-
-      Second node defining the axis
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: F (= 0.0)
-
-      Magnitude of the force applied. Positive value means away from the axis given by *nodeA* and *nodeB*.
-
-      [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-HarmonicOscillation
-"""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.HarmonicOscillation`
-
-.. autoclass:: HarmonicOscillation
-   :members:
-   :exclude-members: freq, amp, dir, t0, perpFree, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: freq (= nan)
-
-      Frequence of oscillation
-
-      [type: Real]
-
-   .. attribute:: amp (= nan)
-
-      Amplitude of oscillation
-
-      [type: Real]
-
-   .. attribute:: dir (= Vector3(1,0,0))
-
-      Direcrtion of oscillation (normalized automatically)
-
-      [type: Vector3r]
-
-   .. attribute:: t0 (= 0.0)
-
-      Time when the oscillator is in the center position (phase)
-
-      [type: Real]
-
-   .. attribute:: perpFree (= False)
-
-      If true, only velocity in the *dir* sense will be prescribed, velocity in the perpendicular sense will be preserved.
-
-      [type: bool]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-CombinedImpose
-""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.Impose` → :obj:`~woo.dem.CombinedImpose`
-
-.. autoclass:: CombinedImpose
-   :members:
-   :exclude-members: imps, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: imps (= [])
-
-      Impositions which are combined together, always called in this order.
-
-      [type: vector<shared_ptr<Impose>>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 Tracer
 ++++++
 
@@ -2817,7 +2718,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0x2842b60>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x22267e0>)
 
       Color range for coloring the trace line
 
@@ -2906,239 +2807,6 @@ AxialGravity
 
 .. rst-class:: emphasized
 
-Stress/strain control
----------------------
-
-TODO
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-PeriIsoCompressor
-+++++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.PeriIsoCompressor`
-
-.. autoclass:: PeriIsoCompressor
-   :members:
-   :exclude-members: stresses, charLen, maxSpan, maxUnbalanced, globalUpdateInt, state, doneHook, keepProportions, currUnbalanced, avgStiffness, sigma, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: stresses (= [])
-
-      Stresses that should be reached, one after another
-
-      [type: vector<Real>]
-
-   .. attribute:: charLen (= -1.0)
-
-      Characteristic length, should be something like mean particle diameter (default -1=invalid value))
-
-      [type: Real]
-
-   .. attribute:: maxSpan (= -1.0)
-
-      Maximum body span in terms of bbox, to prevent periodic cell getting too small.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: maxUnbalanced (= 0.0001)
-
-      if actual unbalanced force is smaller than this number, the packing is considered stable,
-
-      [type: Real]
-
-   .. attribute:: globalUpdateInt (= 20)
-
-      how often to recompute average stress, stiffness and unbalanced force
-
-      [type: int]
-
-   .. attribute:: state (= 0)
-
-      Where are we at in the stress series
-
-      [type: size_t]
-
-   .. attribute:: doneHook (= '')
-
-      Python command to be run when reaching the last specified stress
-
-      [type: string]
-
-   .. attribute:: keepProportions (= True)
-
-      Exactly keep proportions of the cell (stress is controlled based on average, not its components
-
-      [type: bool]
-
-   .. attribute:: currUnbalanced (= nan)
-
-      Current unbalanced force (updated internally)
-
-      [type: Real, read-only in python]
-
-   .. attribute:: avgStiffness (= nan)
-
-      Value of average stiffness (updated internally)
-
-      [type: Real, read-only in python]
-
-   .. attribute:: sigma (= Vector3(nan,nan,nan))
-
-      Current value of average stress (update internally)
-
-      [type: Vector3r, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-WeirdTriaxControl
-+++++++++++++++++
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.WeirdTriaxControl`
-
-.. autoclass:: WeirdTriaxControl
-   :members:
-   :exclude-members: goal, stressMask, maxStrainRate, maxUnbalanced, absStressTol, relStressTol, maxStrainedStress, growDamping, relVol, globUpdate, doneHook, stress, strain, strainRate, currUnbalanced, prevGrow, mass, externalWork, gradVWorkIx, leapfrogChecked, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: goal (= Vector3(0,0,0))
-
-      Desired stress or strain values (depending on stressMask), strains defined as ``strain(i)=log(Fii)``.
-      
-      .. warning:: Strains are relative to the :obj:`woo.core.Scene.cell.refSize` (reference cell size), not the current one (e.g. at the moment when the new strain value is set).
-
-      [type: Vector3r]
-
-   .. attribute:: stressMask (= 0)
-
-      mask determining strain/stress (0/1) meaning for goal components
-
-      [type: int]
-
-   .. attribute:: maxStrainRate (= Vector3(1,1,1))
-
-      Maximum strain rate of the periodic cell.
-
-      [type: Vector3r]
-
-   .. attribute:: maxUnbalanced (= 0.0001)
-
-      maximum unbalanced force.
-
-      [type: Real]
-
-   .. attribute:: absStressTol (= 1000.0)
-
-      Absolute stress tolerance
-
-      [type: Real]
-
-   .. attribute:: relStressTol (= 3e-05)
-
-      Relative stress tolerance; if negative, it is relative to the largest stress value along all axes, where strain is prescribed.
-
-      [type: Real]
-
-   .. attribute:: maxStrainedStress (= nan)
-
-      Current abs-maximum stress in strain-controlled directions; useda as reference when :obj:`relStressTol` is negative.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: growDamping (= 0.25)
-
-      Damping of cell resizing (0=perfect control, 1=no control at all).
-
-      [type: Real]
-
-   .. attribute:: relVol (= 1.0)
-
-      For stress computation, use volume of the periodic cell multiplied by this constant.
-
-      [type: Real]
-
-   .. attribute:: globUpdate (= 5)
-
-      How often to recompute average stress, stiffness and unbalaced force.
-
-      [type: int]
-
-   .. attribute:: doneHook (= '')
-
-      python command to be run when the desired state is reached
-
-      [type: string]
-
-   .. attribute:: stress (= Matrix3(0,0,0, 0,0,0, 0,0,0))
-
-      Stress tensor
-
-      [type: Matrix3r]
-
-   .. attribute:: strain (= Vector3(0,0,0))
-
-      cell strain, updated automatically
-
-      [type: Vector3r]
-
-   .. attribute:: strainRate (= Vector3(0,0,0))
-
-      cell strain rate, updated automatically
-
-      [type: Vector3r]
-
-   .. attribute:: currUnbalanced (= nan)
-
-      current unbalanced force (updated every globUpdate)
-
-      [type: Real]
-
-   .. attribute:: prevGrow (= Vector3(0,0,0))
-
-      previous cell grow
-
-      [type: Vector3r]
-
-   .. attribute:: mass (= nan)
-
-      mass of the cell (user set); if not set, it will be computed as sum of masses of all particles.
-
-      [type: Real]
-
-   .. attribute:: externalWork (= 0.0)
-
-      Work input from boundary controller.
-
-      [type: Real]
-
-   .. attribute:: gradVWorkIx (= -1)
-
-      Index for work done by velocity gradient, if tracking energy
-
-      [type: int, not saved, not accessible from python]
-
-   .. attribute:: leapfrogChecked (= False)
-
-      Whether we already checked that we come before :obj:`Leapfrog` (otherwise setting nextGradV will have no effect.
-
-      [type: bool, not accessible from python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 MeshVolume
 ----------
 
@@ -3186,58 +2854,34 @@ MeshVolume
 
 .. rst-class:: emphasized
 
-TraceVisRep
------------
+BoxTraceTimeSetter
+------------------
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.dem.TraceVisRep`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.BoxTraceTimeSetter`
 
-.. autoclass:: TraceVisRep
+.. autoclass:: BoxTraceTimeSetter
    :members:
-   :exclude-members: pts, scalars, times, t0, tracer, writeIx, flags, __init__, __getstate__, __setstate__
+   :exclude-members: node, box, glColor, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: pts (= [])
+   .. attribute:: node (= None)
 
-      History points
+      Optionally define local coordinate system for :obj:`box`.
 
-      [type: vector<Vector3r>, not shown in the UI, read-only in python]
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
 
-   .. attribute:: scalars (= [])
+   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
 
-      History scalars
+      Box volume; in local coordinates if :obj:`node` is given, global otherwise.
 
-      [type: vector<Real>, not shown in the UI, read-only in python]
+      [type: AlignedBox3r]
 
-   .. attribute:: times (= [])
+   .. attribute:: glColor (= 0.5)
 
-      History times (only saved with :obj:`Tracer.saveTime`).
-
-      [type: vector<Real>, not shown in the UI, read-only in python]
-
-   .. attribute:: t0 (= nan)
-
-      Time the trace was created/reset, for plotting relative time; does not change with compression.
+      Color for rendering (NaN disables), mapped using the default colormap.
 
       [type: Real]
-
-   .. attribute:: tracer (= None)
-
-      :obj:`Tracer` which created (and is, presumably, managing) this object; it is necessary for getting rendering parameters, and is updated automatically.
-
-      [type: shared_ptr<:obj:`Tracer <woo.dem.Tracer>`>, read-only in python]
-
-   .. attribute:: writeIx (= 0)
-
-      Index where next data will be written
-
-      [type: size_t]
-
-   .. attribute:: flags (= 0)
-
-      Flags for this instance
-
-      [type: short]
 
 
 .. rst-class:: html-toggle
@@ -3342,11 +2986,11 @@ Collider
 		rankdir=LR;
 		margin=.2;
 		"Collider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
-		"InsertionSortCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
-		"AabbCollider" -> "InsertionSortCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AabbCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
+		"AabbCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
 		"Collider" -> "AabbCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"GridCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
 		"Collider" -> "GridCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AabbTreeCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
-		"AabbCollider" -> "AabbTreeCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"AabbCollider" -> "AabbTreeCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InsertionSortCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Collider"];
+		"AabbCollider" -> "InsertionSortCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Collider
@@ -3513,7 +3157,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x2735ef0>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x2119ed0>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -3596,9 +3240,9 @@ AabbCollider
 		rankdir=LR;
 		margin=.2;
 		"AabbCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.AabbCollider"];
-		"InsertionSortCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.AabbCollider"];
-		"AabbCollider" -> "InsertionSortCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AabbTreeCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.AabbCollider"];
-		"AabbCollider" -> "AabbTreeCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"AabbTreeCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.AabbCollider"];
+		"AabbCollider" -> "AabbTreeCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InsertionSortCollider" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.AabbCollider"];
+		"AabbCollider" -> "InsertionSortCollider" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: AabbCollider
@@ -3606,7 +3250,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x26e44c0>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x20c8490>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -3623,6 +3267,23 @@ AabbCollider
       Allow particles without bounding box. This is currently only useful for testing :obj:`woo.fem.Tetra` which don't undergo any collisions.
 
       [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+AabbTreeCollider
+""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.Collider` → :obj:`~woo.dem.AabbCollider` → :obj:`~woo.dem.AabbTreeCollider`
+
+.. autoclass:: AabbTreeCollider
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
 
 
 .. rst-class:: html-toggle
@@ -3718,23 +3379,6 @@ InsertionSortCollider
       Whether the collider is in periodic mode (read-only; for debugging)
 
       [type: bool, not saved, read-only in python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-AabbTreeCollider
-""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.Collider` → :obj:`~woo.dem.AabbCollider` → :obj:`~woo.dem.AabbTreeCollider`
-
-.. autoclass:: AabbTreeCollider
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
 
 
 .. rst-class:: html-toggle
@@ -3852,36 +3496,19 @@ BoundFunctor
 		rankdir=LR;
 		margin=.2;
 		"BoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"Bo1_Capsule_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"Bo1_Facet_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_Facet_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Capsule_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"BoundFunctor" -> "Bo1_Capsule_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Ellipsoid_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
 		"Bo1_Sphere_Aabb" -> "Bo1_Ellipsoid_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Rod_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Rod_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Bo1_Tetra_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.BoundFunctor"];
-		"BoundFunctor" -> "woo.fem.Bo1_Tetra_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_InfCylinder_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_InfCylinder_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Sphere_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Sphere_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Wall_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Wall_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Facet_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Facet_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Cone_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
-		"BoundFunctor" -> "Bo1_Cone_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"BoundFunctor" -> "Bo1_Rod_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_InfCylinder_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_InfCylinder_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Bo1_Tetra_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.BoundFunctor"];
+		"BoundFunctor" -> "woo.fem.Bo1_Tetra_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Sphere_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_Sphere_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Cone_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_Cone_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Bo1_Wall_Aabb" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoundFunctor"];
+		"BoundFunctor" -> "Bo1_Wall_Aabb" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: BoundFunctor
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Bo1_Cone_Aabb
-"""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.dem.Bo1_Cone_Aabb`
-
-.. autoclass:: Bo1_Cone_Aabb
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
@@ -4021,6 +3648,23 @@ Bo1_Rod_Aabb
 
 .. rst-class:: emphasized
 
+Bo1_Cone_Aabb
+"""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.BoundFunctor` → :obj:`~woo.dem.Bo1_Cone_Aabb`
+
+.. autoclass:: Bo1_Cone_Aabb
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 GridBoundFunctor
 ++++++++++++++++
 
@@ -4035,9 +3679,9 @@ GridBoundFunctor
 		"GridBoundFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
 		"Grid1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
 		"GridBoundFunctor" -> "Grid1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Grid1_InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
-		"GridBoundFunctor" -> "Grid1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Grid1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
-		"GridBoundFunctor" -> "Grid1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Grid1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
-		"GridBoundFunctor" -> "Grid1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"GridBoundFunctor" -> "Grid1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Grid1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
+		"GridBoundFunctor" -> "Grid1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Grid1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.GridBoundFunctor"];
+		"GridBoundFunctor" -> "Grid1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: GridBoundFunctor
@@ -4189,34 +3833,52 @@ GridBoundDispatcher
 
 .. rst-class:: emphasized
 
-BoxTraceTimeSetter
-------------------
+AnisoPorosityAnalyzer
+---------------------
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.BoxTraceTimeSetter`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.AnisoPorosityAnalyzer`
 
-.. autoclass:: BoxTraceTimeSetter
+.. autoclass:: AnisoPorosityAnalyzer
    :members:
-   :exclude-members: node, box, glColor, __init__, __getstate__, __setstate__
+   :exclude-members: poro, div, initStep, initNum, rayIds, rayPts, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= None)
+   .. attribute:: poro (= Matrix3(0,0,0, 0,0,0, 0,0,0))
 
-      Optionally define local coordinate system for :obj:`box`.
+      Store analysis result here
 
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+      [type: Matrix3r, read-only in python]
 
-   .. attribute:: box (= AlignedBox3((1.7976931348623157e308,1.7976931348623157e308,1.7976931348623157e308), (-1.7976931348623157e308,-1.7976931348623157e308,-1.7976931348623157e308)))
+   .. attribute:: div (= 10)
 
-      Box volume; in local coordinates if :obj:`node` is given, global otherwise.
+      Fineness of division of interval (0…1) for \ :math:`u`\ ,\ :math:`v`\  ∈〈0…1〉, which are used for uniform distribution over the positive octant as \ :math:`\theta=rac{\pi}{2}u`\ , \ :math:`\phi=\arccos v`\  (see http://mathworld.wolfram.com/SpherePointPicking.html)
 
-      [type: AlignedBox3r]
+      [type: int]
 
-   .. attribute:: glColor (= 0.5)
+   .. attribute:: initStep (= -1)
 
-      Color for rendering (NaN disables), mapped using the default colormap.
+      Step in which internal data were last updated
 
-      [type: Real]
+      [type: long, not accessible from python]
+
+   .. attribute:: initNum (= 18446744073709551615)
+
+      Number of particles at last update
+
+      [type: size_t, not accessible from python]
+
+   .. attribute:: rayIds (= [])
+
+      Particles intersected with ray when *oneRay* was last called from python.
+
+      [type: vector<Particle::id_t>, read-only in python]
+
+   .. attribute:: rayPts (= [])
+
+      Starting and ending points of segments intersecting particles.
+
+      [type: vector<Vector3r>, read-only in python]
 
 
 .. rst-class:: html-toggle
@@ -4247,11 +3909,11 @@ Inlet
 		rankdir=LR;
 		margin=.2;
 		"Inlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
-		"RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
+		"ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
+		"Inlet" -> "ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
+		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
 		"Inlet" -> "RandomInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
-		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
-		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConveyorInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
-		"Inlet" -> "ConveyorInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
+		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
 		"RandomInlet" -> "CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Inlet"];
 		"RandomInlet" -> "ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -4339,11 +4001,11 @@ RandomInlet
 		rankdir=LR;
 		margin=.2;
 		"RandomInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
+		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
 		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CylinderInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
 		"RandomInlet" -> "CylinderInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"RandomInlet" -> "ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.RandomInlet"];
-		"RandomInlet" -> "BoxInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"RandomInlet" -> "ArcInlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: RandomInlet
@@ -4441,62 +4103,6 @@ RandomInlet
 
 .. rst-class:: emphasized
 
-BoxInlet
-""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet`
-
-.. graphviz::
-
-	digraph BoxInlet {
-		rankdir=LR;
-		margin=.2;
-		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
-		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
-		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: BoxInlet
-   :members:
-   :exclude-members: box, node, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: box (= AlignedBox3((nan,nan,nan), (nan,nan,nan)))
-
-      Box volume specification (lower and upper corners)
-
-      [type: AlignedBox3r]
-
-   .. attribute:: node (= <Node @ 0x277f820, at (0,0,0)>)
-
-      Node defining local coordinate system (optional; if not given, global coordinates are used).
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-BoxInlet2d
-%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet` → :obj:`~woo.dem.BoxInlet2d`
-
-.. autoclass:: BoxInlet2d
-   :members:
-   :exclude-members: axis, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: axis (= 2)
-
-      Axis normal to the plane in which particles are generated.
-
-      [type: short]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 ArcInlet
 """"""""
 
@@ -4508,7 +4114,7 @@ ArcInlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2785bf0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x2169bd0, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -4566,6 +4172,62 @@ CylinderInlet
       Number of subdivision slices for rendering.
 
       [type: int]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+BoxInlet
+""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet`
+
+.. graphviz::
+
+	digraph BoxInlet {
+		rankdir=LR;
+		margin=.2;
+		"BoxInlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
+		"BoxInlet2d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.BoxInlet"];
+		"BoxInlet" -> "BoxInlet2d" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: BoxInlet
+   :members:
+   :exclude-members: box, node, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: box (= AlignedBox3((nan,nan,nan), (nan,nan,nan)))
+
+      Box volume specification (lower and upper corners)
+
+      [type: AlignedBox3r]
+
+   .. attribute:: node (= <Node @ 0x2163800, at (0,0,0)>)
+
+      Node defining local coordinate system (optional; if not given, global coordinates are used).
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+BoxInlet2d
+%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Inlet` → :obj:`~woo.dem.RandomInlet` → :obj:`~woo.dem.BoxInlet` → :obj:`~woo.dem.BoxInlet2d`
+
+.. autoclass:: BoxInlet2d
+   :members:
+   :exclude-members: axis, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: axis (= 2)
+
+      Axis normal to the plane in which particles are generated.
+
+      [type: short]
 
 
 .. rst-class:: html-toggle
@@ -4760,7 +4422,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0x28adbf0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x2291870, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -4826,13 +4488,13 @@ ParticleGenerator
 		rankdir=LR;
 		margin=.2;
 		"ParticleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdClumpGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PharmaCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdSphereGenerator" -> "PsdEllipsoidGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdSphereGenerator" -> "PsdCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdClumpGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"MinMaxSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
+		"ParticleGenerator" -> "MinMaxSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PharmaCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
 		"ParticleGenerator" -> "PharmaCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"ParticleGenerator" -> "PsdSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"MinMaxSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"ParticleGenerator" -> "MinMaxSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdSphereGenerator" -> "PsdCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleGenerator"];
-		"PsdSphereGenerator" -> "PsdEllipsoidGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"ParticleGenerator" -> "PsdSphereGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: ParticleGenerator
@@ -4858,6 +4520,53 @@ ParticleGenerator
 
 .. rst-class:: emphasized
 
+PharmaCapsuleGenerator
+""""""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ParticleGenerator` → :obj:`~woo.dem.PharmaCapsuleGenerator`
+
+.. autoclass:: PharmaCapsuleGenerator
+   :members:
+   :exclude-members: len, capLen, extDiam, colors, cutCorr, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: len (= 0.0194)
+
+      Total (locked) length of the capsule.
+
+      [type: Real]
+
+   .. attribute:: capLen (= 0.00978)
+
+      Cut length of the cap.
+
+      [type: Real]
+
+   .. attribute:: extDiam (= Vector2(0.00691,0.00663))
+
+      External diameter of the cap and the body.
+
+      [type: Vector2r]
+
+   .. attribute:: colors (= Vector2(0.5,0.99))
+
+      Color of body and cap; white and red with the default (coolwarm) colormap.
+
+      [type: Vector2r]
+
+   .. attribute:: cutCorr (= 0.5)
+
+      Make the cap shorter by this amount relative to the area of outer cap over the inner cap; this is to compensate for the approximation that the cap is not cut sharply.
+
+      [type: Real]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 PsdSphereGenerator
 """"""""""""""""""
 
@@ -4870,9 +4579,9 @@ PsdSphereGenerator
 		rankdir=LR;
 		margin=.2;
 		"PsdSphereGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
-		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
-		"PsdSphereGenerator" -> "PsdEllipsoidGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdClumpGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
-		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
+		"PsdClumpGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
+		"PsdSphereGenerator" -> "PsdClumpGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdEllipsoidGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
+		"PsdSphereGenerator" -> "PsdEllipsoidGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PsdCapsuleGenerator" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.PsdSphereGenerator"];
 		"PsdSphereGenerator" -> "PsdCapsuleGenerator" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -5021,53 +4730,6 @@ MinMaxSphereGenerator
 
 .. rst-class:: emphasized
 
-PharmaCapsuleGenerator
-""""""""""""""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ParticleGenerator` → :obj:`~woo.dem.PharmaCapsuleGenerator`
-
-.. autoclass:: PharmaCapsuleGenerator
-   :members:
-   :exclude-members: len, capLen, extDiam, colors, cutCorr, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: len (= 0.0194)
-
-      Total (locked) length of the capsule.
-
-      [type: Real]
-
-   .. attribute:: capLen (= 0.00978)
-
-      Cut length of the cap.
-
-      [type: Real]
-
-   .. attribute:: extDiam (= Vector2(0.00691,0.00663))
-
-      External diameter of the cap and the body.
-
-      [type: Vector2r]
-
-   .. attribute:: colors (= Vector2(0.5,0.99))
-
-      Color of body and cap; white and red with the default (coolwarm) colormap.
-
-      [type: Vector2r]
-
-   .. attribute:: cutCorr (= 0.5)
-
-      Make the cap shorter by this amount relative to the area of outer cap over the inner cap; this is to compensate for the approximation that the cap is not cut sharply.
-
-      [type: Real]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 SpatialBias
 +++++++++++
 
@@ -5144,29 +4806,6 @@ AxialBias
 
       [type: float]
 
-LayeredAxialBias
-%%%%%%%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.SpatialBias` → :obj:`~woo.dem.AxialBias` → :obj:`~woo.dem.LayeredAxialBias`
-
-.. autoclass:: LayeredAxialBias
-   :members:
-   :exclude-members: layerSpec, xRangeSum, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: layerSpec (= [])
-
-      Vector specifying layering; each item contains the following numbers: ``dMin, dMax, xMin0, xMax0, xMin1, xMax1, ...``. A particle which falls within ``dMin, dMax`` will be placed, with uniform probability, into intervals specified by other couples. Coordinates are given in normalized space, so ``xMin..xMax`` must lie in in 〈0,1〉. Particles which do not fall into any fraction will not be biased (thus placed uniformly randomly), and a warning will be issued.
-
-      [type: vector<VectorXr>]
-
-   .. attribute:: xRangeSum (= [])
-
-      Sum of ``xMax_i-xMin_i`` for each fraction, for faster lookup. Internal/debugging use only.
-
-      [type: vector<Real>, not shown in the UI, not dumped, not saved, read-only in python]
-
 PsdAxialBias
 %%%%%%%%%%%%
 
@@ -5201,6 +4840,29 @@ PsdAxialBias
       Reorder the PSD fractions; this is mainly useful for discrete distributions, where the order can be non-increasing, such as with ``reorder=[1,0,2]`` which will put the finest fraction in the middle of the other two
 
       [type: vector<int>]
+
+LayeredAxialBias
+%%%%%%%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.SpatialBias` → :obj:`~woo.dem.AxialBias` → :obj:`~woo.dem.LayeredAxialBias`
+
+.. autoclass:: LayeredAxialBias
+   :members:
+   :exclude-members: layerSpec, xRangeSum, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: layerSpec (= [])
+
+      Vector specifying layering; each item contains the following numbers: ``dMin, dMax, xMin0, xMax0, xMin1, xMax1, ...``. A particle which falls within ``dMin, dMax`` will be placed, with uniform probability, into intervals specified by other couples. Coordinates are given in normalized space, so ``xMin..xMax`` must lie in in 〈0,1〉. Particles which do not fall into any fraction will not be biased (thus placed uniformly randomly), and a warning will be issued.
+
+      [type: vector<VectorXr>]
+
+   .. attribute:: xRangeSum (= [])
+
+      Sum of ``xMax_i-xMin_i`` for each fraction, for faster lookup. Internal/debugging use only.
+
+      [type: vector<Real>, not shown in the UI, not dumped, not saved, read-only in python]
 
 
 .. rst-class:: html-toggle
@@ -5261,56 +4923,15 @@ ParticleShooter
 		rankdir=LR;
 		margin=.2;
 		"ParticleShooter" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleShooter"];
-		"AlignedMinMaxShooter" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleShooter"];
-		"ParticleShooter" -> "AlignedMinMaxShooter" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcShooter" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleShooter"];
-		"ParticleShooter" -> "ArcShooter" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"ArcShooter" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleShooter"];
+		"ParticleShooter" -> "ArcShooter" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AlignedMinMaxShooter" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ParticleShooter"];
+		"ParticleShooter" -> "AlignedMinMaxShooter" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: ParticleShooter
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-ArcShooter
-""""""""""
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.ParticleShooter` → :obj:`~woo.dem.ArcShooter`
-
-.. autoclass:: ArcShooter
-   :members:
-   :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: node (= <Node @ 0x2786df0, at (0,0,0)>)
-
-      Node defining local coordinate system. *Must* be given.
-
-      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
-
-   .. attribute:: elevRange (= Vector2(0,0))
-
-      Range for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`). The actual value is chosen with uniform probability from this range.
-
-      [type: Vector2r, unit: rad]
-
-   .. attribute:: azimRange (= Vector2(0,0))
-
-      Range for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.
-
-      [type: Vector2r, unit: rad]
-
-   .. attribute:: vRange (= Vector2(nan,nan))
-
-      Range for velocity magnitude.
-
-      [type: Vector2r, unit: m/s]
 
 
 .. rst-class:: html-toggle
@@ -5347,6 +4968,47 @@ AlignedMinMaxShooter
 
 .. rst-class:: emphasized
 
+ArcShooter
+""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ParticleShooter` → :obj:`~woo.dem.ArcShooter`
+
+.. autoclass:: ArcShooter
+   :members:
+   :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: node (= <Node @ 0x216add0, at (0,0,0)>)
+
+      Node defining local coordinate system. *Must* be given.
+
+      [type: shared_ptr<:obj:`Node <woo.core.Node>`>]
+
+   .. attribute:: elevRange (= Vector2(0,0))
+
+      Range for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`). The actual value is chosen with uniform probability from this range.
+
+      [type: Vector2r, unit: rad]
+
+   .. attribute:: azimRange (= Vector2(0,0))
+
+      Range for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.
+
+      [type: Vector2r, unit: rad]
+
+   .. attribute:: vRange (= Vector2(nan,nan))
+
+      Range for velocity magnitude.
+
+      [type: Vector2r, unit: m/s]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
 Outlet
 ++++++
 
@@ -5359,11 +5021,11 @@ Outlet
 		rankdir=LR;
 		margin=.2;
 		"Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CrazyOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "CrazyOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
 		"Outlet" -> "BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CrazyOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"Outlet" -> "CrazyOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Outlet
@@ -5587,7 +5249,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x27bef70, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x21a2f50, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -5870,19 +5532,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x2726a70>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x210a9a0>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x2719af0>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x20fd970>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0x2726990>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x210a8c0>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -6045,9 +5707,9 @@ CGeom
 		rankdir=LR;
 		margin=.2;
 		"CGeom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeom"];
-		"L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeom"];
-		"CGeom" -> "L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeom"];
-		"CGeom" -> "G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeom"];
+		"CGeom" -> "G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeom"];
+		"CGeom" -> "L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: CGeom
@@ -6055,7 +5717,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x270ebe0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x20f2bb0, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -6179,28 +5841,28 @@ CGeomFunctor
 		rankdir=LR;
 		margin=.2;
 		"CGeomFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Any_Any_L6Geom__Base" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"CGeomFunctor" -> "Cg2_Any_Any_L6Geom__Base" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"CGeomFunctor" -> "Cg2_Wall_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"CGeomFunctor" -> "Cg2_Sphere_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Any_Any_L6Geom__Base" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"CGeomFunctor" -> "Cg2_Any_Any_L6Geom__Base" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"CGeomFunctor" -> "Cg2_Wall_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_G3Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
+		"CGeomFunctor" -> "Cg2_Sphere_Sphere_G3Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CGeomFunctor"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: CGeomFunctor
@@ -6254,25 +5916,25 @@ Cg2_Any_Any_L6Geom__Base
 		rankdir=LR;
 		margin=.2;
 		"Cg2_Any_Any_L6Geom__Base" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Rod_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Rod_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Cone_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Cone_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_InfCylinder_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_InfCylinder_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Ellipsoid_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Facet_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Facet_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Sphere_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Sphere_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Sphere_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
 		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Sphere_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Wall_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Wall_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Capsule_Capsule_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Capsule_Capsule_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cg2_Facet_InfCylinder_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Any_Any_L6Geom__Base"];
-		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_InfCylinder_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Cg2_Any_Any_L6Geom__Base" -> "Cg2_Facet_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: Cg2_Any_Any_L6Geom__Base
@@ -6313,6 +5975,61 @@ Cg2_Any_Any_L6Geom__Base
       
 
       [type: int, range: 0−15]
+
+Cg2_Wall_Sphere_L6Geom
+''''''''''''''''''''''
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Wall_Sphere_L6Geom`
+
+.. autoclass:: Cg2_Wall_Sphere_L6Geom
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+Cg2_Ellipsoid_Ellipsoid_L6Geom
+''''''''''''''''''''''''''''''
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom`
+
+.. graphviz::
+
+	digraph Cg2_Ellipsoid_Ellipsoid_L6Geom {
+		rankdir=LR;
+		margin=.2;
+		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom"];
+		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom"];
+		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: Cg2_Ellipsoid_Ellipsoid_L6Geom
+   :members:
+   :exclude-members: brent, brentBits, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: brent (= True)
+
+      Use Brent iteration for finding maximum of the Perram-Wertheim potential. If false, use Newton-Raphson (not yet implemented).
+
+      [type: bool]
+
+   .. attribute:: brentBits (= 32)
+
+      Precision for the Brent method, as number of bits.
+
+      [type: int]
+
+Cg2_Sphere_Ellipsoid_L6Geom
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom` → :obj:`~woo.dem.Cg2_Sphere_Ellipsoid_L6Geom`
+
+.. autoclass:: Cg2_Sphere_Ellipsoid_L6Geom
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
 
 Cg2_Facet_Sphere_L6Geom
 '''''''''''''''''''''''
@@ -6369,17 +6086,6 @@ Cg2_InfCylinder_Sphere_L6Geom
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
 
-Cg2_Rod_Sphere_L6Geom
-'''''''''''''''''''''
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Rod_Sphere_L6Geom`
-
-.. autoclass:: Cg2_Rod_Sphere_L6Geom
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
 Cg2_Cone_Sphere_L6Geom
 ''''''''''''''''''''''
 
@@ -6387,6 +6093,17 @@ Cg2_Cone_Sphere_L6Geom
 :obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Cone_Sphere_L6Geom`
 
 .. autoclass:: Cg2_Cone_Sphere_L6Geom
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+Cg2_Rod_Sphere_L6Geom
+'''''''''''''''''''''
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Rod_Sphere_L6Geom`
+
+.. autoclass:: Cg2_Rod_Sphere_L6Geom
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
@@ -6485,61 +6202,6 @@ Cg2_Facet_Facet_L6Geom
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
 
-Cg2_Wall_Sphere_L6Geom
-''''''''''''''''''''''
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Wall_Sphere_L6Geom`
-
-.. autoclass:: Cg2_Wall_Sphere_L6Geom
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
-Cg2_Ellipsoid_Ellipsoid_L6Geom
-''''''''''''''''''''''''''''''
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom`
-
-.. graphviz::
-
-	digraph Cg2_Ellipsoid_Ellipsoid_L6Geom {
-		rankdir=LR;
-		margin=.2;
-		"Cg2_Ellipsoid_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom"];
-		"Cg2_Sphere_Ellipsoid_L6Geom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom"];
-		"Cg2_Ellipsoid_Ellipsoid_L6Geom" -> "Cg2_Sphere_Ellipsoid_L6Geom" [arrowsize=0.5,style="setlinewidth(0.5)"]
-	}
-
-.. autoclass:: Cg2_Ellipsoid_Ellipsoid_L6Geom
-   :members:
-   :exclude-members: brent, brentBits, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: brent (= True)
-
-      Use Brent iteration for finding maximum of the Perram-Wertheim potential. If false, use Newton-Raphson (not yet implemented).
-
-      [type: bool]
-
-   .. attribute:: brentBits (= 32)
-
-      Precision for the Brent method, as number of bits.
-
-      [type: int]
-
-Cg2_Sphere_Ellipsoid_L6Geom
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CGeomFunctor` → :obj:`~woo.dem.Cg2_Any_Any_L6Geom__Base` → :obj:`~woo.dem.Cg2_Ellipsoid_Ellipsoid_L6Geom` → :obj:`~woo.dem.Cg2_Sphere_Ellipsoid_L6Geom`
-
-.. autoclass:: Cg2_Sphere_Ellipsoid_L6Geom
-   :members:
-   :exclude-members: __init__, __getstate__, __setstate__
-   :special-members:
-
 
 .. rst-class:: html-toggle
 
@@ -6592,13 +6254,13 @@ CPhys
 		rankdir=LR;
 		margin=.2;
 		"CPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
-		"CPhys" -> "FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"CPhys" -> "FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhys"];
+		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: CPhys
@@ -6636,11 +6298,11 @@ FrictPhys
 		rankdir=LR;
 		margin=.2;
 		"FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
 		"FrictPhys" -> "IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"FrictPhys" -> "PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
-		"FrictPhys" -> "ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
+		"FrictPhys" -> "HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.FrictPhys"];
 		"FrictPhys" -> "LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -6719,6 +6381,125 @@ HertzPhys
       Contact radius, used for storing previous value as the initial guess in the next step.
 
       [type: Real]
+
+LudingPhys
+%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.CPhys` → :obj:`~woo.dem.FrictPhys` → :obj:`~woo.dem.LudingPhys`
+
+.. autoclass:: LudingPhys
+   :members:
+   :exclude-members: kn1, kna, k2hat, deltaMax, deltaLim, kr, kw, viscN, viscT, viscR, viscW, dynDivStat, statR, statW, xiT, xiR, xiW, work, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: kn1 (= nan)
+
+      Normal plastic (loading) stiffness.
+
+      [type: Real]
+
+   .. attribute:: kna (= nan)
+
+      Normal adhesive stiffness.
+
+      [type: Real]
+
+   .. attribute:: k2hat (= nan)
+
+      Maximum stiffness.
+
+      [type: Real]
+
+   .. attribute:: deltaMax (= 0.0)
+
+      Historically maximum overlap value.
+
+      [type: Real]
+
+   .. attribute:: deltaLim (= nan)
+
+      Upper limit for :obj:`deltaMax`.
+
+      [type: Real]
+
+   .. attribute:: kr (= nan)
+
+      Roll stiffness.
+
+      [type: Real]
+
+   .. attribute:: kw (= nan)
+
+      Twist stiffness.
+
+      [type: Real]
+
+   .. attribute:: viscN (= nan)
+
+      Normal viscosity.
+
+      [type: Real]
+
+   .. attribute:: viscT (= nan)
+
+      Tangent viscosity.
+
+      [type: Real]
+
+   .. attribute:: viscR (= nan)
+
+      Roll viscosity.
+
+      [type: Real]
+
+   .. attribute:: viscW (= nan)
+
+      Twist viscosity.
+
+      [type: Real]
+
+   .. attribute:: dynDivStat (= nan)
+
+      Dynamic to static friction.
+
+      [type: Real]
+
+   .. attribute:: statR (= nan)
+
+      Roll static friction.
+
+      [type: Real]
+
+   .. attribute:: statW (= nan)
+
+      Twist static friction.
+
+      [type: Real]
+
+   .. attribute:: xiT (= Vector2(0,0))
+
+      Tangent elastic displacement.
+
+      [type: Vector2r]
+
+   .. attribute:: xiR (= Vector2(0,0))
+
+      Tangent elastic rotation.
+
+      [type: Vector2r]
+
+   .. attribute:: xiW (= 0.0)
+
+      Twist elastic rotation.
+
+      [type: Real]
+
+   .. attribute:: work (= [])
+
+      Per-contact dissipation (unallocated when energy tracking is not enabled).
+
+      [type: vector<Real>]
 
 ConcretePhys
 %%%%%%%%%%%%
@@ -6877,125 +6658,6 @@ ConcretePhys
 
       [type: Real, not saved, read-only in python]
 
-LudingPhys
-%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.dem.CPhys` → :obj:`~woo.dem.FrictPhys` → :obj:`~woo.dem.LudingPhys`
-
-.. autoclass:: LudingPhys
-   :members:
-   :exclude-members: kn1, kna, k2hat, deltaMax, deltaLim, kr, kw, viscN, viscT, viscR, viscW, dynDivStat, statR, statW, xiT, xiR, xiW, work, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: kn1 (= nan)
-
-      Normal plastic (loading) stiffness.
-
-      [type: Real]
-
-   .. attribute:: kna (= nan)
-
-      Normal adhesive stiffness.
-
-      [type: Real]
-
-   .. attribute:: k2hat (= nan)
-
-      Maximum stiffness.
-
-      [type: Real]
-
-   .. attribute:: deltaMax (= 0.0)
-
-      Historically maximum overlap value.
-
-      [type: Real]
-
-   .. attribute:: deltaLim (= nan)
-
-      Upper limit for :obj:`deltaMax`.
-
-      [type: Real]
-
-   .. attribute:: kr (= nan)
-
-      Roll stiffness.
-
-      [type: Real]
-
-   .. attribute:: kw (= nan)
-
-      Twist stiffness.
-
-      [type: Real]
-
-   .. attribute:: viscN (= nan)
-
-      Normal viscosity.
-
-      [type: Real]
-
-   .. attribute:: viscT (= nan)
-
-      Tangent viscosity.
-
-      [type: Real]
-
-   .. attribute:: viscR (= nan)
-
-      Roll viscosity.
-
-      [type: Real]
-
-   .. attribute:: viscW (= nan)
-
-      Twist viscosity.
-
-      [type: Real]
-
-   .. attribute:: dynDivStat (= nan)
-
-      Dynamic to static friction.
-
-      [type: Real]
-
-   .. attribute:: statR (= nan)
-
-      Roll static friction.
-
-      [type: Real]
-
-   .. attribute:: statW (= nan)
-
-      Twist static friction.
-
-      [type: Real]
-
-   .. attribute:: xiT (= Vector2(0,0))
-
-      Tangent elastic displacement.
-
-      [type: Vector2r]
-
-   .. attribute:: xiR (= Vector2(0,0))
-
-      Tangent elastic rotation.
-
-      [type: Vector2r]
-
-   .. attribute:: xiW (= 0.0)
-
-      Twist elastic rotation.
-
-      [type: Real]
-
-   .. attribute:: work (= [])
-
-      Per-contact dissipation (unallocated when energy tracking is not enabled).
-
-      [type: vector<Real>]
-
 IcePhys
 %%%%%%%
 
@@ -7084,20 +6746,37 @@ CPhysFunctor
 		rankdir=LR;
 		margin=.2;
 		"CPhysFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_FrictMat_FrictPhys_CrossAnisotropic" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys_CrossAnisotropic" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_ConcreteMat_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"CPhysFunctor" -> "Cp2_ConcreteMat_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_ConcreteMat_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"CPhysFunctor" -> "Cp2_ConcreteMat_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_FrictMat_FrictPhys_CrossAnisotropic" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys_CrossAnisotropic" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: CPhysFunctor
    :members:
    :exclude-members: __init__, __getstate__, __setstate__
    :special-members:
+
+Cp2_ConcreteMat_ConcretePhys
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CPhysFunctor` → :obj:`~woo.dem.Cp2_ConcreteMat_ConcretePhys`
+
+.. autoclass:: Cp2_ConcreteMat_ConcretePhys
+   :members:
+   :exclude-members: cohesiveThresholdStep, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: cohesiveThresholdStep (= 10)
+
+      Should new contacts be cohesive? They will before this iter#, they will not be afterwards. If 0, they will never be. If negative, they will always be created as cohesive (10 by default).
+
+      [type: long]
 
 Cp2_FrictMat_FrictPhys_CrossAnisotropic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7177,9 +6856,9 @@ Cp2_FrictMat_FrictPhys
 		margin=.2;
 		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
 		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
 		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -7268,23 +6947,6 @@ Cp2_HertzMat_HertzPhys
 
       [type: Real]
 
-Cp2_ConcreteMat_ConcretePhys
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.CPhysFunctor` → :obj:`~woo.dem.Cp2_ConcreteMat_ConcretePhys`
-
-.. autoclass:: Cp2_ConcreteMat_ConcretePhys
-   :members:
-   :exclude-members: cohesiveThresholdStep, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: cohesiveThresholdStep (= 10)
-
-      Should new contacts be cohesive? They will before this iter#, they will not be afterwards. If 0, they will never be. If negative, they will always be created as cohesive (10 by default).
-
-      [type: long]
-
 
 .. rst-class:: html-toggle
 
@@ -7337,9 +6999,9 @@ CData
 		rankdir=LR;
 		margin=.2;
 		"CData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"IdealElPlData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"CData" -> "IdealElPlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
-		"CData" -> "PelletCData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"G3GeomCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"PelletCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"CData" -> "PelletCData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IdealElPlData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
+		"CData" -> "IdealElPlData" [arrowsize=0.5,style="setlinewidth(0.5)"]		"G3GeomCData" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CData"];
 		"CData" -> "G3GeomCData" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -7441,15 +7103,15 @@ LawFunctor
 		rankdir=LR;
 		margin=.2;
 		"LawFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"Law2_L6Geom_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_HertzPhys_DMT" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_G3Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_G3Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_PelletPhys_Pellet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
-		"LawFunctor" -> "Law2_L6Geom_PelletPhys_Pellet" [arrowsize=0.5,style="setlinewidth(0.5)"]
+		"Law2_G3Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_G3Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_LinEl6" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_FrictPhys_LinEl6" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_FrictPhys_IdealElPl" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_FrictPhys_IdealElPl" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_PelletPhys_Pellet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_PelletPhys_Pellet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Law2_L6Geom_HertzPhys_DMT" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.LawFunctor"];
+		"LawFunctor" -> "Law2_L6Geom_HertzPhys_DMT" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
 .. autoclass:: LawFunctor
@@ -7679,6 +7341,35 @@ Law2_L6Geom_HertzPhys_DMT
 
       [type: int, not saved, not accessible from python]
 
+Law2_L6Geom_LudingPhys
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.LawFunctor` → :obj:`~woo.dem.Law2_L6Geom_LudingPhys`
+
+.. autoclass:: Law2_L6Geom_LudingPhys
+   :members:
+   :exclude-members: wImmediate, viscIx, plastIx, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: wImmediate (= True)
+
+      Increment plastic & viscous work in :obj:`S.energy <woo.core.Scene.EnergyTracker>` in every step rather than commiting the sum when contact dissolves. Note that :obj:`Particle.matState <woo.dem.MatState>` (if a :obj:`LudingMatState`) is always updated only when the contact dissolves.
+
+      [type: bool]
+
+   .. attribute:: viscIx (= -1)
+
+      Index of viscous dissipation.
+
+      [type: int, not saved, not accessible from python]
+
+   .. attribute:: plastIx (= -1)
+
+      Index of plastic dissipation.
+
+      [type: int, not saved, not accessible from python]
+
 Law2_L6Geom_ConcretePhys
 %%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -7729,35 +7420,6 @@ Law2_L6Geom_ConcretePhys
    .. attribute:: elastPotIx (= -1)
 
       Index for elastic potential energy
-
-      [type: int, not saved, not accessible from python]
-
-Law2_L6Geom_LudingPhys
-%%%%%%%%%%%%%%%%%%%%%%
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.LawFunctor` → :obj:`~woo.dem.Law2_L6Geom_LudingPhys`
-
-.. autoclass:: Law2_L6Geom_LudingPhys
-   :members:
-   :exclude-members: wImmediate, viscIx, plastIx, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: wImmediate (= True)
-
-      Increment plastic & viscous work in :obj:`S.energy <woo.core.Scene.EnergyTracker>` in every step rather than commiting the sum when contact dissolves. Note that :obj:`Particle.matState <woo.dem.MatState>` (if a :obj:`LudingMatState`) is always updated only when the contact dissolves.
-
-      [type: bool]
-
-   .. attribute:: viscIx (= -1)
-
-      Index of viscous dissipation.
-
-      [type: int, not saved, not accessible from python]
-
-   .. attribute:: plastIx (= -1)
-
-      Index of plastic dissipation.
 
       [type: int, not saved, not accessible from python]
 
@@ -8133,52 +7795,455 @@ LawTesterStage
 
 .. rst-class:: emphasized
 
-AnisoPorosityAnalyzer
----------------------
+Suspicious
+----------
 
 
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.dem.AnisoPorosityAnalyzer`
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Suspicious`
 
-.. autoclass:: AnisoPorosityAnalyzer
+.. autoclass:: Suspicious
    :members:
-   :exclude-members: poro, div, initStep, initNum, rayIds, rayPts, __init__, __getstate__, __setstate__
+   :exclude-members: avgVel, avgForce, avgFn, avgFt, avgUn, relThreshold, errPar, errCon, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: poro (= Matrix3(0,0,0, 0,0,0, 0,0,0))
+   .. attribute:: avgVel (= nan)
 
-      Store analysis result here
+      Average velocity norm.
 
-      [type: Matrix3r, read-only in python]
+      [type: Real, read-only in python]
 
-   .. attribute:: div (= 10)
+   .. attribute:: avgForce (= nan)
 
-      Fineness of division of interval (0…1) for \ :math:`u`\ ,\ :math:`v`\  ∈〈0…1〉, which are used for uniform distribution over the positive octant as \ :math:`\theta=rac{\pi}{2}u`\ , \ :math:`\phi=\arccos v`\  (see http://mathworld.wolfram.com/SpherePointPicking.html)
+      Average particle force norm.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: avgFn (= nan)
+
+      Average normal force norm.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: avgFt (= nan)
+
+      Average shear force norm.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: avgUn (= nan)
+
+      Average normal overlap.
+
+      [type: Real, read-only in python]
+
+   .. attribute:: relThreshold (= 100.0)
+
+      Break on quantity this much larger than the average.
+
+      [type: Real]
+
+   .. attribute:: errPar (= _8ParticleList[])
+
+      Particle where there was some error (shown in OpenGL).
+
+      [type: vector<shared_ptr<Particle>>]
+
+   .. attribute:: errCon (= [])
+
+      Contacts where there was some error (shown in OpenGL)
+
+      [type: vector<shared_ptr<Contact>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Internal forces
+---------------
+
+TODO
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+IntraForce
+++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.Dispatcher` → :obj:`~woo.dem.IntraForce`
+
+.. autoclass:: IntraForce
+   :members:
+   :exclude-members: functors, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: functors (= [])
+
+      Functors active in the dispatch mechanism [overridden below].
+
+      [type: vector<shared_ptr<IntraFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+IntraFunctor
+++++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor`
+
+.. graphviz::
+
+	digraph IntraFunctor {
+		rankdir=LR;
+		margin=.2;
+		"IntraFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"IntraFunctor" -> "In2_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Tet4_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"IntraFunctor" -> "woo.fem.In2_Tet4_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Truss_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"IntraFunctor" -> "In2_Truss_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Sphere_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"IntraFunctor" -> "In2_Sphere_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"In2_Wall_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.IntraFunctor"];
+		"IntraFunctor" -> "In2_Wall_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.IntraFunctor"];
+		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: IntraFunctor
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Sphere_ElastMat
+"""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Sphere_ElastMat`
+
+.. autoclass:: In2_Sphere_ElastMat
+   :members:
+   :exclude-members: alreadyWarned_ContactLoopWithApplyForces, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: alreadyWarned_ContactLoopWithApplyForces (= False)
+
+      Keep track of whether the warning on ContactLoop already applying forces was issued.
+
+      [type: bool, not shown in the UI]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Wall_ElastMat
+"""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Wall_ElastMat`
+
+.. autoclass:: In2_Wall_ElastMat
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Facet
+"""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Facet`
+
+.. graphviz::
+
+	digraph In2_Facet {
+		rankdir=LR;
+		margin=.2;
+		"In2_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.In2_Facet"];
+		"woo.fem.In2_Membrane_FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.In2_Facet"];
+		"woo.fem.In2_Membrane_ElastMat" -> "woo.fem.In2_Membrane_FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.In2_Membrane_ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.In2_Facet"];
+		"In2_Facet" -> "woo.fem.In2_Membrane_ElastMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: In2_Facet
+   :members:
+   :exclude-members: __init__, __getstate__, __setstate__
+   :special-members:
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+In2_Truss_ElastMat
+""""""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.Functor` → :obj:`~woo.dem.IntraFunctor` → :obj:`~woo.dem.In2_Truss_ElastMat`
+
+.. autoclass:: In2_Truss_ElastMat
+   :members:
+   :exclude-members: setL0, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: setL0 (= True)
+
+      Automatically set equilibrium length of truss, when first encountered.
+
+      [type: bool]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+Packings
+--------
+
+TODO
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+ShapePack
++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapePack`
+
+.. autoclass:: ShapePack
+   :members:
+   :exclude-members: cellSize, movable, div, raws, userData, loadFrom, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: cellSize (= Vector3(0,0,0))
+
+      Positive components signify periodic boundary along the respective axis.
+
+      [type: Vector3r]
+
+   .. attribute:: movable (= False)
+
+      Whether the packing is movable, i.e. should be automatically recentered after filtered with a predicate.
+
+      [type: bool]
+
+   .. attribute:: div (= 5)
+
+      Default value for recomputing properties of clumps (relative to the smallest equivalent radius)
 
       [type: int]
 
-   .. attribute:: initStep (= -1)
+   .. attribute:: raws (= [])
 
-      Step in which internal data were last updated
+      Raw shapes of particles/clumps.
 
-      [type: long, not accessible from python]
+      [type: vector<shared_ptr<ShapeClump>>]
 
-   .. attribute:: initNum (= 18446744073709551615)
+   .. attribute:: userData (= '')
 
-      Number of particles at last update
+      String of arbitrary user data to be loaded/saved with the ShapePack.
 
-      [type: size_t, not accessible from python]
+      [type: string]
 
-   .. attribute:: rayIds (= [])
+   .. attribute:: loadFrom (= '')
 
-      Particles intersected with ray when *oneRay* was last called from python.
+      If given when constructing the instance, the file is loaded immediately and the attribute is reset.
 
-      [type: vector<Particle::id_t>, read-only in python]
+      [type: string]
 
-   .. attribute:: rayPts (= [])
 
-      Starting and ending points of segments intersecting particles.
+.. rst-class:: html-toggle
 
-      [type: vector<Vector3r>, read-only in python]
+
+.. rst-class:: emphasized
+
+RawShape
+++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.RawShape`
+
+.. autoclass:: RawShape
+   :members:
+   :exclude-members: className, center, radius, raw, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: className (= '')
+
+      Name of the Shape subclass.
+
+      [type: string]
+
+   .. attribute:: center (= Vector3(0,0,0))
+
+      Center of the bounding sphere.
+
+      [type: Vector3r]
+
+   .. attribute:: radius (= 0.0)
+
+      Radius of the bounding sphere.
+
+      [type: Real]
+
+   .. attribute:: raw (= [])
+
+      Raw data for shape reconstruction; the size of the array is shape-specific.
+
+      [type: vector<Real>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+ShapeClump
+++++++++++
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump`
+
+.. graphviz::
+
+	digraph ShapeClump {
+		rankdir=LR;
+		margin=.2;
+		"ShapeClump" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
+		"SphereClumpGeom" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
+		"ShapeClump" -> "SphereClumpGeom" [arrowsize=0.5,style="setlinewidth(0.5)"]		"RawShapeClump" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ShapeClump"];
+		"ShapeClump" -> "RawShapeClump" [arrowsize=0.5,style="setlinewidth(0.5)"]
+	}
+
+.. autoclass:: ShapeClump
+   :members:
+   :exclude-members: scaleProb, pos, ori, volume, equivRad, inertia, div, clumped, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: scaleProb (= [])
+
+      Used by particle generators: piecewise-linear function probability(equivRad) given as a sequence of x,y coordinates. If not given, constant function \ :math:`p(d)=1`\  is assumed. See the documentation of :obj:`woo.dem.PsdClumpGenerator` for details.
+
+      [type: vector<Vector2r>]
+
+   .. attribute:: pos (= Vector3(0,0,0))
+
+      Centroid position (computed automatically)
+
+      [type: Vector3r, not dumped, read-only in python]
+
+   .. attribute:: ori (= Quaternion((1,0,0),0))
+
+      Principal axes orientation (computed automatically)
+
+      [type: Quaternionr, not dumped, read-only in python]
+
+   .. attribute:: volume (= nan)
+
+      Volume (computed automatically)
+
+      [type: Real, unit: m³, not dumped, read-only in python]
+
+   .. attribute:: equivRad (= nan)
+
+      Equivalent radius of the clump (computed automatically) -- mean of radii of gyration, i.e. \ :math:`\frac{1}{3}\sum \sqrt{I_{ii}/V}`\ .
+
+      [type: Real, unit: m, not dumped, read-only in python]
+
+   .. attribute:: inertia (= Vector3(nan,nan,nan))
+
+      Geometrical inertia (computed with unit density)
+
+      [type: Vector3r, not dumped, read-only in python]
+
+   .. attribute:: div (= 5)
+
+      Sampling grid fineness, when computing volume and other properties, relative to the smallest sphere's radius. When zero or negative, assume spheres don't intersect and use a different algorithm (Steiner's theorem).
+
+      [type: int, not dumped]
+
+   .. attribute:: clumped (= True)
+
+      Whether nodes of this shape are clumped together when the particle is created (so far, clumped shapes *only* are produced).
+
+      [type: bool, read-only in python]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+RawShapeClump
+"""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump` → :obj:`~woo.dem.RawShapeClump`
+
+.. autoclass:: RawShapeClump
+   :members:
+   :exclude-members: rawShapes, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: rawShapes (= [])
+
+      Data for creating primitive shapes
+
+      [type: vector<shared_ptr<RawShape>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+SphereClumpGeom
+"""""""""""""""
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.dem.ShapeClump` → :obj:`~woo.dem.SphereClumpGeom`
+
+.. autoclass:: SphereClumpGeom
+   :members:
+   :exclude-members: centers, radii, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: centers (= [])
+
+      Centers of constituent spheres, in clump-local coordinates.
+
+      [type: vector<Vector3r>]
+
+   .. attribute:: radii (= [])
+
+      Radii of constituent spheres
+
+      [type: vector<Real>]
 
 
 .. rst-class:: html-toggle
@@ -8208,13 +8273,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0x27cbfe0>)
+   .. attribute:: particles (= <ParticleContainer @ 0x21afc50>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0x27cc200>)
+   .. attribute:: contacts (= <ContactContainer @ 0x21afe70>)
 
       Linear view on particle contacts
 
@@ -8325,69 +8390,4 @@ ParticleContainer
       Free particle id's
 
       [type: list<id_t>, not accessible from python]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
-Suspicious
-----------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.Engine` → :obj:`~woo.core.PeriodicEngine` → :obj:`~woo.dem.Suspicious`
-
-.. autoclass:: Suspicious
-   :members:
-   :exclude-members: avgVel, avgForce, avgFn, avgFt, avgUn, relThreshold, errPar, errCon, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: avgVel (= nan)
-
-      Average velocity norm.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: avgForce (= nan)
-
-      Average particle force norm.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: avgFn (= nan)
-
-      Average normal force norm.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: avgFt (= nan)
-
-      Average shear force norm.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: avgUn (= nan)
-
-      Average normal overlap.
-
-      [type: Real, read-only in python]
-
-   .. attribute:: relThreshold (= 100.0)
-
-      Break on quantity this much larger than the average.
-
-      [type: Real]
-
-   .. attribute:: errPar (= _8ParticleList[])
-
-      Particle where there was some error (shown in OpenGL).
-
-      [type: vector<shared_ptr<Particle>>]
-
-   .. attribute:: errCon (= [])
-
-      Contacts where there was some error (shown in OpenGL)
-
-      [type: vector<shared_ptr<Contact>>]
 

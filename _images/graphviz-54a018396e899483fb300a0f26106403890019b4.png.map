@@ -1,0 +1,5 @@
+<map id="ShapeClump" name="ShapeClump">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.ShapeClump" title="ShapeClump" alt="" coords="25,49,115,71"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.ShapeClump" title="SphereClumpGeom" alt="" coords="163,25,290,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.ShapeClump" title="RawShapeClump" alt="" coords="170,71,283,94"/>
+</map>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>woo.paraviewscript &#8212; Woo 1.0+rev1-git-6353fce documentation</title>
+    <title>woo.paraviewscript &#8212; Woo 1.0+rev1-git-47657b2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/cloud.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-6353fce documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-47657b2 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.paraviewscript</a></li> 
@@ -402,7 +402,7 @@
 <span class="s1">    rep=Show()</span>
 <span class="s1">    rep.Representation=&#39;Outline&#39;</span>
 <span class="s1">    rep.Visibility=1</span>
-<span class="s1">    # rep.CubeAxesVisibility=1 # PV 5.10</span>
+<span class="s1">    rep.CubeAxesVisibility=1</span>
 
 <span class="s1">    for arr,name,rgb in [(&#39;cross&#39;,&#39;Segregation&#39;,(0,0,1)),(&#39;diffA&#39;,&#39;Small fraction&#39;,(0,1,0)),(&#39;diffB&#39;,&#39;Big fraction&#39;,(1,0,0))]:</span>
 <span class="s1">        SetActiveSource(_last)</span>
@@ -412,19 +412,15 @@
 <span class="s1">        scale=_avgcell/denom</span>
 <span class="s1">        scale*=2*splitStride # biggest vector spans about 2 cells (including stride)</span>
 <span class="s1">        if name==&#39;Segregation&#39;: scale*=4</span>
-<span class="s1">        gl=Glyph(GlyphType=&quot;Arrow&quot;,GlyphTransform=&quot;Transform2&quot;,OrientationArray=[&#39;POINTS&#39;,arr])</span>
+<span class="s1">        gl=Glyph(GlyphType=&quot;Arrow&quot;,GlyphTransform=&quot;Transform2&quot;,Vectors=[&#39;POINTS&#39;,arr])</span>
 <span class="s1">        if hasattr(gl,&#39;MaskPoints&#39;): # PV 4.0</span>
 <span class="s1">            gl.MaskPoints=0 </span>
 <span class="s1">            gl.SetScaleFactor=scale</span>
 <span class="s1">            gl.RandomMode=0</span>
-<span class="s1">        elif hasattr(gl,&#39;GlyphMode&#39;) and hasattr(gl,&#39;ScaleMode&#39;): # PV&gt;=4.3</span>
+<span class="s1">        elif hasattr(gl,&#39;GlyphMode&#39;): # PV&gt;=4.3</span>
 <span class="s1">            gl.GlyphMode=&#39;All Points&#39;</span>
 <span class="s1">            gl.ScaleMode=&#39;vector&#39;</span>
 <span class="s1">            gl.ScaleFactor=scale</span>
-<span class="s1">        else: # PV 5.x</span>
-<span class="s1">            gl.GlyphMode=&#39;All Points&#39;</span>
-<span class="s1">            gl.ScaleArray=[&#39;POINTS&#39;,arr]</span>
-
 <span class="s1">        RenameSource(name,gl)</span>
 <span class="s1">        rep=Show()</span>
 <span class="s1">        rep.ColorArrayName=(&#39;POINT_DATA&#39;,&#39;&#39;) # solid color</span>
@@ -610,7 +606,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">Woo 1.0+rev1-git-6353fce documentation</a> &#187;</li>
+    <li><a href="../../index.html">Woo 1.0+rev1-git-47657b2 documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">woo.paraviewscript</a></li> 
