@@ -18,6 +18,15 @@
 #endif
 
 
+#define PERI_INIT_FIX1
+//#define PERI_INIT_FIX2
+// #define ISC_PERI_CHUNKED_IS
+
+#if !(defined(PERI_INIT_FIX1) || defined(PERI_INIT_FIX2))
+	#error At least one of PERI_INIT_FIX1, PERI_INIT_FIX2 *must* be defined (initial sort with inifite boxes)
+#endif
+
+
 WOO_PLUGIN(dem,(InsertionSortCollider));
 WOO_IMPL_LOGGER(InsertionSortCollider);
 
@@ -459,8 +468,13 @@ void InsertionSortCollider::run(){
 					if(periodic && isinf(BBj[i].coord)){
 						// check that min and max are both infinite or none of them
 						assert(!bv || ((isinf(bv->min[j]) && isinf(bv->max[j])) || (!isinf(bv->min[j]) && !isinf(bv->max[j]))));
-						// infinite particles span between cell boundaries (both have coordinate 0), the lower bound having period 0, the upper one 1 (does not change during simulation at all)
-						BBj[i].period=(BBj[i].flags.isMin?0:1); BBj[i].coord=0.; /* wasInf=true; */
+						#ifdef PERI_INIT_FIX1
+							/* this was a good idea but initial sort diregards the period, thus fails to detect initial contact with the infinite BB */
+							BBj[i].coord=(BBj[i].flags.isMin?0:BBj.cellDim);
+						#else
+							// infinite particles span between cell boundaries (both have coordinate 0), the lower bound having period 0, the upper one 1 (does not change during simulation at all)
+							BBj[i].period=(BBj[i].flags.isMin?0:1); BBj[i].coord=0.; /* wasInf=true; */
+						#endif
 						BBj[i].flags.isInf=true; // keep track of infinite coord here, so that we know there is no separation possible later
 					}
 				} else { // vanished particle
@@ -569,15 +583,22 @@ void InsertionSortCollider::run(){
 			} else { // periodic case: see comments above
 				// parallelizing this decreases performance slightly
 				for(long i=0; i<2*nPar; i++){
-					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))) continue;
+					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))){ LOG_DEBUG("Skipping {} (id={}, isMin={})",i,V[i].id,V[i].flags.isMin); continue; }
 					const Particle::id_t& iid=V[i].id;
 					long cnt=0;
 					// we might wrap over the periodic boundary here; that's why the condition is different from the aperiodic case
-					for(long j=V.norm(i+1); V[j].id!=iid; j=V.norm(j+1)){
+					LOG_TRACE("i={}, loop: j=V.norm(i+1)={}; V[j].id={} != iid={}; j=V.norm(j+1)",i,V.norm(i+1),V[V.norm(i+1)].id,iid)
+					for(long j=V.norm(i+1); V[j].id!=iid
+						#ifdef PERI_INIT_FIX2
+							|| (V[i].flags.isInf && !V[j].flags.isMin)
+						#endif
+							; j=V.norm(j+1)){
+						LOG_TRACE("i={} (id={}, isMin={}), j={} (id={}, isMin={})",i,V[i].id,V[i].flags.isMin,j,V[j].id,V[j].flags.isMin);
+						if(cnt++>2*(long)nPar){ LOG_FATAL("Uninterrupted loop in the initial sort?"); throw std::logic_error("loop??"); }
 						const Particle::id_t& jid=V[j].id;
 						if(!V[j].flags.isMin) continue;
+						LOG_TRACE("Calling handleBoundInversionPeri({},{},false)",iid,jid)
 						handleBoundInversionPeri(iid,jid,/*separating*/false);
-						if(cnt++>2*(long)nPar){ LOG_FATAL("Uninterrupted loop in the initial sort?"); throw std::logic_error("loop??"); }
 					}
 				}
 			}
@@ -611,7 +632,7 @@ Real InsertionSortCollider::cellWrapRel(const Real x, const Real x0, const Real 
 	return (xNorm-floor(xNorm))*(x1-x0);
 }
 
-
+#ifdef ISC_PERI_CHUNKED_IS
 void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
 	assert(v.size==(long)v.vec.size());
@@ -772,8 +793,10 @@ void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide,
 	}
 }
 
-#if 0
-void InsertionSortCollider::insertionSortPeri_orig(VecBounds& v, bool doCollide, int ax){
+#else
+
+void InsertionSortCollider::insertionSortPeri_part(VecBounds& v, bool doCollide, int ax, long iBegin, long iEnd, long iStart){ throw std::runtime_error("Not active with old insertSortPeri"); }
+void InsertionSortCollider::insertionSortPeri(VecBounds& v, bool doCollide, int ax){
 	assert(periodic);
 	long &loIdx=v.loIdx; const long &size=v.size;
 	for(long _i=0; _i<size; _i++){
@@ -781,6 +804,7 @@ void InsertionSortCollider::insertionSortPeri_orig(VecBounds& v, bool doCollide,
 		const long i_1=v.norm(i-1);
 		//switch period of (i) if the coord is below the lower edge cooridnate-wise and just above the split
 		if(i==loIdx && v[i].coord<0){ v[i].period-=1; v[i].coord+=v.cellDim; loIdx=v.norm(loIdx+1); }
+		// else if(i==v.norm(loIdx+1) && v[i].coord>v.cellDim){ v[i].period+=1; v[i].coord-=v.cellDim; loIdx=v.norm(loIdx-1); }
 		// coordinate of v[i] used to check inversions
 		// if crossing the split, adjust by cellDim;
 		// if we get below the loIdx however, the v[i].coord will have been adjusted already, no need to do that here

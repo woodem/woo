@@ -72,7 +72,7 @@ Possible performance improvements & bugs
 
 // #define to turn on some tracing information for the periodic part
 // all code under this can be probably removed at some point, when the collider will have been tested thoroughly
-// #define PISC_DEBUG
+//#define PISC_DEBUG
 
 
 #ifdef ISC_TIMING
