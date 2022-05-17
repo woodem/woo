@@ -932,7 +932,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         else:
             relq=float('nan')
             unbe,unbf=woo.utils.unbalancedEnergy(S),woo.utils.unbalancedForce(S)
-        print('rel 95%% ht: %s / %g, mass %g, %d particles, unbalanced F: %g E: %g / %g'%('OK' if inlet.dead else str(q95),S.lab.goalHt,inlet.mass,len(S.dem.par),unbf,unbf,S.lab.goalUnb))
+        print('rel 95%% ht: %s / %g, mass %g, %d particles, unbalanced F: %g E: %g / %g'%('OK' if inlet.dead else str(q95),S.lab.goalHt,inlet.mass,len(S.dem.par),unbf,unbe,S.lab.goalUnb))
         if not inlet.dead and q95>=S.lab.goalHt and inlet.mass>S.lab.massMin:
             S.lab.leapfrog.damping=min(.9,S.lab.leapfrog.damping*1.5)
             inlet.dead=True
