@@ -20,7 +20,7 @@
 
 #define PERI_INIT_FIX1
 //#define PERI_INIT_FIX2
-// #define ISC_PERI_CHUNKED_IS
+#define ISC_PERI_CHUNKED_IS
 
 #if !(defined(PERI_INIT_FIX1) || defined(PERI_INIT_FIX2))
 	#error At least one of PERI_INIT_FIX1, PERI_INIT_FIX2 *must* be defined (initial sort with inifite boxes)
