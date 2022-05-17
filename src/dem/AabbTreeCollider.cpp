@@ -6,9 +6,9 @@
 WOO_PLUGIN(dem,(AabbTreeCollider));
 WOO_IMPL_LOGGER(AabbTreeCollider);
 
-WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS_PY);
 
-#define ATC_TIMING
+// #define ATC_TIMING
 
 #ifdef ATC_TIMING
 	#define ATC_CHECKPOINT(cpt) timingDeltas->checkpoint(__LINE__,cpt)
@@ -16,22 +16,46 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS);
 	#define ATC_CHECKPOINT(cpt)
 #endif
 
+AlignedBox3r AabbTreeCollider::pyGetAabb(const Particle::id_t& pId){
+	if(!tree) woo::RuntimeError("No tree object.");
+	if(!tree->hasParticle(pId)) woo::IndexError("No particle {}",pId);
+	const auto& aabb(tree->getAABB(pId));
+	return AlignedBox3r(aabb.lowerBound,aabb.upperBound);
+}
+
+Vector3i AabbTreeCollider::pyGetPeriod(const Particle::id_t& pId){
+	if(!tree) woo::RuntimeError("No tree object.");
+	if(pId>=boxPeriods.size()) woo::IndexError("No particle {}",pId);
+	return boxPeriods[pId];
+}
+
 void AabbTreeCollider::invalidatePersistentData(){
 	tree.reset();
 }
 
+AlignedBox3r AabbTreeCollider::canonicalBox(const Particle::id_t& pId, const Aabb& aabb){
+	if(!scene->isPeriodic) return aabb.box;
+	assert(boxPeriods.size()>(size_t)pId);
+	Vector3i& boxPeriod(boxPeriods[pId]);
+	/* handle infinite dimension specially */
+	Vector3r cent=aabb.box.center();
+	bool wasInf[3]={false,false,false};
+	for(int ax=0; ax<3; ax++){
+		if(isinf(aabb.box.min()[ax]) || isinf(aabb.box.max()[ax])){ cent[ax]=.5*scene->cell->getSize()[ax]; wasInf[ax]=true; }
+	}
+	(void)scene->cell->canonicalizePt(cent,boxPeriod);
+	Vector3r off=boxPeriod.cast<Real>().array()*scene->cell->getSize().array();
+	AlignedBox3r ret(aabb.box.min()-off,aabb.box.max()-off);
+	for(int ax=0; ax<3; ax++){
+		if(!wasInf[ax]) continue;
+		ret.min()[ax]=0;
+		ret.max()[ax]=scene->cell->getSize()[ax];
+	}
+	return ret;
+}
+
+
 void AabbTreeCollider::run(){
-	#if 0
-		// old test
-		::aabb::Tree tt;
-		tt.insertParticle(0,Vector3r(-.53,-.53,-.13),Vector3r(.53,.53,.93));
-		tt.insertParticle(1,Vector3r(.22,.22,.22),Vector3r(1.78,1.78,1.78));
-		tt.insertParticle(2,Vector3r(.27,.97,.97),Vector3r(2.33,3.03,3.03));
-		for(int i:{0,1,2}){
-			auto q=tt.query(i);
-			for(size_t j=0; i<q.size(); i++) LOG_DEBUG("+ ##{}+{}",i,j);
-		}
-	#endif
 
 	#ifdef ATC_TIMING
 		if(!timingDeltas) timingDeltas=make_shared<TimingDeltas>();
@@ -71,8 +95,10 @@ void AabbTreeCollider::run(){
 	ATC_CHECKPOINT("bounds:start");
 	// parallelizable?
 	std::list<Particle::id_t> changed;
+	if(scene->isPeriodic) boxPeriods.resize(dem->particles->size());
 	for(const shared_ptr<Particle>& p: *dem->particles){
 		if(!p->shape) continue;
+		assert(dynamic_cast<Aabb*>(p->shape->bound.get()));
 		// if(!p->shape->bound) continue;
 		#ifdef WOO_ABBY
 			if(tree->size()<=p->id){
@@ -80,28 +106,28 @@ void AabbTreeCollider::run(){
 			if(tree->nParticles()<=p->id){
 		#endif
 			AabbCollider::updateAabb(p);
-			const auto& aabb(p->shape->bound->cast<Aabb>());
+			AlignedBox3r box=canonicalBox(p->id,p->shape->bound->cast<Aabb>());
 			#ifdef WOO_ABBY
-				tree->insert(p->id,aabb.box.min(),aabb.box.max());
-				LOG_TRACE("   #{}: inserted into the tree (contains {} particles): {}…{}",p->id,tree->size(),aabb.box.min().transpose(),aabb.box.max().transpose());
+				tree->insert(p->id,box.min(),box.max());
+				LOG_TRACE("   #{}: inserted into the tree (contains {} particles): {}…{}",p->id,tree->size(),box.min().transpose(),box.max().transpose());
 			#else
-				tree->insertParticle(p->id,aabb.box.min(),aabb.box.max());
-				LOG_TRACE("   #{}: inserted into the tree (contains {} particles): {}…{}",p->id,tree->nParticles(),aabb.box.min().transpose(),aabb.box.max().transpose());
+				if(!tree->hasParticle(p->id)) tree->insertParticle(p->id,box.min(),box.max());
+				else tree->updateParticle(p->id,box.min(),box.max(),/*alwaysReinsert*/true);
+				LOG_TRACE("   #{}: inserted into the tree (contains {} particles): {}…{}",p->id,tree->nParticles(),box.min().transpose(),box.max().transpose());
 			#endif
 			changed.push_back(p->id);
 		}
 		else if(AabbCollider::aabbIsDirty(p)){
 			AabbCollider::updateAabb(p);
-			const auto& aabb(p->shape->bound->cast<Aabb>());
-			LOG_TRACE("   #{}: aabb updated",p->id);
+			AlignedBox3r box=canonicalBox(p->id,p->shape->bound->cast<Aabb>());
+			LOG_TRACE("   #{}: aabb updated → {}…{}",p->id,box.min().transpose(),box.max().transpose());
 			#ifdef WOO_ABBY
-				tree->update(p->id,aabb.box.min(),aabb.box.max(),/*alwaysReinsert*/false);
+				tree->update(p->id,box.min(),box.max(),/*alwaysReinsert*/false);
 			#else
-				tree->updateParticle(p->id,aabb.box.min(),aabb.box.max(),/*alwaysReinsert*/false);
+				tree->updateParticle(p->id,box.min(),box.max(),/*alwaysReinsert*/true);
 			#endif
 			changed.push_back(p->id);
 		}
-		assert(dynamic_cast<Aabb*>(p->shape->bound.get()));
 	}
 	ATC_CHECKPOINT("bounds:end");
 	if(changed.empty()){
@@ -181,6 +207,7 @@ void AabbTreeCollider::run(){
 			newC->pA=(idA<idB?pA:pB); newC->pB=(idA<idB?pB:pA);
 			newC->stepCreated=scene->step;
 			newC->stepLastSeen=scene->step;
+			if(scene->isPeriodic) newC->cellDist=(boxPeriods[idB]-boxPeriods[idA]);
 			dem->contacts->addMaybe_fast(newC); // not thread-safe (ok when not parallelized)
 			LOG_TRACE("   * created new contact {}",newC->pyStr());
 		}

@@ -2,7 +2,7 @@
 #include"Collision.hpp"
 #include"Contact.hpp"
 
-#define WOO_ABBY
+//#define WOO_ABBY
 
 #ifdef WOO_ABBY
 	#include"../lib/aabbcc/abby.hpp"
@@ -17,6 +17,7 @@ struct AabbTreeCollider: public AabbCollider{
 		typedef abby::tree<Particle::id_t,Vector3r> Tree3d;
 	#else
 		typedef ::aabb::Tree Tree3d;
+		std::vector<Vector3i> boxPeriods;
 	#endif
 	shared_ptr<Tree3d> tree;
 
@@ -35,13 +36,16 @@ struct AabbTreeCollider: public AabbCollider{
 	// forces reinitialization
 	void invalidatePersistentData() override;
 
+	AlignedBox3r canonicalBox(const Particle::id_t&, const Aabb& aabb);
+
+	Vector3i pyGetPeriod(const Particle::id_t& id);
+	AlignedBox3r pyGetAabb(const Particle::id_t& id);
 
 	public:
 	//! Predicate called from loop within ContactContainer::erasePending
 	bool shouldBeRemoved(const shared_ptr<Contact> &C, Scene* scene) const {
 		if(C->pA.expired() || C->pB.expired()) return true; //remove contact where constituent particles have been deleted
 		Particle::id_t id1=C->leakPA()->id, id2=C->leakPB()->id;
-		if(scene->isPeriodic) throw std::runtime_error("Periodic boundaries not yet handled in AabbTreeCollider.");
 		if(!tree) return false;
 		#ifdef WOO_ABBY
 			return !tree->get_aabb(id1).overlaps(tree->get_aabb(id2),/*touchIsOverlap*/true);
@@ -53,11 +57,12 @@ struct AabbTreeCollider: public AabbCollider{
 	}
 
 
-	#define woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS \
-		AabbTreeCollider,AabbCollider,ClassTrait().doc("Collider based on AABB hierarchy."),
-		/*attrs*/
+	#define woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS_PY \
+		AabbTreeCollider,AabbCollider,ClassTrait().doc("Collider based on AABB hierarchy."), \
+		/*attrs*/ \
+		,/*py*/ .def("getAabb",&AabbTreeCollider::pyGetAabb,py::arg("id")).def("getPeriod",&AabbTreeCollider::pyGetPeriod,py::arg("id"))
 
 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_AabbTreeCollider__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(AabbTreeCollider);
