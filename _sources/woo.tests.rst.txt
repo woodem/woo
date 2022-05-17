@@ -12,10 +12,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_hertz`
+:mod:`woo.tests.test_clump`
 ----------------------------------------
 
-.. automodule:: woo.tests.test_hertz
+.. automodule:: woo.tests.test_clump
    :members:
    :undoc-members:
 
@@ -40,24 +40,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_pbc`
---------------------------------------
-
-.. automodule:: woo.tests.test_pbc
-   :members:
-   :undoc-members:
-
 :mod:`woo.tests.test_labels`
 -----------------------------------------
 
 .. automodule:: woo.tests.test_labels
-   :members:
-   :undoc-members:
-
-:mod:`woo.tests.test_ellipsoid`
---------------------------------------------
-
-.. automodule:: woo.tests.test_ellipsoid
    :members:
    :undoc-members:
 
@@ -75,10 +61,10 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_batch`
-----------------------------------------
+:mod:`woo.tests.test_psd`
+--------------------------------------
 
-.. automodule:: woo.tests.test_batch
+.. automodule:: woo.tests.test_psd
    :members:
    :undoc-members:
 
@@ -96,10 +82,24 @@
    :members:
    :undoc-members:
 
-:mod:`woo.tests.test_clump`
+:mod:`woo.tests.test_pbc`
+--------------------------------------
+
+.. automodule:: woo.tests.test_pbc
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_hertz`
 ----------------------------------------
 
-.. automodule:: woo.tests.test_clump
+.. automodule:: woo.tests.test_hertz
+   :members:
+   :undoc-members:
+
+:mod:`woo.tests.test_ellipsoid`
+--------------------------------------------
+
+.. automodule:: woo.tests.test_ellipsoid
    :members:
    :undoc-members:
 
@@ -168,7 +168,7 @@ _TestPyClass
 
       [type: [Vector2, …]]
 
-   .. attribute:: aNode (= <Node @ 0x2dfd040, at (1,1,1)>)
+   .. attribute:: aNode (= <Node @ 0x3485c70, at (1,1,1)>)
 
       node attr
 
@@ -180,7 +180,7 @@ _TestPyClass
 
       [type: Node]
 
-   .. attribute:: aNNode (= [<Node @ 0x32724f0, at (1,1,1)>, <Node @ 0x2dfc490, at (2,2,2)>])
+   .. attribute:: aNNode (= [<Node @ 0x350e7b0, at (1,1,1)>, <Node @ 0x3be2a60, at (2,2,2)>])
 
       List of nodes
 
@@ -242,10 +242,10 @@ _TestPyClass2
 
       [type: int]
 
-:mod:`woo.tests.test_psd`
---------------------------------------
+:mod:`woo.tests.test_batch`
+----------------------------------------
 
-.. automodule:: woo.tests.test_psd
+.. automodule:: woo.tests.test_batch
    :members:
    :undoc-members:
    :exclude-members: _TestPyClass2,  _TestPyClass

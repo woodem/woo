@@ -1,7 +1,0 @@
-<map id="Outlet" name="Outlet">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.Outlet" title="Outlet" alt="" coords="25,71,97,94"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.Outlet" title="BoxOutlet" alt="" coords="151,25,225,47"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.Outlet" title="CrazyOutlet" alt="" coords="145,71,231,94"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Outlet" title="ArcOutlet" alt="" coords="151,118,225,141"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.Outlet" title="StackedBoxOutlet" alt="" coords="279,25,397,47"/>
-</map>

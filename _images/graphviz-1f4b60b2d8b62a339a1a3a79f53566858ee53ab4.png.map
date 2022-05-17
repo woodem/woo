@@ -1,7 +1,0 @@
-<map id="Collider" name="Collider">
-<area shape="rect" id="node1" href="woo.dem.html#woo.dem.Collider" title="Collider" alt="" coords="25,71,97,94"/>
-<area shape="rect" id="node2" href="woo.dem.html#woo.dem.Collider" title="AabbCollider" alt="" coords="145,47,235,70"/>
-<area shape="rect" id="node3" href="woo.dem.html#woo.dem.Collider" title="GridCollider" alt="" coords="147,94,233,117"/>
-<area shape="rect" id="node4" href="woo.dem.html#woo.dem.Collider" title="AabbTreeCollider" alt="" coords="292,25,407,47"/>
-<area shape="rect" id="node5" href="woo.dem.html#woo.dem.Collider" title="InsertionSortCollider" alt="" coords="283,71,415,94"/>
-</map>

@@ -1,0 +1,8 @@
+<map id="FrictMat" name="FrictMat">
+<area shape="rect" id="node1" href="woo.dem.html#woo.dem.FrictMat" title="FrictMat" alt="" coords="25,118,97,141"/>
+<area shape="rect" id="node2" href="woo.dem.html#woo.dem.FrictMat" title="ConcreteMat" alt="" coords="145,25,235,47"/>
+<area shape="rect" id="node3" href="woo.dem.html#woo.dem.FrictMat" title="LudingMat" alt="" coords="149,71,231,94"/>
+<area shape="rect" id="node4" href="woo.dem.html#woo.dem.FrictMat" title="HertzMat" alt="" coords="153,118,227,141"/>
+<area shape="rect" id="node5" href="woo.dem.html#woo.dem.FrictMat" title="IceMat" alt="" coords="154,165,226,187"/>
+<area shape="rect" id="node6" href="woo.dem.html#woo.dem.FrictMat" title="PelletMat" alt="" coords="154,211,226,234"/>
+</map>
