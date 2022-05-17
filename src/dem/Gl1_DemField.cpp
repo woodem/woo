@@ -413,7 +413,7 @@ void Gl1_DemField::doContactNodes(){
 			else if(pA->shape->isA<Facet>()){ A=pA->shape->cast<Facet>().getNearestPt(B); }
 			else A=pA->shape->avgNodePos();
 			const Vector3r& dA(pA->shape->nodes[0]->getData<GlData>().dGlPos); const Vector3r& dB(pB->shape->nodes[0]->getData<GlData>().dGlPos);
-			if(scene->isPeriodic){ B+=scene->cell->intrShiftPos(C->cellDist); }
+			// if(scene->isPeriodic){ B+=scene->cell->intrShiftPos(C->cellDist); }
 			GLUtils::GLDrawLine(A+dA,B+dB,.5*CompUtils::mapColor(C->color));
 		}
 	}
