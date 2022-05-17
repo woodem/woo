@@ -227,7 +227,7 @@ namespace aabb
 			negMinImage=-.5*boxSize;
 		#else
 		isPeriodic = false;
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			posMinImage[i] =  0.5*boxSize[i];
 			negMinImage[i] = -0.5*boxSize[i];
@@ -279,7 +279,7 @@ namespace aabb
 		nodes[node].left = NULL_NODE;
 		nodes[node].right = NULL_NODE;
 		nodes[node].height = 0;
-		// nodes[node].aabb.setDimension(dimension);
+		// nodes[node].aabb.setDimension(Dim);
 		nodeCount++;
 
 		return node;
@@ -294,6 +294,10 @@ namespace aabb
 		nodes[node].height = -1;
 		freeList = node;
 		nodeCount--;
+	}
+
+	bool Tree::hasParticle(unsigned int particle){
+		return particleMap.count(particle)!=0;
 	}
 
 	void Tree::insertParticle(unsigned int particle, const VecT& lowerBound, const VecT& upperBound)
@@ -316,7 +320,7 @@ namespace aabb
 			size=upperBound-lowerBound;
 		#else
 		// Compute the AABB limits.
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			// Validate the bound.
 			if (lowerBound[i] > upperBound[i])
@@ -336,7 +340,7 @@ namespace aabb
 				nodes[node].aabb.lowerBound -= skinThickness * size;
 				nodes[node].aabb.upperBound += skinThickness * size;
 			#else
-			for (unsigned int i=0;i<dimension;i++)
+			for (unsigned int i=0;i<Dim;i++)
 			{
 				nodes[node].aabb.lowerBound[i] -= skinThickness * size[i];
 				nodes[node].aabb.upperBound[i] += skinThickness * size[i];
@@ -444,7 +448,7 @@ namespace aabb
 			size=upperBound-lowerBound;
 		#else
 		// Compute the AABB limits.
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			// Validate the bound.
 			if (lowerBound[i] > upperBound[i])
@@ -467,7 +471,7 @@ namespace aabb
 
 		if(skinThickness!=0){
 			// Fatten the new AABB.
-			for (unsigned int i=0;i<dimension;i++)
+			for (unsigned int i=0;i<Dim;i++)
 			{
 				aabb.lowerBound[i] -= skinThickness * size[i];
 				aabb.upperBound[i] += skinThickness * size[i];
@@ -524,7 +528,7 @@ namespace aabb
 				#if 1
 					separation=nodeAABB.centre-aabb.centre;
 				#else
-				for (unsigned int i=0;i<dimension;i++)
+				for (unsigned int i=0;i<Dim;i++)
 					separation[i] = nodeAABB.centre[i] - aabb.centre[i];
 				#endif
 
@@ -537,7 +541,7 @@ namespace aabb
 						nodeAABB.lowerBound+=shift;
 						nodeAABB.upperBound+=shift;
 					#else
-					for (unsigned int i=0;i<dimension;i++)
+					for (unsigned int i=0;i<Dim;i++)
 					{
 						nodeAABB.lowerBound[i] += shift[i];
 						nodeAABB.upperBound[i] += shift[i];
@@ -1088,7 +1092,7 @@ namespace aabb
 			assert((aabb.lowerBound==nodes[node].aabb.lowerBound));
 			assert((aabb.upperBound==nodes[node].aabb.upperBound));
 		#else
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			assert(aabb.lowerBound[i] == nodes[node].aabb.lowerBound[i]);
 			assert(aabb.upperBound[i] == nodes[node].aabb.upperBound[i]);
@@ -1098,10 +1102,10 @@ namespace aabb
 		validateMetrics(left);
 		validateMetrics(right);
 	}
-
+	#if 0
 	void Tree::periodicBoundaries(VecT& position)
 	{
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			if (position[i] < 0)
 			{
@@ -1121,7 +1125,7 @@ namespace aabb
 	{
 		bool isShifted = false;
 
-		for (unsigned int i=0;i<dimension;i++)
+		for (unsigned int i=0;i<Dim;i++)
 		{
 			if (separation[i] < negMinImage[i])
 			{
@@ -1142,4 +1146,30 @@ namespace aabb
 
 		return isShifted;
 	}
+	#else
+		void Tree::periodicBoundaries(VecT& position){
+			for (unsigned int i=0; i<Dim; i++){
+				if(!periodicity[i]) continue;
+				while(position[i]<0) position[i]+=boxSize[i];
+				while(position[i]>boxSize[i]) position[i]-=boxSize[i];
+			}
+		}
+		bool Tree::minimumImage(VecT& separation, VecT& shift){
+			bool isShifted = false;
+			for (unsigned int i=0; i<Dim; i++){
+				if(!periodicity[i]) continue;
+				while(separation[i]<negMinImage[i]){
+					separation[i] += periodicity[i]*boxSize[i];
+					shift[i] = periodicity[i]*boxSize[i];
+					isShifted=true;
+				}
+				while(separation[i]>=posMinImage[i]){
+					separation[i] -= periodicity[i]*boxSize[i];
+					shift[i] = -periodicity[i]*boxSize[i];
+					isShifted=true;
+				}
+			}
+			return isShifted;
+		}
+	#endif
 }

@@ -259,6 +259,8 @@ namespace aabb
          */
         void insertParticle(unsigned int, const VecT&, const VecT&);
 
+        bool hasParticle(unsigned int);
+
         /// Return the number of particles in the tree.
         unsigned int nParticles();
 
