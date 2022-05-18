@@ -209,7 +209,7 @@ GridCollider
 
       [type: Real, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x2aa4ea0>)
+   .. attribute:: boundDispatcher (= <GridBoundDispatcher @ 0x2676ea0>)
 
       Dispatches :obj:`GridBound` creation to :obj:`GridBoundFuctor` based on :obj:`Shape` type.
 
@@ -302,7 +302,7 @@ AabbCollider
    :exclude-members: boundDispatcher, verletDist, noBoundOk, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x2a533a0>)
+   .. attribute:: boundDispatcher (= <BoundDispatcher @ 0x26253a0>)
 
       :obj:`BoundDispatcher` object that is used for creating :obj:`bounds <Particle.bound>` on collider's request as necessary.
 
@@ -1164,7 +1164,7 @@ BoxInlet
 
       [type: AlignedBox3r]
 
-   .. attribute:: node (= <Node @ 0x2aee7d0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x26c07d0, at (0,0,0)>)
 
       Node defining local coordinate system (optional; if not given, global coordinates are used).
 
@@ -1204,7 +1204,7 @@ ArcInlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2af4ba0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x26c6ba0, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -1456,7 +1456,7 @@ ConveyorInlet
 
       [type: list<shared_ptr<Node>>, not accessible from python]
 
-   .. attribute:: node (= <Node @ 0x2c1cc80, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x27eec80, at (0,0,0)>)
 
       Position and orientation of the factory; local x-axis is the feed direction.
 
@@ -1984,7 +1984,7 @@ ArcShooter
    :exclude-members: node, elevRange, azimRange, vRange, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2af5da0, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x26c7da0, at (0,0,0)>)
 
       Node defining local coordinate system. *Must* be given.
 
@@ -2055,10 +2055,10 @@ Outlet
 		rankdir=LR;
 		margin=.2;
 		"Outlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"CrazyOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"Outlet" -> "CrazyOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ArcOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
 		"Outlet" -> "ArcOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StackedBoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CrazyOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
-		"Outlet" -> "CrazyOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
+		"BoxOutlet" -> "StackedBoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"BoxOutlet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Outlet"];
 		"Outlet" -> "BoxOutlet" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -2186,7 +2186,7 @@ ArcOutlet
    :exclude-members: node, cylBox, glSlices, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2b2df20, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x26fff20, at (0,0,0)>)
 
       Node defining local coordinates system. *Must* be given.
 
@@ -2566,19 +2566,19 @@ ContactLoop
    :exclude-members: geoDisp, phyDisp, lawDisp, hook, alreadyWarnedNoCollider, evalStress, applyForces, updatePhys, dist00, stress, reorderEvery, prevVol, prevStress, gradVIx, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x2a95a20>)
+   .. attribute:: geoDisp (= <CGeomDispatcher @ 0x2667a20>)
 
       :obj:`CGeomDispatcher` object that is used for dispatch.
 
       [type: shared_ptr<:obj:`CGeomDispatcher <woo.dem.CGeomDispatcher>`>, read-only in python]
 
-   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x2a88be0>)
+   .. attribute:: phyDisp (= <CPhysDispatcher @ 0x265abe0>)
 
       :obj:`CPhysDispatcher` object used for dispatch.
 
       [type: shared_ptr<:obj:`CPhysDispatcher <woo.dem.CPhysDispatcher>`>, read-only in python]
 
-   .. attribute:: lawDisp (= <LawDispatcher @ 0x2a95940>)
+   .. attribute:: lawDisp (= <LawDispatcher @ 0x2667940>)
 
       :obj:`LawDispatcher` object used for dispatch.
 
@@ -2751,7 +2751,7 @@ CGeom
    :exclude-members: node, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2a7db90, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x264fb90, at (0,0,0)>)
 
       Local coordinates definition.
 
@@ -3781,11 +3781,11 @@ CPhysFunctor
 		margin=.2;
 		"CPhysFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
 		"Cp2_FrictMat_FrictPhys_CrossAnisotropic" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys_CrossAnisotropic" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_ConcreteMat_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys_CrossAnisotropic" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"CPhysFunctor" -> "Cp2_FrictMat_FrictPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_ConcreteMat_ConcretePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
 		"CPhysFunctor" -> "Cp2_ConcreteMat_ConcretePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.CPhysFunctor"];
 		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -3807,10 +3807,10 @@ Cp2_FrictMat_FrictPhys
 		rankdir=LR;
 		margin=.2;
 		"Cp2_FrictMat_FrictPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_LudingMat_LudingPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
 		"Cp2_FrictMat_FrictPhys" -> "Cp2_LudingMat_LudingPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_HertzMat_HertzPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
-		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_HertzMat_HertzPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_PelletMat_PelletPhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
+		"Cp2_FrictMat_FrictPhys" -> "Cp2_PelletMat_PelletPhys" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cp2_IceMat_IcePhys" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Cp2_FrictMat_FrictPhys"];
 		"Cp2_FrictMat_FrictPhys" -> "Cp2_IceMat_IcePhys" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
 
@@ -4904,13 +4904,13 @@ DemField
    :exclude-members: particles, contacts, loneMask, gravity, distFactor, saveDead, deadNodes, deadParticles, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: particles (= <ParticleContainer @ 0x2b3ac20>)
+   .. attribute:: particles (= <ParticleContainer @ 0x270cc20>)
 
       Particles (each particle holds its contacts, and references associated nodes)
 
       [type: shared_ptr<:obj:`ParticleContainer <woo.dem.ParticleContainer>`>, read-only in python]
 
-   .. attribute:: contacts (= <ContactContainer @ 0x2b3ae40>)
+   .. attribute:: contacts (= <ContactContainer @ 0x270ce40>)
 
       Linear view on particle contacts
 
@@ -5560,15 +5560,15 @@ Shape
 		rankdir=LR;
 		margin=.2;
 		"Shape" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
-		"woo.fem.Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
-		"woo.fem.Tetra" -> "woo.fem.Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
 		"Facet" -> "woo.fem.Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Cone" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Cone" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
-		"Shape" -> "woo.fem.Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
+		"Shape" -> "woo.fem.Tetra" [arrowsize=0.5,style="setlinewidth(0.5)"]		"woo.fem.Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),filled",fillcolor=grey,height=0.2,URL="woo.fem.html#woo.fem.Shape"];
+		"woo.fem.Tetra" -> "woo.fem.Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Truss" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Rod" -> "Truss" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
 		"Shape" -> "Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Shape"];
@@ -5950,11 +5950,11 @@ ElastMat
 		rankdir=LR;
 		margin=.2;
 		"ElastMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"LudingMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
 		"FrictMat" -> "LudingMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HertzMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
 		"FrictMat" -> "HertzMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"PelletMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
-		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"FrictMat" -> "PelletMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"IceMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
+		"FrictMat" -> "IceMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConcreteMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
 		"FrictMat" -> "ConcreteMat" [arrowsize=0.5,style="setlinewidth(0.5)"]		"FrictMat" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.ElastMat"];
 		"ElastMat" -> "FrictMat" [arrowsize=0.5,style="setlinewidth(0.5)"]
 	}
@@ -6844,7 +6844,7 @@ POVRayExport
 
       [type: int]
 
-   .. attribute:: colorRange (= <ScalarRange @ 0x2b798b0>)
+   .. attribute:: colorRange (= <ScalarRange @ 0x274b8b0>)
 
       Range to map :obj:`woo.dem.Shape.color` to RGB for pigment specification.
 
@@ -7277,13 +7277,13 @@ Impose
 		margin=.2;
 		"Impose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"VariableAlignedRotation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "VariableAlignedRotation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"RadialForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "RadialForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HarmonicOscillation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "HarmonicOscillation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CombinedImpose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "CombinedImpose" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "VariableAlignedRotation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"CombinedImpose" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "CombinedImpose" [arrowsize=0.5,style="setlinewidth(0.5)"]		"HarmonicOscillation" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "HarmonicOscillation" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VariableVelocity3d" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "VariableVelocity3d" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "ReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"InterpolatedMotion" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
-		"Impose" -> "InterpolatedMotion" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConstantForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "InterpolatedMotion" [arrowsize=0.5,style="setlinewidth(0.5)"]		"RadialForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
+		"Impose" -> "RadialForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"ConstantForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "ConstantForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"AlignedHarmonicOscillations" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "AlignedHarmonicOscillations" [arrowsize=0.5,style="setlinewidth(0.5)"]		"VelocityAndReadForce" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
 		"Impose" -> "VelocityAndReadForce" [arrowsize=0.5,style="setlinewidth(0.5)"]		"StableCircularOrbit" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.dem.html#woo.dem.Impose"];
@@ -7377,7 +7377,7 @@ CircularOrbit
    :exclude-members: node, rotate, omega, angle, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: node (= <Node @ 0x2c5a360, at (0,0,0)>)
+   .. attribute:: node (= <Node @ 0x282c360, at (0,0,0)>)
 
       Local coordinate system.
 
@@ -7895,7 +7895,7 @@ Tracer
 
       [type: bool, not accessible from python]
 
-   .. attribute:: lineColor (= <ScalarRange @ 0x2bb17b0>)
+   .. attribute:: lineColor (= <ScalarRange @ 0x27837b0>)
 
       Color range for coloring the trace line
 

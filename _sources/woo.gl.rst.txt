@@ -80,12 +80,12 @@ GlShapeFunctor
 		margin=.2;
 		"GlShapeFunctor" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_Tet4" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"Gl1_Tetra" -> "Gl1_Tet4" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Rod" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Rod" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Capsule" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_Sphere" -> "Gl1_Capsule" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Ellipsoid" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_Sphere" -> "Gl1_Ellipsoid" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_InfCylinder" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
-		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_InfCylinder" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Facet" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
+		"GlShapeFunctor" -> "Gl1_Facet" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Membrane" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"Gl1_Facet" -> "Gl1_Membrane" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Wall" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Wall" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Sphere" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
 		"GlShapeFunctor" -> "Gl1_Sphere" [arrowsize=0.5,style="setlinewidth(0.5)"]		"Gl1_Tetra" [shape="box",fontsize=8,style="setlinewidth(0.5),solid",height=0.2,URL="woo.gl.html#woo.gl.GlShapeFunctor"];
@@ -533,13 +533,13 @@ Gl1_Membrane
 
       [type: bool]
 
-   .. attribute:: uRange (= <ScalarRange @ 0x2c7cb60>)
+   .. attribute:: uRange (= <ScalarRange @ 0x284eb60>)
 
       Range for displacements (colors only)
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: phiRange (= <ScalarRange @ 0x2c81fb0>)
+   .. attribute:: phiRange (= <ScalarRange @ 0x2853fb0>)
 
       Range for rotations (colors only)
 
@@ -891,77 +891,6 @@ LabelGlRep
 
 .. rst-class:: emphasized
 
-TensorGlRep
------------
-
-
-:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.TensorGlRep`
-
-.. autoclass:: TensorGlRep
-   :members:
-   :exclude-members: val, eigVec, eigVal, skew, relSz, skewRelSz, scaleExp, range, skewRange, __init__, __getstate__, __setstate__
-   :special-members:
-
-   .. attribute:: val (= Matrix3(0,0,0, 0,0,0, 0,0,0))
-
-      Value to be rendered.
-
-      [type: Matrix3r]
-
-   .. attribute:: eigVec (= Matrix3(0,0,0, 0,0,0, 0,0,0))
-
-      eigenvectors as columns, updated in postLoad.
-
-      [type: Matrix3r, not saved, read-only in python]
-
-   .. attribute:: eigVal (= Vector3(0,0,0))
-
-      eigenvalues of corresponding eigenvectors, updated in postLoad.
-
-      [type: Vector3r, not saved, read-only in python]
-
-   .. attribute:: skew (= Vector3(0,0,0))
-
-      skew (asymmetric) components of the tensor
-
-      [type: Vector3r, not saved]
-
-   .. attribute:: relSz (= 0.1)
-
-      Size of maximum-length arrows, relative to scene radius
-
-      [type: Real]
-
-   .. attribute:: skewRelSz (= -1.0)
-
-      Size of maximum-length skew curved arrows; if negative, use relSz instead.
-
-      [type: Real]
-
-   .. attribute:: scaleExp (= 1.0)
-
-      Exponent for scaling arrow sizem kuje wutg VectorGlRep. NaN disables scaling, making all arrows the same size.
-
-      [type: Real]
-
-   .. attribute:: range (= None)
-
-      Extrema values for symmetric components.
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-   .. attribute:: skewRange (= None)
-
-      Extrema values for skew components
-
-      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
-
-
-.. rst-class:: html-toggle
-
-
-.. rst-class:: emphasized
-
 GlCPhysFunctor
 --------------
 
@@ -1011,13 +940,13 @@ Gl1_CPhys
    :exclude-members: range, shearRange, shearColor, signFilter, relMaxRad, slices, slices_range, __init__, __getstate__, __setstate__
    :special-members:
 
-   .. attribute:: range (= <ScalarRange @ 0x2c36500>)
+   .. attribute:: range (= <ScalarRange @ 0x2808500>)
 
       Range for normal force
 
       [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
-   .. attribute:: shearRange (= <ScalarRange @ 0x2c35440>)
+   .. attribute:: shearRange (= <ScalarRange @ 0x2807440>)
 
       Range for absolute value of shear force
 
@@ -1076,7 +1005,7 @@ Gl1_ConcretePhys
 
       [type: int, named enum, possible values are: **'no'** (*''*; 0), **'only'** (1), **'also'** (2)]
 
-   .. attribute:: dmgRange (= <ScalarRange @ 0x2c89ee0>)
+   .. attribute:: dmgRange (= <ScalarRange @ 0x285bee0>)
 
       Range for disk damage coloring.
 
@@ -1300,19 +1229,19 @@ Gl1_DemField
 
       [type: int]
 
-   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x2c255e0>)
+   .. attribute:: shapeDispatcher (= <GlShapeDispatcher @ 0x27f75e0>)
 
       Dispatcher for rendering :obj:`shapes <woo.dem.Shape>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlShapeDispatcher <woo.gl.GlShapeDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x2c25500>)
+   .. attribute:: boundDispatcher (= <GlBoundDispatcher @ 0x27f7500>)
 
       Dispatcher for rendering :obj:`bounds <woo.dem.Bound>`. Set up automatically.
 
       [type: shared_ptr<:obj:`GlBoundDispatcher <woo.gl.GlBoundDispatcher>`>, not shown in the UI, read-only in python]
 
-   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x2c4ff50>)
+   .. attribute:: cPhysDispatcher (= <GlCPhysDispatcher @ 0x2821f50>)
 
       Dispatcher for rendering :obj:`CPhys <woo.dem.CPhys>`. Set up automatically.
 
@@ -1690,6 +1619,77 @@ GlCPhysDispatcher
       Functors active in the dispatch mechanism [overridden below].
 
       [type: vector<shared_ptr<GlCPhysFunctor>>]
+
+
+.. rst-class:: html-toggle
+
+
+.. rst-class:: emphasized
+
+TensorGlRep
+-----------
+
+
+:obj:`~woo.core.Object` → :obj:`~woo.core.NodeVisRep` → :obj:`~woo.gl.TensorGlRep`
+
+.. autoclass:: TensorGlRep
+   :members:
+   :exclude-members: val, eigVec, eigVal, skew, relSz, skewRelSz, scaleExp, range, skewRange, __init__, __getstate__, __setstate__
+   :special-members:
+
+   .. attribute:: val (= Matrix3(0,0,0, 0,0,0, 0,0,0))
+
+      Value to be rendered.
+
+      [type: Matrix3r]
+
+   .. attribute:: eigVec (= Matrix3(0,0,0, 0,0,0, 0,0,0))
+
+      eigenvectors as columns, updated in postLoad.
+
+      [type: Matrix3r, not saved, read-only in python]
+
+   .. attribute:: eigVal (= Vector3(0,0,0))
+
+      eigenvalues of corresponding eigenvectors, updated in postLoad.
+
+      [type: Vector3r, not saved, read-only in python]
+
+   .. attribute:: skew (= Vector3(0,0,0))
+
+      skew (asymmetric) components of the tensor
+
+      [type: Vector3r, not saved]
+
+   .. attribute:: relSz (= 0.1)
+
+      Size of maximum-length arrows, relative to scene radius
+
+      [type: Real]
+
+   .. attribute:: skewRelSz (= -1.0)
+
+      Size of maximum-length skew curved arrows; if negative, use relSz instead.
+
+      [type: Real]
+
+   .. attribute:: scaleExp (= 1.0)
+
+      Exponent for scaling arrow sizem kuje wutg VectorGlRep. NaN disables scaling, making all arrows the same size.
+
+      [type: Real]
+
+   .. attribute:: range (= None)
+
+      Extrema values for symmetric components.
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
+
+   .. attribute:: skewRange (= None)
+
+      Extrema values for skew components
+
+      [type: shared_ptr<:obj:`ScalarRange <woo.core.ScalarRange>`>]
 
 
 .. rst-class:: html-toggle
