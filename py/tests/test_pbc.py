@@ -201,5 +201,22 @@ class TestPBCCollisions(unittest.TestCase):
         bb=[float(b[0]) for b in S.lab.coll.dumpBounds()[0]]
         bs=sorted(bb)
         self.assertEqual(bb,bs)
+    def testInitSortAxis(self):
+        'PBC: initial sort in InsertionSortCollider handles infinite dimensions correctly'
+        for sortAxis in (0,1,2):
+            S=woo.core.Scene(dt=1,
+                fields=[woo.dem.DemField(par=[
+                   woo.dem.Sphere.make((.8,1.8,.8),radius=.1,color=0),
+                   woo.dem.InfCylinder.make((.5,.5,.5),axis=0,radius=.3,color=.5)
+                ])],
+                engines=[woo.dem.InsertionSortCollider([woo.dem.Bo1_Sphere_Aabb(),woo.dem.Bo1_InfCylinder_Aabb()],verletDist=0,label='coll',sortAxis=sortAxis,paraPeri=False)]
+            )
+            S.periodic=True
+            S.cell.setBox((1,1,1))
+            S.one()
+            self.assertEqual(len(S.dem.par[0].allContacts),1)
+            C=S.dem.con[0]
+            self.assertEqual((C.id1,C.id2),(1,0))
+            self.assertEqual(C.cellDist,(0,-1,0))
 
 
