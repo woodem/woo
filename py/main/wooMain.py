@@ -167,10 +167,12 @@ def main(sysArgv=None):
         import woo.config, glob
         if not woo.config.sourceRoot: raise RuntimeError('This build does not define woo.config.sourceRoot (packaged version?)')
         if opts.rebuild>1:
-            if os.path.exists(woo.config.sourceRoot+'/.git'): cmd=['git','-C',woo.config.sourceRoot,'pull','origin']
-            elif os.path.exists(woo.config.sourceRoot+'/.bzr'): cmd=['bzr','up',woo.config.sourceRoot]
-            print('Updating Woo using '+' '.join(cmd))
-            if subprocess.call(cmd): raise RuntimeError('Error updating Woo from repository.')
+            if os.path.exists(woo.config.sourceRoot+'/.git'):
+                cmd=['git','-C',woo.config.sourceRoot,'pull','origin']
+                print('Updating Woo using '+' '.join(cmd))
+                if subprocess.call(cmd): raise RuntimeError('Error updating Woo from repository.')
+            else:
+                print('Not updating WooDEM sources (not a repository)')
             # find updatable dirs in wooExtra
             for d in glob.glob(woo.config.sourceRoot+'/wooExtra/*')+glob.glob(woo.config.sourceRoot+'/wooExtra/*/*'):
                 dd=os.path.abspath(d)
