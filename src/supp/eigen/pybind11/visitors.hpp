@@ -630,30 +630,32 @@ class AabbVisitor{
 		.def(py::init(&AabbVisitor::from_list))
 		.def(py::init<Box>(),py::arg("other"))
 		.def(py::init<VectorType,VectorType>(),py::arg("min"),py::arg("max"))
-		.def(py::pickle([](const Box& b){ return py::make_tuple(b.min(),b.max()); },&AabbVisitor::from_tuple))
+		.def(py::pickle([](const Box& self){ return py::make_tuple(self.min(),self.max()); },&AabbVisitor::from_tuple))
 		.def("volume",&Box::volume)
 		.def("empty",&Box::isEmpty)
-		.def("center",&AabbVisitor::center)
-		.def("sizes",&AabbVisitor::sizes)
-		.def("contains",&AabbVisitor::containsPt)
-		.def("contains",&AabbVisitor::containsBox)
+		.def("center",&Box::center)
+		.def("sizes",&Box::sizes)
+		.def("contains",[](const Box& self, const VectorType& pt)->bool{ return self.contains(pt);})
+		.def("contains",[](const Box& self, const Box& other)->bool{ return self.contains(other);})
 		// for the "in" operator
-		.def("__contains__",&AabbVisitor::containsPt)
-		.def("__contains__",&AabbVisitor::containsBox)
-		.def("extend",&AabbVisitor::extendPt)
-		.def("extend",&AabbVisitor::extendBox)
-		.def("clamp",&AabbVisitor::clamp)
+		.def("__contains__",[](const Box& self, const VectorType& pt)->bool{ return self.contains(pt);})
+		.def("__contains__",[](const Box& self, const Box& other)->bool{ return self.contains(other);})
+		.def("extend",[](Box& self, const VectorType& pt){ self.extend(pt);})
+		.def("extend",[](Box& self, const Box& other){ self.extend(other);})
+		.def("clamp",&Box::clamp)
 		// return new objects
 		.def("intersection",&Box::intersection)
 		.def("merged",&Box::merged)
 		// those return internal references, which is what we want
 		// return_value_policy::reference_internal is the default for def_property
-		.def_property("min",&AabbVisitor::min,&AabbVisitor::setMin)
-		.def_property("max",&AabbVisitor::max,&AabbVisitor::setMax)
+		.def_property("min",[](Box& self)->VectorType&{ return self.min(); },[](Box& self, const VectorType& v){ self.min()=v; })
+		.def_property("max",[](Box& self)->VectorType&{ return self.max(); },[](Box& self, const VectorType& v){ self.max()=v; })
 
-		.def_static("__len__",&AabbVisitor::len)
-		.def("__setitem__",&AabbVisitor::set_item).def("__getitem__",&AabbVisitor::get_item)
-		.def("__setitem__",&AabbVisitor::set_minmax).def("__getitem__",&AabbVisitor::get_minmax)
+		.def_static("__len__",[](Box& self){ return 2; })
+		.def("__setitem__",[](Box& self, py::tuple _idx, Scalar value){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) self.min()[idx[1]]=value; else self.max()[idx[1]]=value; })
+		.def("__getitem__",[](const Box& self, py::tuple _idx){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) return self.min()[idx[1]]; return self.max()[idx[1]]; })
+		.def("__setitem__",[](Box& self, Index idx, const VectorType& value){ IDX_CHECK(idx,2); if(idx==0) self.min()=value; else self.max()=value; })
+		.def("__getitem__",[](const Box& self, Index idx){ IDX_CHECK(idx,2); if(idx==0) return self.min(); return self.max(); })
 		.def("__str__",&AabbVisitor::__str__).def("__repr__",&AabbVisitor::__str__)
 		;
 
@@ -667,23 +669,28 @@ class AabbVisitor{
 		return Box(py::cast<VectorType>(t[0]),py::cast<VectorType>(t[1]));
 	}
 	private:
-	static bool containsPt(const Box& self, const VectorType& pt){ return self.contains(pt); }
-	static bool containsBox(const Box& self, const Box& other){ return self.contains(other); }
-	static void extendPt(Box& self, const VectorType& pt){ self.extend(pt); }
-	static void extendBox(Box& self, const Box& other){ self.extend(other); }
-	static void clamp(Box& self, const Box& other){ self.clamp(other); }
-	static VectorType& min(Box& self){ return self.min(); }
-	static VectorType& max(Box& self){ return self.max(); }
-	static void setMin(Box& self, const VectorType& v){ self.min()=v; }
-	static void setMax(Box& self, const VectorType& v){ self.max()=v; }
-	static VectorType center(const Box& self){ return self.center(); }
-	static VectorType sizes(const Box& self){ return self.sizes(); }
-	static Index len(){ return 2; }
-	// getters and setters
-	static Scalar get_item(const Box& self, py::tuple _idx){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) return self.min()[idx[1]]; return self.max()[idx[1]]; }
-	static void set_item(Box& self, py::tuple _idx, Scalar value){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) self.min()[idx[1]]=value; else self.max()[idx[1]]=value; }
-	static VectorType get_minmax(const Box& self, Index idx){ IDX_CHECK(idx,2); if(idx==0) return self.min(); return self.max(); }
-	static void set_minmax(Box& self, Index idx, const VectorType& value){ IDX_CHECK(idx,2); if(idx==0) self.min()=value; else self.max()=value; }
+	#if 0
+		static bool containsPt(const Box& self, const VectorType& pt){ return self.contains(pt); }
+		static bool containsBox(const Box& self, const Box& other){ return self.contains(other); }
+		static void extendPt(Box& self, const VectorType& pt){ self.extend(pt); }
+		static void extendBox(Box& self, const Box& other){ self.extend(other); }
+		static void clamp(Box& self, const Box& other){ self.clamp(other); }
+		static VectorType& min(Box& self){ return self.min(); }
+		static VectorType& max(Box& self){ return self.max(); }
+		static void setMin(Box& self, const VectorType& v){ self.min()=v; }
+		static void setMax(Box& self, const VectorType& v){ self.max()=v; }
+		static VectorType center(const Box& self){ return self.center(); }
+		static VectorType sizes(const Box& self){ return self.sizes(); }
+	#endif
+
+	#if 0
+		static Index len(){ return 2; }
+		// getters and setters
+		static Scalar get_item(const Box& self, py::tuple _idx){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) return self.min()[idx[1]]; return self.max()[idx[1]]; }
+		static void set_item(Box& self, py::tuple _idx, Scalar value){ Index idx[2]; Index mx[2]={2,Box::AmbientDimAtCompileTime}; IDX2_CHECKED_TUPLE_INTS(_idx,mx,idx); if(idx[0]==0) self.min()[idx[1]]=value; else self.max()[idx[1]]=value; }
+		static VectorType get_minmax(const Box& self, Index idx){ IDX_CHECK(idx,2); if(idx==0) return self.min(); return self.max(); }
+		static void set_minmax(Box& self, Index idx, const VectorType& value){ IDX_CHECK(idx,2); if(idx==0) self.min()=value; else self.max()=value; }
+	#endif
 	static string __str__(const py::object& obj){
 		const Box& self=py::cast<Box>(obj);
 		std::ostringstream oss; oss<<object_class_name(obj)<<"((";
