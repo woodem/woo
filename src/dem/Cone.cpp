@@ -84,6 +84,12 @@ bool Cg2_Cone_Sphere_L6Geom::go(const shared_ptr<Shape>& s1, const shared_ptr<Sh
 	}
 	Real unDistSq=(S-contPt).squaredNorm()-pow2(s.radius);
 
+	#if 0
+		if(scene->isPeriodic && unDistSq>.5*pow2(scene->cell->getSize().minCoeff())){
+			LOG_ERROR("##{}+{}: normal distance {} is larger than half cell min-size; is cellDist {} correct?",C->pyId1(),C->pyId2(),sqrt(unDistSq),C->cellDist.transpose());
+		}
+	#endif
+
 	if(!inside && unDistSq>0 && !C->isReal() && !force) return false;
 
 	Real uN=(inside?-1:1)*(S-contPt).norm()-s.radius;
