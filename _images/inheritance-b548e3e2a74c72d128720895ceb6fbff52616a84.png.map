@@ -1,8 +1,0 @@
-<map id="inheritancec80da1a5ff" name="inheritancec80da1a5ff">
-<area shape="rect" id="node1" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="342,104,438,129"/>
-<area shape="rect" id="node3" href="#woo.models.ContactModelSelector" target="_top" title="User interface for humanely selecting contact model and all its features, plus functions returning respective :obj:`woo.dem.CPhysFunctor` and :obj:`woo.dem.LawFunctor` objects." alt="" coords="527,80,744,105"/>
-<area shape="rect" id="node4" href="woo.pyderived.html#woo.pyderived.PyWooObject" target="_top" title="Define some c++&#45;compatibility functions for python classes. Derived class is created as::" alt="" coords="301,55,479,80"/>
-<area shape="rect" id="node5" href="#woo.models.CundallModel" target="_top" title="Linear model :cite:`Cundall1979`." alt="" coords="48,5,211,31"/>
-<area shape="rect" id="node6" href="#woo.models.HertzModel" target="_top" title="Purely elastic Hertz contact model; base class for :obj:`SchwarzModel`. For details, see :ref:`hertzian_contact_models`." alt="" coords="315,5,465,31"/>
-<area shape="rect" id="node7" href="#woo.models.SchwarzModel" target="_top" title="Schwarz contact model, following :cite:`Schwarz2003`. Details are given in :ref:`adhesive_contact_models`." alt="" coords="551,5,719,31"/>
-</map>

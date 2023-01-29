@@ -1,7 +1,0 @@
-:mod:`woo.pyderived`
-=================================
-
-.. automodule:: woo.pyderived
-   :members:
-   :undoc-members:
-

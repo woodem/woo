@@ -1,7 +1,0 @@
-:mod:`woo.paraviewscript`
-======================================
-
-.. automodule:: woo.paraviewscript
-   :members:
-   :undoc-members:
-

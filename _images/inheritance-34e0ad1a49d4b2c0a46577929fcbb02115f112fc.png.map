@@ -1,6 +1,0 @@
-<map id="inheritance5dc6862242" name="inheritance5dc6862242">
-<area shape="rect" id="node1" href="#woo.qt.SnapshotEngine" target="_top" title="Periodically save snapshots of GLView(s) as .png files. Files are named :obj:`fileBase` + :obj:`counter` + ``.png`` (counter is left&#45;padded by 0s, i.e. snap00004.png)." alt="" coords="791,5,941,31"/>
-<area shape="rect" id="node2" href="woo.core.html#woo.core.PeriodicEngine" target="_top" title="Run Engine::run with given fixed periodicity real time (=wall clock time, computation time), virtual time (simulation time), step number), by setting any of those criteria (virtPeriod, realPeriod, stepPeriod) to a positive value. They are all negative (inactive) by default." alt="" coords="592,5,743,31"/>
-<area shape="rect" id="node3" href="woo.core.html#woo.core.Engine" target="_top" title="Basic execution unit of simulation, called from the simulation loop (O.engines)" alt="" coords="445,5,544,31"/>
-<area shape="rect" id="node4" href="woo.core.html#woo.core.Object" target="_top" title="Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits." alt="" coords="301,5,397,31"/>
-</map>

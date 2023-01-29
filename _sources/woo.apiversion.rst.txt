@@ -1,7 +1,0 @@
-:mod:`woo.apiversion`
-==================================
-
-.. automodule:: woo.apiversion
-   :members:
-   :undoc-members:
-

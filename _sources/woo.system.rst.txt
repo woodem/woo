@@ -1,7 +1,0 @@
-:mod:`woo.system`
-==============================
-
-.. automodule:: woo.system
-   :members:
-   :undoc-members:
-

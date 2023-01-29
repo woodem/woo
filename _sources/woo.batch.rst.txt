@@ -1,7 +1,0 @@
-:mod:`woo.batch`
-=============================
-
-.. automodule:: woo.batch
-   :members:
-   :undoc-members:
-

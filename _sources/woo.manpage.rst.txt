@@ -1,7 +1,0 @@
-:mod:`woo.manpage`
-===============================
-
-.. automodule:: woo.manpage
-   :members:
-   :undoc-members:
-

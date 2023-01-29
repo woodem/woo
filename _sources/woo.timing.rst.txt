@@ -1,7 +1,0 @@
-:mod:`woo.timing`
-==============================
-
-.. automodule:: woo.timing
-   :members:
-   :undoc-members:
-

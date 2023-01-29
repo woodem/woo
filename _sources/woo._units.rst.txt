@@ -1,7 +1,0 @@
-:mod:`woo._units`
-==============================
-
-.. automodule:: woo._units
-   :members:
-   :undoc-members:
-

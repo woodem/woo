@@ -1,7 +1,0 @@
-:mod:`woo.linterpolation`
-======================================
-
-.. automodule:: woo.linterpolation
-   :members:
-   :undoc-members:
-

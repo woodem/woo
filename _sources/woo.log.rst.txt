@@ -1,7 +1,0 @@
-:mod:`woo.log`
-===========================
-
-.. automodule:: woo.log
-   :members:
-   :undoc-members:
-

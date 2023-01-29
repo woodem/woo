@@ -1,7 +1,0 @@
-:mod:`woo.objectlibrary`
-=====================================
-
-.. automodule:: woo.objectlibrary
-   :members:
-   :undoc-members:
-
