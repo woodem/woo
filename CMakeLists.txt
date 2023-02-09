@@ -548,6 +548,7 @@ install(FILES
 	py/tests/test_clustering.py
 	py/tests/test_core.py
 	py/tests/test_demfield.py
+	py/tests/test_eigen.py
 	py/tests/test_ellipsoid.py
 	py/tests/test_energy.py
 	py/tests/test_grid.py
