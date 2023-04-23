@@ -477,17 +477,18 @@ OPTION(WOO_SPDLOG_LOCAL "build using local spdlog version" ON)
 if(WOO_SPDLOG_LOCAL)
 	add_library(spdlog_local STATIC
 		src/lib/spdlog/src/async.cpp
+		src/lib/spdlog/src/cfg.cpp
 		src/lib/spdlog/src/color_sinks.cpp
 		src/lib/spdlog/src/file_sinks.cpp
-		src/lib/spdlog/src/fmt.cpp
+		src/lib/spdlog/src/bundled_fmtlib_format.cpp
 		src/lib/spdlog/src/spdlog.cpp
 		src/lib/spdlog/src/stdout_sinks.cpp
 	)
 	target_include_directories(spdlog_local PUBLIC src/lib/)
-    add_definitions(-DSPDLOG_COMPILED_LIB)
+	add_definitions(-DSPDLOG_COMPILED_LIB)
 	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
 else()
-	find_package(spdlog REQUIRED 1.5)
+	find_package(spdlog REQUIRED 1.8)
 	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog::spdlog)
 endif()
 

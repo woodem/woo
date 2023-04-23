@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <cassert>
 
 namespace spdlog {
 namespace details {
@@ -75,13 +76,13 @@ public:
     // Return number of elements actually stored
     size_t size() const
     {
-        if (tail_ > head_)
+        if (tail_ >= head_)
         {
-           return tail_ - head_;
+            return tail_ - head_;
         }
         else
         {
-            return max_items_ - (head_ - tail_ );
+            return max_items_ - (head_ - tail_);
         }
     }
 
@@ -90,7 +91,7 @@ public:
     const T &at(size_t i) const
     {
         assert(i < size());
-        return v_[(head_+ i) % max_items_];
+        return v_[(head_ + i) % max_items_];
     }
 
     // Pop item from front.
@@ -118,6 +119,11 @@ public:
     size_t overrun_counter() const
     {
         return overrun_counter_;
+    }
+
+    void reset_overrun_counter()
+    {
+        overrun_counter_ = 0;
     }
 
 private:
