@@ -12,13 +12,12 @@ WOO_IMPL_LOGGER(ConveyorInlet);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ConveyorInlet__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_InletMatState__CLASS_BASE_DOC_ATTRS);
 
-#if 0
 Vector2r ConveyorInlet::minMaxDiam() const {
-	if(spherePack) return Vector2r(std::min_element(spherePack->radii.begin(),spherePack->radii.end()),std::max_element(spherePack->radii.begin(),spherePack->radii.end()));
-	else if (shapePack)
-	else return Vector2r(std::min_element(radii.begin(),radii.end()),std::max_element(radii.begin(),radii.end()));
+	assert(!spherePack);
+	if(shapePack) return 2*shapePack->minMaxEquivRad();
+	else if(radii.size()>0) return 2*Vector2r(*std::min_element(radii.begin(),radii.end()),*std::max_element(radii.begin(),radii.end()));
+	return Vector2r(NaN,NaN);
 };
-#endif
 
 Real ConveyorInlet::critDt(){
 	if(!material->isA<ElastMat>()){

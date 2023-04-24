@@ -38,6 +38,7 @@ struct ConveyorInlet: public Inlet{
 	void nodeLeavesBarrier(const shared_ptr<Node>& p);
 	void setAttachedParticlesColor(const shared_ptr<Node>& n, Real c);
 	void setAttachedParticlesMatState(const shared_ptr<Node>& n, const shared_ptr<InletMatState>& ms);
+	Vector2r minMaxDiam() const override;
 
 	#ifdef WOO_OPENGL
 		void render(const GLViewInfo&) override{
