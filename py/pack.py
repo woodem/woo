@@ -711,7 +711,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         import hashlib
         paramHash=hashlib.sha1(params.encode('utf-8')).hexdigest()
         memoizeFile=memoizeDir+'/'+paramHash+'.perifeed'
-        log.info('Memoize file is ',memoizeFile)
+        log.info(f'Memoize file is {memoizeFile}')
         if os.path.exists(memoizeDir+'/'+paramHash+'.perifeed'):
             log.info('Returning memoized result')
             if not gen:
@@ -729,9 +729,9 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     else: raise NotImplementedError('Generators without PSD do not inform about the biggest particle radius.')
     minSize=rMax*5
     cellSize=Vector3(max(dim[0]/p3,minSize),max(dim[1]/p3,minSize),max(dim[2]/p3,minSize))
-    log.info('dimension',dim)
-    log.info('initial cell size',cellSize)
-    log.info('psd=',psd)
+    log.info(f'dimension {dim}')
+    log.info(f'initial cell size {cellSize}')
+    log.info(f'psd={psd}')
     import woo.core, woo.dem, math
     S=woo.core.Scene(fields=[woo.dem.DemField()])
     S.periodic=True
@@ -755,10 +755,10 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     ]
     # if dontBlock: return S
     S.one()
-    log.info('Created %d particles, compacting...'%(len(S.dem.par)))
+    log.info(f'Created {len(S.dem.par)} particles, compacting...')
     S.dt=.9*utils.pWaveDt(S,noClumps=True)
     S.dtSafety=.9
-    if clumps: warnings.warn('utils.pWaveDt called with noClumps=True (clumps ignored), the result (S.dt=%g) might be significantly off!'%S.dt)
+    if clumps: warnings.warn(f'utils.pWaveDt called with noClumps=True (clumps ignored), the result (S.dt={S.dt}) might be significantly off!')
     S.engines=[
         woo.dem.PeriIsoCompressor(charLen=2*rMax,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=goal,doneHook='print("done"); S.stop();',globalUpdateInt=1,keepProportions=True,label='peri'),
         # plots only useful for debugging - uncomment if needed
@@ -771,10 +771,10 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     if gen: sp=woo.dem.ShapePack()
     else: sp=SpherePack()
     sp.fromDem(S,S.dem)
-    log.info('Packing size is',sp.cellSize)
+    log.info(f'Packing size is {sp.cellSize}')
     sp.canonicalize()
     if not gen: sp.makeOverlapFree()
-    log.info('Loose packing size is',sp.cellSize)
+    log.info(f'Loose packing size is {sp.cellSize}')
     cc,rr=[],[]
     inf=float('inf')
     boxMin=Vector3(0,0,0);
@@ -783,7 +783,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
     boxMax[lenAxis]=inf
     box=AlignedBox3(boxMin,boxMax)
     sp2=sp.filtered(inAlignedBox(box))
-    log.info('Box is ',box)
+    log.info(f'Box is {box}')
     #for c,r in sp:
     #    if c-Vector3(r,r,r) not in box or c+Vector3(r,r,r) not in box: continue
     #    cc.append(c); rr.append(r)
@@ -792,7 +792,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
         #sp2.fromList(cc,rr)
         #sp2.cellSize=sp.cellSize
         if memoizeDir:
-            log.info('Saving to',memoizeFile)
+            log.info(f'Saving to {memoizeFile}')
             # print len(sp2)
             sp2.save(memoizeFile)
         if returnSpherePack or gen:
@@ -904,6 +904,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         unbalancedFunc='woo.utils.unbalancedForce'
     S.lab.goalHt=dim[2]
     S.lab.goalUnb=goal
+    S.lab.useEnergy=useEnergy
     import textwrap
     S.engines=utils.defaultEngines(damping=damping,dynDtPeriod=100)+[
         woo.dem.BoxInlet(
@@ -914,10 +915,10 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
             maxAttempts=20,
             generator=generator,
             materials=[mat],
-            shooter=woo.dem.AlignedMinMaxShooter(dir=(0,0,-1),vRange=(0,0)),
+            shooter=woo.dem.AlignedMinMaxShooter(dir=(0,0,1),vRange=(0,0)),
             mask=1,
             label='inlet',
-            doneHook='S.dem.par.remove(S.lab.wallId)',
+            # doneHook='S.dem.par.remove(S.lab.wallId)', # DONT REMOVE THE WALL
             spatialBias=bias,
             #periSpanMask=1, # x is periodic
         ),
@@ -936,11 +937,13 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         if not inlet.dead and q95>=S.lab.goalHt and inlet.mass>S.lab.massMin:
             S.lab.leapfrog.damping=min(.9,S.lab.leapfrog.damping*1.5)
             inlet.dead=True
-            S.dem.par.remove(S.lab.wallId)
+            # S.dem.par.remove(S.lab.wallId)
+            # S.lab.collider.forceInitSort=True
             print("Particles reach high enough, stopping inlet; waiting for unbalanced E to go below %g."%S.lab.goalUnb)
-        if inlet.dead and unbe<S.lab.goalUnb:
-            print("Unbalanced E dropped, finished.")
+        if inlet.dead and (unbe if S.lab.useEnergy else unbf)<S.lab.goalUnb:
+            print(f"Unbalanced {'E' if S.lab.useEnergy else 'F'} dropped, finished.")
             S.stop()
+        S.lab.collider.forceInitSort=True # bug in the periodic collider...?!
         """))
         # woo.core.PyRunner(300,'import woo\nprint("%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S)))'),
         # woo.core.PyRunner(300,'import woo.utils; relq=woo.utils.contactCoordQuantiles(S.dem,[.95])[0]/S.lab.goalHt; print("Rel. coord 95% quantile:",relq);\nif relq>1:\n    S.lab.factory.dead=True; S.dem.par.remove(S.lab.wallId);'),
@@ -950,6 +953,10 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
     S.dtSafety=dtSafety
     log.info('Inlet box is %s',S.lab.inlet.box)
+    #if 1:
+    #    for bf in S.lab.collider.boundDispatcher.functors:
+    #        if isinstance(bf,woo.dem.Bo1_Wall_Aabb): bf.halfThick=.01*cellSize[0]
+
     if dontBlock: return S
     else: S.run()
     S.wait()
