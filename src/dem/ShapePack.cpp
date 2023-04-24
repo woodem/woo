@@ -256,6 +256,16 @@ std::tuple<vector<shared_ptr<Node>>,vector<shared_ptr<Particle>>> RawShapeClump:
 }
 
 
+Vector2r ShapePack::minMaxEquivRad() const {
+	// recomputeAll();
+	Vector2r ret(NaN,NaN);
+	for(const auto& r: raws){
+		if(std::isnan(ret[0]) || r->equivRad>ret[0]) ret[0]=r->equivRad;
+		if(std::isnan(ret[1]) || r->equivRad<ret[1]) ret[1]=r->equivRad;
+	}
+	return ret;
+}
+
 void ShapePack::recomputeAll(){
 	#ifdef WOO_OPENMP
 		#pragma omp parallel for schedule(guided)

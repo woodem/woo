@@ -104,6 +104,8 @@ struct ShapePack: public Object{
 	// mostly for testing only
 	void add(const vector<shared_ptr<Shape>>& ss, bool clumped=true);
 
+	Vector2r minMaxEquivRad() const;
+
 	shared_ptr<ShapePack> filtered(const shared_ptr<Predicate>& p, int recenter=-1); // recenter is for compat with SpherePack
 	void filter(const shared_ptr<Predicate>& p, int recenter=-1);
 	// total volume of all particles
@@ -134,7 +136,8 @@ struct ShapePack: public Object{
 		.def("solidVolume",&ShapePack::solidVolume) \
 		.def("translate",&ShapePack::translate) \
 		.def("canonicalize",&ShapePack::canonicalize) \
-		.def("cellRepeat",&ShapePack::cellRepeat)
+		.def("cellRepeat",&ShapePack::cellRepeat) \
+		.def("minMaxEquivRad",&ShapePack::minMaxEquivRad)
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ShapePack__CLASS_BASE_DOC_ATTRS_PY);
 };
