@@ -31,8 +31,9 @@ WOO_REGISTER_OBJECT(Wall);
 struct Bo1_Wall_Aabb: public BoundFunctor{
 	virtual void go(const shared_ptr<Shape>&) override;
 	FUNCTOR1D(Wall);
-	#define woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC Bo1_Wall_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Wall`"
-	WOO_DECL__CLASS_BASE_DOC(woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC);
+	#define woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC_ATTRS Bo1_Wall_Aabb,BoundFunctor,"Creates/updates an :obj:`Aabb` of a :obj:`Wall`", \
+		((Real,halfThick,0.,,"Additional thickness added to the Aabb, to work around potential collision detection issues."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC_ATTRS);
 };
 WOO_REGISTER_OBJECT(Bo1_Wall_Aabb);
 

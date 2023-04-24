@@ -10,7 +10,7 @@ WOO_PLUGIN(dem,(Wall)(Bo1_Wall_Aabb)(In2_Wall_ElastMat)(Cg2_Wall_Sphere_L6Geom)(
 #endif
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_CTOR(woo_dem_Wall__CLASS_BASE_DOC_ATTRS_CTOR);
-WOO_IMPL__CLASS_BASE_DOC(woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_Bo1_Wall_Aabb__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_In2_Wall_ElastMat__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Sphere_L6Geom__CLASS_BASE_DOC);
 WOO_IMPL__CLASS_BASE_DOC(woo_dem_Cg2_Wall_Facet_L6Geom__CLASS_BASE_DOC);
@@ -31,6 +31,10 @@ void Bo1_Wall_Aabb::go(const shared_ptr<Shape>& sh){
 	const Real& inf=std::numeric_limits<Real>::infinity();
 	aabb.min=Vector3r(-inf,-inf,-inf); aabb.max=Vector3r( inf, inf, inf);
 	aabb.min[wall.axis]=aabb.max[wall.axis]=sh->nodes[0]->pos[wall.axis];
+	if(halfThick>0){
+		aabb.min[wall.axis]-=halfThick;
+		aabb.max[wall.axis]+=halfThick;
+	}
 }
 
 void In2_Wall_ElastMat::go(const shared_ptr<Shape>& sh, const shared_ptr<Material>& m, const shared_ptr<Particle>& particle){
