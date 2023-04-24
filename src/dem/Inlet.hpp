@@ -40,7 +40,9 @@ struct Inlet: public PeriodicEngine{
 		((bool,zeroRateAtStop,true,,"When the generator stops (mass/number of particles reached, ...), set :obj:`currRate` to zero immediately")) \
 		((Real,currRateSmooth,1,AttrTrait<>().range(Vector2r(0,1)),"Smoothing factor for currRate ∈〈0,1〉")) \
 		((Real,glColor,0,AttrTrait<>().noGui(),"Color for rendering (nan disables rendering)")) \
-		, /*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<Inlet>>(mod); // converter needed for DetectSteadyState
+		, /*py*/ \
+		  .def("minMaxDiam",&Inlet::minMaxDiam) \
+		  ; woo::converters_cxxVector_pyList_2way<shared_ptr<Inlet>>(mod); // converter needed for DetectSteadyState
 
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS_PY);
