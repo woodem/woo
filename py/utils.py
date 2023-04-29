@@ -472,7 +472,7 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
     if renameNotOverwrite and os.path.exists(out):
         i=0
         while(os.path.exists(out+"~%d"%i)): i+=1
-        os.rename(out,out+"~%d"%i); log.warn("Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i))
+        os.rename(out,out+"~%d"%i); log.warning("Output file `%s' already existed, old file renamed to `%s'"%(out,out+"~%d"%i))
     if holdLast<0: holdLast*=-fps
     if isinstance(frameSpec,list) or isinstance(frameSpec,tuple):
         if holdLast>0: frameSpec=list(frameSpec)+int(holdLast)*[frameSpec[-1]]
@@ -513,7 +513,8 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
                 #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
                 # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
                 inputs=['-i',symPattern]
-                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+                pix_fmt=['-pix_fmt','yuv420p'] # https://bugzilla.mozilla.org/show_bug.cgi?id=1368063
+                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+pix_fmt+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
             log.info('Pass %d: %s'%(passNo,' '.join(cmd)))
             ret=subprocess.call(cmd)
             if ret!=0: raise RuntimeError("Error running %s."%encExec)
