@@ -88,7 +88,7 @@ import pylab
 
 try:
     import matplotlib.style
-    matplotlib.style.use('seaborn-darkgrid')
+    matplotlib.style.use('seaborn-v0_8-darkgrid')
 except: pass
 
 # simulation-specific bits moved to woo.core.Plot
@@ -700,7 +700,7 @@ def savePlotSequence(P,fileBase,stride=1,imgRatio=(5,7),title=None,titleFrames=2
     if lastFrames>1: ret+=(lastFrames-1)*[ret[-1]]
     return ret
 
-def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=None,logoPos=(20,20),dpi=100,font=None):
+def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=None,logoPos=(20,20),dpi=100,fontKw={}):
     '''Create figure with title and save to file.
 
     :param out: file to save the result to; format is anything supported by matplotlib.
@@ -724,12 +724,9 @@ def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=No
     lines=[(t,True) for t in title.split('\n')]+([(t,False) for t in subtitle.split('\n')] if subtitle else [])
     nLines=len(lines); fontSizes=size[1]/10.,size[1]/16.
     def writeLine(text,vertPos,fontsize):
-        rgba,depth=matplotlib.mathtext.MathTextParser('Bitmap').to_rgba(text,fontsize=fontsize,dpi=fig.get_dpi(),color=fgColor)
-        textsize=rgba.shape[1],rgba.shape[0]
-        if textsize[0]>size[0]:
-            rgba,depth=matplotlib.mathtext.MathTextParser('Bitmap').to_rgba(text,fontsize=fontsize*size[0]/textsize[0],dpi=fig.get_dpi(),color=fgColor)
-            textsize=rgba.shape[1],rgba.shape[0]
-        fig.figimage(rgba.astype(float)/255.,xo=(size[0]-textsize[0])/2.,yo=vertPos-depth)
+        t=fig.text(size[0]/2,vertPos,text,color=fgColor,fontsize=fontsize,transform=None,horizontalalignment='center',**fontKw)
+        if (ratio:=(t.get_window_extent().width/size[0]))>1:
+            t.set_fontsize(fontsize/ratio)
     nTitle,nSubtitle=len(title.split('\n')),len(subtitle.split('\n')) if subtitle else 0
     nLines=nTitle+nSubtitle
     ht=size[1]; y0=ht-2*fontSizes[0]; yStep=(ht-2.5*fontSizes[0])/(nTitle+.6*nSubtitle+(.5 if nSubtitle else 0))
@@ -743,6 +740,7 @@ def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=No
     for i,(l,isTitle) in enumerate(lines):
         writeLine(l,y0-lineYOffset(i),fontSizes[0 if isTitle else 1])
     # http://stackoverflow.com/a/4805178/761090 - savefig default overrides facecolor set previously
+    log.warning(f'Saving to file://{os.path.abspath(out)}')
     fig.savefig(out,facecolor=fig.get_facecolor(),dpi=dpi)
     
 
