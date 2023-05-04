@@ -65,7 +65,7 @@ void POVRayExport::run(){
 bool POVRayExport::skipParticle(const shared_ptr<Particle>& p, bool doStatic){
 	if(!p->shape) return true;
 	if(mask && !(mask&p->mask)) return true;
-	if(doStatic!=!!(staticMask & p->mask)) return true; // skip non-static particles with doStatic and vice versa
+	if(doStatic!=(!!(staticMask&p->mask))) return true; // skip non-static particles with doStatic and vice versa
 	if(!p->shape->getVisible() && skipInvisible) return true;
 	if(!clip.isEmpty() && !clip.contains(p->shape->nodes[0]->pos)) return true;
 	return false;
@@ -73,18 +73,6 @@ bool POVRayExport::skipParticle(const shared_ptr<Particle>& p, bool doStatic){
 
 bool POVRayExport::writeParticleInc(const string& frameInc, bool doStatic){
 	DemField* dem=static_cast<DemField*>(field.get());
-	#if 0
-		if(doStatic){
-			bool todo=false;
-			for(const auto& p: *dem->particles){
-				if(skipParticle(p,doStatic)) continue;
-				if(facetsAsMesh && p->shape->isA<Facet>()) continue;
-				todo=true;
-				break;
-			}
-			if(!todo) return false;
-		}
-	#endif
 	std::ofstream os;
 	os.open(frameInc);
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+frameInc+"'.");
@@ -358,18 +346,22 @@ void POVRayExport::writeFacetsMeshInc(std::ofstream& os, bool doStatic){
 	}
 	vector<size_t> clusters(boost::num_vertices(graph));
 	size_t numClusters=boost::connected_components(graph,clusters.data());
+	/* n is component number, assigned to each vertex */
 	for(size_t n=0; n<numClusters; n++){
 		std::list<Particle::id_t> pp;
 		for(size_t i=0; i<N; i++){
-			if(clusters[i]!=n) continue;
-			const auto& p((*dem->particles)[n]);
+			if(clusters[i]!=n) continue; /* particle ID=i does not belong to this cluster */
+			const auto& p((*dem->particles)[i]);
 			if(!p || skipParticle(p,doStatic) || !p->shape->isA<Facet>()) continue;
 			pp.push_back(i);
 		}
 		if(pp.size()==0) continue;
 		// single particle, no mesh; use the normal routine
-		if(pp.size()==1) exportParticle(os,(*dem->particles)[pp.front()]);
-		else{
+		if(pp.size()==1){
+			const auto& p((*dem->particles)[pp.front()]);
+			assert(p->shape->isA<Facet>());
+			exportParticle(os,p);
+		}else{
 			// gather all nodes we need
 			std::set<Node*> nodeset;
 			for(const auto& id: pp){
