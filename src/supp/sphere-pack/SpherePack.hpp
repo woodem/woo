@@ -134,6 +134,8 @@ public:
 	void scale(Real scale, bool keepRadius=false);
 	Real maxRelOverlap();
 	void makeOverlapFree(){ scale(maxRelOverlap()+1,/*keepRadius*/true); }
+	int pruneOverlapping(float minRelOverlap);
+
 
 	// iteration 
 	size_t len() const{ return pack.size(); }

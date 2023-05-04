@@ -44,6 +44,7 @@ PYBIND11_MODULE(_packSpheres,mod){
 		.def("cellFill",&SpherePack::cellFill,"Repeat the packing (if periodic) so that the results has dim() >= given size. The packing retains periodicity, but changes cellSize. Raises exception for non-periodic packing.")
 		.def("canonicalize",&SpherePack::canonicalize,"Move all sphere's centers inside *cellSize*; only works for periodic packings without clumps.")
 		.def("maxRelOverlap",&SpherePack::maxRelOverlap,"Return maximum relative overlap of particles.")
+		.def("pruneOverlapping",&SpherePack::pruneOverlapping,WOO_PY_ARGS(py::arg("minRelOverlap")),"Remove all spheres with some minimal relative overlap; of the two overlapping spheres, the larger one will be removed. Returns the number of spheres removed.")
 		.def("makeOverlapFree",&SpherePack::makeOverlapFree,"Scale by 1+maxRelOverlap(), without changing radii.")
 		.def("cellRepeat",&SpherePack::cellRepeat,"Repeat the packing given number of times in each dimension. Periodicity is retained, cellSize changes. Raises exception for non-periodic packing.")
 		.def("sphereVol",&SpherePack::sphereVol,"Summary volume of spheres, disregarding any overlaps (:math:`\\frac{4}{3}\\pi\\sum r_i^3`).")

@@ -462,6 +462,39 @@ void SpherePack::scale(Real scale, bool keepRadius){
 	}
 }
 
+int SpherePack::pruneOverlapping(float minRelOverlap){
+	size_t sz=pack.size();
+	bool peri=(cellSize!=Vector3r::Zero());
+	Real ret=0.;
+	std::list<size_t> forRemoval;
+	for(size_t i1=0; i1<sz; i1++){
+		for(size_t i2=i1+1; i2<sz; i2++){
+			const Sph &s1=pack[i1]; const Sph& s2=pack[i2];
+			// squared distance - normal or wrapped, if periodic
+			Real sqDist=peri?periPtDistSq(s1.c,s2.c):(s1.c-s2.c).squaredNorm();
+			// sphere in a clump, and within the same clump
+			if(s1.clumpId>=0 && s1.clumpId==s2.clumpId) continue;
+			// too far from each other
+			if(sqDist>pow2(s1.r+s2.r)) continue;
+			// compute relative overlap
+			Real dist=sqrt(sqDist);
+			Real relOverlap=1-(dist/(s1.r+s2.r));
+			if(relOverlap>=minRelOverlap){
+				forRemoval.push_back(s1.r>s2.r?i1:i2);
+			}
+		}
+	}
+	if(forRemoval.empty()) return 0;
+	forRemoval.sort();
+	forRemoval.unique();
+	int counter=0;
+	for(const size_t& id: forRemoval){
+		pack.erase(pack.begin()+id+counter);
+		counter++;
+	}
+	return forRemoval.size();
+}
+
 Real SpherePack::maxRelOverlap(){
 	/*
 	For current distance d₀ and overlap z=r₁+r₂-d₀, determine scaling coeff s=(1+relOverlap) such that d₀s=r₁+r₂ (i.e. scaling packing by s will result in no overlap).
