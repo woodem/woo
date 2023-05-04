@@ -376,7 +376,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             def runScript(script):
                 sys.stderr.write("Running script "+arg0+'\n')
                 try:
-                    exec(open(script,'r').read(),globals())
+                    exec(open(script,'r').read(),globals()|{'__file__':arg0})
                 except SystemExit: raise
                 except: # all other exceptions
                     traceback.print_exc()
