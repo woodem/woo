@@ -802,8 +802,7 @@ def makePeriodicFeedPack(dim,psd,lenAxis=0,damping=.3,porosity=.5,goal=.15,maxNu
 
 
 
-
-def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dtSafety=.9,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None,bias=None):
+def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5,goal=.15,dtSafety=.9,dontBlock=False,memoizeDir=None,botLine=None,leftLine=None,rightLine=None,clumps=[],returnSpherePack=False,useEnergy=True,gen=None,bias=None,sapWorkaround=True,stepPeriod=200):
     '''Create dense packing periodic in the +x direction, suitable for use with ConveyorInlet.
 :param useEnergy: use :obj:`woo.utils.unbalancedEnergy` instead of :obj:`woo.utils.unbalancedForce` as stop criterion.
 :param goal: target unbalanced force/energy; if unbalanced energy is used, this value is **multiplied by .2**.
@@ -811,7 +810,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
 :param mat: material for particles
 :param gravity: gravity acceleration (as Vector3)
 '''
-    log.info(f'woo.pack.makeBandFeedPack(dim={dim},psd={psd},mat={mat.dumps(format="expr",width=-1,noMagic=True)},gravity={gravity},excessWd={excessWd},damping={damping},dontBlock={dontBlock},botLine={botLine},leftLine={leftLine},rightLine={rightLine},clumps={clumps},gen={gen.dumps(format="expr",width=-1,noMagic=True)},bias={bias.dumps(format="expr",width=-1,noMagic=True) if bias else None})')
+    log.info(f'woo.pack.makeBandFeedPack(dim={dim},psd={psd},mat={mat.dumps(format="expr",width=-1,noMagic=True)},{gravity=},{excessWd=},{damping=},{dontBlock=},{botLine=},{leftLine=},{rightLine=},{clumps=},{returnSpherePack=},{sapWorkaround=},gen={gen.dumps(format="expr",width=-1,noMagic=True)},bias={bias.dumps(format="expr",width=-1,noMagic=True) if bias else None})')
     dim=list(dim) # make modifiable in case of excess width
 
     retWd=dim[1]
@@ -855,7 +854,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         log.info('Memoize file is %s',memoizeFile)
         if os.path.exists(memoizeDir+'/'+paramHash+'.bandfeed'):
             log.info('Returning memoized result')
-            if not gen:
+            if returnSpherePack:
                 sp=SpherePack()
                 sp.load(memoizeFile)
                 printBulkParams(sp)
@@ -875,7 +874,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     # add limiting surface
     p=sweptPolylines2gtsSurface([utils.tesselatePolyline([Vector3(x,yz[0],yz[1]) for yz in boundary2d],maxDist=min(cellSize[0]/4.,cellSize[1]/4.,cellSize[2]/4.)) for x in numpy.linspace(0,cellSize[0],num=4)])
     S.dem.par.add(gtsSurface2Facets(p,mask=0b011),nodes=False) # nodes not needed
-    if 1: ## XXX
+    if sapWorkaround: ## XXX
         S.lab.wallId=S.dem.par.add(woo.dem.Wall.make(0,axis=0,mat=mat,fixed=True))
         log.warning('makeBandFeedPack: Adding artificial wall to avoid periodic-inlet issues (under investigation)')
     S.dem.loneMask=0b010
@@ -905,11 +904,12 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
     S.lab.goalHt=dim[2]
     S.lab.goalUnb=goal
     S.lab.useEnergy=useEnergy
+    S.lab.sapWorkaround=sapWorkaround
     import textwrap
-    S.engines=utils.defaultEngines(damping=damping,dynDtPeriod=100)+[
+    S.engines=utils.defaultEngines(damping=damping,collider='sap',dynDtPeriod=100)+[
         woo.dem.BoxInlet(
             box=((.01*cellSize[0],factoryLeft,factoryBottom),(cellSize[0],factoryRight,cellSize[2])),
-            stepPeriod=200,
+            stepPeriod=stepPeriod,
             maxMass=-1, # massToDo,
             massRate=0,
             maxAttempts=20,
@@ -922,9 +922,7 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
             spatialBias=bias,
             #periSpanMask=1, # x is periodic
         ),
-        #PyRunner(200,'plot.addData(uf=utils.unbalancedForce(),i=O.scene.step)'),
-        # woo.core.PyRunner(300,'import woo\nprint "%g/%g mass, %d particles, unbalanced '+('energy' if useEnergy else 'force')+'%g/'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),'+unabalncedFunc+'(S))'),
-        woo.core.PyRunner(300,textwrap.dedent("""
+        woo.core.PyRunner(200,textwrap.dedent("""
         import woo, woo.utils, math
         inlet=S.lab.inlet
         if not inlet.dead:
@@ -943,28 +941,27 @@ def makeBandFeedPack(dim,mat,gravity,psd=[],excessWd=None,damping=.3,porosity=.5
         if inlet.dead and (unbe if S.lab.useEnergy else unbf)<S.lab.goalUnb:
             print(f"Unbalanced {'E' if S.lab.useEnergy else 'F'} dropped, finished.")
             S.stop()
-        S.lab.collider.forceInitSort=True # bug in the periodic collider...?!
+        # bug in the periodic collider...?!
+        if S.lab.sapWorkaround: S.lab.collider.forceInitSort=True 
         """))
-        # woo.core.PyRunner(300,'import woo\nprint("%g/%g mass, %d particles, unbalanced F: %g E: %g /'+str(goal)+'"%(S.lab.factory.mass,S.lab.factory.maxMass,len(S.dem.par),woo.utils.unbalancedForce(S),woo.utils.unbalancedEnergy(S)))'),
-        # woo.core.PyRunner(300,'import woo.utils; relq=woo.utils.contactCoordQuantiles(S.dem,[.95])[0]/S.lab.goalHt; print("Rel. coord 95% quantile:",relq);\nif relq>1:\n    S.lab.factory.dead=True; S.dem.par.remove(S.lab.wallId);'),
-        # woo.core.PyRunner(300,'import woo\nif S.lab.factory.dead: S.lab.leapfrog.damping=1.5*%g'%damping),
-        # woo.core.PyRunner(200,'import woo\nif '+unbalancedFunc+'(S)<'+str(goal)+' and S.lab.factory.dead: S.stop()'),
     ]
     # S.dt=.7*utils.spherePWaveDt(psd[0][0],mat.density,mat.young)
     S.dtSafety=dtSafety
+    S.lab.collider.paraPeri=False
     log.info('Inlet box is %s',S.lab.inlet.box)
-    #if 1:
-    #    for bf in S.lab.collider.boundDispatcher.functors:
-    #        if isinstance(bf,woo.dem.Bo1_Wall_Aabb): bf.halfThick=.01*cellSize[0]
 
     if dontBlock: return S
     else: S.run()
     S.wait()
     
-    if gen: sp=woo.dem.ShapePack()
+    if not returnSpherePack: sp=woo.dem.ShapePack()
     else: sp=SpherePack()
     sp.fromDem(S,S.dem)
     sp.canonicalize()
+    # workaround collider bug here
+    if isinstance(sp,SpherePack):
+        removed=sp.pruneOverlapping(minRelOverlap=.5)
+        log.info(f'Removed {removed} overlapping spheres (fixes collider issues and subsequent explosions)')
     # remove what is above the requested height; starts from 0, but a bit less, use -dim[2] for dimensionality consistency
     sp=sp.filtered(woo.pack.inAxisRange(axis=2,range=(-dim[2],dim[2])),recenter=False)
     printBulkParams(sp)
