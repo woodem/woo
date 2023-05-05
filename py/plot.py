@@ -725,7 +725,7 @@ def createTitleFrame(out,size,title,bgColor=(.8,.6,.8),fgColor='#405090',logo=No
     nLines=len(lines); fontSizes=size[1]/10.,size[1]/16.
     def writeLine(text,vertPos,fontsize):
         t=fig.text(size[0]/2,vertPos,text,color=fgColor,fontsize=fontsize,transform=None,horizontalalignment='center',**fontKw)
-        if (ratio:=(t.get_window_extent().width/size[0]))>1:
+        if (ratio:=(t.get_window_extent(renderer=_find_matplotlib_renderer(fig)).width/size[0]))>1:
             t.set_fontsize(fontsize/ratio)
     nTitle,nSubtitle=len(title.split('\n')),len(subtitle.split('\n')) if subtitle else 0
     nLines=nTitle+nSubtitle
@@ -929,6 +929,23 @@ def Scene_plot_saveGnuplot(P,baseName,term='wxt',extension=None,timestamp=False,
         i+=1
     fPlot.close()
     return baseName+'.gnuplot'
+
+# https://stackoverflow.com/a/22689498
+def _find_matplotlib_renderer(fig):
+    if hasattr(fig.canvas, "get_renderer"):
+        #Some backends, such as TkAgg, have the get_renderer method, which 
+        #makes this easy.
+        renderer = fig.canvas.get_renderer()
+    else:
+        #Other backends do not have the get_renderer method, so we have a work 
+        #around to find the renderer.  Print the figure to a temporary file 
+        #object, and then grab the renderer that was used.
+        #(I stole this trick from the matplotlib backend_bases.py 
+        #print_figure() method.)
+        import io
+        fig.canvas.print_figure(io.BytesIO())
+        renderer = fig._cachedRenderer
+    return(renderer)
 
 
 def _deprecPlotFunc(old,func,new=None,takesScene=False,*args,**kw):
