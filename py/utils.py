@@ -785,7 +785,50 @@ def freecadExport(S,out,mask=0):
             else: warnings.warn('S.dem.par[%d] not exported (unhandled shape %s)'%(p.id,p.shape.__class__.__name__))
         f.write('doc.recompute()\n')
 
-    
+def waitWithProgress(S,refresh=.5):
+    import rich.panel
+    import rich.progress
+    import time
+    import psutil
+    class WooProgress(rich.progress.Progress):
+        def __init__(self,S):
+            self.S=S
+            if S.stopAtTime>0: self.proType='time'
+            elif S.stopAtStep>0: self.proType='step'
+            else: self.proType='indet'
+            self.colGoal=rich.progress.TextColumn('')
+            self.proc=psutil.Process(os.getpid())
+            self.proc.cpu_percent() # ignore value of the first call, is zero
+            super().__init__(
+                rich.progress.SpinnerColumn(),
+                self.colGoal,
+                rich.progress.BarColumn(),
+                rich.progress.TaskProgressColumn(show_speed=True),
+                rich.progress.TimeElapsedColumn(),
+                rich.progress.TimeRemainingColumn(),
+                auto_refresh=True,
+                refresh_per_second=1./refresh,
+                expand=True
+            )
+            self.myTask=self.add_task('Running...',total={'time':S.stopAtTime,'step':S.stopAtStep,'indet':None}[self.proType])
+        def update(self):
+            if not hasattr(self,'myTask'): return
+            super().update(self.myTask,completed={'time':S.time,'step':S.step,'indet':S.step}[self.proType])
+            # super().refresh()
+        def get_renderables(self):
+            self.update()
+            self.description='t={S.t} | Δt={S.dt}'
+            if self.proType=='time': self.colGoal.text_format=f'time [progress.elapsed]{S.time:<6f}[/progress.elapsed] / [progress.filesize]{S.stopAtTime:.6g} s[/progress.filesize]'
+            elif self.proType=='step': self.colGoal.text_format=f'step [progress.elapsed]{S.step}[/progress.elapsed] / [progress.filesize]{S.stopAtStep}[/progress.filesize]'
+            else: self.colGoal.text_format=''
+            task_table=self.make_tasks_table(self.tasks)
+            task_table.title=f'DEM ▶ t={S.time:.6f} step={S.step} ● Δt={S.dt:.6f} par={len(S.dem.par)} con={len(S.dem.con)}'
+            task_table.caption=f'CPU ▶ [green]{self.proc.cpu_percent():.3g}%[/green] ([red]{woo.master.numThreads}[/red] OpenMP threads)'
+            yield rich.panel.Panel(task_table)
+    S.run()
+    with WooProgress(S=S) as progress:
+        S.wait()
+
 
 #############################
 ##### deprecated functions
@@ -817,4 +860,5 @@ def readParamsFromTable(*args,**kw):
 def runPreprocessorInBatch(*args,**kw):
     _deprecatedUtilsFunction('runPreprocessorInBatch','woo.batch.runPreprocessor')
     return woo.batch.runPreprocessor(*args,**kw)
+
 
