@@ -207,6 +207,7 @@ void Leapfrog::run(){
 		else{
 			// fixed particle, with gradV2: velocity correction, without acceleration
 			if(homoDeform==Cell::HOMO_GRADV2) dyn.vel=ImLL4hInv*(LmL*node->pos+IpLL4h*dyn.vel);
+			pprevFluctVel=pprevFluctAngVel=Vector3r::Zero();
 		}
 		/* adapt node velocity/position in (t+dt/2) to space gradV;	must be done before position update, so that particle follows */
 		// this is for both fixed and free particles, without gradV2
