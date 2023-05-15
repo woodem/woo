@@ -408,7 +408,9 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             if not opts.paused:
                 woo.master.scene.run() # run the new simulation
                 # wait for the Master (if scenes are switched)
-                if woo.runtime.opts.exitAfter: woo.master.waitForScenes() 
+                if woo.runtime.opts.exitAfter:
+                    woo.utils.waitWithProgress()
+                    # woo.master.waitForScenes() 
     if woo.runtime.opts.expression:
         # try to be smart iporting some modules
         import re
@@ -422,7 +424,9 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
         else: raise ValueError('Expression given with -e must be a Scene or a Preprocessor, not a %s'%type(obj))
         if not opts.paused:
             woo.master.scene.run()
-            if woo.runtime.opts.exitAfter: woo.master.waitForScenes()
+            if woo.runtime.opts.exitAfter:
+                woo.utils.waitWithProgress()
+                # woo.master.waitForScenes()
     if woo.runtime.opts.commands:
         exec(woo.runtime.opts.commands,globals(),locals())
     if woo.runtime.opts.exitAfter:

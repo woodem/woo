@@ -436,7 +436,7 @@ def ensureDir(d,msg='Creating directory %s'):
     os.makedirs(d,exist_ok=True)
 
 
-def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-.5,open=False):
+def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=0,crf=22,holdLast=-.5,open=False):
     """Create a video from external image files using `mencoder <http://www.mplayerhq.hu>`__, `avconv <http://libav.org/avconv.html>`__ or `ffmpeg <http://www.ffmpeg.org>`__ (whichever is found on the system). Encodes using the default mencoder codec (mpeg4), two-pass with mencoder and one-pass with avconv, running multi-threaded with number of threads equal to number of OpenMP threads allocated for Woo.
 
     Some *out* extensions (``.gif``, ``.mng``) will call ImageMagick (``convert``; likely not available under Windows) to create animated image instead of video file.
@@ -507,14 +507,20 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=15000,holdLast=-
         # use temp file instead, explicitly
         passLogFile=woo.master.tmpFilename()+'.log'
         # passNo==0 means single pass (avconv)
-        for passNo in ((1,2) if encType=='mencoder' else (0,)):
-            if encType=='mencoder': cmd=[encExec,'mf://%s'%frameSpecMenc,'-mf','fps=%d'%int(fps),'-ovc','lavc','-lavcopts','vbitrate=%d:vpass=%d:threads=%d:%s'%(int(kbps),passNo,woo.master.numThreads,'turbo' if passNo==1 else ''),'-passlogfile',passLogFile,'-o',(devNull if passNo==1 else out)]
+        for passNo in (1,2): # ((1,2) if encType=='mencoder' else (1,2)):
+            if encType=='mencoder': cmd=[encExec,f'mf://{frameSpecMenc}','-mf',f'fps={int(fps)}','-ovc','lavc','-lavcopts',f'vbitrate={kbps}:vpass={passNo}:threads={woo.master.numThreads}:{"turbo" if passNo==1 else ""}','-passlogfile',passLogFile,'-o',(devNull if passNo==1 else out)]
             elif encType=='avconv':
                 #inputs=sum([['-i',f] for f in frameSpecAvconv],[])
                 # inputs=['-i','concat:"'+'|'.join(frameSpecAvconv)+'"']
                 inputs=['-i',symPattern]
                 pix_fmt=['-pix_fmt','yuv420p'] # https://bugzilla.mozilla.org/show_bug.cgi?id=1368063
-                cmd=[encExec]+inputs+['-r',str(int(fps)),'-b:v','%dk'%int(kbps),'-threads',str(woo.master.numThreads)]+pix_fmt+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+                if out.endswith('mp4'):
+                    cmd=[encExec]+inputs+['-r',f'{int(fps)}']+(['-b:v',f'{int(kbps)}k'] if kbps>0 else ['-crf',str(crf),'-preset','slow'])+['-threads',str(woo.master.numThreads)]+pix_fmt+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
+                elif out.endswith('.webm'):
+                    cmd0=[encExec]+inputs+['-r',f'{int(fps)}']+['-preset','slow']+['-threads',f'{woo.master.numThreads}','-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)','-c:v','libvpx-vp9']+pix_fmt+(['-b:v',f'{int(kbps)}k'] if kbps>0 else ['-b:v','0','-crf',f'{crf}'])+['-passlogfile',passLogFile]
+                    if passNo==1: cmd=cmd0+['-pass','1','-f','null','/dev/null']
+                    else: cmd=cmd0+['-row-mt','1','-pass','2','-y',out]
+                    # +['-y',out]
             log.info('Pass %d: %s'%(passNo,' '.join(cmd)))
             ret=subprocess.call(cmd)
             if ret!=0: raise RuntimeError("Error running %s."%encExec)
@@ -785,17 +791,14 @@ def freecadExport(S,out,mask=0):
             else: warnings.warn('S.dem.par[%d] not exported (unhandled shape %s)'%(p.id,p.shape.__class__.__name__))
         f.write('doc.recompute()\n')
 
-def waitWithProgress(S,refresh=.5):
+def waitWithProgress(S=None,refresh=1):
     import rich.panel
     import rich.progress
     import time
     import psutil
     class WooProgress(rich.progress.Progress):
-        def __init__(self,S):
-            self.S=S
-            if S.stopAtTime>0: self.proType='time'
-            elif S.stopAtStep>0: self.proType='step'
-            else: self.proType='indet'
+        def __init__(self,scene=None):
+            self.scene=scene
             self.colGoal=rich.progress.TextColumn('')
             self.proc=psutil.Process(os.getpid())
             self.proc.cpu_percent() # ignore value of the first call, is zero
@@ -810,24 +813,39 @@ def waitWithProgress(S,refresh=.5):
                 refresh_per_second=1./refresh,
                 expand=True
             )
-            self.myTask=self.add_task('Running...',total={'time':S.stopAtTime,'step':S.stopAtStep,'indet':None}[self.proType])
+            self.myTask=self.add_task('Running...',total=None)
+        def proType(self):
+            S=(self.scene if self.scene else woo.master.scene)
+            if S.stopAtTime>0: return 'time'
+            elif S.stopAtStep>0: return 'step'
+            else: return 'indet'
         def update(self):
+            S=(self.scene if self.scene else woo.master.scene)
             if not hasattr(self,'myTask'): return
-            super().update(self.myTask,completed={'time':S.time,'step':S.step,'indet':S.step}[self.proType])
+            pt=self.proType()
+            super().update(self.myTask,
+                total={'time':S.stopAtTime,'step':S.stopAtStep,'indet':None}[pt],
+                completed={'time':S.time,'step':S.step,'indet':S.step}[pt]
+            )
             # super().refresh()
         def get_renderables(self):
             self.update()
+            S=(self.scene if self.scene else woo.master.scene)
             self.description='t={S.t} | Δt={S.dt}'
-            if self.proType=='time': self.colGoal.text_format=f'time [progress.elapsed]{S.time:<6f}[/progress.elapsed] / [progress.filesize]{S.stopAtTime:.6g} s[/progress.filesize]'
-            elif self.proType=='step': self.colGoal.text_format=f'step [progress.elapsed]{S.step}[/progress.elapsed] / [progress.filesize]{S.stopAtStep}[/progress.filesize]'
+            if (pt:=self.proType())=='time': self.colGoal.text_format=f'time [progress.elapsed]{S.time:<6f}[/progress.elapsed] / [progress.filesize]{S.stopAtTime:.6g} s[/progress.filesize]'
+            elif pt=='step': self.colGoal.text_format=f'step [progress.elapsed]{S.step}[/progress.elapsed] / [progress.filesize]{S.stopAtStep}[/progress.filesize]'
             else: self.colGoal.text_format=''
             task_table=self.make_tasks_table(self.tasks)
             task_table.title=f'DEM ▶ t={S.time:.6f} step={S.step} ● Δt={S.dt:.6f} par={len(S.dem.par)} con={len(S.dem.con)}'
             task_table.caption=f'CPU ▶ [green]{self.proc.cpu_percent():.3g}%[/green] ([red]{woo.master.numThreads}[/red] OpenMP threads)'
             yield rich.panel.Panel(task_table)
-    S.run()
-    with WooProgress(S=S) as progress:
-        S.wait()
+    if S is not None:
+        S.run()
+        with WooProgress(S=S) as progress:
+            S.wait()
+    else:
+        with WooProgress() as progress:
+            woo.master.waitForScenes()
 
 
 #############################

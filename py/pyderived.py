@@ -394,7 +394,11 @@ class PyWooObject(object):
             for k in kw:
                 if not hasattr(self,k): raise AttributeError('No such attribute: %s'%k)
                 if k in self._attrValues: self._attrValues[k]=self._attrTraitsDict[k].coerceValue(kw[k])
-                else: setattr(self,k,kw[k])
+                else:
+                    try: setattr(self,k,kw[k])
+                    except AttributeError as e:
+                        raise AttributeError(f'Error setting attribute {k}: {str(e)}')
+                        
         derivedClass.__str__=lambda o:'<%s @ %d (py)>'%(derivedClass.__name__,id(o))
         derivedClass.__repr__=derivedClass.__str__
         derivedClass._cxxAddr=property(lambda sefl: id(self))
