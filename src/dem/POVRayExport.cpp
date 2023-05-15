@@ -128,17 +128,27 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 	else if(capsule) os<<"sphere_sweep{ linear_spline, 2, <"<<-.5*capsule->shaft<<",0,0> ,"<<capsule->radius<<", <"<<.5*capsule->shaft<<",0,0> ,"<<capsule->radius<<" "<<makeTexture(p)<<" "<<node2pov(n0)<<" }";
 	else if(ellipsoid) os<<"sphere{ o, 1 scale "<<vec2pov(ellipsoid->semiAxes)<<" "<<makeTexture(p)<<" "<<node2pov(n0)<<" }";
 	else if(wall){
-		if((wall->glAB.isEmpty())){ os<<"plane{ "<<Vector3r::Unit(wall->axis)<<", "<<wall->nodes[0]->pos[wall->axis]; }
+		short ax=wall->axis, ax1=(wall->axis+1)%3, ax2=(wall->axis+2)%3;
+		if((wall->glAB.isEmpty())){ os<<"plane{ "<<Vector3r::Unit(ax)<<", 0"; } // "<<wall->nodes[0]->pos[ax]; }
 		else{ // quad, as mesh2
-			Vector3r a; a[wall->axis]=wall->nodes[0]->pos[wall->axis]; Vector3r b(a), c(a), d(a);
-			short ax1((wall->axis+1)%3), ax2((wall->axis+2)%3);
-			a[ax1]=wall->glAB.min()[0]; a[ax2]=wall->glAB.min()[1];
-			b[ax1]=wall->glAB.min()[0]; b[ax2]=wall->glAB.max()[1];
-			c[ax1]=wall->glAB.max()[0]; c[ax2]=wall->glAB.min()[1];
-			d[ax1]=wall->glAB.max()[0]; d[ax2]=wall->glAB.max()[1];
+			Vector3r a(Vector3r::Zero()); Vector3r b(a), c(a), d(a);
+			Vector2r mn(wall->glAB.min()), mx(wall->glAB.max());
+			a[ax1]+=mn[0]; a[ax2]+=mn[1];
+			b[ax1]+=mn[0]; b[ax2]+=mx[1];
+			c[ax1]+=mx[0]; c[ax2]+=mn[1];
+			d[ax1]+=mx[0]; d[ax2]+=mx[1];
 			os<<"mesh2{ vertex_vectors { 4 "<<vec2pov(a)<<", "<<vec2pov(b)<<", "<<vec2pov(c)<<", "<<vec2pov(d)<<" } face_indices { 2, <0,2,1>, <1,2,3> }";
 		}
-		os<<makeTexture(p,wallTexture)<<" }"; // will use the default if wallTexture is empty
+		os<<makeTexture(p,wallTexture); // will use the default if wallTexture is empty
+		// must come after texture so that it is also rotated
+		if(wall->nodes[0]->ori!=Quaternionr::Identity()){
+			AngleAxisr aa(wall->nodes[0]->ori);
+			Vector3r r=aa.axis()*aa.angle();
+			if(abs(aa.axis()[ax])<0.999999) LOG_ERROR("#{}: rotation of wall does not respect its Wall.axis={}: rotated around {} by {} rad.",p->id,wall->axis,aa.axis(),aa.angle());
+			os<<" rotate"<<vec2pov(r*(180./M_PI))<<"";
+		}
+		if(wall->nodes[0]->pos!=Vector3r::Zero()) os<<" translate"<<vec2pov(wall->nodes[0]->pos);
+		os<<" }";
 	}
 	else if(infCyl){
 		if(isnan(infCyl->glAB.maxCoeff())){ // infinite cylinder, use quadric for this
@@ -276,7 +286,7 @@ void POVRayExport::writeMasterPov(const string& masterPov){
 		if(t.empty() || done.count(t)>0) continue;
 		done.insert(t);
 		os<<
-			"#macro woo_tex_"<<t<<"(rgb0,rgb1,diam)\n"
+			"#macro woo_tex_"<<t<<"(t,rgb0,rgb1,diam)\n"
 			"   texture{\n"
 			"      pigment {granite scale .2 color_map { [0 color rgb0] [1.0 color rgb rgb1] }}\n"
 			"      normal  {marble bump_size .8 scale .2 turbulence .7 }\n"
