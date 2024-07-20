@@ -260,7 +260,7 @@ void GLViewer::setInitialView(){
 	}
 	// initial update of the view, so that script can create view and grab sreenshot
 	// oterwise the rendering thread never kicks in and screenshot will be blank
-	updateGL();
+	updateGL_();
 
 	//centerMedianQuartile();
 	//connect(&GLGlobals::redrawTimer,SIGNAL(timeout()),this,SLOT(updateGL()));
@@ -619,7 +619,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 	}
 	else if(e->key()==Qt::Key_Period) gridSubdivide = !gridSubdivide;
 	else if(e->key()!=Qt::Key_Escape && e->key()!=Qt::Key_Space) QGLViewer::keyPressEvent(e);
-	updateGL();
+	updateGL_();
 }
 /* Center the scene such that periodic cell is contained in the view */
 void GLViewer::centerPeriodic(){
@@ -1278,7 +1278,7 @@ void GLViewer::wheelEvent(QWheelEvent* event){
 	qglviewer::Vec newPos=manipulatedFrame()->position()+qglviewer::Vec(normal[0],normal[1],normal[2])*dist;
 	manipulatedFrame()->setPosition(newPos);
 	renderer->clipPlanes[manipulatedClipPlane]->pos=Vector3r(newPos[0],newPos[1],newPos[2]);
-	updateGL();
+	updateGL_();
 	/* in draw, bound cutting planes will be moved as well */
 }
 

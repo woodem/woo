@@ -49,7 +49,7 @@ void OpenGLManager::timerEvent(QTimerEvent* event){
 	if(measure){ t=woo::TimingInfo::getNow(/*evenIfDisabled*/true); }
 
 	/* ------------------ */
-	views[0]->updateGL();
+	views[0]->updateGL_();
 	/* -------------------*/
 
 	if(measure){

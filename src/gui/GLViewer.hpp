@@ -128,7 +128,13 @@ class GLViewer : public QGLViewer
 		void setInitialView();
 
      public:
-		//virtual void updateGL(void);
+		void updateGL_(){
+			#if QGLVIEWER_VERSION < 0x20700
+				this->updateGL();
+			#else
+				this->update();
+			#endif
+		}
 
 		const int viewId;
 		// public because of _GLViewer which exposes this to python
