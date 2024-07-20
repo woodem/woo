@@ -2,6 +2,7 @@
 #pragma once
 #include<Python.h>
 #include<string>
+#define PYBIND11_DETAILED_ERROR_MESSAGES
 #include<pybind11/pybind11.h>
 typedef pybind11::gil_scoped_acquire GilLock;
 //! run string as python command; locks & unlocks GIL automatically

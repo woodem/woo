@@ -76,6 +76,7 @@ std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(
 	#error Neither <filesystem> nor <experimental/filesystem> are includable!
 #endif
 
+#define PYBIND11_DETAILED_ERROR_MESSAGES
 // includes python headers, which also define PY_MAJOR_VERSION
 #include<pybind11/pybind11.h>
 #include<pybind11/eval.h>

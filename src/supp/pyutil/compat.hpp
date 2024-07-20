@@ -21,7 +21,7 @@
 #endif
 // forward decl
 namespace woo { struct Object; }; 
-
+#define PYBIND11_DETAILED_ERROR_MESSAGES
 #include<pybind11/pybind11.h>
 namespace pybind11{
 	// emulate boost::python::extract
@@ -48,39 +48,3 @@ namespace pybind11{
 		inline void delitem(::pybind11::dict& d, const char* key){ d.attr("pop")(key); }
 	}
 }
-
-// this was for boost::python
-#if 0
-	#define def_property_readonly add_property
-	#define def_property add_property
-	#define def_property_static add_static_property
-	#define def_property_readonly_static add_static_property
-	#define add_property_readonly add_property
-	#define def_readonly_static def_readonly // boost::python does not distcriminate those
-	#define def_static(name,...) def(name,__VA_ARGS__).staticmethod(name)
-	#define WOO_PY_GETTER_COPY(func) py::make_function(func,py::return_value_policy<py::return_by_value>())
-	#define WOO_PY_EXPOSE_COPY(classT,attr) py::make_getter(attr,py::return_value_policy<py::return_by_value>())
-	#define WOO_PY_DICT_CONTAINS(dict,key) dict.has_key(key)
-	#define WOO_PY_DICT_UPDATE(src,dst) dst.update(src);
-	// boost::python wants args to be grouped in parens
-	#define WOO_PY_ARGS(...) (__VA_ARGS__)
-
-	#define WOO_PY_RETURN__TAKE_OWNERSHIP py::return_value_policy<py::manage_new_object>()
-	namespace boost { namespace python {
-		template<typename T> object cast(const T& o){ return object(o); }
-		template<typename T> T cast(object& o){ return extract<T>(o)(); }
-		template<typename T> bool isinstance(object& o){ return extract<T>(o).check(); }
-		// for raw arguments
-		typedef dict kwargs;
-		typedef tuple args_;
-		typedef scope module_;
-		// pybind11 is a class, mimick here
-		inline object none(){ return object(); }
-		#if 0
-			// pybind11 exposes import as py::module::import, mimick here
-			namespace module{
-				py::object import(const char* name){ return ::boost::python::import(name); }
-			}
-		#endif
-	}};
-#endif

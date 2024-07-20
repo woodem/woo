@@ -10,10 +10,6 @@
 #include<boost/preprocessor/cat.hpp>
 #include<boost/preprocessor/stringize.hpp>
 
-#include<pybind11/pybind11.h>
-namespace py=pybind11;
-
-
 #include"../supp/base/Math.hpp"
 #include"../supp/base/Types.hpp"
 #include"../supp/base/Logging.hpp"
