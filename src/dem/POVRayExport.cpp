@@ -4,7 +4,7 @@
 #include<boost/range/algorithm/sort.hpp>
 #include<boost/range/algorithm/copy.hpp>
 #include<boost/range/algorithm/set_algorithm.hpp>
-#include<boost/function_output_iterator.hpp>
+#include<boost/iterator/function_output_iterator.hpp>
 
 #include<boost/graph/adjacency_list.hpp>
 #include<boost/graph/connected_components.hpp>

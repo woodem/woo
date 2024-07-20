@@ -2,7 +2,7 @@
 
 #include"GridStore.hpp"
 #include"GridCollider.hpp" // for timing macro GC_CHECKPOINT2
-#include<boost/function_output_iterator.hpp>
+#include<boost/iterator/function_output_iterator.hpp>
 #include<boost/range/algorithm/set_algorithm.hpp>
 
 WOO_PLUGIN(dem,(GridStore));

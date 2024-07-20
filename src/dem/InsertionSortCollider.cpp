@@ -583,7 +583,8 @@ void InsertionSortCollider::run(){
 			} else { // periodic case: see comments above
 				// parallelizing this decreases performance slightly
 				for(long i=0; i<2*nPar; i++){
-					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))){ LOG_DEBUG("Skipping {} (id={}, isMin={})",i,V[i].id,V[i].flags.isMin); continue; }
+					/* the + converts bitfield to int so that fmt::format can handle it: https://github.com/fmtlib/fmt/issues/1284 */
+					if(WOO_UNLIKELY(!(V[i].flags.isMin && V[i].flags.hasBB))){ LOG_DEBUG("Skipping {} (id={}, isMin={})",i,V[i].id,+V[i].flags.isMin); continue; }
 					const Particle::id_t& iid=V[i].id;
 					long cnt=0;
 					// we might wrap over the periodic boundary here; that's why the condition is different from the aperiodic case
@@ -593,7 +594,7 @@ void InsertionSortCollider::run(){
 							|| (V[i].flags.isInf && !V[j].flags.isMin)
 						#endif
 							; j=V.norm(j+1)){
-						LOG_TRACE("i={} (id={}, isMin={}), j={} (id={}, isMin={})",i,V[i].id,V[i].flags.isMin,j,V[j].id,V[j].flags.isMin);
+						LOG_TRACE("i={} (id={}, isMin={}), j={} (id={}, isMin={})",i,V[i].id,+V[i].flags.isMin,j,V[j].id,+V[j].flags.isMin);
 						if(cnt++>2*(long)nPar){ LOG_FATAL("Uninterrupted loop in the initial sort?"); throw std::logic_error("loop??"); }
 						const Particle::id_t& jid=V[j].id;
 						if(!V[j].flags.isMin) continue;
