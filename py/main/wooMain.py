@@ -414,7 +414,7 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
     if woo.runtime.opts.expression:
         # try to be smart iporting some modules
         import re
-        m=re.match('(woo\.pre\.[a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\(',opts.expression)
+        m=re.match(r'(woo\.pre\.[a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\(',opts.expression)
         if m:    __import__(m.group(1))
         obj=eval(opts.expression)
         if isinstance(obj,woo.core.Scene): woo.master.scene=obj
@@ -436,17 +436,17 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
     # common ipython configuration
     ipconfig=dict( # ipython options, see e.g. http://www.cv.nrao.edu/~rreid/casa/tips/ipy_user_conf.py
         banner1='[[ ^L clears screen, ^U kills line. '+', '.join(['F12 controller']+(['F11 3d view','F10 both'] if 'opengl' in woo.config.features else [])+(['F9 generator'] if qt else [])+['F8 plot'])+'. ]]\n',
-        prompt_in1='Woo [\#]: ',
-        prompt_in2='    .\D.: ',
-        prompt_out=" -> [\#]: ",
+        prompt_in1=r'Woo [\#]: ',
+        prompt_in2=r'    .\D.: ',
+        prompt_out=r" -> [\#]: ",
         separate_in='',separate_out='',separate_out2='',
         readline_parse_and_bind=[
             'tab: complete',
             # only with the gui; the escape codes might not work on non-linux terminals.
             ]
-            +(['"\e[24~": "\C-Uwoo.qt.Controller();\C-M"']+(['"\e[23~": "\C-Uwoo.qt.View();\C-M"','"\e[21~": "\C-Uwoo.qt.Controller(), woo.qt.View();\C-M"'] if 'opengl' in woo.config.features else [])+['"\e[20~": "\C-Uwoo.qt.Generator();\C-M"'] if qt else []) # F12,F11,F10,F9
-            +['"\e[19~": "\C-Uwoo.master.scene.plot.plot();\C-M"', #F8
-                '"\e[A": history-search-backward', '"\e[B": history-search-forward', # incremental history forward/backward
+            +([r'"\e[24~": "\C-Uwoo.qt.Controller();\C-M"']+([r'"\e[23~": "\C-Uwoo.qt.View();\C-M"',r'"\e[21~": "\C-Uwoo.qt.Controller(), woo.qt.View();\C-M"'] if 'opengl' in woo.config.features else [])+[r'"\e[20~": "\C-Uwoo.qt.Generator();\C-M"'] if qt else []) # F12,F11,F10,F9
+            +[r'"\e[19~": "\C-Uwoo.master.scene.plot.plot();\C-M"', #F8
+                r'"\e[A": history-search-backward', r'"\e[B": history-search-forward', # incremental history forward/backward
         ]
     )
             
@@ -463,9 +463,9 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
         for k in ipconfig: setattr(InteractiveShellEmbed,k,ipconfig[k])
         ipshell=InteractiveShellEmbed()
         if ipython_version<500:
-            ipshell.prompt_manager.in_template= 'Woo [\#]: '
-            ipshell.prompt_manager.in2_template='    .\D.: '
-            ipshell.prompt_manager.out_template=' -> [\#]: '
+            ipshell.prompt_manager.in_template= r'Woo [\#]: '
+            ipshell.prompt_manager.in2_template=r'    .\D.: '
+            ipshell.prompt_manager.out_template=r' -> [\#]: '
         # IPython >= 5.0
         else:
             # important, equivalent to %gui qt5 magick
@@ -889,9 +889,9 @@ finished: %s
     parser=argparse.ArgumentParser(description='Woo: batch system: runs Woo simulation multiple times with different parameters.\n\nSee https://woodem.org/user/batch.html for details.\n\nBatch can be specified either with parameter table TABLE (must not end in .py), which is either followed by exactly one SIMULATION.py (must end in .py), or contains !SCRIPT column specifying the simulation to be run. The second option is to specify multiple scripts, which can optionally have /nCores suffix to specify number of cores for that particular simulation (corresponds to !THREADS column in the parameter table), e.g. sim.py/3.')
     parser.add_argument('-j','--jobs',dest='maxJobs',type=int,help="Maximum number of simultaneous threads to run (default: number of cores, further limited by OMP_NUM_THREADS if set by the environment: %d)"%numCores,metavar='NUM',default=numCores)
     parser.add_argument('--job-threads',dest='defaultThreads',type=int,help="Default number of threads for one job; can be overridden by per-job with !THREADS (or !OMP_NUM_THREADS) column. Defaults to 1.",metavar='NUM',default=1)
-    parser.add_argument('--force-threads',action='store_true',dest='forceThreads',help='Force jobs to not use more cores than the maximum (see \-j), even if !THREADS colums specifies more.')
+    parser.add_argument('--force-threads',action='store_true',dest='forceThreads',help=r'Force jobs to not use more cores than the maximum (see \-j), even if !THREADS colums specifies more.')
     parser.add_argument('--log',dest='logFormat',help='Format of job log files: must contain a $, %% or @, which will be replaced by script name, line number or by title column respectively. Directory for logs will be created automatically. (default: logs/$.@.log)',metavar='FORMAT',default='logs/$.@.log')
-    parser.add_argument('--global-log',dest='globalLog',help='Filename where to redirect output of woo-batch itself (as opposed to \-\-log); if not specified (default), stdout/stderr are used',metavar='FILE')
+    parser.add_argument('--global-log',dest='globalLog',help=r'Filename where to redirect output of woo-batch itself (as opposed to \-\-log); if not specified (default), stdout/stderr are used',metavar='FILE')
     parser.add_argument('-l','--lines',dest='lineList',help='Lines of TABLE to use, in the format 2,3-5,8,11-13 (default: all available lines in TABLE)',metavar='LIST')
     parser.add_argument('--results',dest='resultsDb',help='File (HDF5 or SQLite) where simulation should store its results (such as input/output files and some data); the default is to use {tableName}.hdf5 ({tableName}.sqlite under Windows), if there is a param table, otherwise each simulation defines its own default files to write results in.\nThe preferred format is HDF5 (usually *.hdf5, *.h5, *.he5, *.hdf), SQLite is used for *.sqlite, *.db.',default=None)
     parser.add_argument('--nice',dest='nice',type=int,help='Nice value of spawned jobs (default: 10)',default=10)
@@ -904,7 +904,7 @@ finished: %s
     parser.add_argument('--http-wait',action='store_true',dest='httpWait',help='Do not quit if still serving overview over http repeatedly',default=False)
     parser.add_argument('--exit-prompt',action='store_true',dest='exitPrompt',help='Do not quit until a key is pressed in the terminal (useful for reviewing plots after all simulations finish).',default=False)
     # parser.add_argument('--generate-manpage',help='Generate man page documenting this program and exit',dest='manpage',metavar='FILE')
-    parser.add_argument('--plot-update',type=int,dest='plotAlwaysUpdateTime',help='Interval (in seconds) at which job plots will be updated even if not requested via HTTP. Non-positive values will make the plots not being updated and saved unless requested via HTTP (see \-\-plot-timeout for controlling maximum age of those).  Plots are saved at exit under the same name as the log file, with the .log extension removed. (default: 120 seconds)',metavar='TIME',default=120)
+    parser.add_argument('--plot-update',type=int,dest='plotAlwaysUpdateTime',help=r'Interval (in seconds) at which job plots will be updated even if not requested via HTTP. Non-positive values will make the plots not being updated and saved unless requested via HTTP (see \-\-plot-timeout for controlling maximum age of those).  Plots are saved at exit under the same name as the log file, with the .log extension removed. (default: 120 seconds)',metavar='TIME',default=120)
     parser.add_argument('--plot-timeout',type=int,dest='plotTimeout',help='Maximum age (in seconds) of plots served over HTTP; they will be updated if they are older. (default: 30 seconds)',metavar='TIME',default=30)
     parser.add_argument('--refresh',type=int,dest='refresh',help='Refresh rate of automatically reloaded web pages (summary, logs, ...).',metavar='TIME',default=30)
     parser.add_argument('--timing',type=int,dest='timing',default=0,metavar='COUNT',help='Repeat each job COUNT times, and output a simple table with average/variance/minimum/maximum job duration; used for measuring how various parameters affect execution time. Jobs can override the global value with the !COUNT column.')
@@ -941,7 +941,7 @@ finished: %s
         import _thread
         _thread.start_new_thread(runTailProcess,(globalLog,))
     
-    if len([1 for a in args if re.match('.*\.py(/[0-9]+)?',a)])==len(args) and len(args)!=0 or opts.notable:
+    if len([1 for a in args if re.match(r'.*\.py(/[0-9]+)?',a)])==len(args) and len(args)!=0 or opts.notable:
         # if all args end in .py, they are simulations that we will run
         table=None; scripts=args
     elif len(args)==2:

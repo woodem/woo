@@ -82,7 +82,7 @@ if not WIN and (wooOptions.quirks & wooOptions.quirkIntel) and 'DISPLAY' in os.e
             try:
                 glx=subprocess.check_output("LC_ALL=C glxinfo | grep 'OpenGL version string:'",shell=True,stderr=subprocess.STDOUT,universal_newlines=True).split('\n')
                 # this should cover broken drivers down to Ubuntu 12.04 which shipped Mesa 8.0
-                if len(glx)==1 and re.match('.* Mesa (9\.[01]|8\.0)\..*',glx[0]):
+                if len(glx)==1 and re.match(r'.* Mesa (9\.[01]|8\.0)\..*',glx[0]):
                     print('Intel GPU + Mesa < 9.2 detected, setting LIBGL_ALWAYS_SOFTWARE=1\n\t(use --quirks=0 to disable)')
                     os.environ['LIBGL_ALWAYS_SOFTWARE']='1'
             except subprocess.CalledProcessError: pass # failed glxinfo call, such as when not installed

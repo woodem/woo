@@ -517,7 +517,8 @@ def makeVideo(frameSpec,out,renameNotOverwrite=True,fps=24,kbps=0,crf=22,holdLas
                 if out.endswith('mp4'):
                     cmd=[encExec]+inputs+['-r',f'{int(fps)}']+(['-b:v',f'{int(kbps)}k'] if kbps>0 else ['-crf',str(crf),'-preset','slow'])+['-threads',str(woo.master.numThreads)]+pix_fmt+(['-pass',str(passNo),'-passlogfile',passLogFile] if passNo>0 else [])+['-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)']+(['-f','rawvideo','-y',devNull] if passNo==1 else ['-f','mp4','-y',out])
                 elif out.endswith('.webm'):
-                    cmd0=[encExec]+inputs+['-r',f'{int(fps)}']+['-preset','slow']+['-threads',f'{woo.master.numThreads}','-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)','-c:v','libvpx-vp9']+pix_fmt+(['-b:v',f'{int(kbps)}k'] if kbps>0 else ['-b:v','0','-crf',f'{crf}'])+['-passlogfile',passLogFile]
+                    # ['-preset','slow']+
+                    cmd0=[encExec]+inputs+['-r',f'{int(fps)}']+['-threads',f'{woo.master.numThreads}','-an','-vf','crop=(floor(in_w/2)*2):(floor(in_h/2)*2)','-c:v','libvpx-vp9']+pix_fmt+(['-b:v',f'{int(kbps)}k'] if kbps>0 else ['-b:v','0','-crf',f'{crf}'])+['-passlogfile',passLogFile]
                     if passNo==1: cmd=cmd0+['-pass','1','-f','null','/dev/null']
                     else: cmd=cmd0+['-row-mt','1','-pass','2','-y',out]
                     # +['-y',out]
