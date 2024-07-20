@@ -50,7 +50,6 @@ def prepareHorse(pre):
     woo.master.usesApi=10102
     import woo.gts as gts # not sure whether this is necessary
     import woo.pack, woo.utils, woo.core, woo
-    import pkg_resources
     S=woo.core.Scene(fields=[DemField()])
     for a in ['reportFmt','vtkPrefix']: setattr(pre,a,woo.utils.fixWindowsPath(getattr(pre,a)))
     S.pre=pre.deepcopy() # so that our manipulation does not affect input fields
@@ -62,9 +61,9 @@ def prepareHorse(pre):
     
 
     # load the horse
-    # FIXME: pyinstaller should support pkg_resources on package which is frozen as well :|
-    if hasattr(sys,'frozen'): surf=gts.read(open(sys._MEIPASS+'/data/horse.coarse.gts','r'))
-    else: surf=gts.read(pkg_resources.resource_stream('woo','data/horse.coarse.gts'))
+    import importlib.resources
+    with (importlib.resources.files('woo')/'data/horse.coarse.gts').open('rb') as data:
+        surf=gts.read(data)
     
     if not surf.is_closed(): raise RuntimeError('Horse surface not closed?!')
     pred=woo.pack.inGtsSurface(surf)
