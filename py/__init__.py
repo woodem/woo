@@ -67,7 +67,8 @@ elif 'OMP_NUM_THREADS' in os.environ:
     print(f'Honoring environment variable OMP_NUM_THREADS={os.environ["OMP_NUM_THREADS"]}.')
 
 import sysconfig
-soSuffix=sysconfig.get_config_vars()['SO']
+
+soSuffix=sysconfig.get_config_var('SHLIB_SUFFIX') or sysconfig.get_config_var('SO')
 
 #
 # QUIRKS
