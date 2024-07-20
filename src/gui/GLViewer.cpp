@@ -156,27 +156,15 @@ QImage GLViewer::loadTexture(const char *filename, GLuint &textureID){
     return tex;
 }
 
-GLViewer::GLViewer(int _viewId, QGLWidget* shareWidget): QGLViewer(/*parent*/(QWidget*)NULL,shareWidget), viewId(_viewId) {
-	isMoving=false;
-	cut_plane = 0;
-	cut_plane_delta = -2;
-	gridSubdivide = false;
-	prevSize=Vector2i(550,550);
+GLViewer::GLViewer(int _viewId): QGLViewer(/*parent*/(QWidget*)NULL), viewId(_viewId) {
 	resize(prevSize[0],prevSize[1]);
-	framesDone=0;
-
 	if(viewId==0) setWindowTitle("3d view");
 	else setWindowTitle(("Secondary view #"+to_string(viewId)).c_str());
-
 	setWindowIcon(QIcon(":/woo-logo.svg"));
-
-	QApplication::setFont(QFont("Sans Serif"));
-
-
+	// QApplication::setFont(QFont("Sans Serif"));
 	show();
 
 	mouseMovesCamera();
-	manipulatedClipPlane=-1;
 
 	if(manipulatedFrame()==0) setManipulatedFrame(new qglviewer::ManipulatedFrame());
 
@@ -1214,28 +1202,6 @@ string GLViewer::getRealTimeString(){
 }
 #undef _W2
 #undef _W3
-
-void GLViewer::mousePressEvent(QMouseEvent *e){
-	#if 0
-		pressPos=e->globalPos(); // remember this position for blocking the cursor when rotating
-		cerr<<"["<<pressPos.x()<<","<<pressPos.y()<<"]";
-	#endif
-	QGLViewer::mousePressEvent(e);
-}
-
-void GLViewer::mouseMoveEvent(QMouseEvent *e){
-	// cerr<<(rotCursorFreeze?":":".");
-	#if 0
-		if(rotCursorFreeze && (e->buttons()&(Qt::LeftButton|Qt::RightButton|Qt::MiddleButton))){
-			// this is the event returning us to the initial position, which we need to ignore
-			// see http://www.qtcentre.org/threads/16298-free-mouse-pointer
-			if(QCursor::pos()==pressPos) { cerr<<"_"; return; }
-			cerr<<"#";
-			QCursor::setPos(pressPos); // already in global coords
-	}
-	#endif
-	QGLViewer::mouseMoveEvent(e);
-}
 
 /* Handle double-click event; if clipping plane is manipulated, align it with the global coordinate system.
  * Otherwise pass the event to QGLViewer to handle it normally.

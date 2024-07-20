@@ -112,14 +112,14 @@ class GLViewer : public QGLViewer
 	
 	friend class QGLThread;
 	private:
-		Vector2i prevSize; // used to move scales accordingly
+		Vector2i prevSize=Vector2i(550,550); // used to move scales accordingly
 		QPoint pressPos; // remember where the last button was pressed, to freeze the cursor
 
-		bool			isMoving;
-		float			cut_plane;
-		int			cut_plane_delta;
-		bool			gridSubdivide;
-		int manipulatedClipPlane;
+		bool isMoving=false;
+		float cut_plane=0;
+		int cut_plane_delta=-2;
+		bool gridSubdivide=false;
+		int manipulatedClipPlane=-1;
 		set<int> boundClipPlanes;
 		shared_ptr<qglviewer::LocalConstraint> xyPlaneConstraint;
 		string strBoundGroup(){string ret; for(int i: boundClipPlanes) ret+=" "+to_string(i+1); return ret;}
@@ -141,10 +141,10 @@ class GLViewer : public QGLViewer
 		// shared by all instances
 		static bool rotCursorFreeze;
 		static bool paraviewLike3d;
-		long framesDone;
+		long framesDone=0;
 
 		void centerMedianQuartile();
-		GLViewer(int viewId, QGLWidget* shareWidget=0);
+		GLViewer(int viewId);
 		virtual ~GLViewer();
 		#if 0
 			virtual void paintGL();
@@ -221,9 +221,6 @@ class GLViewer : public QGLViewer
 		virtual void endSelection(const QPoint &point) override;
 		virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 		virtual void wheelEvent(QWheelEvent* e) override;
-		// hijacked to optionally freeze cursor when rotating
-		virtual void mouseMoveEvent(QMouseEvent *e) override;
-		virtual void mousePressEvent(QMouseEvent *e) override;
 };
 
 /*! Get unconditional lock on a GL view.
