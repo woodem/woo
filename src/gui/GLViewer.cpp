@@ -1086,6 +1086,8 @@ void GLViewer::postDraw(){
 		nextSnapFile.clear();
 		nextSnapMsg=true; // show next message, unless disabled again
 	}
+
+	glPopMatrix();
 }
 
 
