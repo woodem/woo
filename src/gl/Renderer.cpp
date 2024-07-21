@@ -199,7 +199,6 @@ void Renderer::setLighting(){
 
 
 	// not sctrictly lighting related
-	glEnable(GL_BLEND);
 	glEnable(GL_LINE_SMOOTH);
 	//glEnable(GL_POLYGON_SMOOTH);
 	glShadeModel(GL_SMOOTH);
