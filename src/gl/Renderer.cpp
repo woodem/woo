@@ -197,6 +197,12 @@ void Renderer::setLighting(){
 	//Shared material settings
 	resetSpecularEmission();
 
+	// enable depth testing
+	glEnable(GL_DEPTH_TEST);
+	// reset depth data from the previous frame
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// antialiasing (via multisampling, MSAA)
+	glEnable(GL_MULTISAMPLE);
 
 	// not sctrictly lighting related
 	glEnable(GL_LINE_SMOOTH);
