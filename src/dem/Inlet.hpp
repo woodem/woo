@@ -1,4 +1,5 @@
 #pragma once
+#include<random>
 #include"Particle.hpp"
 #include<boost/range/numeric.hpp>
 #include<boost/range/algorithm/fill.hpp>
@@ -313,16 +314,39 @@ struct ArcInlet: public RandomInlet{
 };
 WOO_REGISTER_OBJECT(ArcInlet);
 
-struct ArcShooter: public ParticleShooter{
+struct ArcShooterBase: public ParticleShooter{
 	void operator()(const shared_ptr<Node>& n) override;
-	void postLoad(ArcShooter&, void*);
-	#define woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS \
-		ArcShooter,ParticleShooter,"Shoot particles in direction defined by (normally-distributed) angles from tangent and base plane (cylindrical coordinates defined by :obj:`node`) in given point, with magnitude constraind by :obj:`vRange`.", \
-		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinate system. *Must* be given.")) \
+	void postLoad(ArcShooterBase&, void*);
+	#define woo_dem_ArcShooterBase__CLASS_BASE_DOC_ATTRS \
+		ArcShooterBase,ParticleShooter,"Shoot particles in direction defined by angles from tangent and base plane (cylindrical coordinates defined by :obj:`node`) in given point. This is an abstract class. Child classes implement uniform and normal distribution of the parameters.", \
+		((shared_ptr<Node>,node,make_shared<Node>(),AttrTrait<Attr::triggerPostLoad>(),"Node defining local coordinate system. *Must* be given."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooterBase__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(ArcShooterBase);
+
+struct RangeArcShooter: public ArcShooterBase{
+	void operator()(const shared_ptr<Node>& n) override;
+	#define woo_dem_RangeArcShooter__CLASS_BASE_DOC_ATTRS \
+		RangeArcShooter,ArcShooterBase,"Velocity of generated particles distributed uniformly in spherical coordinates.", \
 		((Vector2r,elevRange,Vector2r(0,0),AttrTrait<>().angleUnit(),"Range for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`). The actual value is chosen with uniform probability from this range.")) \
 		((Vector2r,azimRange,Vector2r(0,0),AttrTrait<>().angleUnit(),"Range for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.")) \
-		((Vector2r,vRange,Vector2r(NaN,NaN),AttrTrait<>().velUnit(),"Range for velocity magnitude."))
+		((Vector2r,vRange,Vector2r(NaN,NaN),AttrTrait<>().velUnit(),"Range for velocity magnitude.")) \
 
-	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_RangeArcShooter__CLASS_BASE_DOC_ATTRS);
 };
-WOO_REGISTER_OBJECT(ArcShooter);
+WOO_REGISTER_OBJECT(RangeArcShooter);
+
+struct NormDistArcShooter: public ArcShooterBase{
+	std::default_random_engine gen;
+	std::normal_distribution<Real> elevND, azimND, velND;
+	void postLoad(NormDistArcShooter&, void*);
+	void operator()(const shared_ptr<Node>& n) override;
+	#define woo_dem_NormDistArcShooter__CLASS_BASE_DOC_ATTRS \
+		NormDistArcShooter,ArcShooterBase,"Velocity of generated particles with (truncated) normal distribution in spherical coordinates.", \
+		((Vector2r,elevMeanStd,Vector2r(0,0),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`).")) \
+		((Vector2r,azimMeanStd,Vector2r(0,0),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.")) \
+		((Vector2r,vMeanStd,Vector2r(NaN,NaN),AttrTrait<Attr::triggerPostLoad>().velUnit(),"Mean+stdev for velocity magnitude.")) \
+		((float,stDevTrunc,3,,"Truncate all normal distributions at a multiple of the standard deviation."))
+	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_NormDistArcShooter__CLASS_BASE_DOC_ATTRS);
+};
+WOO_REGISTER_OBJECT(NormDistArcShooter);

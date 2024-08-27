@@ -15,7 +15,7 @@
 
 #include<boost/tuple/tuple_comparison.hpp>
 
-WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)(ArcShooter)(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias)(NonuniformAxisPlacementBias));
+WOO_PLUGIN(dem,(Inlet)(ParticleGenerator)(MinMaxSphereGenerator)(ParticleShooter)(AlignedMinMaxShooter)(RandomInlet)(BoxInlet)(BoxInlet2d)(CylinderInlet)(ArcInlet)(ArcShooterBase)(RangeArcShooter)(NormDistArcShooter)(SpatialBias)(AxialBias)(PsdAxialBias)(LayeredAxialBias)(NonuniformAxisPlacementBias));
 
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Inlet__CLASS_BASE_DOC_ATTRS_PY);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ParticleGenerator__CLASS_BASE_DOC_ATTRS_PY);
@@ -32,7 +32,9 @@ WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_AxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_PsdAxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_LayeredAxialBias__CLASS_BASE_DOC_ATTRS);
 WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_NonuniformAxisPlacementBias__CLASS_BASE_DOC_ATTRS);
-WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooter__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_ArcShooterBase__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_RangeArcShooter__CLASS_BASE_DOC_ATTRS);
+WOO_IMPL__CLASS_BASE_DOC_ATTRS(woo_dem_NormDistArcShooter__CLASS_BASE_DOC_ATTRS);
 
 
 WOO_IMPL_LOGGER(RandomInlet);
@@ -621,8 +623,12 @@ bool ArcInlet::validateBox(const AlignedBox3r& b) {
 #endif
 
 
-void ArcShooter::postLoad(ArcShooter&, void*){
-	if(!node){ node=make_shared<Node>(); throw std::runtime_error("ArcShooter.node: must not be None (dummy node created)."); }
+void ArcShooterBase::postLoad(ArcShooterBase&, void*){
+	if(!node){ node=make_shared<Node>(); throw std::runtime_error("ArcShooterBase.node: must not be None (dummy node created)."); }
+}
+
+void ArcShooterBase::operator()(const shared_ptr<Node>& n){
+	throw std::runtime_error("ArcShooterBase::operator(): ArcShooterBase is abstract, only its child classes are to be used.");
 }
 
 Vector3r cart2spher(const Vector3r& xyz){
@@ -637,7 +643,7 @@ Vector3r spher2cart(const Vector3r& rAzimElev){
 	return r*Vector3r(cos(elev)*cos(azim),cos(elev)*sin(azim),sin(elev));
 }
 
-void ArcShooter::operator()(const shared_ptr<Node>& n){
+void RangeArcShooter::operator()(const shared_ptr<Node>& n){
 	// local coords where x is radial WRT cylindrical coords defined by *node*
 	Vector3r rPhiZ(CompUtils::cart2cyl(node->ori.conjugate()*(n->pos-node->pos)));
 	Quaternionr qPerp=Quaternionr(AngleAxisr(rPhiZ[1],Vector3r::UnitZ()));
@@ -645,6 +651,36 @@ void ArcShooter::operator()(const shared_ptr<Node>& n){
 	Real vNorm=Mathr::IntervalRandom(vRange[0],vRange[1]);
 	Real azim=Mathr::IntervalRandom(azimRange[0],azimRange[1]);
 	Real elev=Mathr::IntervalRandom(elevRange[0],elevRange[1]);
+	n->getData<DemData>().vel=node->ori*qPerp*spher2cart(Vector3r(/*radius*/vNorm,/*azimuth*/azim,/*elev*/elev));
+}
+
+
+void NormDistArcShooter::postLoad(NormDistArcShooter&, void* attr){
+	#define _INI(meanStd,ND) if(!(meanStd[1]>0)) throw std::runtime_error("NormDistArcShooter::" #meanStd "[1]: standard deviation must be positive (not "+std::to_string(meanStd[1])+")"); if(ND.mean()!=meanStd[0] || ND.stddev()!=meanStd[1]) ND=std::normal_distribution<Real>(meanStd[0],meanStd[1]);
+	_INI(elevMeanStd,elevND);
+	_INI(azimMeanStd,azimND);
+	_INI(vMeanStd,velND);
+	#undef _INI
+	if(!(stDevTrunc>1.)) throw std::runtime_error("NormDistArcShooter::stDevTrunc: must be greater than 1.0 (is "+to_string(stDevTrunc)+")");
+}
+
+void NormDistArcShooter::operator()(const shared_ptr<Node>& n){
+	// local coords where x is radial WRT cylindrical coords defined by *node*
+	Vector3r rPhiZ(CompUtils::cart2cyl(node->ori.conjugate()*(n->pos-node->pos)));
+	Quaternionr qPerp=Quaternionr(AngleAxisr(rPhiZ[1],Vector3r::UnitZ()));
+	// Quaternion qElev=AngleAxisr(atan2(rPhiZ[2],rPhiZ[0]),Vector3r::UnitY);
+	auto truncND=[&](std::normal_distribution<Real>& ND){
+		Real ret; int N=0;
+		while(N<1000000){ // avoid hang if some param is weird
+			ret=ND(gen);
+			if(std::abs(ret-ND.mean())/ND.stddev()<=stDevTrunc) return ret;
+			N++;
+		}
+		throw std::runtime_error("Failed to generate pseudo-random number with truncated normal distribution (mean "+to_string(ND.mean())+", stdev "+to_string(ND.stddev())+", attempts "+to_string(N)+")");
+	};
+	Real vNorm=truncND(velND);
+	Real azim=truncND(azimND);
+	Real elev=truncND(elevND);
 	n->getData<DemData>().vel=node->ori*qPerp*spher2cart(Vector3r(/*radius*/vNorm,/*azimuth*/azim,/*elev*/elev));
 }
 
