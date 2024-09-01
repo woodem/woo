@@ -8,7 +8,8 @@ __all__=['live','liveInterval','autozoom','legendAlpha','scientific','scatterMar
 
 
 import sys
-import collections
+import collections.abc
+
 
 
 
@@ -618,7 +619,7 @@ def liveUpdate(P,timestamp):
             if not hasattr(ax,'wooYFuncs') or not ax.wooYFuncs: continue # not defined of empty
             yy=set();
             for f in ax.wooYFuncs:
-                if isinstance(f, collections.Callable): yy.update(f())
+                if isinstance(f, collections.abc.Callable): yy.update(f())
                 elif hasattr(f,'keys'):
                     yy.update(list(f.keys()))
                 else: raise ValueError("Internal error: ax.wooYFuncs items must be callables or dictionary-like objects and nothing else.")

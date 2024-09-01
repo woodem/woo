@@ -301,7 +301,7 @@ namespace woo{
 		AttrTrait& colormapChoice(bool includeDefault=true){
 			static_assert(compileFlags&(int)Flags::namedEnum,"Attr::namedEnum flag must be used as template parameter with .colormapChoice(): AttrTrait<Attr::namedEnum|...>().colormapChoice(...).");
 			colormap(true); // set the bit, so that python can put sampler next to the name in the UI
-			map<int,vector<string>> pairs; if(includeDefault) pairs.insert({-1,{"default",""}}); for(size_t i=0; i<CompUtils::colormaps.size(); i++) pairs.insert({i,{CompUtils::colormaps[i].name}}); return namedEnum(pairs);
+			map<int,vector<string>> pairs; if(includeDefault) pairs.insert({-1,{"default",""}}); for(int i=0; i<(int)CompUtils::colormaps.size(); i++) pairs.insert({i,{CompUtils::colormaps[i].name}}); return namedEnum(pairs);
 		}
 
 		AttrTrait& buttons(const vector<string>& b, bool showBefore=true){ _buttons=std::function<py::object()>([=]()->py::object{ return py::make_tuple(py::cast(b),showBefore);}); return *this; }
