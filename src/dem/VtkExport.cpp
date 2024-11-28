@@ -663,7 +663,7 @@ void VtkExport::run(){
 		if(what&WHAT_CON) writeVtp(cPoly,"con");
 		if(what&WHAT_SPHERES) writeVtu(sGrid,"spheres");
 		if(what&WHAT_MESH) writeVtu(mGrid,"mesh");
-		if(!staticMeshDone && (what&WHAT_STATIC)) writeVtu(smGrid,"static");
+		if(!staticMeshDone && (what&WHAT_STATIC)){ writeVtu(smGrid,"static"); staticMeshDone=true; }
 		if(what&WHAT_TRI) writeVtu(tGrid,"tri");
 	} else {
 		throw std::runtime_error("VtkExport::hdf5: not yet implemented");
