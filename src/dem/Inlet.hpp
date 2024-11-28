@@ -343,9 +343,9 @@ struct NormDistArcShooter: public ArcShooterBase{
 	void operator()(const shared_ptr<Node>& n) override;
 	#define woo_dem_NormDistArcShooter__CLASS_BASE_DOC_ATTRS \
 		NormDistArcShooter,ArcShooterBase,"Velocity of generated particles with (truncated) normal distribution in spherical coordinates.", \
-		((Vector2r,elevMeanStd,Vector2r(0,0),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`).")) \
-		((Vector2r,azimMeanStd,Vector2r(0,0),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.")) \
-		((Vector2r,vMeanStd,Vector2r(NaN,NaN),AttrTrait<Attr::triggerPostLoad>().velUnit(),"Mean+stdev for velocity magnitude.")) \
+		((Vector2r,elevMeanStd,Vector2r(0,1e-5),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for elevation from the plane perpendicular to the local :math:`z`-axis (as defined by :obj:`node`).")) \
+		((Vector2r,azimMeanStd,Vector2r(0,1e-5),AttrTrait<Attr::triggerPostLoad>().angleUnit(),"Mean+stdev for azimuth angle, where zero is radial connecting particle position and local origin (:obj:`node`) and positive sense defined as rotation around the :obj:`node` :math:`z`-axis.")) \
+		((Vector2r,vMeanStd,Vector2r(0,11e-5),AttrTrait<Attr::triggerPostLoad>().velUnit(),"Mean+stdev for velocity magnitude.")) \
 		((float,stDevTrunc,3,,"Truncate all normal distributions at a multiple of the standard deviation."))
 	WOO_DECL__CLASS_BASE_DOC_ATTRS(woo_dem_NormDistArcShooter__CLASS_BASE_DOC_ATTRS);
 };
