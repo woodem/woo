@@ -31,9 +31,12 @@ namespace pybind11{
 		extract(const object& obj_): obj(obj_){}
 		/* this is colosally ugly, but unfortunately py::isinstance only checks real instance type, not convertibility */
 		// bool check(){ return isinstance<T>(obj); }
-		bool check(){ try{ cast<T>(obj); return true; } catch(...){ return false; }  }
-		T operator()() const { return cast<T>(obj); }
-		operator T() const { return cast<T>(obj); }
+		bool check(){ try{ this->operator()(); return true; } catch(...){ return false; }  }
+		operator T() const { return this->operator()(); }
+		T operator()() const {
+			// if constexpr(std::is_convertible_v<T,std::string>) return std::string(str(obj));
+			return cast<T>(obj);
+		}
 	};
 	// boost::python::ptr does not seem to be needed in pybind11 when casting from raw pointer
 	// make it no-op

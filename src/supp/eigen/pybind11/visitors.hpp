@@ -655,6 +655,7 @@ class AabbVisitor{
 		.def("__setitem__",&AabbVisitor::set_item).def("__getitem__",&AabbVisitor::get_item)
 		.def("__setitem__",&AabbVisitor::set_minmax).def("__getitem__",&AabbVisitor::get_minmax)
 		.def("__str__",&AabbVisitor::__str__).def("__repr__",&AabbVisitor::__str__)
+		.def("__mul__",[](const Box& self, const Scalar& a){ return Box(self.min()*a,self.max()*a); })
 		;
 
 		py::implicitly_convertible<py::tuple,Box>();

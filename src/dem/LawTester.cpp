@@ -15,10 +15,15 @@ WOO_IMPL_LOGGER(LawTester);
 void LawTesterStage::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	// go through the dict, find just values we need
 	if(!kw.contains("whats")) return;
-	py::extract<string> isStr(py::cast<py::object>(kw["whats"]));
-	if(!isStr.check()) return;
-
-	string whatStr=isStr();
+	string whatStr;
+	try {
+		whatStr=std::string(py::str(kw["whats"]));
+	} catch(...){
+		return;
+	}
+	//py::extract<string> isStr(py::cast<py::object>(kw["whats"]));
+	//if(!isStr.check()) return;
+	// string whatStr=isStr();
 	kw.attr("pop")("whats"); // remove from kw
 	if(whatStr.size()!=6) woo::ValueError("LawTesterStage.whats, if given as string, must have length 6, not "+to_string(whatStr.size())+".");
 	for(int i=0;i<6;i++){
