@@ -75,7 +75,7 @@ void Engine::runPy_generic(const string& callerId, const string& command, Scene*
 	GilLock lock;
 	try{
 		// scripts are run in this namespace (wooMain)
-		py::object global(py::import("wooMain").attr("__dict__"));
+		py::object global(py::import("__main__").attr("__dict__"));
 		py::dict local;
 		local["scene"]=py::cast(py::ptr(scene_));
 		local["S"]=py::cast(py::ptr(scene_));

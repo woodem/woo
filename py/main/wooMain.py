@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-__all__=['main','batch','options','WooOptions']
+# __all__=['main','batch','options','WooOptions']
 
 
 import sys, os
@@ -376,7 +376,8 @@ def ipythonSession(opts,qt=False,qapp=None,qtConsole=False):
             def runScript(script):
                 sys.stderr.write("Running script "+arg0+'\n')
                 try:
-                    exec(open(script,'r').read(),globals()|{'__file__':arg0})
+                    import __main__
+                    exec(open(script,'r').read(),__main__.__dict__) # globals()|{'__file__':arg0},__main__.__dict__)
                 except SystemExit: raise
                 except: # all other exceptions
                     traceback.print_exc()
