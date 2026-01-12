@@ -194,7 +194,7 @@ template<> struct _def_woo_attr__namedEnum<true>{
 };
 #pragma GCC visibility pop
 
-#define _DEF_READWRITE_CUSTOM(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE(thisClass,attr)::compileFlags & woo::Attr::namedEnum)); _def_woo_attr__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
+#define _DEF_READWRITE_CUSTOM(thisClass,attr) if(!(_ATTR_TRAIT(thisClass,attr).isHidden())){ auto _trait(_ATTR_TRAIT(thisClass,attr)); constexpr bool isNamedEnum(!!(_ATTR_TRAIT_TYPE((int)thisClass,attr)::compileFlags & (int)woo::Attr::namedEnum)); _def_woo_attr__namedEnum<isNamedEnum>().wooDef<decltype(_classObj),_ATTR_TRAIT_TYPE(thisClass,attr),thisClass,decltype(thisClass::_ATTR_NAM(attr)),&thisClass::_ATTR_NAM(attr)>(_classObj, _trait, BOOST_PP_STRINGIZE(thisClass), _ATTR_NAM_STR(attr)); }
 
 
 
@@ -231,7 +231,7 @@ template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::valu
 // loop bodies for attribute access
 // _PYGET_ATTR is unused
 // #define _PYGET_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return py::object(_ATTR_NAM(z));
-#define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!(traitT::compileFlags & woo::Attr::hidden),!!(traitT::compileFlags & woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::template trySetNamedBit(key,(traitT::compileFlags&woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
+#define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!((int)traitT::compileFlags & (int)woo::Attr::hidden),!!((int)traitT::compileFlags & (int)woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::template trySetNamedBit(key,((int)traitT::compileFlags&(int)woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
 
 #define _PYHASKEY_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return true;
 #define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::cast(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
@@ -254,7 +254,7 @@ template<> struct _SerializeMaybe<false>{
 
 
 // serialization of a single attribute
-#define _WOO_BOOST_SERIALIZE_REPEAT(x,klass,z) _SerializeMaybe<!(_ATTR_TRAIT_TYPE(klass,z)::compileFlags & woo::Attr::noSave)>::serialize(ar,_ATTR_NAM(z), BOOST_PP_STRINGIZE(_ATTR_NAM(z)));
+#define _WOO_BOOST_SERIALIZE_REPEAT(x,klass,z) _SerializeMaybe<!((int)_ATTR_TRAIT_TYPE(klass,z)::compileFlags & (int)woo::Attr::noSave)>::serialize(ar,_ATTR_NAM(z), BOOST_PP_STRINGIZE(_ATTR_NAM(z)));
 
 // TODO: handle this by defining boost::serialization::base_class alias for base_object
 #ifdef WOO_CEREAL
