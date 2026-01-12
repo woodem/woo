@@ -6,7 +6,7 @@ from woo import *
 import woo.log
 r=1e-3
 m=LudingMat(
-    young=30e9,plastDivKn=.5,adhDivKn=.2,ktDivKn=.2,krDivKn=0,kwDivKn=0,relPlastDepth=.01,
+    young=30e9,k1DivKn=.5,kaDivKn=.2,ktDivKn=.2,krDivKn=0,kwDivKn=0,deltaLimRel=.01,
     tanPhi=.4,statR=.4,statW=.4,
     viscN=0,viscT=0,viscR=0,viscW=0
 )
@@ -31,9 +31,9 @@ S=woo.master.scene=Scene(
             ],
             done='S.stop()',label='tester'
         ),
-        PyRunner(5,'C=S.dem.con[0]; S.plot.addData(i=S.step,time=S.time,f=C.phys.force,deltaMax=C.phys.deltaMax,ftNorm=C.phys.force.yz().norm(),t=C.phys.torque,uN=C.geom.uN,normBranch=C.phys.normBranch)')
+        PyRunner(5,'C=S.dem.con[0]; S.plot.addData(i=S.step,time=S.time,f=C.phys.force,deltaMax=C.phys.deltaMax,uN=C.geom.uN,t=C.phys.torque)') # , ,ftNorm=C.phys.force.yz().norm(),t=C.phys.torque,uN=C.geom.uN'), # normBranch=C.phys.normBranch
     ],
-    plot=Plot(plots={'uN':('f_x'),'uN ':('deltaMax'),' uN':('normBranch')}) # ,'f_x':('ftNorm',)}
+    plot=Plot(plots={'uN':('f_x'),'uN ':('deltaMax'),}) # ,' uN':('normBranch') # ,'f_x':('ftNorm',)
 )
 
 S.saveTmp()

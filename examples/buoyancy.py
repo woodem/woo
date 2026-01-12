@@ -9,7 +9,7 @@ S=woo.master.scene=woo.core.Scene(
     plot=woo.core.Plot(plots={'t':('p_z',None,('v_z','r')),'t ':('F_z','Fg_only')}),
     engines=DemField.minimalEngines(model=woo.models.ContactModelSelector(name='linear',damping=0.0))+[
         HalfspaceBuoyancy(liqRho=mat.density,surfPt=(0,0,5),dragCoef=0.9,drag=True),
-        woo.core.PyRunner(1,command='addPlotData()'),
+        woo.core.PyRunner(stepPeriod=1,command='addPlotData()'),
     ],
     fields=[DemField(gravity=(0,0,-9.81),
         par=Wall.makeBox(box=((0,0,0),(4,4,4)),which=(1,1,1,1,1,0),mat=mat)+[

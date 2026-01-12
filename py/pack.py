@@ -526,7 +526,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
             sp.cellSize=(0,0,0) # resetting cellSize avoids warning when rotating, plus we don't want periodic packing anyway
             if orientation: sp.rotate(*orientation.toAxisAngle())
             return filterSpherePack(predicate,sp,mat=mat)
-        else: log.info("No suitable packing in database found, running",'PERIODIC compression' if wantPeri else 'triaxial')
+        else: log.info(f"No suitable packing in database found, running {'PERIODIC' if wantPeri else 'triaxial'} compression.")
         sys.stdout.flush()
     S=core.Scene(fields=[dem.DemField()])
     if wantPeri:
@@ -536,7 +536,7 @@ def randomDensePack(predicate,radius,mat=-1,dim=None,cropLayers=0,rRelFuzz=0.,sp
         S.cell.setBox(x1,y1,z1)
         #print cloudPorosity,beta,gamma,N100,x1,y1,z1,S.cell.refSize
         #print x1,y1,z1,radius,rRelFuzz
-        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=1e-2,doneHook='print("DONE"); S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor')]
+        S.engines=[dem.ForceResetter(),dem.InsertionSortCollider([dem.Bo1_Sphere_Aabb()],verletDist=.05*radius),dem.ContactLoop([dem.Cg2_Sphere_Sphere_L6Geom()],[dem.Cp2_FrictMat_FrictPhys()],[dem.Law2_L6Geom_FrictPhys_IdealElPl()],applyForces=True),dem.Leapfrog(damping=.7,reset=False),dem.PeriIsoCompressor(charLen=2*radius,stresses=[PERI_SIG1,PERI_SIG2],maxUnbalanced=1e-2,doneHook='print("DONE"); S.stop();',globalUpdateInt=5,keepProportions=True,label='compressor'),woo.core.PyRunner(50,'print(f"{S.step=} {S.time=} {S.lab.compressor.stresses=} {S.lab.compressor.sigma=}")')]
         num=sp.makeCloud(Vector3().Zero,S.cell.size0,radius,rRelFuzz,spheresInCell,True)
         mat=dem.FrictMat(young=30e9,tanPhi=.5,density=1e3,ktDivKn=.2)
         for s in sp: S.dem.par.add(woo.dem.Sphere.make(s[0],s[1],mat=mat))

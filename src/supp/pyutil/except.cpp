@@ -18,23 +18,29 @@ namespace woo{
 	// since https://github.com/pybind/pybind11/commit/35045eeef8969b7b446c64b192502ac1cbf7c451)
 	// but not sure how to check it is supported nicely?
 	std::string parsePythonException_gilLocked(py::error_already_set& e){
-		if(!e.type() || !PyType_Check(e.type().ptr())) return "unreported exception type";
-		if(!e.value()) return "unreported exception value";
-		if(!e.trace()) return "unreported exception traceback";
-		std::string ret=((PyTypeObject*)e.type().ptr())->tp_name;
+		std::string ret;
+		if(!e.type() || !PyType_Check(e.type().ptr())){
+			ret+="[type()=?]";
+		}
+		else ret+=((PyTypeObject*)e.type().ptr())->tp_name;
 		ret+=": ";
-		ret+=py::str(e.value()).cast<std::string>();
-		pybind11::object mod_tb(pybind11::module::import("traceback"));
-		pybind11::object fmt_tb(mod_tb.attr("format_tb"));
-		// Call format_tb to get a list of traceback strings
-		pybind11::object h_tb(e.trace());
-		pybind11::object tb_list(fmt_tb(h_tb));
-		// Extract the string, check the extraction, and fallback in necessary
-		ret+="\n\n";
-		try {
-			for(auto &s: tb_list) ret += s.cast<std::string>();
-		} catch(const pybind11::value_error &e) {
-			ret += "[[error parsing traceback]]";
+		ret+=e.what();
+		if(!e.value()) ret+=" [value()=?]";
+		else ret+="("+py::str(e.value()).cast<std::string>()+")";
+		if(!e.trace()) ret+=" [trace()=?]";
+		else{
+			pybind11::object mod_tb(pybind11::module::import("traceback"));
+			pybind11::object fmt_tb(mod_tb.attr("format_tb"));
+			// Call format_tb to get a list of traceback strings
+			pybind11::object h_tb(e.trace());
+			pybind11::object tb_list(fmt_tb(h_tb));
+			// Extract the string, check the extraction, and fallback in necessary
+			ret+="\n\n";
+			try {
+				for(auto &s: tb_list) ret += s.cast<std::string>();
+			} catch(const pybind11::value_error &e) {
+				ret += "[[error parsing traceback]]";
+			}
 		}
 		return ret;
 	}

@@ -83,6 +83,7 @@ void Engine::runPy_generic(const string& callerId, const string& command, Scene*
 		local["field"]=py::cast(field_);
 		local["woo"]=py::import("woo");
 		// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
+		LOG_INFO("command='{}', global={}, local={}",command,py::str(global),py::str(local));
 		py::exec(command.c_str(),global,local);
 	} catch (py::error_already_set& e){
 		throw std::runtime_error(callerId+": exception in '"+command+"':\n"+parsePythonException_gilLocked(e));

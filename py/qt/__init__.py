@@ -265,7 +265,7 @@ class ControllerClass(QWidget,Ui_Controller):
         se=ObjectEditor(ser,parent=self.displayArea,ignoredAttrs=set(['label']),showType=True,path=path)
         self.displayArea.setWidget(se)
     def fillAboutData(self):    
-        import woo, woo.config, platform, textwrap, types, pkg_resources, collections
+        import woo, woo.config, platform, textwrap, types, collections, importlib.metadata
         extras=[]
         try:
             import wooExtra
@@ -274,7 +274,7 @@ class ControllerClass(QWidget,Ui_Controller):
                 mod=getattr(wooExtra,exName)
                 if type(mod)!=types.ModuleType: continue
                 modName=mod.__name__
-                ver=pkg_resources.get_distribution(modName).version
+                ver=importlib.metadata.version(modName)
                 distributor=str(getattr(mod,'distributor') if hasattr(mod,'distributor') else u'−')
                 extras.append(ExInfo(name=exName,mod=mod,version=ver,distributor=distributor))
         except ImportError: pass # no wooExtra modules installed
