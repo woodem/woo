@@ -1,6 +1,6 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.14 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20 FATAL_ERROR)
 PROJECT(woo VERSION 1.2)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 OPTION(WOO_DEBUG "Include debugging information" OFF)
@@ -18,6 +18,13 @@ OPTION(WOO_CCACHE "Use ccache when compiling" ON)
 OPTION(WOO_DISTCC "Use disctt when compiling (only active if ccache is also active)" OFF)
 OPTION(WOO_CEREAL "Use cereal instead of boost::serialization (experimental!)" OFF)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
+
+
+include(FetchContent)
+
+cmake_policy(SET CMP0167 NEW) # use boost-provided cmake config
+
+
 
 if(DEFINED ENV{VIRTUAL_ENV})
 	if("${WOO_INSTALL_SCHEME}" STREQUAL "posix_user")
