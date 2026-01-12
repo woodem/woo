@@ -8,3 +8,4 @@ build-*
 *.triax-compact
 *.randomdense
 *.pyc
+.cache

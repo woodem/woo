@@ -76,8 +76,7 @@ find_package(PkgConfig REQUIRED)
 #find_package(Python3 Interpreter Development NumPy)
 find_package(Python3 REQUIRED Interpreter Development NumPy)
 
-set(Backward_DIR ${PROJECT_SOURCE_DIR}/src/lib/backward/cmake)
-find_package(Backward REQUIRED)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/lib/backward-cpp)
 
 if(WOO_DEBUG)
 	add_definitions(-DWOO_DEBUG)

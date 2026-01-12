@@ -5,7 +5,7 @@
 #include"../src/supp/base/openmp-accu.hpp"
 #include"../src/supp/pyutil/compat.hpp"
 
-#include"../src/lib/backward/backward.hpp"
+#include"../src/lib/backward-cpp/backward.hpp"
 
 #include"../src/supp/eigen/pybind11/register.hpp"
 
