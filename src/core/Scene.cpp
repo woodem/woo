@@ -384,13 +384,13 @@ void Scene::doOneStep(){
 			if(!e->field && e->needsField())  throw std::runtime_error(e->pyStr()+" has no field to run on, but requires one.");
 			if(e->dead) continue; // skip completely dead engines, but not those who are not isActivated()
 			Real crDt=e->critDt();
-			LOG_INFO("Critical dt from "+e->pyStr()+": {}",crDt);
+			LOG_INFO("Critical dt from {}: {}",pyStr(),crDt);
 			dt=min(dt,crDt);
 		}
 		for(const auto& f: fields){
 			f->scene=this;
 			Real crDt=f->critDt();
-			LOG_INFO("Critical dt from "+f->pyStr()+": {}",crDt);
+			LOG_INFO("Critical dt from {}: {}",f->pyStr(),crDt);
 			dt=min(dt,crDt);
 		}
 		if(isinf(dt)) throw std::runtime_error("Failed to obtain meaningful dt from engines and fields automatically.");
