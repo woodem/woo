@@ -271,3 +271,9 @@ const Real NaN(std::numeric_limits<Real>::signaling_NaN());
 __attribute__((unused))
 const Real Inf(std::numeric_limits<Real>::infinity());
 
+
+
+#include <fmt/ostream.h>
+
+template<typename T, int Rows, int Cols>
+struct fmt::formatter<Eigen::Matrix<T,Rows,Cols>> : fmt::ostream_formatter {};
