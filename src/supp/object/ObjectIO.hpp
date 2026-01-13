@@ -75,7 +75,7 @@ struct ObjectIO{
 		else save<T,cereal::BinaryOutputArchive>(out,objectTag,object);
 		// rename to the file requested;
 		// see http://stackoverflow.com/questions/7054844/is-rename-atomic
-		filesystem::rename(tmp,fileName);
+		std::filesystem::rename(tmp,fileName);
 	}
 	// load from given file, guessing compression and XML/binary from extension
 	template<class T>

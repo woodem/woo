@@ -26,7 +26,7 @@
 	#include<unistd.h> // for getpid
 #endif
 
-namespace fs=filesystem;
+namespace fs=std::filesystem;
 
 class RenderMutexLock: public std::scoped_lock<std::mutex>{
 	public:

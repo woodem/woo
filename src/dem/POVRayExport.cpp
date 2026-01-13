@@ -53,9 +53,9 @@ void POVRayExport::run(){
 	out=scene->expandTags(out);
 	string staticInc=out+"_static.inc";
 	string masterPov=out+"_master.pov";
-	if(!filesystem::exists(masterPov)) writeMasterPov(masterPov);
+	if(!std::filesystem::exists(masterPov)) writeMasterPov(masterPov);
 	// overwrite static mesh when run the first time always
-	if(nDone==1 || !filesystem::exists(staticInc)) writeParticleInc(staticInc,/*doStatic*/true);
+	if(nDone==1 || !std::filesystem::exists(staticInc)) writeParticleInc(staticInc,/*doStatic*/true);
 
 	string frameInc=fmt::format("{}_frame_{:05d}.inc",out,frameCounter);
 	writeParticleInc(frameInc,/*doStatic*/false);
@@ -215,11 +215,11 @@ void POVRayExport::exportParticle(std::ofstream& os, const shared_ptr<Particle>&
 void POVRayExport::writeMasterPov(const string& masterPov){
 	std::ofstream os;
 	os.open(masterPov);
-	string staticInc=filesystem::path(out+"_static.inc").filename().string();
-	string masterBase=filesystem::path(masterPov).filename().string();
+	string staticInc=std::filesystem::path(out+"_static.inc").filename().string();
+	string masterBase=std::filesystem::path(masterPov).filename().string();
 	// string texturesInc=filesystem::path(out+"_textures.inc").filename().string();
-	if(texturesInc.empty()) texturesInc=filesystem::path(out+"_textures.inc").filename().string();
-	string frameIncBase=filesystem::path(out+"_frame_").filename().string();
+	if(texturesInc.empty()) texturesInc=std::filesystem::path(out+"_textures.inc").filename().string();
+	string frameIncBase=std::filesystem::path(out+"_frame_").filename().string();
 
 	if(!os.is_open()) throw std::runtime_error("Unable to open output file '"+masterPov+"'.");
 	os<<

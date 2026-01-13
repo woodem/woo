@@ -1,3 +1,6 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/woodem/woo-doc
+[submodule "src/lib/spdlog-repo"]
+	path = src/lib/spdlog-repo
+	url = https://github.com/gabime/spdlog.git

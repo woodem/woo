@@ -83,8 +83,8 @@ void SnapshotEngine::run(){
 	const shared_ptr<GLViewer>& glv=OpenGLManager::self->views[0];
 	if(fileBase.empty()) fileBase=Master::instance().tmpFilename()+"/";
 	std::ostringstream fss; fss<<fileBase<<std::setw(5)<<std::setfill('0')<<counter++<<"."<<boost::algorithm::to_lower_copy(format);
-	filesystem::path p(fss.str());
-	filesystem::create_directories(p.parent_path());
+	std::filesystem::path p(fss.str());
+	std::filesystem::create_directories(p.parent_path());
 	LOG_DEBUG("GL view → {}",fss.str());
 	glv->setSnapshotFormat(QString(format.c_str()));
 	glv->nextSnapFile=fss.str();
@@ -416,7 +416,7 @@ void GLViewer::setState(string state){
 	out<<state; out.close();
 	LOG_DEBUG("Will load state from temp file {}",tmpFile);
 	QString origStateFileName=stateFileName(); setStateFileName(QString(tmpFile.c_str())); restoreStateFromFile(); setStateFileName(origStateFileName);
-	filesystem::remove(filesystem::path(tmpFile));
+	std::filesystem::remove(std::filesystem::path(tmpFile));
 }
 
 void GLViewer::keyPressEvent(QKeyEvent *e)
@@ -447,7 +447,7 @@ void GLViewer::keyPressEvent(QKeyEvent *e)
 					for(int i=0; ;i++){
 						std::ostringstream fss; fss<<std::setw(4)<<std::setfill('0')<<i;
 						string out2=boost::algorithm::replace_all_copy(out,"{#}",fss.str());
-						if(!filesystem::exists(out2)){ nextSnapFile=out2; break; }
+						if(!std::filesystem::exists(out2)){ nextSnapFile=out2; break; }
 					}
 				} else nextSnapFile=out;
 				LOG_INFO("Will save snapshot to {}",nextSnapFile);

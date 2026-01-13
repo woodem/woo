@@ -66,15 +66,7 @@ using std::to_string;
 template<typename T>
 std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(); }
 
-#if __has_include(<filesystem>)
-	#include<filesystem>
-	namespace filesystem=std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-	#include<experimental/filesystem>
-	namespace filesystem=std::experimental::filesystem;
-#else
-	#error Neither <filesystem> nor <experimental/filesystem> are includable!
-#endif
+#include<filesystem>
 
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 // includes python headers, which also define PY_MAJOR_VERSION

@@ -71,7 +71,7 @@ py::tuple SpherePack::toCcRr() const {
 }
 
 void SpherePack::fromFile(const string& fname) {
-	if(!filesystem::exists(fname)) {
+	if(!std::filesystem::exists(fname)) {
 		throw std::invalid_argument(string("File with spheres `")+fname+"' doesn't exist.");
 	}
 	std::ifstream sphereFile(fname.c_str());

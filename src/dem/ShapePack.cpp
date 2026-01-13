@@ -405,7 +405,7 @@ void ShapePack::saveTxt(const string& out) const {
 }
 
 void ShapePack::loadTxt(const string& in) {
-	if(!filesystem::exists(in)) throw std::invalid_argument("ShapePack.loadTxt: '"+in+"' doesn't exist.");
+	if(!std::filesystem::exists(in)) throw std::invalid_argument("ShapePack.loadTxt: '"+in+"' doesn't exist.");
 	std::ifstream f(in);
 	if(!f.good()) throw std::runtime_error("ShapePack.loadTxt: '"+in+"' couldn't be opened (but exists).");
 	raws.clear();
