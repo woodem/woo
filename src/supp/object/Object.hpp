@@ -231,7 +231,7 @@ template<typename T,typename std::enable_if<!std::is_base_of<py::handle,T>::valu
 // loop bodies for attribute access
 // _PYGET_ATTR is unused
 // #define _PYGET_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return py::object(_ATTR_NAM(z));
-#define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!((int)traitT::compileFlags & (int)woo::Attr::hidden),!!((int)traitT::compileFlags & (int)woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::template trySetNamedBit(key,((int)traitT::compileFlags&(int)woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
+#define _PYSET_ATTR(x,klass,z) { typedef _ATTR_TRAIT_TYPE(klass,z) traitT; if(key==_ATTR_NAM_STR(z)) { _setAttrMaybe<!!((int)traitT::compileFlags & (int)woo::Attr::hidden),!!((int)traitT::compileFlags & (int)woo::Attr::namedEnum)>::set(_ATTR_TRAIT_GET(klass,z)(),key,value,_ATTR_NAM(z)); return; } if(_bit_accessors_if_integral<std::is_integral<_ATTR_TYP(z)>::value>::trySetNamedBit(key,((int)traitT::compileFlags&(int)woo::Attr::readonly),_ATTR_TRAIT(klass,z)._bits,_ATTR_NAM(z),value)) return; }
 
 #define _PYHASKEY_ATTR(x,y,z) if(key==_ATTR_NAM_STR(z)) return true;
 #define _PYATTR_TRAIT(x,klass,z)        traitList.append(py::cast(static_cast<AttrTraitBase*>(&_ATTR_TRAIT_GET(klass,z)())));
