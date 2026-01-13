@@ -1,5 +1,6 @@
 // 2006-2008 © Václav Šmilauer <eudoxos@arcig.cz> 
 #pragma once
+#include"Math.hpp"
 /*
  * This file defines various useful logging-related macros - userspace stuff is
  * - LOG_* for actual logging,
@@ -30,16 +31,17 @@
 #define LOG_DEBUG_EARLY(msg) { if(getenv("WOO_DEBUG")) std::cerr<<"DEBUG "<<_LOG_HEAD<<msg<<std::endl; }
 #define LOG_DEBUG_EARLY_FRAGMENT(msg) { if(getenv("WOO_DEBUG")) std::cerr<<msg; }
 
+#include "Math.hpp"
 
 #ifdef WOO_DEBUG
 	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #else
 	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #endif
-#include"../../lib/spdlog/spdlog.h"
-#include"../../lib/spdlog/async_logger.h"
-#include"../../lib/spdlog/sinks/stdout_color_sinks.h"
-#include"../../lib/spdlog/fmt/ostr.h"
+#include<spdlog/spdlog.h>
+#include<spdlog/async_logger.h>
+#include<spdlog/sinks/stdout_color_sinks.h>
+#include<spdlog/fmt/ostr.h>
 
 #define LOG_TRACE(...) {SPDLOG_LOGGER_TRACE(logger,__VA_ARGS__);}
 #define LOG_DEBUG(...) {SPDLOG_LOGGER_DEBUG(logger,__VA_ARGS__);}

@@ -82,4 +82,7 @@ typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 
+#include<spdlog/fmt/ostr.h>
+template<>
+struct fmt::formatter<pybind11::str> : fmt::ostream_formatter {};
 

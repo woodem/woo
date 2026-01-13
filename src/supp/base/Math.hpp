@@ -1,14 +1,6 @@
 // © 2010 Václav Šmilauer <eudoxos@arcig.cz>
 #pragma once
 
-#if 0 // broken, do not use
-// optimize as much as possible even in the debug mode (effective?)
-#if defined(__GNUG__) && __GNUC__ >= 4 && __GNUC_MINOR__ >=4
-	#pragma GCC push_options
-	#pragma GCC optimize "2"
-#endif
-#endif
-
 #ifdef QUAD_PRECISION
 	typedef long double quad;
 	typedef quad Real;
@@ -23,28 +15,9 @@
 #include"Types.hpp"
 
 
-// BEGIN workaround for
-// * http://eigen.tuxfamily.org/bz/show_bug.cgi?id=528
-// * https://sourceforge.net/tracker/index.php?func=detail&aid=3584127&group_id=202880&atid=983354
-// (only needed with gcc <= 4.7)
-// must come before Eigen/Core is included
-#include<stdlib.h>
-#include<sys/stat.h>
-// END workaround
-
-/* clang 3.3 warns:
-		/usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector.h:82:5: warning: 'register' storage class specifier is deprecated [-Wdeprecated]
-			register const Scalar* __restrict A0 = lhs + j*lhsStride;
-	we silence this warning with diagnostic pragmas:
-*/
-#if defined(__GNUC__) || defined(__clang__)
-	#pragma GCC diagnostic push
-	#pragma GCC diagnostic ignored "-Wdeprecated"
-	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
 #define EIGEN_NO_DEBUG
 #include<Eigen/Core>
+#include<Eigen/Dense>
 #include<Eigen/Geometry>
 #include<Eigen/Eigenvalues>
 #include<Eigen/QR>
@@ -271,9 +244,7 @@ const Real NaN(std::numeric_limits<Real>::signaling_NaN());
 __attribute__((unused))
 const Real Inf(std::numeric_limits<Real>::infinity());
 
+#include<spdlog/fmt/ostr.h>
 
-
-#include <fmt/ostream.h>
-
-template<typename T, int Rows, int Cols>
-struct fmt::formatter<Eigen::Matrix<T,Rows,Cols>> : fmt::ostream_formatter {};
+template <typename T, typename Char>
+struct fmt::formatter<T,Char,std::enable_if_t<std::is_base_of_v<Eigen::DenseBase<T>,T>>>: fmt::ostream_formatter { };

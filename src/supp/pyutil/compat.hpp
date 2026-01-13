@@ -1,4 +1,6 @@
 #pragma once
+#include"../base/Logging.hpp"
+
 
 #include<functional>
 #define add_property_readonly def_property_readonly
