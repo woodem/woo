@@ -17,6 +17,7 @@ SET(WOO_BUILD_JOBS 0 CACHE STRING "Set default number of parallel build level, w
 OPTION(WOO_CCACHE "Use ccache when compiling" ON)
 OPTION(WOO_DISTCC "Use disctt when compiling (only active if ccache is also active)" OFF)
 OPTION(WOO_CEREAL "Use cereal instead of boost::serialization (experimental!)" OFF)
+OPTION(WOO_NANOBIND "Use nanobind instead of pybind11" OFF)
 SET(PYTHON_EXECUTABLE "/usr/bin/python3" CACHE FILEPATH "The version of Python to build.")
 
 
@@ -97,23 +98,38 @@ else()
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-# pybind11 can be installed via pip, in which case it self-reports its own cmake directory
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} "-cimport pybind11; print(pybind11.get_cmake_dir())"
-    RESULT_VARIABLE PYBIND11_AS_PY_PACKAGE
-    OUTPUT_VARIABLE pybind11_DIR
-    # OUTPUT_QUIET # this would discard the result we need
-    ERROR_QUIET
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-# invocation failed, discard the result (if any)
-if(PYBIND11_AS_PY_PACKAGE AND NOT PYBIND11_AS_PY_PACKAGE EQUAL 0)
-    message(STATUS "pybind11 not importable as python module, using standard paths only")
-    unset(pybind11_DIR)
-endif()
-# this will use pybind11_DIR automatically, if defined
-find_package(pybind11 2.4 REQUIRED)
-
+if(WOO_NANOBIND)
+   find_package(Python COMPONENTS Interpreter Development.Module)
+   # link_libraries(Python::Module)
+   FetchContent_Declare(
+      nanobind
+		GIT_REPOSITORY https://github.com/wjakob/nanobind.git
+		GIT_TAG v2.7.0
+	)
+	FetchContent_MakeAvailable(nanobind)
+	#nanobind_add_module(oofempy NB_STATIC STABLE_ABI LTO ${oofem_SOURCE_DIR}/bindings/python/oofem.cpp)
+   #nanobind_build_library(nanobind-static) # -static is added via NB_STATIC for the module
+   #link_libraries(nanobind-static) # for pythonfield.C and possibly others using nanobind functions
+   #add_definitions(-D_USE_NANOBIND)
+   #include_directories(${oofem_SOURCE_DIR}/extern/nanobind/include)
+else(WOO_NANOBIND)
+	# pybind11 can be installed via pip, in which case it self-reports its own cmake directory
+	execute_process(
+		COMMAND ${PYTHON_EXECUTABLE} "-cimport pybind11; print(pybind11.get_cmake_dir())"
+		RESULT_VARIABLE PYBIND11_AS_PY_PACKAGE
+		OUTPUT_VARIABLE pybind11_DIR
+		# OUTPUT_QUIET # this would discard the result we need
+		ERROR_QUIET
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+	# invocation failed, discard the result (if any)
+	if(PYBIND11_AS_PY_PACKAGE AND NOT PYBIND11_AS_PY_PACKAGE EQUAL 0)
+		message(STATUS "pybind11 not importable as python module, using standard paths only")
+		unset(pybind11_DIR)
+	endif()
+	# this will use pybind11_DIR automatically, if defined
+	find_package(pybind11 2.4 REQUIRED)
+endif(WOO_NANOBIND)
 
 execute_process(
     COMMAND ${PYTHON_EXECUTABLE} "-cimport numpy; print(numpy.get_include())"
@@ -423,11 +439,19 @@ COMBINE_SOURCES("${CMAKE_BINARY_DIR}/srcs" ;
 )
 message(STATUS "Combined sources are ${WOO_CXX_SOURCES_COMBINED}")
 
-pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
-	${WOO_CXX_SOURCES_COMBINED}
-	${WOO_CXX_GUI_SOURCES}
-	${WOO_CXX_GTS_SOURCES}
-)
+if(WOO_NANOBIND)
+	nanobind_add_module(${CXX_INTERNAL} NB_STATIC STABLE_ABI LTO
+		${WOO_CXX_SOURCES_COMBINED}
+		${WOO_CXX_GUI_SOURCES}
+		${WOO_CXX_GTS_SOURCES}
+	)
+else()
+	pybind11_add_module(${CXX_INTERNAL} NO_EXTRAS
+		${WOO_CXX_SOURCES_COMBINED}
+		${WOO_CXX_GUI_SOURCES}
+		${WOO_CXX_GTS_SOURCES}
+	)
+endif()
 target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
 
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
@@ -484,23 +508,14 @@ target_link_libraries(${CXX_INTERNAL} PRIVATE Backward::Backward)
 
 OPTION(WOO_SPDLOG_LOCAL "build using local spdlog version" ON)
 if(WOO_SPDLOG_LOCAL)
-	add_library(spdlog_local STATIC
-		src/lib/spdlog/src/async.cpp
-		src/lib/spdlog/src/cfg.cpp
-		src/lib/spdlog/src/color_sinks.cpp
-		src/lib/spdlog/src/file_sinks.cpp
-		src/lib/spdlog/src/bundled_fmtlib_format.cpp
-		src/lib/spdlog/src/spdlog.cpp
-		src/lib/spdlog/src/stdout_sinks.cpp
-	)
-	target_include_directories(spdlog_local PUBLIC src/lib/)
-	add_definitions(-DSPDLOG_COMPILED_LIB)
-	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog_local)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/src/lib/spdlog-repo")
 else()
 	find_package(spdlog REQUIRED 1.8)
-	target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog::spdlog)
 endif()
+target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog::spdlog)
 
+
+target_compile_options(${CXX_INTERNAL} PRIVATE -Rpass=analysis -Rpass-missed=analysis -ftime-trace)
 
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
