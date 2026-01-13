@@ -48,7 +48,7 @@ void FlowAnalysis::setupGrid(){
 	if(!masks.empty()){
 		nFractions=masks.size();
 	}
-	LOG_WARN("There are {} grid(s) {}x{}x{}={} storing {} numbers per point (total {} items)",nFractions,boxCells[0],boxCells[1],boxCells[2],boxCells.prod(),NUM_PT_DATA,boxCells.prod()*nFractions*NUM_PT_DATA);
+	LOG_WARN("There are {} grid(s) {}x{}x{}={} storing {} numbers per point (total {} items)",nFractions,boxCells[0],boxCells[1],boxCells[2],boxCells.prod(),(int)NUM_PT_DATA,boxCells.prod()*nFractions*NUM_PT_DATA);
 	data.resize(boost::extents[nFractions][boxCells[0]][boxCells[1]][boxCells[2]][NUM_PT_DATA]);
 	// zero all array items
 	std::fill(data.origin(),data.origin()+data.size(),0);
@@ -104,7 +104,7 @@ void FlowAnalysis::addOneParticle(const shared_ptr<Particle>& par, const Vector3
 			matStateName=par->matState->getScalarName(matStateScalar);
 			if(matStateName.empty()){
 				matStateName=par->matState->getClassName()+"::scalar_"+to_string(matStateScalar);
-				LOG_WARN("#{}: using {} instead of empty result from MatState::getScalarName({}).",par->id,matStateScalar);
+				LOG_WARN("#{}: using {} instead of empty result from MatState::getScalarName({}).",par->id,matStateName,matStateScalar);
 			}
 		}
 	}
