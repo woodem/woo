@@ -296,7 +296,7 @@ template<> struct _SerializeMaybe<false>{
 #endif
 
 // inline version of the serialization function
-// no need for explcit instantiation, as the code is in headers
+// no need for explicit instantiation, as the code is in headers
 #define _WOO_BOOST_SERIALIZE_INLINE(thisClass,baseClass,attrs) \
 	friend class cereal::access; \
 	private: template<class ArchiveT> void serialize(ArchiveT & ar, std::uint32_t const version){ \

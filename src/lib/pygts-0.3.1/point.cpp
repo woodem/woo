@@ -57,7 +57,7 @@ is_ok(PygtsPoint *self, PyObject *args)
 
 
 static PyObject*
-set(PygtsPoint *self, PyObject *args)
+set_(PygtsPoint *self, PyObject *args)
 {
   gdouble x=0,y=0,z=0;
 
@@ -668,7 +668,7 @@ static PyMethodDef methods[] = {
    "Signature: p.is_ok().\n"
   },  
 
-  {"set", (PyCFunction)set,
+  {"set", (PyCFunction)set_,
    METH_VARARGS,
    "Sets x, y, and z coordinates of this Point p.\n"
    "\n"

@@ -190,11 +190,7 @@ if(WOO_GTS)
 endif()
 
 if(WOO_VTK)
-	find_package(VTK REQUIRED) # COMPONENTS CommonCore)
-	#if(VTK_VERSION VERSION_LESS "8.90")
-	#find_package(VTK COMPONENTS vtkCommonCore vtkCommonDataModel vtkIOXML vtkUniformGrid vtkUnstructuredGrid)
-	#else()
-	#endif()
+	find_package(VTK REQUIRED COMPONENTS CommonCore IOXML)
 	add_definitions(-DWOO_VTK)
 endif()
 
@@ -454,6 +450,8 @@ else()
 endif()
 target_link_libraries(${CXX_INTERNAL} PUBLIC DOUBLECONVERSION tbb)
 
+target_precompile_headers(${CXX_INTERNAL} PRIVATE src/supp/object/Object.hpp src/dem/Particle.hpp src/core/Field.hpp src/supp/base/Math.hpp src/supp/multimethods/Indexable.hpp src/supp/base/Logging.hpp src/core/Master.hpp src/core/Engine.hpp src/dem/Collision.hpp src/dem/FrictMat.hpp)
+
 target_include_directories(${CXX_INTERNAL} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 if(WOO_QT5)
@@ -515,7 +513,7 @@ endif()
 target_link_libraries(${CXX_INTERNAL} PRIVATE spdlog::spdlog)
 
 
-target_compile_options(${CXX_INTERNAL} PRIVATE -Rpass=analysis -Rpass-missed=analysis -ftime-trace)
+# target_compile_options(${CXX_INTERNAL} PRIVATE -Rpass=analysis -Rpass-missed=analysis -ftime-trace)
 
 target_link_libraries(${CXX_INTERNAL} PUBLIC
 	Eigen3::Eigen
