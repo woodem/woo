@@ -225,7 +225,7 @@ void LawTester::run(){
 
 	if(stg->untilEvery>1 && (stg->step%stg->untilEvery)>0) return;
 
-	GilLock lock; // lock the interpreter for this block
+	py::gil_scoped_acquire lock; // lock the interpreter for this block
 	string* errCmd=nullptr; // to know where the error happened (traceback does not show that)
 	/* check the result of stg->until */
 	try{

@@ -89,13 +89,13 @@ class Engine: public Object {
 		((bool,isNewObject,true,AttrTrait<Attr::hidden>(),"Flag to recognize in postLoad whether this object has just been constructed, to set userAssignedField properly (ugly...)")) \
 		,/* ctor */ setDefaultScene(); , \
 		/* py */ \
-		.add_property("execTime",&Engine::timingInfo_nsec_get,&Engine::timingInfo_nsec_set,"Cummulative time this Engine took to run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
-		.add_property("execCount",&Engine::timingInfo_nExec_get,&Engine::timingInfo_nExec_set,"Cummulative count this engine was run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
+		.def_property("execTime",&Engine::timingInfo_nsec_get,&Engine::timingInfo_nsec_set,"Cummulative time this Engine took to run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
+		.def_property("execCount",&Engine::timingInfo_nExec_get,&Engine::timingInfo_nExec_set,"Cummulative count this engine was run (only used if :obj:`Master.timingEnabled`\\ ==\\ ``True``).") \
 		.def_readonly("timingDeltas",&Engine::timingDeltas,"Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and :obj:`Master.timingEnabled`\\ ==\\ ``True``.") \
 		.def("__call__",&Engine::explicitRun,WOO_PY_ARGS(py::arg("scene"),py::arg("field")=shared_ptr<Field>()),"Run the engine just once, using *scene*. If *field* is not given as the engine requires it, it will be obtained from *scene* automatically (with the same rules as for engines which don't have an explicit field: if one field is found, it is used, no or more compatible fields raise an exception.)") \
 		.def("acceptsField",&Engine::acceptsField) \
-		.add_property("field",&Engine::field_get,&Engine::field_set,"Field to run this engine on; if unassigned, or set to *None*, automatic field selection is triggered.") \
-		.add_property_readonly("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
+		.def_property("field",&Engine::field_get,&Engine::field_set,"Field to run this engine on; if unassigned, or set to *None*, automatic field selection is triggered.") \
+		.def_property_readonly("scene",&Engine::py_getScene,"Get associated scene object, if any (this function is dangerous in some corner cases, as it has to use raw pointer).") \
 		.def("critDt",&Engine::critDt,"Return critical (maximum numerically stable) timestep for this engine. By default returns infinity (no critical timestep) but derived engines may override this function.") \
 		; \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<Engine>>(mod);
@@ -120,7 +120,7 @@ class ParallelEngine: public Engine {
 	#define woo_core_ParallelEngine__CLASS_BASE_DOC_ATTRS_PY \
 		ParallelEngine,Engine,"Engine for running other Engine in parallel.\n\n.. admonition:: Special constructor\n\n   Possibly nested list of engines, where each top-level item (engine or list) will be run in parallel; nested lists will be run sequentially.", \
 		((slaveContainer,slaves,,AttrTrait<Attr::hidden>(),"[will be overridden]")), \
-		/*py*/ .add_property("slaves",&ParallelEngine::pySlavesGet,&ParallelEngine::pySlavesSet,"List of lists of Engines; each top-level group will be run in parallel with other groups, while Engines inside each group will be run sequentially, in given order.");
+		/*py*/ .def_property("slaves",&ParallelEngine::pySlavesGet,&ParallelEngine::pySlavesSet,"List of lists of Engines; each top-level group will be run in parallel with other groups, while Engines inside each group will be run sequentially, in given order.");
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_ParallelEngine__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(ParallelEngine);

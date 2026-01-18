@@ -227,7 +227,7 @@ public:
 #endif
 
 namespace woo{
-	void registerOpenMPAccuClassesInPybind11(py::module&);
+	void registerOpenMPAccuClassesInPybind11(py::module_&);
 }
 
 #ifdef WOO_CEREAL

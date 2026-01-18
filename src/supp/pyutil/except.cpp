@@ -1,5 +1,6 @@
 #include"except.hpp"
 #include"gil.hpp"
+#include"compat.hpp"
 
 
 namespace woo{
@@ -10,7 +11,7 @@ namespace woo{
 
 	// http://thejosephturner.com/blog/2011/06/15/embedding-python-in-c-applications-with-boostpython-part-2/
 	std::string parsePythonException(py::error_already_set& e){
-		GilLock lock;
+		py::gil_scoped_acquire lock;
 		return parsePythonException_gilLocked(e);
 	}
 
@@ -25,20 +26,25 @@ namespace woo{
 		else ret+=((PyTypeObject*)e.type().ptr())->tp_name;
 		ret+=": ";
 		ret+=e.what();
+		#ifdef WOO_NANOBIND
+			auto traceback=e.traceback();
+		#else
+			auto traceback=e.trace();
+		#endif
 		if(!e.value()) ret+=" [value()=?]";
-		else ret+="("+py::str(e.value()).cast<std::string>()+")";
-		if(!e.trace()) ret+=" [trace()=?]";
+		else ret+="("+PY_CAST(string,py::str(e.value()))+")";
+		if(!traceback) ret+=" [trace()=?]";
 		else{
-			pybind11::object mod_tb(pybind11::module::import("traceback"));
-			pybind11::object fmt_tb(mod_tb.attr("format_tb"));
+			py::object mod_tb(py::module_::import_("traceback"));
+			py::object fmt_tb(mod_tb.attr("format_tb"));
 			// Call format_tb to get a list of traceback strings
-			pybind11::object h_tb(e.trace());
-			pybind11::object tb_list(fmt_tb(h_tb));
+			py::object h_tb(traceback);
+			py::object tb_list(fmt_tb(h_tb));
 			// Extract the string, check the extraction, and fallback in necessary
 			ret+="\n\n";
 			try {
-				for(auto &s: tb_list) ret += s.cast<std::string>();
-			} catch(const pybind11::value_error &e) {
+				for(auto s: tb_list) ret += PY_CAST(std::string,s);
+			} catch(...) {
 				ret += "[[error parsing traceback]]";
 			}
 		}

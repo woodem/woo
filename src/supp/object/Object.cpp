@@ -28,7 +28,7 @@ py::dict Object_pyDict_pickleable(const Object& o) { return o.pyDict(/*all*/fals
 
 std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 	checkPyClassRegistersItself("Object");
-	py::class_<Object,shared_ptr<Object>> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.");
+	py::class_<Object PY_SHARED_PTR_HOLDER(Object)> classObj(mod,"Object","Base class for all Woo classes, providing uniform interface for constructors with attributes, attribute access, pickling, serialization via cereal/boost::serialization, equality comparison, attribute traits.");
 	return [classObj,mod]() mutable {
 		classObj
 		.def(py::init<>())
@@ -40,7 +40,7 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		.def("dict",&Object::pyDict,WOO_PY_ARGS(py::arg("all")=true),"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
 		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
 		.def("updateAttrs",&Object::pyUpdateAttrs,"Update object attributes from given dictionary")
-		.def(py::pickle([](const shared_ptr<Object>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<Object>))
+		PY_PICKLE([](const shared_ptr<Object>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<Object>)
 		.def("save",&Object::boostSave,py::arg("filename"))
 		.def_static("_boostLoad",&Object::boostLoad,py::arg("filename")) 
 		//.def_readonly("_derivedCxxClasses",&Object::derivedCxxClasses)

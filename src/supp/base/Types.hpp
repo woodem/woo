@@ -68,21 +68,11 @@ std::string ptr_to_string(T* p){ std::ostringstream oss; oss<<p; return oss.str(
 
 #include<filesystem>
 
-#define PYBIND11_DETAILED_ERROR_MESSAGES
-// includes python headers, which also define PY_MAJOR_VERSION
-#include<pybind11/pybind11.h>
-#include<pybind11/eval.h>
-#include<pybind11/operators.h>
-#include<pybind11/stl.h>
-// #include<pybind11/eigen.h>
+// pulls in everything python-related
 #include"../pyutil/compat.hpp"
-namespace py=pybind11;
 
 typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 
-#include<spdlog/fmt/ostr.h>
-template<>
-struct fmt::formatter<pybind11::str> : fmt::ostream_formatter {};
 

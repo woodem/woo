@@ -123,8 +123,8 @@ template<> struct _bit_accessors_if_integral<true> {
 		for(size_t i=0; i<bits.size(); i++){
 			auto getter=[i](const classT& obj){ return bool(obj.*A & (1<<i)); };
 			auto setter=[i](classT& obj, bool val){ if(val) obj.*A|=(1<<i); else obj.*A&=~(1<<i); };
-			if(ro) _classObj.add_property_readonly(bits[i].c_str(),getter);
-			else   _classObj.add_property(bits[i].c_str(),getter,setter);
+			if(ro) _classObj.def_property_readonly(bits[i].c_str(),getter);
+			else   _classObj.def_property(bits[i].c_str(),getter,setter);
 		}
 	}
 	template<typename IntegralT>
@@ -146,7 +146,7 @@ template<> struct _bit_accessors_if_integral<true> {
 // define accessors raising InvalidArugment at every access
 template<typename classObjT, typename traitT>
 void _wooDef_deprecatedProperty(classObjT& _classObj, traitT& trait){
-	_classObj.add_property(trait._name.c_str(),
+	_classObj.def_property(trait._name.c_str(),
 		[trait](py::object self)->void{ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },
 		[trait](py::object self, py::object val){ throw std::invalid_argument("Error accessing "+trait._className+"."+trait._name+": "+trait._doc); },
 		trait._doc.c_str())
@@ -163,11 +163,11 @@ template<> struct _def_woo_attr__namedEnum<false>{
 		bool _ro=trait.isReadonly(), _post=trait.isTriggerPostLoad(), _ref(!_ro && (woo::py_wrap_ref<attrT>::value || trait.isPyByRef()));
 		const char* docStr(trait._doc.c_str());
 		if      ( _ref && !_ro && !_post) _classObj.def_readwrite(attrName,A,docStr);
-		else if ( _ref && !_ro &&  _post) _classObj.add_property(attrName,[](const classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,docStr);
+		else if ( _ref && !_ro &&  _post) _classObj.def_property(attrName,[](const classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,docStr);
 		else if ( _ref &&  _ro)           _classObj.def_readonly(attrName,A,docStr);
-		else if (!_ref && !_ro && !_post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },[](classT& o, const attrT& val){ o.*A=val; },py::return_value_policy::copy,docStr);
-		else if (!_ref && !_ro &&  _post) _classObj.add_property(attrName,[](classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,py::return_value_policy::copy,docStr);
-		else if (!_ref &&  _ro)           _classObj.add_property_readonly(attrName,[](const classT& o){ return o.*A; },py::return_value_policy::copy,docStr);
+		else if (!_ref && !_ro && !_post) _classObj.def_property(attrName,[](classT& o){ return o.*A; },[](classT& o, const attrT& val){ o.*A=val; },py::return_value_policy::copy,docStr);
+		else if (!_ref && !_ro &&  _post) _classObj.def_property(attrName,[](classT& o){ return o.*A; },make_setter_postLoad<classT,attrT,A>,py::return_value_policy::copy,docStr);
+		else if (!_ref &&  _ro)           _classObj.def_property_readonly(attrName,[](const classT& o){ return o.*A; },py::return_value_policy::copy,docStr);
 		if(_ro && _post) cerr<<"WARN: "<<className<<"::"<<attrName<<" with the woo::Attr::readonly flag also uselessly sets woo::Attr::triggerPostLoad."<<endl;
 		if(!trait._bits.empty()) _bit_accessors_if_integral<std::is_integral<attrT>::value>::template doRegister<classObjT,classT,attrT,A>(_classObj,trait._bits,_ro && (!trait._bitsRw));
 	}
@@ -187,9 +187,9 @@ template<> struct _def_woo_attr__namedEnum<true>{
 		auto getter=[trait](const classT& obj){ return trait.namedEnum_num2name(obj.*A); };
 		auto setter=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val);};
 		auto setterPostLoad=[trait](classT& obj, py::object val){ obj.*A=trait.namedEnum_name2num(val); obj.callPostLoad((void*)&(obj.*A)); };
-		if (_ro)                _classObj.add_property_readonly(attrName,getter,docStr);
-		else if(!_ro && !_post) _classObj.add_property(attrName,getter,setter,docStr);
-		else if(!_ro &&  _post) _classObj.add_property(attrName,getter,setterPostLoad,docStr);
+		if (_ro)                _classObj.def_property_readonly(attrName,getter,docStr);
+		else if(!_ro && !_post) _classObj.def_property(attrName,getter,setter,docStr);
+		else if(!_ro &&  _post) _classObj.def_property(attrName,getter,setterPostLoad,docStr);
 	}
 };
 #pragma GCC visibility pop
@@ -203,7 +203,7 @@ template<> struct _def_woo_attr__namedEnum<true>{
 /* kw attribute setter */
 #define _PYSET_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))){ _DEPREC_ERROR(thisClass,z); }
 /* expose exception-raising accessors to python */
-#define _PYATTR_DEPREC_DEF(x,thisClass,z) .add_property(BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z)),"Deprecated attribute, raises exception when accessed:" _DEPREC_COMMENT(z))
+#define _PYATTR_DEPREC_DEF(x,thisClass,z) .def_property(BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z)),&thisClass::BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z)),"Deprecated attribute, raises exception when accessed:" _DEPREC_COMMENT(z))
 #define _PYHASKEY_ATTR_DEPREC(x,thisClass,z) if(key==BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))) return false;
 /* accessors functions raising error */
 #define _ACCESS_DEPREC(x,thisClass,z) /*getter*/ int BOOST_PP_CAT(_getDeprec_,_DEPREC_OLDNAME(z))(){ _DEPREC_ERROR(thisClass,z); /*compiler happy*/return -1; } /*setter*/ void BOOST_PP_CAT(_setDeprec_,_DEPREC_OLDNAME(z))(const py::object&){_DEPREC_ERROR(thisClass,z); }
@@ -340,15 +340,24 @@ template<> struct _SerializeMaybe<false>{
 #define _DEPREC_OLDNAME(x) BOOST_PP_TUPLE_ELEM(2,0,x)
 #define _DEPREC_COMMENT(x) BOOST_PP_TUPLE_ELEM(2,1,x)
 
+#ifdef WOO_NANOBIND
+	#define _PY_DEF_INITS(thisClass) \
+		_classObj.def("__init__",[](thisClass* instance){ new(instance) thisClass; instance->callPostLoad(NULL); return instance; }); \
+		_classObj.def("__init__",[](thisClass* instance, py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(instance,a,k);});
+#else
+	#define _PY_DEF_INITS(thisClass) \
+		_classObj.def(py::init<>([](){ shared_ptr<thisClass> instance=make_shared<thisClass>(); instance->callPostLoad(NULL); return instance; })); \
+		_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);}));
+#endif
+
 #define _PY_REGISTER_CLASS_BODY(thisClass,baseClass,classTrait,attrs,deprec,extras) \
 	checkPyClassRegistersItself(#thisClass); \
 	WOO_SET_DOCSTRING_OPTS; \
 	auto traitPtr=make_shared<ClassTrait>(classTrait); traitPtr->name(#thisClass).file(__FILE__).line(__LINE__); \
-	py::class_<thisClass,shared_ptr<thisClass>,baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
+	py::class_<thisClass PY_SHARED_PTR_HOLDER(thisClass),baseClass> _classObj(mod,#thisClass,traitPtr->getDoc().c_str()); \
 	return [traitPtr,_classObj,mod]() mutable { \
-		_classObj.def(py::init<>([](){ shared_ptr<thisClass> instance=make_shared<thisClass>(); instance->callPostLoad(NULL); return instance; })); \
-		_classObj.def(py::init([](py::args& a, py::kwargs& k){ return Object_ctor_kwAttrs<thisClass>(a,k);})); \
-		_classObj.def(py::pickle([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>)); \
+		_PY_DEF_INITS(thisClass) \
+		_classObj PY_PICKLE([](const shared_ptr<thisClass>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<thisClass>); \
 		_classObj.attr("_classTrait")=traitPtr; \
 		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF,thisClass,attrs); \
 		(void) _classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF,thisClass,deprec); \
@@ -553,14 +562,20 @@ struct Object: public boost::noncopyable, public enable_shared_from_this<Object>
 
 // helper functions
 template <typename T>
-shared_ptr<T> Object_ctor_kwAttrs(py::args_& t, py::kwargs& d){
-	shared_ptr<T> instance=make_shared<T>();
+#ifdef WOO_NANOBIND
+	T* Object_ctor_kwAttrs(T* instance, py::args_& t, py::kwargs& d){
+		new (instance) T;
+#else
+	shared_ptr<T> Object_ctor_kwAttrs(py::args_& t, py::kwargs& d){
+		shared_ptr<T> instance=make_shared<T>();
+#endif
 	instance->pyHandleCustomCtorArgs(t,d); // can change t and d in-place
 	if(py::len(t)>0) throw std::runtime_error("Zero (not "+to_string(py::len(t))+") non-keyword constructor arguments required [in Object_ctor_kwAttrs; Object::pyHandleCustomCtorArgs might had changed it after your call].");
 	if(py::len(d)>0) instance->pyUpdateAttrs(d);
-	instance->callPostLoad(NULL); 
+	instance->callPostLoad(NULL);
 	return instance;
 }
+
 
 template<typename T>
 shared_ptr<T> Object__setstate__(py::dict state){

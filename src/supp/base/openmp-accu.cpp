@@ -38,7 +38,7 @@ namespace woo{
 			}
 		}
 	#endif
-	void registerOpenMPAccuClassesInPybind11(py::module& mod){
+	void registerOpenMPAccuClassesInPybind11(py::module_& mod){
 		WOO_SET_DOCSTRING_OPTS;
 		#if 0
 			py::class_<OpenMPArrayAccumulator<int>> ompaai(mod,"OpenMPArrayAccumulator<int>");

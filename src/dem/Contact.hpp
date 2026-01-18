@@ -104,11 +104,11 @@ struct Contact: public Object{
 		((Real,minDist00Sq,-1,AttrTrait<Attr::readonly>(),"Minimum distance between nodes[0] of both shapes so that the contact can exist. Set in ContactLoop by geometry functor once, and is used to check for possible contact without having to call the functor. If negative, not used. Currently, only Sphere-Sphere contacts use this information.")) \
 		((int,stepLastSeen,-1,AttrTrait<Attr::readonly>(),"")) \
 		((size_t,linIx,0,AttrTrait<Attr::readonly>().noGui(),"Position in the linear view (ContactContainer)")) \
-		, /*py*/ .add_property_readonly("id1",&Contact::pyId1,":obj:`Particle.id` of the first contacting particle.").add_property_readonly("id2",&Contact::pyId2,":obj:`Particle.id` of the second contacting particle.").add_property_readonly("real",&Contact::isReal,"Whether the contact is real (has :obj:`geom` and :obj:`phys`); unreal contacts are created by broadband collisions detection and have no physical significance.").add_property_readonly("ids",&Contact::pyIds,":obj:`IDs <Particle.id>` of both contacting particles as 2-tuple.") \
+		, /*py*/ .def_property_readonly("id1",&Contact::pyId1,":obj:`Particle.id` of the first contacting particle.").def_property_readonly("id2",&Contact::pyId2,":obj:`Particle.id` of the second contacting particle.").def_property_readonly("real",&Contact::isReal,"Whether the contact is real (has :obj:`geom` and :obj:`phys`); unreal contacts are created by broadband collisions detection and have no physical significance.").def_property_readonly("ids",&Contact::pyIds,":obj:`IDs <Particle.id>` of both contacting particles as 2-tuple.") \
 		.def("dPos",&Contact::dPos_py,"Return position difference vector pB-pA, taking `Contact.cellDist` in account properly. Both particles must be uninodal, exception is raised otherwise.") \
 		.def("dist",&Contact::dist_py,"Shorthand for dPos.norm().") \
-		.add_property_readonly("pA",&Contact::pyPA,"First particle of the contact") \
-		.add_property_readonly("pB",&Contact::pyPB,"Second particle of the contact") \
+		.def_property_readonly("pA",&Contact::pyPA,"First particle of the contact") \
+		.def_property_readonly("pB",&Contact::pyPB,"Second particle of the contact") \
 		.def("resetPhys",&Contact::pyResetPhys,"Set :obj:`phys` to *None* (to force its re-evaluation)") \
 		.def("isFresh",&Contact::pyIsFresh,WOO_PY_ARGS(py::arg("scene")),"Say whether this contact has just been created. Equivalent to ``C.stepCreated==scene.step``.") \
 		.def("forceSign",&Contact::pyForceSign,WOO_PY_ARGS(py::arg("p")),"Return sign of :obj:`CPhys.force` as it appies on the particle passed, i.e. +1 if ``p==C.pA`` and -1 if ``p==C.pB``. Raise an exception if ``p`` is neither ``pA`` or ``pB``.") \

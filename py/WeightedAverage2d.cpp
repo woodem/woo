@@ -27,14 +27,14 @@ WOO_PYTHON_MODULE(WeightedAverage2d);
 		.def("cellNum",&pyGaussAverage::cellNum)
 		.def("cellSum",&pyGaussAverage::cellSum)
 		.def("cellAvg",&pyGaussAverage::cellAvg)
-		.add_property("stDev",&pyGaussAverage::stDev_get,&pyGaussAverage::stDev_set)
-		.add_property("relThreshold",&pyGaussAverage::relThreshold_get,&pyGaussAverage::relThreshold_set)
-		.add_property("clips",&pyGaussAverage::clips_get,&pyGaussAverage::clips_set)
-		.add_property_readonly("data",&pyGaussAverage::data_get)
-		.add_property_readonly("aabb",&pyGaussAverage::aabb_get)
-		.add_property_readonly("nCells",&pyGaussAverage::nCells_get)
-		.add_property_readonly("cellArea",&pyGaussAverage::cellArea)
-		.add_property_readonly("cellDim",&pyGaussAverage::cellDim)
+		.def_property("stDev",&pyGaussAverage::stDev_get,&pyGaussAverage::stDev_set)
+		.def_property("relThreshold",&pyGaussAverage::relThreshold_get,&pyGaussAverage::relThreshold_set)
+		.def_property("clips",&pyGaussAverage::clips_get,&pyGaussAverage::clips_set)
+		.def_property_readonly("data",&pyGaussAverage::data_get)
+		.def_property_readonly("aabb",&pyGaussAverage::aabb_get)
+		.def_property_readonly("nCells",&pyGaussAverage::nCells_get)
+		.def_property_readonly("cellArea",&pyGaussAverage::cellArea)
+		.def_property_readonly("cellDim",&pyGaussAverage::cellDim)
 	;
 };
 

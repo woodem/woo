@@ -26,7 +26,7 @@ struct MeshVolume: public PeriodicEngine{
 		((vector<shared_ptr<Node>>,nodes,,AttrTrait<Attr::noSave>().noGui(),"List of nodes, in the same order as the GTS surface structure.")) \
 		((Real,vol,NaN,,"Volume as computed when last run")) \
 		((Real,thickVol,NaN,,"Volume of the inner side of the mesh: the mesh is defined by :obj:`facets' <Facet>` midplanes, but some facets may have non-zero :obj:`Facet.halfThick`. This number is the sum of (initial!) facet area times :obj:`Facet.halfThick`. To get the volume with this part subtracted, use :obj:`netVol`.")) \
-		,/*py*/ .add_property_readonly("netVol",&MeshVolume::pyNetVol,"Net volume: :obj:`volume` minus :obj:`thickVol`.")
+		,/*py*/ .def_property_readonly("netVol",&MeshVolume::pyNetVol,"Net volume: :obj:`volume` minus :obj:`thickVol`.")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_MeshVolume__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(MeshVolume);

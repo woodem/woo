@@ -33,7 +33,7 @@ struct Functor: public Object
 		((string,label,,AttrTrait<>().activeLabel().noGui(),"Textual label for this object; must be valid python identifier, you can refer to it directly fron python (must be a valid python identifier).")), \
 		/*ctor*/ scene=Master::instance().getScene().get() , \
 		/*py*/ .def_readonly("timingDeltas",&Functor::timingDeltas,"Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and :obj:`Master.timingEnabled` is ``True``.") \
-		.add_property_readonly("bases",&Functor::getFunctorTypes,"Ordered list of types (as strings) this functor accepts.")
+		.def_property_readonly("bases",&Functor::getFunctorTypes,"Ordered list of types (as strings) this functor accepts.")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_core_Functor__CLASS_BASE_DOC_ATTRS_CTOR_PY);
 };
 WOO_REGISTER_OBJECT(Functor);

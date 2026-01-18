@@ -241,7 +241,7 @@ void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 				CAUSE: see https://svn.boost.org/trac/boost/ticket/8290 and pkg/dem/ParticleContainer.cpp
 			*/
 			if(n->getData<DemData>().isTracerSkip()) continue;
-			GilLock lock; // get GIL to avoid crash when destroying python-instantiated object
+			py::gil_scoped_acquire lock; // get GIL to avoid crash when destroying python-instantiated object
 			if(setupEmpty){
 				n->rep=make_shared<TraceVisRep>();
 				auto& tr=n->rep->cast<TraceVisRep>();
@@ -255,7 +255,7 @@ void Tracer::resetNodesRep(bool setupEmpty, bool includeDead){
 	if(includeDead){
 		for(const auto& n: dem.deadNodes){
 			if(n->getData<DemData>().isTracerSkip()) continue;
-			GilLock lock; // get GIL to avoid crash, see above
+			py::gil_scoped_acquire lock; // get GIL to avoid crash, see above
 			n->rep.reset();
 		}
 	}

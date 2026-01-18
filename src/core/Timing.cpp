@@ -3,8 +3,8 @@
 namespace woo{
 
 	void TimingDeltas::pyRegisterClass(py::module_& mod){
-		py::class_<TimingDeltas,shared_ptr<TimingDeltas>>(mod,"TimingDeltas")
-			.add_property_readonly("data",&TimingDeltas::pyData,"Get timing data as list of tuples (label, execTime[nsec], execCount) (one tuple per checkpoint)")
+		py::class_<TimingDeltas PY_SHARED_PTR_HOLDER(TimingDeltas)>(mod,"TimingDeltas")
+			.def_property_readonly("data",&TimingDeltas::pyData,"Get timing data as list of tuples (label, execTime[nsec], execCount) (one tuple per checkpoint)")
 			.def("reset",&TimingDeltas::reset,"Reset timing information")
 		;
 	}

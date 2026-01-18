@@ -10,7 +10,7 @@ void GridCollider::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(!boundDispatcher) boundDispatcher=make_shared<GridBoundDispatcher>();
 	vector<shared_ptr<GridBoundFunctor>> vf=py::extract<vector<shared_ptr<GridBoundFunctor>>>((t[0]))();
 	for(const auto& f: vf) boundDispatcher->add(f);
-	t=py::tuple(); // empty the args
+	t=py::args_(); // empty the args
 }
 
 void GridCollider::getLabeledObjects(const shared_ptr<LabelMapper>& labelMapper){ if(boundDispatcher) boundDispatcher->getLabeledObjects(labelMapper); Engine::getLabeledObjects(labelMapper); }

@@ -5,7 +5,7 @@
 
 namespace woo {
 	static bool pyCallerInfo(string& file, string& func, int& line){
-		GilLock l; // auto-desctructed at the end of scope
+		py::gil_scoped_acquire l; // auto-desctructed at the end of scope
 		PyFrameObject* frame=PyEval_GetFrame(); 
 		if(!frame) return false;
 		//  python >= 3.12
@@ -15,8 +15,13 @@ namespace woo {
 			PyCodeObject* code=frame->f_code;
 		#endif
 		if(!code) return false;
-		file=py::cast<string>(code->co_filename);
-		func=py::cast<string>(code->co_name);
+		#ifdef WOO_NANOBIND
+			file=py::steal<py::str>(code->co_filename).c_str();
+			func=py::steal<py::str>(code->co_name).c_str();
+		#else
+			file=py::cast<string>(code->co_filename);
+			func=py::cast<string>(code->co_name);
+		#endif
 		line=PyFrame_GetLineNumber(frame);
 		return true;
 	}

@@ -8,7 +8,7 @@ struct SceneAttachedObject: public Object{
 	#define woo_core_SceneAttachedObject__CLASS_BASE_DOC_ATRRS_PY \
 		SceneAttachedObject,Object,"Parent class for object uniquely attached to one scene, for convenience of derived classes.", \
 		((weak_ptr<Scene>,scene,,AttrTrait<Attr::readonly>().noGui().noDump(),"Back-reference to the scene object, needed for python; set automatically in Scene::postLoad when the object is assigned.")) \
-		, /* py */ .add_property_readonly("scene",&Plot::getScene_py,"Back-reference to the scene object, needed for python; set automatically when the object is assigned to :obj:`Scene`.")
+		, /* py */ .def_property_readonly("scene",&Plot::getScene_py,"Back-reference to the scene object, needed for python; set automatically when the object is assigned to :obj:`Scene`.")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_core_SceneAttachedObject__CLASS_BASE_DOC_ATRRS_PY);
 };

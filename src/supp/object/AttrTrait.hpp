@@ -41,7 +41,7 @@ namespace woo{
 		// e.g. when _ini was holding a make_shared<Plot>(), it would cause crash at shutdown
 		// due to shared_ptr not holding GIL when releasing the object possibly created in python
 		~AttrTraitBase(){ 
-			if(Py_IsInitialized()){ GilLock gil; _resetInternalPythonObjects(); }
+			if(Py_IsInitialized()){ py::gil_scoped_acquire gil; _resetInternalPythonObjects(); }
 			_resetInternalPythonObjects();
 		}
 
@@ -164,7 +164,7 @@ namespace woo{
 				.def_property_readonly("namedEnum",&AttrTraitBase::isNamedEnum)
 				.def_property_readonly("colormap",&AttrTraitBase::isColormap)
 				.def_property_readonly("deprecated",&AttrTraitBase::isDeprecated)
-				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,WOO_PY_ARGS(py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")=""),"Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
+				.def("namedEnum_validValues",&AttrTraitBase::namedEnum_pyValidValues,py::arg("pre0")="",py::arg("post0")="",py::arg("pre")="",py::arg("post")="","Valid values for named enum. *pre* and *post* are prefixed/suffixed to each possible value (used for formatting), *pre0* and *post0* are used with the first (primary/preferred) value.")
 				.def_readonly("_flags",&AttrTraitBase::_flags)
 				// non-flag attributes
 				.def_readonly("doc",&AttrTraitBase::_doc)
@@ -356,12 +356,12 @@ namespace woo{
 		ClassTrait& name(const string& __name){ _name=__name; return *this; }
 		ClassTrait& section(const string& _title, const string& _intro, const vector<string>& _docOther){ title=_title; intro=_intro; docOther=_docOther; return *this; }
 		static void pyRegisterClass(py::module_ mod){
-			py::class_<ClassTrait,shared_ptr<ClassTrait>>(mod,"ClassTrait")
+			py::class_<ClassTrait PY_SHARED_PTR_HOLDER(ClassTrait)>(mod,"ClassTrait")
 				.def_readonly("title",&ClassTrait::title)
 				.def_readonly("intro",&ClassTrait::intro)
 				.def_readonly("file",&ClassTrait::_file)
 				.def_readonly("line",&ClassTrait::_line)
-				.add_property_readonly("docOther",[](const shared_ptr<ClassTrait>& c){return c->docOther; })
+				.def_property_readonly("docOther",[](const shared_ptr<ClassTrait>& c){return c->docOther; })
 				.def_readonly("doc",&ClassTrait::_doc)
 				.def_readonly("name",&ClassTrait::_name)
 				.def("__str__",&ClassTrait::pyStr)

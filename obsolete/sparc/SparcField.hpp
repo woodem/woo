@@ -151,7 +151,7 @@ struct SparcData: public NodeData{
 		, /* ctor */
 		, /*py*/
 		.def_static("_getDataOnNode",&Node::pyGetData<SparcData>).def_static("_setDataOnNode",&Node::pySetData<SparcData>)
-		.add_property("D",&SparcData::getD).add_property("W",&SparcData::getW).add_property("rot",&SparcData::getRotVec)
+		.def_property("D",&SparcData::getD).def_property("W",&SparcData::getW).def_property("rot",&SparcData::getRotVec)
 		.def("gFixedV",&SparcData::getGFixedV).def("gFixedT",&SparcData::getGFixedT)
 		;
 	);
@@ -234,7 +234,7 @@ struct ExplicitNodeIntegrator: public Engine {
 		_classObj.attr("wlsLinXyz")=(int)WLS_LIN_XYZ;
 		_classObj.attr("wlsQuadXyz")=(int)WLS_QUAD_XYZ;
 		
-		//.add_property("wDist",& [](){ return WEIGHT_DIST; })
+		//.def_property("wDist",& [](){ return WEIGHT_DIST; })
 		// .enum_<WeightFunc>("weight").value("dist",WEIGHT_DIST).value("gauss",WEIGHT_GAUSS)
 	);
 };

@@ -257,19 +257,24 @@ void VariableVelocity3d::velocity(const Scene* scene, const shared_ptr<Node>& n)
 			}
 		}
 		if(hookNo>=0 && !hooks[hookNo].empty()){
-			GilLock lock;
+			py::gil_scoped_acquire lock;
 			try{
-					py::object global(py::import("wooMain").attr("__dict__"));
+					py::object global(py::module_::import_("wooMain").attr("__dict__"));
 					py::dict local;
 					local["scene"]=py::cast(py::ptr(scene));
 					local["S"]=py::cast(py::ptr(scene));
-					local["woo"]=py::import("woo");
+					local["woo"]=py::module_::import_("woo");
 					local["node"]=py::cast(n);
 					local["self"]=py::cast(this->shared_from_this());
 					local["timeIndex"]=hookNo;
 					local["cycle"]=cycle;
 					local["prevTime"]=prevTimeOrig;
-					py::exec(hooks[hookNo].c_str(),global,local);
+					#ifdef WOO_NANOBIND
+						local.update(global.cast<py::dict>());
+						py::exec(hooks[hookNo].c_str(),local);
+					#else
+						py::exec(hooks[hookNo].c_str(),global,local);
+					#endif
 			} catch (py::error_already_set& e){
 					LOG_ERROR("Python error from {}.hook[{}]: {}",this->pyStr(),hookNo,hooks[hookNo]);
 					LOG_ERROR("Node {}, time {}. Error follows.",n->pyStr(),scene->time);

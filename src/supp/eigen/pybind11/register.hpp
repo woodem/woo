@@ -1,6 +1,6 @@
 #pragma once
-#define PYBIND11_DETAILED_ERROR_MESSAGES
-#include<pybind11/pybind11.h>
+#include"../../pyutil/compat.hpp"
+
 namespace woo{
-	void registerEigenClassesInPybind11(py::module& mod);
+	void registerEigenClassesInPybind11(py::module_& mod);
 };

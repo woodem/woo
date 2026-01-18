@@ -64,7 +64,7 @@ struct GlSetup: public Object{
 		((vector<shared_ptr<Object>>,objs,,AttrTrait<Attr::readonly>().noGui(),"List of all objects used; their order is determined at run-time. Some of them may be None (unused indices) which indicate separator in list of those objects when presented in the UI.")) \
 		((bool,dirty,false,AttrTrait<Attr::readonly>().noGui().noDump(),"Set after modifying functors, so that they can be regenerated.")) \
 		((string,qglviewerState,"",AttrTrait<Attr::readonly>().noGui(),"XML representation of the view state -- updated occasionally (once a second) from the current open view (if any).")) \
-		,/*py*/ .add_property_readonly("objNames",&GlSetup::getObjNames) \
+		,/*py*/ .def_property_readonly("objNames",&GlSetup::getObjNames) \
 			.def("__call__",&GlSetup::pyCall,"Replace all current functors by those passed as arguments."); \
 			auto oo=makeObjs(); assert(objTypeIndices.empty()); \
 			for(size_t i=0; i<oo.size(); i++){ \
@@ -74,7 +74,7 @@ struct GlSetup: public Object{
 				objTypeNames.push_back(o?o->getClassName():"None"); \
 				objAccessorNames.push_back(accessor); \
 				/*separator*/if(!o) continue; \
-				_classObj.add_property(accessor.c_str(),\
+				_classObj.def_property(accessor.c_str(),\
 					[i](shared_ptr<GlSetup> g){g->checkIndex(i); return g->objs[i];},[i](shared_ptr<GlSetup> g, shared_ptr<Object> val){ g->checkIndex(i); if(!val) woo::ValueError("Must not be None."); const auto valPtr=val.get(); if(std::type_index(typeid(*valPtr))!=objTypeIndices[i]) woo::TypeError(objTypeNames[i]+" instance required (not "+val->getClassName()+")."); g->objs[i]=val; } \
 				); \
 			}

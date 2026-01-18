@@ -14,7 +14,7 @@
 
 * inherit from boost::noncopyable?
 
-* `add_property` → `def_property` (getter and setter), `def_property_readonly` (getter only)
+* `def_property` → `def_property` (getter and setter), `def_property_readonly` (getter only)
 
 * `def_readonly`, `def_readwrite`: unchanged
 

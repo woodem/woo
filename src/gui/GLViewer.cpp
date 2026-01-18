@@ -799,7 +799,7 @@ void GLViewer::postSelection(const QPoint& point)
 		setSceneCenter(qglviewer::Vec(pos[0],pos[1],pos[2]));
 		{
 			//cerr<<"Selected object #"<<selection<<" is a "<<renderer->selObj->getClassName()<<endl;
-			GilLock lock;
+			py::gil_scoped_acquire lock;
 			cerr<<"Selected "<<py::extract<string>(py::str(py::cast(renderer->selObj)))()<<endl;
 		}
 		cerr<<"\tat "<<renderer->selObjNode->pos.transpose()<<endl;

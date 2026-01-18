@@ -38,6 +38,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold")
 	#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fuse-ld=gold")
 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fuse-ld=gold")
+	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -ftemplate-backtrace-limit=0)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	# https://github.com/pybind/pybind11/issues/1604#issuecomment-443385783
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
@@ -110,7 +111,9 @@ if(WOO_NANOBIND)
 	#nanobind_add_module(oofempy NB_STATIC STABLE_ABI LTO ${oofem_SOURCE_DIR}/bindings/python/oofem.cpp)
    #nanobind_build_library(nanobind-static) # -static is added via NB_STATIC for the module
    #link_libraries(nanobind-static) # for pythonfield.C and possibly others using nanobind functions
-   #add_definitions(-D_USE_NANOBIND)
+   add_definitions(-DWOO_NANOBIND)
+   nanobind_build_library(nanobind-static) # -static is added via NB_STATIC for the module
+	link_libraries(nanobind-static)
    #include_directories(${oofem_SOURCE_DIR}/extern/nanobind/include)
 else(WOO_NANOBIND)
 	# pybind11 can be installed via pip, in which case it self-reports its own cmake directory

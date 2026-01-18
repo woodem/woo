@@ -6,18 +6,25 @@
 #include"../base/openmp-accu.hpp"
 #include"compat.hpp"
 
-#include<pybind11/stl.h>
-#include<pybind11/stl_bind.h>
-
-// no-op with pybind11
+#ifdef WOO_NANOBIND
 namespace woo{
-	template<typename T> void converters_cxxVector_pyList_2way(py::module& mod, const string& name=""){
+	template<typename T> void converters_cxxVector_pyList_2way(py::module_& mod, const string& name=""){
+		std::cerr<<"TODO: converters_cxxVector_pyList_2way: no-op with nanobind"<<std::endl;
+	}
+}
+#else
+namespace woo{
+	template<typename T> void converters_cxxVector_pyList_2way(py::module_& mod, const string& name=""){
 		//std::cerr<<"Binding vec_"<<typeid(T).name()<<"..."<<std::endl;
 		string name2=name.empty()?(string("_")+(typeid(typename T::element_type).name())+"List"):name;
-		auto vec=py::bind_vector<std::vector<T>>(mod,name2,py::module_local(false));
+		auto vec=py::bind_vector<std::vector<T>>(mod,name2
+			#ifndef WOO_NANOBIND
+				,py::module_local(false)
+			#endif
+		);
 		// pickling will be used **only** for types which were declared opaque
 		// but we declare it for all types anyway
-		vec.def(py::pickle(
+		vec PY_PICKLE(
 				// __getstate__ 
 				[](const vector<T>& self){
 				py::list ret; for(const auto& item: self) ret.append(item);
@@ -26,30 +33,41 @@ namespace woo{
 			// __setstate__
 			[](py::list lst){
 				vector<T> ret(py::len(lst));
-				for(int i=0; i<py::len(lst); i++) ret[i]=lst[i].cast<T>();
+				for(int i=0; i<py::len(lst); i++) ret[i]=PY_CAST(T,lst[i]);
 				return ret;
 			}
-		));
+		);
 		//std::cerr<<"Declaring py::list → vec_"<<typeid(T).name()<<" implicit convertibility..."<<std::endl;
 		py::implicitly_convertible<py::list,std::vector<T>>();
 		py::implicitly_convertible<py::tuple,std::vector<T>>();
 	};
 };
+#endif
 
-#if 1
+
+#if 0
+namespace nanobind::detail{
+	template<typename T> struct type_caster<OpenMPAccumulator<T>>{
+		bool from_python(handle src, uint8_t flags, cleanup_list *cleanup) noexcept {
+
+		}
+		static handle cast(const OpenMPAccumulator<T>& src, return_value_policy policy, handle parent){
+			return py::cast(src.get()).release();
+		}
+		bool load(handle src, bool){
+			// setting array value not supported
+			return false;
+		}
+	};
+}
+#endif
+
+#if 0
 namespace pybind11::detail {
 	template<typename T> struct type_caster<OpenMPAccumulator<T>>{
 		// static_assert(std::is_integral<T>() || std::is_floating_point<T>());
-		#if PYBIND11_VERSION_HEX>=0x02090000
-			PYBIND11_TYPE_CASTER(OpenMPAccumulator<T>,const_name("OpenMPAccumulator"));
-		#else
-			PYBIND11_TYPE_CASTER(OpenMPAccumulator<T>,_("OpenMPAccumulator"));
-		#endif
+		PYBIND11_TYPE_CASTER(OpenMPAccumulator<T>,const_name("OpenMPAccumulator"));
 		static handle cast(const OpenMPAccumulator<T>& src, return_value_policy policy, handle parent){
-			// return py::cast(src.get(),py::return_value_policy::copy);
-			// py::cast uses existing to-python converters (including Vector3 and others) and returns py::object
-			// .release() will invalidate the object (refcount+pointer) and return just the pointer (handle)
-			// see cheatsheet on that: https://github.com/pybind/pybind11/issues/1201
 			return py::cast(src.get()).release();
 		}
 		bool load(handle src, bool){
@@ -59,53 +77,16 @@ namespace pybind11::detail {
 	};
 	template<typename T> struct type_caster<OpenMPArrayAccumulator<T>>{
 		static_assert(std::is_integral<T>() || std::is_floating_point<T>());
-
-		#if PYBIND11_VERSION_HEX>=0x02090000
-			PYBIND11_TYPE_CASTER(OpenMPArrayAccumulator<T>,const_name("OpenMPArrayAccumulator"));
-		#else
-			PYBIND11_TYPE_CASTER(OpenMPArrayAccumulator<T>,_("OpenMPArrayAccumulator"));
-		#endif
-
+		PYBIND11_TYPE_CASTER(OpenMPArrayAccumulator<T>,const_name("OpenMPArrayAccumulator"));
 		static handle cast(const OpenMPArrayAccumulator<T>& src, return_value_policy policy, handle parent){
 			PyObject *ret=PyList_New(src.size());
-			#if 0
-				auto data=src.getPerThreadData();
-				for(size_t i=0; i<data.size(); i++){ for(size_t j=0; j<data[i].size(); j++){ std::cerr<<" "<<data[i][j]; } std::cerr<<";"; } std::cerr<<endl;
-			#endif
 			for(size_t ix=0; ix<src.size(); ix++){
 				PyList_SetItem(ret,ix,py::cast(src.get(ix)).release().ptr());
-				#if 0
-					if constexpr(std::is_integral<T>()) PyList_SetItem(ret,i,PyLong_FromLong((long)src.get(i)));
-					else if constexpr(std::is_floating_point<T>()) PyList_SetItem(ret,i,PyFloat_FromDouble((double)src.get(i)));
-					else throw std::runtime_error("Error converting OpenMPArrayAccu to sequence?");
-				#endif
 			}
 			return ret;
-			//std::vector<T> ret(src.size());
-			//for(size_t i=0; i<src.size(); i++){ ret[i]=src[i]; std::cerr<<"  item ["<<i<<"]: "<<src[i]<<std::endl; }
-			//return py::cast(ret);
 		}
-		bool load(handle src, bool){
-			// setting array value not supported
+		bool load(handle src, bool){ // setting array value not supported
 			return false;
-		#if 0
-			PyObject *source=src.ptr();
-			if(std::is_integral<T>()){
-				PyObject *tmp=PyNumber_Long(source);
-				if(!tmp) return false; // throw std::runtime_error("OpenMPArrayAccumulator: failed to extract integral number.");
-				value.set(PyLong_AsLong(tmp));
-				Py_DECREF(tmp);
-				return !PyErr_Occurred();
-			};
-			if(std::is_integral<T>()){
-				PyObject *fp=PyNumber_Float(source);
-				PyObject *lo=PyNumber_Long(source);
-				if(fp){ value.set(PyFloat_AsDouble(fp)); Py_DECREF(fp); }
-				else if(lo){ value.set(PyLong_AsLong(lo)); Py_DECREF(lo); }
-				else return false;
-				return !PyErr_Occurred();
-			};
-		#endif
 		}
 	};
 }

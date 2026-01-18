@@ -62,7 +62,7 @@ void ContactLoop::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	for(shared_ptr<CGeomFunctor> gf: vg) this->geoDisp->add(gf);
 	for(shared_ptr<CPhysFunctor> pf: vp) this->phyDisp->add(pf);
 	for(shared_ptr<LawFunctor> cf: vl)   this->lawDisp->add(cf);
-	t=py::tuple(); // empty the args; not sure if this is OK, as there is some refcounting in raw_constructor code
+	t=py::args_(); // empty the args; not sure if this is OK, as there is some refcounting in raw_constructor code
 }
 
 void ContactLoop::getLabeledObjects(const shared_ptr<LabelMapper>& labelMapper){

@@ -100,8 +100,8 @@ class EnergyTracker: public Object{
 			.def("items",&EnergyTracker::items_py,"Return contents as list of (name,value) tuples.") \
 			.def("total",&EnergyTracker::total,"Return sum of all energies.") \
 			.def("relErr",&EnergyTracker::relErr,"Total energy divided by sum of absolute values.") \
-			.add_property_readonly("names",&EnergyTracker::names_py) /* return name->id map as python dict */ \
-			.add_property_readonly("_perThreadData",&EnergyTracker::perThreadData,"Contents as dictionary, where each value is tuple of individual threads' values (for debugging)") \
+			.def_property_readonly("names",&EnergyTracker::names_py) /* return name->id map as python dict */ \
+			.def_property_readonly("_perThreadData",&EnergyTracker::perThreadData,"Contents as dictionary, where each value is tuple of individual threads' values (for debugging)") \
 			.def("gridOn",&EnergyTracker::gridOn,WOO_PY_ARGS(py::arg("box"),py::arg("cellSize"),py::arg("maxIndex")=-1),"Initialize :obj:`grid` object, which will record spacial location of energy events.") \
 			.def("gridOff",&EnergyTracker::gridOff,"Disable :obj:`grid` so that energy location is not recorded anymore. The :obj:`grid` object is discarded, including any data it might have contained.") \
 			.def("gridToVTK",&EnergyTracker::gridToVTK,WOO_PY_ARGS(py::arg("out")),"Write grid data to VTK file *out* (``.vti`` will be appended); returns output file name.") \

@@ -87,19 +87,15 @@ static void wooInitialize(){
 		PyEval_InitThreads();
 	#endif
 
-	#if PYBIND11_VERSION_HEX>=0x02060000
-		py::module_ m=py::module_::create_extension_module(
-	#else
-		py::module m(
+	py::module_ m=py::create_extension_module("_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here.",new PyModuleDef
+		#ifndef WOO_NANOBIND
+			,py::mod_gil_not_used(false)
 	#endif
-		"_wooEigen11","Woo's internal wrapper of some Eigen classes; most generic classes are exposed via pybind11's numpy interface as numpy arrays, only special-need cases are wrapped here."
-		#if PYBIND11_VERSION_HEX>=0x02060000
-			 ,new py::module_::module_def
-		#endif
 	);
+
 	woo::registerEigenClassesInPybind11(m);
 	woo::registerOpenMPAccuClassesInPybind11(m);
-	auto sysModules=py::extract<py::dict>(py::getattr(py::import("sys"),"modules"))();
+	auto sysModules=py::extract<py::dict>(py::getattr(py::module_::import_("sys"),"modules"))();
 	if(sysModules.contains("minieigen")) LOG_FATAL("sys.modules['minieigen'] is already there, expect trouble (this build uses pybind11-based internal wrapper of eigen, not boost::python-based minieigen");
 	sysModules["_wooEigen11"]=m;
 	sysModules["minieigen"]=m;

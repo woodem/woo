@@ -44,9 +44,9 @@ struct TraceVisRep: public NodeVisRep{
 		((short,flags,0,,"Flags for this instance")) \
 		,/*py*/ \
 			.def("consolidate",&TraceVisRep::consolidate,"Make :obj:`pts` sequential (normally, the data are stored as circular buffer, with next write position at :obj:`writeIx`, so that they are ordered temporally.") \
-			.add_property_readonly("pts",&TraceVisRep::pyPts_get,"History points (read-only from python, as a copy of internal data is returned).") \
-			.add_property_readonly("times",&TraceVisRep::pyTimes_get,"History times (read-only from python, as a copy of internal data is returned).") \
-			.add_property_readonly("scalars",&TraceVisRep::pyScalars_get,"History scalars (read-only from python, as a copy of internal data is returned).") \
+			.def_property_readonly("pts",&TraceVisRep::pyPts_get,"History points (read-only from python, as a copy of internal data is returned).") \
+			.def_property_readonly("times",&TraceVisRep::pyTimes_get,"History times (read-only from python, as a copy of internal data is returned).") \
+			.def_property_readonly("scalars",&TraceVisRep::pyScalars_get,"History scalars (read-only from python, as a copy of internal data is returned).") \
 			.def("scalar",&TraceVisRep::pyScalar_get,"Get one history scalar (to avoid copying arrays), indexed as in python (negative counts backwards).") \
 			.def("pt",&TraceVisRep::pyPt_get,"Get one history point (to avoid copying arrays), indexed as in python (negative counts backwards).") \
 			.def("time",&TraceVisRep::pyTime_get,"Get one history time (to avoid copying arrays), indexed as in python (negative counts backwards).")

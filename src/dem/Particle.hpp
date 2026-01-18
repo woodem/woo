@@ -97,26 +97,26 @@ struct Particle: public Object{
 		((MapParticleContact,contacts,,AttrTrait<Attr::noSave|Attr::hidden>(),"Contacts of this particle, indexed by id of the other particle.")) \
 		/* ((int,flags,0,AttrTrait<Attr::hidden>(),"Various flags, only individually accesible from Python")) */ \
 		, /*py*/ \
-			.add_property("pos",&Particle::getPos,&Particle::setPos,py::return_value_policy::reference,"Particle position; shorthand for ``p.shape.nodes[0].pos`` -- uninodal particles only (raises exception otherwise).") \
-			.add_property("ori",&Particle::getOri,&Particle::setOri,py::return_value_policy::reference,"Particle orientation; shorthand for ``p.shape.nodes[0].ori`` -- uninodal particles only (raises exception otherwise).") \
-			.add_property("refPos",&Particle::getRefPos,&Particle::setRefPos woo_dem_Particle__OPENGL__return_internal_reference ,"Reference particle position; shorthand for :obj:`p.shape.nodes[0].gl.refPos <woo.gl.GlData.refPos>`, and ``Vector3(nan,nan,nan)`` if :obj:`gl <GlData>` is not defined on the node.") \
-			.add_property("vel",&Particle::getVel,&Particle::setVel,py::return_value_policy::reference,"Particle velocity; shorthand for :obj:`p.shape.nodes[0].dem.vel <DemData.vel>` -- uninodal particles only (raises exception otherwise).") \
-			.add_property("angVel",&Particle::getAngVel,&Particle::setAngVel,py::return_value_policy::reference,"Particle angular velocity; shorthand for :obj:`p.shape.nodes[0].dem.angVel <DemData.angVel>` -- uninodal particles only (raises exception otherwise).") \
+			.def_property("pos",&Particle::getPos,&Particle::setPos,py::return_value_policy::reference,"Particle position; shorthand for ``p.shape.nodes[0].pos`` -- uninodal particles only (raises exception otherwise).") \
+			.def_property("ori",&Particle::getOri,&Particle::setOri,py::return_value_policy::reference,"Particle orientation; shorthand for ``p.shape.nodes[0].ori`` -- uninodal particles only (raises exception otherwise).") \
+			.def_property("refPos",&Particle::getRefPos,&Particle::setRefPos woo_dem_Particle__OPENGL__return_internal_reference ,"Reference particle position; shorthand for :obj:`p.shape.nodes[0].gl.refPos <woo.gl.GlData.refPos>`, and ``Vector3(nan,nan,nan)`` if :obj:`gl <GlData>` is not defined on the node.") \
+			.def_property("vel",&Particle::getVel,&Particle::setVel,py::return_value_policy::reference,"Particle velocity; shorthand for :obj:`p.shape.nodes[0].dem.vel <DemData.vel>` -- uninodal particles only (raises exception otherwise).") \
+			.def_property("angVel",&Particle::getAngVel,&Particle::setAngVel,py::return_value_policy::reference,"Particle angular velocity; shorthand for :obj:`p.shape.nodes[0].dem.angVel <DemData.angVel>` -- uninodal particles only (raises exception otherwise).") \
 			.def("updateMassInertia",&Particle::updateMassInertia,"Internal use only. Recompute mass and inertia of all particle's nodes; this function is usually called by particle construction routines; interally calls ``Shape::updateMassInertia`` and only works for particles without shared nodes.") \
-			.add_property_readonly("contacts",&Particle::pyContacts,"Return all :obj:`real <Contact.real>` particle's contacts as dictionary mapping :obj:`other particles' IDs <Particle.id>` and obj:`Contact` objects.") \
-			.add_property_readonly("con",&Particle::pyCon,"Return list of :obj:`IDs <Particle.id>` of contacting particles (:obj:`~Contact.real` contacts only); shorthand for ``p.contacts.keys()``.") \
-			.add_property_readonly("tacts",&Particle::pyTacts,"Return list of :obj:`Contact` objects where this particle takes part (:obj:`~Contact.real` contacts only); shorthand for ``p.contact.values()``.") \
-			.add_property_readonly("allContacts",&Particle::pyAllContacts,"Return dictionary mapping :obj:`other particles' IDs <Particle.id` to :obj:`Contact` objects, including contacts which are *not* :obj:`~Contact.real`.") \
-		.add_property("impose",&Particle::getImpose,&Particle::setImpose,"Particle imposed constraints; shorthand for :obj:`p.shape.nodes[0].dem.impose <DemData.impose>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property_readonly("mass",&Particle::getMass,"Particle mass; shorthand for :obj:`p.shape.nodes[0].dem.mass <DemData.mass>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property_readonly("inertia",&Particle::getInertia,"Particle inertia; shorthand for :obj:`p.shape.nodes[0].dem.inertia <DemData.inertia>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property_readonly("f",&Particle::getForce,"Force on particle; shorthand for :obj:`p.shape.nodes[0].dem.force <DemData.force>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property_readonly("t",&Particle::getTorque,"Torque on particle; shorthand for :obj:`p.shape.nodes[0].dem.torque <DemData.force>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property("blocked",&Particle::getBlocked,&Particle::setBlocked,"Blocked degrees of freedom of the particle; shorthand for :obj:`p.shape.nodes[0].dem.blocked <DemData.blocked>` -- uninodal particles only (raises exception otherwise).") \
-		.add_property_readonly("nodes",&Particle::getNodes,"List of particle nodes; shorthand for :obj:`p.shape.nodes <Shape.nodes>`.") \
-		.add_property_readonly("Ek",&Particle::getEk,"Summary kinetic energy of the particle, shorthand for ``p.Ekt+p.Ekr``.") \
-		.add_property_readonly("Ekt",&Particle::getEk_trans,"Translational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}m|\\vec{v}|^2` -- uninodal particles only (raises exception otherwise). Space deformation is not considered here, see :obj:`getEk`.") \
-		.add_property_readonly("Ekr",&Particle::getEk_rot,"Rotational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}\\vec{\\omega}^T\\mat{T}^T\\mat{I}\\mat{T}\\omega` (where :math:`\\mat{T}` is :obj:`p.shape.nodes[0].ori <woo.core.Node.ori>` as rotation matrix, :math:`\\mat{I}` is :obj:`p.shape.nodes[0].dem.inertia <DemData.inertia>` as diagonal matrix  -- uninodal particles only (raises exception otherwise).  Space deformation is not considered here, see :obj:`getEk`.") \
+			.def_property_readonly("contacts",&Particle::pyContacts,"Return all :obj:`real <Contact.real>` particle's contacts as dictionary mapping :obj:`other particles' IDs <Particle.id>` and obj:`Contact` objects.") \
+			.def_property_readonly("con",&Particle::pyCon,"Return list of :obj:`IDs <Particle.id>` of contacting particles (:obj:`~Contact.real` contacts only); shorthand for ``p.contacts.keys()``.") \
+			.def_property_readonly("tacts",&Particle::pyTacts,"Return list of :obj:`Contact` objects where this particle takes part (:obj:`~Contact.real` contacts only); shorthand for ``p.contact.values()``.") \
+			.def_property_readonly("allContacts",&Particle::pyAllContacts,"Return dictionary mapping :obj:`other particles' IDs <Particle.id` to :obj:`Contact` objects, including contacts which are *not* :obj:`~Contact.real`.") \
+		.def_property("impose",&Particle::getImpose,&Particle::setImpose,"Particle imposed constraints; shorthand for :obj:`p.shape.nodes[0].dem.impose <DemData.impose>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property_readonly("mass",&Particle::getMass,"Particle mass; shorthand for :obj:`p.shape.nodes[0].dem.mass <DemData.mass>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property_readonly("inertia",&Particle::getInertia,"Particle inertia; shorthand for :obj:`p.shape.nodes[0].dem.inertia <DemData.inertia>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property_readonly("f",&Particle::getForce,"Force on particle; shorthand for :obj:`p.shape.nodes[0].dem.force <DemData.force>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property_readonly("t",&Particle::getTorque,"Torque on particle; shorthand for :obj:`p.shape.nodes[0].dem.torque <DemData.force>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property("blocked",&Particle::getBlocked,&Particle::setBlocked,"Blocked degrees of freedom of the particle; shorthand for :obj:`p.shape.nodes[0].dem.blocked <DemData.blocked>` -- uninodal particles only (raises exception otherwise).") \
+		.def_property_readonly("nodes",&Particle::getNodes,"List of particle nodes; shorthand for :obj:`p.shape.nodes <Shape.nodes>`.") \
+		.def_property_readonly("Ek",&Particle::getEk,"Summary kinetic energy of the particle, shorthand for ``p.Ekt+p.Ekr``.") \
+		.def_property_readonly("Ekt",&Particle::getEk_trans,"Translational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}m|\\vec{v}|^2` -- uninodal particles only (raises exception otherwise). Space deformation is not considered here, see :obj:`getEk`.") \
+		.def_property_readonly("Ekr",&Particle::getEk_rot,"Rotational kinetic energy of the particle, computed on-demand as :math:`\\frac{1}{2}\\vec{\\omega}^T\\mat{T}^T\\mat{I}\\mat{T}\\omega` (where :math:`\\mat{T}` is :obj:`p.shape.nodes[0].ori <woo.core.Node.ori>` as rotation matrix, :math:`\\mat{I}` is :obj:`p.shape.nodes[0].dem.inertia <DemData.inertia>` as diagonal matrix  -- uninodal particles only (raises exception otherwise).  Space deformation is not considered here, see :obj:`getEk`.") \
 		.def("getEk",&Particle::getEk_any,WOO_PY_ARGS(py::arg("trans")=true,py::arg("rot")=true,py::arg("scene")=shared_ptr<Scene>()),"Compute kinetic energy (translational and/or rotational); when *scene* is given, only fluctuation linear/angular velocity will be considered if periodic boundary conditions are active.") \
 		.def_static("make",&Particle::make,WOO_PY_ARGS(py::arg("shape"),py::arg("mat"),py::arg("fixed")=false),"Return Particle instance created from given shape and material; nodes with DemData are automatically added to the shape, mass and inertia is recomuted.") \
 		; \
@@ -290,13 +290,13 @@ public:
 		((std::list<Particle*>,parRef,,AttrTrait<Attr::hidden|Attr::noSave>().noGui(),"Back-reference for particles using this node; this is important for knowing when a node may be deleted (no particles referenced) and such. Should be kept consistent.")) \
 		((shared_ptr<Impose>,impose,,,"Impose arbitrary velocity, angular velocity, ... on the node; the functor is called from Leapfrog, after new position and velocity have been computed.")) \
 		((weak_ptr<Node>,master,,AttrTrait<Attr::hidden>().noGui(),"Master node; currently only used with clumps (since this is never set from python, it is safe to use weak_ptr).")) \
-		, /*py*/ .add_property("blocked",&DemData::blocked_vec_get,&DemData::blocked_vec_set,"Degress of freedom where linear/angular velocity will be always constant (equal to zero, or to an user-defined value), regardless of applied force/torque. String that may contain 'xyzXYZ' (translations and rotations).") \
-		.add_property_readonly("noClump",&DemData::isNoClump) \
-		/*.add_property("clump",&DemData::isClump).add_property("clumped",&DemData::isClumped).add_property("energySkip",&DemData::isEnergySkip,&DemData::setEnergySkip).add_property("gravitySkip",&DemData::isGravitySkip,&DemData::setGravitySkip).add_property("tracerSkip",&DemData::isTracerSkip,&DemData::setTracerSkip).add_property("dampingSkip",&DemData::isDampingSkip,&DemData::setDampingSkip) */ \
-		.add_property_readonly("master",&DemData::pyGetMaster) \
-		.add_property_readonly("parRef",&DemData::pyParRef_get).def("addParRef",&DemData::addParRef) \
-		.add_property_readonly("isAspherical",&DemData::isAspherical,"Return ``True`` when inertia components are not equal.") \
-		.add_property_readonly("useAsphericalLeapfrog",&DemData::useAsphericalLeapfrog,"Say whether the node will use aspherical :obj:`leapfrog <woo.dem.Leapfrog>` integration routine. The criterion is that the node :obj:`is aspherical <isAspherical>` **and** does not have all rotations :obj:`blocked`.") \
+		, /*py*/ .def_property("blocked",&DemData::blocked_vec_get,&DemData::blocked_vec_set,"Degress of freedom where linear/angular velocity will be always constant (equal to zero, or to an user-defined value), regardless of applied force/torque. String that may contain 'xyzXYZ' (translations and rotations).") \
+		.def_property_readonly("noClump",&DemData::isNoClump) \
+		/*.def_property("clump",&DemData::isClump).def_property("clumped",&DemData::isClumped).def_property("energySkip",&DemData::isEnergySkip,&DemData::setEnergySkip).def_property("gravitySkip",&DemData::isGravitySkip,&DemData::setGravitySkip).def_property("tracerSkip",&DemData::isTracerSkip,&DemData::setTracerSkip).def_property("dampingSkip",&DemData::isDampingSkip,&DemData::setDampingSkip) */ \
+		.def_property_readonly("master",&DemData::pyGetMaster) \
+		.def_property_readonly("parRef",&DemData::pyParRef_get).def("addParRef",&DemData::addParRef) \
+		.def_property_readonly("isAspherical",&DemData::isAspherical,"Return ``True`` when inertia components are not equal.") \
+		.def_property_readonly("useAsphericalLeapfrog",&DemData::useAsphericalLeapfrog,"Say whether the node will use aspherical :obj:`leapfrog <woo.dem.Leapfrog>` integration routine. The criterion is that the node :obj:`is aspherical <isAspherical>` **and** does not have all rotations :obj:`blocked`.") \
 		.def_static("setOriMassInertia",&DemData::setOriMassInertia,"Lump mass and inertia from all attached particles and attempt to rotate the node so that its axes are principal axes of inertia, if allowed by particles shape (without chaning the geometry).") \
 		.def("guessMoving",&DemData::guessMoving,"Tell whether the node is likely to be moving or not. Returns true if any of the following is true:\n\n* nonzero :obj:`mass` **and** not all DoFs are :obj:`blocked <flags>` (this will be false for nodes with mass, but which are completely blocked),\n* nonzero :obj:`velocity <vel>`,\n* nonzero :obj:`angular velocity <angVel>`,\n* anything is :obj:`imposed <impose>`.\n\nThis function is used as heuristics by :obj:`S.dem.par.add <woo.dem.ParticleContainer.add>` when called with ``nodes=-1`` (default), to decide whether the particle's nodes should be added to S.dem.nodes.") \
 		.def_static("_getDataOnNode",&Node::pyGetData<DemData>).def_static("_setDataOnNode",&Node::pySetData<DemData>)
@@ -459,11 +459,11 @@ struct Shape: public Object, public Indexable{
 		((Real,color,Mathr::UnitRandom(),,"Normalized color for rendering; negative values render with wire (rather than solid), :math:`|\\text{color}|`>2 means invisible. (use *wire*, *hi* and *visible* to manipulate those)")) \
 		,/*ctor*/ createIndex(); \
 		,/*py*/ \
-			.add_property("wire",&Shape::getWire,&Shape::setWire,"Display this shape as wire or non-wire (unless overrideden by GL functor); internally encoded in :obj:`color`.") \
-			.add_property("hi",&Shape::getHighlighted,&Shape::setHighlighted,"Display this shape as highlighted (blinking color); internally encoded in :obj:`color`.") \
-			.add_property("visible",&Shape::getVisible,&Shape::setVisible,"Set the shape as invisible; internally encoded in :obj:`color`.") \
-			.add_property_readonly("equivRadius",&Shape::equivRadius,"Volumetrically equivalent radius of this shape. Returns NaN if the shape is multinodal or infinite.") \
-			.add_property_readonly("volume",&Shape::volume,"Volume of this shape; returns NaN for multinodal or infinite shapes.") \
+			.def_property("wire",&Shape::getWire,&Shape::setWire,"Display this shape as wire or non-wire (unless overrideden by GL functor); internally encoded in :obj:`color`.") \
+			.def_property("hi",&Shape::getHighlighted,&Shape::setHighlighted,"Display this shape as highlighted (blinking color); internally encoded in :obj:`color`.") \
+			.def_property("visible",&Shape::getVisible,&Shape::setVisible,"Set the shape as invisible; internally encoded in :obj:`color`.") \
+			.def_property_readonly("equivRadius",&Shape::equivRadius,"Volumetrically equivalent radius of this shape. Returns NaN if the shape is multinodal or infinite.") \
+			.def_property_readonly("volume",&Shape::volume,"Volume of this shape; returns NaN for multinodal or infinite shapes.") \
 			.def("asRaw",&Shape::pyAsRaw) \
 			.def("setFromRaw",&Shape::setFromRaw) \
 			.def("isInside",&Shape::isInside,WOO_PY_ARGS(py::arg("pt")),"Fast predicate testing whether *pt* is inside or outside this shape.") \
@@ -498,7 +498,7 @@ struct Bound: public Object, public Indexable{
 		((AlignedBox3r,box,AlignedBox3r(),AttrTrait<Attr::noSave>().readonly().lenUnit(),"Axis-aligned bounding box.")) \
 		,/*ini*/((min,box.min()))((max,box.max())) \
 		,/*ctor*/ createIndex(); \
-		,/*py*/ .add_property_readonly("min",&Bound::pyMin).add_property_readonly("max",&Bound::pyMax) WOO_PY_TOPINDEXABLE(Bound); 
+		,/*py*/ .def_property_readonly("min",&Bound::pyMin).def_property_readonly("max",&Bound::pyMax) WOO_PY_TOPINDEXABLE(Bound);
 	
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_INI_CTOR_PY(woo_dem_Bound__CLASS_BASE_DOC_ATTRS_INI_CTOR_PY);
 

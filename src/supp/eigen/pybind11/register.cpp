@@ -2,7 +2,7 @@
 #include"visitors.hpp"
 // #include<pybind11/eigen.h>
 namespace woo{
-	void registerEigenClassesInPybind11(py::module& mod){
+	void registerEigenClassesInPybind11(py::module_& mod){
 		// mod.attr("__name__")="woo.eigen";
 		WOO_SET_DOCSTRING_OPTS;
 

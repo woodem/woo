@@ -48,12 +48,12 @@ Because we need literal functor and class names for registration in python, we p
 	py::list functors_get(void) const { py::list ret; for(const shared_ptr<FunctorT>& f: functors){ ret.append(f); } return ret; } \
 	void getLabeledObjects(const shared_ptr<LabelMapper>& labelMapper) override { for(const shared_ptr<FunctorT>& f: functors){ Engine::handlePossiblyLabeledObject(f,labelMapper); } } \
 	void functors_set(const vector<shared_ptr<FunctorT> >& ff){ functors.clear(); for(const shared_ptr<FunctorT>& f: ff) add(f); postLoad(*this,NULL); } \
-	void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override { if(py::len(t)==0)return; if(py::len(t)!=1) throw invalid_argument("Exactly one list of " BOOST_PP_STRINGIZE(FunctorT) " must be given."); typedef std::vector<shared_ptr<FunctorT> > vecF; vecF vf=py::extract<vecF>(t[0])(); functors_set(vf); t=py::tuple(); }
+	void pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d) override { if(py::len(t)==0)return; if(py::len(t)!=1) throw invalid_argument("Exactly one list of " BOOST_PP_STRINGIZE(FunctorT) " must be given."); typedef std::vector<shared_ptr<FunctorT> > vecF; vecF vf=py::extract<vecF>(t[0])(); functors_set(vf); t=py::args_(); }
 
 #define WOO_DISPATCHER_FUNCTOR__ATTRS(DispatcherT,FunctorT) \
 	((vector<shared_ptr<FunctorT>>,functors,,,"Functors active in the dispatch mechanism [overridden below].")) 
 #define WOO_DISPATCHER_FUNCTOR__PY(DispatcherT,FunctorT) \
-	.add_property("functors",&DispatcherT::functors_get,&DispatcherT::functors_set,"Functors associated with this dispatcher (list of :obj:`" BOOST_PP_STRINGIZE(FunctorT) "`)") \
+	.def_property("functors",&DispatcherT::functors_get,&DispatcherT::functors_set,"Functors associated with this dispatcher (list of :obj:`" BOOST_PP_STRINGIZE(FunctorT) "`)") \
 		.def("dispMatrix",&DispatcherT::dump,py::arg("names")=true,"Return dictionary with contents of the dispatch matrix.").def("dispFunctor",&DispatcherT::getFunctor,"Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws.")
 
 #define _WOO_DIM_DISPATCHER_FUNCTOR_DOC_ATTRS_CTOR_PY(Dim,DispatcherT,FunctorT,_doc,attrs,ctor,ppy) \

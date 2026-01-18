@@ -27,7 +27,7 @@ struct GLViewInfo{
 #define GL_FUNCTOR(Klass,typelist,renderedType) class Klass: public Functor1D<renderedType,void,typelist>{public:\
 	virtual string renders() const { throw std::runtime_error(#Klass ": unregistered gldraw class.\n"); };\
 	virtual void initgl(){/*WARNING: it must deal with static members, because it is called from another instance!*/};\
-	/* API check only */ void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override { if(!py::len(kw)) { string keys; { bool _first=true; for(auto& item: kw){ if(!_first) keys+=", "; keys+=py::cast<string>(item.first); _first=false; } } Master().instance().checkApi(10102,"Constructing "+getClassName()+" with keywords ("+keys+") will have no effect unless passed to GlSetup/S.gl.",/*pyWarn*/true); } Object::pyHandleCustomCtorArgs(args,kw); } \
+	/* API check only */ void pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw) override { if(!py::len(kw)) { string keys; { bool _first=true; for(auto item: kw){ if(!_first) keys+=", "; keys+=PY_CAST(string,item.first); _first=false; } } Master().instance().checkApi(10102,"Constructing "+getClassName()+" with keywords ("+keys+") will have no effect unless passed to GlSetup/S.gl.",/*pyWarn*/true); } Object::pyHandleCustomCtorArgs(args,kw); } \
 	virtual void setFunctors_getRanges(const vector<shared_ptr<Object>>& ff, vector<shared_ptr<ScalarRange>>& rr){} \
 	WOO_CLASS_BASE_DOC_ATTRS_PY(Klass,Functor,"Abstract functor for rendering :obj:`" #renderedType "` objects.",/*attrs*/,/*py*/ ; woo::converters_cxxVector_pyList_2way<shared_ptr<Klass>>(mod);); \
 	}; WOO_REGISTER_OBJECT(Klass); 

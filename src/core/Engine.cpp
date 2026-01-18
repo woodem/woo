@@ -72,16 +72,16 @@ void Engine::field_set(const shared_ptr<Field>& f){
 
 void Engine::runPy_generic(const string& callerId, const string& command, Scene* scene_, Engine* engine_, const shared_ptr<Field>& field_){
 	if(command.empty()) return;
-	GilLock lock;
+	py::gil_scoped_acquire lock;
 	try{
 		// scripts are run in this namespace (wooMain)
-		py::object global(py::import("__main__").attr("__dict__"));
+		py::object global(py::module_::import_("__main__").attr("__dict__"));
 		py::dict local;
 		local["scene"]=py::cast(py::ptr(scene_));
 		local["S"]=py::cast(py::ptr(scene_));
 		local["engine"]=py::cast(py::ptr(engine_));
 		local["field"]=py::cast(field_);
-		local["woo"]=py::import("woo");
+		local["woo"]=py::module_::import_("woo");
 		// local["wooExtra"]=py::import("wooExtra"); // FIXME: not always importable
 		LOG_INFO("command='{}', global={}, local={}",command,py::str(global),py::str(local));
 		py::exec(command.c_str(),global,local);
@@ -129,7 +129,7 @@ void ParallelEngine::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 	py::extract<py::list> listEx(args[0]);
 	if(!listEx.check()) woo::TypeError("ParallelEngine: non-keyword argument must be a list");
 	pySlavesSet(listEx());
-	args=py::tuple();
+	args=py::args_();
 }
 
 void ParallelEngine::pySlavesSet(const py::list& slaves2){
@@ -200,7 +200,7 @@ void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 	if(py::len(t)==1){
 		try {
 			command=py::cast<std::string>(t[0]);
-			t=py::tuple();
+			t=py::args_();
 			return;
 		} catch(...){ throw std::invalid_argument("Positional argument to PyRunner must be command (a string)."); }
 	}
@@ -208,7 +208,7 @@ void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 		try{
 			command=py::cast<std::string>(t[0]);
 			stepPeriod=py::cast<int>(t[1]);
-			t=py::tuple();
+			t=py::args_();
 			return;
 		} catch(...){ };
 	}
@@ -216,7 +216,7 @@ void PyRunner::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
 		try{
 			command=py::cast<std::string>(t[1]);
 			stepPeriod=py::cast<int>(t[0]);
-			t=py::tuple();
+			t=py::args_();
 			return;
 		} catch(...){ };
 	}

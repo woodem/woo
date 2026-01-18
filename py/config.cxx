@@ -1,6 +1,7 @@
 // this file has the .cxx extension since we compile it separately, not
 // matching the py/*.cpp glob in the build system
 #include"../src/core/Master.hpp"
+#include"../src/supp/pyutil/compat.hpp"
 #include<boost/algorithm/string/predicate.hpp>
 #include<boost/preprocessor.hpp>
 
@@ -56,7 +57,11 @@ PYBIND11_MODULE(config,mod){
 		#ifdef WOO_CATALYST
 			features.append("catalyst");
 		#endif
-		features.append("pybind11");
+		#ifdef WOO_NANOBIND
+			features.append("nanobind");
+		#else
+			features.append("pybind11");
+		#endif
 		features.append("spdlog");
 
 

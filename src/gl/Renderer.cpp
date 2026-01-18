@@ -291,7 +291,7 @@ void Renderer::render(const shared_ptr<Scene>& _scene, bool _withNames, bool _fa
 	if(withNames) cerr<<"render(withNames==true) done, "<<glNamedObjects.size()<<" objects inserted"<<endl;
 
 	// release the shared_ptr; must be GIL-protected since descruction of Python-constructed object without GIL causes crash
-	{ GilLock lock; scene.reset(); }
+	{ py::gil_scoped_acquire lock; scene.reset(); }
 }
 
 void Renderer::setLightHighlighted(int highLev){

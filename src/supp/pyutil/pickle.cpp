@@ -9,9 +9,9 @@ namespace woo{
 
 	void Pickler::ensureInitialized(){
 		if(initialized) return;
-		GilLock pyLock;
+		py::gil_scoped_acquire pyLock;
 		//cerr<<"[Pickler::ensureInitialized:gil]";
-		py::object cPickle=py::module::import("pickle");
+		py::object cPickle=py::module_::import_("pickle");
 		cPickle_dumps=cPickle.attr("dumps");
 		cPickle_loads=cPickle.attr("loads");
 		initialized=true;
@@ -19,7 +19,7 @@ namespace woo{
 
 	std::string Pickler::dumps(py::object o){
 		ensureInitialized();
-		GilLock pyLock;
+		py::gil_scoped_acquire pyLock;
 		py::object minus1=py::cast(-1);
 		// watch out! the object might have NULL pointer (uninitialized??) so make sure to pass None in that case
 		PyObject *b=PyObject_CallFunctionObjArgs(cPickle_dumps.ptr(),o.ptr()?o.ptr():Py_None,minus1.ptr(),NULL);
@@ -28,11 +28,15 @@ namespace woo{
 			else throw std::runtime_error("Pickling failed but no python erro was set??");
 		}
 		assert(PyBytes_Check(b));
-		return std::string(py::reinterpret_steal<py::bytes>(b));
+		#ifdef WOO_NANOBIND
+			return py::steal<py::bytes>(b).c_str();
+		#else
+			return std::string(py::reinterpret_steal<py::bytes>(b));
+		#endif
 	}
 	py::object Pickler::loads(const std::string& s){
 		ensureInitialized();
-		GilLock pyLock;
+		py::gil_scoped_acquire pyLock;
 		//cerr<<"[loads:gil]";
 		return cPickle_loads(py::handle(PyBytes_FromStringAndSize(s.data(),(Py_ssize_t)s.size())));
 	}

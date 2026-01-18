@@ -49,10 +49,10 @@ void Node::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
 			if(!oriEx.check()) woo::TypeError("Node: second non-keyword argument must be Quaternion (ori)");
 			ori=oriEx();
 		}
-		args=py::tuple(); // clear args
+		args=py::args_(); // clear args
 	}
 	for(const char* name:{"dem","gl","mesh","sparc","clDem"}){
-		if(!WOO_PY_DICT_CONTAINS(kw,name)) continue;
+		if(!kw.contains(name)) continue;
 		auto d=py::extract<shared_ptr<NodeData>>(kw[name])();
 		if(d->getterName()!=string(name)) throw std::runtime_error("Node: mismatch passing "+string(name)+"="+d->pyStr()+": shorthand for this type should be "+d->getterName()+" (not "+string(name)+").");
 		d->setDataOnNode(*this);

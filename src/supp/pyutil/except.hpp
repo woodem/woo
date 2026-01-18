@@ -1,12 +1,11 @@
 #pragma once
 
+#include"compat.hpp"
 #include<string>
 #include<format>
 #include<boost/preprocessor.hpp>
 #include"../base/Logging.hpp" // for fmt (possibly bundled with spdlog)
 
-#include<pybind11/pybind11.h>
-namespace py=pybind11;
 
 namespace woo{
 	void StopIteration();
