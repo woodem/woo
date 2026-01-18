@@ -25,7 +25,7 @@ struct SphereClumpGeom: public ShapeClump {
 		((vector<Vector3r>,centers,,AttrTrait<Attr::triggerPostLoad>(),"Centers of constituent spheres, in clump-local coordinates.")) \
 		((vector<Real>,radii,,AttrTrait<Attr::triggerPostLoad>(),"Radii of constituent spheres")) \
 		, /* py */ \
-		.def_static("fromSpherePack",&SphereClumpGeom::fromSpherePack,WOO_PY_ARGS(py::arg("pack"),py::arg("div")=5),"Return [ :obj:`SphereClumpGeom` ] which contain all clumps and spheres from given :obj:`SpherePack`.") \
+		.def_static("fromSpherePack",&SphereClumpGeom::fromSpherePack,py::arg("pack"),py::arg("div")=5,"Return [ :obj:`SphereClumpGeom` ] which contain all clumps and spheres from given :obj:`SpherePack`.") \
 		; woo::converters_cxxVector_pyList_2way<shared_ptr<SphereClumpGeom>>(mod);
 
 

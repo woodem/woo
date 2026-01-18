@@ -69,7 +69,7 @@ struct Tet4: public Tetra{
 		((MatrixXr,EB,,AttrTrait<>().readonly().noGui(),":math:`E B` matrix, used to compute stresses from displacements.")) \
 		,/*ctor*/ createIndex();\
 		,/*py*/.def("setRefConf",&Tet4::setRefConf,"Set the current configuration as the reference one") \
-			.def("ensureStiffnessMatrix",&Tet4::ensureStiffnessMatrix,WOO_PY_ARGS(py::arg("young"),py::arg("nu")),"Ensure that stiffness matrix is initialized; internally also sets reference configuration. The *young* parameter should match :obj:`woo.dem.ElastMat.young` attached to the particle.") \
+			.def("ensureStiffnessMatrix",&Tet4::ensureStiffnessMatrix,py::arg("young"),py::arg("nu"),"Ensure that stiffness matrix is initialized; internally also sets reference configuration. The *young* parameter should match :obj:`woo.dem.ElastMat.young` attached to the particle.") \
 			.def("update",&Tet4::stepUpdate,"Update current configuration; creates reference configuration if not existing") \
 			.def("reset",&Tet4::pyReset) \
 			.def("getStressTensor",&Tet4::getStressTensor)

@@ -177,7 +177,7 @@ struct MatState: public Object{
 		/*attrs*/ \
 		,/*py*/ \
 		.def("getNumScalars",&MatState::getNumScalars,"Return number of scalars (index to :obj:`getScalar` and :obj:`getScalarName` should be lower than this number).") \
-		.def("getScalar",&MatState::getScalar,WOO_PY_ARGS(py::arg("index"),py::arg("time")=0,py::arg("step")=-1,py::arg("smooth")=0),"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
+		.def("getScalar",&MatState::getScalar,py::arg("index"),py::arg("time")=0,py::arg("step")=-1,py::arg("smooth")=0,"Return scalar value given its numerical index. *step* is used to check whether data are up-to-date, smooth (if positive) is used to smooth out old data (usually using exponential decay function)") \
 		.def("getScalarName",&MatState::getScalarName,py::arg("index"),"Return name of scalar at given index (human-readable description)") ;\
 		woo::converters_cxxVector_pyList_2way<shared_ptr<MatState>>(mod);
 
@@ -364,7 +364,7 @@ struct DemField: public Field{
 		((vector<shared_ptr<Particle>>,deadParticles,,AttrTrait<Attr::readonly>().noGui(),"Deleted particles; only used if :obj:`saveDead` is ``True``")) \
 		, /* ctor */ createIndex(); postLoad(*this,NULL); /* to make sure pointers are OK */ \
 		, /*py*/ \
-		.def("collectNodes",&DemField::collectNodes,WOO_PY_ARGS(py::arg("fromCxx")=false),"Collect nodes from all particles and clumps and insert them to nodes defined for this field. Nodes are not added multiple times, even if they are referenced from different particles.") \
+		.def("collectNodes",&DemField::collectNodes,py::arg("fromCxx")=false,"Collect nodes from all particles and clumps and insert them to nodes defined for this field. Nodes are not added multiple times, even if they are referenced from different particles.") \
 		.def("clearDead",&DemField::clearDead) \
 		.def("nodesAppend",&DemField::pyNodesAppend,"Append given node to :obj:`nodes`, and set :obj:`DemData.linIx` to the correct value automatically.") \
 		.def("nodesAppend",&DemField::pyNodesAppendList,"Append given list of nodes to :obj:`nodes`, and set :obj:`DemData.linIx` to the correct value automatically.") \
@@ -466,7 +466,7 @@ struct Shape: public Object, public Indexable{
 			.def_property_readonly("volume",&Shape::volume,"Volume of this shape; returns NaN for multinodal or infinite shapes.") \
 			.def("asRaw",&Shape::pyAsRaw) \
 			.def("setFromRaw",&Shape::setFromRaw) \
-			.def("isInside",&Shape::isInside,WOO_PY_ARGS(py::arg("pt")),"Fast predicate testing whether *pt* is inside or outside this shape.") \
+			.def("isInside",&Shape::isInside,py::arg("pt"),"Fast predicate testing whether *pt* is inside or outside this shape.") \
 			.def("lumpMassInertia",&Shape::pyLumpMassInertia) \
 			WOO_PY_TOPINDEXABLE(Shape) \
 			; \

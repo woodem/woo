@@ -76,7 +76,6 @@ namespace py=PY_NAMESPACE;
 #define WOO_PY_DICT_UPDATE(src,dst) { for(auto kv: src) dst[kv.first]=kv.second; }
 
 // pybind11 needs args separated
-#define WOO_PY_ARGS(...) __VA_ARGS__
 #ifndef PYBIND11_VERSION_HEX
 	#define PYBIND11_VERSION_HEX ((PYBIND11_VERSION_MAJOR<<(3*8))|(PYBIND11_VERSION_MINOR<<(2*8))|(PYBIND11_VERSION_PATCH<<(1*8)))
 #endif

@@ -434,7 +434,7 @@ struct StaticEquilibriumSolver: public ExplicitNodeIntegrator{
 		#endif
 		.def("gradVError",&StaticEquilibriumSolver::gradVError,py::arg("node"),py::arg("rPow")=0,"Compute sum of errors from local velocity linearization (i.e. sum of errors between linear velocity field and real neighbor velocities; errors are weighted according to |x-x₀|^rPow.")
 		//.def("solverInit",&StaticEquilibriumSolver::solverInitPy),"Initialize the solver with x0 as the initial solution.")
-		//.def("solverStep",&StaticEquilibriumSolver::solverStepPt,WOO_PY_ARGS(py::arg("x")),"Advance the solver by one step, with the solution x as the start")
+		//.def("solverStep",&StaticEquilibriumSolver::solverStepPt,py::arg("x"),"Advance the solver by one step, with the solution x as the start")
 		.def("prologue",&StaticEquilibriumSolver::prologuePy)
 		.def("solution",&StaticEquilibriumSolver::solutionPy)
 		// .def("epilogue",&StaticEquilibriumSolver::epiloguePy)

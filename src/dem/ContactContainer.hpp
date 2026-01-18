@@ -121,7 +121,7 @@ struct ContactContainer: public Object{
 		.def("__len__",&ContactContainer::size) \
 		.def("__getitem__",&ContactContainer::pyByIds) \
 		.def("__getitem__",&ContactContainer::pyNth) \
-		.def("remove",&ContactContainer::requestRemoval,WOO_PY_ARGS(py::arg("contact"),py::arg("force")=false)) \
+		.def("remove",&ContactContainer::requestRemoval,py::arg("contact"),py::arg("force")=false) \
 		.def("removeNonReal",&ContactContainer::removeNonReal) \
 		.def("countReal",&ContactContainer::countReal) \
 		.def("realRatio",&ContactContainer::realRatio) \

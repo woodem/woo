@@ -100,7 +100,7 @@ struct Tracer: public PeriodicEngine{
 		((bool,glSmooth,false,,"Render traced lines with GL_LINE_SMOOTH")) \
 		((int,glWidth,1,AttrTrait<>().range(Vector2i(1,10)),"Width of trace lines in pixels")) \
 		, /*py*/ \
-			.def("resetNodesRep",&Tracer::resetNodesRep,WOO_PY_ARGS(py::arg("setupEmpty")=false,py::arg("includeDead")=true),"Reset :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.nodes`. With *setupEmpty*, create new instances of :obj:`TraceVisRep`. With *includeDead*, :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.deadNodes` is also cleared (new are not created, even with *setupEmpty*).") \
+			.def("resetNodesRep",&Tracer::resetNodesRep,py::arg("setupEmpty")=false,py::arg("includeDead")=true,"Reset :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.nodes`. With *setupEmpty*, create new instances of :obj:`TraceVisRep`. With *includeDead*, :obj:`woo.core.Node.rep` on all :obj:`woo.dem.DemField.deadNodes` is also cleared (new are not created, even with *setupEmpty*).") \
 			; \
 			_classObj.attr("scalarNone")=(int)Tracer::SCALAR_NONE; \
 			_classObj.attr("scalarTime")=(int)Tracer::SCALAR_TIME; \

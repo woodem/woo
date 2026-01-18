@@ -78,6 +78,6 @@ class Indexable{
 	virtual void incrementMaxCurrentlyUsedClassIndex() override { assert(dynamic_cast<SomeClass*>(this)); int& max = getMaxCurrentlyUsedIndexStatic(); max++; }
 
 // macro that should be passed in the 4th argument of WOO_CLASS_BASE_ATTR_PY in the top-level indexable
-#define WOO_PY_TOPINDEXABLE(className) .def_property_readonly("dispIndex",&Indexable_getClassIndex<className>,"Return class index of this instance.").def("dispHierarchy",&Indexable_getClassIndices<className>,WOO_PY_ARGS(py::arg("names")=true),"Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.")
+#define WOO_PY_TOPINDEXABLE(className) .def_property_readonly("dispIndex",&Indexable_getClassIndex<className>,"Return class index of this instance.").def("dispHierarchy",&Indexable_getClassIndices<className>,py::arg("names")=true,"Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.")
 
 

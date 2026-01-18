@@ -101,7 +101,7 @@ PYBIND11_MODULE(_GLViewer,mod){
 		.def_property("axes",&pyGLViewer::get_axes,&pyGLViewer::set_axes,"Show arrows for axes.")
 		.def_property("sceneRadius",&pyGLViewer::get_sceneRadius,&pyGLViewer::set_sceneRadius,"Visible scene radius.")
 		.def_property("ortho",&pyGLViewer::get_orthographic,&pyGLViewer::set_orthographic,"Whether orthographic projection is used; if false, use perspective projection.")
-		.add_static_property("rotCursorFreeze",&pyGLViewer::get_rotCursorFreeze,&pyGLViewer::set_rotCursorFreeze)
+		.def_property_static("rotCursorFreeze",&pyGLViewer::get_rotCursorFreeze,&pyGLViewer::set_rotCursorFreeze)
 		.def_property("screenSize",&pyGLViewer::get_screenSize,&pyGLViewer::set_screenSize,"Size of the viewer's window, in scree pixels")
 		.def("fitAABB",&pyGLViewer::fitAABB,py::arg("mn"),py::arg("mx"),"Adjust scene bounds so that Axis-aligned bounding box given by its lower and upper corners *mn*, *mx* fits in.")
 		.def("fitSphere",&pyGLViewer::fitSphere,py::arg("center"),py::arg("radius"),"Adjust scene bounds so that sphere given by *center* and *radius* fits in.")

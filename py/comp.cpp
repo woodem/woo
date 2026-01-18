@@ -38,7 +38,7 @@ PYBIND11_MODULE(comp,mod){
 	WOO_SET_DOCSTRING_OPTS;
 	mod.doc()="Expose interal utility c++ functions for computing volume, centroids, inertia, coordinate transforms; mostly used for testing.";
 	mod.def("tetraVolume",&woo::Volumetric::tetraVolume,py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),"Volume of tetrahedron, computed as :math:`\\frac{1}{6}((A-B)\\cdot(B-D)))\\times(C-D)`.");
-	// mod.def("tetraInertia",&woo::Volumetric::tetraInertia,WOO_PY_ARGS(py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D")),"Inertia tensor of tetrahedron given its vertex coordinates; the algorithm is described in :cite:`Tonon2005`.");
+	// mod.def("tetraInertia",&woo::Volumetric::tetraInertia,py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),"Inertia tensor of tetrahedron given its vertex coordinates; the algorithm is described in :cite:`Tonon2005`.");
 	mod.def("tetraInertia",tetraInertia_cov,py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("fixSign")=true,"Tetrahedron inertia from covariance. If *fixSign* is true, the tensor is multiplied by -1 if the (0,0) entry is negative (this is caued by non-canonical vertex ordering).");
 	mod.def("tetraInertia_grid",tetraInertia_grid,py::arg("A"),py::arg("B"),py::arg("C"),py::arg("D"),py::arg("div")=100,"Tetrahedron inertia from grid sampling (*div* gives subdivision along the shortest aabb side).");
 

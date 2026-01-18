@@ -56,10 +56,10 @@ struct LabelMapper: public Object{
 			.def("items",&LabelMapper::pyItems) \
 			.def("keys",&LabelMapper::pyKeys) \
 			.def("__len__",&LabelMapper::__len__) \
-			.def("__dir__",&LabelMapper::__dir__,WOO_PY_ARGS(py::arg("prefix")="")) \
+			.def("__dir__",&LabelMapper::__dir__,py::arg("prefix")="") \
 			.def("_whereIs",&LabelMapper::whereIs,"Return symbolic constant specifying where is the object with the label given stored (for testing only).") \
-			.def("_setWritable",&LabelMapper::setWritable,WOO_PY_ARGS(py::arg("label"),py::arg("writable")=true),"Make given label writable (without warning), or remove the writable flag (with *writable*=False).\n\n.. note:: Pseudomodules cannot be made writable.") \
-			.def("_isWritable",&LabelMapper::isWritable,WOO_PY_ARGS(py::arg("label")),"Say whether given label is writable. Raise exception when the label does not exist.") \
+			.def("_setWritable",&LabelMapper::setWritable,py::arg("label"),py::arg("writable")=true,"Make given label writable (without warning), or remove the writable flag (with *writable*=False).\n\n.. note:: Pseudomodules cannot be made writable.") \
+			.def("_isWritable",&LabelMapper::isWritable,py::arg("label"),"Say whether given label is writable. Raise exception when the label does not exist.") \
 			.def("_newModule",&LabelMapper::newModule) \
 			; \
 			_classObj.attr("nowhere")=(int)LabelMapper::NOWHERE; \

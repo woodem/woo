@@ -186,7 +186,7 @@ shared_ptr<Particle> Shape::make(const shared_ptr<Shape>& shape, const shared_pt
 
 
 void DemData::pyHandleCustomCtorArgs(py::args_& args, py::kwargs& kw){
-	if(!WOO_PY_DICT_CONTAINS(kw,"blocked")) return;
+	if(!kw.contains("blocked")) return;
 	py::extract<string> strEx(kw["blocked"]);
 	if(!strEx.check()) return;
 	blocked_vec_set(strEx());
@@ -356,11 +356,11 @@ Real Particle::getEk_any(bool trans, bool rot, shared_ptr<Scene> scene) const {
 
 	
 void DemField::pyHandleCustomCtorArgs(py::args_& t, py::kwargs& d){
-		if(WOO_PY_DICT_CONTAINS(d,"par")){
+		if(d.contains("par")){
 			py::extract<vector<shared_ptr<Particle>>> ex(d["par"]);
 			if(!ex.check()) throw std::runtime_error("DemField(par=...) must be a sequence of Particles.");
 			int parNodes=-1; // default, decide by particle properties
-			if(WOO_PY_DICT_CONTAINS(d,"parNodes")){
+			if(d.contains("parNodes")){
 				py::extract<int> en(d["parNodes"]);
 				if(en.check()){ 
 					parNodes=en();

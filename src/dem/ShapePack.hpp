@@ -53,8 +53,8 @@ struct ShapeClump: public Object{
 		((int,div,5,AttrTrait<Attr::triggerPostLoad>().noDump(),"Sampling grid fineness, when computing volume and other properties, relative to the smallest sphere's radius. When zero or negative, assume spheres don't intersect and use a different algorithm (Steiner's theorem)."))  \
 		((bool,clumped,true,AttrTrait<>().readonly(),"Whether nodes of this shape are clumped together when the particle is created (so far, clumped shapes *only* are produced).")) \
 		, /* py */ \
-		.def("recompute",&ShapeClump::recompute,WOO_PY_ARGS(py::arg("div")=5,py::arg("failOk")=false,py::arg("fastOnly")=false),"Recompute principal axes of the clump, using *div* for subdivision (see :obj:`div` for the semantics). *failOk* (silently return in case of invalid data) and *fastOnly* (return if there is lots of cells in subdivision) are only to be used internally.") \
-		.def("makeParticles",&ShapeClump::pyMakeParticles,WOO_PY_ARGS(py::arg("mat"),py::arg("pos"),py::arg("ori")=Quaternionr::Identity(),py::arg("scale")=1.,py::arg("mask")=(int)DemField::defaultMovableMask),"Create particle(s) as described by this geometry, positioned in *pos* and rotated with *ori*. Geometry will be scaled by *scale*. Returns tuple ([Node,...],[Particle,..]).") \
+		.def("recompute",&ShapeClump::recompute,py::arg("div")=5,py::arg("failOk")=false,py::arg("fastOnly")=false,"Recompute principal axes of the clump, using *div* for subdivision (see :obj:`div` for the semantics). *failOk* (silently return in case of invalid data) and *fastOnly* (return if there is lots of cells in subdivision) are only to be used internally.") \
+		.def("makeParticles",&ShapeClump::pyMakeParticles,py::arg("mat"),py::arg("pos"),py::arg("ori")=Quaternionr::Identity(),py::arg("scale")=1.,py::arg("mask")=(int)DemField::defaultMovableMask,"Create particle(s) as described by this geometry, positioned in *pos* and rotated with *ori*. Geometry will be scaled by *scale*. Returns tuple ([Node,...],[Particle,..]).") \
 		; woo::converters_cxxVector_pyList_2way<shared_ptr<ShapeClump>>(mod);
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ShapeClump__CLASS_BASE_DOC_ATTRS_PY);
 };
@@ -128,11 +128,11 @@ struct ShapePack: public Object{
 		((string,loadFrom,,AttrTrait<Attr::triggerPostLoad>(),"If given when constructing the instance, the file is loaded immediately and the attribute is reset.")) \
 		,/*py*/ .def("loadTxt",&ShapePack::loadTxt).def("saveTxt",&ShapePack::saveTxt) \
 			.def("load",&ShapePack::loadTxt).def("save",&ShapePack::saveTxt) /* SpherePack compat names */ \
-		.def("add",&ShapePack::add,WOO_PY_ARGS(py::arg("shapes"),py::arg("clumped")=true)) \
-		.def("fromDem",&ShapePack::fromDem,WOO_PY_ARGS(py::arg("scene"),py::arg("dem"),py::arg("mask")=0,py::arg("skipUnsupported")=true)) \
-		.def("toDem",&ShapePack::toDem,WOO_PY_ARGS(py::arg("scene"),py::arg("dem"),py::arg("mat"),py::arg("mask")=(int)DemField::defaultMovableMask,py::arg("color")=NaN)) \
-		.def("filtered",&ShapePack::filtered,WOO_PY_ARGS(py::arg("predicate"),py::arg("recenter")=-1)) \
-		.def("filter",&ShapePack::filter,WOO_PY_ARGS(py::arg("predicate"),py::arg("recenter")=-1)) \
+		.def("add",&ShapePack::add,py::arg("shapes"),py::arg("clumped")=true) \
+		.def("fromDem",&ShapePack::fromDem,py::arg("scene"),py::arg("dem"),py::arg("mask")=0,py::arg("skipUnsupported")=true) \
+		.def("toDem",&ShapePack::toDem,py::arg("scene"),py::arg("dem"),py::arg("mat"),py::arg("mask")=(int)DemField::defaultMovableMask,py::arg("color")=NaN) \
+		.def("filtered",&ShapePack::filtered,py::arg("predicate"),py::arg("recenter")=-1) \
+		.def("filter",&ShapePack::filter,py::arg("predicate"),py::arg("recenter")=-1) \
 		.def("solidVolume",&ShapePack::solidVolume) \
 		.def("translate",&ShapePack::translate) \
 		.def("canonicalize",&ShapePack::canonicalize) \

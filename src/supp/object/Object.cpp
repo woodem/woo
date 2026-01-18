@@ -38,7 +38,7 @@ std::function<void()> Object::pyRegisterClass(py::module_& mod) {
 		// make Object hashable in Python
 		.def("__hash__",[](const shared_ptr<Object>& o){ return std::hash<shared_ptr<Object>>()(o); })
 		.def("dict",&Object::pyDict,py::arg("all")=true,"Return dictionary of attributes; *all* will cause also attributed with the ``noSave`` or ``noDump`` flags to be returned.")
-		//.def("_attrTraits",&Object::pyAttrTraits,WOO_PY_ARGS(py::arg("parents")=true),"Return list of attribute traits.")
+		//.def("_attrTraits",&Object::pyAttrTraits,py::arg("parents")=true,"Return list of attribute traits.")
 		.def("updateAttrs",&Object::pyUpdateAttrs,"Update object attributes from given dictionary")
 		PY_PICKLE([](const shared_ptr<Object>& self){ return self->pyDict(/*all*/false); },&Object__setstate__<Object>)
 		.def("save",&Object::boostSave,py::arg("filename"))
