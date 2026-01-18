@@ -62,7 +62,7 @@ namespace nanobind::detail{
 }
 #endif
 
-#if 0
+#ifndef WOO_NANOBIND
 namespace pybind11::detail {
 	template<typename T> struct type_caster<OpenMPAccumulator<T>>{
 		// static_assert(std::is_integral<T>() || std::is_floating_point<T>());
