@@ -30,10 +30,10 @@ struct AnisoPorosityAnalyzer: public Engine {
 		((vector<Particle::id_t>,rayIds,,AttrTrait<Attr::readonly>(),"Particles intersected with ray when *oneRay* was last called from python.")) \
 		((vector<Vector3r>,rayPts,,AttrTrait<Attr::readonly>(),"Starting and ending points of segments intersecting particles.")) \
 		,/*py*/ \
-			.def("oneRay",&AnisoPorosityAnalyzer::computeOneRay_check,WOO_PY_ARGS(py::arg("A"),py::arg("B")=Vector3r(Vector3r::Zero()),py::arg("vis")=true)) \
-			.def("oneRay",&AnisoPorosityAnalyzer::computeOneRay_angles_check,WOO_PY_ARGS(py::arg("theta"),py::arg("phi"),py::arg("vis")=true)) \
-			.def_static("splitRay",&AnisoPorosityAnalyzer::splitRay,WOO_PY_ARGS(py::arg("theta"),py::arg("phi"),py::arg("pt0")=Vector3r::Zero().eval(),py::arg("T")=Matrix3r::Identity().eval())) \
-			.def("relSolid",&AnisoPorosityAnalyzer::relSolid,WOO_PY_ARGS(py::arg("theta"),py::arg("phi"),py::arg("pt0")=Vector3r::Zero().eval(),py::arg("vis")=false)) \
+			.def("oneRay",&AnisoPorosityAnalyzer::computeOneRay_check,py::arg("A"),py::arg("B")=Vector3r(Vector3r::Zero()),py::arg("vis")=true) \
+			.def("oneRay",&AnisoPorosityAnalyzer::computeOneRay_angles_check,py::arg("theta"),py::arg("phi"),py::arg("vis")=true) \
+			.def_static("splitRay",&AnisoPorosityAnalyzer::splitRay,py::arg("theta"),py::arg("phi"),py::arg("pt0")=Vector3r::Zero().eval(),py::arg("T")=Matrix3r::Identity().eval()) \
+			.def("relSolid",&AnisoPorosityAnalyzer::relSolid,py::arg("theta"),py::arg("phi"),py::arg("pt0")=Vector3r::Zero().eval(),py::arg("vis")=false) \
 			.def("clearVis",&AnisoPorosityAnalyzer::clearVis,"Clear visualizable intersection segments")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_AnisoPorosityAnalyzer__CLASS_BASE_DOC_ATTRS_PY);
 };

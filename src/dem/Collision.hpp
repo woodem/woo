@@ -72,8 +72,8 @@ struct Collider: public Engine{
 		Collider,Engine,ClassTrait().doc("Abstract class for finding spatial collisions between bodies.").section("Collision detection","TODO",{"Bound","BoundFunctor","GridBoundFunctor","BoundDispatcher","GridBoundDispatcher"}) \
 		,/*attrs*/ \
 			((int,nFullRuns,0,AttrTrait<>(),"Cumulative number of full runs, when collision detection is needed.")) \
-		,/*py*/ .def("probeAabb",&Collider::probeAabb,WOO_PY_ARGS(py::arg("mn"),py::arg("mx")),"Return list of particles intersected by axis-aligned box with given corners") \
-		.def_static("mayCollide",&Collider::mayCollide,WOO_PY_ARGS(py::arg("dem"),py::arg("pA"),py::arg("pB")),"Predicate whether two particles in question may collide or not")
+		,/*py*/ .def("probeAabb",&Collider::probeAabb,py::arg("mn"),py::arg("mx"),"Return list of particles intersected by axis-aligned box with given corners") \
+		.def_static("mayCollide",&Collider::mayCollide,py::arg("dem"),py::arg("pA"),py::arg("pB"),"Predicate whether two particles in question may collide or not")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_Collider__CLASS_BASE_DOC_ATTRS_PY);
 };

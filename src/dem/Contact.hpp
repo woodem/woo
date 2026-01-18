@@ -110,9 +110,9 @@ struct Contact: public Object{
 		.def_property_readonly("pA",&Contact::pyPA,"First particle of the contact") \
 		.def_property_readonly("pB",&Contact::pyPB,"Second particle of the contact") \
 		.def("resetPhys",&Contact::pyResetPhys,"Set :obj:`phys` to *None* (to force its re-evaluation)") \
-		.def("isFresh",&Contact::pyIsFresh,WOO_PY_ARGS(py::arg("scene")),"Say whether this contact has just been created. Equivalent to ``C.stepCreated==scene.step``.") \
-		.def("forceSign",&Contact::pyForceSign,WOO_PY_ARGS(py::arg("p")),"Return sign of :obj:`CPhys.force` as it appies on the particle passed, i.e. +1 if ``p==C.pA`` and -1 if ``p==C.pB``. Raise an exception if ``p`` is neither ``pA`` or ``pB``.") \
-		.def("forceSign",&Contact::pyForceSignId,WOO_PY_ARGS(py::arg("id")),"Return sign of :obj:`CPhys.force` as it appies on the particle with id ``id``, i.e. ``id==C.id1`` and -1 if ``id==id2``. Raise an exception if ``id`` is neither ``id1`` or ``id2``.") \
+		.def("isFresh",&Contact::pyIsFresh,py::arg("scene"),"Say whether this contact has just been created. Equivalent to ``C.stepCreated==scene.step``.") \
+		.def("forceSign",&Contact::pyForceSign,py::arg("p"),"Return sign of :obj:`CPhys.force` as it appies on the particle passed, i.e. +1 if ``p==C.pA`` and -1 if ``p==C.pB``. Raise an exception if ``p`` is neither ``pA`` or ``pB``.") \
+		.def("forceSign",&Contact::pyForceSignId,py::arg("id"),"Return sign of :obj:`CPhys.force` as it appies on the particle with id ``id``, i.e. ``id==C.id1`` and -1 if ``id==id2``. Raise an exception if ``id`` is neither ``id1`` or ``id2``.") \
 		; \
 		woo::converters_cxxVector_pyList_2way<shared_ptr<Contact>>(mod);
 

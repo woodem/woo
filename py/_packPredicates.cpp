@@ -427,7 +427,7 @@ PYBIND11_MODULE(_packPredicates,mod){
 	// base predicate class
 	py::class_<Predicate PY_SHARED_PTR_HOLDER(Predicate),/*tramponline*/PredicateWrap>(mod,"Predicate")
 		.def(py::init<>()) // docs says this needs to be added as well: https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python
-		.def("__call__",&Predicate::operator(),WOO_PY_ARGS(py::arg("pt"),py::arg("pad")=0.))
+		.def("__call__",&Predicate::operator(),py::arg("pt"),py::arg("pad")=0.)
 		.def("aabb",&Predicate::aabb)
 		.def("dim",&Predicate::dim)
 		.def("center",&Predicate::center)

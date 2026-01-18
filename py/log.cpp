@@ -33,9 +33,9 @@ WOO_PYTHON_MODULE(log);
 PYBIND11_MODULE(log,mod){
 	mod.doc() = "Access and manipulation of log4cxx loggers.";
 	WOO_SET_DOCSTRING_OPTS;
-	mod.def("level",logGetLevel,WOO_PY_ARGS(py::arg("logger")));
-	mod.def("setLevel",logSetLevel,WOO_PY_ARGS(py::arg("logger"),py::arg("level")),"Set minimum severity *level* (constants ``TRACE``, ``DEBUG``, ``INFO``, ``WARN``, ``ERROR``, ``FATAL`` = ``CRITICAL`` and ``OFF``) for given logger. If the logger is '', the root logger 'woo' will be operated on.");
-	mod.def("loadConfig",logLoadConfig,WOO_PY_ARGS(py::arg("fileName")),"Load configuration from file (log4cxx::PropertyConfigurator::configure)");
+	mod.def("level",logGetLevel,py::arg("logger"));
+	mod.def("setLevel",logSetLevel,py::arg("logger"),py::arg("level"),"Set minimum severity *level* (constants ``TRACE``, ``DEBUG``, ``INFO``, ``WARN``, ``ERROR``, ``FATAL`` = ``CRITICAL`` and ``OFF``) for given logger. If the logger is '', the root logger 'woo' will be operated on.");
+	mod.def("loadConfig",logLoadConfig,py::arg("fileName"),"Load configuration from file (log4cxx::PropertyConfigurator::configure)");
 	mod.attr("TRACE")=   (int)spdlog::level::level_enum::trace;
 	mod.attr("DEBUG")=   (int)spdlog::level::level_enum::debug;
 	mod.attr("INFO")=    (int)spdlog::level::level_enum::info;

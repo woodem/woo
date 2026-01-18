@@ -68,7 +68,7 @@ struct SparcField: public Field{
 		,/*ctor*/  createIndex(); constructLocator(); 
 		,/*dtor*/ locator->Delete(); points->Delete(); grid->Delete();
 		,/*py*/
-			.def("nodesAround",&SparcField::nodesAround,WOO_PY_ARGS(py::arg("pt"),py::arg("radius")=-1,py::arg("count")=-1,py::arg("ptNode")=shared_ptr<Node>()),"Return array of nodes close to given point *pt*")
+			.def("nodesAround",&SparcField::nodesAround,py::arg("pt"),py::arg("radius")=-1,py::arg("count")=-1,py::arg("ptNode")=shared_ptr<Node>(),"Return array of nodes close to given point *pt*")
 			.def("updateLocator",&SparcField::updateLocator</*useNext*/false>,"Update the locator, should be done manually before the first step perhaps.")
 			.def_static("sceneHasField",&Field_sceneHasField<SparcField>)
 			.def_static("sceneGetField",&Field_sceneGetField<SparcField>)
@@ -215,7 +215,7 @@ struct ExplicitNodeIntegrator: public Engine {
 		((bool,symm01d,true,,"With 0d or 1d basis, suppose Lxx==Lyy==Lzz (shared dofs) if respective out-of-space stresses are prescribed and identical."))
 		,/*ctor*/
 		,/*py*/
-		.def("stressRate",&ExplicitNodeIntegrator::computeStressRate,WOO_PY_ARGS(py::arg("T"),py::arg("D"),py::arg("e")=-1)) // for debugging
+		.def("stressRate",&ExplicitNodeIntegrator::computeStressRate,py::arg("T"),py::arg("D"),py::arg("e")=-1) // for debugging
 		.def_readonly("C",&ExplicitNodeIntegrator::C).def("pointWeight",&ExplicitNodeIntegrator::pointWeight);
 
 
@@ -430,9 +430,9 @@ struct StaticEquilibriumSolver: public ExplicitNodeIntegrator{
 		, /* ctor */
 		, /* py */
 		#if 0
-			.def("compResid",&StaticEquilibriumSolver::compResid,WOO_PY_ARGS(py::arg("vv")=VectorXr()),"Compute residuals corresponding to either given velocities *vv*, or to the current state (if *vv* is not given or empty)")
+			.def("compResid",&StaticEquilibriumSolver::compResid,py::arg("vv")=VectorXr(),"Compute residuals corresponding to either given velocities *vv*, or to the current state (if *vv* is not given or empty)")
 		#endif
-		.def("gradVError",&StaticEquilibriumSolver::gradVError,WOO_PY_ARGS(py::arg("node"),py::arg("rPow")=0),"Compute sum of errors from local velocity linearization (i.e. sum of errors between linear velocity field and real neighbor velocities; errors are weighted according to |x-x₀|^rPow.")
+		.def("gradVError",&StaticEquilibriumSolver::gradVError,py::arg("node"),py::arg("rPow")=0,"Compute sum of errors from local velocity linearization (i.e. sum of errors between linear velocity field and real neighbor velocities; errors are weighted according to |x-x₀|^rPow.")
 		//.def("solverInit",&StaticEquilibriumSolver::solverInitPy),"Initialize the solver with x0 as the initial solution.")
 		//.def("solverStep",&StaticEquilibriumSolver::solverStepPt,WOO_PY_ARGS(py::arg("x")),"Advance the solver by one step, with the solution x as the start")
 		.def("prologue",&StaticEquilibriumSolver::prologuePy)

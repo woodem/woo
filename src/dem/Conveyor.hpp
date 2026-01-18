@@ -99,9 +99,9 @@ struct ConveyorInlet: public Inlet{
 		,/*py*/ \
 			.def("barrier",&ConveyorInlet::pyBarrier) \
 			.def("clear",&ConveyorInlet::pyClear) \
-			.def("diamMass",&ConveyorInlet::pyDiamMass,WOO_PY_ARGS(py::arg("zipped")=false),"Return masses and diameters of generated particles. With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
-			.def("massOfDiam",&ConveyorInlet::pyMassOfDiam,WOO_PY_ARGS(py::arg("min")=0,py::arg("max")=Inf),"Return mass of particles of which diameters are between *min* and *max*.") \
-			.def("psd",&ConveyorInlet::pyPsd,WOO_PY_ARGS(py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=false,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("num")=80),"Return PSD for particles generated.")
+			.def("diamMass",&ConveyorInlet::pyDiamMass,py::arg("zipped")=false,"Return masses and diameters of generated particles. With *zipped*, return list of (diameter, mass); without *zipped*, return tuple of 2 arrays, diameters and masses.") \
+			.def("massOfDiam",&ConveyorInlet::pyMassOfDiam,py::arg("min")=0,py::arg("max")=Inf,"Return mass of particles of which diameters are between *min* and *max*.") \
+			.def("psd",&ConveyorInlet::pyPsd,py::arg("mass")=true,py::arg("cumulative")=true,py::arg("normalize")=false,py::arg("dRange")=Vector2r(NaN,NaN),py::arg("tRange")=Vector2r(NaN,NaN),py::arg("num")=80,"Return PSD for particles generated.")
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_PY(woo_dem_ConveyorInlet__CLASS_BASE_DOC_ATTRS_PY);
 };
 WOO_REGISTER_OBJECT(ConveyorInlet);

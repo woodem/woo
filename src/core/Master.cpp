@@ -196,7 +196,7 @@ void Master::pyRegisterClass(py::module_& mod){
 
 		.def_property("api",&Master::api_get,&Master::api_set,"Current version of API (application programming interface) so that we can warn about possible incompatibilities, when comparing with :obj:`usesApi`. The number uses two decimal places for each part (major,minor,api), so e.g. 10177 is API 1.01.77. The correspondence with version number is loose.")
 		.def_property("usesApi",&Master::usesApi_get,&Master::usesApi_set,"API version this script is using; compared with :obj:`api` at some places to give helpful warnings. This variable can be set either from integer (e.g. 10177) or a Vector3i like ``(1,1,77)``.")
-		.def("checkApi",&Master::checkApi,WOO_PY_ARGS(py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true),"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level (log) warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
+		.def("checkApi",&Master::checkApi,py::arg("minApi"),py::arg("msg"),py::arg("pyWarn")=true,"Check whether the :obj:`currently used API <woo.core.Master.usesApi>` is at least *minApi*. If smaller, issue warning (which is either Python's ``DeprecationWarning`` or c++-level (log) warning depending on *pyWarn*) with link to the API changes page. Also issue ``FutureWarning`` (or c++-level warning, depending on *pyWarn*) if :obj:`~woo.core.Master.usesApi` is not set.")
 		.def_property_readonly("usesApi_locations",[](const Master& self){return self.usesApi_locations;},py::return_value_policy::copy)
 
 		.def("reset",&Master::pyReset,"Set empty main scene")
@@ -222,7 +222,7 @@ void Master::pyRegisterClass(py::module_& mod){
 		.def_property_readonly("numThreads",&Master::numThreads_get /*,&Master::numThreads_set*/,"Maximum number of threads openMP can use.")
 		.def_property_readonly("compiledPyModules",&Master::pyCompiledPyModules) // we might not use to-python converters, since _customConverters have not yet been imported
 
-		.def("exitNoBacktrace",&Master::pyExitNoBacktrace,WOO_PY_ARGS(py::arg("status")=0),"Disable SEGV handler and exit, optionally with given status number.")
+		.def("exitNoBacktrace",&Master::pyExitNoBacktrace,py::arg("status")=0,"Disable SEGV handler and exit, optionally with given status number.")
 		.def("disableGdb",&Master::pyDisableGdb,"Revert SEGV and ABRT handlers to system defaults.")
 		.def("tmpFilename",&Master::tmpFilename,"Return unique name of file in temporary directory which will be deleted when woo exits.")
 		.def_property_readonly("tmpFileDir",&Master::getTmpFileDir,"Directory for temporary files; created automatically at startup.")

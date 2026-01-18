@@ -44,9 +44,9 @@ struct CLDemField: public Field{
 			((shared_ptr<clDem::Simulation>,sim,,,"The OpenCL simulation in question."))
 		, /* ctor */ createIndex();
 		, /* py */ // .def_readwrite("sim",&CLDemField::sim,"Simulation field to operate on")
-		.def_static("clDemToWoo",&CLDemField::clDemToWoo,WOO_PY_ARGS(py::arg("clDemSim"),py::arg("stepPeriod")=1,py::arg("relTol")=-1),"Create woo simulation which mimics the one in *clDemSim* as close as possible. If stepPeriod>=1, prepare enginess for running and comparing them in parallel. *stepPeriod* determines how many steps of the CL simulation to launch at once. If *relTol* is greater than 0., comparison between clDem and Woo will be done at every step, with the tolerance specified.")
+		.def_static("clDemToWoo",&CLDemField::clDemToWoo,py::arg("clDemSim"),py::arg("stepPeriod")=1,py::arg("relTol")=-1,"Create woo simulation which mimics the one in *clDemSim* as close as possible. If stepPeriod>=1, prepare enginess for running and comparing them in parallel. *stepPeriod* determines how many steps of the CL simulation to launch at once. If *relTol* is greater than 0., comparison between clDem and Woo will be done at every step, with the tolerance specified.")
 		
-		.def_static("wooToClDem",&CLDemField::wooToClDem,WOO_PY_ARGS(py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1),"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
+		.def_static("wooToClDem",&CLDemField::wooToClDem,py::arg("scene"),py::arg("stepPeriod")=-1,py::arg("relTol")=-1,"Convert woo simulation in *scene* to clDem simulation (returned object), optionally adding the clDem simulation to the woo's scene itself (if stepPeriod>=1) to be run in parallel. Positive value of *relTol* will run checks between both computations after each *stepPeriod* steps.")
 		
 		.def_static("getSimulation",&CLDemField::getSimulation)
 		.def_static("sceneHasField",&Field_sceneHasField<CLDemField>)

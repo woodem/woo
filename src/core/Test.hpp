@@ -67,8 +67,8 @@ namespace woo{
 			,/*ctor*/ \
 			,/*py*/ \
 				.def_property("aaccuRaw",&WooTestClass::aaccuGetRaw,&WooTestClass::aaccuSetRaw,"Access OpenMPArrayAccumulator data directly. Writing resizes and sets the 0th thread value, resetting all other ones.") \
-				.def("aaccuWriteThreads",&WooTestClass::aaccuWriteThreads,WOO_PY_ARGS(py::arg("index"),py::arg("cycleData")),"Assign a single line in the array accumulator, assigning number from *cycleData* in parallel in each thread.") \
-				.def("arr3d_set",&WooTestClass::arr3d_set,WOO_PY_ARGS(py::arg("shape"),py::arg("data")),"Set arr3d to have *shape* and fill it with *data* (must have the corresponding number of elements).") \
+				.def("aaccuWriteThreads",&WooTestClass::aaccuWriteThreads,py::arg("index"),py::arg("cycleData"),"Assign a single line in the array accumulator, assigning number from *cycleData* in parallel in each thread.") \
+				.def("arr3d_set",&WooTestClass::arr3d_set,py::arg("shape"),py::arg("data"),"Set arr3d to have *shape* and fill it with *data* (must have the corresponding number of elements).") \
 				.def_property_readonly("arr3d",&WooTestClass::arr3d_py_get) \
 				; \
 				_classObj.attr("postLoad_none")=(int)POSTLOAD_NONE; \

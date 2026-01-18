@@ -49,7 +49,7 @@ struct Membrane: public Facet{
 			.def("setRefConf",&Membrane::setRefConf,"Set the current configuration as the reference one.") \
 			.def("update",&Membrane::stepUpdate,WOO_PY_ARGS(py::arg("dt"),py::arg("rotIncr")=false),"Update current configuration; create reference configuration if it does not exist.") \
 			.def("reset",&Membrane::pyReset,"Reset reference configuration; this forces using the current config as reference when :obj:`update` is called again.") \
-			.def("stressCst",&Membrane::stressCst,WOO_PY_ARGS(py::arg("glob")=false),"Return CST stresses (product of :obj:`EBcst` and :obj:`uXy`), provided that :obj:`EBcst` was computed previously by setting :obj:`enableStress` when building stiffness matrices. The value returned is either :math:`(\\sigma_x,\\sigma_y,\\sigma_{xy})` (local stresses), or Matrix3 representing stress tensor in global coordinates (with *glob=True*).") \
+			.def("stressCst",&Membrane::stressCst,py::arg("glob")=false,"Return CST stresses (product of :obj:`EBcst` and :obj:`uXy`), provided that :obj:`EBcst` was computed previously by setting :obj:`enableStress` when building stiffness matrices. The value returned is either :math:`(\\sigma_x,\\sigma_y,\\sigma_{xy})` (local stresses), or Matrix3 representing stress tensor in global coordinates (with *glob=True*).") \
 			.def("stressDkt",&Membrane::stressDkt,"Return Vector6 of DKT stresses (product of :obj:`DBdkt` and :obj:`phiXy`), see :obj:`stressCst` for conditions; additionaly, bending must have been enabled.\n\n.. warning:: This function returns nonsense currently and must be fixed!")
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_Membrane__CLASS_BASE_DOC_ATTRS_CTOR_PY);

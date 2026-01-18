@@ -252,15 +252,15 @@ struct Scene: public Object{
 		.def_readonly("_nextEngines",&Scene::_nextEngines,"Next engines, debugging only",py::return_value_policy::copy) \
 		.def("getRange",&Scene::getRange,"Retrieve a *ScalarRange* object by its label") \
 		/* WOO_OPENCL */ .def("ensureCl",&Scene::ensureCl,"[for debugging] Initialize the OpenCL subsystem (this is done by engines using OpenCL, but trying to do so in advance might catch errors earlier)") \
-		.def("saveTmp",&Scene::saveTmp,WOO_PY_ARGS(py::arg("slot")="",py::arg("quiet")=false),"Save into a temporary slot inside Master (loadable with O.loadTmp)") \
+		.def("saveTmp",&Scene::saveTmp,py::arg("slot")="",py::arg("quiet")=false,"Save into a temporary slot inside Master (loadable with O.loadTmp)") \
 		\
-		.def("run",&Scene::pyRun,WOO_PY_ARGS(py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN)) \
+		.def("run",&Scene::pyRun,py::arg("steps")=-1,py::arg("wait")=false,py::arg("time")=NaN) \
 		.def("stop",&Scene::pyStop) \
 		.def("one",&Scene::pyOne) \
 		.def("wait",&Scene::pyWait,py::arg("timeout")=0) \
 		.def("setLastSave",[](const shared_ptr<Scene>& self, const string& s){ self->lastSave=s; }) \
 		.def_property_readonly("running",&Scene::running) \
-		.def("paused",&Scene::pyPaused,WOO_PY_ARGS(py::arg("allowBg")=false),py::return_value_policy::take_ownership,"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
+		.def("paused",&Scene::pyPaused,py::arg("allowBg")=false,py::return_value_policy::take_ownership,"Return paused context manager; when *allowBg* is True, the context manager is a no-op in the engine background thread and works normally when called from other threads).") \
 		.def("selfTest",&Scene::pySelfTest,"Run self-tests (they are usually run automatically with, see :obj:`selfTestEvery`).") \
 		.def("expandTags",&Scene::expandTags,"Expand :obj:`tags` written as ``{tagName}``, returns the expanded string.") \
 		; /* define nested classes */ \

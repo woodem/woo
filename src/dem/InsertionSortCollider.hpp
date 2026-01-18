@@ -304,7 +304,7 @@ struct InsertionSortCollider: public AabbCollider {
 			.def_readonly("maxima",&InsertionSortCollider::minima,"Array of maximum bbox coords; every 3 contiguous values are x, y, z for one particle") \
 			.def("dumpBounds",&InsertionSortCollider::dumpBounds,"Return representation of the internal sort data. The format is ``([...],[...],[...])`` for 3 axes, where each ``...`` is a list of entries (bounds). The entry is a tuple with the fllowing items:\n\n* coordinate (float)\n* body id (int), but negated for negative bounds\n* period numer (int), if the collider is in the periodic regime.") \
 			.def("dbgInfo",&InsertionSortCollider::dbgInfo,"Return python distionary with information on some internal structures (debugging only)") \
-			.def("spatialOverlap",&InsertionSortCollider::pySpatialOverlap,WOO_PY_ARGS(py::arg("scene"),py::arg("id1"),py::arg("id2")),"Debug access to the spatial overlap function.") \
+			.def("spatialOverlap",&InsertionSortCollider::pySpatialOverlap,py::arg("scene"),py::arg("id1"),py::arg("id2"),"Debug access to the spatial overlap function.") \
 			woo_dem_InsertionSortCollider__PISC_DEBUG_PY
 
 	WOO_DECL__CLASS_BASE_DOC_ATTRS_CTOR_PY(woo_dem_InsertionSortCollider__CLASS_BASE_DOC_ATTRS_CTOR_PY);
